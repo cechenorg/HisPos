@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
@@ -121,11 +120,11 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <Label Content="庫存現值占比" FontSize="25" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding StockValuePieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                        <!--<lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding StockValuePieSeries, UpdateSourceTrigger=PropertyChanged}"/>-->
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <Label Content="今日營業額占比" FontSize="25" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding SalesPieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                        <!--<lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding SalesPieSeries, UpdateSourceTrigger=PropertyChanged}"/>-->
                     </StackPanel>
                     
                 </Grid>
@@ -164,7 +163,7 @@
                         <CheckBox Name="ThisYearLine" Content="今年" Margin="10,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Click="LineChartRange_OnClick"/>
                         <CheckBox Name="LastYearLine" Content="去年同期" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Click="LineChartRange_OnClick"/>
                     </StackPanel>
-                    <lvc:CartesianChart Series="{Binding SalesLineSeries, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0" Background="{StaticResource GridDarkestBackGround}">
+                    <!--<lvc:CartesianChart Series="{Binding SalesLineSeries, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0" Background="{StaticResource GridDarkestBackGround}">
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis ShowLabels="False"/>
                         </lvc:CartesianChart.AxisY>
@@ -175,7 +174,7 @@
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
-                    </lvc:CartesianChart>
+                    </lvc:CartesianChart>-->
                 </Grid>
                 <DataGrid Name="ProductsGrid" Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False">
