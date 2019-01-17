@@ -15,6 +15,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
         }
         public string Id { get; set; }
         public string Name { get; set; }
-        public string FullName { get; set; }
+        private string fullName;
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                Set(() => Id, ref fullName, value);
+            }
+        }
     }
 }

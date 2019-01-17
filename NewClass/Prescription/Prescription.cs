@@ -11,6 +11,7 @@ using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.Medicine;
 using JetBrains.Annotations;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
@@ -23,6 +24,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = new Customer();
             Card = new IcCard();
             Treatment = new Treatment.Treatment();
+            Medicines = new Medicines();
         }
 
         public Prescription(DataRow r)
@@ -64,7 +66,7 @@ namespace His_Pos.NewClass.Prescription
         public int DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區 = 
-        public Products Medicines { get; set; } = new Products(); //調劑用藥
+        public Medicines Medicines { get; set; } = new Medicines(); //調劑用藥
         #region Function
         public int InsertPresription() {
             return PrescriptionDb.InsertPrescription(this);
@@ -83,7 +85,7 @@ namespace His_Pos.NewClass.Prescription
         {
             foreach (var m in Medicines)
             {
-                //PrescriptionDb.ProcessInventory(m,m.);
+                PrescriptionDb.ProcessInventory(m.ID, m.Amount);
             }
         }
 
@@ -93,10 +95,8 @@ namespace His_Pos.NewClass.Prescription
             double total = 0;//總金額
             foreach (var m in Medicines)
             {
-                /*
-                 * consumption+=m.
-                 * total+=m.
-                 */
+                consumption += m.Amount;
+                total += m.TotalPrice;
             }
             PrescriptionDb.ProcessEntry(Id,consumption,total);
         }

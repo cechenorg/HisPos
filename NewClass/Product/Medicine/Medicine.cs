@@ -11,11 +11,20 @@ namespace His_Pos.NewClass.Product.Medicine
     {
         public Medicine() : base()
         {
-
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
         }
         public Medicine(DataRow r) : base(r)
         {
-
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+        }
+        public Medicine(ProductStruct p) : base(p)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            Price = p.SellPrice;
+            NHIPrice = p.NHIPrice;
         }
         private double amount;//總量
         public double Amount
@@ -53,7 +62,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private Position.Position position;//用法
+        private Position.Position position;//途徑
         public Position.Position Position
         {
             get => position;
@@ -65,7 +74,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private int days;
+        private int days;//給藥天數
         public int Days
         {
             get => days;
@@ -77,7 +86,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private double price;
+        private double price;//售價
         public double Price
         {
             get => price;
@@ -89,7 +98,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private double nhiPrice;
+        private double nhiPrice;//健保價
         public double NHIPrice
         {
             get => nhiPrice;
@@ -101,7 +110,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private double totalPrice;
+        private double totalPrice;//總價
         public double TotalPrice
         {
             get => totalPrice;
@@ -110,6 +119,78 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (totalPrice != value)
                 {
                     Set(() => TotalPrice, ref totalPrice, value);
+                }
+            }
+        }
+        private double inventory;//庫存
+        public double Inventory
+        {
+            get => inventory;
+            set
+            {
+                if (inventory != value)
+                {
+                    Set(() => Inventory, ref inventory, value);
+                }
+            }
+        }
+        private bool paySelf;//是否自費
+        public bool PaySelf
+        {
+            get => paySelf;
+            set
+            {
+                if (paySelf != value)
+                {
+                    Set(() => PaySelf, ref paySelf, value);
+                }
+            }
+        }
+        private string vendor;//製造商
+        public string Vendor
+        {
+            get => vendor;
+            set
+            {
+                if (vendor != value)
+                {
+                    Set(() => Vendor, ref vendor, value);
+                }
+            }
+        }
+        private bool control;//是否為管制藥品
+        public bool Control
+        {
+            get => control;
+            set
+            {
+                if (control != value)
+                {
+                    Set(() => Control, ref control, value);
+                }
+            }
+        }
+        private bool frozen;//是否為冷藏藥品
+        public bool Frozen
+        {
+            get => frozen;
+            set
+            {
+                if (frozen != value)
+                {
+                    Set(() => Frozen, ref frozen, value);
+                }
+            }
+        }
+        private bool enable;//是否停用
+        public bool Enable
+        {
+            get => enable;
+            set
+            {
+                if (enable != value)
+                {
+                    Set(() => Enable, ref enable, value);
                 }
             }
         }

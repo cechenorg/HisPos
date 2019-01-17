@@ -9,6 +9,6 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     public enum AddProductEnum
     {
         PruductPurchase = 1,
-
+        AddMedicine = 2
     }
 }

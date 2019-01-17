@@ -14,7 +14,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
     {
         #region Property
         private CollectionViewSource cooPreCollectionViewSource;
-
         private CollectionViewSource CooPreCollectionViewSource
         {
             get => cooPreCollectionViewSource;
@@ -125,32 +124,43 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             }
         }
         #endregion
-
-        #region Command
-
-        private RelayCommand startDateChanged;
-        public RelayCommand StartDateChanged
+        #region Commands
+        public RelayCommand StartDateChanged { get; set; }
+        public RelayCommand EndDateChanged { get; set; }
+        public RelayCommand IDNumberChanged { get; set; }
+        public RelayCommand IsReadChecked { get; set; }
+        public RelayCommand SelectionChanged { get; set; }
+        public RelayCommand PrintMedBag { get; set; }
+        public RelayCommand PrescriptionSelected { get; set; }
+        #endregion
+        public CooperativeSelectionViewModel()
         {
-            get =>
-                startDateChanged ??
-                (startDateChanged = new RelayCommand(ExecuteStartDateChanged));
-            set => startDateChanged = value;
+            InitialCommandActions();
+            Messenger.Default.Register<Prescriptions>(this, "CooperativePrescriptions", GetCooperativePrescription);
         }
+        ~CooperativeSelectionViewModel()
+        {
+            Messenger.Default.Unregister(this);
+        }
+        #region InitialFunctions
+        private void InitialCommandActions()
+        {
+            StartDateChanged = new RelayCommand(ExecuteStartDateChanged);
+            EndDateChanged = new RelayCommand(ExecuteEndDateChanged);
+            IDNumberChanged = new RelayCommand(ExecuteIDNumberChanged);
+            IsReadChecked = new RelayCommand(ExecuteIsReadChecked);
+            SelectionChanged = new RelayCommand(ExecuteSelectionChanged);
+            PrintMedBag = new RelayCommand(ExecutePrintMedBag);
+            PrescriptionSelected = new RelayCommand(ExecutePrescriptionSelected);
+        }
+        #endregion
+        #region CommandActions
         private void ExecuteStartDateChanged()
         {
             if (StartDate is null)
                 CooPreCollectionViewSource.Filter -= FilterByStartDate;
             else
                 CooPreCollectionViewSource.Filter += FilterByStartDate;
-        }
-
-        private RelayCommand endDateChanged;
-        public RelayCommand EndDateChanged
-        {
-            get =>
-                endDateChanged ??
-                (endDateChanged = new RelayCommand(ExecuteEndDateChanged));
-            set => endDateChanged = value;
         }
         private void ExecuteEndDateChanged()
         {
@@ -159,15 +169,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             else
                 CooPreCollectionViewSource.Filter += FilterByEndDate;
         }
-
-        private RelayCommand idNumberChanged;
-        public RelayCommand IDNumberChanged
-        {
-            get =>
-                idNumberChanged ??
-                (idNumberChanged = new RelayCommand(ExecuteIDNumberChanged));
-            set => idNumberChanged = value;
-        }
         private void ExecuteIDNumberChanged()
         {
             if (string.IsNullOrEmpty(IDNumber))
@@ -175,78 +176,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             else
                 CooPreCollectionViewSource.Filter += FilterByIDNumber;
         }
-
-        private RelayCommand isReadChecked;
-        public RelayCommand IsReadChecked
-        {
-            get =>
-                isReadChecked ??
-                (isReadChecked = new RelayCommand(ExecuteIsReadChecked));
-            set => isReadChecked = value;
-        }
         private void ExecuteIsReadChecked()
         {
             CooPreCollectionViewSource.Filter += FilterByIsRead;
-        }
-
-        private RelayCommand selectionChanged;
-        public RelayCommand SelectionChanged
-        {
-            get =>
-                selectionChanged ??
-                (selectionChanged = new RelayCommand(ExecuteSelectionChanged));
-            set => selectionChanged = value;
         }
         private void ExecuteSelectionChanged()
         {
             if (SelectedPrescription != null)
                 CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.Id);
         }
-
-        private RelayCommand printMedBag;
-        public RelayCommand PrintMedBag
-        {
-            get =>
-                printMedBag ??
-                (printMedBag = new RelayCommand(ExecutePrintMedBag));
-            set => printMedBag = value;
-        }
         private void ExecutePrintMedBag()
         {
             SelectedPrescription.PrintMedBag();
         }
-
-        private RelayCommand prescriptionSelected;
-        public RelayCommand PrescriptionSelected
-        {
-            get =>
-                prescriptionSelected ??
-                (prescriptionSelected = new RelayCommand(ExecutePrescriptionSelected));
-            set => prescriptionSelected = value;
-        }
         private void ExecutePrescriptionSelected()
         {
             MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription.Patient = SelectedPrescription.Patient.Check(); 
-            SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId();
-            SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId();
+            SelectedPrescription.Patient = SelectedPrescription.Patient.Check();
+            SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId(SelectedPrescription.Treatment.MainDisease.Id);
+            SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId(SelectedPrescription.Treatment.SubDisease.Id);
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
             MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
-
-        public CooperativeSelectionViewModel()
-        {
-            PrescriptionSelected = new RelayCommand(ExecutePrescriptionSelected);
-            Messenger.Default.Register<Prescriptions>(this, "CooperativePrescriptions", GetCooperativePrescription);
-        }
-
-        ~CooperativeSelectionViewModel()
-        {
-            Messenger.Default.Unregister(this);
-        }
-
+        #region Functions
         private void GetCooperativePrescription(Prescriptions receivePrescriptions)
         {
             CooperativePrescriptions = new Prescriptions();
@@ -261,7 +215,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             CooPreCollectionViewSource.Filter += FilterByEndDate;
             CooPreCollectionViewSource.Filter += FilterByIsRead;
         }
-
+        #endregion
         #region Filter
         private void FilterByStartDate(object sender, FilterEventArgs e)
         {
@@ -328,6 +282,5 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             }
         }
         #endregion
-
     }
 }

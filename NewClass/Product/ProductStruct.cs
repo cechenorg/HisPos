@@ -18,21 +18,20 @@ namespace His_Pos.NewClass.Product
             Inventory = row.Field<int>("Inv_Inventory");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
-            NHIPrice = row.Field<double>("Med_Price");
-            SellPrice = row.Field<double>("Unit_Price");
+            NHIPrice = (double)row.Field<decimal>("Med_Price");
+            SellPrice = (double)row.Field<decimal>("Unit_Price");
+            //IsEnable = row.Field<bool>("Is_Enable");
         }
 
         public string ID { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
-        public string FullName
-        {
-            get { return EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName; }
-        }
-        public int Inventory { get; set; }
+        public string FullName => EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
+        public double Inventory { get; set; }
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }
         public double NHIPrice { get; set; }
         public double SellPrice { get; set; }
+        //public bool IsEnable { get; set; }
     }
 }

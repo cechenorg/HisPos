@@ -274,6 +274,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
+      <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FunctionWindow\AddProductWindow\AddProductEnum.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddProductViewModel.cs" />
     <Compile Include="Database\DataBaseFunction.cs" />
@@ -302,6 +305,7 @@
     <Compile Include="NewClass\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
@@ -942,6 +946,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Page Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

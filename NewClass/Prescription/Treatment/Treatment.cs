@@ -73,8 +73,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => division;
             set
             {
-                division = value;
-                OnPropertyChanged(nameof(Division));
+                Set(() => Division, ref division, value);
             }
         }
 
@@ -84,8 +83,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => pharmacist;
             set
             {
-                pharmacist = value;
-                OnPropertyChanged(nameof(Pharmacist));
+                Set(() => Pharmacist, ref pharmacist, value);
             }
         }
 
@@ -95,8 +93,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => medicalNumber;
             set
             {
-                medicalNumber = value;
-                OnPropertyChanged(nameof(MedicalNumber));
+                Set(() => MedicalNumber, ref medicalNumber, value);
             }
         }
 
@@ -106,8 +103,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => treatDate;
             set
             {
-                treatDate = value;
-                OnPropertyChanged(nameof(TreatDate));
+                Set(() => TreatDate, ref treatDate, value);
             }
         }
 
@@ -117,8 +113,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustDate;
             set
             {
-                adjustDate = value;
-                OnPropertyChanged(nameof(AdjustDate));
+                Set(() => AdjustDate, ref adjustDate, value);
             }
         }
 
@@ -128,8 +123,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => mainDisease;
             set
             {
-                mainDisease = value;
-                OnPropertyChanged(nameof(MainDisease));
+                Set(() => MainDisease, ref mainDisease, value);
             }
         }
 
@@ -139,8 +133,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => subDisease;
             set
             {
-                subDisease = value;
-                OnPropertyChanged(nameof(SubDisease));
+                Set(() => SubDisease, ref subDisease, value);
             }
         }
 
@@ -150,8 +143,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => chronicTotal;
             set
             {
-                chronicTotal = value;
-                OnPropertyChanged(nameof(ChronicTotal));
+                Set(() => ChronicTotal, ref chronicTotal, value);
             }
         }
 
@@ -161,8 +153,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => chronicSeq;
             set
             {
-                chronicSeq = value;
-                OnPropertyChanged(nameof(ChronicSeq));
+                Set(() => ChronicSeq, ref chronicSeq, value);
             }
         }//連續處方箋調劑序號 D35
 
@@ -172,8 +163,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustCase;
             set
             {
-                adjustCase = value;
-                OnPropertyChanged(nameof(AdjustCase));
+                Set(() => AdjustCase, ref adjustCase, value);
             }
         }
 
@@ -183,8 +173,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => prescriptionCase;
             set
             {
-                prescriptionCase = value;
-                OnPropertyChanged(nameof(PrescriptionCase));
+                Set(() => PrescriptionCase, ref prescriptionCase, value);
             }
         }
 
@@ -194,8 +183,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => copayment;
             set
             {
-                copayment = value;
-                OnPropertyChanged(nameof(Copayment));
+                Set(() => Copayment, ref copayment, value);
             }
         }
 
@@ -205,8 +193,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => paymentCategory;
             set
             {
-                paymentCategory = value;
-                OnPropertyChanged(nameof(PaymentCategory));
+                Set(() => PaymentCategory, ref paymentCategory, value);
             }
         }
 
@@ -216,8 +203,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => originalMedicalNumber;
             set
             {
-                originalMedicalNumber = value;
-                OnPropertyChanged(nameof(OriginalMedicalNumber));
+                Set(() => OriginalMedicalNumber, ref originalMedicalNumber, value);
             }
         }
 
@@ -227,8 +213,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => specialTreat;
             set
             {
-                specialTreat = value;
-                OnPropertyChanged(nameof(SpecialTreat));
+                Set(() => SpecialTreat, ref specialTreat, value);
             }
         }
         

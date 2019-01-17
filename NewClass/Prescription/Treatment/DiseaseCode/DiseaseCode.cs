@@ -16,12 +16,20 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         }
         public string Id { get; set; }
         public string Name { get; set; }
-        public string FullName { get; set; }
+        private string fullName;
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                Set(() => Id, ref fullName, value);
+            }
+        }
 
-        public DiseaseCode GetDataByCodeId() {
-            if (string.IsNullOrEmpty(Id))
+        public DiseaseCode GetDataByCodeId(string id) {
+            if (string.IsNullOrEmpty(id))
                 return new DiseaseCode();
-            DataTable table = DiseaseCodeDb.GetDataByCodeId(Id);
+            DataTable table = DiseaseCodeDb.GetDataByCodeId(id);
             return table.Rows.Count == 0 ? null : new DiseaseCode(table.Rows[0]);
         }
     }

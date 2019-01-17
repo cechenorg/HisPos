@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Documents;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -17,6 +15,8 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
@@ -27,18 +27,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     public class PrescriptionDeclareViewModel : TabBase
     {
-        public PrescriptionDeclareViewModel()
-        {
-            CurrentPrescription = new Prescription();
-            DeclareStatus = PrescriptionDeclareStatus.Adjust;
-            InitializeVariables();
-        }
-
-        ~PrescriptionDeclareViewModel()
-        {
-            Messenger.Default.Unregister(this);
-        }
-
         #region Variables
         public override TabBase getTab()
         {
@@ -91,22 +79,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-        private bool _isBusy;
+        private bool isBusy;
         public bool IsBusy
         {
-            get => _isBusy;
+            get => isBusy;
             private set
             {
-                Set(() => IsBusy, ref _isBusy, value);
+                Set(() => IsBusy, ref isBusy, value);
             }
         }
-        private string _busyContent;
+        private string busyContent;
         public string BusyContent
         {
-            get => _busyContent;
+            get => busyContent;
             private set
             {
-                Set(() => BusyContent, ref _busyContent, value);
+                Set(() => BusyContent, ref busyContent, value);
             }
         }
         private int prescriptionCount;
@@ -121,6 +109,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
+        private bool notPrescribe;
+        public bool NotPrescribe
+        {
+            get => notPrescribe;
+            private set
+            {
+                Set(() => NotPrescribe, ref notPrescribe, value);
+            }
+        }
+        public int SelectedMedicinesIndex { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -131,11 +129,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand SearchCustomerByBirthday { get; set; }
         public RelayCommand SearchCustomerByTel { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand<string> GetDiseaseCodeById { get; set; }
+        public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
+        public RelayCommand<string> AddMedicine { get; set; }
+        public RelayCommand<string> EditMedicine { get; set; }
         public RelayCommand AdjustButtonClick { get; set; }
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
         #endregion
+        public PrescriptionDeclareViewModel()
+        {
+            CurrentPrescription = new Prescription();
+            SelectedMedicinesIndex = 0;
+            DeclareStatus = PrescriptionDeclareStatus.Adjust;
+            InitializeVariables();
+            CurrentPrescription.Medicines.Add(new Medicine());
+        }
+
+        ~PrescriptionDeclareViewModel()
+        {
+            Messenger.Default.Unregister(this);
+        }
         #region CommandActions
         private void ExecuteShowCooperativeWindow()
         {
@@ -214,6 +229,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             
         }
+        private void ExecuteAddMedicine(string medicineID)
+        {
+            if (medicineID.Length < 5) return;
+            FunctionWindow.AddProductWindow.AddMedicineWindow medicineWindow = null;
+            medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+            medicineWindow.ShowDialog();
+        }
         private void ExecuteAdjustButtonClick()
         {
             var error = CurrentPrescription.CheckPrescriptionRule();
@@ -238,9 +260,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         }
         #endregion
-        #region Functions
+        #region InitialFunctions
         private void InitializeVariables()
         {
+            NotPrescribe = true;
             InitialItemsSources();
             InitialCommandActions();
             RegisterMessengers();
@@ -267,6 +290,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SearchCustomerByTel = new RelayCommand(ExecuteSearchCustomerByTel);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ExecuteShowCommonInstitutionSelectionWindow);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ExecuteShowInstitutionSelectionWindow);
+            GetDiseaseCodeById = new RelayCommand<string>(ExecuteGetDiseaseCodeById);
+            AdjustCaseSelectionChanged = new RelayCommand(ExecuteAdjustCaseSelectionChanged);
+            AddMedicine = new RelayCommand<string>(ExecuteAddMedicine);
             AdjustButtonClick = new RelayCommand(ExecuteAdjustButtonClick);
             RegisterButtonClick = new RelayCommand(ExecuteRegisterButtonClick);
             PrescribeButtonClick = new RelayCommand(ExecutePrescribeButtonClick);
@@ -276,7 +302,66 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
+            Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
         }
+        #endregion
+        #region EventAction
+        private void ExecuteAdjustCaseSelectionChanged()
+        {
+            CheckDeclareStatus();
+            if (CurrentPrescription.Treatment.AdjustCase != null &&
+                CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+            {
+                NotPrescribe = false;
+            }
+            else
+            {
+                NotPrescribe = true;
+            }
+        }
+        private void ExecuteGetDiseaseCodeById(string id)
+        {
+            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName))
+            {
+                var tmpDisease = CurrentPrescription.Treatment.MainDisease.GetDataByCodeId(id);
+                if (tmpDisease is null || string.IsNullOrEmpty(tmpDisease.Id))
+                {
+                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                }
+                else
+                {
+                    CurrentPrescription.Treatment.MainDisease = tmpDisease;
+                }
+            }
+            else
+            {
+                var tmpDisease = CurrentPrescription.Treatment.SubDisease.GetDataByCodeId(id);
+                if (tmpDisease is null || string.IsNullOrEmpty(tmpDisease.Id))
+                {
+                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                }
+                else
+                {
+                    CurrentPrescription.Treatment.SubDisease = tmpDisease;
+                }
+            }
+        }
+
+        private void GetSelectedProduct(ProductStruct selectedProduct)
+        {
+            //var r = MedicineDb.GetMedicinesBySearchId(proId);
+            //if(r.Table.Columns.Contains("Med_Form"))
+            //    CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineNHI(r);
+            //else
+            //{
+            //    CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineOTC(r);
+            //}
+            CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineNHI(selectedProduct);
+            if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
+                CurrentPrescription.Medicines.Add(new Medicine());
+        }
+        #endregion
+        #region CommandActions
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
             CurrentPrescription.Patient = receiveSelectedCustomer;
@@ -288,6 +373,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
+        }
+        #endregion
+        #region GeneralFunctions
+        private void CheckDeclareStatus()
+        {
+            if(CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+            else if (DateTime.Compare(CurrentPrescription.Treatment.AdjustDate.Date, DateTime.Today.Date) > 0)
+                DeclareStatus = PrescriptionDeclareStatus.Register;
+            else
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Adjust;
+            }
         }
         #endregion
     }

@@ -24,6 +24,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         {
             InitializeComponent();
             this.DataContext = new CustomerSelectionViewModel("",1);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
+                    Close();
+            });
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
 
@@ -31,6 +36,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         {
             InitializeComponent();
             this.DataContext = new CustomerSelectionViewModel(condition,option);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
+                    Close();
+            });
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }
