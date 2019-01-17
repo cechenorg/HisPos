@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class Treatment : INotifyPropertyChanged
+    public class Treatment:ObservableObject
     {
         public Treatment()
         {
@@ -62,8 +63,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => institution;
             set
             {
-                institution = value;
-                OnPropertyChanged(nameof(Institution));
+                Set(() => Institution, ref institution, value);
             }
         }
 

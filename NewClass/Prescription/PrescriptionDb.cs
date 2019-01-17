@@ -55,11 +55,11 @@ namespace His_Pos.NewClass.Prescription
             return prescriptions;
         }
         public static int InsertPrescription(Prescription prescription) {
-            DataTable prescriptionNasterTable = SetPrescriptionMaster(prescription);
+            DataTable prescriptionMasterTable = SetPrescriptionMaster(prescription);
             DataTable prescriptionDetailTable = SetPrescriptionDetail(prescription);
 
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("PrescriptionMaster", prescriptionNasterTable));
+            parameterList.Add(new SqlParameter("PrescriptionMaster", prescriptionMasterTable));
             parameterList.Add(new SqlParameter("PrescriptionDetail", prescriptionDetailTable));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
@@ -173,6 +173,18 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
             return detailTable;
         }
-        
+
+        public static void ProcessInventory(string productID,double amount)
+        {
+
+        }
+        public static void ProcessCashFlow(int prescriptionID)
+        {
+
+        }
+        public static void ProcessEntry(int prescriptionID,double consumption, double total)
+        {
+
+        }
     }
 }

@@ -216,15 +216,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             SelectedPrescription.PrintMedBag();
         }
 
-        private RelayCommand<Window> prescriptionSelected;
-        public RelayCommand<Window> PrescriptionSelected
+        private RelayCommand prescriptionSelected;
+        public RelayCommand PrescriptionSelected
         {
             get =>
                 prescriptionSelected ??
-                (prescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected));
+                (prescriptionSelected = new RelayCommand(ExecutePrescriptionSelected));
             set => prescriptionSelected = value;
         }
-        private void ExecutePrescriptionSelected(Window window)
+        private void ExecutePrescriptionSelected()
         {
             MainWindow.ServerConnection.OpenConnection();
             SelectedPrescription.Patient = SelectedPrescription.Patient.Check(); 
@@ -233,14 +233,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
             MainWindow.ServerConnection.CloseConnection();
-            Messenger.Default.Send<Prescription>(SelectedPrescription, "SelectedPrescription");
-            window?.Close();
         }
         #endregion
 
         public CooperativeSelectionViewModel()
         {
-            PrescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected);
+            PrescriptionSelected = new RelayCommand(ExecutePrescriptionSelected);
             Messenger.Default.Register<Prescriptions>(this, "CooperativePrescriptions", GetCooperativePrescription);
         }
 

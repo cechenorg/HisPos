@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
         }
-        public int Id { get; }
+        public int Id { get; set; }
         public Customer Patient { get; set; }//病患
         public IcCard Card { get; set; }
         private Treatment.Treatment treatment;
@@ -74,5 +74,36 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
 
+        public string CheckPrescriptionRule()//檢查健保邏輯
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessInventory()//扣庫
+        {
+            foreach (var m in Medicines)
+            {
+                //PrescriptionDb.ProcessInventory(m,m.);
+            }
+        }
+
+        public void ProcessEntry()//計算庫存現值
+        {
+            double consumption = 0;//耗用
+            double total = 0;//總金額
+            foreach (var m in Medicines)
+            {
+                /*
+                 * consumption+=m.
+                 * total+=m.
+                 */
+            }
+            PrescriptionDb.ProcessEntry(Id,consumption,total);
+        }
+
+        public void ProcessCashFlow()//計算金流
+        {
+            PrescriptionDb.ProcessCashFlow(Id);
+        }
     }
 }

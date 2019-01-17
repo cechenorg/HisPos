@@ -1,7 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
@@ -19,7 +21,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         }
         public string Id { get; }//院所代碼
         public string Name { get; set; }//院所名稱
-        public string FullName { get; set; }
+        private string fullName;
+        public string FullName
+        {
+            get => fullName;
+            set { Set(() => FullName, ref fullName, value); }
+        }
+
         public bool Common { get; set; }
         public bool IsCooperative { get; set; }
     }

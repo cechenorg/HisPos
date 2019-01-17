@@ -13,4 +13,11 @@ namespace His_Pos.NewClass.Prescription
         ChronicReserve = 2,//慢箋預約
         Register = 3//登錄處方
     }
+
+    public enum PrescriptionDeclareStatus
+    {
+        Adjust = 0,//調劑
+        Register = 1,//登錄
+        Prescribe = 2//自費
+    }
 }

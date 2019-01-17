@@ -1,10 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Documents;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Position;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -16,8 +30,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionDeclareViewModel()
         {
             CurrentPrescription = new Prescription();
-            Messenger.Default.Register<Customer>(this, "SelectedCustomer",GetSelectedCustomer);
-            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
+            DeclareStatus = PrescriptionDeclareStatus.Adjust;
+            InitializeVariables();
         }
 
         ~PrescriptionDeclareViewModel()
@@ -25,11 +39,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Unregister(this);
         }
 
+        #region Variables
         public override TabBase getTab()
         {
             return this;
         }
-        
+        #region ItemsSources
+        public Institutions Institutions { get; set; }
+        public Divisions Divisions { get; set; }
+        public AdjustCases AdjustCases { get; set; }
+        public PaymentCategories PaymentCategories { get; set; }
+        public PrescriptionCases PrescriptionCases { get; set; }
+        public Copayments Copayments { get; set; }
+        public SpecialTreats SpecialTreats { get; set; }
+        public Usages Usages { get; set; }
+        public Positions Positions { get; set; }
+        #endregion
+        private PrescriptionDeclareStatus declareStatus;
+        public PrescriptionDeclareStatus DeclareStatus
+        {
+            get => declareStatus;
+            set
+            {
+                if (declareStatus != value)
+                {
+                    Set(() => DeclareStatus, ref declareStatus, value);
+                }
+            }
+        }
         private Prescription currentPrescription;
         public Prescription CurrentPrescription
         {
@@ -42,7 +79,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-
         private string tempMedicalNumber;
         public string TempMedicalNumber
         {
@@ -55,7 +91,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-
         private bool _isBusy;
         public bool IsBusy
         {
@@ -66,7 +101,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private string _busyContent;
-
         public string BusyContent
         {
             get => _busyContent;
@@ -75,20 +109,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => BusyContent, ref _busyContent, value);
             }
         }
-
-        #region ShowWindowCommand
-        private RelayCommand showCooperativeSelectionWindow;
-        public RelayCommand ShowCooperativeSelectionWindow
+        private int prescriptionCount;
+        public int PrescriptionCount
         {
-            get
+            get => prescriptionCount;
+            set
             {
-                if (showCooperativeSelectionWindow == null)
-                    showCooperativeSelectionWindow = new RelayCommand(() => ExecuteShowCooperativeWindow());
-                return showCooperativeSelectionWindow;
-
+                if (prescriptionCount != value)
+                {
+                    Set(() => PrescriptionCount, ref prescriptionCount, value);
+                }
             }
-            set { showCooperativeSelectionWindow = value; }
         }
+        #endregion
+        #region Commands
+        public RelayCommand ShowCooperativeSelectionWindow { get; set; }
+        public RelayCommand ShowCustomerSelectionWindow { get; set; }
+        // ReSharper disable once InconsistentNaming
+        public RelayCommand SearchCustomerByIDNumber { get; set; }
+        public RelayCommand SearchCustomerByName { get; set; }
+        public RelayCommand SearchCustomerByBirthday { get; set; }
+        public RelayCommand SearchCustomerByTel { get; set; }
+        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
+        public RelayCommand AdjustButtonClick { get; set; }
+        public RelayCommand RegisterButtonClick { get; set; }
+        public RelayCommand PrescribeButtonClick { get; set; }
+        #endregion
+        #region CommandActions
         private void ExecuteShowCooperativeWindow()
         {
             var cooperativePrescriptions = new Prescriptions();
@@ -108,15 +156,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-
-        private RelayCommand showCustomerSelectionWindow;
-        public RelayCommand ShowCustomerSelectionWindow
-        {
-            get =>
-                showCustomerSelectionWindow ??
-                (showCustomerSelectionWindow = new RelayCommand(ExecuteShowCustomerWindow));
-            set => showCooperativeSelectionWindow = value;
-        }
         private void ExecuteShowCustomerWindow()
         {
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
@@ -124,31 +163,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
                 CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
-        // ReSharper disable once InconsistentNaming
-        private RelayCommand searchCustomerByIDNumber;
-        // ReSharper disable once InconsistentNaming
-        public RelayCommand SearchCustomerByIDNumber
-        {
-            get =>
-                searchCustomerByIDNumber ??
-                (searchCustomerByIDNumber = new RelayCommand(ExecuteSearchCustomerByIDNumber));
-            set => searchCustomerByIDNumber = value;
-        }
         private void ExecuteSearchCustomerByIDNumber()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber)) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber,3);
+            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber, 3);
             customerSelectionWindow.ShowDialog();
             if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
                 CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
-        }
-        private RelayCommand searchCustomerByName;
-        public RelayCommand SearchCustomerByName
-        {
-            get =>
-                searchCustomerByName ??
-                (searchCustomerByName = new RelayCommand(ExecuteSearchCustomerByName));
-            set => searchCustomerByName = value;
         }
         private void ExecuteSearchCustomerByName()
         {
@@ -158,29 +179,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
                 CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
-        private RelayCommand searchCustomerByBirthday;
-        public RelayCommand SearchCustomerByBirthday
-        {
-            get =>
-                searchCustomerByBirthday ??
-                (searchCustomerByBirthday = new RelayCommand(ExecuteSearchCustomerByBirthday));
-            set => searchCustomerByBirthday = value;
-        }
         private void ExecuteSearchCustomerByBirthday()
         {
             if (CurrentPrescription.Patient.Birthday is null) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)CurrentPrescription.Patient.Birthday,false), 1);
+            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)CurrentPrescription.Patient.Birthday, false), 1);
             customerSelectionWindow.ShowDialog();
             if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
                 CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
-        }
-        private RelayCommand searchCustomerByTel;
-        public RelayCommand SearchCustomerByTel
-        {
-            get =>
-                searchCustomerByTel ??
-                (searchCustomerByTel = new RelayCommand(ExecuteSearchCustomerByTel));
-            set => searchCustomerByTel = value;
         }
         private void ExecuteSearchCustomerByTel()
         {
@@ -188,15 +193,102 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.Tel, 4);
             customerSelectionWindow.ShowDialog();
         }
-        #endregion 
+        private void ExecuteShowInstitutionSelectionWindow(string search)
+        {
+            if (search.Length < 4) return;
+            var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
+            switch (result.Count)
+            {
+                case 0:
+                    return;
+                case 1:
+                    CurrentPrescription.Treatment.Institution = result[0];
+                    break;
+                default:
+                    var institutionSelectionWindow = new InstitutionSelectionWindow.InstitutionSelectionWindow(search);
+                    institutionSelectionWindow.ShowDialog();
+                    break;
+            }
+        }
+        private void ExecuteShowCommonInstitutionSelectionWindow()
+        {
+            
+        }
+        private void ExecuteAdjustButtonClick()
+        {
+            var error = CurrentPrescription.CheckPrescriptionRule();
+            if (!string.IsNullOrEmpty(error))
+            {
+                MessageWindow.ShowMessage(error,MessageType.ERROR);
+            }
+            else
+            {
+                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                CurrentPrescription.ProcessInventory();
+                CurrentPrescription.ProcessEntry();
+                CurrentPrescription.ProcessCashFlow();
+            }
+        }
+        private void ExecuteRegisterButtonClick()
+        {
+
+        }
+        private void ExecutePrescribeButtonClick()
+        {
+
+        }
+        #endregion
+        #region Functions
+        private void InitializeVariables()
+        {
+            InitialItemsSources();
+            InitialCommandActions();
+            RegisterMessengers();
+        }
+        private void InitialItemsSources()
+        {
+            Institutions = ViewModelMainWindow.Institutions;
+            Divisions = ViewModelMainWindow.Divisions;
+            AdjustCases = ViewModelMainWindow.AdjustCases;
+            PaymentCategories = ViewModelMainWindow.PaymentCategories;
+            PrescriptionCases = ViewModelMainWindow.PrescriptionCases;
+            Copayments = ViewModelMainWindow.Copayments;
+            SpecialTreats = ViewModelMainWindow.SpecialTreats;
+            Usages = ViewModelMainWindow.Usages;
+            Positions = ViewModelMainWindow.Positions;
+        }
+        private void InitialCommandActions()
+        {
+            ShowCooperativeSelectionWindow = new RelayCommand(ExecuteShowCooperativeWindow);
+            ShowCustomerSelectionWindow = new RelayCommand(ExecuteShowCustomerWindow);
+            SearchCustomerByIDNumber = new RelayCommand(ExecuteSearchCustomerByIDNumber);
+            SearchCustomerByName = new RelayCommand(ExecuteSearchCustomerByName);
+            SearchCustomerByBirthday = new RelayCommand(ExecuteSearchCustomerByBirthday);
+            SearchCustomerByTel = new RelayCommand(ExecuteSearchCustomerByTel);
+            ShowCommonInstitutionSelectionWindow = new RelayCommand(ExecuteShowCommonInstitutionSelectionWindow);
+            ShowInstitutionSelectionWindow = new RelayCommand<string>(ExecuteShowInstitutionSelectionWindow);
+            AdjustButtonClick = new RelayCommand(ExecuteAdjustButtonClick);
+            RegisterButtonClick = new RelayCommand(ExecuteRegisterButtonClick);
+            PrescribeButtonClick = new RelayCommand(ExecutePrescribeButtonClick);
+        }
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
+            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
+        }
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
             CurrentPrescription.Patient = receiveSelectedCustomer;
         }
-
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
         }
+        private void GetSelectedInstitution(Institution receiveSelectedInstitution)
+        {
+            CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
+        }
+        #endregion
     }
 }
