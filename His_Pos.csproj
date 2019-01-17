@@ -302,7 +302,7 @@
     <Compile Include="NewClass\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
-    <Compile Include="NewClass\Prescription\Position\Positions.cs" />
+    <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Prescriptions.cs" />
@@ -331,7 +331,11 @@
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreatDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreats.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
-    <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
+    <Compile Include="NewClass\Product\Medicine\Usage\Usages.cs" />
+    <Compile Include="NewClass\Product\Medicine\Medicine.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineNHI.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineOTC.cs" />
+    <Compile Include="NewClass\Product\Medicine\Medicines.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
@@ -461,8 +465,8 @@
     <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="Class\Pharmacy\Pharmacy.cs" />
     <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
-    <Compile Include="NewClass\Prescription\Position\Position.cs" />
-    <Compile Include="NewClass\Prescription\Position\PositionDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
+    <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
     <Compile Include="Class\PredictChronic.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
@@ -513,8 +517,8 @@
     <Compile Include="Class\Leave\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\OTC.cs" />
-    <Compile Include="NewClass\Prescription\Usage\Usage.cs" />
-    <Compile Include="NewClass\Prescription\Usage\UsageDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\Usage\Usage.cs" />
+    <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="Class\WareHouse.cs" />
     <Compile Include="Class\WareHouseDb.cs" />

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
-using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -10,7 +9,8 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Prescription.Usage;
+using His_Pos.NewClass.Product.Medicine.Position;
+using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.ChromeTabViewModel
 {

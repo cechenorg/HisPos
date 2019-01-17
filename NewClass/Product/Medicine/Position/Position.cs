@@ -1,10 +1,7 @@
-﻿using System.ComponentModel;
-using System.Data;
-using System.Runtime.CompilerServices;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using JetBrains.Annotations;
 
-namespace His_Pos.NewClass.Prescription.Position
+namespace His_Pos.NewClass.Product.Medicine.Position
 {
     public class Position : ObservableObject
     { 

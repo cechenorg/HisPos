@@ -1,9 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.NewClass;
-using His_Pos.NewClass.Usage;
 
-namespace His_Pos.NewClass.Prescription.Usage
+namespace His_Pos.NewClass.Product.Medicine.Usage
 {
     public class Usages:Collection<Usage>
     {

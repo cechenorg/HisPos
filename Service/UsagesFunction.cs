@@ -3,8 +3,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Documents;
 using His_Pos.Class;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
+using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.Service
 {
