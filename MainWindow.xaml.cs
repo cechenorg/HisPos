@@ -163,11 +163,7 @@ namespace His_Pos
             timer.Start();
         }
 
-        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (Tabs.SelectedItem is null) return;
-            //((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
-        }
+       
 
         private void Shortcut_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

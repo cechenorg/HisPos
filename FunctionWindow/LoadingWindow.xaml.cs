@@ -391,29 +391,6 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
         
-        public void GetCustomerData(CustomerManageView customerManage)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得客戶資料...");
-
-                var collection = "";/// CustomerDb.GetCustomerData();
-
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    customerManage.CustomerCollection = null;///collection;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    customerManage.DataGridCustomer.SelectedIndex = 0;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
         public void InitEmployeeManageView(EmployeeManageView employeeManage)
         {
             Show();

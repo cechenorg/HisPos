@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace His_Pos.NewClass.Person.Customer
 {
     public class Customer:Person
-    {
+    { 
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
@@ -23,16 +23,15 @@ namespace His_Pos.NewClass.Person.Customer
         #region Function
         public void Save()
         {
+            CustomerDb.Save(this);
         }
         public void Delete()
         {
         }
         public Customer GetCustomerByCusId(int cusId)
         {
-            MainWindow.ServerConnection.OpenConnection();
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            MainWindow.ServerConnection.CloseConnection();
             return customer;
         }
         public Customer Check() {

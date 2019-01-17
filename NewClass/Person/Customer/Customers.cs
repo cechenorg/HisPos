@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Person.Customer
 {
-    public class Customers:Collection<Customer>
+    public class Customers:ObservableCollection<Customer>
     {
         public Customers()
         {
