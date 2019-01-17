@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,6 +20,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             return this;
         }
         #region -----Define Command-----  
+        public RelayCommand SelectionChangedCommand { get; set; }
+        public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         #endregion
@@ -40,8 +44,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             get { return changeText; }
             set { Set(() => ChangeText, ref changeText, value); }
         }
-        public Brush changeForeground;
-        public Brush ChangeForeground
+        public string changeForeground;
+        public string ChangeForeground
         {
             get { return changeForeground; }
             set { Set(() => ChangeForeground, ref changeForeground, value); }
@@ -57,16 +61,57 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public Customer Customer
         {
             get { return customer; }
-            set { Set(() => Customer, ref customer, value); }
+            set { 
+                Set(() => Customer, ref customer, value);
+            }
+        }
+        public Genders genders = new Genders();
+        public Genders Genders
+        {
+            get { return genders; }
+            set {
+                Set(() => Genders, ref genders, value);
+            }
         }
         #endregion
         public CustomerManageViewModel() {
-            InitData(); 
+            InitData();
+            DataChangeCommand = new RelayCommand(DataChangeAction);
+            CancelCommand = new RelayCommand(CancelAction);
+            SubmitCommand = new RelayCommand(SubmitAction);
+            SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
         }
         #region Action
-
+        public void SelectionChangedAction()
+        {
+            if (Customer is null) return;
+            Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == Customer.Id));
+            InitDataChanged(); 
+        }
+        public void DataChangeAction() {
+            DataChanged();
+        }
+        public void CancelAction() {
+            Customer =  NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == Customer.Id));
+            InitDataChanged(); 
+        }
+        public void SubmitAction()
+        { 
+            for (int i = 0; i < CustomerCollection.Count;i ++)
+            {  
+                if (CustomerCollection[i].Id == Customer.Id) { 
+                    CustomerCollection[i] = Customer;
+                    Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == CustomerCollection[i].Id));
+                    break;
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            Customer.Save();
+            MainWindow.ServerConnection.CloseConnection();
+            InitDataChanged();
+        }
         #endregion
-        
+
         #region Function
         public void InitData()
         {
@@ -75,14 +120,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             CustomerCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
-                Customer = CustomerCollection[0];
+                Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
+            InitDataChanged();
         }
         private void DataChanged()
         {
               
             ChangeText = "已修改";
-            ChangeForeground = Brushes.Red;
-
+            ChangeForeground = "Red"; 
             BtnCancelEnable = true;
             BtnSubmitEnable = true;
         }
@@ -90,8 +135,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         private void InitDataChanged()
         {
             ChangeText = "未修改";
-            ChangeForeground = Brushes.Black; 
-            BtnSubmitEnable = false;
+            ChangeForeground = "Black";
+            BtnCancelEnable = false;
             BtnSubmitEnable = false;
         }
         #endregion

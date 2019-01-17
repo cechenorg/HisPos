@@ -297,7 +297,7 @@
                 <chromeTabs:ChromeTabControl x:Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="120"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White" PinTabCommand="{Binding PinTabCommand}"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged"
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900"  
                              ContainerItemPreparedForOverride="TabControl_ContainerItemPreparedForOverride">
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
