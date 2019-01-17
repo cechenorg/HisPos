@@ -15,13 +15,15 @@ using System.Windows.Shapes;
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
     /// <summary>
-    /// AddProductWindow.xaml 的互動邏輯
+    /// ProductPurchaseReturnAddProductWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class AddProductWindow : Window
+    public partial class ProductPurchaseReturnAddProductWindow : Window
     {
-        public AddProductWindow()
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum)
         {
             InitializeComponent();
+
+            DataContext = new AddProductViewModel(searchString, addProductEnum);
         }
     }
 }

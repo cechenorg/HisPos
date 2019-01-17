@@ -269,10 +269,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FunctionWindow\AddProductWindow\AddProductEnum.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddProductViewModel.cs" />
     <Compile Include="Database\DataBaseFunction.cs" />
-    <Compile Include="FunctionWindow\AddProductWindow\AddProductWindow.xaml.cs">
-      <DependentUpon>AddProductWindow.xaml</DependentUpon>
+    <Compile Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml.cs">
+      <DependentUpon>ProductPurchaseReturnAddProductWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
@@ -329,6 +330,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
     <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
+    <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
@@ -929,7 +931,7 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
-    <Page Include="FunctionWindow\AddProductWindow\AddProductWindow.xaml">
+    <Page Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

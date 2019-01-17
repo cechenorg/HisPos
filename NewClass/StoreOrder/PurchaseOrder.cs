@@ -43,5 +43,10 @@ namespace His_Pos.NewClass.StoreOrder
         public override void SaveOrder()
         {
         }
+
+        public override void AddProductByID(string iD)
+        {
+            
+        }
     }
 }
