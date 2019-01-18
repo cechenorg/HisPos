@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using System.Data.SqlTypes;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -71,9 +73,11 @@ namespace His_Pos.NewClass.Prescription
             newRow["PreMas_ImportFileID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.Id); 
             newRow["PreMas_SerialNumber"] = DBNull.Value;
+            newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.Id; 
             newRow["PreMas_MakeUpMarkID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", p.Treatment.PaymentCategory.Id);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", p.Treatment.MedicalNumber);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", "0001");
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", p.Treatment.MedicalNumber); 要補
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MainDiseaseID", p.Treatment.MainDisease.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_SecondDiseaseID", p.Treatment.SubDisease.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DivisionID", p.Treatment.Division.Id);
@@ -97,7 +101,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent", p.DeclareContent);
+            //DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent",  new SqlXml(new XmlTextReader(p.DeclareContent.InnerXml, XmlNodeType.Document, null)));要補
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent", DBNull.Value);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare); 
@@ -106,10 +111,10 @@ namespace His_Pos.NewClass.Prescription
         }
         public static DataTable SetPrescriptionDetail(Prescription p) { //一般藥費
             int medCount = 1;
-            DataTable prescriptionMasterTable = PrescriptionMasterTable();
+            DataTable prescriptionDetailTable = PrescriptionDetailTable();
              
             foreach (var med in p.Medicines) {
-                DataRow newRow = prescriptionMasterTable.NewRow();
+                DataRow newRow = prescriptionDetailTable.NewRow();
                 newRow["PreDet_PrescriptionID"] = DBNull.Value; 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", 1); 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", 100); //還沒算
@@ -123,12 +128,12 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", med.PaySelf ? med.Price : med.NHIPrice); 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", med.Days);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med.PaySelf);
-                prescriptionMasterTable.Rows.Add(newRow);
+                prescriptionDetailTable.Rows.Add(newRow);
                 if (!med.PaySelf)
                     medCount++;
             }
             //這裡要補藥事服務費
-            return prescriptionMasterTable;
+            return prescriptionDetailTable;
         }
         public static DataTable SetPrescriptionDetailSimpleForm(Prescription p) { //日記藥費
             int medCount = 1;
@@ -192,7 +197,7 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_MedicalServiceID", typeof(String));
             masterTable.Columns.Add("PreMas_MedicalServicePoint", typeof(int));
             masterTable.Columns.Add("PreMas_OldMedicalNumber", typeof(String));
-            masterTable.Columns.Add("PreMas_DeclareContent", typeof(XmlDocument));
+            masterTable.Columns.Add("PreMas_DeclareContent", typeof(SqlXml));
             masterTable.Columns.Add("PreMas_IsSendToServer", typeof(bool));
             masterTable.Columns.Add("PreMas_IsGetCard", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));

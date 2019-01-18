@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
@@ -73,7 +74,7 @@ namespace His_Pos.NewClass.Prescription
         public string Remark { get; }//回傳合作診所單號 
         public int MedicineDays { get; set; } //給藥日份
         public int MedicalServiceID { get; set; } //藥事服務代碼 
-        public string DeclareContent { get; set; } //申報檔內容 
+        public XmlDocument DeclareContent { get; set; } = new XmlDocument(); //申報檔內容
         public int DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區 = 
