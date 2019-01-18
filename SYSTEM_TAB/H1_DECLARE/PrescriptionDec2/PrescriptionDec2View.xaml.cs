@@ -516,7 +516,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             string medPaySelf = string.Empty;
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
             var buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Now.Date; //扣庫條件
-            var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id.ToString(), SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
+            var declareTrade = new DeclareTrade(ViewModelMainWindow.CurrentUser.Id.ToString(), SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType; 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                 string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) &&
@@ -1791,7 +1791,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     switch (cName)
                     {
                         case "DivisionCombo":
-                            if (!MainWindow.CurrentUser.Id.Equals(((MedicalPersonnel) HisPerson.SelectedItem).Id))
+                            if (!ViewModelMainWindow.CurrentUser.Id.Equals(((MedicalPersonnel) HisPerson.SelectedItem).Id))
                                 HisPerson.Focus();
                             else
                                 MedicalNumber.Focus();
@@ -2172,7 +2172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 
             if (isMedicalPerson)
             {
-                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(MainWindow.CurrentUser.Id));
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
             }
             else
             {

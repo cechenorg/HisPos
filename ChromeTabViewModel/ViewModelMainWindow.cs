@@ -156,6 +156,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
+        public static Employee CurrentUser { get; set; }
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();

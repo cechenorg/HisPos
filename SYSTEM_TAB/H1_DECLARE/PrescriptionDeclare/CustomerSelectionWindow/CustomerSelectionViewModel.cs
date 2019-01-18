@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public Customer SelectedCustomer
         {
             get => selectedCustomer;
-            private set
+            set
             {
                 Set(() => SelectedCustomer, ref selectedCustomer, value);
             }
@@ -97,6 +97,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         {
             SelectedCustomer.UpdateEditTime();
             SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
+            Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
         }
         #endregion

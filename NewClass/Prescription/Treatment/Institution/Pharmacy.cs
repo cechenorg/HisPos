@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution {
@@ -40,8 +41,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
             pharmacy.MedicalPersonnels = new MedicalPersonnels();
-            if (MainWindow.CurrentUser.WorkPositionId == 2)
-                pharmacy.MedicalPersonnel = new MedicalPersonnel(MainWindow.CurrentUser);
             MainWindow.ServerConnection.CloseConnection();
             return pharmacy;
         }

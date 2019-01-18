@@ -52,7 +52,17 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
         }
         public int Id { get; set; }
-        public Customer Patient { get; set; }//病患
+        private Customer patient;
+
+        public Customer Patient
+        {
+            get => patient;
+            set
+            {
+                Set(() => Patient, ref patient, value);
+            }
+        } //病患
+
         public IcCard Card { get; set; }
         private Treatment.Treatment treatment;
         public Treatment.Treatment Treatment { get; set; }//處方資料

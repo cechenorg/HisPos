@@ -19,6 +19,7 @@ using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -41,10 +42,10 @@ namespace His_Pos
         public static MySQLConnection SingdeConnection = new MySQLConnection();
 
         public static List<Feature> HisFeatures = new List<Feature>();
-        public static Employee CurrentUser;
         public static MainWindow Instance;
 
         private static int hisApiErrorCode;
+
         public int HisApiErrorCode
         {
             get => hisApiErrorCode;
@@ -61,7 +62,9 @@ namespace His_Pos
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
-            CurrentUser = user;
+            ViewModelMainWindow.CurrentUser = user;
+            if (ViewModelMainWindow.CurrentUser.WorkPositionId == 2)
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
@@ -71,7 +74,7 @@ namespace His_Pos
         
         private void InitialUserBlock()
         {
-            UserName.Content = CurrentUser.Name;
+            UserName.Content = ViewModelMainWindow.CurrentUser.Name;
         }
 
         private void FeatureFactory()
@@ -117,7 +120,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = CurrentUser.GetTabAuth();
+            Collection<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)

@@ -175,32 +175,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
             customerSelectionWindow.ShowDialog();
-            if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
-                CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
         private void ExecuteSearchCustomerByIDNumber()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber)) return;
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber, 3);
             customerSelectionWindow.ShowDialog();
-            if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
-                CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
         private void ExecuteSearchCustomerByName()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name)) return;
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.Name, 2);
             customerSelectionWindow.ShowDialog();
-            if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
-                CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
         private void ExecuteSearchCustomerByBirthday()
         {
             if (CurrentPrescription.Patient.Birthday is null) return;
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)CurrentPrescription.Patient.Birthday, false), 1);
             customerSelectionWindow.ShowDialog();
-            if (((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer != null)
-                CurrentPrescription.Patient = ((CustomerSelectionViewModel)customerSelectionWindow.DataContext).SelectedCustomer;
         }
         private void ExecuteSearchCustomerByTel()
         {

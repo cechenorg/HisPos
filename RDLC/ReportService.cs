@@ -11,6 +11,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
@@ -166,7 +167,7 @@ namespace His_Pos.RDLC
                     {"PharmacyId", currentPharmacy.Id},
                     {"PharmacyAddr", currentPharmacy.Address},
                     {"PharmacyTel", currentPharmacy.Tel},
-                    {"MedicalPerson", MainWindow.CurrentUser.Name},
+                    {"MedicalPerson", ViewModelMainWindow.CurrentUser.Name},
                     {"PatientName", p.Customer.Name},
                     {"PatientId", p.Customer.IcNumber},
                     {"PatientTel", p.Customer.ContactInfo.Tel},

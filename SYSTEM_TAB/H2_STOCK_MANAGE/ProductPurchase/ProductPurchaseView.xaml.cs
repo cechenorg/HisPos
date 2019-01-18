@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
@@ -310,7 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             ///if (!confirmWindow.Confirm) return;
 
             StoreOrderData.Type = OrderType.DONE;
-            StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
+            StoreOrderData.RecEmp = ViewModelMainWindow.CurrentUser.Name;
             SaveOrder();
 
             UpdateProductDatas();
@@ -324,7 +325,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
                 if (true)///confirmWindow.Confirm)
                 {
-                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser,StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
+                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, ViewModelMainWindow.CurrentUser,StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
                         "訂單 " + StoreOrderData.Id + " 缺貨 待補貨");
                     storeOrder.Type = OrderType.PROCESSING;
 
