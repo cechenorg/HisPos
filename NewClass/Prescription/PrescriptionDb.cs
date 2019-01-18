@@ -229,10 +229,11 @@ namespace His_Pos.NewClass.Prescription
 
         }
 
-        public static DataTable GetPrescriptionCountByID(int pharmacistId)
+        public static DataTable GetPrescriptionCountByID(string pharmacistIdnum)
         {
-            var table = new DataTable();
-            return table;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacistIdnum);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList); 
         }
     }
 }

@@ -15,7 +15,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         }
         public MedicalPersonnel(DataRow r)
         {
-
+            Id = r.Field<int>("Emp_ID");
+            Name = r.Field<string>("Emp_Name"); 
+             IdNumber = r.Field<string>("Emp_IDNumber");
         }
         public int Id { get; set; }
         public string Name { get; set; }

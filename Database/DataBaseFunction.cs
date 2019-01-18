@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Database {
     public static class DataBaseFunction {
-        public static void AddColumnValue<T>(DataRow row,string column,T value) {
+        public static void AddColumnValue(DataRow row,string column,Object value) {
             row[column] = value;
             bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
 

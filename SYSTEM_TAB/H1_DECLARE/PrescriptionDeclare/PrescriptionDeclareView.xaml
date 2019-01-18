@@ -540,7 +540,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="8,0,8,0">
                         <Label Content="藥品點數 : " Style="{StaticResource BoldLabelContent18}"/>
-                        <Label Content="{Binding CurrentPrescription.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Width="100"  Style="{StaticResource BoldLabelContent18}"/>
+                        <Label Content="{Binding CurrentPrescription.PrescriptionPoint.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Width="100"  Style="{StaticResource BoldLabelContent18}"/>
                         <Image Width="30" Height="30" Margin="100,10,10,10" Source="/Images/vip.png" Visibility="{Binding IsNotReceiveCopayment,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
