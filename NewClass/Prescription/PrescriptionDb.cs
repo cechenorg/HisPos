@@ -14,6 +14,7 @@ using System.Xml.Serialization;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using System.Data.SqlTypes;
 using His_Pos.ChromeTabViewModel;
+using System.Xml.Linq;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -101,7 +102,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            //DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent",  new SqlXml(new XmlTextReader(p.DeclareContent.InnerXml, XmlNodeType.Document, null)));要補
+            if (string.IsNullOrEmpty(ToXmlDocument(p.DeclareContent).InnerXml))
+                newRow["PreMas_SerialNumber"] = DBNull.Value;
+            else
+                newRow["PreMas_SerialNumber"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null)); 
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent", DBNull.Value);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
@@ -239,6 +243,15 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacistIdnum);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList); 
+        }
+
+        public static XmlDocument ToXmlDocument(XDocument xDocument) {
+            var xmlDocument = new XmlDocument();
+            using (var xmlReader = xDocument.CreateReader())
+            {
+                xmlDocument.Load(xmlReader);
+            }
+            return xmlDocument;
         }
     }
 }
