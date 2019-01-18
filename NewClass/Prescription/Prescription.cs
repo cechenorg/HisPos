@@ -81,10 +81,10 @@ namespace His_Pos.NewClass.Prescription
         #region Function
         public int InsertPresription()
         {
-            if (MedicineDays <= 3)
-            {
-                CheckIfSimpleFormDeclare();
-            }
+            //if (MedicineDays <= 3)
+            //{
+            //    CheckIfSimpleFormDeclare();
+            //}
             return PrescriptionDb.InsertPrescription(this);
         }
 
@@ -103,7 +103,7 @@ namespace His_Pos.NewClass.Prescription
 
         private int CountOralLiquidAgent()
         {
-            return Medicines.Count(m=>m is MedicineNHI med && med.Note.Contains(Properties.Resources.口服液劑));
+            return Medicines.Count(m=>m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Properties.Resources.口服液劑));
         }
 
         private int CountDayPayAmount(int cusAge, int medFormCount)
@@ -136,7 +136,7 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
 
-        public int UpdatePrescriptionCount()//計算金流
+        public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.Id).Rows[0].Field<int>("");
         }
