@@ -26,7 +26,16 @@ namespace His_Pos.NewClass.Product
         public string ID { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
-        public string FullName => EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
+
+        public string FullName
+        {
+            get
+            {
+                if(EnglishName.Contains(" "))
+                    return EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
+                return EnglishName + ChineseName;
+            }
+        }
         public double Inventory { get; set; }
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }

@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.NewClass.Product;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
@@ -111,15 +113,19 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 }
                 ProStructCollectionView = ProStructCollectionViewSource.View;
                 ProStructCollectionViewSource.Filter += FilterByProductEnable;
-                if (ProductStructCollection.Count == 1)
+                switch (ProductStructCollection.Count)
                 {
-                    SelectedProductStruct = ProductStructCollection[0];
-                    ProductSelectedAction();
-                }
-                else
-                {
-                    ProStructCollectionViewSource.View.MoveCurrentToFirst();
-                    SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
+                    case 0:
+                        MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+                        break;
+                    case 1:
+                        SelectedProductStruct = ProductStructCollection[0];
+                        ProductSelectedAction();
+                        break;
+                    default:
+                        ProStructCollectionViewSource.View.MoveCurrentToFirst();
+                        SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
+                        break;
                 }
             }
         }
