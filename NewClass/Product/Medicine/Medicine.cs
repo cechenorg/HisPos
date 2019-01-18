@@ -16,6 +16,12 @@ namespace His_Pos.NewClass.Product.Medicine
         }
         public Medicine(DataRow r) : base(r)
         {
+            NHIPrice = (double)r.Field<decimal>("Med_Price");
+            Inventory = r.Field<int>("Inv_Inventory");
+            Vendor = r.Field<string>("Med_Manufactory");
+            Control = r.Field<bool>("Med_IsCommon");
+            Frozen = r.Field<bool>("Med_IsFrozen");
+            Enable = r.Field<bool>("Pro_IsEnable");
             Usage = new Usage.Usage();
             Position = new Position.Position();
         }
@@ -194,5 +200,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+       
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,11 @@ namespace His_Pos.NewClass.Product.Medicine
 {
     public static class MedicineDb
     {
-        public static DataRow GetMedicinesBySearchId(string medicineID)
+        public static DataTable GetMedicinesBySearchId(string medicineID)
         {
-            var table = new DataTable();
-            return table.Rows[0];
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            Database.DataBaseFunction.AddSqlParameter(parameterList, "Pro_Id", medicineID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchId]", parameterList);     
         }
     }
 }

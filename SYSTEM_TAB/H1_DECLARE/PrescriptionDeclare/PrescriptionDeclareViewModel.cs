@@ -349,16 +349,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
-            //var r = MedicineDb.GetMedicinesBySearchId(proId);
-            //if(r.Table.Columns.Contains("Med_Form"))
-            //    CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineNHI(r);
-            //else
-            //{
-            //    CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineOTC(r);
-            //}
-            CurrentPrescription.Medicines[SelectedMedicinesIndex] = new MedicineNHI(selectedProduct);
-            if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
-                CurrentPrescription.Medicines.Add(new Medicine());
+              CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
+            
+               if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
+               CurrentPrescription.Medicines.Add(new Medicine());
         }
         #endregion
         #region CommandActions

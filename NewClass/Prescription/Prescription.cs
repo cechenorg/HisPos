@@ -71,6 +71,22 @@ namespace His_Pos.NewClass.Prescription
         public int InsertPresription() {
             return PrescriptionDb.InsertPrescription(this);
         }
+        public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
+            DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
+            foreach (DataRow r in table.Rows)
+            {
+                switch (r.Field<int>("DataType"))
+                {
+                    case 0:
+                        Medicines[selectedMedicinesIndex] = new MedicineOTC(r);
+                        break;
+                    case 1:
+                        Medicines[selectedMedicinesIndex] = new MedicineNHI(r);
+                        break;
+                }
+            }
+        }
+        
         public void PrintMedBag() { 
         }
 

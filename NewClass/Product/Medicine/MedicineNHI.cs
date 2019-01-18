@@ -10,7 +10,18 @@ namespace His_Pos.NewClass.Product.Medicine
     public class MedicineNHI:Medicine
     {
         public MedicineNHI() : base(){}
-        public MedicineNHI(DataRow r) : base(r) { }
+        public MedicineNHI(DataRow r) : base(r) {
+            Ingredient = r.Field<string>("Med_Ingredient");
+            SideEffect = r.Field<string>("Med_SideEffect");
+            Indication = r.Field<string>("Med_Indication");
+            ATCCode = r.Field<string>("Med_ATC");
+            SingleCompound = r.Field<string>("Med_SingleCompound");
+            Form = r.Field<string>("Med_Form");
+            ControlLevel = r.Field<int?>("Med_Control");
+            Note = r.Field<string>("Med_NhiNote");
+            Warning = r.Field<string>("Med_Warning"); 
+			 
+        }
         public MedicineNHI(ProductStruct p) : base(p) { }
         private string ingredient;//成分
         public string Ingredient
@@ -84,8 +95,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private int controlLevel;//管制級別
-        public int ControlLevel
+        private int? controlLevel;//管制級別
+        public int? ControlLevel
         {
             get => controlLevel;
             set
