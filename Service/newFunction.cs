@@ -411,9 +411,9 @@ namespace His_Pos.Service
                     var parameters = new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
-                            MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
-                        new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
-                        new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                            ViewModelMainWindow.CurrentPharmacy.Name + "(" + ViewModelMainWindow.CurrentPharmacy.Id + ")"),
+                        new ReportParameter("PharmacyAddress", ViewModelMainWindow.CurrentPharmacy.Address),
+                        new ReportParameter("PharmacyTel", ViewModelMainWindow.CurrentPharmacy.Tel),
                         new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
                         new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
                         new ReportParameter("PatientGender_Birthday",
@@ -486,9 +486,9 @@ namespace His_Pos.Service
                 var parameters = new List<ReportParameter>
                 {
                     new ReportParameter("PharmacyName_Id",
-                        MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
-                    new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
-                    new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                        ViewModelMainWindow.CurrentPharmacy.Name + "(" + ViewModelMainWindow.CurrentPharmacy.Id + ")"),
+                    new ReportParameter("PharmacyAddress", ViewModelMainWindow.CurrentPharmacy.Address),
+                    new ReportParameter("PharmacyTel", ViewModelMainWindow.CurrentPharmacy.Tel),
                     new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
                     new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
                     new ReportParameter("PatientGender_Birthday",
@@ -555,7 +555,7 @@ namespace His_Pos.Service
             var cusGender = CurrentPrescription.Customer.IcCard.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
             var parameters = new List<ReportParameter>
             {
-                new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
+                new ReportParameter("Pharmacy", ViewModelMainWindow.CurrentPharmacy.Name),
                 new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
                 new ReportParameter("Gender", cusGender),
                 new ReportParameter("Birthday",

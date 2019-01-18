@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
@@ -296,7 +297,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             var tdata = new Tdata
             {
                 T1 = "30",
-                T2 = MainWindow.CurrentPharmacy.Id,
+                T2 = ViewModelMainWindow.CurrentPharmacy.Id,
                 T3 = tmpTdata.T3,
                 T4 = "2",
                 T5 = "1",

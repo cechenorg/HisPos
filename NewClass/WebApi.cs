@@ -43,7 +43,7 @@ namespace His_Pos.NewClass
         //    string json = JsonConvert.SerializeObject(cooperativeClinicJson);
         //    Dictionary<string, string> keyValues;
         //    keyValues = new Dictionary<string, string> {
-        //            {"pharmacyMedicalNum",MainWindow.CurrentPharmacy.Id },
+        //            {"pharmacyMedicalNum",ViewModelMainWindow.CurrentPharmacy.Id },
         //             {"json",json }
         //        };
         //    HttpMethod httpMethod = new HttpMethod();
