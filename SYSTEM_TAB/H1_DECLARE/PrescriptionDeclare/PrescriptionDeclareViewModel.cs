@@ -159,7 +159,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = "取得合作診所處方...";
-                cooperativePrescriptions.GetCooperativePrescriptions(MainWindow.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
+                cooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

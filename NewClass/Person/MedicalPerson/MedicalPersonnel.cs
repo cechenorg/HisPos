@@ -1,20 +1,20 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using His_Pos.NewClass.Person;
-using His_Pos.NewClass.Person.Employee;
-using JetBrains.Annotations;
 
-namespace His_Pos.NewClass.Prescription.Treatment
+namespace His_Pos.NewClass.Person.MedicalPerson
 {
     public class MedicalPersonnel : ObservableObject
     {
         public MedicalPersonnel(){}
 
-        public MedicalPersonnel(Employee e)
+        public MedicalPersonnel(Employee.Employee e)
         {
             Name = e.Name;
             IdNumber = e.IDNumber;
+        }
+        public MedicalPersonnel(DataRow r)
+        {
+
         }
         public string Name { get; set; }
         public string IdNumber { get; set; }

@@ -111,7 +111,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                     break;
                 }
             }
-            ///MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            ///ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -122,7 +122,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
            /// employee.Id = table.Rows[0][0].ToString();
             EmployeeCollection.Add(newEmployee);
             DataGridEmployee.SelectedIndex = count;
-            ///MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            ///ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

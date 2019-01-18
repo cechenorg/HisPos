@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
@@ -143,7 +144,8 @@ namespace His_Pos.Class.Declare.IcDataUpload
                                     now.Day.ToString().PadLeft(2, '0') + now.Hour.ToString().PadLeft(2, '0') +
                                     now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
             }
-            PharmacyId = MainWindow.CurrentPharmacy.Id;
+            PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
+            
             MedicalNumber = errorCode.Id;
             MedicalPersonIcNumber = current.Pharmacy.MedicalPersonnel.IcNumber;
             MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;
