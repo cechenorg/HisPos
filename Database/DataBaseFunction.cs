@@ -9,20 +9,10 @@ using System.Threading.Tasks;
 namespace His_Pos.Database {
     public static class DataBaseFunction {
         public static void AddColumnValue(DataRow row,string column,Object value) {
-            row[column] = value;
-            bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
-
-            if(canBeNull)
-            {
-                if (value == null)
-                    row[column] = DBNull.Value;
-                else
-                    row[column] = value;
-            }
-            else
-            {
-                row[column] = value;
-            }
+            if (value == null) 
+                row[column] = DBNull.Value;
+            else 
+                row[column] = value; 
         }
         public static void AddSqlParameter(List<SqlParameter> row, string column, Object value)
         { 
