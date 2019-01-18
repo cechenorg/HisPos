@@ -87,7 +87,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="100"/>
                             <RowDefinition Height="100"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -163,9 +163,8 @@
                             </TextBox>
                           </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Background="{StaticResource Shadow}">
-                            <Label  Content="緊急聯絡人" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                            <Label  Content="姓名" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                            <TextBox Width="150" Text="{Binding Customer.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontSize="18" HorizontalContentAlignment="Center" Margin="10,8,0,8">
+                            <Label  Content="聯絡備註" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            <TextBox Background="{StaticResource LightForeGround}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="720" Text="{Binding Customer.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontSize="18" Margin="10,8,0,8">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
