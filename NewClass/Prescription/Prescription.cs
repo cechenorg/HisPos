@@ -18,6 +18,7 @@ using His_Pos.Service;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Dbody = His_Pos.NewClass.Prescription.DeclareFile.Dbody;
 using Ddata = His_Pos.NewClass.Prescription.DeclareFile.Ddata;
+using Dhead = His_Pos.NewClass.Prescription.DeclareFile.Dhead;
 using Pdata = His_Pos.NewClass.Prescription.DeclareFile.Pdata;
 
 namespace His_Pos.NewClass.Prescription
@@ -89,8 +90,10 @@ namespace His_Pos.NewClass.Prescription
             MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
             PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p=>int.Parse(p.P9)) : 0;//計算特殊材料點數
             CreateDeclareFileContent(details);//產生申報資料
             return PrescriptionDb.InsertPrescription(this, details);
         }
@@ -107,16 +110,17 @@ namespace His_Pos.NewClass.Prescription
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
             var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
             details.Add(medicalService);
-            if (CheckIfSimpleFormDeclare())
+            int dailyPrice = CheckIfSimpleFormDeclare();
+            if (dailyPrice > 0)
             {
                 foreach (var d in details)
                 {
                     if (!d.P1.Equals("1")) continue;
                     d.P1 = "4";
-                    d.P8 = "{0:0000000.00}";
-                    d.P9 = "{0:0000000}";
+                    d.P8 = $"{0.00:0000000.00}";
+                    d.P9 = "00000000";
                 }
-                var simpleForm = new Pdata(PDataType.SimpleForm, MedicalServiceID, 100, 1);
+                var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
                 details.Add(simpleForm);
             }
             return details;
@@ -172,16 +176,16 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private bool CheckIfSimpleFormDeclare()
+        private int CheckIfSimpleFormDeclare()
         {
-            if (MedicineDays > 3 || !Treatment.AdjustCase.Id.Equals("1")) return false;
+            if (MedicineDays > 3 || !Treatment.AdjustCase.Id.Equals("1")) return 0;
             double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
-            if (dailyPrice*MedicineDays < medicinePoint) return false;
+            if (dailyPrice*MedicineDays < medicinePoint) return 0;
             Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("3"));
             PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
-            return true;
+            return dailyPrice;
         }
 
         private int CountOralLiquidAgent()
@@ -269,6 +273,9 @@ namespace His_Pos.NewClass.Prescription
         public void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
         {
             Ddata d = new Ddata();
+            d.Dhead = new Dhead();
+            d.Dbody = new Dbody();
+            d.Dbody.Pdata = new List<Pdata>();
             d.Dhead.D1 = Treatment.AdjustCase.Id;
             d.Dhead.D2 = string.Empty;
             d.Dhead.D3 = Patient.IDNumber;
@@ -309,7 +316,7 @@ namespace His_Pos.NewClass.Prescription
             d.Dbody.D43 = Treatment.OriginalMedicalNumber;
             d.Dbody.D44 = Card.NewBornBirthday is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime) Card.NewBornBirthday, false);
             d.Dbody.Pdata = details;
-            DeclareContent = d.SerializeObjectToXDocument();
+            DeclareContent = d.SerializeObjectToXDocument<Ddata>();
         }
 
         private bool CheckIsQuitSmoking()

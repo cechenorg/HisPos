@@ -125,10 +125,9 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
             if (string.IsNullOrEmpty(ToXmlDocument(p.DeclareContent).InnerXml))
-                newRow["PreMas_SerialNumber"] = DBNull.Value;
+                newRow["PreMas_DeclareContent"] = DBNull.Value;
             else
-                newRow["PreMas_SerialNumber"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null)); 
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent", DBNull.Value);
+                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null)); 
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare); 
@@ -151,8 +150,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_TotalAmount", pdata.P7); 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", pdata.P8); 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
-                var med = p.Medicines.SingleOrDefault(m => m.ID.Equals(pdata.P2));
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med != null && med.PaySelf);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", pdata.PaySelf);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             //這裡要補藥事服務費

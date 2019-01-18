@@ -59,17 +59,12 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
         [XmlElement(ElementName = "tdata")]
         public Class.Declare.Tdata Tdata { get; set; }
         [XmlElement(ElementName = "ddata")]
-        public List<Class.Declare.Ddata> Ddata { get; set; }
+        public List<Ddata> Ddata { get; set; }
     }
 
     [XmlRoot(ElementName = "ddata")]
     public class Ddata
     {
-        public Ddata()
-        {
-            Dhead = new Dhead();
-            Dbody = new Dbody();
-        }
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
         [XmlElement(ElementName = "dbody")]
@@ -126,10 +121,6 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
     [XmlRoot(ElementName = "dbody")]
     public class Dbody
     {
-        public Dbody()
-        {
-            Pdata = new List<Pdata>();
-        }
         [XmlElement(ElementName = "d26")]
         public string D26 { get; set; }
         [XmlElement(ElementName = "d30")]
@@ -159,6 +150,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
     [XmlRoot(ElementName = "pdata")]
     public class Pdata
     {
+        public Pdata() { }
         public Pdata(Medicine m,string serial)
         {
             if (m is MedicineNHI && !m.PaySelf)
@@ -175,6 +167,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P11 = $"{m.Days:00}";
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
                 P13 = P12;
+                PaySelf = false;
             }
             else
             {
@@ -192,6 +185,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P11 = days;
                 P12 = string.Empty;
                 P13 = P12;
+                PaySelf = m.PaySelf;
             }
         }
 
@@ -225,6 +219,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                     }
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
                     P13 = P12;
+                    PaySelf = false;
                     break;
                 case PDataType.SimpleForm:
                     P1 = "1";
@@ -243,16 +238,17 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                             P2 = "MA4";
                             break;
                     }
-                    P3 = "{1:0000.00}";
+                    P3 = $"{1.0:0000.00}";
                     P4 = string.Empty;
                     P5 = string.Empty;
                     P6 = percentage.ToString();
                     P7 = $"{amount:00000.0}";
                     P8 = $"{int.Parse(code):00000.0}";
-                    P9 = $"{int.Parse(P8) * int.Parse(P7):00000000}";
+                    P9 = $"{int.Parse(code) * amount:00000000}";
                     P11 = amount.ToString().PadLeft(2,'0');
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
                     P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today.AddDays(amount-1));
+                    PaySelf = false;
                     break;
             }
         }
@@ -286,5 +282,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
         public string P13 { get; set; }
         [XmlElement(ElementName = "p15")]
         public string P15 { get; set; }
+        [XmlIgnore]
+        public bool PaySelf { get; set; }
     }
 }

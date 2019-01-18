@@ -298,6 +298,7 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is null) return string.Empty;
             var doubleType = (double)value;
             return doubleType.ToString(CultureInfo.InvariantCulture);
         }

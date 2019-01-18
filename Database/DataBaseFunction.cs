@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace His_Pos.Database {
     public static class DataBaseFunction {
         public static void AddColumnValue(DataRow row,string column,Object value) {
-            if (value == null) 
+            if (value is null || string.IsNullOrEmpty(value.ToString())) 
                 row[column] = DBNull.Value;
             else 
                 row[column] = value; 

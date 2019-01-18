@@ -142,7 +142,7 @@
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                             <xctk:MaskedTextBox.Text>
                                 <Binding Path="CurrentPrescription.Treatment.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                     ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                     ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                     <Binding.ValidationRules>
                                         <service:DateValidationRule/>
                                     </Binding.ValidationRules>
