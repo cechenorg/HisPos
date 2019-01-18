@@ -12,105 +12,71 @@ using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.DeclareFile
 {
-    [XmlRoot(ElementName = "ddata")]
-    public class Ddata : INotifyPropertyChanged
+    [XmlRoot(ElementName = "tdata")]
+    public class Tdata
     {
-        [XmlElement(ElementName = "decId")]
-        public string DecId { get; set; }
-        private Class.Declare.Dhead _dhead;
+        [XmlElement(ElementName = "t1")]
+        public string T1 { get; set; }
+        [XmlElement(ElementName = "t2")]
+        public string T2 { get; set; }
+        [XmlElement(ElementName = "t3")]
+        public string T3 { get; set; }
+        [XmlElement(ElementName = "t4")]
+        public string T4 { get; set; }
+        [XmlElement(ElementName = "t5")]
+        public string T5 { get; set; }
+        [XmlElement(ElementName = "t6")]
+        public string T6 { get; set; }
+        [XmlElement(ElementName = "t7")]
+        public string T7 { get; set; }
+        [XmlElement(ElementName = "t8")]
+        public string T8 { get; set; }
+        [XmlElement(ElementName = "t9")]
+        public string T9 { get; set; }
+        [XmlElement(ElementName = "t10")]
+        public string T10 { get; set; }
+        [XmlElement(ElementName = "t11")]
+        public string T11 { get; set; }
+        [XmlElement(ElementName = "t12")]
+        public string T12 { get; set; }
+        [XmlElement(ElementName = "t13")]
+        public string T13 { get; set; }
+        [XmlElement(ElementName = "t14")]
+        public string T14 { get; set; }
+    }
+
+    [XmlRoot(ElementName = "pharmacy")]
+    public class Pharmacy
+    {
+        [XmlElement(ElementName = "tdata")]
+        public Class.Declare.Tdata Tdata { get; set; }
+        [XmlElement(ElementName = "ddata")]
+        public List<Class.Declare.Ddata> Ddata { get; set; }
+    }
+
+    [XmlRoot(ElementName = "ddata")]
+    public class Ddata
+    {
         [XmlElement(ElementName = "dhead")]
-        public Class.Declare.Dhead Dhead
-        {
-            get => _dhead;
-            set
-            {
-                _dhead = value;
-                OnPropertyChanged(nameof(Dhead));
-            }
-        }
-
-        private Class.Declare.Dbody _dbody { get; set; }
-
+        public Class.Declare.Dhead Dhead { get; set; }
         [XmlElement(ElementName = "dbody")]
-        public Class.Declare.Dbody Dbody
-        {
-            get => _dbody;
-            set
-            {
-                _dbody = value;
-                OnPropertyChanged(nameof(Dbody));
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public Class.Declare.Dbody Dbody { get; set; }
     }
 
     [XmlRoot(ElementName = "dhead")]
     public class Dhead : INotifyPropertyChanged
     {
-        private string _d1;
         [XmlElement(ElementName = "d1")]
-        public string D1
-        {
-            get => _d1;
-            set
-            {
-                _d1 = value;
-                OnPropertyChanged(nameof(D1));
-            }
-        }
-
-        private string _d2;
+        public string D1 { get; set; }
         [XmlElement(ElementName = "d2")]
-        public string D2
-        {
-            get => _d2;
-            set
-            {
-                _d2 = value;
-                OnPropertyChanged(nameof(D2));
-            }
-        }
-
-        private string _d3;
+        public string D2 { get; set; }
+        
         [XmlElement(ElementName = "d3")]
-        public string D3
-        {
-            get => _d3;
-            set
-            {
-                _d3 = value;
-                OnPropertyChanged(nameof(D3));
-            }
-        }
-        private string _d4;
+        public string D3 { get; set; }
         [XmlElement(ElementName = "d4")]
-        public string D4
-        {
-            get => _d4;
-            set
-            {
-                _d4 = value;
-                OnPropertyChanged(nameof(D4));
-            }
-        }
-        private string _d5;
+        public string D4 { get; set; }
         [XmlElement(ElementName = "d5")]
-        public string D5
-        {
-            get => _d5;
-            set
-            {
-                _d5 = value;
-                OnPropertyChanged(nameof(D5));
-            }
-        }
+        public string D5 { get; set; }
         private string _d6;
         [XmlElement(ElementName = "d6")]
         public string D6
