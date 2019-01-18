@@ -86,9 +86,14 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
 
+        public int UpdatePrescriptionCount()//計算金流
+        {
+            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.Id).Rows[0].Field<int>("");
+        }
+
         public string CheckPrescriptionRule()//檢查健保邏輯
         {
-            throw new NotImplementedException();
+            return string.Empty;
         }
 
         public void ProcessInventory()//扣庫

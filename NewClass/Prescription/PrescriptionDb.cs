@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -185,6 +186,12 @@ namespace His_Pos.NewClass.Prescription
         public static void ProcessEntry(int prescriptionID,double consumption, double total)
         {
 
+        }
+
+        public static DataTable GetPrescriptionCountByID(int pharmacistId)
+        {
+            var table = new DataTable();
+            return table;
         }
     }
 }

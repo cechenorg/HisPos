@@ -97,7 +97,7 @@
                 </TextBox>
                 <Button Content="{StaticResource PrescriptionHistory}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Hidden"/>
                 <Label Content="處方張數" Style="{StaticResource BoldLabelContent18}"/>
-                <Label Content="{Binding PrescriptionCount,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="{Binding PrescriptionCount,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
                 <Rectangle Width="132"/>
                     <Button Content="合作診所處方" Background="DarkCyan" BorderThickness="0" Margin="20,0,0,0" Command="{Binding ShowCooperativeSelectionWindow}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Content="取得病患資料" Background="RoyalBlue" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding ShowCustomerSelectionWindow}"/>
@@ -129,13 +129,19 @@
                     <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="Id" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="170" Height="34" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Pharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
-                </StackPanel>
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Pharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding PharmacistSelectionChanged}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                        </ComboBox>
+                    </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MedicalNumber" Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
