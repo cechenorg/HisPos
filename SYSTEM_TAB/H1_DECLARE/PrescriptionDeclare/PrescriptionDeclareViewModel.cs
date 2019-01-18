@@ -261,16 +261,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.ProcessEntry();
                 CurrentPrescription.ProcessCashFlow();
                 CurrentPrescription.PrintMedBag();
+                MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);
                 //每日上傳
             }
         }
         private void RegisterButtonClickAction()
         {
-            //登錄
+            var error = CurrentPrescription.CheckPrescriptionRule();
+            if (!string.IsNullOrEmpty(error))
+            {
+                MessageWindow.ShowMessage(error, MessageType.ERROR);
+            }
+            else
+            {
+                //登錄
+                MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+            }
+
         }
         private void PrescribeButtonClickAction()
         {
-
+            MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
         }
         #endregion
         #region InitialFunctions
