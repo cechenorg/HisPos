@@ -301,6 +301,8 @@
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employee\Employees.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnelDb.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnels.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
@@ -324,7 +326,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Pharmacy.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\PharmacyDb.cs" />
-    <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategoryDb.cs" />

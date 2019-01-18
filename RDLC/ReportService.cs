@@ -62,7 +62,7 @@ namespace His_Pos.RDLC
             foreach (var m in locations)
                 if (m.Name != "MedicineList")
                 {
-                   /// var locationDictionary = CreateDictionary(p,MainWindow.CurrentPharmacy, medicineIndex);
+                   /// var locationDictionary = CreateDictionary(p,ViewModelMainWindow.CurrentPharmacy, medicineIndex);
                    /// var valuePair = locationDictionary.SingleOrDefault(x => x.Key.Equals(m.Name));
                   ///  medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m,valuePair.Value));
                 }

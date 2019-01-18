@@ -577,7 +577,7 @@ namespace His_Pos.FunctionWindow
                 Dispatcher.Invoke((Action)(() =>
                 {
                     exportView.DeclareMedicinesData = null;//tmpDeclareMedicine;
-                    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                    exportView.HisPerson.ItemsSource = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
                     exportView.ReleasePalace.ItemsSource = ViewModelMainWindow.Institutions;
                     exportView.AdjustCaseCombo.ItemsSource = ViewModelMainWindow.AdjustCases;
                 }));
@@ -610,7 +610,7 @@ namespace His_Pos.FunctionWindow
                 prescriptionDec2View.AdjustCases = ViewModelMainWindow.AdjustCases;
                 prescriptionDec2View.SpecialCodes = ViewModelMainWindow.SpecialTreats;
                 prescriptionDec2View.Usages = ViewModelMainWindow.Usages;
-               /// prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+               /// prescriptionDec2View.MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
                 prescriptionDec2View.Positions = null;/// PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {

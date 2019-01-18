@@ -42,7 +42,6 @@ namespace His_Pos
 
         public static List<Feature> HisFeatures = new List<Feature>();
         public static Employee CurrentUser;
-
         public static MainWindow Instance;
 
         private static int hisApiErrorCode;
@@ -56,14 +55,13 @@ namespace His_Pos
             }
         }
 
-        public static Pharmacy CurrentPharmacy;
+        
         public MainWindow(Employee user)
         {
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
             CurrentUser = user;
-            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             Instance = this;
             InitializeMenu();
             InitialUserBlock();

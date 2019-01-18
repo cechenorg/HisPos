@@ -149,7 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             InitData();
         }
         private void InitData() {
-            ///CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+            ///CooperativeCollection = WebApi.GetXmlByDate(ViewModelMainWindow.CurrentPharmacy.Id, StartDate, EndDate);//ViewModelMainWindow.CurrentPharmacy.Id
         }
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
@@ -158,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                /// 
                 return;
             }
-           /// CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+           /// CooperativeCollection = WebApi.GetXmlByDate(ViewModelMainWindow.CurrentPharmacy.Id, StartDate, EndDate);//ViewModelMainWindow.CurrentPharmacy.Id
         }
 
         private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

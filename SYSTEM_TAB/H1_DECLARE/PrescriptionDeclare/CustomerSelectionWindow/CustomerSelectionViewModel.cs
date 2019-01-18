@@ -95,6 +95,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public RelayCommand CustomerSelected { get; set; }
         private void ExecuteCustomerSelected()
         {
+            SelectedCustomer.UpdateEditTime();
             SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
         }

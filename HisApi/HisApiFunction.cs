@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Service;
 
 namespace His_Pos.HisApi
@@ -7,7 +8,7 @@ namespace His_Pos.HisApi
     {
         public string VerifySamdc() {   //安全模組認證
             string msg = string.Empty;
-            int comConnection =  HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            int comConnection =  HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             if(comConnection == -1) msg = "開啟Com失敗";
             if (comConnection == 0) {
                 int samdcStatus = HisApiBase.csVerifySAMDC();
@@ -55,7 +56,7 @@ namespace His_Pos.HisApi
 
         public string VerifyHpcpin() {    //檢查醫事人員PIN值
             string msg = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            int comConnection = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             if (comConnection == -1) msg = "開啟Com失敗";
             if (comConnection == 0) {
                 int hpcStatus = HisApiBase.hpcVerifyHPCPIN();
@@ -89,7 +90,7 @@ namespace His_Pos.HisApi
 
         public string GetBasicData() {
             string data = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            int comConnection = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             HisApiBase.csCloseCom();
             return data;
         }//GetBasicData()

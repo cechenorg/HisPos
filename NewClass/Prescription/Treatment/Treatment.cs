@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Person.MedicalPerson;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment

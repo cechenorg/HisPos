@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -153,11 +155,12 @@ namespace His_Pos.ChromeTabViewModel
         public static SpecialTreats SpecialTreats { get; set; }
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
-
+        public static Pharmacy CurrentPharmacy { get; set; }
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             CanMoveTabs = true;
             ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
