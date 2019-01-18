@@ -11,5 +11,6 @@ namespace His_Pos.NewClass {
         public bool IsRead { get; set; }//是否已讀
         public bool IsSendToSingde { get; set; }//是否傳送藥健康
         public bool IsAdjust { get; set; }//是否調劑.扣庫
+        public bool IsRegister { get; set; } //是否登錄
     }
 }

@@ -132,6 +132,12 @@ namespace His_Pos.NewClass.Prescription
                 }
             }
         }
+        public void DeleteReserve() {
+            PrescriptionDb.DeleteReserve(SourceId);
+        }
+        public void PredictResere() {
+            PrescriptionDb.PredictResere(SourceId);
+        }
         
         public void PrintMedBag() { 
         }
@@ -156,21 +162,27 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void ProcessEntry()//計算庫存現值
-        {
-            double consumption = 0;//耗用
+        public void ProcessEntry(string entryName, string source, int sourceId)//計算庫存現值
+        { 
             double total = 0;//總金額
             foreach (var m in Medicines)
-            {
-                consumption += m.Amount;
+            { 
                 total += m.TotalPrice;
             }
-            PrescriptionDb.ProcessEntry(Id,consumption,total);
+            PrescriptionDb.ProcessEntry(entryName, source, sourceId , total);
         }
 
-        public void ProcessCashFlow()//計算金流
+        public void ProcessCopaymentCashFlow(string name)//計算部分金流
         {
-            PrescriptionDb.ProcessCashFlow(Id);
+            PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.CopaymentPoint);
+        }
+        public void ProcessSelfPayCashFlow(string name)//計算自費金流
+       {
+            PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.AmountSelfPay);
+        }
+        public void ProcessDepositCashFlow(string name)//計算押金金流
+       {
+            PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.Deposit);
         }
     }
 }

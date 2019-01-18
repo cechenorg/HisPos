@@ -244,23 +244,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
+                MainWindow.ServerConnection.OpenConnection();
                 switch (CurrentPrescription.Source)
                 {
                     case PrescriptionSource.Normal:
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
                         CurrentPrescription.ProcessInventory();
+                        CurrentPrescription.ProcessEntry("調劑耗用","PreMasId", CurrentPrescription.Id);
+                        CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+                        CurrentPrescription.ProcessDepositCashFlow("自費");
+                        CurrentPrescription.ProcessSelfPayCashFlow("押金");
                         break;
                     case PrescriptionSource.Cooperative:
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                        CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
+                        CurrentPrescription.ProcessDepositCashFlow("合作自費");
+                        CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
                         //更新API
                         break;
                     case PrescriptionSource.ChronicReserve:
-                        //預約慢箋
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                        CurrentPrescription.PredictResere();
+                        CurrentPrescription.DeleteReserve();
                         CurrentPrescription.ProcessInventory();
+                        CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+                        CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+                        CurrentPrescription.ProcessDepositCashFlow("自費");
+                        CurrentPrescription.ProcessSelfPayCashFlow("押金");
                         break;
-                }
-                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
-                CurrentPrescription.ProcessEntry();
-                CurrentPrescription.ProcessCashFlow();
+                } 
                 CurrentPrescription.PrintMedBag();
+                MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);
                 //每日上傳
             }
@@ -274,13 +288,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
+                MainWindow.ServerConnection.OpenConnection();
                 //登錄
+                MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
             }
 
         }
         private void PrescribeButtonClickAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            //自費調劑
+            MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
         }
         #endregion
