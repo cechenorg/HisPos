@@ -98,8 +98,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DateTime treatDate;//就醫日期 D7
-        public DateTime TreatDate
+        private DateTime? treatDate;//就醫日期 D7
+        public DateTime? TreatDate
         {
             get => treatDate;
             set

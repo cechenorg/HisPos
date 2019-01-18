@@ -272,7 +272,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.ProcessDepositCashFlow("自費");
                         CurrentPrescription.ProcessSelfPayCashFlow("押金");
                         break;
-                } 
+                }
+                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                CurrentPrescription.ProcessEntry();
+                CurrentPrescription.ProcessCashFlow();
                 CurrentPrescription.PrintMedBag();
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);

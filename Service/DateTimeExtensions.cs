@@ -120,5 +120,52 @@ namespace His_Pos.Service
             var minute = (d.Minute).ToString().PadLeft(2, '0');
             return year + month + day + hour + minute;
         }
+
+        public struct Age
+        {
+            public int Years;
+            public int Months;
+            public int Days;
+        }
+        public static Age CalculateAgeToMonth(DateTime birthDate)
+        {
+            int years = DateTime.Today.Year - birthDate.Year;
+            int months = 0;
+            int days = 0;
+
+            // Check if the last year, was a full year.
+            if (DateTime.Today < birthDate.AddYears(years) && years != 0)
+            {
+                years--;
+            }
+
+            // Calculate the number of months.
+            birthDate = birthDate.AddYears(years);
+
+            if (birthDate.Year == DateTime.Today.Year)
+            {
+                months = DateTime.Today.Month - birthDate.Month;
+            }
+            else
+            {
+                months = (12 - birthDate.Month) + DateTime.Today.Month;
+            }
+
+            // Check if last month was a complete month.
+            if (DateTime.Today < birthDate.AddMonths(months) && months != 0)
+            {
+                months--;
+            }
+
+            // Calculate the number of days.
+            birthDate = birthDate.AddMonths(months);
+
+            days = (DateTime.Today - birthDate).Days;
+            Age result;
+            result.Years = years;
+            result.Months = months;
+            result.Days = days;
+            return result;
+        }
     }
 }
