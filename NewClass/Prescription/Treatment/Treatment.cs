@@ -44,11 +44,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
             } 
             PrescriptionCase = ViewModelMainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : ViewModelMainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
             Copayment = ViewModelMainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : ViewModelMainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
+            //判斷 慢箋領藥序號 > 1 => OriginalMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber//原處方就醫序號
             MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
             TreatDate = Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
+            /*
+             * 判斷是否為慢箋 是 AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("2"));
+             *               否 AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("1"));
+             */
             AdjustCase = new AdjustCase.AdjustCase();
-            PaymentCategory = new PaymentCategory.PaymentCategory();
+            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
             SpecialTreat = new SpecialTreat.SpecialTreat();
             Pharmacist = new MedicalPersonnel();
         }
