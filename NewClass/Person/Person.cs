@@ -20,7 +20,11 @@ namespace His_Pos.NewClass.Person
             Id = r.Field<int>("Person_Id");
             Name = r.Field<string>("Person_Name");
             IDNumber = r.Field<string>("Person_IDNumber");
-            Gender = r["Person_Gender"]?.ToString();
+            Gender = r.Field<string>("Person_Gender");
+            if (string.IsNullOrEmpty(Gender) && !string.IsNullOrEmpty(IDNumber) && IDNumber.Length == 10)
+            {
+                Gender = IDNumber[1].Equals('2') ? "女" : "男";
+            }
             Birthday = r.Field<DateTime?>("Person_BirthDay");
             Tel = r.Field<string>("Person_Telephone");
             CellPhone = r.Field<string>("Person_Cellphone");
