@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
@@ -55,6 +56,41 @@ namespace His_Pos.NewClass.Person.Customer
             var age = today.Year - birthdate.Year;
             if (birthdate > today.AddYears(-age)) age--;
             return age;
+        }
+
+        public DateTimeExtensions.Age CountAgeToMonth()
+        {
+            return DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
+        }
+
+        public int CheckAgePercentage()
+        {
+            var cusAge = CountAgeToMonth();
+            if (cusAge.Years == 0 && cusAge.Months < 6)
+            {
+                return 160;
+            }
+            if (cusAge.Years > 0 && cusAge.Years < 2)
+            {
+                return 130;
+            }
+            if (cusAge.Years == 2)
+            {
+                if (cusAge.Months == 0 && cusAge.Days == 0)
+                    return 130;
+                return 120;
+            }
+            if (cusAge.Years > 2 && cusAge.Years <= 6)
+            {
+                if (cusAge.Years == 6)
+                {
+                    if (cusAge.Months == 0 && cusAge.Days == 0)
+                        return 120;
+                    return 100;
+                }
+                return 120;
+            }
+            return 100;
         }
     }
 }

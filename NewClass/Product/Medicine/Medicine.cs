@@ -38,14 +38,11 @@ namespace His_Pos.NewClass.Product.Medicine
             get => amount;
             set
             {
-                if (amount != value)
-                {
-                    Set(() => Amount, ref amount, value);
-                }
+                Set(() => Amount, ref amount, value);
             }
         }
-        private double dosage;//每次用量
-        public double Dosage
+        private double? dosage;//每次用量
+        public double? Dosage
         {
             get => dosage;
             set
@@ -80,8 +77,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private int days;//給藥天數
-        public int Days
+        private int? days;//給藥天數
+        public int? Days
         {
             get => days;
             set

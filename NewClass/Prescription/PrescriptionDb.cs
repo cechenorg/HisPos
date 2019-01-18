@@ -5,12 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Prescription.DeclareFile;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 
 namespace His_Pos.NewClass.Prescription
@@ -55,10 +60,10 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptions;
         }
-        public static int InsertPrescription(Prescription prescription) { 
+        public static int InsertPrescription(Prescription prescription,List<Pdata> prescriptionDetails) { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription)); 
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails)); 
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
@@ -104,28 +109,25 @@ namespace His_Pos.NewClass.Prescription
             prescriptionMasterTable.Rows.Add(newRow); 
             return prescriptionMasterTable;
         }
-        public static DataTable SetPrescriptionDetail(Prescription p) { //一般藥費
-            int medCount = 1;
+        public static DataTable SetPrescriptionDetail(Prescription p,List<Pdata> prescriptionDetails) { //一般藥費
             DataTable prescriptionMasterTable = PrescriptionMasterTable();
-             
-            foreach (var med in p.Medicines) {
+            foreach (var pdata in prescriptionDetails) {
                 DataRow newRow = prescriptionMasterTable.NewRow();
                 newRow["PreDet_PrescriptionID"] = DBNull.Value; 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", 1); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", 100); //還沒算
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_SerialNumber", med.PaySelf ? 0 : medCount); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Point",med.PaySelf ? 0: med.NHIPrice * med.Amount); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineID",med.ID);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Dosage", med.Dosage);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Usage", med.Usage.Name);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Position", med.Position.Name); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_TotalAmount", med.Amount); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", med.PaySelf ? med.Price : med.NHIPrice); 
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", med.Days);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med.PaySelf);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", pdata.P1); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", pdata.P6); //還沒算
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_SerialNumber", pdata.P10); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Point", pdata.P9); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineID", pdata.P2);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Dosage", pdata.P3);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Usage", pdata.P4);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Position", pdata.P5); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_TotalAmount", pdata.P7); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", pdata.P8); 
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
+                var med = p.Medicines.SingleOrDefault(m => m.ID.Equals(pdata.P2));
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med != null && med.PaySelf);
                 prescriptionMasterTable.Rows.Add(newRow);
-                if (!med.PaySelf)
-                    medCount++;
             }
             //這裡要補藥事服務費
             return prescriptionMasterTable;
@@ -192,7 +194,7 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_MedicalServiceID", typeof(String));
             masterTable.Columns.Add("PreMas_MedicalServicePoint", typeof(int));
             masterTable.Columns.Add("PreMas_OldMedicalNumber", typeof(String));
-            masterTable.Columns.Add("PreMas_DeclareContent", typeof(XmlDocument));
+            masterTable.Columns.Add("PreMas_DeclareContent", typeof(SqlXml));
             masterTable.Columns.Add("PreMas_IsSendToServer", typeof(bool));
             masterTable.Columns.Add("PreMas_IsGetCard", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));

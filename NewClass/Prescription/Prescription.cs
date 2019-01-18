@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Declare;
 using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Person;
-using His_Pos.NewClass.Person.Customer;
-using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
-using JetBrains.Annotations;
+using His_Pos.Service;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
+using Dbody = His_Pos.NewClass.Prescription.DeclareFile.Dbody;
+using Ddata = His_Pos.NewClass.Prescription.DeclareFile.Ddata;
+using Pdata = His_Pos.NewClass.Prescription.DeclareFile.Pdata;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -72,33 +72,112 @@ namespace His_Pos.NewClass.Prescription
         public string OrderNumber { get; set; }//傳送藥健康單號
         public string Remark { get; }//回傳合作診所單號 
         public int MedicineDays { get; set; } //給藥日份
-        public int MedicalServiceID { get; set; } //藥事服務代碼 
-        public string DeclareContent { get; set; } //申報檔內容 
+        public string MedicalServiceID { get; set; } //藥事服務代碼 
+        public XDocument DeclareContent { get; set; } //申報檔內容 
         public int DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區 = 
         public Medicines Medicines { get; set; } = new Medicines(); //調劑用藥
         #region Function
-        public int InsertPresription()
+        public int InsertPresription(string medicalNumber)
         {
-            //if (MedicineDays <= 3)
-            //{
-            //    CheckIfSimpleFormDeclare();
-            //}
-            return PrescriptionDb.InsertPrescription(this);
+            CheckMedicalNumber(medicalNumber);//確認就醫序號
+            MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p=>int.Parse(p.P9)) : 0;//計算特殊材料點數
+            CreateDeclareFileContent(details);//產生申報資料
+            return PrescriptionDb.InsertPrescription(this, details);
         }
 
-        private void CheckIfSimpleFormDeclare()
+        private List<Pdata> SetPrescriptionDetail()
         {
+            var details = new List<Pdata>();
+            var serialNumber = 1;
+            foreach (var med in Medicines.Where(m => m is MedicineNHI && !m.PaySelf))
+            {
+                details.Add(new Pdata(med, serialNumber.ToString()));
+                serialNumber++;
+            }
+            details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
+            var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
+            details.Add(medicalService);
+            if (CheckIfSimpleFormDeclare())
+            {
+                foreach (var d in details)
+                {
+                    if (!d.P1.Equals("1")) continue;
+                    d.P1 = "4";
+                    d.P8 = "{0:0000000.00}";
+                    d.P9 = "{0:0000000}";
+                }
+                var simpleForm = new Pdata(PDataType.SimpleForm, MedicalServiceID, 100, 1);
+                details.Add(simpleForm);
+            }
+            return details;
+        }
+
+        private void CheckMedicalServiceData()
+        {
+            if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
+            {
+                MedicalServiceID = "05202B";//一般處方給付(7天以內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+            else
+            {
+                SetChronicMedicalServiceCode();
+            }
+        }
+
+        private void SetChronicMedicalServiceCode()
+        {
+            if (MedicineDays >= 28)
+            {
+                MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 69;
+            }
+            else if (MedicineDays < 14)
+            {
+                MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+            else
+            {
+                MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 59;
+            }
+        }
+
+        private void CheckMedicalNumber(string medicalNumber)
+        {
+            if (Treatment.ChronicSeq is null)
+                Treatment.MedicalNumber = medicalNumber;
+            else
+            {
+                if (Treatment.ChronicSeq > 1)
+                {
+                    Treatment.MedicalNumber = "IC0" + Treatment.ChronicSeq;
+                    Treatment.OriginalMedicalNumber = medicalNumber;
+                }
+                else
+                {
+                    Treatment.MedicalNumber = medicalNumber;
+                }
+            }
+        }
+
+        private bool CheckIfSimpleFormDeclare()
+        {
+            if (MedicineDays > 3 || !Treatment.AdjustCase.Id.Equals("1")) return false;
             double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
-            if (dailyPrice > medicinePoint)
-            {
-                Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals("3"));
-                PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
-                
-            }
+            if (dailyPrice*MedicineDays < medicinePoint) return false;
+            Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("3"));
+            PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
+            return true;
         }
 
         private int CountOralLiquidAgent()
@@ -138,7 +217,7 @@ namespace His_Pos.NewClass.Prescription
 
         public int UpdatePrescriptionCount()//計算處方張數
         {
-            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.Id).Rows[0].Field<int>("");
+            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.Id).Rows[0].Field<int>("Pre_Count");
         }
 
         public string CheckPrescriptionRule()//檢查健保邏輯
@@ -169,6 +248,61 @@ namespace His_Pos.NewClass.Prescription
         public void ProcessCashFlow()//計算金流
         {
             PrescriptionDb.ProcessCashFlow(Id);
+        }
+
+        public void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
+        {
+            Ddata d = new Ddata();
+            d.Dhead.D1 = Treatment.AdjustCase.Id;
+            d.Dhead.D2 = string.Empty;
+            d.Dhead.D3 = Patient.IDNumber;
+            d.Dhead.D4 = string.Empty;
+            d.Dhead.D5 = Treatment.PaymentCategory?.Id;
+            d.Dhead.D6 = DateTimeExtensions.ConvertToTaiwanCalender((DateTime)Patient.Birthday,false);
+            d.Dhead.D7 = Treatment.MedicalNumber;
+            d.Dhead.D8 = Treatment.MainDisease.Id;
+            d.Dhead.D9 = Treatment.SubDisease?.Id;
+            d.Dhead.D13 = Treatment.Division?.Id;
+            d.Dhead.D14 = Treatment.TreatDate is null? string.Empty: DateTimeExtensions.ConvertToTaiwanCalender((DateTime)Treatment.TreatDate, false);
+            d.Dhead.D15 = Treatment.Copayment.Id;
+            d.Dhead.D16 = $"{PrescriptionPoint.ApplyPoint:00000000}";
+            d.Dhead.D17 = $"{PrescriptionPoint.CopaymentPoint:0000}";
+            d.Dhead.D18 = $"{PrescriptionPoint.TotalPoint:00000000}";
+            d.Dhead.D20 = Patient.Name;
+            d.Dhead.D21 = Treatment.Institution.Id;
+            d.Dhead.D22 = Treatment.PrescriptionCase?.Id;
+            d.Dhead.D23 = DateTimeExtensions.ConvertToTaiwanCalender(Treatment.AdjustDate, false);
+            if (!CheckIsQuitSmoking() && !CheckIsHomeCare())
+            {
+                d.Dhead.D24 = d.Dhead.D21;
+            }
+            else
+            {
+                d.Dhead.D24 = string.Empty;
+            }
+            d.Dhead.D25 = Treatment.Pharmacist.IdNumber;
+            d.Dbody.D26 = Treatment.SpecialTreat?.Id;
+            d.Dbody.D30 = MedicineDays.ToString();
+            d.Dbody.D31 = $"{PrescriptionPoint.SpecialMaterialPoint:0000000}";
+            d.Dbody.D32 = "00000000";
+            d.Dbody.D33 = details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)).ToString();
+            d.Dbody.D35 = Treatment.ChronicSeq is null ? string.Empty : Treatment.ChronicSeq.ToString();
+            d.Dbody.D36 = Treatment.ChronicTotal is null ? string.Empty : Treatment.ChronicTotal.ToString();
+            d.Dbody.D37 = MedicalServiceID;
+            d.Dbody.D38 = details.Single(p => p.P1.Equals("9")).P9;
+            d.Dbody.D43 = Treatment.OriginalMedicalNumber;
+            d.Dbody.D44 = Card.NewBornBirthday is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime) Card.NewBornBirthday, false);
+            d.Dbody.Pdata = details;
+            DeclareContent = d.SerializeObjectToXDocument();
+        }
+
+        private bool CheckIsQuitSmoking()
+        {
+            return Treatment.AdjustCase.Id.Equals("5");
+        }
+        private bool CheckIsHomeCare()
+        {
+            return Treatment.AdjustCase.Id.Equals("D");
         }
     }
 }

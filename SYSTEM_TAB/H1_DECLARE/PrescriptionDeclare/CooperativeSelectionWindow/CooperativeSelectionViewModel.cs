@@ -223,7 +223,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 e.Accepted = false;
             else if (StartDate is null)
                 e.Accepted = true;
-            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) >= 0)
+            else if (DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) >= 0)
                 e.Accepted = true;
             else
             {
@@ -236,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 e.Accepted = false;
             else if (EndDate is null)
                 e.Accepted = true;
-            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) <= 0)
+            else if (DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) <= 0)
                 e.Accepted = true;
             else
             {
@@ -260,18 +260,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 e.Accepted = false;
             else if (IsRead != null && (src.PrescriptionStatus.IsRead && (bool)IsRead))
             {
-                if(StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
+                if(StartDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) < 0)
                     e.Accepted = false;
-                else if (EndDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) > 0)
+                else if (EndDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) > 0)
                     e.Accepted = false;
                 else
                     e.Accepted = true;
             }
             else if (IsNotRead != null && (!src.PrescriptionStatus.IsRead && (bool)IsNotRead))
             {
-                if (StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
+                if (StartDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) < 0)
                     e.Accepted = false;
-                else if (EndDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) > 0)
+                else if (EndDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) > 0)
                     e.Accepted = false;
                 else
                     e.Accepted = true;

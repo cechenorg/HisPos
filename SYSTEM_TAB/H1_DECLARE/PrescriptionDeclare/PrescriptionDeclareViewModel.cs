@@ -257,7 +257,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.ProcessInventory();
                         break;
                 }
-                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
                 CurrentPrescription.ProcessEntry();
                 CurrentPrescription.ProcessCashFlow();
                 CurrentPrescription.PrintMedBag();
