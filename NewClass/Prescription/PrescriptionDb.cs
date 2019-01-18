@@ -136,9 +136,9 @@ namespace His_Pos.NewClass.Prescription
             return prescriptionMasterTable;
         }
         public static DataTable SetPrescriptionDetail(Prescription p,List<Pdata> prescriptionDetails) { //一般藥費
-            DataTable prescriptionMasterTable = PrescriptionMasterTable();
+            DataTable prescriptionDetailTable = PrescriptionDetailTable();
             foreach (var pdata in prescriptionDetails) {
-                DataRow newRow = prescriptionMasterTable.NewRow();
+                DataRow newRow = prescriptionDetailTable.NewRow();
                 newRow["PreDet_PrescriptionID"] = DBNull.Value; 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", pdata.P1); 
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", pdata.P6); //還沒算
@@ -153,7 +153,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                 var med = p.Medicines.SingleOrDefault(m => m.ID.Equals(pdata.P2));
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med != null && med.PaySelf);
-                prescriptionMasterTable.Rows.Add(newRow);
+                prescriptionDetailTable.Rows.Add(newRow);
             }
             //這裡要補藥事服務費
             return prescriptionDetailTable;

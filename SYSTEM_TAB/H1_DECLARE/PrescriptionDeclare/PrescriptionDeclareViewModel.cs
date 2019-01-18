@@ -248,7 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 switch (CurrentPrescription.Source)
                 {
                     case PrescriptionSource.Normal:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
                         CurrentPrescription.ProcessInventory();
                         CurrentPrescription.ProcessEntry("調劑耗用","PreMasId", CurrentPrescription.Id);
                         CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
@@ -256,14 +256,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.ProcessSelfPayCashFlow("押金");
                         break;
                     case PrescriptionSource.Cooperative:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
                         CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
                         CurrentPrescription.ProcessDepositCashFlow("合作自費");
                         CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
                         //更新API
                         break;
                     case PrescriptionSource.ChronicReserve:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
                         CurrentPrescription.PredictResere();
                         CurrentPrescription.DeleteReserve();
                         CurrentPrescription.ProcessInventory();
@@ -273,11 +273,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.ProcessSelfPayCashFlow("押金");
                         break;
                 }
-                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
-                CurrentPrescription.ProcessEntry();
-                CurrentPrescription.ProcessCashFlow();
-                CurrentPrescription.PrintMedBag();
                 MainWindow.ServerConnection.CloseConnection();
+                CurrentPrescription.PrintMedBag();
                 MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);
                 //每日上傳
             }
