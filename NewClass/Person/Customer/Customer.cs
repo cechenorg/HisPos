@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Person.Customer
         public Customer(DataRow r) : base(r)
         {
             ContactNote = r.Field<string>("Cus_UrgentNote");
-            LastEdit = r.Field<DateTime>("Cus_EditTime");
+            LastEdit = r.Field<DateTime?>("Cus_EditTime");
         } 
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間

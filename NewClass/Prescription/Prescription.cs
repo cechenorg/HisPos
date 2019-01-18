@@ -138,7 +138,7 @@ namespace His_Pos.NewClass.Prescription
 
         public int UpdatePrescriptionCount()//計算金流
         {
-            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.Id).Rows[0].Field<int>("");
+            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
         }
 
         public string CheckPrescriptionRule()//檢查健保邏輯

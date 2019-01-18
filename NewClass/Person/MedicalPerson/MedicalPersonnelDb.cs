@@ -10,9 +10,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson
     public static class MedicalPersonnelDb
     {
         public static DataTable GetData()
-        {
-            var table = new DataTable();
-            return table;
+        { 
+           return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicalPersonnels]");
         }
     }
 }

@@ -162,6 +162,7 @@ namespace His_Pos.ChromeTabViewModel
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
             CanMoveTabs = true;
             ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
