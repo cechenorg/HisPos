@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
@@ -78,9 +79,42 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區 = 
         public Medicines Medicines { get; set; } = new Medicines(); //調劑用藥
         #region Function
-        public int InsertPresription() {
+        public int InsertPresription()
+        {
+            if (MedicineDays <= 3)
+            {
+                CheckIfSimpleFormDeclare();
+            }
             return PrescriptionDb.InsertPrescription(this);
         }
+
+        private void CheckIfSimpleFormDeclare()
+        {
+            double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
+            var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
+            var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
+            if (dailyPrice > medicinePoint)
+            {
+                Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals("3"));
+                PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
+                
+            }
+        }
+
+        private int CountOralLiquidAgent()
+        {
+            return Medicines.Count(m=>m is MedicineNHI med && med.Note.Contains(Properties.Resources.口服液劑));
+        }
+
+        private int CountDayPayAmount(int cusAge, int medFormCount)
+        {
+            const int ma1 = 22, ma2 = 31, ma3 = 37, ma4 = 41;
+            if (cusAge <= 12 && medFormCount == 1) return ma2;
+            if (cusAge <= 12 && medFormCount == 2) return ma3;
+            if (cusAge <= 12 && medFormCount >= 3) return ma4;
+            return ma1;
+        }
+
         public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
             foreach (DataRow r in table.Rows)

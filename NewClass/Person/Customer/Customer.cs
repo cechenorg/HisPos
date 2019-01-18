@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
@@ -45,5 +46,15 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
         #endregion
+
+        public int CountAge()
+        {
+            var today = DateTime.Today;
+            Debug.Assert(Birthday != null, nameof(Birthday) + " != null");
+            var birthdate = (DateTime)Birthday;
+            var age = today.Year - birthdate.Year;
+            if (birthdate > today.AddYears(-age)) age--;
+            return age;
+        }
     }
 }

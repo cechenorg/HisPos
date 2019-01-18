@@ -581,5 +581,14 @@ namespace His_Pos.Properties {
                 return ResourceManager.GetString("XmlDeclare", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 口服液劑(原瓶包裝) 的當地語系化字串。
+        /// </summary>
+        internal static string 口服液劑 {
+            get {
+                return ResourceManager.GetString("口服液劑", resourceCulture);
+            }
+        }
     }
 }

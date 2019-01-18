@@ -28,25 +28,13 @@
         <Image x:Key="PrescriptionHistory" Source="/Images/medical-history.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
-            <Button Content="調劑" Command="{Binding AdjustButtonClick}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16">
-                <Button.DataContext>
-                    <prescriptionDeclare:PrescriptionDeclareViewModel/>
-                </Button.DataContext>
-            </Button>
+            <Button Content="調劑" Command="{Binding Path=DataContext.AdjustButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonRegister" DataType="{x:Type Button}">
-            <Button Content="登錄" Command="{Binding RegisterButtonClick}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16">
-                <Button.DataContext>
-                    <prescriptionDeclare:PrescriptionDeclareViewModel/>
-                </Button.DataContext>
-            </Button>
+            <Button Content="登錄" Command="{Binding Path=DataContext.RegisterButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonPrescribe" DataType="{x:Type Button}">
-            <Button Content="自費調劑" Command="{Binding PrescribeButtonClick}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16">
-                <Button.DataContext>
-                    <prescriptionDeclare:PrescriptionDeclareViewModel/>
-                </Button.DataContext>
-            </Button>
+            <Button Content="自費調劑" Command="{Binding Path=DataContext.PrescribeButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="180" Height="30" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">

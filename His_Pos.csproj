@@ -307,6 +307,7 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\PrescriptionStatus.cs" />
+    <Compile Include="NewClass\Prescription\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
