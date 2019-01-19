@@ -58,32 +58,26 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
-            foreach (Item m in c.DeclareXmlDocument.Prescription.MedicineOrder.Item) { 
-                Medicine tempMed = new Medicine(); 
-                tempMed.ID = m.Id;
-                tempMed.ChineseName = m.Desc;
-                tempMed.EnglishName = m.Desc;
-
-                tempMed.Usage = new Usage();
-                tempMed.Usage.Name = m.Freq;
+            int medCount = 0; 
+            foreach (Item m in c.DeclareXmlDocument.Prescription.MedicineOrder.Item) {
+                Medicines.Add(new Medicine());
+                    Medicines[medCount] = new MedicineOTC();
+                    Medicines[medCount].ID = m.Id;
+                    Medicines[medCount].ChineseName = m.Desc;
+                    Medicines[medCount].EnglishName = m.Desc;  
+                Medicines[medCount].Usage.Name = m.Freq;
+                Medicines[medCount].Position.Name = m.Way;
                 if (ViewModelMainWindow.Usages.Count(u => u.Name == m.Freq) == 0)
-                    ViewModelMainWindow.Usages.Add(tempMed.Usage);
+                    ViewModelMainWindow.Usages.Add(Medicines[medCount].Usage); 
+                if (ViewModelMainWindow.Positions.Count(p => p.Name == Medicines[medCount].Position.Name) == 0)
+                    ViewModelMainWindow.Positions.Add(Medicines[medCount].Position);
 
-                tempMed.Position = new Position();
-                tempMed.Position.Name = m.Way;
-                if (ViewModelMainWindow.Positions.Count(p => p.Name == tempMed.Position.Name) == 0)
-                {
-                    ViewModelMainWindow.Positions.Add(tempMed.Position);
-                }
-
-                tempMed.Amount = Convert.ToDouble(m.Total_dose);
-                tempMed.Dosage = Convert.ToDouble(m.Daily_dose);
-                tempMed.Days = Convert.ToInt32(m.Days);
-                tempMed.PaySelf = m.Remark == "*" ? true : false;
-
-                tempMed.TotalPrice = tempMed.PaySelf ? Convert.ToDouble(m.Price) : 0;
-
-                Medicines.Add(tempMed);
+                Medicines[medCount].Amount = Convert.ToDouble(m.Total_dose);
+                Medicines[medCount].Dosage = Convert.ToDouble(m.Daily_dose);
+                Medicines[medCount].Days = Convert.ToInt32(m.Days);
+                Medicines[medCount].PaySelf = m.Remark == "*" ? true : false;
+                Medicines[medCount].TotalPrice = Medicines[medCount].PaySelf ? Convert.ToDouble(m.Price) : 0;
+                medCount++;
             }
         }
         public int Id { get; set; }
@@ -235,7 +229,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
-            foreach (DataRow r in table.Rows)
+            foreach (DataRow r in table.Rows) 
             {
                 switch (r.Field<int>("DataType"))
                 {
@@ -259,7 +253,47 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #endregion
+        public void AddCooperativePrescriptionMedicines() {
+             
+            for(int medCount = 0; medCount < Medicines.Count; medCount++){
+                DataTable table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                Medicine temp = new Medicine();
+                if (table.Rows.Count > 0)
+                {
+                    switch (table.Rows[0].Field<int>("DataType"))
+                    {
+                        case 0:
+                            temp = new MedicineOTC(table.Rows[0]); 
+                            break;
+                        case 1:
+                            temp = new MedicineNHI(table.Rows[0]); 
+                            break;
+                    }
+                }
+                else
+                {
+                    temp = new MedicineOTC();
+                    ((Medicine)temp).ID = Medicines[medCount].ID;
+                    ((Medicine)temp).ChineseName = Medicines[medCount].ChineseName;
+                    ((Medicine)temp).EnglishName = Medicines[medCount].EnglishName;
+                    //這裡要新增商品
+                }
+                ((Medicine)temp).Usage.Name = Medicines[medCount].Usage.Name;
+                ((Medicine)temp).Position.Name = Medicines[medCount].Position.Name;
+                if (ViewModelMainWindow.Usages.Count(u => u.Name == Medicines[medCount].Usage.Name) == 0)
+                    ViewModelMainWindow.Usages.Add(Medicines[medCount].Usage);
+                if (ViewModelMainWindow.Positions.Count(p => p.Name == Medicines[medCount].Position.Name) == 0)
+                    ViewModelMainWindow.Positions.Add(Medicines[medCount].Position);
 
+                ((Medicine)temp).Amount = Medicines[medCount].Amount;
+                ((Medicine)temp).Dosage = Medicines[medCount].Dosage;
+                ((Medicine)temp).Days = Medicines[medCount].Days;
+                ((Medicine)temp).PaySelf = Medicines[medCount].PaySelf;
+                ((Medicine)temp).TotalPrice = Medicines[medCount].TotalPrice;
+                Medicines[medCount] = temp; 
+            }
+           
+        }
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
