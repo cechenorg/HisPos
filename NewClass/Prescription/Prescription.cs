@@ -14,6 +14,8 @@ using His_Pos.Class.Declare;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Product.Medicine.Position;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Dbody = His_Pos.NewClass.Prescription.DeclareFile.Dbody;
@@ -56,6 +58,33 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
+            foreach (Item m in c.DeclareXmlDocument.Prescription.MedicineOrder.Item) { 
+                Medicine tempMed = new Medicine(); 
+                tempMed.ID = m.Id;
+                tempMed.ChineseName = m.Desc;
+                tempMed.EnglishName = m.Desc;
+
+                tempMed.Usage = new Usage();
+                tempMed.Usage.Name = m.Freq;
+                if (ViewModelMainWindow.Usages.Count(u => u.Name == m.Freq) == 0)
+                    ViewModelMainWindow.Usages.Add(tempMed.Usage);
+
+                tempMed.Position = new Position();
+                tempMed.Position.Name = m.Way;
+                if (ViewModelMainWindow.Positions.Count(p => p.Name == tempMed.Position.Name) == 0)
+                {
+                    ViewModelMainWindow.Positions.Add(tempMed.Position);
+                }
+
+                tempMed.Amount = Convert.ToDouble(m.Total_dose);
+                tempMed.Dosage = Convert.ToDouble(m.Daily_dose);
+                tempMed.Days = Convert.ToInt32(m.Days);
+                tempMed.PaySelf = m.Remark == "*" ? true : false;
+
+                tempMed.TotalPrice = tempMed.PaySelf ? Convert.ToDouble(m.Price) : 0;
+
+                Medicines.Add(tempMed);
+            }
         }
         public int Id { get; set; }
         private Customer patient;
@@ -87,7 +116,9 @@ namespace His_Pos.NewClass.Prescription
         public int InsertPresription(string medicalNumber)
         {
             CheckMedicalNumber(medicalNumber);//確認就醫序號
-            MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
