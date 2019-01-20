@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
@@ -75,7 +77,22 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Status Function -----
         public void MoveToNextStatus()
         {
-
+            switch (OrderStatus)
+            {
+                case OrderStatusEnum.NORMAL_UNPROCESSING:
+                    break;
+                case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    break;
+                case OrderStatusEnum.WAITING:
+                    break;
+                case OrderStatusEnum.NORMAL_PROCESSING:
+                    break;
+                case OrderStatusEnum.SINGDE_PROCESSING:
+                    break;
+                default:
+                    MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
+                    break;
+            }
         }
         private void ToWaitingStatus()
         {
@@ -100,15 +117,15 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return false;
         }
-        public virtual bool CheckUnProcessingOrder()
+        protected virtual bool CheckUnProcessingOrder()
         {
             return false;
         }
-        public virtual bool CheckNormalProcessingOrder()
+        protected virtual bool CheckNormalProcessingOrder()
         {
             return false;
         }
-        public virtual bool CheckSingdeProcessingOrder()
+        protected virtual bool CheckSingdeProcessingOrder()
         {
             return false;
         }
