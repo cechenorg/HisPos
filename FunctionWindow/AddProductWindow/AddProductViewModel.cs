@@ -58,8 +58,16 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 Set(() => SearchString, ref searchString, value);
             }
         }
+        private ProductStruct selectedProductStruct;
+        public ProductStruct SelectedProductStruct
+        {
+            get => selectedProductStruct;
+            set
+            {
+                Set(() => SelectedProductStruct, ref selectedProductStruct, value);
+            }
+        }
 
-        public ProductStruct SelectedProductStruct { get; set; }
         public ProductStructs ProductStructCollection { get; set; }
         private AddProductEnum addProEnum { get; set; }
         #endregion
@@ -105,7 +113,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 MainWindow.ServerConnection.OpenConnection();
                 ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
                 MainWindow.ServerConnection.CloseConnection();
-                if(addProEnum == AddProductEnum.AddMedicine)
+                if (addProEnum == AddProductEnum.AddMedicine)
                     ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p=>p.NHIPrice) };
                 else
                 {

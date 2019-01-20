@@ -37,7 +37,8 @@
             </CheckBox>
         </StackPanel>
         <DataGrid Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" HorizontalAlignment="Left" CanUserSortColumns="True"
-                  AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProStructCollectionView}">
+                  AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProStructCollectionView}"
+                  SelectedItem="{Binding SelectedProductStruct,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding ProductSelected}"/>

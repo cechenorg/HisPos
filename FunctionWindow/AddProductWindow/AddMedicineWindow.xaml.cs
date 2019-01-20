@@ -23,12 +23,12 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         public AddMedicineWindow(string search)
         {
             InitializeComponent();
-            DataContext = new AddProductViewModel(search, AddProductEnum.AddMedicine);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseAddProductView"))
                     Close();
             });
+            DataContext = new AddProductViewModel(search, AddProductEnum.AddMedicine);
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }

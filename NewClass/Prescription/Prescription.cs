@@ -228,7 +228,6 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #endregion
-
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");

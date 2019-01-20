@@ -4,6 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Interface;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -50,6 +53,25 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (dosage != value)
                 {
                     Set(() => Dosage, ref dosage, value);
+                }
+            }
+        }
+        private string _usageName;
+        public string UsageName
+        {
+            get => _usageName;
+            set
+            {
+                if (value != null)
+                {
+                    Set(() => UsageName, ref _usageName, value);
+                    Usage = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", "")));
+                    if (Usage != null)
+                    {
+                        Usage.Name = _usageName;
+                        if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null)
+                            CalculateAmount();
+                    }
                 }
             }
         }
@@ -197,6 +219,18 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-       
+        private void CalculateAmount()
+        {
+            if(Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
+            var tmpUsage = Usage;
+            var find = false;
+            foreach (var u in ViewModelMainWindow.Usages)
+            {
+                if (!UsageName.Equals(u.Name)) continue;
+                tmpUsage = u;
+                find = true;
+            }
+            Amount = find ? (double)Dosage * UsagesFunction.CheckUsage((int)Days, tmpUsage) : (double)Dosage * UsagesFunction.CheckUsage((int)Days);
+        }
     }
 }
