@@ -58,7 +58,7 @@ namespace His_Pos.NewClass.Person.Customer
             return age;
         }
 
-        public DateTimeExtensions.Age CountAgeToMonth()
+        private DateTimeExtensions.Age CountAgeToMonth()
         {
             return DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
         }

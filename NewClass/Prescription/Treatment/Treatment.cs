@@ -260,10 +260,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckAdjustCase()
         {
-            if (AdjustCase.Id.Equals("2") && (ChronicSeq is null || ChronicTotal is null))
-                return "慢性病連續處方調劑需填寫領藥次數與總領藥次數\r\n";
             if (string.IsNullOrEmpty(AdjustCase.Id))
                 return "請選擇調劑案件\r\n";
+            if (AdjustCase.Id.Equals("2") && (ChronicSeq is null || ChronicTotal is null))
+                return "慢性病連續處方調劑需填寫領藥次數與總領藥次數\r\n";
             return string.Empty;
         }
         private string CheckPrescriptionCase()
@@ -363,10 +363,12 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public bool CheckIsQuitSmoking()
         {
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
             return AdjustCase.Id.Equals("5");
         }
         public bool CheckIsHomeCare()
         {
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
             return AdjustCase.Id.Equals("D");
         }
         private string CheckDiseaseCode()
@@ -381,15 +383,14 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckChronicTimes()
         {
-            if (AdjustCase.Id.Equals("2"))
-            {
-                if(ChronicSeq is null && ChronicTotal is null)
-                    return "請填寫領藥次數與總領藥次數\r\n";
-                if (ChronicSeq is null)
-                    return "請填寫領藥次數\r\n";
-                if (ChronicTotal is null)
-                    return "請填寫總領藥次數\r\n";
-            }
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return string.Empty;
+            if (!AdjustCase.Id.Equals("2")) return string.Empty;
+            if (ChronicSeq is null && ChronicTotal is null)
+                return "請填寫領藥次數與總領藥次數\r\n";
+            if (ChronicSeq is null)
+                return "請填寫領藥次數\r\n";
+            if (ChronicTotal is null)
+                return "請填寫總領藥次數\r\n";
             return string.Empty;
         }
         public string Check()
