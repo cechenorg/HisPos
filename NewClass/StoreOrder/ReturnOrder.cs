@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
@@ -46,6 +48,27 @@ namespace His_Pos.NewClass.StoreOrder
         public override void AddProductByID(string iD)
         {
             
+        }
+
+        protected override bool CheckUnProcessingOrder()
+        {
+            if (OrderProducts.Count == 0)
+            {
+                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
+                return false;
+            }
+
+            return false;
+        }
+
+        protected override bool CheckNormalProcessingOrder()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool CheckSingdeProcessingOrder()
+        {
+            throw new NotImplementedException();
         }
     }
 }

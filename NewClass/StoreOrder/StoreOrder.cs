@@ -80,56 +80,74 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
+                    ToNormalProcessingStatus();
                     break;
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    ToWaitingStatus();
                     break;
                 case OrderStatusEnum.WAITING:
+                    ToSingdeProcessingStatus();
                     break;
                 case OrderStatusEnum.NORMAL_PROCESSING:
-                    break;
                 case OrderStatusEnum.SINGDE_PROCESSING:
+                    ToDoneStatus();
                     break;
                 default:
                     MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
                     break;
             }
+
+            SaveOrder();
         }
         private void ToWaitingStatus()
         {
+            bool isSuccess = SendOrderToSingde();
 
+            if (isSuccess)
+                OrderStatus = OrderStatusEnum.WAITING;
+            else
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
         }
         private void ToNormalProcessingStatus()
         {
-
+            OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
         }
         private void ToSingdeProcessingStatus()
         {
-
+            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
         private void ToDoneStatus()
         {
-
+            OrderStatus = OrderStatusEnum.DONE;
         }
         #endregion
 
         #region ----- Check Function -----
         public bool CheckOrder()
         {
-            return false;
+            switch (OrderStatus)
+            {
+                case OrderStatusEnum.NORMAL_UNPROCESSING:
+                case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    return CheckUnProcessingOrder();
+                case OrderStatusEnum.NORMAL_PROCESSING:
+                    return CheckNormalProcessingOrder();
+                case OrderStatusEnum.SINGDE_PROCESSING:
+                    return CheckSingdeProcessingOrder();
+                default:
+                    return false;
+            }
         }
-        protected virtual bool CheckUnProcessingOrder()
-        {
-            return false;
-        }
-        protected virtual bool CheckNormalProcessingOrder()
-        {
-            return false;
-        }
-        protected virtual bool CheckSingdeProcessingOrder()
-        {
-            return false;
-        }
+
+        protected abstract bool CheckUnProcessingOrder();
+        protected abstract bool CheckNormalProcessingOrder();
+        protected abstract bool CheckSingdeProcessingOrder();
         #endregion
+
+        private bool SendOrderToSingde()
+        {
+            return false;
+        }
 
         public bool DeleteOrder()
         {
