@@ -195,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             SelectedPrescription.Patient = SelectedPrescription.Patient.Check();
             SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId(SelectedPrescription.Treatment.MainDisease.Id);
             SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId(SelectedPrescription.Treatment.SubDisease.Id);
+            SelectedPrescription.AddCooperativePrescriptionMedicines();
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
             MainWindow.ServerConnection.CloseConnection();

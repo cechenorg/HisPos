@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.Person.Employee
         {
             Password = r.Field<string>("Aut_Password");
             NickName = r.Field<string>("Emp_NickName");
-            WorkPositionId = r.Field<int>("Emp_WorkPositionID");
+            WorkPositionName = r.Field<string>("Emp_WorkPositionName");
             StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
@@ -41,15 +41,25 @@ namespace His_Pos.NewClass.Person.Employee
                 nickName = value;
                 OnPropertyChanged(nameof(NickName));
             }
-        }
-        private int workPositionId;//職位ID
-        public int WorkPositionId
+        }  
+        private int workPositionID;//職位ID
+        public int WorkPositionID
         {
-            get => workPositionId;
+            get => workPositionID;
             set
             {
-                workPositionId = value;
-                OnPropertyChanged(nameof(WorkPositionId));
+                workPositionID = value;
+                OnPropertyChanged(nameof(WorkPositionID));
+            }
+        }
+        private string workPositionName;//職位名稱
+        public string WorkPositionName
+        {
+            get => workPositionName;
+            set
+            {
+                workPositionName = value;
+                OnPropertyChanged(nameof(WorkPositionName));
             }
         }
         private DateTime? startDate;//到職日
@@ -94,9 +104,10 @@ namespace His_Pos.NewClass.Person.Employee
         }
         public int AuthorityValue { get; set; }
         #region Function
-        public void Save()
+        public Employee Save()
         {
-            ///存檔後更新自己
+            DataTable table = EmployeeDb.Save(this);
+            return new Employee(table.Rows[0]);
         }
         public void Delete()
         {

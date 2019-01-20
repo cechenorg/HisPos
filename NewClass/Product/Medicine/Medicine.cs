@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.CooperativeInstitution;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -35,6 +37,8 @@ namespace His_Pos.NewClass.Product.Medicine
             Price = p.SellPrice;
             NHIPrice = p.NHIPrice;
         }
+         
+
         private double amount;//總量
         public double Amount
         {

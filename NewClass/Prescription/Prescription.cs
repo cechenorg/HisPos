@@ -14,6 +14,8 @@ using His_Pos.Class.Declare;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Product.Medicine.Position;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Dbody = His_Pos.NewClass.Prescription.DeclareFile.Dbody;
@@ -56,6 +58,27 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
+            int medCount = 0; 
+            foreach (Item m in c.DeclareXmlDocument.Prescription.MedicineOrder.Item) {
+                Medicines.Add(new Medicine());
+                    Medicines[medCount] = new MedicineOTC();
+                    Medicines[medCount].ID = m.Id;
+                    Medicines[medCount].ChineseName = m.Desc;
+                    Medicines[medCount].EnglishName = m.Desc;  
+                Medicines[medCount].Usage.Name = m.Freq;
+                Medicines[medCount].Position.Name = m.Way;
+                if (ViewModelMainWindow.Usages.Count(u => u.Name == m.Freq) == 0)
+                    ViewModelMainWindow.Usages.Add(Medicines[medCount].Usage); 
+                if (ViewModelMainWindow.Positions.Count(p => p.Name == Medicines[medCount].Position.Name) == 0)
+                    ViewModelMainWindow.Positions.Add(Medicines[medCount].Position);
+
+                Medicines[medCount].Amount = Convert.ToDouble(m.Total_dose);
+                Medicines[medCount].Dosage = Convert.ToDouble(m.Daily_dose);
+                Medicines[medCount].Days = Convert.ToInt32(m.Days);
+                Medicines[medCount].PaySelf = m.Remark == "*" ? true : false;
+                Medicines[medCount].TotalPrice = Medicines[medCount].PaySelf ? Convert.ToDouble(m.Price) : 0;
+                medCount++;
+            }
         }
         public int Id { get; set; }
         private Customer patient;
@@ -87,7 +110,9 @@ namespace His_Pos.NewClass.Prescription
         public int InsertPresription(string medicalNumber)
         {
             CheckMedicalNumber(medicalNumber);//確認就醫序號
-            MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
@@ -204,7 +229,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
-            foreach (DataRow r in table.Rows)
+            foreach (DataRow r in table.Rows) 
             {
                 switch (r.Field<int>("DataType"))
                 {
@@ -228,6 +253,47 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #endregion
+        public void AddCooperativePrescriptionMedicines() {
+             
+            for(int medCount = 0; medCount < Medicines.Count; medCount++){
+                DataTable table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                Medicine temp = new Medicine();
+                if (table.Rows.Count > 0)
+                {
+                    switch (table.Rows[0].Field<int>("DataType"))
+                    {
+                        case 0:
+                            temp = new MedicineOTC(table.Rows[0]); 
+                            break;
+                        case 1:
+                            temp = new MedicineNHI(table.Rows[0]); 
+                            break;
+                    }
+                }
+                else
+                {
+                    temp = new MedicineOTC();
+                    ((Medicine)temp).ID = Medicines[medCount].ID;
+                    ((Medicine)temp).ChineseName = Medicines[medCount].ChineseName;
+                    ((Medicine)temp).EnglishName = Medicines[medCount].EnglishName;
+                    MedicineDb.InsertCooperativeMedicineOTC(((Medicine)temp).ID , ((Medicine)temp).ChineseName);//新增合作診所MedicineOtc
+                }
+                ((Medicine)temp).Usage.Name = Medicines[medCount].Usage.Name;
+                ((Medicine)temp).Position.Name = Medicines[medCount].Position.Name;
+                if (ViewModelMainWindow.Usages.Count(u => u.Name == Medicines[medCount].Usage.Name) == 0)
+                    ViewModelMainWindow.Usages.Add(Medicines[medCount].Usage);
+                if (ViewModelMainWindow.Positions.Count(p => p.Name == Medicines[medCount].Position.Name) == 0)
+                    ViewModelMainWindow.Positions.Add(Medicines[medCount].Position);
+
+                ((Medicine)temp).Amount = Medicines[medCount].Amount;
+                ((Medicine)temp).Dosage = Medicines[medCount].Dosage;
+                ((Medicine)temp).Days = Medicines[medCount].Days;
+                ((Medicine)temp).PaySelf = Medicines[medCount].PaySelf;
+                ((Medicine)temp).TotalPrice = Medicines[medCount].TotalPrice;
+                Medicines[medCount] = temp; 
+            }
+           
+        }
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
