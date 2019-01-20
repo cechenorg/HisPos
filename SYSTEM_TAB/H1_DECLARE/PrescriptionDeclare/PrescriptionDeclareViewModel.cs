@@ -122,6 +122,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => NotPrescribe, ref notPrescribe, value);
             }
         }
+        private Medicine selectedMedicine;
+        public Medicine SelectedMedicine
+        {
+            get => selectedMedicine;
+            set
+            {
+                Set(() => SelectedMedicine, ref selectedMedicine, value);
+            }
+        }
         public int SelectedMedicinesIndex { get; set; }
         private FunctionWindow.AddProductWindow.AddMedicineWindow medicineWindow { get; set; }
         #endregion
@@ -234,8 +243,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AddMedicineAction(string medicineID)
         {
-            if (medicineID.Length < 5) return;
+            if (medicineID.Length < 5)
+            {
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructsBySearchString(medicineID).Count;
+            MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);

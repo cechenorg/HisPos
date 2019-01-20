@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass {
+﻿namespace His_Pos.NewClass.Prescription {
     public class PrescriptionStatus {
         public bool IsGetCard { get; set; } //是否讀卡
         public bool IsDeclare { get; set; } //是否申報
