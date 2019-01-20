@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
@@ -325,7 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             foreach (var product in _takingCollection)
             {
                 if (((IStockTaking)product).EmpId.Equals(""))
-                    ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? MainWindow.CurrentUser.Id.ToString() : TakingEmp.Text;
+                    ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? ViewModelMainWindow.CurrentUser.Id.ToString() : TakingEmp.Text;
             }
         }
 
@@ -401,7 +402,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.DataSources.Add(new ReportDataSource("InventoryDataSet", InventoryChecking.t));
             var parameters = new ReportParameter[2];
-            var recEmp = string.IsNullOrEmpty(TakingEmp.Text) ? MainWindow.CurrentUser.Name : TakingEmp.Text;
+            var recEmp = string.IsNullOrEmpty(TakingEmp.Text) ? ViewModelMainWindow.CurrentUser.Name : TakingEmp.Text;
             parameters[0] = new ReportParameter("CurrentUser", recEmp);
             parameters[1] = new ReportParameter("ProductCount", TakingCollection.Count.ToString());
             rptViewer.LocalReport.ReportPath = @"RDLC\InventoryCheckSheet.rdlc";

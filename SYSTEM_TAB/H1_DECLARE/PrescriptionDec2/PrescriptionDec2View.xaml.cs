@@ -27,7 +27,6 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
-using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -35,8 +34,8 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
+using His_Pos.NewClass.Product.Medicine.Position;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
@@ -328,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             DeclareMedicines = new ObservableCollection<Product>();
             PrescriptionCases = new PrescriptionCases();
-            ///CurrentPrescription.Pharmacy = MainWindow.CurrentPharmacy.DeepCloneViaJson();
+            ///CurrentPrescription.Pharmacy = ViewModelMainWindow.CurrentPharmacy.DeepCloneViaJson();
             var loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(Instance);
             loadingWindow.Show();
@@ -517,7 +516,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             string medPaySelf = string.Empty;
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
             var buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Now.Date; //扣庫條件
-            var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id.ToString(), SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
+            var declareTrade = new DeclareTrade(ViewModelMainWindow.CurrentUser.Id.ToString(), SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType; 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                 string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) &&
@@ -768,9 +767,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 
             }
 
-            if (MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
+            if (ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels != null && ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count > 0)
             {
-                foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+                foreach (var medicalPerson in ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels)
                 {
                     if (!medicalPerson.IdNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
                     ///medicalPerson.PrescriptionCount++;
@@ -778,7 +777,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     break;
                 }
             }
-            ///MedicalPersonnels = new ObservableCollection<MedicalPersonnel>(MainWindow.CurrentPharmacy.MedicalPersonnelCollection);
+            ///MedicalPersonnels = new ObservableCollection<MedicalPersonnel>(ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels);
             HisPerson.ItemsSource = MedicalPersonnels;
             if (!string.IsNullOrEmpty(_clinicDeclareId))
             {
@@ -820,7 +819,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     var pDataInput = pDateTime.Concat(pData).ToArray();
                     var strLength = 40;
                     var icData = new byte[40];
-                    var res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+                    var res = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
                     if (res == 0)
                     {
                         res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
@@ -1792,7 +1791,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     switch (cName)
                     {
                         case "DivisionCombo":
-                            if (!MainWindow.CurrentUser.Id.Equals(((MedicalPersonnel) HisPerson.SelectedItem).Id))
+                            if (!ViewModelMainWindow.CurrentUser.Id.Equals(((MedicalPersonnel) HisPerson.SelectedItem).Id))
                                 HisPerson.Focus();
                             else
                                 MedicalNumber.Focus();
@@ -1936,7 +1935,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void HisPerson_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var c = sender as ComboBox;
-          ///  PrescriptionCount = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p => p.IdNumber.Equals((c.SelectedItem as MedicalPersonnel).IDNumber)).PrescriptionCount;
+          ///  PrescriptionCount = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals((c.SelectedItem as MedicalPersonnel).IDNumber)).PrescriptionCount;
         }
 
         private void NotDeclareSubmit_OnClickSubmit_ButtonClick(object sender, RoutedEventArgs e)
@@ -2105,7 +2104,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 : cs.StringToBytes(" ", 2);
             //補卡註記,長度一個char
             var cTreatAfterCheck = new byte[] {1};
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
             MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
             //取得就醫序號
@@ -2125,7 +2124,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             //取得就醫紀錄
             strLength = 498;
             icData = new byte[498];
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
             MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
             if (res == 0)
@@ -2164,7 +2163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             DivisionCombo.SelectedIndex = -1;
             TreatmentCaseCombo.SelectedIndex = -1;
             var isMedicalPerson = false;
-            foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+            foreach (var m in ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels)
             {
                 ///if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
                 isMedicalPerson = true;
@@ -2173,7 +2172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 
             if (isMedicalPerson)
             {
-                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(MainWindow.CurrentUser.Id));
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
             }
             else
             {

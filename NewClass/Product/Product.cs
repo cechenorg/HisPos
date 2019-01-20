@@ -22,14 +22,37 @@ namespace His_Pos.NewClass.Product
             EnglishName = row.Field<string>("Pro_EnglishName");
         }
 
+        public Product(ProductStruct p)
+        {
+            ID = p.ID;
+            ChineseName = p.ChineseName;
+            EnglishName = p.EnglishName;
+        }
+
         #region ----- Define Variables -----
-        public string ID { get; set; }
+
+        private string id;
+        public string ID
+        {
+            get => id;
+            set
+            {
+                Set(() => ID, ref id, value);
+            }
+        }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
+
         public string FullName
         {
-            get { return ""; }
+            get
+            {
+                if(!string.IsNullOrEmpty(EnglishName))
+                    return EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
+                return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
+            }
         }
+
         #endregion
 
         #region ----- Define Functions -----

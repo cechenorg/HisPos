@@ -6,8 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using Microsoft.VisualBasic;
 
 namespace His_Pos.Class.Product

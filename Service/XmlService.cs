@@ -52,6 +52,29 @@ namespace His_Pos.Service
             }
         }
 
+        public static XDocument SerializeObjectToXDocument<T>(this T value)
+        {
+            try
+            {
+                var xmlserializer = new XmlSerializer(value.GetType());
+                var stringWriter = new StringWriter();
+                using (var writer = XmlWriter.Create(stringWriter))
+                {
+                    xmlserializer.Serialize(writer, value);
+                    var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
+                    document.Descendants()
+                        .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
+                        .Remove();
+                    document.Root?.RemoveAttributes();
+                    return document;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Serialize exception", ex);
+            }
+        }
+
         public static string SerializeDailyUploadObject<T>(this T value)
         {
             if (value == null)

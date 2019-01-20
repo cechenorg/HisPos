@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace His_Pos.NewClass.Prescription.Position
+namespace His_Pos.NewClass.Product.Medicine.Position
 {
     public static class PositionDb
     {

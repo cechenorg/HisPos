@@ -11,8 +11,8 @@
   You can also use Blend to do all this with the tool's support.
 */
 
+using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 
 namespace His_Pos.ChromeTabViewModel
 {

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace His_Pos.NewClass.Usage
+namespace His_Pos.NewClass.Product.Medicine.Usage
 {
     public static class UsageDb
     {

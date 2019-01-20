@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
@@ -17,7 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
 {
     public class CustomerSelectionViewModel : ViewModelBase
     {
-        #region Property
+        #region Variables
         public enum RadioOptions { Option1, Option2, Option3, Option4 }
         private string selectedRadioButton;
         public string SelectedRadioButton
@@ -76,22 +77,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public Customer SelectedCustomer
         {
             get => selectedCustomer;
-            private set
+            set
             {
                 Set(() => SelectedCustomer, ref selectedCustomer, value);
             }
         }
         #endregion
-
-        #region Command
-        private RelayCommand searchingTextChanged;
-        public RelayCommand SearchingTextChanged
-        {
-            get =>
-                searchingTextChanged ??
-                (searchingTextChanged = new RelayCommand(ExecuteSearchingTextChanged));
-            set => searchingTextChanged = value;
-        }
+        #region Commands
+        public RelayCommand SearchingTextChanged { get; set; }
         private void ExecuteSearchingTextChanged()
         {
             if (string.IsNullOrEmpty(Searching))
@@ -99,26 +92,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
             else
                 CustomersCollectionViewSource.Filter += FilterBySearchingText;
         }
-
-        private RelayCommand<Window> customerSelected;
-        public RelayCommand<Window> CustomerSelected
+        public RelayCommand CustomerSelected { get; set; }
+        private void ExecuteCustomerSelected()
         {
-            get =>
-                customerSelected ??
-                (customerSelected = new RelayCommand<Window>(ExecuteCustomerSelected));
-            set => customerSelected = value;
-        }
-
-        private void ExecuteCustomerSelected(Window window)
-        {
+            SelectedCustomer.UpdateEditTime();
             SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
-            window?.Close();
+            Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
+            Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
         }
-
         #endregion
-
         public CustomerSelectionViewModel(string condition, int option)
         {
+            SearchingTextChanged = new RelayCommand(ExecuteSearchingTextChanged);
+            CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             Customers = new Customers();
             Customers.Init();
             CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
@@ -127,6 +113,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
             InitializeFilter(option);
         }
 
+        #region FilterFunctions
         private void InitializeFilter(int option)
         {
             if (string.IsNullOrEmpty(Searching))
@@ -156,7 +143,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
             }
             CustomersCollectionViewSource.Filter += FilterBySearchingText;
         }
-
         private void FilterBySearchingText(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Customer src))
@@ -182,7 +168,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
                 }
             }
         }
-
         private bool FilterByBirthDay(Customer c)
         {
             DateTime birth;
@@ -198,20 +183,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
                     return false;
             }
         }
-
         private bool FilterByName(Customer c)
         {
             return c.Name.Contains(Searching);
         }
-
         private bool FilterByIDNumber(Customer c)
         {
             return c.IDNumber.Contains(Searching);
         }
-
         private bool FilterByTel(Customer c)
         {
             return c.Tel.Contains(Searching);
         }
+        #endregion
     }
 }

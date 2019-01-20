@@ -27,8 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
@@ -267,7 +266,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
             DeclareMedicinesData =  PrescriptionInquireView.Instance.DeclareMedicinesData;
-           /// MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+           /// MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             SetTreatmentData();
             InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
@@ -761,7 +760,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     var pDataInput = pDateTime.Concat(pData).ToArray();
                     var strLength = 40;
                     var icData = new byte[40];
-                    var res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+                    var res = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
                     if (res == 0)
                     {
                         res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
@@ -985,7 +984,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 : cs.StringToBytes(" ", 2);
             //補卡註記,長度一個char
             var cTreatAfterCheck = new byte[] { 1 };
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
             MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
             //取得就醫序號
@@ -998,7 +997,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             //取得就醫紀錄
             strLength = 498;
             icData = new byte[498];
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
             MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
             if (res == 0)

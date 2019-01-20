@@ -291,4 +291,7 @@
   <data name="Male" xml:space="preserve">
     <value>男</value>
   </data>
+  <data name="口服液劑" xml:space="preserve">
+    <value>口服液劑(原瓶包裝)</value>
+  </data>
 </root>

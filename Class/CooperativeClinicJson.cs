@@ -16,7 +16,7 @@ namespace His_Pos.Class
         public CooperativeClinicJson(CooperativePrescriptions cooperativeClinics) { 
              
           // sHospId = cooperativeClinics[0].Prescription.Treatment.MedicalInfo.Hospital.Id;
-          // sRxId = MainWindow.CurrentPharmacy.Id; 
+          // sRxId = ViewModelMainWindow.CurrentPharmacy.Id; 
           //
           // foreach (CooperativePrescription declareData in cooperativeClinics) {
           //     msMedList msMedList = new msMedList();

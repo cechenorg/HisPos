@@ -12,8 +12,6 @@ using His_Pos.Class.ProductType;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
-using LiveCharts;
-using LiveCharts.Wpf;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
@@ -62,25 +60,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             }
         }
 
-        public SeriesCollection StockValuePieSeries { get; set; } = new SeriesCollection();
-        public SeriesCollection SalesPieSeries { get; set; } = new SeriesCollection();
+        //public SeriesCollection StockValuePieSeries { get; set; } = new SeriesCollection();
+        //public SeriesCollection SalesPieSeries { get; set; } = new SeriesCollection();
 
-        private SeriesCollection salesLineSeries = new SeriesCollection();
-        public SeriesCollection SalesLineSeries
-        {
-            get { return salesLineSeries; }
-            set
-            {
-                salesLineSeries = value;
-                NotifyPropertyChanged("SalesLineSeries");
-            }
-        }
+        //private SeriesCollection salesLineSeries = new SeriesCollection();
+        //public SeriesCollection SalesLineSeries
+        //{
+        //    get { return salesLineSeries; }
+        //    set
+        //    {
+        //        salesLineSeries = value;
+        //        NotifyPropertyChanged("SalesLineSeries");
+        //    }
+        //}
 
-        public LineSeries YearSalesLineSeries { get; set; }
-        public LineSeries LastYearSalesLineSeries { get; set; }
+        //public LineSeries YearSalesLineSeries { get; set; }
+        //public LineSeries LastYearSalesLineSeries { get; set; }
 
-        public LineSeries MonthSalesLineSeries { get; set; }
-        public LineSeries LastMonthSalesLineSeries { get; set; }
+        //public LineSeries MonthSalesLineSeries { get; set; }
+        //public LineSeries LastMonthSalesLineSeries { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -127,29 +125,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             foreach (var productType in TypeManageMasters)
             {
-                if (productType.StockValue != 0)
-                {
-                    PieSeries newStockPieSeries = new PieSeries()
-                    {
-                        Title = productType.Name,
-                        Values = new ChartValues<double> { productType.StockValue },
-                        DataLabels = true
-                    };
+                //if (productType.StockValue != 0)
+                //{
+                //    PieSeries newStockPieSeries = new PieSeries()
+                //    {
+                //        Title = productType.Name,
+                //        Values = new ChartValues<double> { productType.StockValue },
+                //        DataLabels = true
+                //    };
 
-                    StockValuePieSeries.Add(newStockPieSeries);
-                }
+                //    StockValuePieSeries.Add(newStockPieSeries);
+                //}
 
-                if (productType.Sales != 0)
-                {
-                    PieSeries newSalesPieSeries = new PieSeries()
-                    {
-                        Title = productType.Name,
-                        Values = new ChartValues<double> { productType.Sales },
-                        DataLabels = true
-                    };
+                //if (productType.Sales != 0)
+                //{
+                //    PieSeries newSalesPieSeries = new PieSeries()
+                //    {
+                //        Title = productType.Name,
+                //        Values = new ChartValues<double> { productType.Sales },
+                //        DataLabels = true
+                //    };
 
-                    SalesPieSeries.Add(newSalesPieSeries);
-                }
+                //    SalesPieSeries.Add(newSalesPieSeries);
+                //}
             }
         }
 
@@ -198,11 +196,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
         private void InitLineChart(string typeId)
         {
-            SalesLineSeries.Clear();
-            YearSalesLineSeries = new LineSeries() { Title = "今年", Stroke = Brushes.RoyalBlue };
-            LastYearSalesLineSeries = new LineSeries() { Title = "去年", Stroke = Brushes.Red };
-            MonthSalesLineSeries = new LineSeries() { Title = "本月", Stroke = Brushes.RoyalBlue };
-            LastMonthSalesLineSeries = new LineSeries() { Title = "上個月", Stroke = Brushes.Red };
+            //SalesLineSeries.Clear();
+            //YearSalesLineSeries = new LineSeries() { Title = "今年", Stroke = Brushes.RoyalBlue };
+            //LastYearSalesLineSeries = new LineSeries() { Title = "去年", Stroke = Brushes.Red };
+            //MonthSalesLineSeries = new LineSeries() { Title = "本月", Stroke = Brushes.RoyalBlue };
+            //LastMonthSalesLineSeries = new LineSeries() { Title = "上個月", Stroke = Brushes.Red };
 
             ///ProductDb.GetProductTypeLineSeries(YearSalesLineSeries, LastYearSalesLineSeries, MonthSalesLineSeries, LastMonthSalesLineSeries, typeId);
 
@@ -212,51 +210,51 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
         private void UpdateLineChartUi()
         {
-            SalesLineSeries.Clear();
+            //SalesLineSeries.Clear();
 
-            if ((bool) MonthRadioButton.IsChecked)
-            {
-                LineChartAxis.Labels = Days;
+            //if ((bool) MonthRadioButton.IsChecked)
+            //{
+            //    LineChartAxis.Labels = Days;
 
-                if((bool)ThisYearLine.IsChecked)
-                    SalesLineSeries.Add(MonthSalesLineSeries);
+            //    if((bool)ThisYearLine.IsChecked)
+            //        SalesLineSeries.Add(MonthSalesLineSeries);
 
-                if ((bool)LastYearLine.IsChecked)
-                    SalesLineSeries.Add(LastMonthSalesLineSeries);
-            }
-            else
-            {
-                LineChartAxis.Labels = Months;
+            //    if ((bool)LastYearLine.IsChecked)
+            //        SalesLineSeries.Add(LastMonthSalesLineSeries);
+            //}
+            //else
+            //{
+            //    LineChartAxis.Labels = Months;
 
-                if ((bool)ThisYearLine.IsChecked)
-                    SalesLineSeries.Add(YearSalesLineSeries);
+            //    if ((bool)ThisYearLine.IsChecked)
+            //        SalesLineSeries.Add(YearSalesLineSeries);
 
-                if ((bool)LastYearLine.IsChecked)
-                    SalesLineSeries.Add(LastYearSalesLineSeries);
-            }
+            //    if ((bool)LastYearLine.IsChecked)
+            //        SalesLineSeries.Add(LastYearSalesLineSeries);
+            //}
         }
 
         private void PieChartPushOut()
         {
-            foreach (PieSeries pieSeries in StockValuePieSeries)
-            {
-                if (pieSeries.Title.Equals(((ProductTypeManageMaster) TypeMaster.SelectedItem).Name))
-                    pieSeries.PushOut = 20;
-                else
-                {
-                    pieSeries.PushOut = 0;
-                }
-            }
+            //foreach (PieSeries pieSeries in StockValuePieSeries)
+            //{
+            //    if (pieSeries.Title.Equals(((ProductTypeManageMaster) TypeMaster.SelectedItem).Name))
+            //        pieSeries.PushOut = 20;
+            //    else
+            //    {
+            //        pieSeries.PushOut = 0;
+            //    }
+            //}
 
-            foreach (PieSeries pieSeries in SalesPieSeries)
-            {
-                if (pieSeries.Title.Equals(((ProductTypeManageMaster)TypeMaster.SelectedItem).Name))
-                    pieSeries.PushOut = 20;
-                else
-                {
-                    pieSeries.PushOut = 0;
-                }
-            }
+            //foreach (PieSeries pieSeries in SalesPieSeries)
+            //{
+            //    if (pieSeries.Title.Equals(((ProductTypeManageMaster)TypeMaster.SelectedItem).Name))
+            //        pieSeries.PushOut = 20;
+            //    else
+            //    {
+            //        pieSeries.PushOut = 0;
+            //    }
+            //}
         }
 
         private void TypeDetail_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -42,7 +42,7 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
-          ///  MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+          ///  MedicalPersonnel = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p =>
           ///      p.IdNumber.Equals(d.Dhead.D25));
         }
 

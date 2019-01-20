@@ -39,12 +39,10 @@
                 <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
                 <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
             </StackPanel>
-            <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CustomersCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
+            <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" SelectedItem="{Binding SelectedCustomer,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CustomersCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction 
-                            Command="{Binding CustomerSelected}"
-                            CommandParameter="{Binding ElementName=CustomSelectWindow}"/>
+                        <i:InvokeCommandAction Command="{Binding CustomerSelected}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Resources>

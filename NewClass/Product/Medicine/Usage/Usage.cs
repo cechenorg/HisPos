@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
 using His_Pos.Service;
 
-namespace His_Pos.NewClass.Prescription.Usage
+namespace His_Pos.NewClass.Product.Medicine.Usage
 {
     public class Usage:ObservableObject,ICloneable
     {

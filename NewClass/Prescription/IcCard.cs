@@ -11,6 +11,6 @@ namespace His_Pos.NewClass.Prescription
         public DateTime CardReleaseDate { get;}//發卡日期
         public DateTime ValidityPeriod { get;}//卡片有效期限
         public int AvailableTimes { get;}//就醫可用次數
-
+        public DateTime? NewBornBirthday { get; }//卡片有效期限
     }
 }

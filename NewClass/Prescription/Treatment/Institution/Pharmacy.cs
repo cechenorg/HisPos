@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution {
     public class Pharmacy : ObservableObject
@@ -30,20 +32,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public int ReaderCom { get; set; }
         public string VpnIp { get; set; }
         public bool NewReader { get; set; }
-        public MedicalPersonnel medicalPersonnel { get; set; }
-        public Collection<MedicalPersonnel> MedicalPersonnelCollection { get; set; }
+        public MedicalPersonnel MedicalPersonnel { get; set; }
+        public MedicalPersonnels MedicalPersonnels { get; set; }
 
         #region Function
         public static Pharmacy GetCurrentPharmacy() {
             MainWindow.ServerConnection.OpenConnection();
-
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
-            pharmacy.medicalPersonnel = new MedicalPersonnel(MainWindow.CurrentUser);
-            pharmacy.MedicalPersonnelCollection = new Collection<MedicalPersonnel>();
-
+            pharmacy.MedicalPersonnels = new MedicalPersonnels();
             MainWindow.ServerConnection.CloseConnection();
-         
             return pharmacy;
         }
         #endregion

@@ -6,6 +6,8 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Product;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.Service
 {
@@ -296,6 +298,7 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is null) return string.Empty;
             var doubleType = (double)value;
             return doubleType.ToString(CultureInfo.InvariantCulture);
         }
@@ -314,6 +317,20 @@ namespace His_Pos.Service
         {
             var isGetCard = (bool)value;
             return isGetCard ? "已過卡" : "未過卡";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IsMedicineEditable : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is MedicineNHI || value is MedicineOTC) return true;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

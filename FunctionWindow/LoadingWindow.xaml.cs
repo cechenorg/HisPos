@@ -23,7 +23,6 @@ using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -31,8 +30,6 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
@@ -394,29 +391,6 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
         
-        public void GetCustomerData(CustomerManageView customerManage)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得客戶資料...");
-
-                var collection = "";/// CustomerDb.GetCustomerData();
-
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    customerManage.CustomerCollection = null;///collection;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    customerManage.DataGridCustomer.SelectedIndex = 0;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
         public void InitEmployeeManageView(EmployeeManageView employeeManage)
         {
             Show();
@@ -580,7 +554,7 @@ namespace His_Pos.FunctionWindow
                 Dispatcher.Invoke((Action)(() =>
                 {
                     exportView.DeclareMedicinesData = null;//tmpDeclareMedicine;
-                    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                    exportView.HisPerson.ItemsSource = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
                     exportView.ReleasePalace.ItemsSource = ViewModelMainWindow.Institutions;
                     exportView.AdjustCaseCombo.ItemsSource = ViewModelMainWindow.AdjustCases;
                 }));
@@ -613,7 +587,7 @@ namespace His_Pos.FunctionWindow
                 prescriptionDec2View.AdjustCases = ViewModelMainWindow.AdjustCases;
                 prescriptionDec2View.SpecialCodes = ViewModelMainWindow.SpecialTreats;
                 prescriptionDec2View.Usages = ViewModelMainWindow.Usages;
-               /// prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+               /// prescriptionDec2View.MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
                 prescriptionDec2View.Positions = null;/// PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -630,7 +604,7 @@ namespace His_Pos.FunctionWindow
                     var isMedicalPerson = false;
                     foreach (var m in prescriptionDec2View.MedicalPersonnels)
                     {
-                        if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
+                        if (!m.Id.Equals(ViewModelMainWindow.CurrentUser.Id)) continue;
                         isMedicalPerson = true;
                         break;
                     }
@@ -638,7 +612,7 @@ namespace His_Pos.FunctionWindow
                     {
                         prescriptionDec2View.CurrentPrescription.Pharmacy.MedicalPersonnel =
                             prescriptionDec2View.MedicalPersonnels.SingleOrDefault(p =>
-                                p.Id.Equals(MainWindow.CurrentUser.Id));
+                                p.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
                     }
                     else
                     {
@@ -649,11 +623,11 @@ namespace His_Pos.FunctionWindow
                     prescriptionDec2View.CurrentPrescription.Treatment.AdjustCase = prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
                     prescriptionDec2View.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = prescriptionDec2View.PrescriptionCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
                     
-                    if (MainWindow.CurrentUser.AuthorityValue.Equals("3"))
+                    if (ViewModelMainWindow.CurrentUser.AuthorityValue.Equals("3"))
                     {
                         for (int i = 0; i < prescriptionDec2View.MedicalPersonnels.Count; i++)
                         {
-                            if (prescriptionDec2View.MedicalPersonnels[i].Name.Equals(MainWindow.CurrentUser.Name))
+                            if (prescriptionDec2View.MedicalPersonnels[i].Name.Equals(ViewModelMainWindow.CurrentUser.Name))
                             {
                                 prescriptionDec2View.HisPerson.SelectedIndex = i;
                             }

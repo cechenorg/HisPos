@@ -17,9 +17,6 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
-using LiveCharts;
-using LiveCharts.Wpf;
-
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 {
     /// <summary>
@@ -45,7 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        public SeriesCollection SalesCollection { get; set; }
+        //public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
@@ -108,23 +105,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 
         private void UpdateChart()
         {
-            SalesCollection = new SeriesCollection();
-            SalesCollection.Add(GetSalesLineSeries());
+            //SalesCollection = new SeriesCollection();
+            //SalesCollection.Add(GetSalesLineSeries());
             AddMonths();
         }
-        private LineSeries GetSalesLineSeries()
-        {
-            ChartValues<double> chartValues = null;///OTCDb.GetOtcSalesByID(InventoryOtc.Id);
+        //private LineSeries GetSalesLineSeries()
+        //{
+        //    ChartValues<double> chartValues = null;///OTCDb.GetOtcSalesByID(InventoryOtc.Id);
 
-            return new LineSeries
-            {
-                Title = "銷售量",
-                Values = chartValues,
-                PointGeometrySize = 10,
-                LineSmoothness = 0,
-                DataLabels = true
-            };
-        }
+        //    return new LineSeries
+        //    {
+        //        Title = "銷售量",
+        //        Values = chartValues,
+        //        PointGeometrySize = 10,
+        //        LineSmoothness = 0,
+        //        DataLabels = true
+        //    };
+        //}
 
         private void AddMonths()
         {

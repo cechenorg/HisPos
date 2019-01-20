@@ -5,8 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
-using His_Pos.NewClass.Prescription.Usage;
-using His_Pos.NewClass.Usage;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 

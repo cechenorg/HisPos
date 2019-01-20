@@ -15,6 +15,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         }
         public string Id { get; }
         public string Name { get; }
-        public string FullName { get; }
+        private string fullName;
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                Set(() => Id, ref fullName, value);
+            }
+        }
     }
 }

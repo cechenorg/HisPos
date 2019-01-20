@@ -122,9 +122,7 @@
                               ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction 
-                                    Command="{Binding PrescriptionSelected}"
-                                    CommandParameter="{Binding ElementName=CooperativeSelectWindow}"/>
+                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
                             </i:EventTrigger>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding SelectionChanged}"/>

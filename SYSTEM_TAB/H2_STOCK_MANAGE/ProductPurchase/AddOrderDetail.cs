@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
@@ -26,7 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
         private void AddNewOrderByUm(WareHouse wareHouse, Manufactory manufactory = null)
         {
-            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, wareHouse, manufactory));
+            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.PURCHASE, ViewModelMainWindow.CurrentUser, wareHouse, manufactory));
             StoOrderOverview.SelectedIndex = 0;
 
             //SetChanged();
@@ -34,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
         private void AddReturn(WareHouse wareHouse, Manufactory manufactory)
         {
-            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.RETURN, MainWindow.CurrentUser, wareHouse, manufactory));
+            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.RETURN, ViewModelMainWindow.CurrentUser, wareHouse, manufactory));
             StoOrderOverview.SelectedIndex = 0;
         }
 

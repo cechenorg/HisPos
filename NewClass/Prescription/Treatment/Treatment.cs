@@ -3,13 +3,15 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Person.MedicalPerson;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class Treatment : INotifyPropertyChanged
+    public class Treatment:ObservableObject
     {
         public Treatment()
         {
@@ -42,11 +44,18 @@ namespace His_Pos.NewClass.Prescription.Treatment
             } 
             PrescriptionCase = ViewModelMainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : ViewModelMainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
             Copayment = ViewModelMainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : ViewModelMainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
-            MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+            if (ChronicSeq != null && ChronicTotal != null) {
+                OriginalMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+                MedicalNumber = "IC0" + ChronicSeq;
+                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("2"));
+            }
+            else {
+                MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("1"));
+            }
             TreatDate = Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
-            AdjustCase = new AdjustCase.AdjustCase();
-            PaymentCategory = new PaymentCategory.PaymentCategory();
+            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
             SpecialTreat = new SpecialTreat.SpecialTreat();
             Pharmacist = new MedicalPersonnel();
         }
@@ -62,8 +71,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => institution;
             set
             {
-                institution = value;
-                OnPropertyChanged(nameof(Institution));
+                Set(() => Institution, ref institution, value);
             }
         }
 
@@ -73,8 +81,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => division;
             set
             {
-                division = value;
-                OnPropertyChanged(nameof(Division));
+                Set(() => Division, ref division, value);
             }
         }
 
@@ -84,8 +91,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => pharmacist;
             set
             {
-                pharmacist = value;
-                OnPropertyChanged(nameof(Pharmacist));
+                Set(() => Pharmacist, ref pharmacist, value);
             }
         }
 
@@ -95,19 +101,17 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => medicalNumber;
             set
             {
-                medicalNumber = value;
-                OnPropertyChanged(nameof(MedicalNumber));
+                Set(() => MedicalNumber, ref medicalNumber, value);
             }
         }
 
-        private DateTime treatDate;//就醫日期 D7
-        public DateTime TreatDate
+        private DateTime? treatDate;//就醫日期 D7
+        public DateTime? TreatDate
         {
             get => treatDate;
             set
             {
-                treatDate = value;
-                OnPropertyChanged(nameof(TreatDate));
+                Set(() => TreatDate, ref treatDate, value);
             }
         }
 
@@ -117,8 +121,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustDate;
             set
             {
-                adjustDate = value;
-                OnPropertyChanged(nameof(AdjustDate));
+                Set(() => AdjustDate, ref adjustDate, value);
             }
         }
 
@@ -128,8 +131,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => mainDisease;
             set
             {
-                mainDisease = value;
-                OnPropertyChanged(nameof(MainDisease));
+                Set(() => MainDisease, ref mainDisease, value);
             }
         }
 
@@ -139,8 +141,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => subDisease;
             set
             {
-                subDisease = value;
-                OnPropertyChanged(nameof(SubDisease));
+                Set(() => SubDisease, ref subDisease, value);
             }
         }
 
@@ -150,8 +151,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => chronicTotal;
             set
             {
-                chronicTotal = value;
-                OnPropertyChanged(nameof(ChronicTotal));
+                Set(() => ChronicTotal, ref chronicTotal, value);
             }
         }
 
@@ -161,8 +161,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => chronicSeq;
             set
             {
-                chronicSeq = value;
-                OnPropertyChanged(nameof(ChronicSeq));
+                Set(() => ChronicSeq, ref chronicSeq, value);
             }
         }//連續處方箋調劑序號 D35
 
@@ -172,8 +171,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustCase;
             set
             {
-                adjustCase = value;
-                OnPropertyChanged(nameof(AdjustCase));
+                Set(() => AdjustCase, ref adjustCase, value);
             }
         }
 
@@ -183,8 +181,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => prescriptionCase;
             set
             {
-                prescriptionCase = value;
-                OnPropertyChanged(nameof(PrescriptionCase));
+                Set(() => PrescriptionCase, ref prescriptionCase, value);
             }
         }
 
@@ -194,8 +191,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => copayment;
             set
             {
-                copayment = value;
-                OnPropertyChanged(nameof(Copayment));
+                Set(() => Copayment, ref copayment, value);
             }
         }
 
@@ -205,8 +201,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => paymentCategory;
             set
             {
-                paymentCategory = value;
-                OnPropertyChanged(nameof(PaymentCategory));
+                Set(() => PaymentCategory, ref paymentCategory, value);
             }
         }
 
@@ -216,8 +211,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => originalMedicalNumber;
             set
             {
-                originalMedicalNumber = value;
-                OnPropertyChanged(nameof(OriginalMedicalNumber));
+                Set(() => OriginalMedicalNumber, ref originalMedicalNumber, value);
             }
         }
 
@@ -227,19 +221,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => specialTreat;
             set
             {
-                specialTreat = value;
-                OnPropertyChanged(nameof(SpecialTreat));
+                Set(() => SpecialTreat, ref specialTreat, value);
             }
         }
-        
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
