@@ -214,5 +214,55 @@ namespace His_Pos.ChromeTabViewModel
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+
+        public static Institution GetInstitution(string id)
+        {
+            var result = Institutions.SingleOrDefault(i => i.Id.Equals(id));
+            return result ?? new Institution();
+        }
+        public static AdjustCase GetAdjustCase(string id)
+        {
+            return AdjustCases.SingleOrDefault(a => a.Id.Equals(id));
+        }
+        public static Division GetDivision(string id)
+        {
+            var result = Divisions.SingleOrDefault(i => i.Id.Equals(id));
+            return result ?? new Division();
+        }
+        public static PaymentCategory GetPaymentCategory(string id)
+        {
+            return PaymentCategories.SingleOrDefault(p => p.Id.Equals(id));
+        }
+        public static PrescriptionCase GetPrescriptionCases(string id)
+        {
+            var result = PrescriptionCases.SingleOrDefault(i => i.Id.Equals(id));
+            return result ?? new PrescriptionCase();
+        }
+        public static Copayment GetCopayment(string id)
+        {
+            var result = Copayments.SingleOrDefault(i => i.Id.Equals(id));
+            return result ?? new Copayment();
+        }
+        public static Usage GetUsage(string name)
+        {
+            var result = Usages.SingleOrDefault(u => u.Reg.IsMatch(name));
+            return result;
+        }
+        public static void CheckContainsUsage(string name)
+        {
+            if (Usages.Count(u => u.Name.Equals(name)) != 0) return;
+            var usageNotFound = new Usage { Name = name };
+            Usages.Add(usageNotFound);
+        }
+        public static Position GetPosition(string name)
+        {
+            return Positions.SingleOrDefault(c => c.Name.Equals(name));
+        }
+        public static void CheckContainsPosition(string name)
+        {
+            if (Positions.Count(p => p.Name.Equals(name)) != 0) return;
+            var positionNotFound = new Position { Name = name };
+            Positions.Add(positionNotFound);
+        }
     }
 }

@@ -340,7 +340,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             } 
             var declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
             if (declareMedicine != null && (declareMedicine.Id.EndsWith("00") || declareMedicine.Id.EndsWith("G0")))
-                declareMedicine.Position = ViewModelMainWindow.Positions.SingleOrDefault(p => p.Id.Contains("PO"))?.Id;
+                declareMedicine.Position = ViewModelMainWindow.GetPosition("PO").Name;
             var currentRow = GetCurrentRowIndex(sender);
 
             if (DeclareDetails.Count > 0)

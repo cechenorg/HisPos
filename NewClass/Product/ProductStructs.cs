@@ -20,7 +20,6 @@ namespace His_Pos.NewClass.Product
         internal static ProductStructs GetProductStructsBySearchString(string searchString)
         {
             DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString);
-
             return new ProductStructs(dataTable);
         }
     }
