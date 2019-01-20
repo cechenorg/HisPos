@@ -399,9 +399,8 @@ namespace His_Pos.Class.Product
             {
                 if (!UsageName.Equals(u.Name)) continue;
                 tmpUsage = u;
-                find = true;
             }
-            Amount = find ? Dosage * UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : Dosage * UsagesFunction.CheckUsage(int.Parse(_days));
+            Amount = Dosage * UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage);
         }
 
         public object Clone()
