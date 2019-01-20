@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
