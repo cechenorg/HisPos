@@ -18,8 +18,10 @@ namespace His_Pos.NewClass.Person.Employee
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e))); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[SaveEmployee]", parameterList); 
         }
-        public static void Delete() {
-
+        public static void Delete(int empId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("EmpId", empId));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteEmployee]", parameterList); 
         }
         public static DataTable EmployeeLogin(string account,string password) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -34,11 +36,26 @@ namespace His_Pos.NewClass.Person.Employee
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList);
             return table;
         }
+        public static DataTable GetPassword(int empId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("EmpId", empId));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeePassword]", parameterList); 
+        }
+        public static void ChangePassword(int empid, string password)
+        { 
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpId", empid); 
+            DataBaseFunction.AddSqlParameter(parameterList, "Password", password);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ChangeEmployeePassword]", parameterList);
+        }
         public static DataTable SetCustomer(Employee e)
         {
             DataTable employeeTable = EmployeeTable();
-            DataRow newRow = employeeTable.NewRow(); 
-            DataBaseFunction.AddColumnValue(newRow,"Emp_ID",e.Id);
+            DataRow newRow = employeeTable.NewRow();
+            if (e.Id == 0)
+                newRow["Emp_ID"] = DBNull.Value;
+            else
+                newRow["Emp_ID"] = e.Id;
             DataBaseFunction.AddColumnValue(newRow,"Emp_Name",e.Name);
             DataBaseFunction.AddColumnValue(newRow,"Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Gender", e.Gender);
