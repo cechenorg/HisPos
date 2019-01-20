@@ -161,8 +161,10 @@ namespace His_Pos.ChromeTabViewModel
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+            MainWindow.ServerConnection.OpenConnection();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+            MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
@@ -184,6 +186,7 @@ namespace His_Pos.ChromeTabViewModel
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
+                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得醫療院所...";
                 Institutions = new Institutions(true);
                 BusyContent = "取得科別...";
@@ -202,6 +205,7 @@ namespace His_Pos.ChromeTabViewModel
                 Usages = new Usages();
                 BusyContent = "取得藥品途徑...";
                 Positions = new Positions();
+                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

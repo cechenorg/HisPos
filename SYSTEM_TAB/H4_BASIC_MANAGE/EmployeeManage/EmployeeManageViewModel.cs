@@ -1,0 +1,176 @@
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person;
+using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.Service;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
+{
+   public class EmployeeManageViewModel : TabBase
+   {
+        public override TabBase getTab() { 
+        return this;
+        }
+        #region -----Define Command----- 
+        public RelayCommand SelectionChangedCommand { get; set; }
+        public RelayCommand DataChangeCommand { get; set; }
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand SubmitCommand { get; set; }
+        #endregion
+        #region ----- Define Variables -----
+        public bool btnCancelEnable;
+        public bool BtnCancelEnable
+        {
+            get { return btnCancelEnable; }
+            set { Set(() => BtnCancelEnable, ref btnCancelEnable, value); }
+        }
+        public bool btnSubmitEnable;
+        public bool BtnSubmitEnable
+        {
+            get { return btnSubmitEnable; }
+            set { Set(() => BtnSubmitEnable, ref btnSubmitEnable, value); }
+        }
+        public string changeText;
+        public string ChangeText
+        {
+            get { return changeText; }
+            set { Set(() => ChangeText, ref changeText, value); }
+        }
+        public string changeForeground;
+        public string ChangeForeground
+        {
+            get { return changeForeground; }
+            set { Set(() => ChangeForeground, ref changeForeground, value); }
+        }
+        public Collection<string> positionCollection;
+        public Collection<string> PositionCollection
+        {
+            get { return positionCollection; }
+            set
+            {
+                Set(() => PositionCollection, ref positionCollection, value);
+            }
+        }
+         
+        public Employee employee;
+        public Employee Employee
+        {
+            get { return employee; }
+            set
+            {
+                Set(() => Employee, ref employee, value);
+            }
+        }
+        public Employees employeeCollection;
+        public Employees EmployeeCollection
+        {
+            get { return employeeCollection; }
+            set
+            {
+                Set(() => EmployeeCollection, ref employeeCollection, value);
+            }
+        }
+        public WorkPositions workPositions;
+        public WorkPositions WorkPositions
+        {
+            get { return workPositions; }
+            set
+            {
+                Set(() => WorkPositions, ref workPositions, value);
+            }
+        }
+        public Genders genders = new Genders();
+        public Genders Genders
+        {
+            get { return genders; }
+            set
+            {
+                Set(() => Genders, ref genders, value);
+            }
+        }
+        #endregion
+
+        public EmployeeManageViewModel() {
+
+            Init();
+            DataChangeCommand = new RelayCommand(DataChangeAction);
+            CancelCommand = new RelayCommand(CancelAction);
+            SubmitCommand = new RelayCommand(SubmitAction);
+            SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+        }
+        #region Action
+        public void SelectionChangedAction()
+        {
+            if (Employee is null) return;
+            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.Id == Employee.Id));
+            InitDataChanged();
+        }
+        public void DataChangeAction()
+        {
+            DataChanged();
+        }
+        public void SubmitAction() {
+            for (int i = 0; i < EmployeeCollection.Count; i++)
+            {
+                if (EmployeeCollection[i].Id == Employee.Id)
+                {
+                    EmployeeCollection[i] = Employee;
+                    Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(cus => cus.Id == EmployeeCollection[i].Id));
+                    break;
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            Employee.WorkPositionID = WorkPositions.Single(w => w.WorkPositionName == Employee.WorkPositionName).WorkPositionId;
+            Employee = Employee.Save();
+            MainWindow.ServerConnection.CloseConnection();
+            InitDataChanged(); 
+        }
+        public void CancelAction()
+        {
+            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.Id == Employee.Id));
+            InitDataChanged();
+        }
+        #endregion
+        #region Function
+
+        private void Init() {
+            MainWindow.ServerConnection.OpenConnection();
+            WorkPositions = new WorkPositions();
+            EmployeeCollection = new Employees();
+            EmployeeCollection.Init();
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (EmployeeCollection.Count > 0)
+                Employee = EmployeeCollection[0];
+            InitDataChanged();
+        }
+        private void DataChanged()
+        { 
+            ChangeText = "已修改";
+            ChangeForeground = "Red";
+            BtnCancelEnable = true;
+            BtnSubmitEnable = true;
+        } 
+        private void InitDataChanged()
+        {
+            ChangeText = "未修改";
+            ChangeForeground = "Black";
+            BtnCancelEnable = false;
+            BtnSubmitEnable = false;
+        }
+        private void openChangePasswordWindow()
+        {
+            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee.Id);
+        }
+        
+        #endregion
+
+    }
+}

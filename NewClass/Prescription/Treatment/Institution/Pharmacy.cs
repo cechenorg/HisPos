@@ -36,12 +36,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public MedicalPersonnels MedicalPersonnels { get; set; }
 
         #region Function
-        public static Pharmacy GetCurrentPharmacy() {
-            MainWindow.ServerConnection.OpenConnection();
+        public static Pharmacy GetCurrentPharmacy() { 
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
-            pharmacy.MedicalPersonnels = new MedicalPersonnels();
-            MainWindow.ServerConnection.CloseConnection();
+            pharmacy.MedicalPersonnels = new MedicalPersonnels(); 
             return pharmacy;
         }
         #endregion
