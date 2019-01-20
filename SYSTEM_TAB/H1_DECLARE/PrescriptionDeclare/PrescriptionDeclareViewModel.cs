@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -121,6 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         public int SelectedMedicinesIndex { get; set; }
+        private FunctionWindow.AddProductWindow.AddMedicineWindow medicineWindow { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -206,6 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ActionShowInstitutionSelectionWindow(string search)
         {
             if (search.Length < 4) return;
+            CurrentPrescription.Treatment.Institution = null;
             var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
             switch (result.Count)
             {
@@ -231,9 +235,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AddMedicineAction(string medicineID)
         {
             if (medicineID.Length < 5) return;
-            FunctionWindow.AddProductWindow.AddMedicineWindow medicineWindow = null;
-            medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
-            medicineWindow.ShowDialog();
+            var productCount = ProductStructs.GetProductStructsBySearchString(medicineID).Count;
+            if (productCount > 1)
+            {
+                medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+                medicineWindow.ShowDialog();
+            }
+            else if (productCount == 1)
+            {
+                medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+            }
         }
         private void AdjustButtonClickAction()
         {
@@ -248,29 +263,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 switch (CurrentPrescription.Source)
                 {
                     case PrescriptionSource.Normal:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
-                        CurrentPrescription.ProcessInventory();
-                        CurrentPrescription.ProcessEntry("調劑耗用","PreMasId", CurrentPrescription.Id);
-                        CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-                        CurrentPrescription.ProcessDepositCashFlow("自費");
-                        CurrentPrescription.ProcessSelfPayCashFlow("押金");
+                        NormalAdjust();
                         break;
                     case PrescriptionSource.Cooperative:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
-                        CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
-                        CurrentPrescription.ProcessDepositCashFlow("合作自費");
-                        CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
+                        CooperativeAdjust();
                         //更新API
                         break;
                     case PrescriptionSource.ChronicReserve:
-                        CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
-                        CurrentPrescription.PredictResere();
-                        CurrentPrescription.DeleteReserve();
-                        CurrentPrescription.ProcessInventory();
-                        CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
-                        CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-                        CurrentPrescription.ProcessDepositCashFlow("自費");
-                        CurrentPrescription.ProcessSelfPayCashFlow("押金");
+                        ChronicAdjust();
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
@@ -348,6 +348,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
             Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
         }
         #endregion
         #region EventAction
@@ -391,13 +392,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
-              CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
-            
-               if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
-               CurrentPrescription.Medicines.Add(new Medicine());
+            CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
+            if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
+                CurrentPrescription.Medicines.Add(new Medicine());
         }
         #endregion
         #region CommandActions
@@ -413,6 +412,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
         }
+        private void DeleteMedicine(NotificationMessage obj)
+        {
+            var m = CurrentPrescription.Medicines[SelectedMedicinesIndex];
+            if(m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) || m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
+                CurrentPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
+        }
         #endregion
         #region GeneralFunctions
         private void CheckDeclareStatus()
@@ -425,6 +430,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 DeclareStatus = PrescriptionDeclareStatus.Adjust;
             }
+        }
+
+        private void NormalAdjust()
+        {
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.ProcessInventory();
+            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("押金");
+        }
+        private void CooperativeAdjust()
+        {
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
+            CurrentPrescription.ProcessDepositCashFlow("合作自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
+            //更新API
+        }
+        private void ChronicAdjust()
+        {
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.PredictResere();
+            CurrentPrescription.DeleteReserve();
+            CurrentPrescription.ProcessInventory();
+            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("押金");
         }
         #endregion
     }

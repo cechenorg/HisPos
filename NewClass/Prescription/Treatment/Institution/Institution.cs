@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             Common = r.Field<bool>("Ins_IsCommon");
             IsCooperative = r.Field<bool>("Ins_IsCooperate");
         }
-        public string Id { get; }//院所代碼
+        public string Id { get; set; }//院所代碼
         public string Name { get; set; }//院所名稱
         private string fullName;
         public string FullName

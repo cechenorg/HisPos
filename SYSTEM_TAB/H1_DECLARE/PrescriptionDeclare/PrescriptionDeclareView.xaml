@@ -232,7 +232,15 @@
                 <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"
                       CanUserSortColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="PrescriptionMedicines_SelectionChanged">
-                <DataGrid.Resources>
+                    <!--<i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseEnter">
+                            <command:EventToCommand Command="{Binding MedicineGridMouseEnter}" CommandParameter="{Binding ElementName=PrescriptionMedicines, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeave">
+                            <command:EventToCommand Command="{Binding MedicineGridMouseLeave}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>-->
+                    <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -272,13 +280,16 @@
                         <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Height" Value="40" />
-                    </Style>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
+                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
+                        </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Name="DeleteDot" Width="30" Source="{Binding Source, NotifyOnSourceUpdated=True}" />
+                                    <Image Name="DeleteDot" Width="30" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" 
+                                       IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -329,7 +340,7 @@
                             <DataTemplate x:Name="UsageDataTemplate">
                                 <TextBox x:Name="Usage" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth"
                                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="14" FontWeight="Bold" 
-                                         IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding Usage.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                         IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -338,7 +349,7 @@
                             <DataTemplate x:Name="PositionDataTemplate">
                                 <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False"
                                          CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
-                                         Text="{Binding Position.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                         Text="{Binding Position.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -534,25 +545,25 @@
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
                         <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox Name="CopaymentText"  Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                 Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Margin="20,0,0,0" Content="應收 $" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox Name="CustomPayText" Width="90" Height="30"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                 Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Name="CustomPayText" Width="90" Height="30"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
+                                 Content="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal">
                         <Label  Content="押金 $" Style="{StaticResource BoldLabelContent18}" />
                         <TextBox Name="DepositText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18"  InputScope="Number"
-                                 Foreground="{StaticResource ForeGround}" Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                 Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.PrescriptionPoint.Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Margin="20,0,0,0" Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox Name="SelfCostText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number"
-                                 Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Name="SelfCostText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number"
+                               Content="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Row="3"  Orientation="Horizontal">
                         <Label Margin="10,0,0,0" Content="已付 $" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox Name="PaidText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                                 Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number"/>
+                                 Text="{Binding CurrentPrescription.PrescriptionPoint.ActualReceive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number"/>
                         <Label Margin="20,0,0,0" Content="找零 $" Style="{StaticResource BoldLabelContent18}"/>
-                        <Label Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                            <Label Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Width="90"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4">
                         <CheckBox Name="IsSendToServer" Width="133" Height="35" Background="RoyalBlue" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"/>

@@ -228,7 +228,9 @@ namespace His_Pos.NewClass.Prescription
         }
 
         public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
+            MainWindow.ServerConnection.OpenConnection();
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
+            MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows) 
             {
                 switch (r.Field<int>("DataType"))
@@ -254,7 +256,6 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
         public void AddCooperativePrescriptionMedicines() {
-             
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 DataTable table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 Medicine temp = new Medicine();
