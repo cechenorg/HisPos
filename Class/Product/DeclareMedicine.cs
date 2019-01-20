@@ -393,15 +393,7 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
-            var tmpUsage = new Usage();
-            var find = false;
-            foreach (var u in ViewModelMainWindow.Usages)
-            {
-                if (!UsageName.Equals(u.Name)) continue;
-                tmpUsage = u;
-                find = true;
-            }
-            Amount = find ? Dosage * UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : Dosage * UsagesFunction.CheckUsage(int.Parse(_days));
+            Amount = Dosage * UsagesFunction.CheckUsage(int.Parse(_days), ViewModelMainWindow.GetUsage(UsageName));
         }
 
         public object Clone()

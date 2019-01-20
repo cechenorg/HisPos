@@ -37,7 +37,24 @@ namespace His_Pos.NewClass.Product.Medicine
             Price = p.SellPrice;
             NHIPrice = p.NHIPrice;
         }
-         
+
+        public Medicine(Item m)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            ViewModelMainWindow.CheckContainsUsage(m.Freq);
+            ViewModelMainWindow.CheckContainsPosition(m.Way);
+            UsageName = m.Freq;
+            PositionName = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Daily_dose);
+            Days = Convert.ToInt32(m.Days);
+            PaySelf = m.Remark.Equals("*");
+            TotalPrice = PaySelf ? Convert.ToDouble(m.Price) : 0;
+        }
 
         private double amount;//總量
         public double Amount
@@ -69,11 +86,11 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
-                    Usage = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", "")));
+                    Usage = ViewModelMainWindow.GetUsage(_usageName);
                     if (Usage != null)
                     {
                         Usage.Name = _usageName;
-                        if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null)
+                        if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(_usageName) && Days != null)
                             CalculateAmount();
                     }
                 }
@@ -88,6 +105,23 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (usage != value)
                 {
                     Set(() => Usage, ref usage, value);
+                }
+            }
+        }
+        private string _positionName;
+        public string PositionName
+        {
+            get => _positionName;
+            set
+            {
+                if (value != null)
+                {
+                    Set(() => PositionName, ref _positionName, value);
+                    Position = ViewModelMainWindow.GetPosition(_positionName);
+                    if (Position != null)
+                    {
+                        Position.Name = _positionName;
+                    }
                 }
             }
         }
@@ -212,6 +246,8 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
         private bool enable;//是否停用
+        private Item m;
+
         public bool Enable
         {
             get => enable;
@@ -226,15 +262,7 @@ namespace His_Pos.NewClass.Product.Medicine
         private void CalculateAmount()
         {
             if(Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
-            var tmpUsage = Usage;
-            var find = false;
-            foreach (var u in ViewModelMainWindow.Usages)
-            {
-                if (!UsageName.Equals(u.Name)) continue;
-                tmpUsage = u;
-                find = true;
-            }
-            Amount = find ? (double)Dosage * UsagesFunction.CheckUsage((int)Days, tmpUsage) : (double)Dosage * UsagesFunction.CheckUsage((int)Days);
+            Amount = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
         }
     }
 }

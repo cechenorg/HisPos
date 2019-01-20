@@ -1,13 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
-using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
@@ -26,36 +22,52 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SpecialTreat = new SpecialTreat.SpecialTreat();
             Copayment = new Copayment.Copayment();
         }
-        public Treatment(CooperativePrescription c) {
-            Institution = ViewModelMainWindow.Institutions.Count(ins => ins.Id == c.DeclareXmlDocument.Prescription.From) == 0 ? new Institution.Institution() : ViewModelMainWindow.Institutions.Single(ins => ins.Id == c.DeclareXmlDocument.Prescription.From);
-            Division = ViewModelMainWindow.Divisions.Count(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject) == 0 ? new Division.Division() : ViewModelMainWindow.Divisions.Single(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject);
-            int diseaseCount = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease.Count;
+        public Treatment(CooperativePrescription c)
+        {
+            var prescription = c.DeclareXmlDocument.Prescription;
+            var study = prescription.Study;
+            var diseases = study.Diseases.Disease;
+            var insurance = prescription.Insurance;
+            var chronic = prescription.Continous_prescription;
+            Institution = ViewModelMainWindow.GetInstitution(prescription.From);
+            Division = ViewModelMainWindow.GetDivision(study.Subject);
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
             MainDisease = new DiseaseCode.DiseaseCode();
             SubDisease = new DiseaseCode.DiseaseCode();
-            for (int i = 0; i < 1; i++){
+            for (int i = 0; i < diseaseCount; i++){
                 switch (i) {
                     case 0:
-                            MainDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
+                            MainDisease.Id = diseases[i].Code;
                         break;
                     case 1:
-                            SubDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
+                            SubDisease.Id = diseases[i].Code;
                         break;
                 }
-            } 
-            PrescriptionCase = ViewModelMainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : ViewModelMainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
-            Copayment = ViewModelMainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : ViewModelMainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
+            }
+            PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(insurance.PrescriptionCase);
+            Copayment = ViewModelMainWindow.GetCopayment(insurance.CopaymentCode);
+            int.TryParse(chronic.Count, out var seq);
+            if (seq != 0)
+                ChronicSeq = seq;
+            int.TryParse(chronic.Total, out var total);
+            if (total != 0)
+                ChronicTotal = total;
             if (ChronicSeq != null && ChronicTotal != null) {
-                OriginalMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = "IC0" + ChronicSeq;
-                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("2"));
+                AdjustCase = ViewModelMainWindow.GetAdjustCase("2");
+                TempMedicalNumber = OriginalMedicalNumber;
             }
             else {
-                MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
-                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("1"));
+                MedicalNumber = insurance.MedicalNumber;
+                AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
+                TempMedicalNumber = MedicalNumber;
             }
             TreatDate = Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
-            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
+            PaymentCategory = ViewModelMainWindow.GetPaymentCategory("4");
             SpecialTreat = new SpecialTreat.SpecialTreat();
             Pharmacist = new MedicalPersonnel();
         }
@@ -115,8 +127,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DateTime adjustDate;//調劑日期 D23
-        public DateTime AdjustDate
+        private DateTime? adjustDate;//調劑日期 D23
+        public DateTime? AdjustDate
         {
             get => adjustDate;
             set
@@ -223,6 +235,178 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 Set(() => SpecialTreat, ref specialTreat, value);
             }
+        }
+
+        private string tempMedicalNumber;
+        public string TempMedicalNumber
+        {
+            get => tempMedicalNumber;
+            set
+            {
+                if (tempMedicalNumber != value)
+                {
+                    Set(() => TempMedicalNumber, ref tempMedicalNumber, value);
+                }
+            }
+        }
+        public string CheckInstitution()
+        {
+            if (CheckIsHomeCare() || CheckIsQuitSmoking())
+            {
+                Institution = new Institution.Institution { Id = "N", Name = string.Empty };
+                return string.Empty;
+            }
+            return Institution is null ? "請選擇釋出院所\r\n" : string.Empty;
+        }
+        public string CheckAdjustCase()
+        {
+            if (AdjustCase.Id.Equals("2") && (ChronicSeq is null || ChronicTotal is null))
+                return "慢性病連續處方調劑需填寫領藥次數與總領藥次數\r\n";
+            if (string.IsNullOrEmpty(AdjustCase.Id))
+                return "請選擇調劑案件\r\n";
+            return string.Empty;
+        }
+        public string CheckPrescriptionCase()
+        {
+            if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.Id))
+                return "請選擇處方案件\r\n";
+            return string.Empty;
+        }
+
+        public string CheckAdjustDate()
+        {
+            if (AdjustDate is null) return "請填寫調劑日期\r\n";
+            if (TreatDate == null || !(ChronicSeq is null)) return string.Empty;
+            var startDate = (DateTime)TreatDate;
+            var endDate = (DateTime)AdjustDate;
+            var holiday = 0;
+            while (startDate < endDate)
+            {
+                if ((int)startDate.DayOfWeek == 0 || (int)startDate.DayOfWeek == 6)
+                {
+                    holiday += 1;
+                }
+                startDate = startDate.AddDays(1);
+            }
+            if (new TimeSpan(endDate.Ticks - startDate.Ticks).Days - holiday > 3)
+            {
+                return "處方已超過可領取時限\r\n";
+            }
+            return string.Empty;
+        }
+        public string CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(TempMedicalNumber))
+            {
+                if (!CheckIsHomeCare()) return "就醫序號未填寫\r\n";
+                TempMedicalNumber = "N";
+                return string.Empty;
+            }
+            if (ChronicSeq is null)
+                MedicalNumber = TempMedicalNumber;
+            else
+            {
+                if (ChronicSeq > 1)
+                {
+                    MedicalNumber = "IC0" + ChronicSeq;
+                    OriginalMedicalNumber = TempMedicalNumber;
+                }
+                else
+                {
+                    MedicalNumber = TempMedicalNumber;
+                }
+            }
+            return string.Empty;
+        }
+        public string CheckCopayment()
+        {
+            if (CheckIsHomeCare())
+            {
+                Copayment = ViewModelMainWindow.GetCopayment("009");
+                return string.Empty;
+            }
+            return string.IsNullOrEmpty(Copayment.Id) ? "請選擇部分負擔\r\n" : string.Empty;
+        }
+        public string CheckPharmacist()
+        {
+            return string.IsNullOrEmpty(Pharmacist.IdNumber) ? "請選擇調劑藥師或填寫藥師身分證字號\r\n" : string.Empty;
+        }
+        public string CheckDivision()
+        {
+            if (string.IsNullOrEmpty(Division.Id))
+            {
+                if (CheckIsHomeCare() || CheckIsQuitSmoking())
+                    return string.Empty;
+                return "請選擇就醫科別\r\n";
+            }
+            return string.Empty;
+        }
+        public string CheckTreatDate()
+        {
+            if (TreatDate is null)
+            {
+                if (CheckIsHomeCare())
+                    return string.Empty;
+                return "請填寫就醫日期\r\n";
+            }
+            return string.Empty;
+        }
+        public string CheckPaymentCategory()
+        {
+            if (PaymentCategory is null)
+            {
+                if (CheckIsHomeCare() || ChronicSeq != null || AdjustCase.Id.Equals("2"))
+                    return string.Empty;
+                return "請給付類別\r\n";
+            }
+            return string.Empty;
+        }
+        public bool CheckIsQuitSmoking()
+        {
+            return AdjustCase.Id.Equals("5");
+        }
+        public bool CheckIsHomeCare()
+        {
+            return AdjustCase.Id.Equals("D");
+        }
+        public string CheckDiseaseCode()
+        {
+            if (string.IsNullOrEmpty(MainDisease.Id))
+            {
+                if (CheckIsHomeCare())
+                    return string.Empty;
+                return "請填寫主診斷代碼\r\n";
+            }
+            return string.Empty;
+        }
+        public string CheckChronicTimes()
+        {
+            if (AdjustCase.Id.Equals("2"))
+            {
+                if(ChronicSeq is null && ChronicTotal is null)
+                    return "請填寫領藥次數與總領藥次數\r\n";
+                if (ChronicSeq is null)
+                    return "請填寫領藥次數\r\n";
+                if (ChronicTotal is null)
+                    return "請填寫總領藥次數\r\n";
+            }
+            return string.Empty;
+        }
+        public string Check()
+        {
+            return 
+             CheckInstitution() +
+             CheckAdjustCase() +
+             CheckPrescriptionCase() +
+             CheckAdjustDate() +
+             CheckPharmacist() +
+             CheckMedicalNumber() +
+             CheckCopayment() +
+             CheckDivision() +
+             CheckTreatDate() +
+             CheckPaymentCategory() +
+             CheckDiseaseCode() +
+             CheckChronicTimes();
         }
     }
 }

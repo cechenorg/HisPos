@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -23,7 +21,6 @@ using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -71,18 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-        private string tempMedicalNumber;
-        public string TempMedicalNumber
-        {
-            get => tempMedicalNumber;
-            set
-            {
-                if (tempMedicalNumber != value)
-                {
-                    Set(() => TempMedicalNumber, ref tempMedicalNumber, value);
-                }
-            }
-        }
+        
         private bool isBusy;
         public bool IsBusy
         {
@@ -422,6 +408,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
+            CurrentPrescription.CountPrescriptionPoint();
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
@@ -439,7 +426,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
                 DeclareStatus = PrescriptionDeclareStatus.Prescribe;
-            else if (DateTime.Compare(CurrentPrescription.Treatment.AdjustDate.Date, DateTime.Today.Date) > 0)
+            else if (DateTime.Compare(((DateTime)CurrentPrescription.Treatment.AdjustDate).Date, DateTime.Today.Date) > 0)
                 DeclareStatus = PrescriptionDeclareStatus.Register;
             else
             {
@@ -449,7 +436,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void NormalAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.ProcessInventory();
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
@@ -458,7 +445,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CooperativeAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("合作自費");
             CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
@@ -466,7 +453,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ChronicAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription(TempMedicalNumber);
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.PredictResere();
             CurrentPrescription.DeleteReserve();
             CurrentPrescription.ProcessInventory();

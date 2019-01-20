@@ -92,5 +92,28 @@ namespace His_Pos.NewClass.Person.Customer
             }
             return 100;
         }
+
+        public string CheckBirthday()
+        {
+            if (Birthday is null) return "請填寫病患出生年月日\r\n";
+            return DateTime.Compare((DateTime) Birthday, DateTime.Today) > 0 ? "出生年月日不可大於今天\r\n" : string.Empty;
+        }
+
+        public string CheckIDNumber()
+        {
+            return string.IsNullOrEmpty(IDNumber) ? "請填寫病患身分證字號\r\n" : string.Empty;
+        }
+        public string CheckName()
+        {
+            return string.IsNullOrEmpty(Name) ? "請填寫病患姓名\r\n" : string.Empty;
+        }
+
+        public string CheckBasicData()
+        {
+            return
+            CheckBirthday()+
+            CheckIDNumber()+
+            CheckName();
+        }
     }
 }
