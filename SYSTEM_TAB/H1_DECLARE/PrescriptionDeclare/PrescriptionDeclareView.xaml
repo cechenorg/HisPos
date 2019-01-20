@@ -230,7 +230,7 @@
                 </StackPanel>
             </Grid>
                 <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"
-                      CanUserSortColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False"
+                      CanUserSortColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False" SelectedItem="{Binding SelectedMedicine,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="PrescriptionMedicines_SelectionChanged">
                     <!--<i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseEnter">

@@ -45,8 +45,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
                     deletable.Source = string.Empty;
-
-                PrescriptionMedicines.SelectedItem = deletable;
             }
         }
 
@@ -57,19 +55,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
                     deletable.Source = "/Images/DeleteDot.png";
-
-                PrescriptionMedicines.SelectedItem = deletable;
+                ((PrescriptionDeclareViewModel) DataContext).SelectedMedicine = (Medicine)selectedItem;
             }
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            PrescriptionMedicines.SelectedItem = (sender as DataGridRow)?.Item;
-            if (PrescriptionMedicines.SelectedItem is IDeletable)
+            if (((PrescriptionDeclareViewModel)DataContext).SelectedMedicine is IDeletable)
             {
-                if(!string.IsNullOrEmpty((PrescriptionMedicines.SelectedItem as MedicineOTC).Source) || !string.IsNullOrEmpty((PrescriptionMedicines.SelectedItem as MedicineNHI).Source))
+                if (PrescriptionMedicines.SelectedItem is MedicineNHI med)
                 {
-                    Messenger.Default.Send(new NotificationMessage("DeleteMedicine"));
+                    if(!string.IsNullOrEmpty(med.Source))
+                        Messenger.Default.Send(new NotificationMessage("DeleteMedicine"));
+                }
+                else if (PrescriptionMedicines.SelectedItem is MedicineOTC otc)
+                {
+                    if (!string.IsNullOrEmpty(otc.Source))
+                        Messenger.Default.Send(new NotificationMessage("DeleteMedicine"));
                 }
             }
         }
