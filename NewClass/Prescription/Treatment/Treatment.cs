@@ -76,7 +76,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
 
         }
-
+        #region Variables
         private Institution.Institution institution;//釋出院所 D21
         public Institution.Institution Institution
         {
@@ -236,7 +236,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 Set(() => SpecialTreat, ref specialTreat, value);
             }
         }
-
         private string tempMedicalNumber;
         public string TempMedicalNumber
         {
@@ -249,6 +248,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 }
             }
         }
+        #endregion
+        #region NHIRulesCheckFunctions
         private string CheckInstitution()
         {
             if (CheckIsHomeCare() || CheckIsQuitSmoking())
@@ -272,7 +273,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 return "請選擇處方案件\r\n";
             return string.Empty;
         }
-
         private string CheckAdjustDate()
         {
             if (AdjustDate is null) return "請填寫調劑日期\r\n";
@@ -395,7 +395,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public string Check()
         {
-            return 
+            return
              CheckInstitution() +
              CheckAdjustCase() +
              CheckPrescriptionCase() +
@@ -409,5 +409,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckDiseaseCode() +
              CheckChronicTimes();
         }
+        #endregion
     }
 }
