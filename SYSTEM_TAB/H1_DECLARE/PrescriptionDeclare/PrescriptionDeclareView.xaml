@@ -288,7 +288,7 @@
                     <DataGridTemplateColumn Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <Image Name="DeleteDot" Width="30" MouseRightButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" 
+                                    <Image Name="DeleteDot" Width="30" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" 
                                        IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
