@@ -3,7 +3,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Person.Employee
 { 
-    public class Employees : Collection<Employee>
+    public class Employees : ObservableCollection<Employee>
     {
         public Employees()
         {

@@ -63,7 +63,7 @@ namespace His_Pos
             InitializeComponent();
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
-            if (ViewModelMainWindow.CurrentUser.WorkPositionId == 2)
+            if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
             Instance = this;
             InitializeMenu();

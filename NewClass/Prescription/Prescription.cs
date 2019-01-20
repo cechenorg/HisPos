@@ -276,7 +276,7 @@ namespace His_Pos.NewClass.Prescription
                     ((Medicine)temp).ID = Medicines[medCount].ID;
                     ((Medicine)temp).ChineseName = Medicines[medCount].ChineseName;
                     ((Medicine)temp).EnglishName = Medicines[medCount].EnglishName;
-                    //這裡要新增商品
+                    MedicineDb.InsertCooperativeMedicineOTC(((Medicine)temp).ID , ((Medicine)temp).ChineseName);//新增合作診所MedicineOtc
                 }
                 ((Medicine)temp).Usage.Name = Medicines[medCount].Usage.Name;
                 ((Medicine)temp).Position.Name = Medicines[medCount].Position.Name;

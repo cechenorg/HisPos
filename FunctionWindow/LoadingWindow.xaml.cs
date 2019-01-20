@@ -391,34 +391,7 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
         
-        public void InitEmployeeManageView(EmployeeManageView employeeManage)
-        {
-            Show();
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得員工資料...");
-                Employees employeeCollection = new Employees();
-                employeeCollection.Init(); 
-
-                ChangeLoadingMessage("取得權限資料...");
-                var positionCollection = new Collection<Object>(); ///EmployeeDb.GetPositionData();
-
-                Dispatcher.Invoke((Action)(() =>
-                {
-                  employeeManage.EmployeeCollection = employeeCollection;
-                   /// employeeManage.PositionCollection = positionCollection;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    employeeManage.DataGridEmployee.SelectedIndex = 0;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
 
         public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord)
         {
