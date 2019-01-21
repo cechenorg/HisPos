@@ -329,7 +329,30 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is MedicineNHI || value is MedicineOTC) return true;
+            if (value is MedicineNHI || value is MedicineOTC)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class IsPriceReadOnly : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is MedicineNHI|| value is MedicineOTC)
+            {
+                if (((Medicine)value).Amount <= 0)
+                {
+                    return true;
+                }
+                return value is MedicineNHI nhi && !nhi.PaySelf;
+            }
             return false;
         }
 

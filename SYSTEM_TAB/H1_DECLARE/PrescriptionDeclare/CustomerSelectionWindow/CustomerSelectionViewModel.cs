@@ -95,8 +95,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public RelayCommand CustomerSelected { get; set; }
         private void ExecuteCustomerSelected()
         {
+            MainWindow.ServerConnection.OpenConnection();
             SelectedCustomer.UpdateEditTime();
+            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.ServerConnection.OpenConnection();
             SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
+            MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
         }
@@ -106,7 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
             SearchingTextChanged = new RelayCommand(ExecuteSearchingTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             Customers = new Customers();
+            MainWindow.ServerConnection.OpenConnection();
             Customers.Init();
+            MainWindow.ServerConnection.CloseConnection();
             CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
             CustomersCollectionView = CustomersCollectionViewSource.View;
             Searching = condition;

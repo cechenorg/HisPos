@@ -22,6 +22,7 @@
             <Setter Property="Margin" Value="5,10,5,10"/>
         </Style>
         <service:IsMedicineEditable x:Key="IsMedicineEditableConverter" />
+        <service:IsPriceReadOnly x:Key="IsPriceReadOnly"/>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter" />
         <service:DoubleConverter x:Key="DoubleConverter"/>
@@ -105,7 +106,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Orientation="Horizontal">
                     <Label  Content="釋出院所" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox x:Name="ReleaseHospital" Width="400" Height="34" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox x:Name="ReleaseHospital" Width="400" Height="34" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"
                              Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.Institution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
@@ -287,7 +288,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn x:Name="MedicineId" Width="130" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="MedicineCodeDataTemplate">
+                            <DataTemplate>
                                 <TextBox x:Name="MedicineCodeAuto" Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="14" InputScope="AlphanumericHalfWidth" Text="{Binding ID,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                                     <TextBox.InputBindings>
@@ -320,7 +321,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="DosageDataTemplate">
+                            <DataTemplate>
                                 <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red"
                                          Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DoubleConverter},Delay=400}" />
@@ -329,7 +330,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn MinWidth="40" Header="用法" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="UsageDataTemplate">
+                            <DataTemplate>
                                 <TextBox x:Name="Usage" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth"
                                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="14" FontWeight="Bold" 
                                          IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -338,7 +339,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn MinWidth="40" Header="途徑" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="PositionDataTemplate">
+                            <DataTemplate>
                                 <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False"
                                          CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
                                          Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -353,24 +354,16 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="MedicineAmountDataTemplate">
-                                <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
+                        <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"
                                          Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="Inventory" MinWidth="40" Header="庫存" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="60" Binding="{Binding NHIPrice,UpdateSourceTrigger=PropertyChanged}" FontSize="14" FontWeight="Bold" Header="健保價格" IsReadOnly="True">
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="60" Binding="{Binding NHIPrice,UpdateSourceTrigger=PropertyChanged}" FontSize="14" FontWeight="Bold" Header="健保價" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -380,12 +373,30 @@
                     </DataGridTextColumn>
                     <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="PaysDataTemplate">
+                            <DataTemplate>
                                     <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="60" Binding="{Binding Price,UpdateSourceTrigger=PropertyChanged}" FontSize="14" FontWeight="Bold" Header="自費價格" IsReadOnly="True">
+                        <DataGridTemplateColumn MinWidth="60" Header="自費價" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="MedicinePrice" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"
+                                         Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly,UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="60" Header="總價" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"
+                                         Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly,UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -393,15 +404,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="60" Header="總價" IsReadOnly="True" Binding="{Binding TotalPrice,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
+                        <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineBuckleDataTemplate">
                                 <Image Source="{Binding BuckleIcon,UpdateSourceTrigger=PropertyChanged}" Width="16"/>
@@ -547,8 +550,8 @@
                         <TextBox Name="DepositText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18"  InputScope="Number"
                                  Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.PrescriptionPoint.Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Margin="20,0,0,0" Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
-                        <Label Name="SelfCostText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number"
-                               Content="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Name="SelfCostText" Width="90" Height="30" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number"
+                               Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Row="3"  Orientation="Horizontal">
                         <Label Margin="10,0,0,0" Content="已付 $" Style="{StaticResource BoldLabelContent18}"/>

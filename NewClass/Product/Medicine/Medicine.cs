@@ -74,6 +74,7 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
+                CheckIsPriceReadOnly();
             }
         }
         private double? dosage;//每次用量
@@ -217,9 +218,21 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (paySelf != value)
                 {
                     Set(() => PaySelf, ref paySelf, value);
+                    CheckIsPriceReadOnly();
                 }
             }
         }
+
+        private void CheckIsPriceReadOnly()
+        {
+            if (Amount <= 0)
+                IsPriceReadOnly = true;
+            else
+            {
+                IsPriceReadOnly = !PaySelf;
+            }
+        }
+
         private string vendor;//製造商
         public string Vendor
         {
@@ -270,10 +283,27 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+
+        private bool isPriceReadOnly;
+        public bool IsPriceReadOnly {
+            get => isPriceReadOnly;
+            set
+            {
+                Set(() => IsPriceReadOnly, ref isPriceReadOnly, value);
+            }
+        }
+
         private void CalculateAmount()
         {
             if(Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
             Amount = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
+        }
+
+        public void CheckPaySelf(string adjustCaseId)
+        {
+            if (string.IsNullOrEmpty(adjustCaseId)) return;
+            if (adjustCaseId.Equals("0"))
+                PaySelf = true;
         }
     }
 }

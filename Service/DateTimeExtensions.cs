@@ -167,5 +167,17 @@ namespace His_Pos.Service
             result.Days = days;
             return result;
         }
+        public static string NullableDateToTWCalender(DateTime? d, bool needSplit)
+        {
+            if (d is null) return string.Empty;
+            var convert = (DateTime) d;
+            var year = (convert.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (convert.Month).ToString().PadLeft(2, '0');
+            var day = (convert.Day).ToString().PadLeft(2, '0');
+            if (needSplit)
+                return year + "/" + month + "/" + day;
+            return year + month + day;
+            
+        }
     }
 }

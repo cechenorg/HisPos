@@ -1,9 +1,20 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -13,6 +24,8 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
+using Microsoft.Reporting.WinForms;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -157,6 +170,8 @@ namespace His_Pos.ChromeTabViewModel
         public static Positions Positions { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
+        private int m_currentPageIndex;
+        private IList<Stream> m_streams;
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
@@ -263,6 +278,135 @@ namespace His_Pos.ChromeTabViewModel
             if (Positions.Count(p => p.Name.Equals(name)) != 0) return;
             var positionNotFound = new Position { Name = name };
             Positions.Add(positionNotFound);
+        }
+        public void StartPrintMedBag(ReportViewer r, Prescription p = null)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "藥袋列印中...";
+                Export(r.LocalReport, 22, 24);
+                ReportPrint(Properties.Settings.Default.MedBagPrinter);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if(p is null)
+                    MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                else
+                {
+                    p.PrintReceipt();
+                }
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+        public void StartPrintReceipt(ReportViewer r)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "收據列印中...";
+                Export(r.LocalReport, 25.4, 9.3);
+                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+        private void Export(LocalReport report, double width, double height)
+        {
+            try
+            {
+                string deviceInfo =
+                    @"<DeviceInfo>
+                <OutputFormat>EMF</OutputFormat>" +
+                    "  <PageWidth>" + width + "cm</PageWidth>" +
+                    "  <PageHeight>" + height + "cm</PageHeight>" +
+                    "  <MarginTop>0cm</MarginTop>" +
+                    "  <MarginLeft>0cm</MarginLeft>" +
+                    "  <MarginRight>0cm</MarginRight>" +
+                    "  <MarginBottom>0cm</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                m_streams = new List<Stream>();
+                report.Render("Image", deviceInfo, CreateStream, out warnings);
+                foreach (Stream stream in m_streams)
+                    stream.Position = 0;
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("Export()"+ ex.Message, MessageType.ERROR);
+                });
+            }
+        }
+
+        private void ReportPrint(string printer)
+        {
+            if (m_streams == null || m_streams.Count == 0)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("ReportPrint()_1", MessageType.ERROR);
+                });
+                return;
+            }
+            try
+            {
+                PrintDocument printDoc = new PrintDocument();
+                printDoc.PrinterSettings.PrinterName = printer;
+                printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+                m_currentPageIndex = 0;
+                printDoc.Print();
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("ReportPrint" + ex.Message, MessageType.ERROR);
+                });
+            }
+        }
+        private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,
+            string mimeType, bool willSeek)
+        {
+            Stream stream = new MemoryStream();
+            m_streams.Add(stream);
+            return stream;
+        }
+        private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
+        {
+            try
+            {
+                Metafile pageImage = new
+                    Metafile(m_streams[m_currentPageIndex]);
+
+                // Adjust rectangular area with printer margins.
+                Rectangle adjustedRect = new Rectangle(
+                    ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
+                    ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
+                    ev.PageBounds.Width,
+                    ev.PageBounds.Height);
+
+                // Draw a white background for the report
+                ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
+
+                // Draw the report content
+                ev.Graphics.DrawImage(pageImage, adjustedRect);
+
+                // Prepare for the next page. Make sure we haven't hit the end.
+                m_currentPageIndex++;
+                ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("printDoc_PrintPage" + ex.Message, MessageType.ERROR);
+                });
+            }
         }
     }
 }

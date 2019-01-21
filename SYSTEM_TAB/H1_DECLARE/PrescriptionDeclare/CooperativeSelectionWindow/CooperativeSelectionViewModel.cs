@@ -5,8 +5,10 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
 {
@@ -190,8 +192,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             MainWindow.ServerConnection.OpenConnection();
             SelectedPrescription.UpdateCooperativePrescriptionIsRead(); 
             MainWindow.ServerConnection.CloseConnection();
-
-            SelectedPrescription.PrintMedBag();
+            var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
+            if ((bool)medBagPrint.DialogResult)
+            {
+                var printBySingleMode = new MedBagSelectionWindow();
+                var singleMode = (bool)printBySingleMode.ShowDialog();
+                var receiptResult = new ConfirmWindow("是否列印收據", "列印收據");
+                var receiptPrint = false;
+                if (SelectedPrescription.PrescriptionPoint.AmountsPay > 0)
+                {
+                    receiptPrint = (bool)receiptResult.DialogResult;
+                }
+                SelectedPrescription.PrintMedBag(singleMode, receiptPrint);
+            }
         }
         private void ExecutePrescriptionSelected()
         {

@@ -115,5 +115,11 @@ namespace His_Pos.NewClass.Person.Customer
             CheckIDNumber()+
             CheckName();
         }
+
+        public string CheckGender()
+        {
+            Gender = IDNumber[1].Equals('2') ? Properties.Resources.Female : Properties.Resources.Male;
+            return Gender;
+        }
     }
 }

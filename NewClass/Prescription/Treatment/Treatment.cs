@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -134,6 +135,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             set
             {
                 Set(() => AdjustDate, ref adjustDate, value);
+                Messenger.Default.Send(new NotificationMessage("AdjustDateChanged"));
             }
         }
 

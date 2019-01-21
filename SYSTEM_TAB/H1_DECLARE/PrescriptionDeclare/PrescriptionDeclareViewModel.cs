@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing.Printing;
 using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -21,6 +22,7 @@ using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
+using Microsoft.Reporting.WinForms;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -191,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void SearchCusByBirthAction()
         {
             if (CurrentPrescription.Patient.Birthday is null) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)CurrentPrescription.Patient.Birthday, false), 1);
+            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
             customerSelectionWindow.ShowDialog();
         }
         private void SearchCustomerByTelAction()
@@ -274,13 +276,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
-                CurrentPrescription.PrintMedBag();
-                MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);
+                PrintMedBag();
                 //每日上傳
                 ClearPrescription();
             }
 
         }
+
+        private void PrintMedBag()
+        {
+            var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
+            if ((bool)medBagPrint.DialogResult)
+            {
+                var printBySingleMode = new MedBagSelectionWindow();
+                var singleMode = (bool)printBySingleMode.ShowDialog();
+                var receiptPrint = false;
+                if (CurrentPrescription.PrescriptionPoint.AmountsPay > 0)
+                {
+                    var receiptResult = new ConfirmWindow("是否列印收據", "列印收據");
+                    receiptPrint = (bool) receiptResult.DialogResult;
+                }
+                CurrentPrescription.PrintMedBag(singleMode, receiptPrint);
+            }
+        }
+
         private void RegisterButtonClickAction()
         {
             var error = CurrentPrescription.CheckPrescriptionRule();
@@ -365,7 +384,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
             Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
+            Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", CheckDeclareStatus);
         }
+
+        private void CheckDeclareStatus(NotificationMessage adjustChange)
+        {
+            if (!adjustChange.Notification.Equals("AdjustDateChanged")) return;
+            var adjust = CurrentPrescription.Treatment.AdjustDate;
+            if (CurrentPrescription.Treatment.AdjustDate is null) return;
+            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) || !CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+            {
+                DeclareStatus = DateTime.Today.Date >= ((DateTime)adjust).Date ?
+                    PrescriptionDeclareStatus.Adjust :
+                    PrescriptionDeclareStatus.Register;
+            }
+            else
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+            }
+        }
+
         #endregion
         #region EventAction
         private void AdjustCaseSelectionChangedAction()
@@ -375,12 +413,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
             {
                 NotPrescribe = false;
+                CurrentPrescription.Treatment.Institution =
+                    new Institution
+                    {
+                        Id = ViewModelMainWindow.CurrentPharmacy.Id,
+                        Name = ViewModelMainWindow.CurrentPharmacy.Name,
+                        FullName = ViewModelMainWindow.CurrentPharmacy.Id + ViewModelMainWindow.CurrentPharmacy.Name
+                    };
+                CurrentPrescription.Treatment.PrescriptionCase = null;
+                CurrentPrescription.Treatment.TempMedicalNumber = string.Empty;
+                CurrentPrescription.Treatment.Copayment = null;
+                CurrentPrescription.Treatment.TreatDate = null;
+                CurrentPrescription.Treatment.ChronicSeq = null;
+                CurrentPrescription.Treatment.ChronicTotal = null;
+                CurrentPrescription.Treatment.Division = null;
+                CurrentPrescription.Treatment.MainDisease = null;
+                CurrentPrescription.Treatment.SubDisease = null;
+                CurrentPrescription.Treatment.SpecialTreat = null;
+                CurrentPrescription.Treatment.PaymentCategory = null;
+                SetMedicinesPaySelf();
             }
             else
             {
                 NotPrescribe = true;
             }
         }
+
+        private void SetMedicinesPaySelf()
+        {
+            var medList = CurrentPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            if (medList.Count > 0)
+            {
+                foreach (var m in medList)
+                {
+                    if(m.PaySelf) continue;
+                    m.PaySelf = true;
+                }
+            }
+        }
+
         private void GetDiseaseCodeByIdAction(string id)
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName))
@@ -432,7 +503,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void DeleteMedicine(NotificationMessage obj)
         {
-            if(CurrentPrescription.Medicines.Count == SelectedMedicinesIndex) return;
+            if(CurrentPrescription.Medicines.Count <= SelectedMedicinesIndex) return;
             var m = CurrentPrescription.Medicines[SelectedMedicinesIndex];
             if (m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) ||
                 m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
