@@ -218,7 +218,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Institution GetInstitution(string id)
         {
             var result = Institutions.SingleOrDefault(i => i.Id.Equals(id));
-            return result ?? new Institution();
+            return result;
         }
         public static AdjustCase GetAdjustCase(string id)
         {
@@ -227,7 +227,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Division GetDivision(string id)
         {
             var result = Divisions.SingleOrDefault(i => i.Id.Equals(id));
-            return result ?? new Division();
+            return result;
         }
         public static PaymentCategory GetPaymentCategory(string id)
         {
@@ -236,12 +236,12 @@ namespace His_Pos.ChromeTabViewModel
         public static PrescriptionCase GetPrescriptionCases(string id)
         {
             var result = PrescriptionCases.SingleOrDefault(i => i.Id.Equals(id));
-            return result ?? new PrescriptionCase();
+            return result?? PrescriptionCases.Single(i => i.Id.Equals("4"));
         }
         public static Copayment GetCopayment(string id)
         {
             var result = Copayments.SingleOrDefault(i => i.Id.Equals(id));
-            return result ?? new Copayment();
+            return result ?? Copayments.SingleOrDefault(i => i.Id.Equals("I20"));
         }
         public static Usage GetUsage(string name)
         {

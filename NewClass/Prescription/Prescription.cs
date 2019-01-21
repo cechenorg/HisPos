@@ -84,7 +84,11 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥
-
+        public void InitialCurrentPrescription()
+        {
+            Treatment.Initial();
+            Medicines.Add(new Medicine());
+        }
         private int CountCopaymentPoint()
         {
             if (CheckFreeCopayment())
