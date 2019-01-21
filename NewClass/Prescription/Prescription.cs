@@ -310,7 +310,7 @@ namespace His_Pos.NewClass.Prescription
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 Medicines[medCount] = temp; 
             }
-           
+            Medicines.Add(new Medicine());
         }
         public int UpdatePrescriptionCount()//計算處方張數
         {

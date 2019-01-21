@@ -203,33 +203,6 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptionDetailTable;
         }
-        public static DataTable SetPrescriptionDetailSimpleForm(Prescription p) { //日記藥費
-            int medCount = 1;
-            DataTable prescriptionMasterTable = PrescriptionMasterTable();
-
-            foreach (var med in p.Medicines)
-            {
-                DataRow newRow = prescriptionMasterTable.NewRow();
-                newRow["PreDet_PrescriptionID"] = DBNull.Value;
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", 1);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", 100); //還沒算
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_SerialNumber", med.PaySelf ? 0 : medCount);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Point", med.PaySelf ? 0 : med.NHIPrice * med.Amount);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineID", med.ID);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Dosage", med.Dosage);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Usage", med.Usage.Name);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Position", med.Position.Name);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_TotalAmount", med.Amount);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", med.PaySelf ? med.Price : med.NHIPrice);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", med.Days);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", med.PaySelf);
-                prescriptionMasterTable.Rows.Add(newRow);
-                if (!med.PaySelf)
-                    medCount++;
-            }
-            //這裡要補藥事服務費
-            return prescriptionMasterTable;
-        }
         public static DataTable PrescriptionMasterTable() {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("PreMas_ID", typeof(int));
