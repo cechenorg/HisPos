@@ -75,8 +75,28 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 Set(() => Amount, ref amount, value);
                 CheckIsPriceReadOnly();
+                CountTotalPrice();
             }
         }
+
+        private void CountTotalPrice()
+        {
+            if(Amount <= 0) return;
+            if (PaySelf)
+            {
+                if (Price > 0)
+                    TotalPrice = Amount * Price;
+                else
+                {
+                    TotalPrice = Amount * NHIPrice;
+                }
+            }
+            else
+            {
+                TotalPrice = Amount * NHIPrice;
+            }
+        }
+
         private double? dosage;//每次用量
         public double? Dosage
         {
@@ -170,6 +190,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (price != value)
                 {
                     Set(() => Price, ref price, value);
+                    CountTotalPrice();
                 }
             }
         }
@@ -194,9 +215,18 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (totalPrice != value)
                 {
                     Set(() => TotalPrice, ref totalPrice, value);
+                    CheckPrice();
                 }
             }
         }
+
+        private void CheckPrice()
+        {
+            if(Amount <=  0 || !PaySelf)return;
+            if (Price != TotalPrice / Amount)
+                Price = TotalPrice / Amount;
+        }
+
         private double inventory;//庫存
         public double Inventory
         {

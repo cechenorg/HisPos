@@ -1,10 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
-using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
-using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
