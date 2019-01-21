@@ -119,8 +119,9 @@ namespace His_Pos
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
-
+            MainWindow.ServerConnection.OpenConnection();
             Collection<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
+            MainWindow.ServerConnection.CloseConnection();
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)

@@ -23,6 +23,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
+        public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand NewEmployeeCommand { get; set; }
+        public RelayCommand ChangePassWordCommand { get; set; }
         #endregion
         #region ----- Define Variables -----
         public bool btnCancelEnable;
@@ -104,8 +107,37 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             CancelCommand = new RelayCommand(CancelAction);
             SubmitCommand = new RelayCommand(SubmitAction);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+            DeleteCommand = new RelayCommand(DeleteAction);
+            NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
+            ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
         }
         #region Action
+        public void ChangePassWordAction() {
+            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee);
+        }
+        public void NewEmployeeAction() {
+            Employee newEmployee = new Employee();
+            newEmployee.Name = "新人";
+            newEmployee.Gender = "男";
+            newEmployee.WorkPositionID = 2;
+            newEmployee.WorkPositionName = "藥師";
+            newEmployee.StartDate = DateTime.Today;
+            newEmployee.Birthday = DateTime.Today;
+            newEmployee.IDNumber = DateTime.Now.ToString("yyyyMMddhhss");
+            MainWindow.ServerConnection.OpenConnection();
+            newEmployee = newEmployee.Save();
+            MainWindow.ServerConnection.CloseConnection();
+            EmployeeCollection.Add(newEmployee);
+            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection[EmployeeCollection.Count - 1]);
+        }
+        public void DeleteAction()
+        {
+            MainWindow.ServerConnection.OpenConnection(); 
+            Employee.Delete();
+            EmployeeCollection.Remove( EmployeeCollection.Single(emp => emp.Id == Employee.Id) );
+            Employee = NewFunction.DeepCloneViaJson( EmployeeCollection[EmployeeCollection.Count - 1]);
+            MainWindow.ServerConnection.CloseConnection(); 
+        }
         public void SelectionChangedAction()
         {
             if (Employee is null) return;
@@ -148,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             MainWindow.ServerConnection.CloseConnection();
 
             if (EmployeeCollection.Count > 0)
-                Employee = EmployeeCollection[0];
+                Employee = NewFunction.DeepCloneViaJson(EmployeeCollection[0]);
             InitDataChanged();
         }
         private void DataChanged()
@@ -165,11 +197,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             BtnCancelEnable = false;
             BtnSubmitEnable = false;
         }
-        private void openChangePasswordWindow()
-        {
-            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee.Id);
-        }
-        
+         
         #endregion
 
     }

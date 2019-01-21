@@ -3,8 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
-using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -20,20 +20,22 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private string EmpNewPassword { get; set; }
         #endregion
 
-        public ChangePasswordWindow(int id)
+        public ChangePasswordWindow(Employee e)
         {
             InitializeComponent();
-            EmpId = id;
-            /// EmpOldPassword = EmployeeDb.GetEmployeePassword(EmpId);
+            EmpId = e.Id;
+            MainWindow.ServerConnection.OpenConnection();
+            EmpOldPassword = e.GetPassword();
+            MainWindow.ServerConnection.CloseConnection();
             ShowDialog();
         }
 
         private void ConfirmChangePassword_OnClick(object sender, RoutedEventArgs e)
         {
             if(!CheckPasswordValid()) return;
-
-            ///EmployeeDb.SetEmployeePassword(EmpId, EmpNewPassword);
-
+            MainWindow.ServerConnection.OpenConnection();
+            EmployeeDb.ChangePassword(EmpId, EmpNewPassword);
+            MainWindow.ServerConnection.CloseConnection(); 
             MessageWindow.ShowMessage("更新密碼成功!", MessageType.SUCCESS);
             
 
