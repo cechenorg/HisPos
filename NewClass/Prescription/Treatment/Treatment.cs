@@ -413,6 +413,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
 
         public void Initial()
         {
+            Division = null;
+            SpecialTreat = null;
+
             Pharmacist = ViewModelMainWindow.CurrentPharmacy.GetPharmacist();
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;
