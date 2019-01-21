@@ -14,6 +14,7 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.Product;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using Microsoft.International.Formatters;

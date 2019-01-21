@@ -411,6 +411,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
             CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
+            CurrentPrescription.CountPrescriptionPoint();
             if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
                 CurrentPrescription.Medicines.Add(new Medicine());
         }
@@ -433,8 +434,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(CurrentPrescription.Medicines.Count == SelectedMedicinesIndex) return;
             var m = CurrentPrescription.Medicines[SelectedMedicinesIndex];
-            if(m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) || m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
+            if (m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) ||
+                m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
+            {
                 CurrentPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
+                CurrentPrescription.CountPrescriptionPoint();
+                if (CurrentPrescription.Medicines.Count == 0)
+                {
+                    CurrentPrescription.Medicines.Add(new Medicine());
+                }
+            }
+                
         }
         #endregion
         #region GeneralFunctions
