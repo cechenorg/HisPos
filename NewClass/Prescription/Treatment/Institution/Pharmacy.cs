@@ -42,6 +42,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             pharmacy.MedicalPersonnels = new MedicalPersonnels(); 
             return pharmacy;
         }
+        public MedicalPersonnel GetPharmacist()
+        {
+            if (ViewModelMainWindow.CurrentUser.WorkPositionName.Equals("藥師"))
+                return MedicalPersonnels.Single(m => m.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
+            return MedicalPersonnels[0];
+        }
         #endregion
     }
 }

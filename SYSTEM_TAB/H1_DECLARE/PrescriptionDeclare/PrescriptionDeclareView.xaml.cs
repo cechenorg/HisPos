@@ -22,8 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dg = sender as DataGrid;
-            if (dg == null) return;
+            if (!(sender is DataGrid dg)) return;
             var index = dg.SelectedIndex;
             if(index == -1) return;
             ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = index;

@@ -138,14 +138,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand AdjustButtonClick { get; set; }
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
+        public RelayCommand ClearButtonClick { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
-            CurrentPrescription = new Prescription();
             SelectedMedicinesIndex = 0;
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
             InitializeVariables();
-            CurrentPrescription.Medicines.Add(new Medicine());
         }
 
         ~PrescriptionDeclareViewModel()
@@ -278,7 +277,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.PrintMedBag();
                 MessageWindow.ShowMessage("處方登錄成功",MessageType.SUCCESS);
                 //每日上傳
+                ClearPrescription();
             }
+
         }
         private void RegisterButtonClickAction()
         {
@@ -293,6 +294,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 //登錄
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                ClearPrescription();
             }
 
         }
@@ -302,6 +304,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //自費調劑
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+            ClearPrescription();
         }
         #endregion
         #region InitialFunctions
@@ -311,6 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             InitialItemsSources();
             InitialCommandActions();
             RegisterMessengers();
+            InitialPrescription();
         }
         private void InitialItemsSources()
         {
@@ -342,7 +346,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
+            ClearButtonClick = new RelayCommand(ClearPrescription);
         }
+        private void InitialPrescription()
+        {
+            CurrentPrescription = new Prescription();
+            CurrentPrescription.InitialCurrentPrescription();
+        }
+        private void ClearPrescription()
+        {
+            InitialPrescription();
+        }
+
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);

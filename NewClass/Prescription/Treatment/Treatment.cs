@@ -69,7 +69,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             AdjustDate = DateTime.Today;
             PaymentCategory = ViewModelMainWindow.GetPaymentCategory("4");
             SpecialTreat = new SpecialTreat.SpecialTreat();
-            Pharmacist = new MedicalPersonnel();
+            Pharmacist = ViewModelMainWindow.CurrentPharmacy.GetPharmacist();
         }
 
         public Treatment(DataRow r)
@@ -410,5 +410,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckChronicTimes();
         }
         #endregion
+
+        public void Initial()
+        {
+            Pharmacist = ViewModelMainWindow.CurrentPharmacy.GetPharmacist();
+            TreatDate = DateTime.Today;
+            AdjustDate = DateTime.Today;
+            AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
+            PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases("09");
+            PaymentCategory = ViewModelMainWindow.GetPaymentCategory("4");
+            Copayment = ViewModelMainWindow.GetCopayment("I20");
+        }
     }
 }
