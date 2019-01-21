@@ -431,6 +431,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void DeleteMedicine(NotificationMessage obj)
         {
+            if(CurrentPrescription.Medicines.Count == SelectedMedicinesIndex) return;
             var m = CurrentPrescription.Medicines[SelectedMedicinesIndex];
             if(m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) || m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
                 CurrentPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
