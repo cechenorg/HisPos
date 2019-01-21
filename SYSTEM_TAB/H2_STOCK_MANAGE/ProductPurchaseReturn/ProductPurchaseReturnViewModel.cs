@@ -11,6 +11,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
@@ -57,13 +58,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            AddOrderCommand = new RelayCommand(AddOrderAction);
-            DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
-            ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
-            ReloadCommand = new RelayCommand(ReloadAction);
-            AddProductCommand = new RelayCommand<string>(AddProductAction);
-
             InitVariables();
+            RegisterCommend();
+            RegisterMessenger();
+        }
+
+        ~ProductPurchaseReturnViewModel()
+        {
+            UnRegisterMessenger();
         }
 
         #region ----- Define Actions -----
@@ -127,6 +129,31 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (StoreOrderCollection.Count > 0)
                 CurrentStoreOrder = StoreOrderCollection[0];
         }
+
+        private void RegisterCommend()
+        {
+            AddOrderCommand = new RelayCommand(AddOrderAction);
+            DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
+            ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
+            ReloadCommand = new RelayCommand(ReloadAction);
+            AddProductCommand = new RelayCommand<string>(AddProductAction);
+        }
+        
+        #region ----- Messenger Functions -----
+        private void RegisterMessenger()
+        {
+            Messenger.Default.Register<ProductStruct>(this, GetSelectedProduct);
+        }
+        private void UnRegisterMessenger()
+        {
+            Messenger.Default.Unregister(this);
+        }
+        private void GetSelectedProduct(ProductStruct selectedProduct)
+        {
+            
+        }
+        #endregion
+
         #endregion
     }
 }
