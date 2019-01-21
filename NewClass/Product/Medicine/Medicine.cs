@@ -52,8 +52,19 @@ namespace His_Pos.NewClass.Product.Medicine
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Daily_dose);
             Days = Convert.ToInt32(m.Days);
-            PaySelf = m.Remark.Equals("*");
-            TotalPrice = PaySelf ? Convert.ToDouble(m.Price) : 0;
+            PaySelf = !string.IsNullOrEmpty(m.Remark) ;
+           
+            switch (m.Remark) {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    break;
+            } 
         }
 
         private double amount;//總量
