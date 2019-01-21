@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription
             var birthYear = int.Parse(customer.Birth.Substring(0, 3)) + 1911;
             var birthMonth = int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = int.Parse(customer.Birth.Substring(5, 2));
-            #endregion
+            #endregion 
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
@@ -55,7 +55,7 @@ namespace His_Pos.NewClass.Prescription
             Card = new IcCard(); 
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
-            PrescriptionStatus.IsRead = c.IsRead.Equals("Y");
+            PrescriptionStatus.IsRead = c.IsRead.Equals("D");
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }
@@ -412,6 +412,9 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+        }
+        public void UpdateCooperativePrescriptionIsRead() {
+            PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
         }
     }
 }

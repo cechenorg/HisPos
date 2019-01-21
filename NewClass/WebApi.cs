@@ -27,7 +27,7 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateXmlStatus", keyValues);
         }
-        internal static void UpdateIsReadByDeclareId(string DeclareId)
+        internal static void UpdateIsRead(string DeclareId)
         {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
