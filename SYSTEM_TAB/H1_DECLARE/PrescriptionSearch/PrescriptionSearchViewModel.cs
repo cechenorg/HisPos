@@ -70,7 +70,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private DateTime? endDate;
         public DateTime? EndDate
         {
-            get => startDate;
+            get => endDate;
             set
             {
                 Set(() => EndDate, ref endDate, value);
@@ -181,7 +181,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 return;
             }
             //依條件查詢對應處方
+            MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
+            MainWindow.ServerConnection.CloseConnection();
             UpdateCollectionView();
         }
 
