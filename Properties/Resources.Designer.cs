@@ -799,11 +799,200 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 與健保局連線認證中，請稍後... 的當地語系化字串。
+        /// </summary>
+        internal static string 健保局連線中 {
+            get {
+                return ResourceManager.GetString("健保局連線中", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 口服液劑(原瓶包裝) 的當地語系化字串。
         /// </summary>
         internal static string 口服液劑 {
             get {
                 return ResourceManager.GetString("口服液劑", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 所置入非安全模組卡(檔) 的當地語系化字串。
+        /// </summary>
+        internal static string 所置入非安全模組 {
+            get {
+                return ResourceManager.GetString("所置入非安全模組", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機控制軟體異常，請檢查讀卡機設備 的當地語系化字串。
+        /// </summary>
+        internal static string 控制軟體異常 {
+            get {
+                return ResourceManager.GetString("控制軟體異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 未認證 的當地語系化字串。
+        /// </summary>
+        internal static string 未認證 {
+            get {
+                return ResourceManager.GetString("未認證", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查中 {
+            get {
+                return ResourceManager.GetString("檢查中", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保IC卡檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查健保卡 {
+            get {
+                return ResourceManager.GetString("檢查健保卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 安全模組檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查安全模組 {
+            get {
+                return ResourceManager.GetString("檢查安全模組", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 醫事人員卡檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查醫事人員卡 {
+            get {
+                return ResourceManager.GetString("檢查醫事人員卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 認證失敗 {
+            get {
+                return ResourceManager.GetString("認證失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功 {
+            get {
+                return ResourceManager.GetString("認證成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功(已驗PIN) 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功已驗 {
+            get {
+                return ResourceManager.GetString("認證成功已驗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功(未驗PIN) 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功未驗 {
+            get {
+                return ResourceManager.GetString("認證成功未驗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞 的當地語系化字串。
+        /// </summary>
+        internal static string 讀卡機異常 {
+            get {
+                return ResourceManager.GetString("讀卡機異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機逾時 的當地語系化字串。
+        /// </summary>
+        internal static string 讀卡機逾時 {
+            get {
+                return ResourceManager.GetString("讀卡機逾時", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡資料讀取中... 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取健保卡 {
+            get {
+                return ResourceManager.GetString("讀取健保卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡讀取失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取失敗 {
+            get {
+                return ResourceManager.GetString("讀取失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡讀取成功 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取成功 {
+            get {
+                return ResourceManager.GetString("讀取成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機連接開啟失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 連接失敗 {
+            get {
+                return ResourceManager.GetString("連接失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機連接開啟成功 的當地語系化字串。
+        /// </summary>
+        internal static string 連接成功 {
+            get {
+                return ResourceManager.GetString("連接成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 開啟讀卡機連接... 的當地語系化字串。
+        /// </summary>
+        internal static string 開啟讀卡機 {
+            get {
+                return ResourceManager.GetString("開啟讀卡機", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 醫事人員卡驗證中... 的當地語系化字串。
+        /// </summary>
+        internal static string 驗證醫事人員卡 {
+            get {
+                return ResourceManager.GetString("驗證醫事人員卡", resourceCulture);
             }
         }
     }

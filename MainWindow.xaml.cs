@@ -44,18 +44,6 @@ namespace His_Pos
         public static List<Feature> HisFeatures = new List<Feature>();
         public static MainWindow Instance;
 
-        private static int hisApiErrorCode;
-
-        public int HisApiErrorCode
-        {
-            get => hisApiErrorCode;
-            set
-            {
-                hisApiErrorCode = value;
-                SetCardReaderStatus(hisApiErrorCode);
-            }
-        }
-
         
         public MainWindow(Employee user)
         {
@@ -201,7 +189,7 @@ namespace His_Pos
             ///ProductDb.UpdateDailyStockValue();
             ///DeclareDb declareDb = new DeclareDb();
            /// declareDb.SendUnSendCooperClinicDeclare();
-            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+            if (ViewModelMainWindow.IsConnectionOpened)
                 HisApiBase.CloseCom();
             Environment.Exit(0);
         }
@@ -240,7 +228,7 @@ namespace His_Pos
 
         private void AfterVerify(object sender, RunWorkerCompletedEventArgs e)
         {
-            SetSamDcStatus(((ViewModelMainWindow) DataContext).IsVerifySamDc ? "認證成功" : "認證失敗");
+            SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? "認證成功" : "認證失敗");
         }
 
         private static string GetEnumDescription(Enum value)

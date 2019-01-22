@@ -121,7 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
-        public RelayCommand ShowCustomerSelectionWindow { get; set; }
+        public RelayCommand GetPatinetData { get; set; }
         // ReSharper disable once InconsistentNaming
         public RelayCommand SearchCustomerByIDNumber { get; set; }
         public RelayCommand SearchCustomerByName { get; set; }
@@ -170,8 +170,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        private void ShowCustomerWindowAction()
+        private void GetPatientDataAction()
         {
+            if (CurrentPrescription.GetCard()) return;
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
             customerSelectionWindow.ShowDialog();
         }
@@ -281,7 +282,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 //每日上傳
                 ClearPrescription();
             }
-
         }
 
         private void PrintMedBag()
@@ -353,7 +353,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void InitialCommandActions()
         {
             ShowCooperativeSelectionWindow = new RelayCommand(ShowCooperativeWindowAction);
-            ShowCustomerSelectionWindow = new RelayCommand(ShowCustomerWindowAction);
+            GetPatinetData = new RelayCommand(GetPatientDataAction);
             SearchCustomerByIDNumber = new RelayCommand(SearchCusByIDNumAction);
             SearchCustomerByName = new RelayCommand(SearchCusByNameAction);
             SearchCustomerByBirthday = new RelayCommand(SearchCusByBirthAction);
