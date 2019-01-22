@@ -170,14 +170,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             }
             if (EndDate is null)
                 EndDate = DateTime.Today;
-            if (((DateTime) EndDate).Month - ((DateTime) StartDate).Month > 3)
-            {
-                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
-                return;
-            }
-            if (DateTime.Compare((DateTime) StartDate, (DateTime) EndDate) > 0)
+            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
             {
                 MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                return;
+            }
+            var end = (DateTime) EndDate;
+            var start = (DateTime) StartDate;
+            var month = (end.Year - start.Year) * 12 + (end.Month - start.Month);
+            if (month > 3)
+            {
+                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
                 return;
             }
             //依條件查詢對應處方
