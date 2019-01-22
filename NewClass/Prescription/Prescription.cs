@@ -38,13 +38,15 @@ namespace His_Pos.NewClass.Prescription
             Id = r.Field<int>("ID");
             Patient = new Customer();
             Patient.Id = r.Field<int>("CustomerID");
+            Patient.IDNumber = r.Field<string>("CustomerIDNumber");
+            Patient.Name = r.Field<string>("CustomerName");  
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines();
             PrescriptionStatus = new PrescriptionStatus(r,PrescriptionSource.Normal);
             PrescriptionPoint = new PrescriptionPoint(r);
             DeclareFileID = r.Field<int>("DeclareFileID");
-            MedicineDays = r.Field<int>("MedicineDays");
+            MedicineDays = r.Field<byte>("MedicineDays");
             Medicines.GetDataByPrescriptionId(Id);
         }
         public Prescription(CooperativePrescription c) {
