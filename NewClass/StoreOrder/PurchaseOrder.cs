@@ -44,11 +44,29 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void SaveOrder()
         {
+            StoreOrderDB.SavePurchaseOrder(this);
         }
 
         public override void AddProductByID(string iD)
         {
-            
+            DataTable dataTable = PurchaseReturnProductDB.GetPurchaseProductByProductID(iD);
+
+            PurchaseProduct purchaseProduct;
+
+            switch (dataTable.Rows[0].Field<string>(""))
+            {
+                case "O":
+                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0]);
+                    break;
+                case "M":
+                    purchaseProduct = new PurchaseMedicine(dataTable.Rows[0]);
+                    break;
+                default:
+                    purchaseProduct = new PurchaseProduct();
+                    break;
+            }
+
+            OrderProducts.Add(purchaseProduct);
         }
 
         protected override bool CheckUnProcessingOrder()

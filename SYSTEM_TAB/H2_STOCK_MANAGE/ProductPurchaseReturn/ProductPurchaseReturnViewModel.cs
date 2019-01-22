@@ -107,14 +107,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void AddProductAction(string searchString)
         {
-            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, AddProductEnum.PruductPurchase);
-            productPurchaseReturnAddProductWindow.ShowDialog();
-
-            AddProductViewModel viewModel = productPurchaseReturnAddProductWindow.DataContext as AddProductViewModel;
-
-            if (viewModel.IsProductSelected)
+            if (searchString.Length < 5)
             {
-                CurrentStoreOrder.AddProductByID(viewModel.SelectedProductStruct.ID);
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructsBySearchString(searchString).Count;
+            MainWindow.ServerConnection.CloseConnection();
+            if (productCount > 1)
+            {
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, AddProductEnum.PruductPurchase);
+                productPurchaseReturnAddProductWindow.ShowDialog();
+            }
+            else if (productCount == 1)
+            {
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, AddProductEnum.PruductPurchase);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
             }
         }
         #endregion
@@ -142,15 +154,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Messenger Functions -----
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<ProductStruct>(this, GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
         }
         private void UnRegisterMessenger()
         {
             Messenger.Default.Unregister(this);
         }
-        private void GetSelectedProduct(ProductStruct selectedProduct)
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
-            
+            if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
+                MainWindow.ServerConnection.CloseConnection();
+            }
         }
         #endregion
 

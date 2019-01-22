@@ -9,30 +9,30 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class PurchaseProduct : Product
     {
-        
-        string Note { get; set; }
-        double LastPrice { get; set; }
-        double OrderAmount { get; set; }
-        double FreeAmount { get; set; }
-        string Invoice { get; set; }
-        string ValidDate { get; set; }
-        string BatchNumber { get; set; }
+        #region ----- Define Variables -----
+        public double Inventory { get; set; }
+        public double SaveAmount { get; set; }
+        public double BasicAmount { get; set; }
+        public double LastPrice { get; set; }
+        public double OrderAmount { get; set; }
+        public double FreeAmount { get; set; }
+        public double Price { get; set; }
+        public string Invoice { get; set; }
+        public string ValidDate { get; set; }
+        public string BatchNumber { get; set; }
+        public string Note { get; set; }
 
-        bool IsFirstBatch { get; set; }
+        public bool IsFirstBatch { get; set; }
+        public double SingdePackageAmount { get; } 
+        public double SingdePackagePrice { get; }
+        public double SingdePrice { get; }
+        public bool IsManufactorySingde { get; set; }
+        #endregion
 
-        double PackageAmount { get; }
-        double PackagePrice { get; }
-        double SingdePrice { get; }
+        public PurchaseProduct() : base() {}
 
-        bool IsSingde { get; set; }
-
-        public PurchaseProduct() : base()
-        {
-        }
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
         }
-        
-        
     }
 }

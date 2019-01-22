@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
@@ -94,6 +95,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
             if (string.IsNullOrEmpty(SelectedProductStruct.ID)) return;
             Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
+            Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
             Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
         }
 
