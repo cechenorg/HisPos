@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Prescription {
         public PrescriptionPoint(DataRow r) {
             ApplyPoint = r.Field<int>("ApplyPoint");
             TotalPoint = r.Field<int>("TotalPoint");
-            CopaymentPoint = r.Field<int>("CopaymentPoint");
+            CopaymentPoint = r.Field<short>("CopaymentPoint");
             SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");

@@ -27,7 +27,13 @@ namespace His_Pos.NewClass.Product.Medicine
         public void GetDataByPrescriptionId(int preId) {
             DataTable table = MedicineDb.GetDataByPrescriptionId(preId);
             foreach (DataRow r in table.Rows) {
-                Add(new Medicine(r));
+                Medicine med = new Medicine(r);
+                med.Usage.Name = r.Field<string>("Usage");
+                med.Position.Name = r.Field<string>("Position");
+                med.Days = r.Field<short>("MedicineDays");
+                med.PaySelf = r.Field<bool>("PaySelf");
+                med.Amount = r.Field<double>("TotalAmount");
+                Add(med);
             }
         }
     }

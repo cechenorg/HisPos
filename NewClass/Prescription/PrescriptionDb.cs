@@ -140,10 +140,10 @@ namespace His_Pos.NewClass.Prescription
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist.IdNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate); 
+                DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList); 
         }
         #endregion

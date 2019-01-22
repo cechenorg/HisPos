@@ -76,17 +76,18 @@ namespace His_Pos.NewClass.Prescription.Treatment
 
         public Treatment(DataRow r)
         {
-            Division = ViewModelMainWindow.GetDivision(r.Field<int>("DivisionID").ToString());
-            AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<int>("AdjustCaseID").ToString());
-            Copayment = ViewModelMainWindow.GetCopayment(r.Field<int>("CopaymentID").ToString());
-            PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(r.Field<int>("PrescriptionCaseID").ToString());
-            Institution = ViewModelMainWindow.GetInstitution(r.Field<int>("InstitutionID").ToString());
-            PaymentCategory = ViewModelMainWindow.GetPaymentCategory(r.Field<int>("PaymentCategoryID").ToString());
+            Division = ViewModelMainWindow.GetDivision(r.Field<string>("DivisionID").ToString());
+            AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID").ToString());
+            Copayment = ViewModelMainWindow.GetCopayment(r.Field<string>("CopaymentID").ToString());
+            PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID").ToString());
+            Institution = ViewModelMainWindow.GetInstitution(r.Field<string>("InstitutionID").ToString());
+            PaymentCategory = ViewModelMainWindow.GetPaymentCategory(r.Field<string>("PaymentCategoryID").ToString());
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime>("TreatmentDate");
-            
-            ChronicSeq = r.Field<int>("ChronicSequence");
-            ChronicTotal = r.Field<int>("ChronicTotal");
+            if(!string.IsNullOrEmpty(r.Field<string>("ChronicSequence")))
+                ChronicSeq = int.Parse(r.Field<string>("ChronicSequence"));
+            if (!string.IsNullOrEmpty(r.Field<string>("ChronicTotal")))
+                ChronicTotal = int.Parse(r.Field<string>("ChronicTotal")); 
             MainDisease = new DiseaseCode.DiseaseCode();
             MainDisease.ID = r.Field<string>("MainDiseaseID");
             SubDisease = new DiseaseCode.DiseaseCode();

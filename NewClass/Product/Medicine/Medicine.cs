@@ -28,13 +28,7 @@ namespace His_Pos.NewClass.Product.Medicine
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
             Usage = new Usage.Usage();
-            Usage.Name = r.Field<string>("Usage");
-            Position = new Position.Position();
-            Position.Name = r.Field<string>("Position");
-            Days = r.Field<int>("MedicineDays");
-            PaySelf = r.Field<bool>("PaySelf");
-            Amount = r.Field<double>("TotalAmount");
-           
+            Position = new Position.Position(); 
         }
         public Medicine(ProductStruct p) : base(p)
         {

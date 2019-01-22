@@ -15,22 +15,11 @@ namespace His_Pos.Database {
                 row[column] = value; 
         }
         public static void AddSqlParameter(List<SqlParameter> row, string column, Object value)
-        { 
-            if(value is null)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
                 row.Add(new SqlParameter(column, DBNull.Value));
-            bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
-
-            if (canBeNull)
-            {
-                if (value == null)
-                    row.Add(new SqlParameter(column,DBNull.Value));
-                else
-                    row.Add(new SqlParameter(column, value));
-            }
             else
-            {
-                row.Add(new SqlParameter(column, value));
-            }
+                row.Add(new SqlParameter(column, value)); 
         }
     }
 }
