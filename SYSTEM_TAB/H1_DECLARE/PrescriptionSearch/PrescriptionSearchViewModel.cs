@@ -15,9 +15,13 @@ using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
-    public class PrescriptionSearchViewModel:ViewModelBase
+    public class PrescriptionSearchViewModel : TabBase
     {
         #region Variables
+        public override TabBase getTab()
+        {
+            return this;
+        }
         public MedicalPersonnels MedicalPersonnels { get; set; }
         public Institutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
