@@ -22,9 +22,9 @@ namespace His_Pos.NewClass.Prescription
             }
            
         }
-        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patient,AdjustCase adj,Institution ins,MedicalPersonnel pharmacist)
+        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,AdjustCase adj,Institution ins,MedicalPersonnel pharmacist)
         {
-            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate,eDate,patient,adj,ins,pharmacist);
+            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate,eDate,adj,ins,pharmacist);
             foreach (DataRow r in table.Rows)
             {
                 Add(new Prescription(r));

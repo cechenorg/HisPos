@@ -164,7 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void SearchAction()
         {
             //依條件查詢對應處方
-            SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,Patient,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
+            SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
             UpdateCollectionView();
         }
 

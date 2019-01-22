@@ -136,7 +136,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptions;
         }
-        public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, string patient, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
         {
             var table = new DataTable();
             return table;
