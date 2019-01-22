@@ -76,7 +76,28 @@ namespace His_Pos.NewClass.Prescription.Treatment
 
         public Treatment(DataRow r)
         {
+            Division = ViewModelMainWindow.GetDivision(r.Field<int>("DivisionID").ToString());
+            AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<int>("AdjustCaseID").ToString());
+            Copayment = ViewModelMainWindow.GetCopayment(r.Field<int>("CopaymentID").ToString());
+            PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(r.Field<int>("PrescriptionCaseID").ToString());
+            Institution = ViewModelMainWindow.GetInstitution(r.Field<int>("InstitutionID").ToString());
+            PaymentCategory = ViewModelMainWindow.GetPaymentCategory(r.Field<int>("PaymentCategoryID").ToString());
+            AdjustDate = r.Field<DateTime>("AdjustDate");
+            TreatDate = r.Field<DateTime>("TreatmentDate");
+            
+            ChronicSeq = r.Field<int>("ChronicSequence");
+            ChronicTotal = r.Field<int>("ChronicTotal");
+            MainDisease = new DiseaseCode.DiseaseCode();
+            MainDisease.ID = r.Field<string>("MainDiseaseID");
+            SubDisease = new DiseaseCode.DiseaseCode();
+            SubDisease.ID = r.Field<string>("SecondDiseaseID");
+            Pharmacist = new MedicalPersonnel(r);
+            SpecialTreat = new SpecialTreat.SpecialTreat();
+            SpecialTreat.Id = r.Field<string>("SpecialTreatID");
 
+            MedicalNumber = r.Field<string>("MedicalNumber");
+            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+             
         }
         #region Variables
         private Institution.Institution institution;//釋出院所 D21

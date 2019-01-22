@@ -35,8 +35,17 @@ namespace His_Pos.NewClass.Prescription
 
         public Prescription(DataRow r)
         {
-            Id = r.Field<int>("");
-
+            Id = r.Field<int>("ID");
+            Patient = new Customer();
+            Patient.Id = r.Field<int>("CustomerID");
+            Card = new IcCard();
+            Treatment = new Treatment.Treatment(r);
+            Medicines = new Medicines();
+            PrescriptionStatus = new PrescriptionStatus(r,PrescriptionSource.Normal);
+            PrescriptionPoint = new PrescriptionPoint(r);
+            DeclareFileID = r.Field<int>("DeclareFileID");
+            MedicineDays = r.Field<int>("MedicineDays");
+            Medicines.GetDataByPrescriptionId(Id);
         }
         public Prescription(CooperativePrescription c) {
             #region CooPreVariable
