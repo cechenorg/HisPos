@@ -1,16 +1,20 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.InstitutionSelectionWindow;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
@@ -32,6 +36,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SearchPrescriptions, ref searchPrescriptions, value);
+            }
+        }
+        private CollectionViewSource prescriptionCollectionVS;
+        private CollectionViewSource PrescriptionCollectionVS
+        {
+            get => prescriptionCollectionVS;
+            set
+            {
+                Set(() => PrescriptionCollectionVS, ref prescriptionCollectionVS, value);
+            }
+        }
+
+        private ICollectionView prescriptionCollectionView;
+        public ICollectionView PrescriptionCollectionView
+        {
+            get => prescriptionCollectionView;
+            set
+            {
+                Set(() => PrescriptionCollectionView, ref prescriptionCollectionView, value);
             }
         }
         private DateTime? startDate;
@@ -59,6 +82,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => Patient, ref patient, value);
+                if (string.IsNullOrEmpty(patient))
+                    PrescriptionCollectionVS.Filter -= FilterByPatient;
+                else
+                    PrescriptionCollectionVS.Filter += FilterByPatient;
             }
         }
         private MedicalPersonnel selectedSelectedPharmacist;
@@ -86,6 +113,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedInstitution, ref selectedInstitution, value);
+            }
+        }
+        private Prescription selectedPrescription;
+        public Prescription SelectedPrescription
+        {
+            get => selectedPrescription;
+            set
+            {
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
         #endregion
@@ -121,11 +157,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             //依條件查詢對應處方
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,Patient,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
+            UpdateCollectionView();
         }
+
         private void ReserveSearchAction()
         {
             //查詢預約慢箋
             SearchPrescriptions.GetReservePrescription();
+            UpdateCollectionView();
         }
         private void GetInstitutionAction(string search)
         {
@@ -155,6 +194,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         #endregion
         #region Functions
+        private void UpdateCollectionView()
+        {
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            PrescriptionCollectionVS.Filter += FilterByPatient;
+            if (PrescriptionCollectionView.IsEmpty) return;
+            PrescriptionCollectionView.MoveCurrentToFirst();
+            SelectedPrescription = (Prescription)PrescriptionCollectionView.CurrentItem;
+        }
+        #endregion
+        #region Filters
+        private void FilterByPatient(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Prescription src))
+                e.Accepted = false;
+            else if (string.IsNullOrEmpty(Patient))
+                e.Accepted = true;
+            else
+            {
+                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient))
+                {
+                    e.Accepted = true;
+                }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+        }
         #endregion
     }
 }
