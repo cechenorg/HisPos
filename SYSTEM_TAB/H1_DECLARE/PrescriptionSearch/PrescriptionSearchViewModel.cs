@@ -163,8 +163,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region CommandActions
         private void SearchAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
             //依條件查詢對應處方
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
+            MainWindow.ServerConnection.CloseConnection();
             UpdateCollectionView();
         }
 
