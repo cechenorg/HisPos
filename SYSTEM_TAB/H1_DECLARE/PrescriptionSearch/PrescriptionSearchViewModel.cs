@@ -91,6 +91,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
+        public RelayCommand ReserveSearch { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand ImportDeclareFile { get; set; }
         #endregion
@@ -110,6 +111,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void InitialCommands()
         {
             Search = new RelayCommand(SearchAction);
+            ReserveSearch = new RelayCommand(ReserveSearchAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFile = new RelayCommand(ImportDeclareFileAction);
         }
@@ -119,6 +121,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             //依條件查詢對應處方
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,Patient,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
+        }
+        private void ReserveSearchAction()
+        {
+            //查詢預約慢箋
+            SearchPrescriptions.GetReservePrescription();
         }
         private void GetInstitutionAction(string search)
         {

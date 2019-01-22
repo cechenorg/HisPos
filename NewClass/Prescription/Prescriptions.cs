@@ -30,5 +30,14 @@ namespace His_Pos.NewClass.Prescription
                 Add(new Prescription(r));
             }
         }
+
+        public void GetReservePrescription()
+        {
+            var table = PrescriptionDb.GetReservePrescriptionsData();
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Prescription(r));
+            }
+        }
     }
 }

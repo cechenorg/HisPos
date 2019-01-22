@@ -392,5 +392,11 @@ namespace His_Pos.NewClass.Prescription
             return detailTable;
         }
         #endregion
+
+        public static DataTable GetReservePrescriptionsData()
+        {
+            var table = new DataTable();
+            return table;
+        }
     }
 }
