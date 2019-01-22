@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -82,12 +83,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => Patient, ref patient, value);
-                if (string.IsNullOrEmpty(patient))
-                    PrescriptionCollectionVS.Filter -= FilterByPatient;
-                else
-                    PrescriptionCollectionVS.Filter += FilterByPatient;
+                UpdateFilter();
             }
         }
+
         private MedicalPersonnel selectedSelectedPharmacist;
         public MedicalPersonnel SelectedPharmacist
         {
@@ -135,6 +134,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             InitialVariables();
             InitialCommands();
+            RegisterMessengers();
+        }
+        ~PrescriptionSearchViewModel()
+        {
+            Messenger.Default.Unregister(this);
         }
         #region InitialFunctions
         private void InitialVariables()
@@ -150,6 +154,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFile = new RelayCommand(ImportDeclareFileAction);
+        }
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
         }
         #endregion
         #region CommandActions
@@ -202,6 +210,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if (PrescriptionCollectionView.IsEmpty) return;
             PrescriptionCollectionView.MoveCurrentToFirst();
             SelectedPrescription = (Prescription)PrescriptionCollectionView.CurrentItem;
+        }
+        private void UpdateFilter()
+        {
+            if (PrescriptionCollectionVS is null) return;
+            if (string.IsNullOrEmpty(patient))
+                PrescriptionCollectionVS.Filter -= FilterByPatient;
+            else
+                PrescriptionCollectionVS.Filter += FilterByPatient;
+        }
+        private void GetSelectedInstitution(Institution ins)
+        {
+            SelectedInstitution = ins;
         }
         #endregion
         #region Filters

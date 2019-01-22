@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365"
              FontFamily="Segoe UI Semibold">
@@ -49,26 +50,26 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}"/>
-                    <ComboBox Margin="0,0,10,0" Width="130" Height="34" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
-                    <Label Content="調劑案件" Margin="0,10,10,10" Style="{StaticResource BoldLabelContent18}"/>
-                    <ComboBox x:Name="AdjustCaseCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" Margin="10,0,10,0" />
-                    <TextBox Width="375" Height="34" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"
+                    <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" Margin="0,0,10,0" />
+                    <TextBox Name="ReleaseHospital" Width="375" Height="34" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" materialDesign:HintAssist.Hint="輸入院所代碼"
                              Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Button Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,10,0"/>
+                    <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}" Margin="10"/>
+                    <ComboBox Margin="0,0,10,0" Width="100" Height="34" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
+                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <Label Content="調劑案件" Margin="0,10,10,10" Style="{StaticResource BoldLabelContent18}"/>
+                    <ComboBox Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
+                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="30,0,10,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
-                    <Label Content="病患" Style="{StaticResource BoldLabelContent18}"/>
-                    <TextBox Text="{Binding Patient,Mode=TwoWay}" Margin="10" Width="130" FontSize="16"/>
-                    <Button Content="慢箋預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="1060,0,10,0"/>
+                    <Label Content="病患篩選" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Text="{Binding Patient,Mode=TwoWay}" Margin="10" Width="130" FontSize="16" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center"/>
+                    <Button Content="慢箋預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="1010,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,UpdateSourceTrigger=PropertyChanged}"                     
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >
