@@ -73,7 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             get => startDate;
             set
             {
-                Set(() => StartDate, ref startDate, value);
+                Set(() => EndDate, ref endDate, value);
             }
         }
         private string patient;
@@ -163,6 +163,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region CommandActions
         private void SearchAction()
         {
+            if (StartDate is null)
+            {
+                MessageWindow.ShowMessage(StringRes.StartDateEmpty,MessageType.WARNING);
+                return;
+            }
+            if (EndDate is null)
+                EndDate = DateTime.Today;
+            if (((DateTime) EndDate).Month - ((DateTime) StartDate).Month > 3)
+            {
+                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
+                return;
+            }
+            if (DateTime.Compare((DateTime) StartDate, (DateTime) EndDate) > 0)
+            {
+                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                return;
+            }
             //依條件查詢對應處方
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
             UpdateCollectionView();

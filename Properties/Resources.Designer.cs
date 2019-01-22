@@ -700,11 +700,38 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢日期範圍超出限制(3個月) 的當地語系化字串。
+        /// </summary>
+        internal static string SearchDateOutOfRange {
+            get {
+                return ResourceManager.GetString("SearchDateOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 搜尋字長度不得小於 的當地語系化字串。
         /// </summary>
         internal static string ShortSearchString {
             get {
                 return ResourceManager.GetString("ShortSearchString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請填寫起始日期 的當地語系化字串。
+        /// </summary>
+        internal static string StartDateEmpty {
+            get {
+                return ResourceManager.GetString("StartDateEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 起始日期不得大於結束日期 的當地語系化字串。
+        /// </summary>
+        internal static string StartDateOutOfRange {
+            get {
+                return ResourceManager.GetString("StartDateOutOfRange", resourceCulture);
             }
         }
         

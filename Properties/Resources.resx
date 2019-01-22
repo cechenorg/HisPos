@@ -357,4 +357,13 @@
   <data name="GetCooperativePrescriptions" xml:space="preserve">
     <value>取得合作診所處方...</value>
   </data>
+  <data name="SearchDateOutOfRange" xml:space="preserve">
+    <value>查詢日期範圍超出限制(3個月)</value>
+  </data>
+  <data name="StartDateEmpty" xml:space="preserve">
+    <value>請填寫起始日期</value>
+  </data>
+  <data name="StartDateOutOfRange" xml:space="preserve">
+    <value>起始日期不得大於結束日期</value>
+  </data>
 </root>
