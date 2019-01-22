@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,12 @@ namespace His_Pos.NewClass.Product.Medicine
         {
             var selfPay = this.Where(m => m.PaySelf).Sum(m=>m.TotalPrice);
             return (int)Math.Ceiling(selfPay);
+        }
+        public void GetDataByPrescriptionId(int preId) {
+            DataTable table = MedicineDb.GetDataByPrescriptionId(preId);
+            foreach (DataRow r in table.Rows) {
+                Add(new Medicine(r));
+            }
         }
     }
 }

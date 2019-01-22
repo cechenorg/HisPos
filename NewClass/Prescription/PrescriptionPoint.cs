@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,16 @@ using GalaSoft.MvvmLight;
 namespace His_Pos.NewClass.Prescription {
     public class PrescriptionPoint:ObservableObject
     {
+        public PrescriptionPoint() { }
+        public PrescriptionPoint(DataRow r) {
+            ApplyPoint = r.Field<int>("ApplyPoint");
+            TotalPoint = r.Field<int>("TotalPoint");
+            CopaymentPoint = r.Field<int>("CopaymentPoint");
+            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
+            TreatmentPoint = r.Field<int>("TreatmentPoint");
+            MedicinePoint = r.Field<int>("MedicinePoint");
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint"); 
+        }
         public int ApplyPoint { get; set; }//申請點數 
         private int totalPoint;//總點數
         public int TotalPoint

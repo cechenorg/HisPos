@@ -1,5 +1,17 @@
-﻿namespace His_Pos.NewClass.Prescription {
+﻿using System.Data;
+
+namespace His_Pos.NewClass.Prescription {
     public class PrescriptionStatus {
+        public PrescriptionStatus() { }
+        public PrescriptionStatus(DataRow r, PrescriptionSource type) {
+            switch (type) {
+                case PrescriptionSource.Normal:
+                    IsGetCard = r.Field<bool>("IsGetCard");
+                    IsDeclare = r.Field<bool>("IsDeclare");
+                    IsSendToSingde = r.Field<bool>("IsSendToServer");
+                    break; 
+            } 
+        }
         public bool IsGetCard { get; set; } //是否讀卡
         public bool IsDeclare { get; set; } //是否申報
         public bool IsRead { get; set; }//是否已讀

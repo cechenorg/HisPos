@@ -88,7 +88,7 @@ namespace His_Pos.NewClass.Prescription
                 xmlDocument.Load(xmlReader);
             }
             return xmlDocument;
-        }
+        } 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;
@@ -138,8 +138,13 @@ namespace His_Pos.NewClass.Prescription
         }
         public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
         {
-            var table = new DataTable();
-            return table;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist.IdNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList); 
         }
         #endregion
         #region TableSet
