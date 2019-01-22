@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
@@ -40,10 +41,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
             for (int i = 0; i < diseaseCount; i++){
                 switch (i) {
                     case 0:
-                            MainDisease.Id = diseases[i].Code;
+                            MainDisease.ID = diseases[i].Code;
                         break;
                     case 1:
-                            SubDisease.Id = diseases[i].Code;
+                            SubDisease.ID = diseases[i].Code;
                         break;
                 }
             }
@@ -259,25 +260,23 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 Institution = new Institution.Institution { Id = "N", Name = string.Empty };
                 return string.Empty;
             }
-            return Institution is null ? "請選擇釋出院所\r\n" : string.Empty;
+            return Institution is null ? StringRes.InstitutionError : string.Empty;
         }
         private string CheckAdjustCase()
         {
             if (string.IsNullOrEmpty(AdjustCase.Id))
-                return "請選擇調劑案件\r\n";
-            if (AdjustCase.Id.Equals("2") && (ChronicSeq is null || ChronicTotal is null))
-                return "慢性病連續處方調劑需填寫領藥次數與總領藥次數\r\n";
+                return StringRes.AdjustCaseError;
             return string.Empty;
         }
         private string CheckPrescriptionCase()
         {
             if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.Id))
-                return "請選擇處方案件\r\n";
+                return StringRes.PrescriptionCaseError;
             return string.Empty;
         }
         private string CheckAdjustDate()
         {
-            if (AdjustDate is null) return "請填寫調劑日期\r\n";
+            if (AdjustDate is null) return StringRes.AdjustDateError;
             if (TreatDate == null || !(ChronicSeq is null)) return string.Empty;
             var startDate = (DateTime)TreatDate;
             var endDate = (DateTime)AdjustDate;
@@ -292,7 +291,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             if (new TimeSpan(endDate.Ticks - startDate.Ticks).Days - holiday > 3)
             {
-                return "處方已超過可領取時限\r\n";
+                return StringRes.PrescriptoinOutOfDate;
             }
             return string.Empty;
         }
@@ -300,7 +299,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             if (string.IsNullOrEmpty(TempMedicalNumber))
             {
-                if (!CheckIsHomeCare()) return "就醫序號未填寫\r\n";
+                if (!CheckIsHomeCare()) return StringRes.MedicalNumberError;
                 TempMedicalNumber = "N";
                 return string.Empty;
             }
@@ -327,11 +326,11 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 Copayment = ViewModelMainWindow.GetCopayment("009");
                 return string.Empty;
             }
-            return string.IsNullOrEmpty(Copayment.Id) ? "請選擇部分負擔\r\n" : string.Empty;
+            return string.IsNullOrEmpty(Copayment.Id) ? StringRes.CopaymentError : string.Empty;
         }
         private string CheckPharmacist()
         {
-            return string.IsNullOrEmpty(Pharmacist.IdNumber) ? "請選擇調劑藥師或填寫藥師身分證字號\r\n" : string.Empty;
+            return string.IsNullOrEmpty(Pharmacist.IdNumber) ? StringRes.PharmacistIDError : string.Empty;
         }
         private string CheckDivision()
         {
@@ -339,7 +338,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 if (CheckIsHomeCare() || CheckIsQuitSmoking())
                     return string.Empty;
-                return "請選擇就醫科別\r\n";
+                return StringRes.DivisionError;
             }
             return string.Empty;
         }
@@ -349,7 +348,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 if (CheckIsHomeCare())
                     return string.Empty;
-                return "請填寫就醫日期\r\n";
+                return StringRes.TreatDateError;
             }
             return string.Empty;
         }
@@ -359,7 +358,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 if (CheckIsHomeCare() || ChronicSeq != null || AdjustCase.Id.Equals("2"))
                     return string.Empty;
-                return "請給付類別\r\n";
+                return StringRes.PaymentCategoryError;
             }
             return string.Empty;
         }
@@ -375,11 +374,11 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckDiseaseCode()
         {
-            if (string.IsNullOrEmpty(MainDisease.Id))
+            if (string.IsNullOrEmpty(MainDisease.ID))
             {
                 if (CheckIsHomeCare())
                     return string.Empty;
-                return "請填寫主診斷代碼\r\n";
+                return StringRes.DiseaseCodeError;
             }
             return string.Empty;
         }
@@ -388,11 +387,11 @@ namespace His_Pos.NewClass.Prescription.Treatment
             if (string.IsNullOrEmpty(AdjustCase.Id)) return string.Empty;
             if (!AdjustCase.Id.Equals("2")) return string.Empty;
             if (ChronicSeq is null && ChronicTotal is null)
-                return "請填寫領藥次數與總領藥次數\r\n";
+                return StringRes.ChronicTimesError; 
             if (ChronicSeq is null)
-                return "請填寫領藥次數\r\n";
+                return StringRes.ChronicSeqError;
             if (ChronicTotal is null)
-                return "請填寫總領藥次數\r\n";
+                return StringRes.ChronicTotalError;
             return string.Empty;
         }
         public string Check()

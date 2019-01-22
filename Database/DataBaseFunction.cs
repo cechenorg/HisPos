@@ -16,6 +16,8 @@ namespace His_Pos.Database {
         }
         public static void AddSqlParameter(List<SqlParameter> row, string column, Object value)
         { 
+            if(value is null)
+                row.Add(new SqlParameter(column, DBNull.Value));
             bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
 
             if (canBeNull)

@@ -147,51 +147,50 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         #region InitialFunctions
         private void InitialCommandActions()
         {
-            StartDateChanged = new RelayCommand(ExecuteStartDateChanged);
-            EndDateChanged = new RelayCommand(ExecuteEndDateChanged);
-            IDNumberChanged = new RelayCommand(ExecuteIDNumberChanged);
-            IsReadChecked = new RelayCommand(ExecuteIsReadChecked);
-            SelectionChanged = new RelayCommand(ExecuteSelectionChanged);
-            PrintMedBag = new RelayCommand(ExecutePrintMedBag);
-            PrescriptionSelected = new RelayCommand(ExecutePrescriptionSelected);
+            StartDateChanged = new RelayCommand(StartDateChangedAction);
+            EndDateChanged = new RelayCommand(EndDateChangedAction);
+            IDNumberChanged = new RelayCommand(IDNumberChangedAction);
+            IsReadChecked = new RelayCommand(IsReadCheckedAction);
+            SelectionChanged = new RelayCommand(SelectionChangedAction);
+            PrintMedBag = new RelayCommand(PrintAction);
+            PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
         }
         #endregion
         #region CommandActions
-        private void ExecuteStartDateChanged()
+        private void StartDateChangedAction()
         {
             if (StartDate is null)
                 CooPreCollectionViewSource.Filter -= FilterByStartDate;
             else
                 CooPreCollectionViewSource.Filter += FilterByStartDate;
         }
-        private void ExecuteEndDateChanged()
+        private void EndDateChangedAction()
         {
             if (EndDate is null)
                 CooPreCollectionViewSource.Filter -= FilterByEndDate;
             else
                 CooPreCollectionViewSource.Filter += FilterByEndDate;
         }
-        private void ExecuteIDNumberChanged()
+        private void IDNumberChangedAction()
         {
             if (string.IsNullOrEmpty(IDNumber))
                 CooPreCollectionViewSource.Filter -= FilterByIDNumber;
             else
                 CooPreCollectionViewSource.Filter += FilterByIDNumber;
         }
-        private void ExecuteIsReadChecked()
+        private void IsReadCheckedAction()
         {
             CooPreCollectionViewSource.Filter += FilterByIsRead;
         }
-        private void ExecuteSelectionChanged()
+        private void SelectionChangedAction()
         {
             if (SelectedPrescription != null)
                 CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.Id);
         }
-        private void ExecutePrintMedBag()
+        private void PrintAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription.UpdateCooperativePrescriptionIsRead(); 
-            MainWindow.ServerConnection.CloseConnection();
+            GetCompletePrescriptionData();
+            SelectedPrescription.CountPrescriptionPoint();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
             if ((bool)medBagPrint.DialogResult)
             {
@@ -206,17 +205,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 SelectedPrescription.PrintMedBag(singleMode, receiptPrint);
             }
         }
-        private void ExecutePrescriptionSelected()
+        private void PrescriptionSelectedAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription.Patient = SelectedPrescription.Patient.Check();
-            SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId(SelectedPrescription.Treatment.MainDisease.Id);
-            SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId(SelectedPrescription.Treatment.SubDisease.Id);
-            SelectedPrescription.AddCooperativePrescriptionMedicines();
-            SelectedPrescription.UpdateCooperativePrescriptionIsRead();
+            GetCompletePrescriptionData();
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection")); 
-            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Functions
@@ -233,6 +226,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             CooPreCollectionViewSource.Filter += FilterByStartDate;
             CooPreCollectionViewSource.Filter += FilterByEndDate;
             CooPreCollectionViewSource.Filter += FilterByIsRead;
+        }
+
+        private void GetCompletePrescriptionData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            SelectedPrescription.Patient = SelectedPrescription.Patient.Check();
+            SelectedPrescription.Treatment.MainDisease.GetDataByCodeId(SelectedPrescription.Treatment.MainDisease.ID);
+            SelectedPrescription.Treatment.SubDisease.GetDataByCodeId(SelectedPrescription.Treatment.SubDisease.ID);
+            SelectedPrescription.AddCooperativePrescriptionMedicines();
+            SelectedPrescription.UpdateCooperativePrescriptionIsRead();
+            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Filter

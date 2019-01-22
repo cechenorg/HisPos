@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.Class.Declare;
-using His_Pos.Class.Product;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -27,6 +19,7 @@ using Ddata = His_Pos.NewClass.Prescription.DeclareFile.Ddata;
 using Dhead = His_Pos.NewClass.Prescription.DeclareFile.Dhead;
 using MedicineDb = His_Pos.NewClass.Product.Medicine.MedicineDb;
 using Pdata = His_Pos.NewClass.Prescription.DeclareFile.Pdata;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -286,7 +279,7 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
         public void AddCooperativePrescriptionMedicines() {
-            for(int medCount = 0; medCount < Medicines.Count; medCount++){
+            for(int medCount = 0; medCount < Medicines.Count(m=>m is MedicineOTC || m is MedicineNHI); medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
                 if (table.Rows.Count > 0)
@@ -340,7 +333,7 @@ namespace His_Pos.NewClass.Prescription
             var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
             if (!medList.Any())
             {
-                return "請選擇處方藥品\r\n";
+                return StringRes.MedicineEmpty;
             }
             if (medList.Count(m=>m.Amount == 0) == 0)
             {
@@ -372,20 +365,17 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.CopaymentPoint);
         }
         public void ProcessSelfPayCashFlow(string name)//計算自費金流
-       {
+        {
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.AmountSelfPay);
         }
         public void ProcessDepositCashFlow(string name)//計算押金金流
-       {
+        {
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.Deposit);
         }
 
-        public void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
+        private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
         {
-            Ddata d = new Ddata();
-            d.Dhead = new Dhead();
-            d.Dbody = new Dbody();
-            d.Dbody.Pdata = new List<Pdata>();
+            var d = new Ddata {Dhead = new Dhead(), Dbody = new Dbody {Pdata = new List<Pdata>()}};
             d.Dhead.D1 = Treatment.AdjustCase.Id;
             d.Dhead.D2 = string.Empty;
             d.Dhead.D3 = Patient.IDNumber;
@@ -393,8 +383,8 @@ namespace His_Pos.NewClass.Prescription
             d.Dhead.D5 = Treatment.PaymentCategory?.Id;
             d.Dhead.D6 = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday,false);
             d.Dhead.D7 = Treatment.MedicalNumber;
-            d.Dhead.D8 = Treatment.MainDisease.Id;
-            d.Dhead.D9 = Treatment.SubDisease?.Id;
+            d.Dhead.D8 = Treatment.MainDisease.ID;
+            d.Dhead.D9 = Treatment.SubDisease?.ID;
             d.Dhead.D13 = Treatment.Division?.Id;
             d.Dhead.D14 = Treatment.TreatDate is null? string.Empty: DateTimeExtensions.ConvertToTaiwanCalender((DateTime)Treatment.TreatDate, false);
             d.Dhead.D15 = Treatment.Copayment.Id;
@@ -444,21 +434,6 @@ namespace His_Pos.NewClass.Prescription
         {
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public void PrintMedBag(bool singleMode,bool receiptPrint)
         {

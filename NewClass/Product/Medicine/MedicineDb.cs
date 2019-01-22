@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.Medicine
     {
         public static DataTable GetMedicinesBySearchId(string medicineID)
         {
+            if (string.IsNullOrEmpty(medicineID)) return new DataTable();
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
             Database.DataBaseFunction.AddSqlParameter(parameterList, "Pro_Id", medicineID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchId]", parameterList);     

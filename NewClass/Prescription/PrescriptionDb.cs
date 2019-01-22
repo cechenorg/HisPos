@@ -18,6 +18,9 @@ using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach; 
 using System.Xml.Linq;
+using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -133,6 +136,11 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptions;
         }
+        public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, string patient, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        {
+            var table = new DataTable();
+            return table;
+        }
         #endregion
         #region TableSet
         public static DataTable SetPrescriptionMaster(Prescription p) {
@@ -148,8 +156,8 @@ namespace His_Pos.NewClass.Prescription
             newRow["PreMas_MakeUpMarkID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", p.Treatment.PaymentCategory.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", p.Treatment.MedicalNumber);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MainDiseaseID", p.Treatment.MainDisease.Id);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_SecondDiseaseID", p.Treatment.SubDisease.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MainDiseaseID", p.Treatment.MainDisease.ID);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_SecondDiseaseID", p.Treatment.SubDisease.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DivisionID", p.Treatment.Division.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TreatmentDate", p.Treatment.TreatDate);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Treatment.Copayment.Id);
@@ -272,8 +280,8 @@ namespace His_Pos.NewClass.Prescription
             newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.Id);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalNumber", p.Treatment.MedicalNumber); 
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.Id);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.ID);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_DivisionID", p.Treatment.Division.Id);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_TreatmentDate", p.Treatment.TreatDate);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_CopaymentID", p.Treatment.Copayment.Id);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing.Printing;
 using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -12,6 +11,7 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
@@ -19,11 +19,10 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Product.Medicine.Position;
-using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
-using Microsoft.Reporting.WinForms;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
+using StringRes = His_Pos.Properties.Resources;
+// ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
@@ -43,8 +42,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionCases PrescriptionCases { get; set; }
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
-        public Usages Usages { get; set; }
-        public Positions Positions { get; set; }
         #endregion
         private PrescriptionDeclareStatus declareStatus;
         public PrescriptionDeclareStatus DeclareStatus
@@ -120,7 +117,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         public int SelectedMedicinesIndex { get; set; }
-        private FunctionWindow.AddProductWindow.AddMedicineWindow medicineWindow { get; set; }
+        private FunctionWindow.AddProductWindow.AddMedicineWindow MedicineWindow { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -160,7 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = "取得合作診所處方...";
+                BusyContent = StringRes.GetCooperativePrescriptions;
                 cooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -202,9 +199,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.Tel, 4);
             customerSelectionWindow.ShowDialog();
         }
-        private void ActionShowInstitutionSelectionWindow(string search)
+        private void ShowInsSelectionWindowAction(string search)
         {
-            if (search.Length < 4) return;
+            if (search.Length < 4)
+            {
+                MessageWindow.ShowMessage(StringRes.ShortSearchString+"4",MessageType.WARNING);
+                return;
+            }
             CurrentPrescription.Treatment.Institution = null;
             var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
             switch (result.Count)
@@ -232,7 +233,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (medicineID.Length < 5)
             {
-                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.ShortSearchString+"5", MessageType.WARNING);
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
@@ -240,16 +241,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
-                medicineWindow.ShowDialog();
+                MedicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+                MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
-                medicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+                MedicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
             }
             else
             {
-                MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.MedicineNotFound, MessageType.WARNING);
             }
         }
         private void AdjustButtonClickAction()
@@ -285,16 +286,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrintMedBag()
         {
-            var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
-            if ((bool)medBagPrint.DialogResult)
+            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+            if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
             {
                 var printBySingleMode = new MedBagSelectionWindow();
-                var singleMode = (bool)printBySingleMode.ShowDialog();
+                var singleMode = false;
+                if (printBySingleMode.DialogResult != null)
+                    singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
                 var receiptPrint = false;
                 if (CurrentPrescription.PrescriptionPoint.AmountsPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow("是否列印收據", "列印收據");
-                    receiptPrint = (bool) receiptResult.DialogResult;
+                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+                    if (receiptResult.DialogResult != null)
+                        receiptPrint = (bool) receiptResult.DialogResult;
                 }
                 CurrentPrescription.PrintMedBag(singleMode, receiptPrint);
             }
@@ -312,7 +316,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MainWindow.ServerConnection.OpenConnection();
                 //登錄
                 MainWindow.ServerConnection.CloseConnection();
-                MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
                 ClearPrescription();
             }
 
@@ -322,7 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             //自費調劑
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
         #endregion
@@ -345,8 +349,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescriptionCases = ViewModelMainWindow.PrescriptionCases;
             Copayments = ViewModelMainWindow.Copayments;
             SpecialTreats = ViewModelMainWindow.SpecialTreats;
-            Usages = ViewModelMainWindow.Usages;
-            Positions = ViewModelMainWindow.Positions;
         }
         private void InitialCommandActions()
         {
@@ -357,7 +359,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SearchCustomerByBirthday = new RelayCommand(SearchCusByBirthAction);
             SearchCustomerByTel = new RelayCommand(SearchCustomerByTelAction);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
-            ShowInstitutionSelectionWindow = new RelayCommand<string>(ActionShowInstitutionSelectionWindow);
+            ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             PharmacistSelectionChanged = new RelayCommand(PharmacistChangedAction);
             GetDiseaseCodeById = new RelayCommand<string>(GetDiseaseCodeByIdAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
@@ -384,24 +386,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
             Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
-            Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", CheckDeclareStatus);
+            Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
         }
 
-        private void CheckDeclareStatus(NotificationMessage adjustChange)
+        private void AdjustDateChanged(NotificationMessage adjustChange)
         {
             if (!adjustChange.Notification.Equals("AdjustDateChanged")) return;
-            var adjust = CurrentPrescription.Treatment.AdjustDate;
-            if (CurrentPrescription.Treatment.AdjustDate is null) return;
-            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) || !CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
-            {
-                DeclareStatus = DateTime.Today.Date >= ((DateTime)adjust).Date ?
-                    PrescriptionDeclareStatus.Adjust :
-                    PrescriptionDeclareStatus.Register;
-            }
-            else
-            {
-                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
-            }
+            CheckDeclareStatus();
         }
 
         #endregion
@@ -454,28 +445,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetDiseaseCodeByIdAction(string id)
         {
+            var d = new DiseaseCode();
+            d.GetDataByCodeId(id);
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName))
             {
-                var tmpDisease = CurrentPrescription.Treatment.MainDisease.GetDataByCodeId(id);
-                if (tmpDisease is null || string.IsNullOrEmpty(tmpDisease.Id))
+                if (string.IsNullOrEmpty(d.ID))
                 {
-                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                    MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
                 }
                 else
                 {
-                    CurrentPrescription.Treatment.MainDisease = tmpDisease;
+                    CurrentPrescription.Treatment.MainDisease = d;
                 }
             }
             else
             {
-                var tmpDisease = CurrentPrescription.Treatment.SubDisease.GetDataByCodeId(id);
-                if (tmpDisease is null || string.IsNullOrEmpty(tmpDisease.Id))
+                if (string.IsNullOrEmpty(d.ID))
                 {
-                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                    MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
                 }
                 else
                 {
-                    CurrentPrescription.Treatment.SubDisease = tmpDisease;
+                    CurrentPrescription.Treatment.SubDisease = d;
                 }
             }
         }
@@ -521,13 +512,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region GeneralFunctions
         private void CheckDeclareStatus()
         {
-            if(CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+            if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
                 DeclareStatus = PrescriptionDeclareStatus.Prescribe;
-            else if (DateTime.Compare(((DateTime)CurrentPrescription.Treatment.AdjustDate).Date, DateTime.Today.Date) > 0)
-                DeclareStatus = PrescriptionDeclareStatus.Register;
             else
             {
-                DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                var adjust = CurrentPrescription.Treatment.AdjustDate;
+                if (adjust is null)
+                {
+                    DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                }
+                else
+                {
+                    DeclareStatus = DateTime.Today.Date >= ((DateTime)adjust).Date ?
+                        PrescriptionDeclareStatus.Adjust :
+                        PrescriptionDeclareStatus.Register;
+                }
             }
         }
 

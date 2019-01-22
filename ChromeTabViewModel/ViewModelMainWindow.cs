@@ -14,7 +14,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -26,6 +25,7 @@ using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using Microsoft.Reporting.WinForms;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -202,23 +202,23 @@ namespace His_Pos.ChromeTabViewModel
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "取得醫療院所...";
+                BusyContent = StringRes.GetInstitutions;
                 Institutions = new Institutions(true);
-                BusyContent = "取得科別...";
+                BusyContent = StringRes.GetDivisions;
                 Divisions = new Divisions();
-                BusyContent = "取得調劑案件...";
+                BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases();
-                BusyContent = "取得給付類別...";
+                BusyContent = StringRes.GetPaymentCategories;
                 PaymentCategories = new PaymentCategories();
-                BusyContent = "取得處方案件...";
+                BusyContent = StringRes.GetPrescriptionCases;
                 PrescriptionCases = new PrescriptionCases();
-                BusyContent = "取得部分負擔...";
+                BusyContent = StringRes.GetCopayments;
                 Copayments = new Copayments();
-                BusyContent = "取得部分負擔...";
+                BusyContent = StringRes.GetSpecialTreats;
                 SpecialTreats = new SpecialTreats();
-                BusyContent = "取得藥品用法...";
+                BusyContent = StringRes.GetUsages;
                 Usages = new Usages();
-                BusyContent = "取得藥品途徑...";
+                BusyContent = StringRes.GetPositions;
                 Positions = new Positions();
                 MainWindow.ServerConnection.CloseConnection();
             };
@@ -265,7 +265,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static void CheckContainsUsage(string name)
         {
-            if (Usages.Count(u => u.Name.Equals(name)) != 0) return;
+            if (Usages.Count(u => u.Name.Equals(name)) != 0 || string.IsNullOrEmpty(name)) return;
             var usageNotFound = new Usage { Name = name };
             Usages.Add(usageNotFound);
         }
@@ -284,7 +284,7 @@ namespace His_Pos.ChromeTabViewModel
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = "藥袋列印中...";
+                BusyContent = StringRes.MedBagPrinting;
                 Export(r.LocalReport, 22, 24);
                 ReportPrint(Properties.Settings.Default.MedBagPrinter);
             };
@@ -292,7 +292,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 IsBusy = false;
                 if(p is null)
-                    MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
                 else
                 {
                     p.PrintReceipt();
@@ -306,14 +306,14 @@ namespace His_Pos.ChromeTabViewModel
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = "收據列印中...";
+                BusyContent = StringRes.ReceiptPrinting;
                 Export(r.LocalReport, 25.4, 9.3);
                 ReportPrint(Properties.Settings.Default.ReceiptPrinter);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -341,7 +341,7 @@ namespace His_Pos.ChromeTabViewModel
             catch (Exception ex)
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("Export()"+ ex.Message, MessageType.ERROR);
+                    MessageWindow.ShowMessage("Export:"+ ex.Message, MessageType.ERROR);
                 });
             }
         }
@@ -351,7 +351,7 @@ namespace His_Pos.ChromeTabViewModel
             if (m_streams == null || m_streams.Count == 0)
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("ReportPrint()_1", MessageType.ERROR);
+                    MessageWindow.ShowMessage("ReportPrint:m_streams null", MessageType.ERROR);
                 });
                 return;
             }
@@ -366,7 +366,7 @@ namespace His_Pos.ChromeTabViewModel
             catch (Exception ex)
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("ReportPrint" + ex.Message, MessageType.ERROR);
+                    MessageWindow.ShowMessage("ReportPrint:" + ex.Message, MessageType.ERROR);
                 });
             }
         }
