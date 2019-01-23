@@ -20,6 +20,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
@@ -327,7 +328,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
             {
                 MainWindow.ServerConnection.OpenConnection();
-                //登錄
+                switch (CurrentPrescription.Source)
+                {
+                    case PrescriptionSource.Normal:
+                        NormalRegister();
+                        break;
+                    case PrescriptionSource.Cooperative:
+                        MessageWindow.ShowMessage("合作處方不可登錄",MessageType.ERROR);
+                        return;  
+                    case PrescriptionSource.ChronicReserve:
+                        ChronicRegister();
+                        break;
+                }
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
                 ClearPrescription();
@@ -574,6 +586,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessDepositCashFlow("自費");
             CurrentPrescription.ProcessSelfPayCashFlow("押金");
         }
+        private void NormalRegister() { 
+            if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
+                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription); 
+            }
+               
+           
+        }
+        private void ChronicRegister()
+        {
+
+        }
+        
         #endregion
     }
 }
