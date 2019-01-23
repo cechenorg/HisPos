@@ -328,6 +328,32 @@ namespace His_Pos.NewClass.Prescription
             }
             Medicines.Add(new Medicine());
         }
+        public void ConvertNHIandOTCPrescriptionMedicines()
+        {
+            Medicine temp = new Medicine();
+            for (int medCount = 0; medCount < Medicines.Count; medCount++)
+            {
+                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                if (table.Rows.Count > 0)
+                {
+                    switch (table.Rows[0].Field<int>("DataType"))
+                    {
+                        case 0:
+                            temp = new MedicineOTC(table.Rows[0]);
+                            break;
+                        case 1:
+                            temp = new MedicineNHI(table.Rows[0]);
+                            break;
+                    }
+                }
+                temp.Usage.Name = Medicines[medCount].Usage.Name;
+                temp.Position.Name = Medicines[medCount].Position.Name;
+                temp.Days = Medicines[medCount].Days;
+                temp.PaySelf = Medicines[medCount].PaySelf;
+                temp.Amount = Medicines[medCount].Amount; 
+                Medicines[medCount] = temp; 
+            }
+        }
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
