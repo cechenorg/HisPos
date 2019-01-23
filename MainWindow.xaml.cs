@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
@@ -17,19 +16,12 @@ using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
-using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using His_Pos.NewClass.Prescription.Treatment.Copayment;
-using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
-using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
-using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos
 {
@@ -223,12 +215,12 @@ namespace His_Pos
 
         private void DuringVerify(object sender, ProgressChangedEventArgs e)
         {
-            SetSamDcStatus("安全模組認證中...");
+            SetSamDcStatus(StringRes.檢查安全模組);
         }
 
         private void AfterVerify(object sender, RunWorkerCompletedEventArgs e)
         {
-            SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? "認證成功" : "認證失敗");
+            SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? StringRes.認證成功 : StringRes.認證失敗);
         }
 
         private static string GetEnumDescription(Enum value)

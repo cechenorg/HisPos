@@ -291,13 +291,13 @@
                         <DataGridTemplateColumn x:Name="MedicineId" Width="130" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch"
+                                    <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="14" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBox.InputBindings>
                                             <KeyBinding Command="{Binding DataContext.AddMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        CommandParameter="{Binding Text, ElementName=MedicineCodeAuto}" Key="Enter" />
+                                                        CommandParameter="{Binding Text, ElementName=MedicineID}" Key="Enter" />
                                             <KeyBinding Command="{Binding DataContext.EditMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        CommandParameter="{Binding Text, ElementName=MedicineCodeAuto}" Key="Back" />
+                                                        CommandParameter="{Binding Text, ElementName=MedicineID}" Key="Back" />
                                         </TextBox.InputBindings>
                                     </TextBox>
                                 </DataTemplate>

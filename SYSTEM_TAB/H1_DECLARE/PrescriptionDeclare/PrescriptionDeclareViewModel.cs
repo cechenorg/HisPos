@@ -172,9 +172,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetPatientDataAction()
         {
-            if (CurrentPrescription.GetCard()) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
-            customerSelectionWindow.ShowDialog();
+            var isGetCard = false;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.讀取健保卡;
+                isGetCard = CurrentPrescription.GetCard();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if (isGetCard) return;
+                var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
+                customerSelectionWindow.ShowDialog();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         private void SearchCusByIDNumAction()
         {
