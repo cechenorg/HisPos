@@ -497,9 +497,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
-            MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.ConvertNHIandOTCPrescriptionMedicines();
-            MainWindow.ServerConnection.CloseConnection();
+            //MainWindow.ServerConnection.OpenConnection();
+            //CurrentPrescription.ConvertNHIandOTCPrescriptionMedicines();
+            //MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint();
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)

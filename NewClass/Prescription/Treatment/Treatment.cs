@@ -356,7 +356,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckDivision()
         {
-            if (string.IsNullOrEmpty(Division.Id))
+            if (Division is null || string.IsNullOrEmpty(Division.Id))
             {
                 if (CheckIsHomeCare() || CheckIsQuitSmoking())
                     return string.Empty;
