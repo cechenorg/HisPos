@@ -18,13 +18,10 @@ namespace His_Pos.Class.Person
 
         public Customer(BasicData basicData)
         {
-            var year = int.Parse(basicData.Birthday.Substring(0, 3)) + 1911;
-            var month = int.Parse(basicData.Birthday.Substring(3, 2));
-            var day = int.Parse(basicData.Birthday.Substring(5, 2));
             Name = basicData.Name;
-            Birthday = new DateTime(year,month,day);
-            IcNumber = basicData.IcNumber;
-            Gender = basicData.Gender;
+            Birthday = basicData.Birthday;
+            IcNumber = basicData.IDNumber;
+            //Gender = basicData.Gender;
             IcCard = new IcCard(basicData);
             ContactInfo = new ContactInfo();
         }

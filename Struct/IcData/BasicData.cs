@@ -1,4 +1,6 @@
-﻿using His_Pos.Service;
+﻿using System;
+using His_Pos.Service;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.Struct.IcData
 {
@@ -6,10 +8,10 @@ namespace His_Pos.Struct.IcData
     {
         public string CardNumber;
         public string Name;
-        public string IcNumber;
-        public string Birthday;
-        public bool Gender;
-        public string CardReleaseDate;
+        public string IDNumber;
+        public DateTime Birthday;
+        public string Gender;
+        public DateTime CardReleaseDate;
         public string CardLogoutMark;
         public string EmergencyTel;
         /*
@@ -25,13 +27,20 @@ namespace His_Pos.Struct.IcData
         public BasicData(byte[] pBuffer)
         {
             var f = new Function();
-
             CardNumber = f.ByteArrayToString(12,pBuffer,0);
             Name = f.ByteArrayToString(20, pBuffer, 12).Trim();
-            IcNumber = f.ByteArrayToString(10, pBuffer, 32);
-            Birthday = f.ByteArrayToString(7, pBuffer, 42);
-            Gender = f.ByteArrayToString(1, pBuffer, 49).Equals("M");
-            CardReleaseDate = f.ByteArrayToString(7, pBuffer, 50);
+            IDNumber = f.ByteArrayToString(10, pBuffer, 32);
+            var dateString = f.ByteArrayToString(7, pBuffer, 42);
+            var year = int.Parse(dateString.Substring(0, 3)) + 1911;
+            var month = int.Parse(dateString.Substring(3, 2));
+            var day = int.Parse(dateString.Substring(5, 2));
+            Birthday = new DateTime(year,month,day);
+            Gender = f.ByteArrayToString(1, pBuffer, 49).Equals("M")? StringRes.Male: StringRes.Female;
+            dateString = f.ByteArrayToString(7, pBuffer, 50);
+            year = int.Parse(dateString.Substring(0, 3)) + 1911;
+            month = int.Parse(dateString.Substring(3, 2));
+            day = int.Parse(dateString.Substring(5, 2));
+            CardReleaseDate = new DateTime(year, month, day);
             CardLogoutMark = f.ByteArrayToString(1, pBuffer, 57);
             EmergencyTel = f.ByteArrayToString(14, pBuffer, 58);
         }

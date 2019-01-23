@@ -290,7 +290,7 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
         public void AddCooperativePrescriptionMedicines() {
-            for(int medCount = 0; medCount < Medicines.Count(m=>m is MedicineOTC || m is MedicineNHI); medCount++){
+            for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
                 if (table.Rows.Count > 0)
@@ -319,7 +319,6 @@ namespace His_Pos.NewClass.Prescription
                 temp.PositionName = Medicines[medCount].Position.Name;
                 ViewModelMainWindow.CheckContainsUsage(temp.UsageName);
                 ViewModelMainWindow.CheckContainsPosition(temp.PositionName);
-
                 temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
@@ -329,28 +328,35 @@ namespace His_Pos.NewClass.Prescription
             }
             Medicines.Add(new Medicine());
         }
+        public void ConvertNHIandOTCPrescriptionMedicines()
+        {
+            Medicine temp = new Medicine();
+            for (int medCount = 0; medCount < Medicines.Count; medCount++)
+            {
+                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                if (table.Rows.Count > 0)
+                {
+                    switch (table.Rows[0].Field<int>("DataType"))
+                    {
+                        case 0:
+                            temp = new MedicineOTC(table.Rows[0]);
+                            break;
+                        case 1:
+                            temp = new MedicineNHI(table.Rows[0]);
+                            break;
+                    }
+                }
+                temp.Usage.Name = Medicines[medCount].Usage.Name;
+                temp.Position.Name = Medicines[medCount].Position.Name;
+                temp.Days = Medicines[medCount].Days;
+                temp.PaySelf = Medicines[medCount].PaySelf;
+                temp.Amount = Medicines[medCount].Amount; 
+                Medicines[medCount] = temp; 
+            }
+        }
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
-        }
-
-        public string CheckPrescriptionRule()//檢查健保邏輯
-        {
-            return CheckMedicines() + Treatment.Check() + Patient.CheckBasicData();
-        }
-
-        private string CheckMedicines()
-        {
-            var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
-            if (!medList.Any())
-            {
-                return StringRes.MedicineEmpty;
-            }
-            if (medList.Count(m=>m.Amount == 0) == 0)
-            {
-                return string.Empty;
-            }
-            return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
 
         public void ProcessInventory()//扣庫
@@ -384,52 +390,24 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.Deposit);
         }
 
-        private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
+        #region DeclareFunctions
+        public string CheckPrescriptionRule()//檢查健保邏輯
         {
-            var d = new Ddata {Dhead = new Dhead(), Dbody = new Dbody {Pdata = new List<Pdata>()}};
-            d.Dhead.D1 = Treatment.AdjustCase.Id;
-            d.Dhead.D2 = string.Empty;
-            d.Dhead.D3 = Patient.IDNumber;
-            d.Dhead.D4 = string.Empty;
-            d.Dhead.D5 = Treatment.PaymentCategory?.Id;
-            d.Dhead.D6 = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday,false);
-            d.Dhead.D7 = Treatment.MedicalNumber;
-            d.Dhead.D8 = Treatment.MainDisease.ID;
-            d.Dhead.D9 = Treatment.SubDisease?.ID;
-            d.Dhead.D13 = Treatment.Division?.Id;
-            d.Dhead.D14 = Treatment.TreatDate is null? string.Empty: DateTimeExtensions.ConvertToTaiwanCalender((DateTime)Treatment.TreatDate, false);
-            d.Dhead.D15 = Treatment.Copayment.Id;
-            d.Dhead.D16 = $"{PrescriptionPoint.ApplyPoint:00000000}";
-            d.Dhead.D17 = $"{PrescriptionPoint.CopaymentPoint:0000}";
-            d.Dhead.D18 = $"{PrescriptionPoint.TotalPoint:00000000}";
-            d.Dhead.D20 = Patient.Name;
-            d.Dhead.D21 = Treatment.Institution.Id;
-            d.Dhead.D22 = Treatment.PrescriptionCase?.Id;
-            d.Dhead.D23 = DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, false);
-            if (!Treatment.CheckIsQuitSmoking() && !Treatment.CheckIsHomeCare())
-            {
-                d.Dhead.D24 = d.Dhead.D21;
-            }
-            else
-            {
-                d.Dhead.D24 = string.Empty;
-            }
-            d.Dhead.D25 = Treatment.Pharmacist.IdNumber;
-            d.Dbody.D26 = Treatment.SpecialTreat?.Id;
-            d.Dbody.D30 = MedicineDays.ToString();
-            d.Dbody.D31 = $"{PrescriptionPoint.SpecialMaterialPoint:0000000}";
-            d.Dbody.D32 = "00000000";
-            d.Dbody.D33 = details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)).ToString();
-            d.Dbody.D35 = Treatment.ChronicSeq is null ? string.Empty : Treatment.ChronicSeq.ToString();
-            d.Dbody.D36 = Treatment.ChronicTotal is null ? string.Empty : Treatment.ChronicTotal.ToString();
-            d.Dbody.D37 = MedicalServiceID;
-            d.Dbody.D38 = details.Single(p => p.P1.Equals("9")).P9;
-            d.Dbody.D43 = Treatment.OriginalMedicalNumber;
-            d.Dbody.D44 = DateTimeExtensions.NullableDateToTWCalender(Card.NewBornBirthday, false);
-            d.Dbody.Pdata = details;
-            DeclareContent = d.SerializeObjectToXDocument<Ddata>();
+            return CheckMedicines() + Treatment.Check() + Patient.CheckBasicData();
         }
-
+        private string CheckMedicines()
+        {
+            var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            if (!medList.Any())
+            {
+                return StringRes.MedicineEmpty;
+            }
+            if (medList.Count(m => m.Amount == 0) == 0)
+            {
+                return string.Empty;
+            }
+            return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+        }
         public void CountPrescriptionPoint()
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
@@ -440,12 +418,20 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
         }
+        private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
+        {
+            var medDeclare = details.Where(p => !p.P1.Equals("0")).ToList();
+            var d = new Ddata(this, medDeclare);
+            DeclareContent = d.SerializeObjectToXDocument();
+            d.Dbody.Pdata = details;
+        }
+        #endregion
 
         public void UpdateCooperativePrescriptionIsRead()
         {
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
         }
-
+        #region PrintFunctions
         public void PrintMedBag(bool singleMode,bool receiptPrint)
         {
             var rptViewer = new ReportViewer();
@@ -536,7 +522,6 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.Refresh();
             ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
         }
-
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
@@ -574,7 +559,6 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("Form", m.Form)
                     };
         }
-
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
         {
             var treatmentDate =
@@ -600,6 +584,29 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
                 new ReportParameter("Division", Treatment.Division.Name)
             };
+        }
+        #endregion
+
+        public bool GetCard()
+        {
+            Card.GetBasicData();
+            if (string.IsNullOrEmpty(Card.IDNumber)) return false;
+            Patient = new Customer(Card);
+            MainWindow.ServerConnection.OpenConnection();
+            var cus = Patient.Check();
+            MainWindow.ServerConnection.CloseConnection();
+            if (cus != null)
+            {
+                if (string.IsNullOrEmpty(cus.IDNumber) || !cus.IDNumber.Equals(Patient.IDNumber))
+                    cus.IDNumber = Patient.IDNumber;
+                if (cus.Birthday is null)
+                    cus.Birthday = Patient.Birthday;
+                else if(DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
+                    cus.Birthday = Patient.Birthday;
+                cus.Gender = Patient.Gender;
+                Patient = cus;
+            }
+            return true;
         }
     }
 }

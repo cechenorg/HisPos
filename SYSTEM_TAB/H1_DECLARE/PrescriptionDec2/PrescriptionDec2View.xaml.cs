@@ -2104,37 +2104,39 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 : cs.StringToBytes(" ", 2);
             //補卡註記,長度一個char
             var cTreatAfterCheck = new byte[] {1};
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
-            //取得就醫序號
-            if (res == 0)
+            if (HisApiBase.OpenCom())
             {
-                IsMedicalNumberGet = true;
-                Seq = new SeqNumber(icData);
-                CurrentPrescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
-                NotifyPropertyChanged(nameof(CurrentPrescription.Customer.IcCard));
-            }
-            //未取得就醫序號
-            else
-            {
-                GetMedicalNumberErrorCode = res;
-            }
-
-            //取得就醫紀錄
-            strLength = 498;
-            icData = new byte[498];
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
-            MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
-            if (res == 0)
-            {
-                var startIndex = 84;
-                for (var i = 0; i < 6; i++)
+                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                //取得就醫序號
+                if (HisApiBase.csCloseCom() == 0)
                 {
-                    if (icData[startIndex + 3] == 32) break;
-                    TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex,false));
-                    startIndex += 69;
+                    IsMedicalNumberGet = true;
+                    Seq = new SeqNumber(icData);
+                    CurrentPrescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
+                    NotifyPropertyChanged(nameof(CurrentPrescription.Customer.IcCard));
+                }
+                //未取得就醫序號
+                else
+                {
+                    GetMedicalNumberErrorCode = res;
+                }
+                //取得就醫紀錄
+                strLength = 498;
+                icData = new byte[498];
+                if (HisApiBase.OpenCom())
+                {
+                    res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                    HisApiBase.csCloseCom();
+                }
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32) break;
+                        TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex, false));
+                        startIndex += 69;
+                    }
                 }
             }
         }
@@ -2195,7 +2197,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             PaidText.Text = string.Empty;
             CustomerSelected = false;
             _isPrescribe = false;
-            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
+            ViewModelMainWindow.IsIcCardValid = false;
             CurrentCustomerHistoryMaster?.CustomerHistoryMasterCollection.Clear();
             CurrentCustomerHistoryMaster = new CustomerHistoryMaster();
             CusHistoryMaster.ItemsSource = null;
@@ -2217,12 +2219,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             {
                 var strLength = 72;
                 var icData = new byte[72];
-                HisApiBase.OpenCom();
-                if (MainWindow.Instance.HisApiErrorCode == 0)
+                if (HisApiBase.OpenCom())
                 {
                     MainWindow.Instance.SetCardReaderStatus("健保卡資料讀取中...");
-                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
-                    if (MainWindow.Instance.HisApiErrorCode == 0)
+                    var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    if (res == 0)
                     {
                         MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
                         CurrentPrescription.IsGetIcCard = true;

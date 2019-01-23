@@ -2,13 +2,11 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -17,6 +15,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.InstitutionSelectionWind
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
+// ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -48,7 +47,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => PrescriptionCollectionVS, ref prescriptionCollectionVS, value);
             }
         }
-
         private ICollectionView prescriptionCollectionView;
         public ICollectionView PrescriptionCollectionView
         {
@@ -86,7 +84,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 UpdateFilter();
             }
         }
-
         private MedicalPersonnel selectedSelectedPharmacist;
         public MedicalPersonnel SelectedPharmacist
         {

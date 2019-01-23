@@ -6,20 +6,30 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
+using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
 {
     public class Customer:Person
-    { 
+    {
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
         {
             ContactNote = r.Field<string>("Cus_UrgentNote");
             LastEdit = r.Field<DateTime?>("Cus_EditTime");
-        } 
+        }
+
+        public Customer(IcCard card)
+        {
+            Name = card.Name;
+            IDNumber = card.IDNumber;
+            Birthday = card.Birthday;
+            Gender = card.Gender;
+        }
+
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄

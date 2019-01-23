@@ -61,7 +61,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請選擇調劑案件\r\n 的當地語系化字串。
+        ///   查詢類似 請選擇調劑案件\n 的當地語系化字串。
         /// </summary>
         internal static string AdjustCaseError {
             get {
@@ -70,7 +70,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫調劑日期\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫調劑日期\n 的當地語系化字串。
         /// </summary>
         internal static string AdjustDateError {
             get {
@@ -124,7 +124,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 慢箋請填寫調劑序號\r\n 的當地語系化字串。
+        ///   查詢類似 慢箋請填寫調劑序號\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicSeqError {
             get {
@@ -133,7 +133,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫領藥次數與總領藥次數\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫領藥次數與總領藥次數\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicTimesError {
             get {
@@ -142,7 +142,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 慢箋請填寫可調劑次數\r\n 的當地語系化字串。
+        ///   查詢類似 慢箋請填寫可調劑次數\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicTotalError {
             get {
@@ -250,7 +250,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫主診斷碼\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫主診斷碼\n 的當地語系化字串。
         /// </summary>
         internal static string DiseaseCodeError {
             get {
@@ -268,7 +268,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫科別\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫科別\n 的當地語系化字串。
         /// </summary>
         internal static string DivisionError {
             get {
@@ -439,7 +439,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫釋出院所\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫釋出院所\n 的當地語系化字串。
         /// </summary>
         internal static string InstitutionError {
             get {
@@ -511,7 +511,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫序號\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫序號\n 的當地語系化字串。
         /// </summary>
         internal static string MedicalNumberError {
             get {
@@ -547,7 +547,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫處方藥品\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫處方藥品\n 的當地語系化字串。
         /// </summary>
         internal static string MedicineEmpty {
             get {
@@ -574,7 +574,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫給付類別\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫給付類別\n 的當地語系化字串。
         /// </summary>
         internal static string PaymentCategoryError {
             get {
@@ -583,7 +583,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\r\n 的當地語系化字串。
+        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\n 的當地語系化字串。
         /// </summary>
         internal static string PharmacistIDError {
             get {
@@ -601,7 +601,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請選擇處方案件\r\n 的當地語系化字串。
+        ///   查詢類似 請選擇處方案件\n 的當地語系化字串。
         /// </summary>
         internal static string PrescriptionCaseError {
             get {
@@ -610,7 +610,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 處方已超過可領取時限\r\n 的當地語系化字串。
+        ///   查詢類似 處方已超過可領取時限\n 的當地語系化字串。
         /// </summary>
         internal static string PrescriptoinOutOfDate {
             get {
@@ -772,7 +772,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫日期\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫日期\n 的當地語系化字串。
         /// </summary>
         internal static string TreatDateError {
             get {
@@ -799,11 +799,200 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 與健保局連線認證中，請稍後... 的當地語系化字串。
+        /// </summary>
+        internal static string 健保局連線中 {
+            get {
+                return ResourceManager.GetString("健保局連線中", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 口服液劑(原瓶包裝) 的當地語系化字串。
         /// </summary>
         internal static string 口服液劑 {
             get {
                 return ResourceManager.GetString("口服液劑", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 所置入非安全模組卡(檔) 的當地語系化字串。
+        /// </summary>
+        internal static string 所置入非安全模組 {
+            get {
+                return ResourceManager.GetString("所置入非安全模組", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機控制軟體異常，請檢查讀卡機設備 的當地語系化字串。
+        /// </summary>
+        internal static string 控制軟體異常 {
+            get {
+                return ResourceManager.GetString("控制軟體異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 未認證 的當地語系化字串。
+        /// </summary>
+        internal static string 未認證 {
+            get {
+                return ResourceManager.GetString("未認證", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查中 {
+            get {
+                return ResourceManager.GetString("檢查中", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保IC卡檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查健保卡 {
+            get {
+                return ResourceManager.GetString("檢查健保卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 安全模組檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查安全模組 {
+            get {
+                return ResourceManager.GetString("檢查安全模組", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 醫事人員卡檢查中... 的當地語系化字串。
+        /// </summary>
+        internal static string 檢查醫事人員卡 {
+            get {
+                return ResourceManager.GetString("檢查醫事人員卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 認證失敗 {
+            get {
+                return ResourceManager.GetString("認證失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功 {
+            get {
+                return ResourceManager.GetString("認證成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功(已驗PIN) 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功已驗 {
+            get {
+                return ResourceManager.GetString("認證成功已驗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 認證成功(未驗PIN) 的當地語系化字串。
+        /// </summary>
+        internal static string 認證成功未驗 {
+            get {
+                return ResourceManager.GetString("認證成功未驗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞 的當地語系化字串。
+        /// </summary>
+        internal static string 讀卡機異常 {
+            get {
+                return ResourceManager.GetString("讀卡機異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機逾時 的當地語系化字串。
+        /// </summary>
+        internal static string 讀卡機逾時 {
+            get {
+                return ResourceManager.GetString("讀卡機逾時", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡資料讀取中... 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取健保卡 {
+            get {
+                return ResourceManager.GetString("讀取健保卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡讀取失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取失敗 {
+            get {
+                return ResourceManager.GetString("讀取失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 健保卡讀取成功 的當地語系化字串。
+        /// </summary>
+        internal static string 讀取成功 {
+            get {
+                return ResourceManager.GetString("讀取成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機連接開啟失敗 的當地語系化字串。
+        /// </summary>
+        internal static string 連接失敗 {
+            get {
+                return ResourceManager.GetString("連接失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 讀卡機連接開啟成功 的當地語系化字串。
+        /// </summary>
+        internal static string 連接成功 {
+            get {
+                return ResourceManager.GetString("連接成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 開啟讀卡機連接... 的當地語系化字串。
+        /// </summary>
+        internal static string 開啟讀卡機 {
+            get {
+                return ResourceManager.GetString("開啟讀卡機", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 醫事人員卡驗證中... 的當地語系化字串。
+        /// </summary>
+        internal static string 驗證醫事人員卡 {
+            get {
+                return ResourceManager.GetString("驗證醫事人員卡", resourceCulture);
             }
         }
     }

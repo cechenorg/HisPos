@@ -102,7 +102,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             SamCode = seq.SamId;
             CardNo = currentPrescription.Customer.IcCard.CardNo;
             IcNumber = currentPrescription.Customer.IcCard.IcNumber;
-            BirthDay = customerData.Birthday;
+            BirthDay = DateTimeExtensions.ConvertToTaiwanCalender(customerData.Birthday,false);
             TreatmentDateTime = seq.TreatDateTime;
             MedicalNumber = string.Empty;
             PharmacyId = seq.InstitutionId;

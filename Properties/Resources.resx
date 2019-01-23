@@ -250,55 +250,55 @@
     <value>口服液劑(原瓶包裝)</value>
   </data>
   <data name="AdjustCaseError" xml:space="preserve">
-    <value>請選擇調劑案件\r\n</value>
+    <value>請選擇調劑案件\n</value>
   </data>
   <data name="AdjustDateError" xml:space="preserve">
-    <value>請填寫調劑日期\r\n</value>
+    <value>請填寫調劑日期\n</value>
   </data>
   <data name="ChronicSeqError" xml:space="preserve">
-    <value>慢箋請填寫調劑序號\r\n</value>
+    <value>慢箋請填寫調劑序號\n</value>
   </data>
   <data name="ChronicTimesError" xml:space="preserve">
-    <value>請填寫領藥次數與總領藥次數\r\n</value>
+    <value>請填寫領藥次數與總領藥次數\n</value>
   </data>
   <data name="ChronicTotalError" xml:space="preserve">
-    <value>慢箋請填寫可調劑次數\r\n</value>
+    <value>慢箋請填寫可調劑次數\n</value>
   </data>
   <data name="CopaymentError" xml:space="preserve">
     <value>請填寫部分負擔\r\n</value>
   </data>
   <data name="DiseaseCodeError" xml:space="preserve">
-    <value>請填寫主診斷碼\r\n</value>
+    <value>請填寫主診斷碼\n</value>
   </data>
   <data name="DivisionError" xml:space="preserve">
-    <value>請填寫就醫科別\r\n</value>
+    <value>請填寫就醫科別\n</value>
   </data>
   <data name="InstitutionError" xml:space="preserve">
-    <value>請填寫釋出院所\r\n</value>
+    <value>請填寫釋出院所\n</value>
   </data>
   <data name="MedicalNumberError" xml:space="preserve">
-    <value>請填寫就醫序號\r\n</value>
+    <value>請填寫就醫序號\n</value>
   </data>
   <data name="MedicalNumberError1" xml:space="preserve">
     <value>請填寫就醫序號\r\n</value>
   </data>
   <data name="MedicineEmpty" xml:space="preserve">
-    <value>請填寫處方藥品\r\n</value>
+    <value>請填寫處方藥品\n</value>
   </data>
   <data name="PaymentCategoryError" xml:space="preserve">
-    <value>請填寫給付類別\r\n</value>
+    <value>請填寫給付類別\n</value>
   </data>
   <data name="PharmacistIDError" xml:space="preserve">
-    <value>未選擇調劑藥師或調劑藥師身分證未填寫\r\n</value>
+    <value>未選擇調劑藥師或調劑藥師身分證未填寫\n</value>
   </data>
   <data name="PrescriptionCaseError" xml:space="preserve">
-    <value>請選擇處方案件\r\n</value>
+    <value>請選擇處方案件\n</value>
   </data>
   <data name="PrescriptoinOutOfDate" xml:space="preserve">
-    <value>處方已超過可領取時限\r\n</value>
+    <value>處方已超過可領取時限\n</value>
   </data>
   <data name="TreatDateError" xml:space="preserve">
-    <value>請填寫就醫日期\r\n</value>
+    <value>請填寫就醫日期\n</value>
   </data>
   <data name="DiseaseCodeNotFound" xml:space="preserve">
     <value>查無疾病代碼</value>
@@ -365,5 +365,68 @@
   </data>
   <data name="StartDateOutOfRange" xml:space="preserve">
     <value>起始日期不得大於結束日期</value>
+  </data>
+  <data name="健保局連線中" xml:space="preserve">
+    <value>與健保局連線認證中，請稍後...</value>
+  </data>
+  <data name="所置入非安全模組" xml:space="preserve">
+    <value>所置入非安全模組卡(檔)</value>
+  </data>
+  <data name="控制軟體異常" xml:space="preserve">
+    <value>讀卡機控制軟體異常，請檢查讀卡機設備</value>
+  </data>
+  <data name="未認證" xml:space="preserve">
+    <value>未認證</value>
+  </data>
+  <data name="檢查中" xml:space="preserve">
+    <value>檢查中...</value>
+  </data>
+  <data name="檢查健保卡" xml:space="preserve">
+    <value>健保IC卡檢查中...</value>
+  </data>
+  <data name="檢查安全模組" xml:space="preserve">
+    <value>安全模組檢查中...</value>
+  </data>
+  <data name="檢查醫事人員卡" xml:space="preserve">
+    <value>醫事人員卡檢查中...</value>
+  </data>
+  <data name="認證失敗" xml:space="preserve">
+    <value>認證失敗</value>
+  </data>
+  <data name="認證成功" xml:space="preserve">
+    <value>認證成功</value>
+  </data>
+  <data name="認證成功已驗" xml:space="preserve">
+    <value>認證成功(已驗PIN)</value>
+  </data>
+  <data name="認證成功未驗" xml:space="preserve">
+    <value>認證成功(未驗PIN)</value>
+  </data>
+  <data name="讀卡機異常" xml:space="preserve">
+    <value>讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞</value>
+  </data>
+  <data name="讀卡機逾時" xml:space="preserve">
+    <value>讀卡機逾時</value>
+  </data>
+  <data name="讀取健保卡" xml:space="preserve">
+    <value>健保卡資料讀取中...</value>
+  </data>
+  <data name="讀取失敗" xml:space="preserve">
+    <value>健保卡讀取失敗</value>
+  </data>
+  <data name="讀取成功" xml:space="preserve">
+    <value>健保卡讀取成功</value>
+  </data>
+  <data name="連接失敗" xml:space="preserve">
+    <value>讀卡機連接開啟失敗</value>
+  </data>
+  <data name="連接成功" xml:space="preserve">
+    <value>讀卡機連接開啟成功</value>
+  </data>
+  <data name="開啟讀卡機" xml:space="preserve">
+    <value>開啟讀卡機連接...</value>
+  </data>
+  <data name="驗證醫事人員卡" xml:space="preserve">
+    <value>醫事人員卡驗證中...</value>
   </data>
 </root>

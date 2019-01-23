@@ -86,58 +86,11 @@ namespace His_Pos.ChromeTabViewModel
                 Set(() => HpcCardStatus, ref _hpcCardStatus, value);
             }
         }
-
-        private bool _isConnectionOpened;
-
-        public bool IsConnectionOpened
-        {
-            get => _isConnectionOpened;
-            set
-            {
-                _isConnectionOpened = value;
-            }
-        }
-
-        private bool _hisApiException;
-
-        public bool HisApiException
-        {
-            get => _hisApiException;
-            set
-            {
-                _hisApiException = value;
-            }
-        }
-        private bool _isIcCardValid;
-        public bool IsIcCardValid
-        {
-            get => _isIcCardValid;
-            set
-            {
-                _isIcCardValid = value;
-            }
-        }
-        private bool _isHpcValid;
-
-        public bool IsHpcValid
-        {
-            get => _isHpcValid;
-            set
-            {
-                Set(() => IsHpcValid, ref _isHpcValid, value);
-            }
-        }
-
-        private bool _isVerifySamDc;
-
-        public bool IsVerifySamDc
-        {
-            get => _isVerifySamDc;
-            set
-            {
-                Set(() => IsVerifySamDc, ref _isVerifySamDc, value);
-            }
-        }
+        public static bool IsConnectionOpened { get; set; }
+        public static bool HisApiException { get; set; }
+        public static bool IsIcCardValid { get; set; }
+        public static bool IsHpcValid { get; set; }
+        public static bool IsVerifySamDc { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
