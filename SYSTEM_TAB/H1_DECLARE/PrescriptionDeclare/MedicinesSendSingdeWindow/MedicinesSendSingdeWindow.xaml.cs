@@ -13,6 +13,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeW
         {
             InitializeComponent();
             DataContext = new MedicinesSendSingdeViewModel(p);
+            ShowDialog();
         }
         
     }
