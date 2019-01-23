@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.Struct.IcData;
+using His_Pos.NewClass.Prescription.IcData;
 
 namespace His_Pos.Class
 {

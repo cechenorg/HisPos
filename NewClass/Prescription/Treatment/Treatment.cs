@@ -3,8 +3,10 @@ using System.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription.Treatment
@@ -446,6 +448,20 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases("09");
             PaymentCategory = ViewModelMainWindow.GetPaymentCategory("4");
             Copayment = ViewModelMainWindow.GetCopayment("I20");
+        }
+        public void GetLastMedicalNumber()
+        {
+            if (HisApiBase.OpenCom())
+            {
+                int iBufferLen = 7;
+                byte[] pBuffer = new byte[7];
+                var res = HisApiBase.hisGetLastSeqNum(pBuffer,ref iBufferLen);
+                if (res == 0)
+                {
+                    TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                }
+                HisApiBase.CloseCom();
+            }
         }
     }
 }

@@ -1,125 +1,54 @@
-﻿using System.Text;
-using His_Pos.ChromeTabViewModel;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Documents;
+using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
+// ReSharper disable All
 
 namespace His_Pos.HisApi
 {
     public class HisApiFunction
     {
-        public string VerifySamdc() {   //安全模組認證
-            string msg = string.Empty;
-            int comConnection =  HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            if(comConnection == -1) msg = "開啟Com失敗";
-            if (comConnection == 0) {
-                int samdcStatus = HisApiBase.csVerifySAMDC();
-                switch (samdcStatus)
+        public static List<string> WritePrescriptionData(Prescription p)
+        {
+            var signList = new List<string>();
+            var medList = p.Medicines.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            var iWriteCount = medList.Count;
+            var iBufferLength = 40 * iWriteCount;
+            var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
+            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime+"\0",14);
+            byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", 11);
+            byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", 8);
+            byte[] pDataWrite = ConvertData.StringToBytes(pDataWriteStr, 3660);
+            byte[] pBuffer = new byte[iBufferLength];
+            if (HisApiBase.OpenCom())
+            {
+                var res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
+                if (res == 0)
                 {
-                    case 0:
-                        msg = "Success";
-                        break;
-                    case 4012:
-                        msg = "未置入安全模組卡";
-                        break;
-                    case 4032:
-                        msg = "所插入非安全模組卡";
-                        break;
-                    case 4051:
-                        msg = "安全模組與IDC認證失敗";
-                        break;
-                    case 4052:
-                        msg = "Bnhihost.ini 檔案無法開啟";
-                        break;
-                    case 4053:
-                        msg = "Bnhihost.ini 檔案內容有誤";
-                        break;
-                    case 4061:
-                        msg = "網路連線失敗";
-                        break;
-                    case 6005:
-                        msg = "安全模組卡的外部認證失敗";
-                        break;
-                    case 6006:
-                        msg = "IDC的外部認證失敗";
-                        break;
-                    case 6007:
-                        msg = "安全模組卡的內部認證失敗";
-                        break;
-                    case 6008:
-                        msg = "寫入讀卡機日期時間失敗";
-                        break;
+                    var startIndex = 0;
+                    for (int i = 0; i < iWriteCount; i++)
+                    {
+                        signList.Add(ConvertData.ByToString(pBuffer, startIndex,40));
+                        startIndex += 40;
+                    }
                 }
             }
-            HisApiBase.csCloseCom();
-            return msg;
-        }//VerifySAMDC()
-
-
-        public string VerifyHpcpin() {    //檢查醫事人員PIN值
-            string msg = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            if (comConnection == -1) msg = "開啟Com失敗";
-            if (comConnection == 0) {
-                int hpcStatus = HisApiBase.hpcVerifyHPCPIN();
-                switch (hpcStatus)
-                {
-                    case 0:
-                        msg = "Success";
-                        break;
-                    case 4000:
-                        msg = "讀卡機timeout";
-                        break;
-                    case 4014:
-                        msg = "未置入醫事人員卡";
-                        break;
-                    case 4029:
-                        msg = "IC卡權限不足";
-                        break;
-                    case 4034:
-                        msg = "所置入非醫事人員卡";
-                        break;
-                    case 4050:
-                        msg = "安全模組尚未與IDC認證";
-                        break;
-                }
-            }
-            HisApiBase.csCloseCom();
-            return msg;
-        } //VerifyHPCPIN()
-
-
-
-        public string GetBasicData() {
-            string data = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            HisApiBase.csCloseCom();
-            return data;
-        }//GetBasicData()
-        private string ByteSubStr(string strInput, int startIndex, int byteLength)
+            return signList;
+        }
+        //正常上傳
+        public static void CreatDailyUploadData()
         {
-            var lEncoding = Encoding.GetEncoding("big5", new EncoderExceptionFallback(), new DecoderReplacementFallback(""));
-            var lByte = lEncoding.GetBytes(strInput);
-            if (byteLength <= 0)
-                return "";
-            if (startIndex + 1 > lByte.Length)
-                return "";
-            if (startIndex + byteLength > lByte.Length)
-                byteLength = lByte.Length - startIndex;
-            return lEncoding.GetString(lByte, startIndex, byteLength);
+            
         }
 
-        public string GetIcData(StringBuilder data, int startIndex, int length)
+        //異常上傳
+        public static void CreatErrorDailyUploadData()
         {
-            return ByteSubStr(data.ToString(), startIndex, length);
-        }
-
-        public void ErrorDetect(int _res)
-        {
-            var _message = new StringBuilder(100);
-            _message.Clear();
-            if (_res == 0)
-                return;
-            var errorCodrDescription = Function.GetEnumDescription("ErrorCode", _res.ToString());
-            _message.Append(errorCodrDescription);
+            
         }
     }
 }

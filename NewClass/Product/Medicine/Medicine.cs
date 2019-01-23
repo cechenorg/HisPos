@@ -125,6 +125,10 @@ namespace His_Pos.NewClass.Product.Medicine
                         if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(_usageName) && Days != null)
                             CalculateAmount();
                     }
+                    else
+                    {
+
+                    }
                 }
             }
         }
@@ -249,6 +253,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 {
                     Set(() => PaySelf, ref paySelf, value);
                     CheckIsPriceReadOnly();
+                    CountTotalPrice();
                 }
             }
         }

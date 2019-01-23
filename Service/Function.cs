@@ -234,7 +234,7 @@ namespace His_Pos.Service
             }
         }
 
-        public string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
+        public static string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
         {
             var tmpByteArr = new byte[length];
             Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
@@ -248,12 +248,11 @@ namespace His_Pos.Service
             {
                 var filePath = ExportXml(dailyUpload, "每日上傳");
                 var fileName = filePath + ".xml";
-                var cs = new ConvertData();
-                var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+                var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
-                var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+                var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
                 var element = dailyUpload.Root.Element("REC");
-                var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+                var count = ConvertData.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
                 if(HisApiBase.OpenCom() && ViewModelMainWindow.IsVerifySamDc)

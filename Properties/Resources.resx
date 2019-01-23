@@ -444,4 +444,13 @@
   <data name="驗證醫事人員卡" xml:space="preserve">
     <value>醫事人員卡驗證中...</value>
   </data>
+  <data name="取得就醫序號" xml:space="preserve">
+    <value>取得就醫序號...</value>
+  </data>
+  <data name="寫卡" xml:space="preserve">
+    <value>卡片資料寫入中...</value>
+  </data>
+  <data name="產生每日上傳資料" xml:space="preserve">
+    <value>產生每日上傳資料中...</value>
+  </data>
 </root>

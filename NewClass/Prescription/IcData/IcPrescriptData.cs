@@ -1,6 +1,6 @@
 ﻿using His_Pos.Class.Product;
 
-namespace His_Pos.Struct.IcData
+namespace His_Pos.NewClass.Prescription.IcData
 {
     public struct IcPrescriptData
     {

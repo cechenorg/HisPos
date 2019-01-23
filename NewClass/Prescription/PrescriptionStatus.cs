@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.Prescription {
         public bool IsSendToSingde { get; set; }//是否傳送過藥健康
         public bool IsAdjust { get; set; }//是否調劑.扣庫
         public bool IsRegister { get; set; } //是否登錄
-        public bool IsSendOrder { get; set; } = false; //判斷是否傳送要健康
+        public bool IsSendOrder { get; set; } //判斷是否傳送要健康
+        public bool IsDeposit { get; set; } //是否押金
     }
 }

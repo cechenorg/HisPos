@@ -4,8 +4,8 @@ using System.Data;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.Service;
-using His_Pos.Struct.IcData;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.Class.Declare.IcDataUpload
@@ -103,7 +103,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             CardNo = currentPrescription.Customer.IcCard.CardNo;
             IcNumber = currentPrescription.Customer.IcCard.IcNumber;
             BirthDay = DateTimeExtensions.ConvertToTaiwanCalender(customerData.Birthday,false);
-            TreatmentDateTime = seq.TreatDateTime;
+            TreatmentDateTime = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(seq.TreatDateTime);
             MedicalNumber = string.Empty;
             PharmacyId = seq.InstitutionId;
             MedicalPersonIcNumber = currentPrescription.Pharmacy.MedicalPersonnel.IcNumber;
@@ -120,7 +120,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
             IcNumber = current.Customer.IcCard.IcNumber;
             BirthDay = DateTimeExtensions.ConvertToTaiwanCalender(current.Customer.Birthday, false);
-            var cs = new ConvertData();
             var pBuffer = new byte[13];
             var iBufferlength = 13;
             var now = DateTime.Now;
@@ -128,7 +127,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             {
                 if (HisApiBase.csGetDateTime(pBuffer, ref iBufferlength) == 0)
                 {
-                    TreatmentDateTime = cs.ByToString(pBuffer, 0, iBufferlength);
+                    TreatmentDateTime = ConvertData.ByToString(pBuffer, 0, iBufferlength);
                     HisApiBase.CloseCom();
                 }
                 else

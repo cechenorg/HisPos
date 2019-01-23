@@ -27,6 +27,7 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -37,7 +38,6 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
-using His_Pos.Struct.IcData;
 using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
 using Visibility = System.Windows.Visibility;
 using Application = System.Windows.Application;
@@ -797,7 +797,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             try
             {
-                var cs = new ConvertData();
                 var icPrescripList = new List<IcPrescriptData>();
                 foreach (var med in CurrentPrescription.Medicines)
                 {
@@ -812,10 +811,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 var pPatientBitrhDay = new byte[10];
                 Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
                 Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
-                var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
+                var pDateTime = ConvertData.StringToBytes(Seq.TreatDateTime + " ", 14);
                 foreach (var icPrescript in icPrescripList)
                 {
-                    var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                    var pData = ConvertData.StringToBytes(icPrescript.DataStr, 61);
                     var pDataInput = pDateTime.Concat(pData).ToArray();
                     var strLength = 40;
                     var icData = new byte[40];
@@ -825,7 +824,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                         res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
                             icData, ref strLength);
                         if (res == 0)
-                            _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                            _prescriptionSignatureList.Add(ConvertData.ByToString(icData, 0, 40));
                         HisApiBase.csCloseCom();
                     }
                     else
@@ -864,7 +863,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                         continue;
                     var medicalData = new MedicalData
                     {
-                        MedicalOrderTreatDateTime = Seq.TreatDateTime,
+                        MedicalOrderTreatDateTime = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(Seq.TreatDateTime),
                         MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].P1MedicalOrder,
                         TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].P2MedicalId,
                         Usage = _currentDeclareData.DeclareDetails[i].P4Usage,
@@ -2096,12 +2095,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             var strLength = 296;
             var icData = new byte[296];
-            var cs = new ConvertData();
-            var cTreatItem = cs.StringToBytes("AF\0", 3);
+            var cTreatItem = ConvertData.StringToBytes("AF\0", 3);
             //新生兒就醫註記,長度兩個char
             var cBabyTreat = TreatRecCollection.Count > 0
-                ? cs.StringToBytes(TreatRecCollection[0].NewbornTreatmentMark + "\0", 3)
-                : cs.StringToBytes(" ", 2);
+                ? ConvertData.StringToBytes(TreatRecCollection[0].NewbornTreatmentMark + "\0", 3)
+                : ConvertData.StringToBytes(" ", 2);
             //補卡註記,長度一個char
             var cTreatAfterCheck = new byte[] {1};
             if (HisApiBase.OpenCom())

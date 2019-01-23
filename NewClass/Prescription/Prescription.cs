@@ -109,7 +109,7 @@ namespace His_Pos.NewClass.Prescription
         public int DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
-       
+        public List<string> PrescriptionSign { get; set; }
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥
         public void InitialCurrentPrescription()
         {
@@ -407,6 +407,19 @@ namespace His_Pos.NewClass.Prescription
         private string CheckMedicines()
         {
             var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            foreach (var med in medList)
+            {
+                if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
+                {
+                    ViewModelMainWindow.CheckContainsUsage(med.UsageName);
+                    med.Usage = ViewModelMainWindow.GetUsage(med.UsageName);
+                }
+                if (!string.IsNullOrEmpty(med.PositionName) && med.Position is null)
+                {
+                    ViewModelMainWindow.CheckContainsPosition(med.PositionName);
+                    med.Position = ViewModelMainWindow.GetPosition(med.PositionName);
+                }
+            }
             if (!medList.Any())
             {
                 return StringRes.MedicineEmpty;
@@ -598,8 +611,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool GetCard()
         {
-            Card.GetBasicData();
-            if (string.IsNullOrEmpty(Card.IDNumber)) return false;
+            if (!Card.GetBasicData()) return false;
             Patient = new Customer(Card);
             MainWindow.ServerConnection.OpenConnection();
             var cus = Patient.Check();
