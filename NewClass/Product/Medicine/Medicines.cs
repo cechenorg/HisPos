@@ -36,5 +36,19 @@ namespace His_Pos.NewClass.Product.Medicine
                 Add(med);
             }
         }
+        public void GetDataByReserveId(string resId)
+        {
+            DataTable table = MedicineDb.GetDataByReserveId(resId);
+            foreach (DataRow r in table.Rows)
+            {
+                Medicine med = new Medicine(r);
+                med.Usage.Name = r.Field<string>("Usage");
+                med.Position.Name = r.Field<string>("Position");
+                med.Days = r.Field<short>("MedicineDays");
+                med.PaySelf = r.Field<bool>("PaySelf");
+                med.Amount = r.Field<double>("TotalAmount");
+                Add(med);
+            }
+        }
     }
 }

@@ -9,7 +9,11 @@ namespace His_Pos.NewClass.Prescription {
                     IsGetCard = r.Field<bool>("IsGetCard");
                     IsDeclare = r.Field<bool>("IsDeclare");
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
-                    break; 
+                    break;
+                case PrescriptionSource.ChronicReserve:
+                    IsSendToSingde = r.Field<bool>("IsSendToServer");
+                    IsRegister = r.Field<bool>("IsRegister");
+                    break;
             } 
         }
         public bool IsGetCard { get; set; } //是否讀卡

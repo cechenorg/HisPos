@@ -31,21 +31,32 @@ namespace His_Pos.NewClass.Prescription
             Medicines = new Medicines();
         }
 
-        public Prescription(DataRow r)
-        {
-            Id = r.Field<int>("ID");
+        public Prescription(DataRow r,PrescriptionSource prescriptionSource)
+        { 
             Patient = new Customer();
             Patient.Id = r.Field<int>("CustomerID");
             Patient.IDNumber = r.Field<string>("CustomerIDNumber");
             Patient.Name = r.Field<string>("CustomerName");  
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
-            Medicines = new Medicines();
-            PrescriptionStatus = new PrescriptionStatus(r,PrescriptionSource.Normal);
+            Medicines = new Medicines(); 
             PrescriptionPoint = new PrescriptionPoint(r);
             DeclareFileID = r.Field<int>("DeclareFileID");
             MedicineDays = r.Field<byte>("MedicineDays");
-            Medicines.GetDataByPrescriptionId(Id);
+            switch (prescriptionSource) {
+                case PrescriptionSource.Normal:
+                    Id = r.Field<int>("ID");
+                    Medicines.GetDataByPrescriptionId(Id);
+                    PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.Normal);
+                    break;
+                case PrescriptionSource.ChronicReserve:
+                    Source = PrescriptionSource.ChronicReserve;
+                    SourceId = r.Field<int>("ID").ToString();
+                    Medicines.GetDataByReserveId(SourceId);
+                    PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
+                    break;
+            }
+            
         }
         public Prescription(CooperativePrescription c) {
             #region CooPreVariable
@@ -387,7 +398,7 @@ namespace His_Pos.NewClass.Prescription
         {
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.Deposit);
         }
-
+         
         #region DeclareFunctions
         public string CheckPrescriptionRule()//檢查健保邏輯
         {

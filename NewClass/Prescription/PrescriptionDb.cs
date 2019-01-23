@@ -99,12 +99,34 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.Id);
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
-        }
+        } 
         public static DataTable GetReservePrescriptionsData()
         {
             var table = new DataTable();
             return table;
         }
+      
+        public static DataTable GetPrescriptionsNoGetCardByCusId(string cusId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
+        }
+
+        public static DataTable GetPrescriptionsByCusId(string cusId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusId]", parameterList);
+        }
+        public static DataTable GetReservePrescriptionByCusId(string cusId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByCusId]", parameterList);
+        }
+
+
         public static void SendDeclareOrderToSingde(string CurrentDecMasId, string storId, Prescription p, List<PrescriptionSendData> PrescriptionSendData)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY

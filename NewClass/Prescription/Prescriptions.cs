@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -27,7 +28,7 @@ namespace His_Pos.NewClass.Prescription
             var table = PrescriptionDb.GetSearchPrescriptionsData(sDate,eDate,adj,ins,pharmacist);
             foreach (DataRow r in table.Rows)
             {
-                Add(new Prescription(r));
+                Add(new Prescription(r,PrescriptionSource.Normal));
             }
         }
 
@@ -36,8 +37,41 @@ namespace His_Pos.NewClass.Prescription
             var table = PrescriptionDb.GetReservePrescriptionsData();
             foreach (DataRow r in table.Rows)
             {
-                Add(new Prescription(r));
+                Add(new Prescription(r, PrescriptionSource.Normal));
             }
         }
+        public void GetPrescriptionsByCusId(string CusId) //取得處方
+        {
+            var table = PrescriptionDb.GetPrescriptionsByCusId(CusId);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Prescription(r, PrescriptionSource.Normal));
+            }
+        }
+        public void GetPrescriptionsNoGetCardByCusId(string CusId) //取得未過卡處方
+        {
+            var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(CusId);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Prescription(r, PrescriptionSource.Normal));
+            }
+        } 
+        public void GetReservePrescriptionByCusId(string CusId) //取得預約慢箋
+        {
+            var table = PrescriptionDb.GetReservePrescriptionByCusId(CusId);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Prescription(r, PrescriptionSource.ChronicReserve));
+            }
+        }
+        public void GetCooperaPrescriptionsByCusIdNumber(string CusIdNum) //取德合作診所
+        {
+            Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.Id, CusIdNum);
+            foreach (var r in table)
+            {
+                Add(r);
+            }
+        }
+        
     }
 }
