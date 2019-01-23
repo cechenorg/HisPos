@@ -309,6 +309,7 @@
     <Compile Include="NewClass\Person\Gender.cs" />
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
@@ -930,10 +931,10 @@
       <DependentUpon>ConfirmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <Compile Include="Struct\IcData\BasicData.cs" />
-    <Compile Include="Struct\IcData\IcPrescriptData.cs" />
-    <Compile Include="Struct\IcData\SeqNumber.cs" />
-    <Compile Include="Struct\IcData\TreatmentDataNoNeedHPC.cs" />
+    <Compile Include="NewClass\Prescription\IcData\BasicData.cs" />
+    <Compile Include="NewClass\Prescription\IcData\IcPrescriptData.cs" />
+    <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
+    <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />

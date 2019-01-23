@@ -376,7 +376,13 @@
                         <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"/>
+                                    <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedicinePriceChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -394,7 +400,13 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"
-                                         Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="TextChanged">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedicinePriceChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

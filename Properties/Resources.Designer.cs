@@ -823,11 +823,29 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 取得就醫序號... 的當地語系化字串。
+        /// </summary>
+        internal static string 取得就醫序號 {
+            get {
+                return ResourceManager.GetString("取得就醫序號", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 口服液劑(原瓶包裝) 的當地語系化字串。
         /// </summary>
         internal static string 口服液劑 {
             get {
                 return ResourceManager.GetString("口服液劑", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 卡片資料寫入中... 的當地語系化字串。
+        /// </summary>
+        internal static string 寫卡 {
+            get {
+                return ResourceManager.GetString("寫卡", resourceCulture);
             }
         }
         
@@ -891,6 +909,15 @@ namespace His_Pos.Properties {
         internal static string 檢查醫事人員卡 {
             get {
                 return ResourceManager.GetString("檢查醫事人員卡", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 產生每日上傳資料中... 的當地語系化字串。
+        /// </summary>
+        internal static string 產生每日上傳資料 {
+            get {
+                return ResourceManager.GetString("產生每日上傳資料", resourceCulture);
             }
         }
         

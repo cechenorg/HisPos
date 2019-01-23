@@ -97,7 +97,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
         }
 
         //byte轉字串
-        public string ByToString(byte[] bytes, int Start, int Num)
+        public static string ByToString(byte[] bytes, int Start, int Num)
         {
             string data;
             data = "";
@@ -123,13 +123,12 @@ namespace His_Pos.Class.Declare.IcDataUpload
             return l_Encoding.GetString(l_byte, a_StartIndex, a_Cnt);
         }
 
-        public byte Asc(string s)
+        public static byte Asc(string s)
         {
-
             return Encoding.ASCII.GetBytes(s.ToCharArray(), 0, 1)[0];
         }
         //字串轉btyes
-        public byte[] StringToBytes(string newString, int len)
+        public static byte[] StringToBytes(string newString, int len)
         {
 
             int byteLength = newString.Length;

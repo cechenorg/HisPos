@@ -36,5 +36,22 @@ namespace His_Pos.NewClass.Product.Medicine
                 Add(med);
             }
         }
+        public string CreateMedicalData(string dateTime)
+        {
+            var medList = this.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            var result = string.Empty;
+            foreach (var med in medList)
+            {
+                result += dateTime;
+                result += "1";
+                result += med.ID.PadLeft(12, ' ');
+                result += med.PositionName.PadLeft(6, ' ');
+                result += med.UsageName.PadLeft(18, ' ');
+                result += med.Days.ToString().PadLeft(2, ' ');
+                result += med.Amount.ToString().PadLeft(7, ' ');
+                result += "01";
+            }
+            return result;
+        }
     }
 }

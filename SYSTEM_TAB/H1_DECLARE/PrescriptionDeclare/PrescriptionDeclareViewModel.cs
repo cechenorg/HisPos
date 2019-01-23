@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -134,6 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand<string> EditMedicine { get; set; }
+        public RelayCommand MedicinePriceChanged { get; set; }
         public RelayCommand AdjustButtonClick { get; set; }
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
@@ -178,11 +180,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 BusyContent = StringRes.讀取健保卡;
                 isGetCard = CurrentPrescription.GetCard();
+                if (isGetCard)
+                {
+                    BusyContent = StringRes.取得就醫序號;
+                    CurrentPrescription.Treatment.GetLastMedicalNumber();
+                }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if (isGetCard) return;
+                if (isGetCard)
+                {
+                    CurrentPrescription.PrescriptionStatus.IsGetCard = true;
+                    CurrentPrescription.Card.GetMedicalNumber(1);
+                    return;
+                }
                 var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
                 customerSelectionWindow.ShowDialog();
             };
@@ -276,6 +288,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
+                if (!CurrentPrescription.Card.IsGetMedicalNumber && !CurrentPrescription.PrescriptionStatus.IsDeposit)
+                {
+                    //詢問異常上傳
+                }
                 MainWindow.ServerConnection.OpenConnection();
                 switch (CurrentPrescription.Source)
                 {
@@ -291,8 +307,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
+                if (CurrentPrescription.PrescriptionStatus.IsGetCard)
+                {
+                    CreateDailyUploadData();
+                }
                 PrintMedBag();
-                //每日上傳
                 ClearPrescription();
             }
         }
@@ -377,11 +396,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetDiseaseCodeById = new RelayCommand<string>(GetDiseaseCodeByIdAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
+            MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             ClearButtonClick = new RelayCommand(ClearPrescription);
         }
+
         private void InitialPrescription()
         {
             CurrentPrescription = new Prescription();
@@ -459,7 +480,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetDiseaseCodeByIdAction(string id)
         {
             var d = new DiseaseCode();
+            MainWindow.ServerConnection.OpenConnection();
             d.GetDataByCodeId(id);
+            MainWindow.ServerConnection.CloseConnection();
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName))
             {
                 if (string.IsNullOrEmpty(d.ID))
@@ -545,7 +568,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-
         private void NormalAdjust()
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
@@ -573,6 +595,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("自費");
             CurrentPrescription.ProcessSelfPayCashFlow("押金");
+        }
+        private void CreateDailyUploadData()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.寫卡;
+                CurrentPrescription.PrescriptionSign = HisApiFunction.WritePrescriptionData(CurrentPrescription);
+                BusyContent = StringRes.產生每日上傳資料;
+                if (CurrentPrescription.Card.IsGetMedicalNumber)
+                    HisApiFunction.CreatDailyUploadData();
+                else
+                {
+                    if (!CurrentPrescription.PrescriptionStatus.IsDeposit)
+                    {
+                        HisApiFunction.CreatErrorDailyUploadData();
+                    }
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+        private void CountMedicinePoint()
+        {
+            CurrentPrescription.CountPrescriptionPoint();
         }
         #endregion
     }
