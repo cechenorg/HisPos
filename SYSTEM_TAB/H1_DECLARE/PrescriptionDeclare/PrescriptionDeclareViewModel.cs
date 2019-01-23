@@ -314,7 +314,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
             {
                 MainWindow.ServerConnection.OpenConnection();
-                //登錄
+                switch (CurrentPrescription.Source)
+                {
+                    case PrescriptionSource.Normal:
+                        NormalRegister();
+                        break;
+                    case PrescriptionSource.Cooperative:
+                        MessageWindow.ShowMessage("合作處方不可登錄",MessageType.ERROR);
+                        return;  
+                    case PrescriptionSource.ChronicReserve:
+                        ChronicRegister();
+                        break;
+                }
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
                 ClearPrescription();
@@ -561,6 +572,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessDepositCashFlow("自費");
             CurrentPrescription.ProcessSelfPayCashFlow("押金");
         }
+        private void NormalRegister() {
+           
+        }
+        private void ChronicRegister()
+        {
+
+        }
+        
         #endregion
     }
 }

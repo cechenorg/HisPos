@@ -349,6 +349,9 @@
     <Compile Include="NewClass\Product\Medicine\MedicineNHI.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineOTC.cs" />
     <Compile Include="NewClass\Product\Medicine\Medicines.cs" />
+    <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendData.cs" />
+    <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDataDb.cs" />
+    <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
@@ -419,6 +422,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>
     </Compile>
