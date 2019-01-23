@@ -290,7 +290,7 @@ namespace His_Pos.NewClass.Prescription
 
         #endregion
         public void AddCooperativePrescriptionMedicines() {
-            for(int medCount = 0; medCount < Medicines.Count(m=>m is MedicineOTC || m is MedicineNHI); medCount++){
+            for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
                 if (table.Rows.Count > 0)

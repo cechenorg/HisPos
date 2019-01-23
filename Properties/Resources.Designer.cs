@@ -61,7 +61,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請選擇調劑案件\r\n 的當地語系化字串。
+        ///   查詢類似 請選擇調劑案件\n 的當地語系化字串。
         /// </summary>
         internal static string AdjustCaseError {
             get {
@@ -70,7 +70,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫調劑日期\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫調劑日期\n 的當地語系化字串。
         /// </summary>
         internal static string AdjustDateError {
             get {
@@ -124,7 +124,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 慢箋請填寫調劑序號\r\n 的當地語系化字串。
+        ///   查詢類似 慢箋請填寫調劑序號\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicSeqError {
             get {
@@ -133,7 +133,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫領藥次數與總領藥次數\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫領藥次數與總領藥次數\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicTimesError {
             get {
@@ -142,7 +142,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 慢箋請填寫可調劑次數\r\n 的當地語系化字串。
+        ///   查詢類似 慢箋請填寫可調劑次數\n 的當地語系化字串。
         /// </summary>
         internal static string ChronicTotalError {
             get {
@@ -250,7 +250,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫主診斷碼\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫主診斷碼\n 的當地語系化字串。
         /// </summary>
         internal static string DiseaseCodeError {
             get {
@@ -268,7 +268,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫科別\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫科別\n 的當地語系化字串。
         /// </summary>
         internal static string DivisionError {
             get {
@@ -439,7 +439,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫釋出院所\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫釋出院所\n 的當地語系化字串。
         /// </summary>
         internal static string InstitutionError {
             get {
@@ -511,7 +511,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫序號\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫序號\n 的當地語系化字串。
         /// </summary>
         internal static string MedicalNumberError {
             get {
@@ -547,7 +547,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫處方藥品\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫處方藥品\n 的當地語系化字串。
         /// </summary>
         internal static string MedicineEmpty {
             get {
@@ -574,7 +574,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫給付類別\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫給付類別\n 的當地語系化字串。
         /// </summary>
         internal static string PaymentCategoryError {
             get {
@@ -583,7 +583,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\r\n 的當地語系化字串。
+        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\n 的當地語系化字串。
         /// </summary>
         internal static string PharmacistIDError {
             get {
@@ -601,7 +601,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請選擇處方案件\r\n 的當地語系化字串。
+        ///   查詢類似 請選擇處方案件\n 的當地語系化字串。
         /// </summary>
         internal static string PrescriptionCaseError {
             get {
@@ -610,7 +610,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 處方已超過可領取時限\r\n 的當地語系化字串。
+        ///   查詢類似 處方已超過可領取時限\n 的當地語系化字串。
         /// </summary>
         internal static string PrescriptoinOutOfDate {
             get {
@@ -772,7 +772,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 請填寫就醫日期\r\n 的當地語系化字串。
+        ///   查詢類似 請填寫就醫日期\n 的當地語系化字串。
         /// </summary>
         internal static string TreatDateError {
             get {
