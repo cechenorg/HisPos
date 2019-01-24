@@ -370,7 +370,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         NormalRegister();
                         break;
                     case PrescriptionSource.Cooperative:
-                        MessageWindow.ShowMessage("合作診所處方不可登陸 請將調劑日期設定為今天", MessageType.ERROR);
+                        MessageWindow.ShowMessage("合作診所處方不可登錄 請將調劑日期設定為今天", MessageType.ERROR);
                         return; 
                     case PrescriptionSource.ChronicReserve:
                         ChronicRegister();
@@ -385,7 +385,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescribeButtonClickAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            //自費調劑
+            PrescribeFunction();
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
@@ -584,7 +584,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void NormalAdjust()
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
-            CurrentPrescription.ProcessInventory();
+            CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("自費");
@@ -604,7 +604,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.PredictResere();
             CurrentPrescription.DeleteReserve();
-            CurrentPrescription.ProcessInventory();
+            CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("自費");
@@ -632,7 +632,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             CurrentPrescription.UpdateReserve();
         }
-        
+        private void PrescribeFunction() {
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
+            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("押金");
+        }
+      
         private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
         {
             var worker = new BackgroundWorker();

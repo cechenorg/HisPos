@@ -63,8 +63,9 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
                 case "*":
                     TotalPrice = Convert.ToDouble(m.Price);
+                    Price = 0;
                     break;
-            } 
+            }
         }
 
         private double amount;//總量

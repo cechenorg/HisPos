@@ -394,11 +394,12 @@ namespace His_Pos.NewClass.Prescription
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
         }
 
-        public void ProcessInventory()//扣庫
-        {
+        public void ProcessInventory(string type,string source,string sourceId)//扣庫
+        { 
             foreach (var m in Medicines)
-            {
-                PrescriptionDb.ProcessInventory(m.ID, m.Amount);
+            { 
+                if(!string.IsNullOrEmpty(m.ID))
+                PrescriptionDb.ProcessInventory(m.ID, m.Amount, type, source, sourceId);
             }
         }
 
