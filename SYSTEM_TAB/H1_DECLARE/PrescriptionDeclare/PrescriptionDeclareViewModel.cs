@@ -31,6 +31,7 @@ using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeWindow;
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -316,8 +317,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         NormalAdjust();
                         break;
                     case PrescriptionSource.Cooperative:
-                        CooperativeAdjust();
-                        //更新API
+                        CooperativeAdjust(); 
                         break;
                     case PrescriptionSource.ChronicReserve:
                         ChronicAdjust();
@@ -593,6 +593,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CooperativeAdjust()
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.InsertCooperAdjust();
             CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("合作自費");
             CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
@@ -611,19 +612,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NormalRegister() { 
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
-                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription); 
-            }
+                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription);
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
+                    return;
+                }
+                    
+            } 
             CurrentPrescription.InsertReserve(); 
         }
-       
         
-
         private void ChronicRegister() {
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder)
             {
-            //傳送藥健康window
+                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription);
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
+                { 
+                    return;
+                }
             }
-            //update reserve
+            CurrentPrescription.UpdateReserve();
         }
         
         private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
