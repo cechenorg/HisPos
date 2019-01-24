@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
-        Title="選擇異常代碼" Height="450" Width="550" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Title="選擇異常代碼" Height="450" Width="560" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Viewbox Stretch="Fill">
         <Grid Margin="10,10,10,0" Width="530">
             <Grid.RowDefinitions>

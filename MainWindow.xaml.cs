@@ -12,6 +12,8 @@ using ChromeTabs;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
+using His_Pos.Class.Product;
 using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
@@ -175,13 +177,9 @@ namespace His_Pos
         {
             Messenger.Default.Send(new NotificationMessage("MainWindowClosing")); 
             Messenger.Default.Unregister<NotificationMessage>(this);
-            ///var d = new DeclareDb();
             var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳","每日上傳確認");
             if ((bool)dailyUploadConfirm.DialogResult)
-               /// d.StartDailyUpload();
-            ///ProductDb.UpdateDailyStockValue();
-            ///DeclareDb declareDb = new DeclareDb();
-           /// declareDb.SendUnSendCooperClinicDeclare();
+
             if (ViewModelMainWindow.IsConnectionOpened)
                 HisApiBase.CloseCom();
             Environment.Exit(0);
