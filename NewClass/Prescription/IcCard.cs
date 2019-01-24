@@ -3,10 +3,10 @@ using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.IcData;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 

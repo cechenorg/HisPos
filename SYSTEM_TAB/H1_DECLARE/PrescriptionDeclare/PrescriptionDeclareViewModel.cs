@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -124,6 +125,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         public int SelectedMedicinesIndex { get; set; }
         private MedSelectWindow MedicineWindow { get; set; }
+        private bool? isDeposit;
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -293,9 +295,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                if (!CurrentPrescription.Card.IsGetMedicalNumber && !CurrentPrescription.PrescriptionStatus.IsDeposit)
+                IcErrorCode errorCode = null;
+                if (!CurrentPrescription.GetCard() && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
                 {
-                    //詢問異常上傳
+                    var e = new ErrorUploadWindow(false); //詢問異常上傳
+                    if(((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
+                    {
+                        MessageWindow.ShowMessage(StringRes.重新過卡或押金, MessageType.WARNING);
+                        isDeposit = true;
+                        return;
+                    }
+                    errorCode = ((ErrorUploadWindowViewModel) e.DataContext).SelectedIcErrorCode;
                 }
                 MainWindow.ServerConnection.OpenConnection();
                 switch (CurrentPrescription.Source)
@@ -312,10 +322,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
-                if (CurrentPrescription.PrescriptionStatus.IsGetCard)
-                {
-                    CreateDailyUploadData();
-                }
+                CreateDailyUploadData(errorCode);
                 PrintMedBag();
                 ClearPrescription();
             }
@@ -611,22 +618,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         }
         
-        private void CreateDailyUploadData()
+        private void CreateDailyUploadData(IcErrorCode error = null)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = StringRes.寫卡;
-                CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
-                BusyContent = StringRes.產生每日上傳資料;
-                if (CurrentPrescription.Card.IsGetMedicalNumber)
-                    HisAPI.CreatDailyUploadData(CurrentPrescription);
+                if (CurrentPrescription.PrescriptionStatus.IsGetCard)
+                {
+                    if (CurrentPrescription.Card.IsGetMedicalNumber)
+                    {
+                        if(CreatePrescriptionSiqn())
+                            HisAPI.CreatDailyUploadData(CurrentPrescription);
+                    }
+                    else
+                    {
+                        if (error is null)
+                        {
+                            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
+                        }
+                        else
+                        {
+                            HisAPI.CreatErrorDailyUploadData(CurrentPrescription,error);
+                        }
+                       
+                    }
+                }
                 else
                 {
-                    if (!CurrentPrescription.PrescriptionStatus.IsDeposit)
-                    {
-                        HisAPI.CreatErrorDailyUploadData();
-                    }
+                    CurrentPrescription.PrescriptionStatus.IsDeclare = false;
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -636,6 +655,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+
+        private bool CreatePrescriptionSiqn()
+        {
+            BusyContent = StringRes.寫卡;
+            CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
+            BusyContent = StringRes.產生每日上傳資料;
+            if (CurrentPrescription.PrescriptionSign.Count !=
+                CurrentPrescription.Medicines.Count(m =>
+                    (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
+            {
+                MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
+                var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
+                e.ShowDialog();
+                while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
+                {
+                    e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber);
+                    e.ShowDialog();
+                }
+                var errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+                HisAPI.CreatErrorDailyUploadData(CurrentPrescription, errorCode);
+                return false;
+            }
+            return true;
+        }
+
         private void CountMedicinePoint()
         {
             CurrentPrescription.CountPrescriptionPoint();

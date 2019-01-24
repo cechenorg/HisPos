@@ -4,14 +4,14 @@ using System.Data;
 using System.Linq;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class.Declare;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
-using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
-namespace His_Pos.Class.Declare.IcDataUpload
+namespace His_Pos.NewClass.Prescription.IcData.Upload
 {
     [XmlRoot(ElementName = "RECS")]
     public class Recs
@@ -29,10 +29,12 @@ namespace His_Pos.Class.Declare.IcDataUpload
             HeaderMessage = header;
             MainMessage = main;
         }
-        public Rec(NewClass.Prescription.Prescription p)
+        public Rec(Prescription p,IcErrorCode e = null)
         {
-            HeaderMessage = new Header {DataFormat = "1", DataType = p.Card.IsGetMedicalNumber ? "1" : "2", UploadVersion = "1.0"};
-            MainMessage = new MainMessage(p,false);
+            HeaderMessage = e is null ? 
+                new Header {DataFormat = "1", DataType = "1", UploadVersion = "1.0"} 
+                : new Header { DataFormat = "1", DataType = "2", UploadVersion = "1.0" };
+            MainMessage = new MainMessage(p,e,false);
         }
 
         public Rec(DataRow row)
@@ -87,15 +89,17 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
             IcMessage = icData;
         }
-        public MainMessage(NewClass.Prescription.Prescription p,bool makeUp)
+        public MainMessage(Prescription p, IcErrorCode e,bool makeUp)
         {
-            IcMessage = new IcData(p, makeUp);
+            IcMessage = new IcData(p,e,makeUp);
             MedicalMessageList = new List<MedicalData>();
             var treatDateTime = DateTimeEx.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             for (var i = 0; i < medList.Count; i++)
             {
-                MedicalMessageList.Add(new MedicalData(medList[i], treatDateTime, p.PrescriptionSign[i]));
+                MedicalMessageList.Add(e is null
+                    ? new MedicalData(medList[i], treatDateTime, p.PrescriptionSign[i])
+                    : new MedicalData(medList[i], treatDateTime));
             }
         }
         [XmlElement(ElementName = "MB1")]
@@ -108,18 +112,28 @@ namespace His_Pos.Class.Declare.IcDataUpload
     public class IcData
     {
         public IcData() { }
-        public IcData(NewClass.Prescription.Prescription p,bool makeUp)
+        public IcData(Prescription p, IcErrorCode e, bool makeUp)
         {
             var seq = p.Card.MedicalNumberData;
-            SamCode = seq.SamId;
-            CardNo = p.Card.CardNumber;
-            IcNumber = p.Card.IDNumber;
-            BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday, false);
-            TreatmentDateTime = DateTimeEx.ToStringWithSecond(seq.TreatDateTime);
-            MedicalNumber = string.Empty;
-            PharmacyId = seq.InstitutionId;
+            if (e is null)
+            {
+                CardNo = p.Card.CardNumber;
+                SamCode = seq.SamId;
+                SecuritySignature = seq.SecuritySignature;
+                IDNumber = p.Card.IDNumber;
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday, false);
+                MedicalNumber = string.Empty;
+                PharmacyId = seq.InstitutionId;
+            }
+            else
+            {
+                IDNumber = p.Patient.IDNumber;
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false);
+                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                MedicalNumber = e.ID;
+                PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
+            }
             MedicalPersonIcNumber = p.Treatment.Pharmacist.IdNumber;
-            SecuritySignature = seq.SecuritySignature;
             MainDiagnosisCode = p.Treatment.MainDisease.ID;
             if (!string.IsNullOrEmpty(p.Treatment.SubDisease.ID))
                 SecondDiagnosisCode = p.Treatment.SubDisease.ID;
@@ -127,11 +141,11 @@ namespace His_Pos.Class.Declare.IcDataUpload
                              p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
             CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
         }
-        public IcData(SeqNumber seq,Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
+        public IcData(SeqNumber seq,Class.Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
         {
             SamCode = seq.SamId;
             CardNo = currentPrescription.Customer.IcCard.CardNo;
-            IcNumber = currentPrescription.Customer.IcCard.IcNumber;
+            IDNumber = currentPrescription.Customer.IcCard.IcNumber;
             BirthDay = DateTimeEx.ConvertToTaiwanCalender(customerData.Birthday,false);
             TreatmentDateTime = DateTimeEx.ConvertToTaiwanCalenderWithTime(seq.TreatDateTime);
             MedicalNumber = string.Empty;
@@ -146,9 +160,9 @@ namespace His_Pos.Class.Declare.IcDataUpload
             CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
 
-        public IcData(Prescription current,IcErrorCodeWindow.IcErrorCode errorCode,DeclareData currentDeclareData)
+        public IcData(Class.Prescription current,IcErrorCodeWindow.IcErrorCode errorCode,DeclareData currentDeclareData)
         {
-            IcNumber = current.Customer.IcCard.IcNumber;
+            IDNumber = current.Customer.IcCard.IcNumber;
             BirthDay = DateTimeEx.ConvertToTaiwanCalender(current.Customer.Birthday, false);
             var pBuffer = new byte[13];
             var iBufferlength = 13;
@@ -190,7 +204,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         //V
         [XmlElement(ElementName = "A12")]
-        public string IcNumber { get; set; }//身分證號或 身分證明文件號碼
+        public string IDNumber { get; set; }//身分證號或 身分證明文件號碼
 
         //V
         [XmlElement(ElementName = "A13")]
@@ -280,7 +294,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
 
         }
-        public MedicalData(Medicine med,string treatDateTime, string preSig)
+        public MedicalData(Medicine med,string treatDateTime, string preSig = null)
         {
             MedicalOrderTreatDateTime = treatDateTime;
             MedicalOrderCategory = med is MedicineSpecialMaterial ? "4" : "1";
@@ -315,7 +329,8 @@ namespace His_Pos.Class.Declare.IcDataUpload
                     PrescriptionDeliveryMark = "04";
                     break;
             }
-            PrescriptionSignature = preSig;
+            if(!string.IsNullOrEmpty(preSig))
+                PrescriptionSignature = preSig;
         }
         //V 
         [XmlElement(ElementName = "A71")]
