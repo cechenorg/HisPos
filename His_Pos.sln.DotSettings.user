@@ -28,7 +28,9 @@
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">NewVersion</s:String>
 	<s:Boolean x:Key="/Default/Environment/RuntimeUsedReferences/SolutionImplicitUsedModulesNames/=Microsoft_002EReportViewer_002EVS2015_002EWinForms/@EntryIndexedValue">True</s:Boolean>
 	<s:Int64 x:Key="/Default/Environment/SearchAndNavigation/DefaultOccurrencesGroupingIndex/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Copayment/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Copayments/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Dbody/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Dhead/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/UserDictionary/Words/=Personnels/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Personnels/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Recs/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace His_Pos.Class.Declare.IcDataUpload
+namespace His_Pos.NewClass.Prescription.IcData.Upload
 {
     public class ConvertData
     {

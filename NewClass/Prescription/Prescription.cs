@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
@@ -18,6 +17,7 @@ using Ddata = His_Pos.NewClass.Prescription.DeclareFile.Ddata;
 using MedicineDb = His_Pos.NewClass.Product.Medicine.MedicineDb;
 using Pdata = His_Pos.NewClass.Prescription.DeclareFile.Pdata;
 using StringRes = His_Pos.Properties.Resources;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -277,7 +277,7 @@ namespace His_Pos.NewClass.Prescription
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
             if (dailyPrice*MedicineDays < medicinePoint) return 0;
-            Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase("3");
+            Treatment.AdjustCase = VM.GetAdjustCase("3");
             PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
             return dailyPrice;
         }
@@ -351,8 +351,8 @@ namespace His_Pos.NewClass.Prescription
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionName = Medicines[medCount].Position.Name;
-                ViewModelMainWindow.CheckContainsUsage(temp.UsageName);
-                ViewModelMainWindow.CheckContainsPosition(temp.PositionName);
+                VM.CheckContainsUsage(temp.UsageName);
+                VM.CheckContainsPosition(temp.PositionName);
                 temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
@@ -437,20 +437,20 @@ namespace His_Pos.NewClass.Prescription
         {
             return CheckMedicines() + Treatment.Check() + Patient.CheckBasicData();
         }
-        private string CheckMedicines()
+        public string CheckMedicines()
         {
             var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
             foreach (var med in medList)
             {
                 if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
                 {
-                    ViewModelMainWindow.CheckContainsUsage(med.UsageName);
-                    med.Usage = ViewModelMainWindow.GetUsage(med.UsageName);
+                    VM.CheckContainsUsage(med.UsageName);
+                    med.Usage = VM.GetUsage(med.UsageName);
                 }
                 if (!string.IsNullOrEmpty(med.PositionName) && med.Position is null)
                 {
-                    ViewModelMainWindow.CheckContainsPosition(med.PositionName);
-                    med.Position = ViewModelMainWindow.GetPosition(med.PositionName);
+                    VM.CheckContainsPosition(med.PositionName);
+                    med.Position = VM.GetPosition(med.PositionName);
                 }
             }
             if (!medList.Any())
@@ -467,7 +467,11 @@ namespace His_Pos.NewClass.Prescription
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
             if (PrescriptionPoint.MedicinePoint <= 100)
-                Treatment.Copayment = ViewModelMainWindow.GetCopayment("I21");
+                Treatment.Copayment = VM.GetCopayment("I21");
+            else
+            {
+                Treatment.Copayment = VM.GetCopayment("I20");
+            }
             PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
@@ -499,10 +503,10 @@ namespace His_Pos.NewClass.Prescription
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
                     if(receiptPrint)
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer,this);
+                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer,this);
                     else
                     {
-                        ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
                     }
                 }
             }
@@ -531,10 +535,10 @@ namespace His_Pos.NewClass.Prescription
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
                 if (receiptPrint)
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, this);
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, this);
                 else
                 {
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
                 }
             }
         }
@@ -550,7 +554,7 @@ namespace His_Pos.NewClass.Prescription
             var cusGender = string.IsNullOrEmpty(Patient.Gender)?Patient.CheckGender(): Patient.Gender;
             var parameters = new List<ReportParameter>
             {
-                new ReportParameter("Pharmacy", ViewModelMainWindow.CurrentPharmacy.Name),
+                new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("Gender", cusGender),
                 new ReportParameter("Birthday",
@@ -571,7 +575,7 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
+            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {
@@ -581,9 +585,9 @@ namespace His_Pos.NewClass.Prescription
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
-                            ViewModelMainWindow.CurrentPharmacy.Name + "(" + ViewModelMainWindow.CurrentPharmacy.Id + ")"),
-                        new ReportParameter("PharmacyAddress", ViewModelMainWindow.CurrentPharmacy.Address),
-                        new ReportParameter("PharmacyTel", ViewModelMainWindow.CurrentPharmacy.Tel),
+                            VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.Id + ")"),
+                        new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
+                        new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                         new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
                         new ReportParameter("PatientName", Patient.Name),
                         new ReportParameter("PatientGender_Birthday",(Patient.Gender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
@@ -619,9 +623,9 @@ namespace His_Pos.NewClass.Prescription
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",
-                    ViewModelMainWindow.CurrentPharmacy.Name + "(" + ViewModelMainWindow.CurrentPharmacy.Id + ")"),
-                new ReportParameter("PharmacyAddress", ViewModelMainWindow.CurrentPharmacy.Address),
-                new ReportParameter("PharmacyTel", ViewModelMainWindow.CurrentPharmacy.Tel),
+                    VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.Id + ")"),
+                new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
+                new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                 new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("PatientGender_Birthday",Patient.Gender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
@@ -651,7 +655,7 @@ namespace His_Pos.NewClass.Prescription
                     cus.IDNumber = Patient.IDNumber;
                 if (cus.Birthday is null)
                     cus.Birthday = Patient.Birthday;
-                else if(DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
+                else if(Patient.Birthday is null || DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
                     cus.Birthday = Patient.Birthday;
                 cus.Gender = Patient.Gender;
                 Patient = cus;

@@ -284,6 +284,10 @@
       <DependentUpon>ProductPurchaseReturnAddProductWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
+    <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindow.xaml.cs">
+      <DependentUpon>ErrorUploadWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
@@ -319,6 +323,7 @@
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
@@ -404,9 +409,9 @@
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\ErrorMessage.cs" />
-    <Compile Include="Class\Declare\IcDataUpload\ConvertData.cs" />
-    <Compile Include="Class\Declare\IcDataUpload\IcDataUploadService.cs" />
-    <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
+    <Compile Include="NewClass\Prescription\IcData\Upload\ConvertData.cs" />
+    <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadService.cs" />
+    <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
@@ -976,6 +981,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

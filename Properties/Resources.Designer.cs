@@ -850,11 +850,29 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 卡片寫入異常，請選擇異常代碼 的當地語系化字串。
+        /// </summary>
+        internal static string 寫卡異常 {
+            get {
+                return ResourceManager.GetString("寫卡異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 所置入非安全模組卡(檔) 的當地語系化字串。
         /// </summary>
         internal static string 所置入非安全模組 {
             get {
                 return ResourceManager.GetString("所置入非安全模組", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 押金確認 的當地語系化字串。
+        /// </summary>
+        internal static string 押金確認 {
+            get {
+                return ResourceManager.GetString("押金確認", resourceCulture);
             }
         }
         
@@ -1017,6 +1035,15 @@ namespace His_Pos.Properties {
         internal static string 連接成功 {
             get {
                 return ResourceManager.GetString("連接成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 尚未選擇異常代碼，請輸入押金金額或重新過卡後再次按下調劑按鈕 的當地語系化字串。
+        /// </summary>
+        internal static string 重新過卡或押金 {
+            get {
+                return ResourceManager.GetString("重新過卡或押金", resourceCulture);
             }
         }
         
