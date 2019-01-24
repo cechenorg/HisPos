@@ -60,9 +60,15 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
         }
          
-        public static void ProcessInventory(string productID,double amount)
+        public static void ProcessInventory(string productID,double amount,string type,string source,string sourcdId)
         {
-            
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
+            DataBaseFunction.AddSqlParameter(parameterList, "BuckleValue", amount);
+            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
+            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ProductBuckle]", parameterList); 
         }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {
