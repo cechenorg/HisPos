@@ -173,6 +173,7 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Messenger.Default.Send(new NotificationMessage("MainWindowClosing")); 
             Messenger.Default.Unregister<NotificationMessage>(this);
             ///var d = new DeclareDb();
             var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳","每日上傳確認");

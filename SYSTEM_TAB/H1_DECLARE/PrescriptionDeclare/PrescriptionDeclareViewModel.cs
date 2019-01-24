@@ -353,8 +353,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         NormalRegister();
                         break;
                     case PrescriptionSource.Cooperative:
-                        MessageWindow.ShowMessage("合作處方不可登錄",MessageType.ERROR);
-                        return;  
+                        MessageWindow.ShowMessage("合作診所處方不可登陸 請將調劑日期設定為今天", MessageType.ERROR);
+                        return; 
                     case PrescriptionSource.ChronicReserve:
                         ChronicRegister();
                         break;
@@ -595,7 +595,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("合作自費");
             CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
-            //更新API
+            CurrentPrescription.UpdateCooperativePrescriptionStatus();
         }
         private void ChronicAdjust()
         {
@@ -612,14 +612,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
                 MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription); 
             }
-               
-           
+            CurrentPrescription.InsertReserve(); 
         }
-        private void ChronicRegister()
-        {
-
-        }
+       
         
+
+        private void ChronicRegister() {
+            if (CurrentPrescription.PrescriptionStatus.IsSendOrder)
+            {
+            //傳送藥健康window
+            }
+            //update reserve
+        }
         private void CreateDailyUploadData()
         {
             var worker = new BackgroundWorker();

@@ -285,6 +285,9 @@
     </Compile>
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
+    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
+    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
+    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />

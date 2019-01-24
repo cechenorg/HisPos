@@ -184,7 +184,19 @@ namespace His_Pos.NewClass.Prescription
             CreateDeclareFileContent(details);//產生申報資料
             return PrescriptionDb.InsertPrescription(this, details);
         }
+        public int InsertReserve() {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
 
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            CreateDeclareFileContent(details);//產生申報資料
+            return PrescriptionDb.InsertReserve(this, details);
+        }
         private List<Pdata> SetPrescriptionDetail()
         {
             var details = new List<Pdata>();
@@ -398,7 +410,15 @@ namespace His_Pos.NewClass.Prescription
         {
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.Deposit);
         }
-         
+        public void UpdateCooperativePrescriptionIsRead() {
+            PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
+        }
+        public void UpdateCooperativePrescriptionStatus() {
+            PrescriptionDb.UpdateCooperativePrescriptionStatus(SourceId);
+        }
+        public void InsertCooperAdjust() {
+            PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
+        }
         #region DeclareFunctions
         public string CheckPrescriptionRule()//檢查健保邏輯
         {
@@ -448,11 +468,7 @@ namespace His_Pos.NewClass.Prescription
             d.Dbody.Pdata = details;
         }
         #endregion
-
-        public void UpdateCooperativePrescriptionIsRead()
-        {
-            PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
-        }
+        
         #region PrintFunctions
         public void PrintMedBag(bool singleMode,bool receiptPrint)
         {

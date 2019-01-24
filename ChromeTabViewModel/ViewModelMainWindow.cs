@@ -10,8 +10,11 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass;
+using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -137,7 +140,13 @@ namespace His_Pos.ChromeTabViewModel
             ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
             //You can also use the sort description to manually sort the tabs, based on your own criterias.
+
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification == "MainWindowClosing")
+                    WindowCloseAction();
+            });
         }
 
         private RelayCommand initialData;
@@ -329,6 +338,12 @@ namespace His_Pos.ChromeTabViewModel
             Stream stream = new MemoryStream();
             m_streams.Add(stream);
             return stream;
+        }
+        public void WindowCloseAction() {
+            MainWindow.ServerConnection.OpenConnection();
+            WebApi.SendToCooperClinic();
+            CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
         {
