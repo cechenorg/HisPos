@@ -447,7 +447,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             Division = null;
             SpecialTreat = null;
-
             Pharmacist = VM.CurrentPharmacy.GetPharmacist();
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;

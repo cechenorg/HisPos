@@ -29,6 +29,7 @@ namespace His_Pos.NewClass.Prescription
             Card = new IcCard();
             Treatment = new Treatment.Treatment();
             Medicines = new Medicines();
+            PrescriptionSign = new List<string>();
         }
 
         public Prescription(DataRow r,PrescriptionSource prescriptionSource)

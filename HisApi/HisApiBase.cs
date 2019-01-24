@@ -175,6 +175,12 @@ namespace His_Pos.HisApi
         // 3.1 資料上傳
         [DllImport("csHis.dll")]
         public static extern int csUploadData(byte[] pUploadFileName, byte[] fFileSize, byte[] pNumber, byte[] pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csUploadDataPrec(byte[]pUploadFileName,byte[]pFileSize,byte[]pNumber,byte[]pPrecNumber,byte[]pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csDownloadData(byte[] pSAMID,byte[] pHospID,byte[] pNumber,byte[] pSendDate,byte[] pRecvDate,byte[] pServerRandom, byte[] pDownloadFileName);
         // 4.1 取得醫事人員卡狀態
         [DllImport("csHis.dll")]
         public static extern int hpcGetHPCStatus(int Req, ref int Status);

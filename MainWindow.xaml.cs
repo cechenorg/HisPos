@@ -20,6 +20,7 @@ using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
@@ -175,13 +176,14 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Messenger.Default.Send(new NotificationMessage("MainWindowClosing")); 
-            Messenger.Default.Unregister<NotificationMessage>(this);
-            var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳","每日上傳確認");
-            if ((bool)dailyUploadConfirm.DialogResult)
-
-            if (ViewModelMainWindow.IsConnectionOpened)
-                HisApiBase.CloseCom();
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count > 0)
+            {
+                var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳", "每日上傳確認");
+                var upload = (bool)dailyUploadConfirm.DialogResult;
+                if (upload)
+                    UploadFunctions.StartDailyUpload(uploadTable);
+            }
             Environment.Exit(0);
         }
 

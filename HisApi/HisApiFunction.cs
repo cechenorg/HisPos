@@ -46,7 +46,9 @@ namespace His_Pos.HisApi
         {
             Rec rec = new Rec(p);
             var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
             IcDataUploadDb.InsertDailyUploadData(p.Id,uploadData,p.Card.MedicalNumberData.TreatDateTime);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         //異常上傳
@@ -54,7 +56,9 @@ namespace His_Pos.HisApi
         {
             Rec rec = new Rec(p,e);
             var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
             IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            MainWindow.ServerConnection.CloseConnection();
             Console.WriteLine(uploadData);
         }
     }

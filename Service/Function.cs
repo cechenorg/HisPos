@@ -106,7 +106,7 @@ namespace His_Pos.Service
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\藥健康\\"+FileTypeName;
+            path += "\\Declare\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\";
@@ -242,27 +242,25 @@ namespace His_Pos.Service
             return result;
         }
 
-        public void DailyUpload(XDocument dailyUpload)
+        public void DailyUpload(XDocument dailyUpload,string recCount)
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "每日上傳");
-                var fileName = filePath + ".xml";
+                var filePath = ExportXml(dailyUpload, "dailyUpload");
+                var fileName = filePath + ".zip";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
                 var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-                var element = dailyUpload.Root.Element("REC");
-                var count = ConvertData.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+                var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                if(HisApiBase.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
+                if (HisApiBase.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                     HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                 HisApiBase.CloseCom();
             }
             catch (Exception ex)
             {
                 MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
-                
                 return;
             }
         }

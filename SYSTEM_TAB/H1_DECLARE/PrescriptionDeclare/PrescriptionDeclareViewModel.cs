@@ -440,6 +440,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ClearPrescription()
         {
             InitialPrescription();
+            isDeposit = null;
         }
 
         private void RegisterMessengers()
