@@ -238,25 +238,26 @@ namespace His_Pos.NewClass.Prescription
                         }
                     }
                     Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
+                     
                 }
-                else if( !(declareMedicine is Medicine) )
-                {
-                    Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-                    Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
-                    Dtl_data.Append(empty.PadRight(16, ' ')); //使用頻率
-                    Dtl_data.Append(empty.PadRight(3, ' ')); //使用天數
-                    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                    Dtl_data.Append(empty.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-
-                    Dtl_data.Append(" ");  //自費判斷 Y自費收費 N自費不收費
-
-                    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
-                }
-
-
-                if (i != p.Medicines.Count)
+                //else if( !(declareMedicine is Medicine) )
+                //{
+                //    Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
+                //    Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
+                //    Dtl_data.Append(empty.PadRight(16, ' ')); //使用頻率
+                //    Dtl_data.Append(empty.PadRight(3, ' ')); //使用天數
+                //    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
+                //    Dtl_data.Append(empty.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                //
+                //    Dtl_data.Append(" ");  //自費判斷 Y自費收費 N自費不收費
+                //
+                //    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
+                //    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
+                //}
+                // 
+                if (i < p.Medicines.Count(med => med is MedicineNHI))
                     Dtl_data.AppendLine();
+                 
                 i++;
             }
             MySQLConnection conn = new MySQLConnection();
