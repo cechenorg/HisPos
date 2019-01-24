@@ -453,4 +453,13 @@
   <data name="產生每日上傳資料" xml:space="preserve">
     <value>產生每日上傳資料中...</value>
   </data>
+  <data name="寫卡異常" xml:space="preserve">
+    <value>卡片寫入異常，請選擇異常代碼</value>
+  </data>
+  <data name="押金確認" xml:space="preserve">
+    <value>押金確認</value>
+  </data>
+  <data name="重新過卡或押金" xml:space="preserve">
+    <value>尚未選擇異常代碼，請輸入押金金額或重新過卡後再次按下調劑按鈕</value>
+  </data>
 </root>

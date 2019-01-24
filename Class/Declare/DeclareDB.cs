@@ -12,7 +12,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.RDLC;
 using His_Pos.Interface;
 using His_Pos.Class.Person;

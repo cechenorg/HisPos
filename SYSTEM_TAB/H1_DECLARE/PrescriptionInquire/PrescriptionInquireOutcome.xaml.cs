@@ -12,7 +12,6 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
@@ -22,6 +21,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.NewClass.Prescription.IcData;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -790,7 +790,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     DateTimeExtensions.ConvertToTaiwanCalender(InquiredPrescription.Prescription.Treatment.AdjustDate,
                         false);
                 var headerMessage = new Header { DataFormat = "1" };
-                var icRecord = new REC(headerMessage, mainMessage);
+                var icRecord = new Rec(headerMessage, mainMessage);
                 int sigCount = 0;
                 for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                 {
@@ -872,7 +872,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     var icData = new IcData(InquiredPrescription.Prescription, errorCode, InquiredPrescription);
                     var mainMessage = new MainMessage(icData);
                     var headerMessage = new Header { DataFormat = "2" };
-                    var icRecord = new REC(headerMessage, mainMessage);
+                    var icRecord = new Rec(headerMessage, mainMessage);
 
                     for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                     {

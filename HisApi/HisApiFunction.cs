@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
-using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -14,7 +16,7 @@ namespace His_Pos.HisApi
         public static List<string> WritePrescriptionData(Prescription p)
         {
             var signList = new List<string>();
-            var medList = p.Medicines.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
             var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
@@ -40,15 +42,19 @@ namespace His_Pos.HisApi
             return signList;
         }
         //正常上傳
-        public static void CreatDailyUploadData()
+        public static void CreatDailyUploadData(Prescription p)
         {
-            
+            Rec rec = new Rec(p);
+            var uploadData = rec.SerializeDailyUploadObject();
+            IcDataUploadDb.InsertDailyUploadData(p.Id,uploadData,p.Card.MedicalNumberData.TreatDateTime);
         }
 
         //異常上傳
-        public static void CreatErrorDailyUploadData()
+        public static void CreatErrorDailyUploadData(Prescription p,IcErrorCode e)
         {
-            
+            Rec rec = new Rec(p,e);
+            var uploadData = rec.SerializeDailyUploadObject();
+            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
         }
     }
 }
