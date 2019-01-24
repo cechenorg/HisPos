@@ -197,6 +197,19 @@ namespace His_Pos.NewClass.Prescription
             CreateDeclareFileContent(details);//產生申報資料
             return PrescriptionDb.InsertReserve(this, details);
         }
+        public void UpdateReserve() {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            CreateDeclareFileContent(details);//產生申報資料
+            PrescriptionDb.UpdateReserve(this, details);
+        }
         private List<Pdata> SetPrescriptionDetail()
         {
             var details = new List<Pdata>();

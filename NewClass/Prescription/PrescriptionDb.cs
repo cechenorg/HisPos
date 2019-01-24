@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", SetReserveMaster(prescription));
             DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReserve]", parameterList);
-            return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString());
+            return Convert.ToInt32(table.Rows[0]["ResMas_ID"].ToString());
         }
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -50,8 +50,16 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ReserveId", recMasId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictResere]", parameterList);
-        } 
-        
+        }
+        public static void UpdateReserve(Prescription prescription, List<Pdata> prescriptionDetails) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataTable resMaster = SetReserveMaster(prescription);
+            resMaster.Rows[0]["ResMas_ID"] = prescription.SourceId;
+            DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", resMaster);
+            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
+            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
+        }
+         
         public static void ProcessInventory(string productID,double amount)
         {
             
@@ -134,7 +142,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
 
-        public static void SendDeclareOrderToSingde(string CurrentDecMasId, string storId, Prescription p, List<PrescriptionSendData> PrescriptionSendData)
+        public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
             string Rx_order = Convert.ToDateTime(p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
@@ -150,11 +158,11 @@ namespace His_Pos.NewClass.Prescription
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
             //第一行
-            Dtl_data.Append(CurrentDecMasId.PadLeft(8, '0')); //藥局病歷號
+            Dtl_data.Append(p.Id.ToString().PadLeft(8, '0')); //藥局病歷號
             Dtl_data.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名 
-            Dtl_data.Append(p.Card.IDNumber.PadRight(10, ' ')); //身分證字號
+            Dtl_data.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
             Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false)); //出生年月日
-            string gender = p.Card.Gender.Substring(1, 1) == "男" ? "1" : "2";
+            string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
             Dtl_data.Append(p.Patient.Tel == null ? empty.PadRight(20, ' ') : p.Patient.Tel.PadRight(20, ' ')); //電話
             Dtl_data.AppendLine();
@@ -171,8 +179,8 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(p.Treatment.PrescriptionCase.Id.PadRight(2, ' ')); //案件
             Dtl_data.Append(p.Treatment.Division.Id.PadRight(2, ' ')); //科別
             Dtl_data.Append(p.Treatment.MainDisease.ID.PadRight(10, ' ')); //主診斷
-            Dtl_data.Append(p.Treatment.SubDisease.ID.PadRight(10, ' ')); //次診斷
-            Dtl_data.Append(p.Treatment.MedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
+            Dtl_data.Append(string.IsNullOrEmpty(p.Treatment.SubDisease.ID) ? empty.PadRight(10, ' ') : p.Treatment.SubDisease.ID.PadRight(10, ' ')); //次診斷
+            Dtl_data.Append(p.Treatment.OriginalMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
             Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
             Dtl_data.Append(p.Treatment.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
             Dtl_data.Append(p.Treatment.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
@@ -219,13 +227,13 @@ namespace His_Pos.NewClass.Prescription
                     {
                         if (row.MedId == declareMedicine.ID)
                         {
-                            amount = row.SendAmount;
+                            amount = row.SendAmount.ToString();
                             break;
                         }
                     }
                     Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
                 }
-                else
+                else if( !(declareMedicine is Medicine) )
                 {
                     Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
                     Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
