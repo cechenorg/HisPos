@@ -18,6 +18,7 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
+using System.Linq;
 
 namespace His_Pos.NewClass.Prescription
 {
