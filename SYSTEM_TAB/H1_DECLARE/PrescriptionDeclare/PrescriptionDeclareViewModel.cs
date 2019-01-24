@@ -6,7 +6,6 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -21,9 +20,14 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeWindow;
+using CusSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow.CustomerSelectionWindow;
+using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.InstitutionSelectionWindow.InstitutionSelectionWindow;
+using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
+using HisAPI = His_Pos.HisApi.HisApiFunction;
+using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -119,7 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         public int SelectedMedicinesIndex { get; set; }
-        private FunctionWindow.AddProductWindow.AddMedicineWindow MedicineWindow { get; set; }
+        private MedSelectWindow MedicineWindow { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -161,7 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.GetCooperativePrescriptions;
-                cooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
+                cooperativePrescriptions.GetCooperativePrescriptions(VM.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -196,7 +200,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Card.GetMedicalNumber(1);
                     return;
                 }
-                var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow();
+                var customerSelectionWindow = new CusSelectWindow();
                 customerSelectionWindow.ShowDialog();
             };
             IsBusy = true;
@@ -205,25 +209,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void SearchCusByIDNumAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber)) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber, 3);
+            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
             customerSelectionWindow.ShowDialog();
         }
         private void SearchCusByNameAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name)) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.Name, 2);
+            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
             customerSelectionWindow.ShowDialog();
         }
         private void SearchCusByBirthAction()
         {
             if (CurrentPrescription.Patient.Birthday is null) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+            var customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
             customerSelectionWindow.ShowDialog();
         }
         private void SearchCustomerByTelAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel)) return;
-            var customerSelectionWindow = new CustomerSelectionWindow.CustomerSelectionWindow(CurrentPrescription.Patient.Tel, 4);
+            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
             customerSelectionWindow.ShowDialog();
         }
         private void ShowInsSelectionWindowAction(string search)
@@ -243,7 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Treatment.Institution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow.InstitutionSelectionWindow(search);
+                    var institutionSelectionWindow = new InsSelectWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -268,12 +272,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                MedicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
-                MedicineWindow = new FunctionWindow.AddProductWindow.AddMedicineWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID);
             }
             else
             {
@@ -335,6 +339,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 CurrentPrescription.PrintMedBag(singleMode, receiptPrint);
             }
+            else
+            {
+                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess,MessageType.SUCCESS);
+            }
         }
 
         private void RegisterButtonClickAction()
@@ -385,14 +393,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void InitialItemsSources()
         {
-            Institutions = ViewModelMainWindow.Institutions;
-            Divisions = ViewModelMainWindow.Divisions;
-            MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
-            AdjustCases = ViewModelMainWindow.AdjustCases;
-            PaymentCategories = ViewModelMainWindow.PaymentCategories;
-            PrescriptionCases = ViewModelMainWindow.PrescriptionCases;
-            Copayments = ViewModelMainWindow.Copayments;
-            SpecialTreats = ViewModelMainWindow.SpecialTreats;
+            Institutions = VM.Institutions;
+            Divisions = VM.Divisions;
+            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels;
+            AdjustCases = VM.AdjustCases;
+            PaymentCategories = VM.PaymentCategories;
+            PrescriptionCases = VM.PrescriptionCases;
+            Copayments = VM.Copayments;
+            SpecialTreats = VM.SpecialTreats;
         }
         private void InitialCommandActions()
         {
@@ -450,24 +458,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
             {
                 NotPrescribe = false;
-                CurrentPrescription.Treatment.Institution =
-                    new Institution
-                    {
-                        Id = ViewModelMainWindow.CurrentPharmacy.Id,
-                        Name = ViewModelMainWindow.CurrentPharmacy.Name,
-                        FullName = ViewModelMainWindow.CurrentPharmacy.Id + ViewModelMainWindow.CurrentPharmacy.Name
-                    };
-                CurrentPrescription.Treatment.PrescriptionCase = null;
-                CurrentPrescription.Treatment.TempMedicalNumber = string.Empty;
-                CurrentPrescription.Treatment.Copayment = null;
-                CurrentPrescription.Treatment.TreatDate = null;
-                CurrentPrescription.Treatment.ChronicSeq = null;
-                CurrentPrescription.Treatment.ChronicTotal = null;
-                CurrentPrescription.Treatment.Division = null;
-                CurrentPrescription.Treatment.MainDisease = null;
-                CurrentPrescription.Treatment.SubDisease = null;
-                CurrentPrescription.Treatment.SpecialTreat = null;
-                CurrentPrescription.Treatment.PaymentCategory = null;
+                CurrentPrescription.Treatment.Clear();
                 SetMedicinesPaySelf();
             }
             else
@@ -626,15 +617,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.寫卡;
-                CurrentPrescription.PrescriptionSign = HisApiFunction.WritePrescriptionData(CurrentPrescription);
+                CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
                 BusyContent = StringRes.產生每日上傳資料;
                 if (CurrentPrescription.Card.IsGetMedicalNumber)
-                    HisApiFunction.CreatDailyUploadData();
+                    HisAPI.CreatDailyUploadData();
                 else
                 {
                     if (!CurrentPrescription.PrescriptionStatus.IsDeposit)
                     {
-                        HisApiFunction.CreatErrorDailyUploadData();
+                        HisAPI.CreatErrorDailyUploadData();
                     }
                 }
             };

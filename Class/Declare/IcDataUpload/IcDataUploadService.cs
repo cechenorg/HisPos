@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.IcData;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 namespace His_Pos.Class.Declare.IcDataUpload
 {
@@ -87,6 +90,17 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
             IcMessage = icData;
         }
+        public MainMessage(NewClass.Prescription.Prescription p)
+        {
+            IcMessage = new IcData(p);
+            MedicalMessageList = new List<MedicalData>();
+            var treatDateTime = DateTimeEx.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var medList = p.Medicines.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            for (int i = 0; i < medList.Count; i++)
+            {
+                MedicalMessageList.Add(new MedicalData(medList[i], treatDateTime, p.PrescriptionSign[i]));
+            }
+        }
         [XmlElement(ElementName = "MB1")]
         public IcData IcMessage { get; set; }
         [XmlElement(ElementName = "MB2")]
@@ -97,13 +111,32 @@ namespace His_Pos.Class.Declare.IcDataUpload
     public class IcData
     {
         public IcData() { }
+        public IcData(NewClass.Prescription.Prescription p)
+        {
+            var seq = p.Card.MedicalNumberData;
+            SamCode = seq.SamId;
+            CardNo = p.Card.CardNumber;
+            IcNumber = p.Card.IDNumber;
+            BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday, false);
+            TreatmentDateTime = DateTimeEx.ToStringWithSecond(seq.TreatDateTime);
+            MedicalNumber = string.Empty;
+            PharmacyId = seq.InstitutionId;
+            MedicalPersonIcNumber = p.Treatment.Pharmacist.IdNumber;
+            SecuritySignature = seq.SecuritySignature;
+            MainDiagnosisCode = p.Treatment.MainDisease.ID;
+            if (!string.IsNullOrEmpty(p.Treatment.SubDisease.ID))
+                SecondDiagnosisCode = p.Treatment.SubDisease.ID;
+            MedicalFee = (p.PrescriptionPoint.MedicinePoint + p.PrescriptionPoint.SpecialMaterialPoint +
+                             p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
+            CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
+        }
         public IcData(SeqNumber seq,Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
         {
             SamCode = seq.SamId;
             CardNo = currentPrescription.Customer.IcCard.CardNo;
             IcNumber = currentPrescription.Customer.IcCard.IcNumber;
-            BirthDay = DateTimeExtensions.ConvertToTaiwanCalender(customerData.Birthday,false);
-            TreatmentDateTime = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(seq.TreatDateTime);
+            BirthDay = DateTimeEx.ConvertToTaiwanCalender(customerData.Birthday,false);
+            TreatmentDateTime = DateTimeEx.ConvertToTaiwanCalenderWithTime(seq.TreatDateTime);
             MedicalNumber = string.Empty;
             PharmacyId = seq.InstitutionId;
             MedicalPersonIcNumber = currentPrescription.Pharmacy.MedicalPersonnel.IcNumber;
@@ -111,15 +144,15 @@ namespace His_Pos.Class.Declare.IcDataUpload
             MainDiagnosisCode = currentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            OutpatientFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
+            MedicalFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
                              currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
-            OutpatientCopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
+            CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
 
         public IcData(Prescription current,IcErrorCodeWindow.IcErrorCode errorCode,DeclareData currentDeclareData)
         {
             IcNumber = current.Customer.IcCard.IcNumber;
-            BirthDay = DateTimeExtensions.ConvertToTaiwanCalender(current.Customer.Birthday, false);
+            BirthDay = DateTimeEx.ConvertToTaiwanCalender(current.Customer.Birthday, false);
             var pBuffer = new byte[13];
             var iBufferlength = 13;
             var now = DateTime.Now;
@@ -150,9 +183,9 @@ namespace His_Pos.Class.Declare.IcDataUpload
             MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(current.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = current.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            OutpatientFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
+            MedicalFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
                              currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
-            OutpatientCopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
+            CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
         //1,3 V  2,4 ~ 
         [XmlElement(ElementName = "A16")]
@@ -220,11 +253,11 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         //V
         [XmlElement(ElementName = "A31")]
-        public string OutpatientFee { get; set; }//健保資料段 8-10-1.門診醫療費用 （當次） (get by HISAPI : hisGetTreatmentNoNeedHPC)
+        public string MedicalFee { get; set; }//健保資料段 8-10-1.門診醫療費用 （當次） (get by HISAPI : hisGetTreatmentNoNeedHPC)
 
         //*
         [XmlElement(ElementName = "A32")]
-        public string OutpatientCopaymentFee { get; set; }//健保資料段 8-10-2.門診部分負擔費用（當次）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+        public string CopaymentFee { get; set; }//健保資料段 8-10-2.門診部分負擔費用（當次）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
         //*
         [XmlElement(ElementName = "A33")]
@@ -246,6 +279,46 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MB2")]
     public class MedicalData
     {
+        public MedicalData()
+        {
+
+        }
+        public MedicalData(Medicine med,string treatDateTime, string prescriptionSignature)
+        {
+            MedicalOrderTreatDateTime = treatDateTime;
+            MedicalOrderCategory = "1";
+            TreatmentProjectCode = med.ID;
+            if (!string.IsNullOrEmpty(med.PositionName))
+                TreatmentPosition = med.PositionName;
+            Usage = med.UsageName;
+            Days = med.Days.ToString();
+            TotalAmount = $"{med.Amount:00000.0}";
+            switch (MedicalOrderCategory)
+            {
+                case "1":
+                    PrescriptionDeliveryMark = "01";
+                    break;
+                case "A":
+                    PrescriptionDeliveryMark = "02";
+                    break;
+                case "2":
+                    PrescriptionDeliveryMark = "05";
+                    break;
+                case "B":
+                    PrescriptionDeliveryMark = "06";
+                    break;
+                case "3":
+                case "4":
+                case "5":
+                    PrescriptionDeliveryMark = "03";
+                    break;
+                case "C":
+                case "D":
+                case "E":
+                    PrescriptionDeliveryMark = "04";
+                    break;
+            }
+        }
         //V 
         [XmlElement(ElementName = "A71")]
         public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
