@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
 using His_Pos.Class.Declare.IcDataUpload;
@@ -40,9 +41,11 @@ namespace His_Pos.HisApi
             return signList;
         }
         //正常上傳
-        public static void CreatDailyUploadData()
+        public static void CreatDailyUploadData(Prescription p)
         {
-            
+            Rec rec = new Rec(p);
+            var uploadData = rec.SerializeDailyUploadObject();
+            Console.WriteLine(uploadData);
         }
 
         //異常上傳

@@ -88,7 +88,7 @@ namespace His_Pos.Service
                     xmlserializer.Serialize(writer, value);
                     var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
                     document.Root?.RemoveAttributes();
-                    return document.ToString();
+                    return document.ToString().Replace("<A18/>", "<A18></A18>").Replace("<A18 />", "<A18></A18>");
                 }
             }
             catch (Exception ex)

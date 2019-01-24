@@ -620,7 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
                 BusyContent = StringRes.產生每日上傳資料;
                 if (CurrentPrescription.Card.IsGetMedicalNumber)
-                    HisAPI.CreatDailyUploadData();
+                    HisAPI.CreatDailyUploadData(CurrentPrescription);
                 else
                 {
                     if (!CurrentPrescription.PrescriptionStatus.IsDeposit)

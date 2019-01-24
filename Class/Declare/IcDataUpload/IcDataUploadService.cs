@@ -13,37 +13,34 @@ using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 namespace His_Pos.Class.Declare.IcDataUpload
 {
-    public class IcDataUploadService
-    {
-        public IcDataUpload IcDataUploadTable { get; set; }
-    }
-    public class IcDataUpload
-    {
-        public RECS IcDataList { get; set; }
-    }
-
     [XmlRoot(ElementName = "RECS")]
-    public class RECS
+    public class Recs
     {
         [XmlElement(ElementName = "REC")]
-        public List<REC> REC { get; set; }
+        public List<Rec> Rec { get; set; }
     }
 
 
     [XmlRoot(ElementName = "REC")]
-    public class REC
+    public class Rec
     {
-        public REC(Header header, MainMessage main)
+        public Rec(Header header, MainMessage main)
         {
             HeaderMessage = header;
             MainMessage = main;
         }
-
-        public REC(DataRow row)
+        public Rec(NewClass.Prescription.Prescription p)
         {
+            HeaderMessage = new Header {DataFormat = "1", DataType = p.Card.IsGetMedicalNumber ? "1" : "2", UploadVersion = "1.0"};
+            MainMessage = new MainMessage(p,false);
         }
 
-        public REC()
+        public Rec(DataRow row)
+        {
+
+        }
+
+        public Rec()
         {
 
         }
@@ -90,13 +87,13 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
             IcMessage = icData;
         }
-        public MainMessage(NewClass.Prescription.Prescription p)
+        public MainMessage(NewClass.Prescription.Prescription p,bool makeUp)
         {
-            IcMessage = new IcData(p);
+            IcMessage = new IcData(p, makeUp);
             MedicalMessageList = new List<MedicalData>();
             var treatDateTime = DateTimeEx.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
-            var medList = p.Medicines.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
-            for (int i = 0; i < medList.Count; i++)
+            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
+            for (var i = 0; i < medList.Count; i++)
             {
                 MedicalMessageList.Add(new MedicalData(medList[i], treatDateTime, p.PrescriptionSign[i]));
             }
@@ -111,7 +108,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
     public class IcData
     {
         public IcData() { }
-        public IcData(NewClass.Prescription.Prescription p)
+        public IcData(NewClass.Prescription.Prescription p,bool makeUp)
         {
             var seq = p.Card.MedicalNumberData;
             SamCode = seq.SamId;
@@ -187,10 +184,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
                              currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
             CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
-        //1,3 V  2,4 ~ 
-        [XmlElement(ElementName = "A16")]
-        public string SamCode { get; set; }//安全模組代碼
-
         //1,3 V  2,4 ~
         [XmlElement(ElementName = "A11")]
         public string CardNo { get; set; }//卡片號碼 (get by HISAPI : csGetCardNo)
@@ -203,6 +196,30 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A13")]
         public string BirthDay { get; set; }//出生日期
 
+        //V
+        [XmlElement(ElementName = "A14")]
+        public string PharmacyId { get; set; }//健保資料段 8-6.醫療院所代碼
+
+        //V
+        [XmlElement(ElementName = "A15")]
+        public string MedicalPersonIcNumber { get; set; }//健保資料段 8-7-1.醫事人員身分證號
+
+        //1,3 V  2,4 ~ 
+        [XmlElement(ElementName = "A16")]
+        public string SamCode { get; set; }//安全模組代碼
+
+        //V
+        [XmlElement(ElementName = "A17")]
+        public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
+
+        //*
+        [XmlElement(ElementName = "A18")]
+        public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
+
+        //V
+        [XmlElement(ElementName = "A19")]
+        public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
+        
         //*
         [XmlElement(ElementName = "A20")]
         public string NewbornBirthDay { get; set; }//健保資料段 7-1.新生兒出生日期
@@ -218,26 +235,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
         //*
         [XmlElement(ElementName = "A24")]
         public string NewbornTreatmentMark { get; set; }//健保資料段 8-2.新生兒就醫註記
-
-        //V
-        [XmlElement(ElementName = "A17")]
-        public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
-
-        //*
-        [XmlElement(ElementName = "A18")]
-        public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
-
-        //V
-        [XmlElement(ElementName = "A19")]
-        public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
-
-        //V
-        [XmlElement(ElementName = "A14")]
-        public string PharmacyId { get; set; }//健保資料段 8-6.醫療院所代碼
-
-        //V
-        [XmlElement(ElementName = "A15")]
-        public string MedicalPersonIcNumber { get; set; }//健保資料段 8-7-1.醫事人員身分證號
 
         //1,3 V  2,4 ~
         [XmlElement(ElementName = "A22")]
@@ -283,10 +280,10 @@ namespace His_Pos.Class.Declare.IcDataUpload
         {
 
         }
-        public MedicalData(Medicine med,string treatDateTime, string prescriptionSignature)
+        public MedicalData(Medicine med,string treatDateTime, string preSig)
         {
             MedicalOrderTreatDateTime = treatDateTime;
-            MedicalOrderCategory = "1";
+            MedicalOrderCategory = med is MedicineSpecialMaterial ? "4" : "1";
             TreatmentProjectCode = med.ID;
             if (!string.IsNullOrEmpty(med.PositionName))
                 TreatmentPosition = med.PositionName;
@@ -318,6 +315,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
                     PrescriptionDeliveryMark = "04";
                     break;
             }
+            PrescriptionSignature = preSig;
         }
         //V 
         [XmlElement(ElementName = "A71")]
@@ -358,7 +356,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
         //*
         [XmlElement(ElementName = "A80")]
         public string AllergyMedicineUploadMark { get; set; }//醫療專區 過敏藥物上傳註記
-
 
         //*
         [XmlElement(ElementName = "A81")]

@@ -844,7 +844,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
                 var mainMessage = new MainMessage(icData);
                 var headerMessage = new Header { DataFormat = "1" };
-                var icRecord = new REC(headerMessage, mainMessage);
+                var icRecord = new Rec(headerMessage, mainMessage);
                 int sigCount = 0;
                 for (var i = 0; i < CurrentPrescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                 {
@@ -923,7 +923,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
                     var mainMessage = new MainMessage(icData);
                     var headerMessage = new Header { DataFormat = "2" };
-                    var icRecord = new REC(headerMessage, mainMessage);
+                    var icRecord = new Rec(headerMessage, mainMessage);
 
                     for (var i = 0; i < CurrentPrescription.Medicines.Count(m=>(m is DeclareMedicine med) && !med.PaySelf); i++)
                     {

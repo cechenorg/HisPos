@@ -19,19 +19,25 @@ namespace His_Pos.Database
         }
         public static void AddSqlParameter(List<SqlParameter> row, string column, Object value)
         {
-            bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
-
-            if (canBeNull)
-            {
-                if (value == null)
-                    row.Add(new SqlParameter(column, DBNull.Value));
-                else
-                    row.Add(new SqlParameter(column, value));
-            }
+            if (value == null)
+                row.Add(new SqlParameter(column, DBNull.Value));
             else
             {
-                row.Add(new SqlParameter(column, value));
+                bool canBeNull = !value.GetType().IsValueType || (Nullable.GetUnderlyingType(value.GetType()) != null);
+
+                if (canBeNull)
+                {
+                    if (value == null)
+                        row.Add(new SqlParameter(column, DBNull.Value));
+                    else
+                        row.Add(new SqlParameter(column, value));
+                }
+                else
+                {
+                    row.Add(new SqlParameter(column, value));
+                }
             }
+            
         }
     }
 }
