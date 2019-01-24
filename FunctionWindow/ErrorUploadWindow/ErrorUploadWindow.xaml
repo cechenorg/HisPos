@@ -15,7 +15,7 @@
                 <RowDefinition Height="350"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <DataGrid Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding IcErrorCodes}"
+            <DataGrid Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding IcErrorCodeList}"
                       CanUserSortColumns="False" EnableRowVirtualization="False" SelectedItem="{Binding SelectedIcErrorCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       GridLinesVisibility="Horizontal">
                 <DataGrid.Resources>

@@ -29,7 +29,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             HeaderMessage = header;
             MainMessage = main;
         }
-        public Rec(Prescription p,IcErrorCode e = null)
+        public Rec(Prescription p,ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
             HeaderMessage = e is null ? 
                 new Header {DataFormat = "1", DataType = "1", UploadVersion = "1.0"} 
@@ -89,7 +89,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         {
             IcMessage = icData;
         }
-        public MainMessage(Prescription p, IcErrorCode e,bool makeUp)
+        public MainMessage(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e,bool makeUp)
         {
             IcMessage = new IcData(p,e,makeUp);
             MedicalMessageList = new List<MedicalData>();
@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
     public class IcData
     {
         public IcData() { }
-        public IcData(Prescription p, IcErrorCode e, bool makeUp)
+        public IcData(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
         {
             var seq = p.Card.MedicalNumberData;
             if (e is null)

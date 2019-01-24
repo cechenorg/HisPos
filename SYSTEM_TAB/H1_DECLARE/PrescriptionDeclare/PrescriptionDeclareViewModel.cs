@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -295,8 +297,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                IcErrorCode errorCode = null;
-                if (!CurrentPrescription.GetCard() && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
+                ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
+                if (!CurrentPrescription.PrescriptionStatus.IsGetCard && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
                 {
                     var e = new ErrorUploadWindow(false); //詢問異常上傳
                     if(((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
@@ -623,7 +625,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //update reserve
         }
         
-        private void CreateDailyUploadData(IcErrorCode error = null)
+        private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -670,16 +672,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.Medicines.Count(m =>
                     (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {
-                MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
-                var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
-                e.ShowDialog();
-                while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
-                {
-                    e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber);
+                bool? isDone = null;
+                ErrorUploadWindowViewModel.IcErrorCode errorCode;
+                Application.Current.Dispatcher.Invoke(delegate {
+                    MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
+                    var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
                     e.ShowDialog();
-                }
-                var errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-                HisAPI.CreatErrorDailyUploadData(CurrentPrescription, errorCode);
+                    while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
+                    {
+                        e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber);
+                        e.ShowDialog();
+                    }
+                    errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+                    if(isDone is null)
+                        HisAPI.CreatErrorDailyUploadData(CurrentPrescription, errorCode);
+                    isDone = true;
+                });
                 return false;
             }
             return true;

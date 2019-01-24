@@ -50,11 +50,12 @@ namespace His_Pos.HisApi
         }
 
         //異常上傳
-        public static void CreatErrorDailyUploadData(Prescription p,IcErrorCode e)
+        public static void CreatErrorDailyUploadData(Prescription p,ErrorUploadWindowViewModel.IcErrorCode e)
         {
             Rec rec = new Rec(p,e);
             var uploadData = rec.SerializeDailyUploadObject();
             IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            Console.WriteLine(uploadData);
         }
     }
 }
