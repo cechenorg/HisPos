@@ -153,9 +153,9 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", remark);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperAdjust]", parameterList);
         }
-        public static void ImportDeclareXml(Prescriptions ps) {
+        public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas) {
             Customers cs = new Customers(); 
-            cs = cs.SetCustomersByPrescriptions(ps);
+            cs = cs.SetCustomersByPrescriptions(ddatas);
             for (int i = 0; i < ps.Count; i++) {
                 ps[i].Patient = cs.Single(c => c.IDNumber == ps[i].Patient.IDNumber);
             }
@@ -535,9 +535,9 @@ namespace His_Pos.NewClass.Prescription
             } 
             return reserveDetailTable;
         }
-        public static DataTable SetImportDeclareXmlMaster(Prescriptions ps) {
+        public static DataTable SetImportDeclareXmlMaster(List<ImportDeclareXml.ImportDeclareXml.Ddata> Ddatas) {
             DataTable prescriptionMasterTable = PrescriptionMasterTable();
-            foreach(var p in ps)
+            foreach(var p in Ddatas)
             {
                 DataRow newRow = prescriptionMasterTable.NewRow();
                 newRow["PreMas_ID"] = p.Id;
@@ -572,11 +572,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicTotal", p.Treatment.ChronicTotal);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
-                DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-                if (string.IsNullOrEmpty(ToXmlDocument(p.DeclareContent).InnerXml))
-                    newRow["PreMas_DeclareContent"] = DBNull.Value;
-                else
-                    newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber); 
+                newRow["PreMas_DeclareContent"] = DBNull.Value; 
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare);

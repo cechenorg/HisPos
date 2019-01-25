@@ -1,5 +1,6 @@
 ﻿using His_Pos.Database;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -67,18 +68,18 @@ namespace His_Pos.NewClass.Person.Customer
             customerTable.Rows.Add(newRow);
             return customerTable;
         }
-        public static DataTable SetCustomersByPrescriptions(Prescriptions ps) {
+        public static DataTable SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> Ddatas) {
             DataTable table = CustomerTable();
-            foreach (var p in ps) {
+            foreach (var d in Ddatas) {
                 DataRow newRow = table.NewRow(); 
-                DataBaseFunction.AddColumnValue(newRow, "Cus_Name", p.Patient.Name);
-                DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", p.Patient.Gender);
-                DataBaseFunction.AddColumnValue(newRow, "Cus_Birthday", p.Patient.Birthday); 
-                DataBaseFunction.AddColumnValue(newRow, "Cus_IDNumber", p.Patient.IDNumber);
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Name", d.D20);
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", d.D3.Substring(1,1) == "2" ? "男" : "女");
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Birthday", Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2))); 
+                DataBaseFunction.AddColumnValue(newRow, "Cus_IDNumber", d.D3);
                 table.Rows.Add(newRow);
             }
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "@Customers", table);
+            DataBaseFunction.AddSqlParameter(parameterList, "Customers", table);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList); 
         }
         public static DataTable CustomerTable()

@@ -86,27 +86,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }
-        }
-        public Prescription(ImportDeclareXml.ImportDeclareXml.Ddata d,int preId) {
-            Id = preId;
-            MedicineDays = Convert.ToInt32(d.D30);
-            Treatment = new Treatment.Treatment(d);
-            Patient = new Customer
-            {
-                IDNumber = d.D3,
-                Name = d.D20,
-                Birthday = Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2)),
-                Gender = d.D3.Substring(1, 1) != "2" ? "男" : "女"
-            };
-            Card = new IcCard();
-            PrescriptionStatus.IsSendToSingde = false;
-            PrescriptionStatus.IsAdjust = true; 
-            foreach (var m in d.Pdatas)
-            { 
-                Medicines.Add(new Medicine(m));
-            }
-            PrescriptionPoint = new PrescriptionPoint(d);
-        }
+        } 
         public int Id { get; set; }
         private Customer patient;
         public Customer Patient

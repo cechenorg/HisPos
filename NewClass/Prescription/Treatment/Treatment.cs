@@ -109,30 +109,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
             TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
         }
-        public Treatment(ImportDeclareXml.ImportDeclareXml.Ddata d) {
-            Division = VM.GetDivision(d.D13);
-            AdjustCase = VM.GetAdjustCase(d.D1);
-            Copayment = VM.GetCopayment(d.D15);
-            PrescriptionCase = VM.GetPrescriptionCases(d.D22);
-            Institution = VM.GetInstitution(d.D21);
-            PaymentCategory = VM.GetPaymentCategory(d.D5);
-            AdjustDate = Convert.ToDateTime((Convert.ToInt32(d.D23.Substring(0, 3)) + 1911).ToString() + "/" + d.D23.Substring(3, 2) + "/" + d.D23.Substring(5, 2));
-            TreatDate = Convert.ToDateTime((Convert.ToInt32(d.D14.Substring(0,3))+1911).ToString() + "/" + d.D14.Substring(3, 2) + "/" + d.D14.Substring(5, 2));
-            if (!string.IsNullOrEmpty(d.D35))
-                ChronicSeq = int.Parse(d.D35);
-            if (!string.IsNullOrEmpty(d.D36))
-                ChronicTotal = int.Parse(d.D36);
-            MainDisease = new DisCode();
-            MainDisease.ID = d.D8;
-            SubDisease = new DisCode();
-            SubDisease.ID = d.D9;
-            Pharmacist = new MedicalPersonnel();
-            Pharmacist.IdNumber = d.D25;
-            SpecialTreat = new SpeTre();
-            SpecialTreat.Id = d.D26;
-            MedicalNumber = d.D7;
-            OriginalMedicalNumber = d.D43; 
-        }
 
         #region Variables
         private Ins institution;//釋出院所 D21
