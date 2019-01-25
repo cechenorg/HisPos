@@ -241,14 +241,14 @@ namespace His_Pos.NewClass.Prescription
         }
         public List<Pdata> SetImportDeclareXmlDetail() {
             var details = new List<Pdata>();
-            var serialNumber = 1;
-            foreach (var med in Medicines)
-            {
-                Pdata pdata = new Pdata(med, serialNumber.ToString());
-                if(med.)
-                details.Add();
-                serialNumber++;
-            } 
+            //var serialNumber = 1;
+            //foreach (var med in Medicines)
+            //{
+            //    Pdata pdata = new Pdata(med, serialNumber.ToString());
+            //    if(med.)
+            //    details.Add();
+            //    serialNumber++;
+            //} 
             return details;
         }
         private void CheckMedicalServiceData()
