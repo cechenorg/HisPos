@@ -419,26 +419,26 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml.cs">
       <DependentUpon>CooperativeSelectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistories.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSelectionWindow\CustomerSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSelectionWindow\CustomerSelectionWindow.xaml.cs">
       <DependentUpon>CustomerSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomPrescriptionWindow\CustomPrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml.cs">
       <DependentUpon>CustomPrescriptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareViewModel.cs" />
@@ -1058,23 +1058,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSelectionWindow\CustomerSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

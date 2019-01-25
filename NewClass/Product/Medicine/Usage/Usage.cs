@@ -16,7 +16,10 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
             Name = r.Field<string>("Usa_Name");
             QuickName = r.Field<string>("Usa_QuickName");
             PrintName = r.Field<string>("Usa_PrintName");
-            Reg = new Regex(r.Field<string>("Usa_Regex"));
+            if (!string.IsNullOrEmpty(r.Field<string>("Usa_Regex")))
+            {
+                Reg = new Regex(r.Field<string>("Usa_Regex"));
+            }
             Days = r.Field<byte?>("Usa_Days")??0;
             Times = r.Field<int?>("Usa_ID")??0;
             PreDefault = r.Field<bool>("Usa_Default");

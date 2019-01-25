@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -10,7 +9,7 @@ using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow
 {
     public class CooperativeSelectionViewModel : ViewModelBase
     {

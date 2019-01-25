@@ -1,24 +1,21 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
-using His_Pos.Class.Person;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.Properties;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
 using IcCard = His_Pos.NewClass.Prescription.IcCard;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomPrescriptionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow
 {
     public class CustomPrescriptionViewModel:ViewModelBase
     {
