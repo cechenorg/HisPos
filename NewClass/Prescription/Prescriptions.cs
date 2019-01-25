@@ -72,6 +72,8 @@ namespace His_Pos.NewClass.Prescription
                 Add(r);
             }
         }
-        
+        public void ImportDeclareXml() {
+            PrescriptionDb.ImportDeclareXml(this);
+        }
     }
 }

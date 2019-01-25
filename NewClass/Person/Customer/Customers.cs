@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.NewClass.Prescription;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -29,6 +30,13 @@ namespace His_Pos.NewClass.Person.Customer
                 Add(new Customer(r));
             }
         }
-
+        public Customers SetCustomersByPrescriptions(Prescriptions ps) {
+            DataTable table = CustomerDb.SetCustomersByPrescriptions(ps);
+            Customers customers = new Customers();
+            foreach (DataRow r in table.Rows) {
+                customers.Add(new Customer(r));
+            }
+            return customers;
+        }
     }
 }
