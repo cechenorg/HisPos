@@ -188,7 +188,6 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                CheckContainsUsage("BID");
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -237,9 +236,9 @@ namespace His_Pos.ChromeTabViewModel
             {
                 if (Usages.Count(u => u.Reg is null && u.Name.Equals(name)) != 0)
                     return;
+                var usageNotFound = new Usage { Name = name, Days = 0, Times = 0, Reg = null, PrintName = "", PrintIcons = new bool[6], PreDefault = false };
+                Usages.Add(usageNotFound);
             };
-            var usageNotFound = new Usage { Name = name ,Days = 0,Times = 0,Reg = new Regex(name),PrintName = "" ,PrintIcons = new bool[6], PreDefault  = false};
-            Usages.Add(usageNotFound);
         }
         public static Position GetPosition(string name)
         {
