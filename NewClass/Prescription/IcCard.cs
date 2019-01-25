@@ -98,9 +98,13 @@ namespace His_Pos.NewClass.Prescription
                     HisApiBase.CloseCom();
                 }
             };
-            worker.RunWorkerCompleted += (o, ea) => { GetTreatDataNoNeedHPC(); };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                GetTreatDataNoNeedHPC();
+            };
             worker.RunWorkerAsync();
         }
+
         public void GetTreatDataNoNeedHPC()
         {
             int iBufferLen = 498;

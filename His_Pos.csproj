@@ -428,6 +428,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml.cs">
       <DependentUpon>CustomerSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml.cs">
+      <DependentUpon>CustomPrescriptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
@@ -1058,6 +1062,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomPrescriptionWindow\CustomPrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

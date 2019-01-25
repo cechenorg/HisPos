@@ -203,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     CurrentPrescription.PrescriptionStatus.IsGetCard = true;
                     CurrentPrescription.Card.GetMedicalNumber(1);
+                    CheckCustomPrescriptions();
                     return;
                 }
                 var customerSelectionWindow = new CusSelectWindow();
@@ -650,8 +651,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     if (CurrentPrescription.Card.IsGetMedicalNumber)
                     {
-                        if(CreatePrescriptionSiqn())
-                            HisAPI.CreatDailyUploadData(CurrentPrescription);
+                        if(CreatePrescriptionSign())
+                            HisAPI.CreatDailyUploadData(CurrentPrescription,false);
                     }
                     else
                     {
@@ -661,7 +662,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         }
                         else
                         {
-                            HisAPI.CreatErrorDailyUploadData(CurrentPrescription,error);
+                            HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false ,error);
                         }
                        
                     }
@@ -679,7 +680,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerAsync();
         }
 
-        private bool CreatePrescriptionSiqn()
+        private bool CreatePrescriptionSign()
         {
             BusyContent = StringRes.寫卡;
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
@@ -701,17 +702,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
                     if(isDone is null)
-                        HisAPI.CreatErrorDailyUploadData(CurrentPrescription, errorCode);
+                        HisAPI.CreatErrorDailyUploadData(CurrentPrescription, true,errorCode);
                     isDone = true;
                 });
                 return false;
             }
             return true;
         }
-
         private void CountMedicinePoint()
         {
             CurrentPrescription.CountPrescriptionPoint();
+        }
+        private void CheckCustomPrescriptions()
+        {
+            CustomPrescriptionWindow.CustomPrescriptionWindow c = new CustomPrescriptionWindow.CustomPrescriptionWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
         #endregion
     }

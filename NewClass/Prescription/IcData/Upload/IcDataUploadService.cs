@@ -29,12 +29,21 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             HeaderMessage = header;
             MainMessage = main;
         }
-        public Rec(Prescription p,ErrorUploadWindowViewModel.IcErrorCode e = null)
+        public Rec(Prescription p, bool isMakeUp,ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
-            HeaderMessage = e is null ? 
-                new Header {DataFormat = "1", DataType = "1", UploadVersion = "1.0"} 
-                : new Header { DataFormat = "1", DataType = "2", UploadVersion = "1.0" };
-            MainMessage = new MainMessage(p,e,false);
+            HeaderMessage = new Header();
+            HeaderMessage.DataFormat = "1";
+            if (e is null)
+            {
+                HeaderMessage.DataType = isMakeUp ? "3" : "1";
+            }
+            else
+            {
+                HeaderMessage.DataType = isMakeUp ? "4" : "2";
+            }
+
+            HeaderMessage.UploadVersion = "1.0";
+            MainMessage = new MainMessage(p,e, isMakeUp);
         }
 
         public Rec(DataRow row)
@@ -133,6 +142,8 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                 MedicalNumber = e.ID;
                 PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
             }
+            if (makeUp)
+                MakeUpMark = "2";
             MedicalPersonIcNumber = p.Treatment.Pharmacist.IdNumber;
             MainDiagnosisCode = p.Treatment.MainDisease.ID;
             if (!string.IsNullOrEmpty(p.Treatment.SubDisease.ID))
@@ -140,6 +151,8 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             MedicalFee = (p.PrescriptionPoint.MedicinePoint + p.PrescriptionPoint.SpecialMaterialPoint +
                              p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
             CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
+            if (makeUp)
+                ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Treatment.AdjustDate, false);
         }
         public IcData(SeqNumber seq,Class.Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
         {
@@ -188,7 +201,6 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                                     now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
             }
             PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
-            
             MedicalNumber = errorCode.Id;
             MedicalPersonIcNumber = current.Pharmacy.MedicalPersonnel.IcNumber;
             MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;

@@ -99,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
             SelectedCustomer.UpdateEditTime();
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.ServerConnection.OpenConnection();
-            SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
+            SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.ID);
             MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));

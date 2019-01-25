@@ -35,14 +35,14 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(DataRow r,PrescriptionSource prescriptionSource)
         { 
             Patient = new Customer();
-            Patient.Id = r.Field<int>("CustomerID");
+            Patient.ID = r.Field<int>("CustomerID");
             Patient.IDNumber = r.Field<string>("CustomerIDNumber");
             Patient.Name = r.Field<string>("CustomerName");  
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines(); 
             PrescriptionPoint = new PrescriptionPoint(r);
-            DeclareFileID = r.Field<int>("DeclareFileID");
+            DeclareFileID = int.Parse(r.Field<string>("DeclareFileID"));
             MedicineDays = r.Field<byte>("MedicineDays");
             switch (prescriptionSource) {
                 case PrescriptionSource.Normal:

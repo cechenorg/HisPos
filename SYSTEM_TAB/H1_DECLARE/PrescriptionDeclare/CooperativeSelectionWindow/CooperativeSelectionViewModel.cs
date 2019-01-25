@@ -185,7 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         private void SelectionChangedAction()
         {
             if (SelectedPrescription != null)
-                CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.Id);
+                CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.ID);
         }
         private void PrintAction()
         {

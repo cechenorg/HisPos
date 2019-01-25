@@ -111,7 +111,7 @@ namespace His_Pos.NewClass.Person.Employee
         }
         public void Delete()
         {
-            EmployeeDb.Delete(Id); 
+            EmployeeDb.Delete(ID); 
         }
         public static Employee Login(string Account,string Password) {
             MainWindow.ServerConnection.OpenConnection();
@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.Person.Employee
             return tabAuths;
         }
         public string GetPassword() {
-          DataTable table =  EmployeeDb.GetPassword(Id);
+          DataTable table =  EmployeeDb.GetPassword(ID);
             return table.Rows[0]["Aut_Password"].ToString();
         }
       

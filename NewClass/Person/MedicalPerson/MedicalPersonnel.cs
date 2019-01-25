@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson
 
         public MedicalPersonnel(Employee.Employee e)
         {
-            Id = e.Id;
+            Id = e.ID;
             Name = e.Name;
             IdNumber = e.IDNumber;
         }

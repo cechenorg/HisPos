@@ -23,7 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public ChangePasswordWindow(Employee e)
         {
             InitializeComponent();
-            EmpId = e.Id;
+            EmpId = e.ID;
             MainWindow.ServerConnection.OpenConnection();
             EmpOldPassword = e.GetPassword();
             MainWindow.ServerConnection.CloseConnection();

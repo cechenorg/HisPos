@@ -117,20 +117,20 @@ namespace His_Pos.NewClass.Prescription
             return table;
         }
       
-        public static DataTable GetPrescriptionsNoGetCardByCusId(string cusId)
+        public static DataTable GetPrescriptionsNoGetCardByCusId(int cusId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
         }
 
-        public static DataTable GetPrescriptionsByCusId(string cusId)
+        public static DataTable GetPrescriptionsByCusId(int cusId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusId]", parameterList);
         }
-        public static DataTable GetReservePrescriptionByCusId(string cusId)
+        public static DataTable GetReservePrescriptionByCusId(int cusId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
@@ -173,7 +173,7 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(p.Treatment.Institution.Id.PadRight(10, ' ')); //院所代號
             Dtl_data.Append(p.Treatment.Institution.Id.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
             Dtl_data.Append(empty.PadRight(20, ' ')); //空
-            Dtl_data.Append(ViewModelMainWindow.CurrentUser.Id.ToString().PadRight(10, ' ')); //藥師代號
+            Dtl_data.Append(ViewModelMainWindow.CurrentUser.ID.ToString().PadRight(10, ' ')); //藥師代號
             Dtl_data.Append(ViewModelMainWindow.CurrentUser.Name.PadRight(20 - NewFunction.HowManyChinese(ViewModelMainWindow.CurrentUser.Name), ' ')); //藥師姓名 
             Dtl_data.AppendLine();
             //第三行
@@ -326,7 +326,7 @@ namespace His_Pos.NewClass.Prescription
             DataTable prescriptionMasterTable = PrescriptionMasterTable();
             DataRow newRow = prescriptionMasterTable.NewRow();
             newRow["PreMas_ID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareFileID", p.DeclareFileID);
             newRow["PreMas_ImportFileID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
@@ -452,7 +452,7 @@ namespace His_Pos.NewClass.Prescription
             DataTable reserveMasterTable = ReserveMasterTable();
             DataRow newRow = reserveMasterTable.NewRow();
             newRow["ResMas_ID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_CustomerID", p.Patient.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_CustomerID", p.Patient.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_DeclareFileID", p.DeclareFileID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
             newRow["ResMas_SerialNumber"] = DBNull.Value;

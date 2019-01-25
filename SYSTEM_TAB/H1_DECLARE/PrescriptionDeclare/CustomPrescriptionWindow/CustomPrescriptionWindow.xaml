@@ -1,0 +1,273 @@
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomPrescriptionWindow.CustomPrescriptionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomPrescriptionWindow"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="病患相關處方" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+    <Viewbox>
+        <xctk:BusyIndicator>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical" Width="800" Margin="10,0,10,10" Visibility="{Binding CooperativeVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                    <Label Content="合作診所處方" Style="{StaticResource BoldLabelContent18}"/>
+                    <DataGrid Name="Cooperative" Margin="0,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding CooperativePrescriptions,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Cooperative_SelectionChanged" >
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="OverridesDefaultStyle" Value="true" />
+                                <Setter Property="Width" Value="100" />
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15" />
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Background>
+                            <StaticResource ResourceKey="GridBackGround"/>
+                        </DataGrid.Background>
+                        <DataGrid.CellStyle>
+                            <StaticResource ResourceKey="DataGridCellStyle"/>
+                        </DataGrid.CellStyle>
+                        <DataGrid.ColumnHeaderStyle>
+                            <StaticResource ResourceKey="DataGridColumnHeaderStyle"/>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="Height" Value="40" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="釋出院所" Width="300" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Institution.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="科別" Width="120" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Division.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,0,10,10" Visibility="{Binding ReservedVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                    <Label Content="慢箋預約處方" Style="{StaticResource BoldLabelContent18}"/>
+                    <DataGrid Name="Reserved"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding ReservedPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Reserved_SelectionChanged" >
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="OverridesDefaultStyle" Value="true" />
+                                <Setter Property="Width" Value="100" />
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15" />
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Background>
+                            <StaticResource ResourceKey="GridBackGround"/>
+                        </DataGrid.Background>
+                        <DataGrid.CellStyle>
+                            <StaticResource ResourceKey="DataGridCellStyle"/>
+                        </DataGrid.CellStyle>
+                        <DataGrid.ColumnHeaderStyle>
+                            <StaticResource ResourceKey="DataGridColumnHeaderStyle"/>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="Height" Value="40" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="釋出院所" Width="300" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Institution.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="科別" Width="120" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Division.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="總次數" Width="65" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.ChronicTotal, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="領藥序" Width="65" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.ChronicSeq, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Vertical" Visibility="{Binding UngetCardVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                    <StackPanel Orientation="Horizontal" Height="35" Margin="10,0,10,0">
+                        <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
+                        <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="650,0,0,0" VerticalAlignment="Center" Command="{Binding GetPatinetData}"/>
+                    </StackPanel>
+                    <DataGrid Margin="10" AutoGenerateColumns="False" CanUserAddRows="False"
+                      CanUserSortColumns="False" EnableRowVirtualization="False"
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" >
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="OverridesDefaultStyle" Value="true" />
+                                <Setter Property="Width" Value="100" />
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15" />
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Background>
+                            <StaticResource ResourceKey="GridBackGround"/>
+                        </DataGrid.Background>
+                        <DataGrid.CellStyle>
+                            <StaticResource ResourceKey="DataGridCellStyle"/>
+                        </DataGrid.CellStyle>
+                        <DataGrid.ColumnHeaderStyle>
+                            <StaticResource ResourceKey="DataGridColumnHeaderStyle"/>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="Height" Value="40" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="釋出院所" Width="300" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Institution.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="科別" Width="120" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.Division.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="調劑日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.AdjustDate, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10">
+                    <Button Content="取消" Background="DimGray" BorderThickness="0" Margin="680,0,0,0" VerticalAlignment="Center" Command="{Binding CancleClick}"/>
+                    <Button Content="確認" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0" VerticalAlignment="Center" Command="{Binding ConfirmClick}"/>
+                </StackPanel>
+            </Grid>
+        </xctk:BusyIndicator>
+    </Viewbox>
+</Window>

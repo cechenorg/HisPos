@@ -577,7 +577,7 @@ namespace His_Pos.FunctionWindow
                     var isMedicalPerson = false;
                     foreach (var m in prescriptionDec2View.MedicalPersonnels)
                     {
-                        if (!m.Id.Equals(ViewModelMainWindow.CurrentUser.Id)) continue;
+                        if (!m.Id.Equals(ViewModelMainWindow.CurrentUser.ID)) continue;
                         isMedicalPerson = true;
                         break;
                     }
@@ -585,7 +585,7 @@ namespace His_Pos.FunctionWindow
                     {
                         prescriptionDec2View.CurrentPrescription.Pharmacy.MedicalPersonnel =
                             prescriptionDec2View.MedicalPersonnels.SingleOrDefault(p =>
-                                p.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
+                                p.Id.Equals(ViewModelMainWindow.CurrentUser.ID));
                     }
                     else
                     {

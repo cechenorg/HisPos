@@ -53,7 +53,7 @@ namespace His_Pos.NewClass.Person.Customer
             return newcustomer;
         }
         public void UpdateEditTime() {
-            CustomerDb.UpdateEditTime(Id);
+            CustomerDb.UpdateEditTime(ID);
         }
 
         #endregion

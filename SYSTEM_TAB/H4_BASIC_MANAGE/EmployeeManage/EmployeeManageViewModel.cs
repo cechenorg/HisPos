@@ -134,14 +134,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         {
             MainWindow.ServerConnection.OpenConnection(); 
             Employee.Delete();
-            EmployeeCollection.Remove( EmployeeCollection.Single(emp => emp.Id == Employee.Id) );
+            EmployeeCollection.Remove( EmployeeCollection.Single(emp => emp.ID == Employee.ID) );
             Employee = NewFunction.DeepCloneViaJson( EmployeeCollection[EmployeeCollection.Count - 1]);
             MainWindow.ServerConnection.CloseConnection(); 
         }
         public void SelectionChangedAction()
         {
             if (Employee is null) return;
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.Id == Employee.Id));
+            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.ID == Employee.ID));
             InitDataChanged();
         }
         public void DataChangeAction()
@@ -151,10 +151,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public void SubmitAction() {
             for (int i = 0; i < EmployeeCollection.Count; i++)
             {
-                if (EmployeeCollection[i].Id == Employee.Id)
+                if (EmployeeCollection[i].ID == Employee.ID)
                 {
                     EmployeeCollection[i] = Employee;
-                    Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(cus => cus.Id == EmployeeCollection[i].Id));
+                    Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(cus => cus.ID == EmployeeCollection[i].ID));
                     break;
                 }
             }
@@ -166,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         }
         public void CancelAction()
         {
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.Id == Employee.Id));
+            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.ID == Employee.ID));
             InitDataChanged();
         }
         #endregion

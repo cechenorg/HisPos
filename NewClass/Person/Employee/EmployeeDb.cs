@@ -52,10 +52,10 @@ namespace His_Pos.NewClass.Person.Employee
         {
             DataTable employeeTable = EmployeeTable();
             DataRow newRow = employeeTable.NewRow();
-            if (e.Id == 0)
+            if (e.ID == 0)
                 newRow["Emp_ID"] = DBNull.Value;
             else
-                newRow["Emp_ID"] = e.Id;
+                newRow["Emp_ID"] = e.ID;
             DataBaseFunction.AddColumnValue(newRow,"Emp_Name",e.Name);
             DataBaseFunction.AddColumnValue(newRow,"Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Gender", e.Gender);

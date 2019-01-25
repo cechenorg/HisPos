@@ -42,9 +42,9 @@ namespace His_Pos.HisApi
             return signList;
         }
         //正常上傳
-        public static void CreatDailyUploadData(Prescription p)
+        public static void CreatDailyUploadData(Prescription p,bool isMakeUp)
         {
-            Rec rec = new Rec(p);
+            Rec rec = new Rec(p, isMakeUp);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
             IcDataUploadDb.InsertDailyUploadData(p.Id,uploadData,p.Card.MedicalNumberData.TreatDateTime);
@@ -52,9 +52,9 @@ namespace His_Pos.HisApi
         }
 
         //異常上傳
-        public static void CreatErrorDailyUploadData(Prescription p,ErrorUploadWindowViewModel.IcErrorCode e)
+        public static void CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
-            Rec rec = new Rec(p,e);
+            Rec rec = new Rec(p, isMakeUp, e);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
             IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);

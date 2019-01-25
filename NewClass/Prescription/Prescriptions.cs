@@ -14,9 +14,9 @@ namespace His_Pos.NewClass.Prescription
         {
         }
 
-        public void GetCooperativePrescriptions(string pharmcyMedicalNum, DateTime sDate, DateTime eDate)
+        public void GetCooperativePrescriptions(string pharmacyID, DateTime sDate, DateTime eDate)
         {
-            Prescriptions prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate(pharmcyMedicalNum, sDate, eDate);
+            Prescriptions prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate(pharmacyID, sDate, eDate);
             foreach (var p in prescriptions)
             {
                 Add(p);
@@ -40,33 +40,33 @@ namespace His_Pos.NewClass.Prescription
                 Add(new Prescription(r, PrescriptionSource.Normal));
             }
         }
-        public void GetPrescriptionsByCusId(string CusId) //取得處方
+        public void GetPrescriptionsByCusId(int cusID) //取得處方
         {
-            var table = PrescriptionDb.GetPrescriptionsByCusId(CusId);
+            var table = PrescriptionDb.GetPrescriptionsByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
                 Add(new Prescription(r, PrescriptionSource.Normal));
             }
         }
-        public void GetPrescriptionsNoGetCardByCusId(string CusId) //取得未過卡處方
+        public void GetPrescriptionsNoGetCardByCusId(int cusID) //取得未過卡處方
         {
-            var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(CusId);
+            var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
                 Add(new Prescription(r, PrescriptionSource.Normal));
             }
         } 
-        public void GetReservePrescriptionByCusId(string CusId) //取得預約慢箋
+        public void GetReservePrescriptionByCusId(int cusID) //取得預約慢箋
         {
-            var table = PrescriptionDb.GetReservePrescriptionByCusId(CusId);
+            var table = PrescriptionDb.GetReservePrescriptionByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
                 Add(new Prescription(r, PrescriptionSource.ChronicReserve));
             }
         }
-        public void GetCooperaPrescriptionsByCusIdNumber(string CusIdNum) //取德合作診所
+        public void GetCooperaPrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
         {
-            Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.Id, CusIdNum);
+            Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.Id, cusIDNum);
             foreach (var r in table)
             {
                 Add(r);

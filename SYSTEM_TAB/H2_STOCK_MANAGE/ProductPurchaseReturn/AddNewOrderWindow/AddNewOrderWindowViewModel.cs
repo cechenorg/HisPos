@@ -67,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         private void ConfirmAddAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.Id);
+            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseAddNewOrderWindow"));
