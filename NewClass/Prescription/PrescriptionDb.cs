@@ -48,6 +48,11 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ReserveId", recMasId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictResere]", parameterList);
         }
+        public static void AdjustPredictResere(string preMasId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", preMasId);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[AdjustPredictResere]", parameterList);
+        } 
         public static void UpdateReserve(Prescription prescription, List<Pdata> prescriptionDetails) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable resMaster = SetReserveMaster(prescription);
@@ -92,7 +97,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacistIdnum);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList); 
         }
-
+        public static DataTable GetPrescriptionId( ) { 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionId]");
+        }
+        
         public static XmlDocument ToXmlDocument(XDocument xDocument) {
             var xmlDocument = new XmlDocument();
             using (var xmlReader = xDocument.CreateReader())
@@ -143,7 +151,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", remark);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperAdjust]", parameterList);
         }
-
+        
 
         public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {

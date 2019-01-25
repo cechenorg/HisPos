@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 
 namespace His_Pos.NewClass.Prescription {
     public class PrescriptionPoint:ObservableObject
@@ -18,6 +19,15 @@ namespace His_Pos.NewClass.Prescription {
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
             MedicalServicePoint = r.Field<int>("MedicalServicePoint"); 
+        }
+        public PrescriptionPoint(Ddata d) {
+            ApplyPoint = Convert.ToInt32(d.D16);
+            TotalPoint = Convert.ToInt32(d.D18);
+            CopaymentPoint = Convert.ToInt32(d.D17);
+            SpecialMaterialPoint = Convert.ToInt32(d.D31);
+            TreatmentPoint = Convert.ToInt32(d.D32);
+            MedicinePoint = Convert.ToInt32(d.D33);
+            MedicalServicePoint = Convert.ToInt32(d.D38);
         }
         public int ApplyPoint { get; set; }//申請點數 
         private int totalPoint;//總點數

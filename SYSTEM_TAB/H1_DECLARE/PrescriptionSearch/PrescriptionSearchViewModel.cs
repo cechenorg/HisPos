@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Xml;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -9,9 +11,12 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.InstitutionSelectionWindow;
+using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
@@ -125,7 +130,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
-        public RelayCommand ImportDeclareFile { get; set; }
+        public RelayCommand ImportDeclareFileCommand { get; set; }
+
         #endregion
         public PrescriptionSearchViewModel()
         {
@@ -150,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Search = new RelayCommand(SearchAction);
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
-            ImportDeclareFile = new RelayCommand(ImportDeclareFileAction);
+            ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
         }
         private void RegisterMessengers()
         {
@@ -217,7 +223,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void ImportDeclareFileAction()
         {
-            //匯入申報檔
+            ImportDeclareFile();
         }
         #endregion
         #region Functions
@@ -241,6 +247,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void GetSelectedInstitution(Institution ins)
         {
             SelectedInstitution = ins;
+        }
+        private void ImportDeclareFile() {
+            OpenFileDialog fdlg = new OpenFileDialog();
+            fdlg.Title = "選擇申報檔";
+            fdlg.InitialDirectory = @"c:\";   //@是取消转义字符的意思
+            fdlg.Filter = "Xml健保申報檔案|*.xml";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            XmlDocument doc = new XmlDocument();
+            doc.PreserveWhitespace = true;
+            Prescriptions prescriptions = new Prescriptions();
+            int tempId = Prescription.GetPrescriptionId();
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                doc.Load(fdlg.FileName);
+                XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
+                XmlDocument data = new XmlDocument();
+                foreach (XmlNode node in ddatas)
+                {
+                    data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
+                    Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
+                    Prescription newPre = new Prescription(d, tempId); 
+                    tempId++;
+                    prescriptions.Add(newPre);
+                }
+              
+            }
+
         }
         #endregion
         #region Filters
