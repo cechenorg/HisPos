@@ -87,28 +87,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }
-        }
-        public Prescription(ImportDeclareXml.ImportDeclareXml.Ddata d,int preId) {
-            Id = preId;
-            MedicineDays = Convert.ToInt32(d.D30);
-            Treatment = new Treatment.Treatment(d);
-            Patient = new Customer
-            {
-                IDNumber = d.D3,
-                Name = d.D20,
-                Birthday = Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2)),
-                Gender = d.D3.Substring(1, 1) != "2" ? "男" : "女"
-            };
-            Card = new IcCard();
-            PrescriptionStatus.IsSendToSingde = false;
-            PrescriptionStatus.IsAdjust = true; 
-            foreach (var m in d.Pdatas)
-            {
-                if(m.P1 != "9" && m.P2.Length > 6)
-                Medicines.Add(new Medicine(m));
-            }
-            PrescriptionPoint = new PrescriptionPoint(d);
-        }
+        } 
         public int Id { get; set; }
         private Customer patient;
         public Customer Patient
@@ -133,7 +112,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
-        public Medicines Medicines { get; set; } = new Medicines();//調劑用藥
+        public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
@@ -259,7 +238,19 @@ namespace His_Pos.NewClass.Prescription
                 details.Add(simpleForm);
             }
             return details;
-        } 
+        }
+        public List<Pdata> SetImportDeclareXmlDetail() {
+            var details = new List<Pdata>();
+            var serialNumber = 1;
+            foreach (var med in Medicines)
+            {
+                Pdata pdata = new Pdata(med, serialNumber.ToString());
+                if(med.)
+                details.Add();
+                serialNumber++;
+            } 
+            return details;
+        }
         private void CheckMedicalServiceData()
         {
             if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
