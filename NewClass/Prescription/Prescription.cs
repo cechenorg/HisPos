@@ -95,14 +95,15 @@ namespace His_Pos.NewClass.Prescription
             {
                 IDNumber = d.D3,
                 Name = d.D20,
-                Birthday = Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2))
+                Birthday = Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2)),
+                Gender = d.D3.Substring(1, 1) != "2" ? "男" : "女"
             };
             Card = new IcCard();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = true; 
             foreach (var m in d.Pdatas)
             {
-                if(m.P1 != "9")
+                if(m.P1 != "9" && m.P2.Length > 6)
                 Medicines.Add(new Medicine(m));
             }
             PrescriptionPoint = new PrescriptionPoint(d);
@@ -231,7 +232,7 @@ namespace His_Pos.NewClass.Prescription
             CreateDeclareFileContent(details);//產生申報資料
             PrescriptionDb.UpdateReserve(this, details);
         }
-        private List<Pdata> SetPrescriptionDetail()
+        public List<Pdata> SetPrescriptionDetail()
         {
             var details = new List<Pdata>();
             var serialNumber = 1;

@@ -223,7 +223,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void ImportDeclareFileAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
             ImportDeclareFile();
+            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Functions
@@ -272,7 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     tempId++;
                     prescriptions.Add(newPre);
                 }
-              
+                prescriptions.ImportDeclareXml();
             }
 
         }

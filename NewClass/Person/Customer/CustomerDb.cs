@@ -1,4 +1,5 @@
 ﻿using His_Pos.Database;
+using His_Pos.NewClass.Prescription;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -65,6 +66,20 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddColumnValue(newRow, "Cus_Note", c.Note);
             customerTable.Rows.Add(newRow);
             return customerTable;
+        }
+        public static DataTable SetCustomersByPrescriptions(Prescriptions ps) {
+            DataTable table = CustomerTable();
+            foreach (var p in ps) {
+                DataRow newRow = table.NewRow(); 
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Name", p.Patient.Name);
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", p.Patient.Gender);
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Birthday", p.Patient.Birthday); 
+                DataBaseFunction.AddColumnValue(newRow, "Cus_IDNumber", p.Patient.IDNumber);
+                table.Rows.Add(newRow);
+            }
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "@Customers", table);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList); 
         }
         public static DataTable CustomerTable()
         {
