@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow
 {
     public class CustomerSelectionViewModel : ViewModelBase
     {

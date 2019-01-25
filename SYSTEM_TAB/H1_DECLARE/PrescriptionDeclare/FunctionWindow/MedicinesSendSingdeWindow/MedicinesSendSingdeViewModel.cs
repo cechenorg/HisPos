@@ -2,9 +2,9 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product; 
+using His_Pos.NewClass.Product;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow
 {
    public class MedicinesSendSingdeViewModel : ViewModelBase
     {
