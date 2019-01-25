@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
@@ -6,6 +7,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
@@ -482,17 +484,25 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public void GetLastMedicalNumber()
         {
-            if (HisApiBase.OpenCom())
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                int iBufferLen = 7;
-                byte[] pBuffer = new byte[7];
-                var res = HisApiBase.hisGetLastSeqNum(pBuffer,ref iBufferLen);
-                if (res == 0)
+                if (HisApiBase.OpenCom())
                 {
-                    TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                    int iBufferLen = 7;
+                    byte[] pBuffer = new byte[7];
+                    var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                    if (res == 0)
+                    {
+                        TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                    }
+                    HisApiBase.CloseCom();
                 }
-                HisApiBase.CloseCom();
-            }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+            };
+            worker.RunWorkerAsync();
         }
 
         public void Clear()

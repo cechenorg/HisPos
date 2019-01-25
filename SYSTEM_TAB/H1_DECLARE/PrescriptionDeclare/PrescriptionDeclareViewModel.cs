@@ -27,6 +27,7 @@ using CooPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Fun
 using CusPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow.CustomPrescriptionWindow;
 using MedSendWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+using MaterialDesignThemes.Wpf;
 using CusSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow.CustomerSelectionWindow;
 using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InstitutionSelectionWindow;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
@@ -204,11 +205,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 BusyContent = StringRes.讀取健保卡;
                 isGetCard = CurrentPrescription.GetCard();
-                if (isGetCard)
-                {
-                    BusyContent = StringRes.取得就醫序號;
-                    CurrentPrescription.Treatment.GetLastMedicalNumber();
-                }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -216,6 +212,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (isGetCard)
                 {
                     CurrentPrescription.PrescriptionStatus.IsGetCard = true;
+                    CurrentPrescription.Treatment.GetLastMedicalNumber();
                     CurrentPrescription.Card.GetMedicalNumber(1);
                     CheckCustomPrescriptions();
                     return;
@@ -317,6 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (!CurrentPrescription.PrescriptionStatus.IsGetCard && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
                 {
                     var e = new ErrorUploadWindow(false); //詢問異常上傳
+                    e.ShowDialog();
                     if(((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
                     {
                         MessageWindow.ShowMessage(StringRes.重新過卡或押金, MessageType.WARNING);

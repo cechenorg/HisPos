@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
@@ -512,7 +513,6 @@ namespace His_Pos.NewClass.Prescription
             d.Dbody.Pdata = details;
         }
         #endregion
-        
         #region PrintFunctions
         public void PrintMedBag(bool singleMode,bool receiptPrint)
         {
@@ -672,9 +672,42 @@ namespace His_Pos.NewClass.Prescription
         public bool GetCard()
         {
             if (!Card.GetBasicData()) return false;
-            Patient = new Customer(Card);
+            if (!string.IsNullOrEmpty(Patient.IDNumber))
+            {
+                if (!Card.PatientBasicData.IDNumber.Equals(Patient.IDNumber))
+                {
+                    ConfirmWindow confirm = new ConfirmWindow("卡片身分證與目前顧客不符，是否覆蓋?", "資料不符");
+                    if (!(bool) confirm.DialogResult)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(Patient.Name))
+            {
+                if (!Card.PatientBasicData.Name.Equals(Patient.Name))
+                {
+                    ConfirmWindow confirm = new ConfirmWindow("卡片姓名與目前顧客資訊不符，是否覆蓋?", "資料不符");
+                    if (!(bool)confirm.DialogResult)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (Patient.Birthday != null)
+            {
+                if (DateTime.Compare(Card.PatientBasicData.Birthday, (DateTime)Patient.Birthday) != 0)
+                {
+                    ConfirmWindow confirm = new ConfirmWindow("卡片生日與目前顧客資訊不符，是否覆蓋?", "資料不符");
+                    if (!(bool)confirm.DialogResult)
+                    {
+                        return false;
+                    }
+                }
+            }
+            var cus = new Customer(Card);
             MainWindow.ServerConnection.OpenConnection();
-            var cus = Patient.Check();
+            Patient = Patient.Check();
             MainWindow.ServerConnection.CloseConnection();
             if (cus != null)
             {
@@ -682,7 +715,7 @@ namespace His_Pos.NewClass.Prescription
                     cus.IDNumber = Patient.IDNumber;
                 if (cus.Birthday is null)
                     cus.Birthday = Patient.Birthday;
-                else if(Patient.Birthday is null || DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
+                else if (Patient.Birthday is null || DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
                     cus.Birthday = Patient.Birthday;
                 cus.Gender = Patient.Gender;
                 Patient = cus;
