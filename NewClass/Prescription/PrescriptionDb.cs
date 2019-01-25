@@ -541,7 +541,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 DataRow newRow = prescriptionMasterTable.NewRow();
                 newRow["PreMas_ID"] = p.Id;
-                DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.Id);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.ID);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareFileID", p.DeclareFileID);
                 newRow["PreMas_ImportFileID"] = DBNull.Value;
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
