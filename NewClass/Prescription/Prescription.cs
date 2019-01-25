@@ -87,6 +87,26 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(new Medicine(m));
             }
         }
+        public Prescription(ImportDeclareXml.ImportDeclareXml.Ddata d,int preId) {
+            Id = preId;
+            MedicineDays = Convert.ToInt32(d.D30);
+            Treatment = new Treatment.Treatment(d);
+            Patient = new Customer
+            {
+                IDNumber = d.D3,
+                Name = d.D20,
+                Birthday = Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2))
+            };
+            Card = new IcCard();
+            PrescriptionStatus.IsSendToSingde = false;
+            PrescriptionStatus.IsAdjust = true; 
+            foreach (var m in d.Pdatas)
+            {
+                if(m.P1 != "9")
+                Medicines.Add(new Medicine(m));
+            }
+            PrescriptionPoint = new PrescriptionPoint(d);
+        }
         public int Id { get; set; }
         private Customer patient;
         public Customer Patient
@@ -237,8 +257,7 @@ namespace His_Pos.NewClass.Prescription
                 details.Add(simpleForm);
             }
             return details;
-        }
-
+        } 
         private void CheckMedicalServiceData()
         {
             if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
@@ -322,7 +341,12 @@ namespace His_Pos.NewClass.Prescription
         public void PredictResere() {
             PrescriptionDb.PredictResere(SourceId);
         }
-
+        public void AdjustPredictResere() {
+            PrescriptionDb.AdjustPredictResere(Id.ToString());
+        }
+        public static int GetPrescriptionId() {
+            return PrescriptionDb.GetPrescriptionId().Rows[0].Field<int>("MaxPreId"); 
+        }
         #endregion
         public void AddCooperativePrescriptionMedicines() {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){

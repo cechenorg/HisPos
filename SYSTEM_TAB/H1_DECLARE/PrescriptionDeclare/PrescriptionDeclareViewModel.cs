@@ -603,8 +603,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ChronicAdjust()
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
-            CurrentPrescription.PredictResere();
-            CurrentPrescription.DeleteReserve();
+            CurrentPrescription.AdjustPredictResere(); 
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");

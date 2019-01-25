@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.Service;
+using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -67,7 +68,20 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
             }
         }
-
+        public Medicine(Pdata p) {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            ID = p.P2; 
+            ViewModelMainWindow.CheckContainsUsage(p.P4);
+            ViewModelMainWindow.CheckContainsPosition(p.P5);
+            UsageName = p.P4;
+            PositionName = p.P5;
+            Amount = Convert.ToDouble(p.P7);
+            Dosage = Convert.ToDouble(p.P3);
+            Days = Convert.ToInt32(p.P11);
+            PaySelf = false;
+             
+        }
         private double amount;//總量
         public double Amount
         {

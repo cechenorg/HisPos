@@ -162,7 +162,7 @@
                     <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="80" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Rectangle Width="65"/>
-                    <Button Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="0,10"/>
+                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="0,10"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
