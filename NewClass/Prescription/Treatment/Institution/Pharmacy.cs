@@ -48,6 +48,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
                 return MedicalPersonnels.Single(m => m.Id.Equals(ViewModelMainWindow.CurrentUser.Id));
             return MedicalPersonnels[0];
         }
+        public void SetPharmacy() {
+            PharmacyDb.SetPharmacy(this);
+        }
         #endregion
     }
 }
