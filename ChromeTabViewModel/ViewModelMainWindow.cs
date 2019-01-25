@@ -188,6 +188,7 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                CheckContainsUsage("BID");
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -223,12 +224,20 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Usage GetUsage(string name)
         {
-            var result = Usages.SingleOrDefault(u => u.Reg.IsMatch(name));
+            var result = Usages.Where(u => u.Reg != null).SingleOrDefault(u => u.Reg.IsMatch(name));
+            if (result is null)
+            {
+                result = Usages.Where(u => u.Reg is null).SingleOrDefault(u => u.Name.Equals(name));
+            }
             return result;
         }
         public static void CheckContainsUsage(string name)
         {
-            if (Usages.Count(u => u.Reg.IsMatch(name)) != 0 || string.IsNullOrEmpty(name)) return;
+            if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(name)) == 0 || string.IsNullOrEmpty(name))
+            {
+                if (Usages.Count(u => u.Reg is null && u.Name.Equals(name)) != 0)
+                    return;
+            };
             var usageNotFound = new Usage { Name = name ,Days = 0,Times = 0,Reg = new Regex(name),PrintName = "" ,PrintIcons = new bool[6], PreDefault  = false};
             Usages.Add(usageNotFound);
         }

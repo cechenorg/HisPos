@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class.Person;
 using His_Pos.NewClass.Prescription;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomPrescriptionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow
 {
     /// <summary>
     /// CustomPrescriptionWindow.xaml 的互動邏輯

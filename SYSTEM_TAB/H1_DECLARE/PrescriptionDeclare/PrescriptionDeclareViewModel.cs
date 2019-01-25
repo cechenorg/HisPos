@@ -23,15 +23,19 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
-using CusSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow.CustomerSelectionWindow;
-using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.InstitutionSelectionWindow.InstitutionSelectionWindow;
+using CooPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow.CooperativeSelectionWindow;
+using CusPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow.CustomPrescriptionWindow;
+using MedSendWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow.MedicinesSendSingdeWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+using CusSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow.CustomerSelectionWindow;
+using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InstitutionSelectionWindow;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.MedicinesSendSingdeWindow;
+
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -62,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (declareStatus != value)
                 {
                     Set(() => DeclareStatus, ref declareStatus, value);
+                    CanSendOrder = declareStatus != PrescriptionDeclareStatus.Adjust;
                 }
             }
         }
@@ -129,6 +134,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public int SelectedMedicinesIndex { get; set; }
         private MedSelectWindow MedicineWindow { get; set; }
         private bool? isDeposit;
+        private bool canSendOrder;
+        public bool CanSendOrder
+        {
+            get => canSendOrder;
+            set
+            {
+                Set(() => CanSendOrder, ref canSendOrder, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -175,7 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                var cooperativeSelectionWindow = new CooperativeSelectionWindow.CooperativeSelectionWindow();
+                var cooperativeSelectionWindow = new CooPreSelectWindow();
                 Messenger.Default.Send(cooperativePrescriptions, "CooperativePrescriptions");
                 cooperativeSelectionWindow.ShowDialog();
             };
@@ -612,7 +626,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NormalRegister() { 
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
-                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription);
+                MedSendWindow medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
                     return;
                 }
@@ -624,7 +638,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ChronicRegister() {
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder)
             {
-                MedicinesSendSingdeWindow.MedicinesSendSingdeWindow medicinesSendSingdeWindow = new MedicinesSendSingdeWindow.MedicinesSendSingdeWindow(CurrentPrescription);
+                MedSendWindow medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                 { 
                     return;
@@ -714,7 +728,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CheckCustomPrescriptions()
         {
-            CustomPrescriptionWindow.CustomPrescriptionWindow c = new CustomPrescriptionWindow.CustomPrescriptionWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
+            CusPreSelectWindow c = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
         #endregion
     }

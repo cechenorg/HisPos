@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow
 {
     /// <summary>
     /// CooperativeSelectionWindow.xaml 的互動邏輯

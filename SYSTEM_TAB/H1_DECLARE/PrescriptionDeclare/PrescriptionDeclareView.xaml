@@ -575,7 +575,8 @@
                             <Label Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Width="90"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
-                            <CheckBox IsChecked="{Binding CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="133" Height="35" Background="RoyalBlue"  Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"/>
+                            <CheckBox Width="133" Height="35" Background="RoyalBlue"  Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"
+                                      IsEnabled="{Binding CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsChecked="{Binding CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,5,8,5" Orientation="Horizontal">
                             <Button Width="125" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}"/>
