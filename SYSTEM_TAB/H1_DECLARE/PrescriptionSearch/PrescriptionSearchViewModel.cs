@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -259,7 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             fdlg.RestoreDirectory = true;
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
-            Prescriptions prescriptions = new Prescriptions();
+            Prescriptions prescriptions = new Prescriptions(); 
             int tempId = Prescription.GetPrescriptionId();
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
@@ -270,7 +271,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 {
                     data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
-                    Prescription newPre = new Prescription(d, tempId); 
+                    Prescription newPre = new Prescription(d, tempId);  
                     tempId++;
                     prescriptions.Add(newPre);
                 }

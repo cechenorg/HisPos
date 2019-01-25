@@ -102,8 +102,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = true; 
             foreach (var m in d.Pdatas)
-            {
-                if(m.P1 != "9" && m.P2.Length > 6)
+            { 
                 Medicines.Add(new Medicine(m));
             }
             PrescriptionPoint = new PrescriptionPoint(d);
@@ -132,7 +131,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
-        public Medicines Medicines { get; set; } = new Medicines();//調劑用藥
+        public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
@@ -258,7 +257,19 @@ namespace His_Pos.NewClass.Prescription
                 details.Add(simpleForm);
             }
             return details;
-        } 
+        }
+        public List<Pdata> SetImportDeclareXmlDetail() {
+            var details = new List<Pdata>();
+            var serialNumber = 1;
+            foreach (var med in Medicines)
+            {
+                Pdata pdata = new Pdata(med, serialNumber.ToString());
+                if(med.)
+                details.Add();
+                serialNumber++;
+            } 
+            return details;
+        }
         private void CheckMedicalServiceData()
         {
             if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))

@@ -71,14 +71,18 @@ namespace His_Pos.NewClass.Product.Medicine
         public Medicine(Pdata p) {
             Usage = new Usage.Usage();
             Position = new Position.Position();
-            ID = p.P2; 
-            ViewModelMainWindow.CheckContainsUsage(p.P4);
-            ViewModelMainWindow.CheckContainsPosition(p.P5);
-            UsageName = p.P4;
-            PositionName = p.P5;
+            ID = p.P2;
+            if ((p.P1 != "9" || (p.P1 == "1" && !p.P2.StartsWith("MA")))) {
+                ViewModelMainWindow.CheckContainsUsage(p.P4);
+                ViewModelMainWindow.CheckContainsPosition(p.P5);
+                UsageName = p.P4;
+                PositionName = p.P5;
+            }
+            if (p.P1 != "9") {
+                Days = Convert.ToInt32(p.P11);
+                Dosage = Convert.ToDouble(p.P3);
+            }  
             Amount = Convert.ToDouble(p.P7);
-            Dosage = Convert.ToDouble(p.P3);
-            Days = Convert.ToInt32(p.P11);
             PaySelf = false;
              
         }

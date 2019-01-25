@@ -111,7 +111,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public Treatment(ImportDeclareXml.ImportDeclareXml.Ddata d) {
             Division = VM.GetDivision(d.D13);
-            AdjustCase = VM.GetAdjustCase(d.D13);
+            AdjustCase = VM.GetAdjustCase(d.D1);
             Copayment = VM.GetCopayment(d.D15);
             PrescriptionCase = VM.GetPrescriptionCases(d.D22);
             Institution = VM.GetInstitution(d.D21);

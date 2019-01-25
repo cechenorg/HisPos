@@ -588,7 +588,7 @@ namespace His_Pos.NewClass.Prescription
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
             foreach(var p in ps)
             {
-                var pdatas = p.SetPrescriptionDetail();
+                var pdatas = p.SetImportDeclareXmlDetail();
                 foreach (var pdata in pdatas)
                 {
                     DataRow newRow = prescriptionDetailTable.NewRow();
