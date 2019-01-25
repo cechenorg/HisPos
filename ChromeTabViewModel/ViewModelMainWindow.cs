@@ -7,6 +7,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -227,8 +228,8 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static void CheckContainsUsage(string name)
         {
-            if (Usages.Count(u => u.Name.Equals(name)) != 0 || string.IsNullOrEmpty(name)) return;
-            var usageNotFound = new Usage { Name = name };
+            if (Usages.Count(u => u.Reg.IsMatch(name)) != 0 || string.IsNullOrEmpty(name)) return;
+            var usageNotFound = new Usage { Name = name ,Days = 0,Times = 0,Reg = new Regex(name),PrintName = "" ,PrintIcons = new bool[6], PreDefault  = false};
             Usages.Add(usageNotFound);
         }
         public static Position GetPosition(string name)
