@@ -188,6 +188,7 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                CheckContainsUsage("BID");
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -232,7 +233,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static void CheckContainsUsage(string name)
         {
-            if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(name)) != 0 || string.IsNullOrEmpty(name))
+            if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(name)) == 0 || string.IsNullOrEmpty(name))
             {
                 if (Usages.Count(u => u.Reg is null && u.Name.Equals(name)) != 0)
                     return;
