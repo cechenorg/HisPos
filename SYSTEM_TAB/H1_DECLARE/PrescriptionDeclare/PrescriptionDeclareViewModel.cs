@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -27,7 +26,6 @@ using CooPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Fun
 using CusPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow.CustomPrescriptionWindow;
 using MedSendWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
-using MaterialDesignThemes.Wpf;
 using CusSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow.CustomerSelectionWindow;
 using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InstitutionSelectionWindow;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
@@ -36,7 +34,7 @@ using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
-using IcCard = His_Pos.NewClass.Prescription.IcCard;
+
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -167,7 +165,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
         public RelayCommand ClearButtonClick { get; set; }
-        private IcCard TempCard { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -513,7 +510,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Messenger.Default.Send(new NotificationMessage("FocusSubDisease"));
                 return;
             }
-            var result = GetDiseaseCodeByID(id);
+            var result = DiseaseCode.GetDiseaseCodeByID(id);
             if (result != null)
             {
                 CurrentPrescription.Treatment.MainDisease = result;
@@ -528,7 +525,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
                 return;
             }
-            var result = GetDiseaseCodeByID(id);
+            var result = DiseaseCode.GetDiseaseCodeByID(id);
             if (result != null)
             {
                 CurrentPrescription.Treatment.SubDisease = result;
@@ -731,17 +728,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckCustomPrescriptions()
         {
             var customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
-        }
-
-        private DiseaseCode GetDiseaseCodeByID(string id)
-        {
-            var d = new DiseaseCode();
-            MainWindow.ServerConnection.OpenConnection();
-            d.GetDataByCodeId(id);
-            MainWindow.ServerConnection.CloseConnection();
-            if (!string.IsNullOrEmpty(d.ID)) return d;
-            MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
-            return null;
         }
 
         private void ReadCard(bool showCusWindow)

@@ -9,11 +9,18 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        mc:Ignorable="d"
+        mc:Ignorable="d" FontFamily="Segoe UI Semibold"
         Title="處方瀏覽" Height="660" Width="1365">
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
+    <Window.Resources>
+        <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
+        <service:IsMedicineEditable x:Key="IsMedicineEditableConverter" />
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:DateConverter x:Key="DateConverter" />
+        <service:DoubleConverter x:Key="DoubleConverter"/>
+    </Window.Resources>
     <Viewbox Stretch="Fill">
         <xctk:BusyIndicator>
             <Grid>
@@ -26,41 +33,16 @@
                     </Grid.RowDefinitions>
                     <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                         <Image Width="30" Height="30" Source="/Images/ID_Card.png" Margin="10"/>
-                        <TextBox Width="150" Height="30" Margin="0,10,10,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
-                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding EditedPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding SearchCustomerByIDNumber}" Key="Enter"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                        <Label Width="150" Height="30" Margin="0,10,10,10" Content="{Binding EditedPrescription.Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                         <Image Width="30" Height="30" Source="/Images/User_48px.png" Margin="10"/>
-                        <TextBox Width="140" Height="30" Margin="0,10,10,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
-                             Text="{Binding EditedPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding SearchCustomerByName}" Key="Enter" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                        <Image x:Name="IcPatientBirthday" Width="30" Height="30" Source="/Images/birthday.png" Margin="10"/>
-                        <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="30" Margin="0,10,10,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}">
-                            <xctk:MaskedTextBox.InputBindings>
-                                <KeyBinding Command="{Binding SearchCustomerByBirthday}" Key="Enter" />
-                            </xctk:MaskedTextBox.InputBindings>
-                            <Binding Path="EditedPrescription.Patient.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                <Binding.ValidationRules>
-                                    <service:DateValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </xctk:MaskedTextBox>
+                        <Label Width="140" Height="30" Margin="0,10,10,10"  Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Name,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10"/>
+                        <xctk:MaskedTextBox Width="100" Height="30" Margin="0,10,10,10" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" Text="{Binding EditedPrescription.Patient.Birthday,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False"/>
                         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10"/>
-                        <TextBox Width="130" Height="30" Margin="0,10,20,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding EditedPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding SearchCustomerByTel}" Key="Enter" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                        <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                        <Rectangle Width="132"/>
+                        <Label Width="130" Height="30" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="410,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="列印藥袋" Command="{Binding PrintMedBag}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     </StackPanel>
                     <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
@@ -77,8 +59,9 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Orientation="Horizontal">
                             <Label  Content="釋出院所" Style="{StaticResource BoldLabelContent18}"/>
-                            <TextBox x:Name="ReleaseHospital" Width="400" Height="34" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" CaretBrush="Red"
-                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding EditedPrescription.Treatment.Institution.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox x:Name="ReleaseHospital" Width="400" Height="34" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" CaretBrush="Red"
+                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1"
+                             FontStretch="ExtraExpanded" Text="{Binding EditedPrescription.Treatment.Institution.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.InputBindings>
                                     <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                                 </TextBox.InputBindings>
@@ -226,9 +209,6 @@
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-                            <ContextMenu x:Key="MedcineContextMenu" x:Name="MedContextMenu" StaysOpen="true" >
-                                <MenuItem Header="申報不扣庫" x:Name="IsBuckle" />
-                            </ContextMenu>
                         </DataGrid.Resources>
                         <DataGrid.Background>
                             <StaticResource ResourceKey="GridBackGround"/>
@@ -241,13 +221,12 @@
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
-                                <Setter Property="ContextMenu" Value="{DynamicResource MedcineContextMenu}"/>
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="16" />
                                 <Setter Property="Height" Value="40" />
-                                <EventSetter Event="UIElement.MouseEnter" Handler="DataGridRow_MouseEnter" />
-                                <EventSetter Event="UIElement.MouseLeave" Handler="DataGridRow_MouseLeave" />
+                                <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
+                                <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -402,6 +381,24 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <Label Content="藥品點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="50"/>
+                        <Label Content="自費金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Label Content="藥服費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="40"/>
+                        <Label Content="總點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Label Content="押金" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="50"/>
+                        <Label Content="實收金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="105,0,0,0"/>
+                        <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </xctk:BusyIndicator>

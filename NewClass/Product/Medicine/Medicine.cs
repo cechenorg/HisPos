@@ -104,7 +104,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (dosage != value)
                 {
                     Set(() => Dosage, ref dosage, value);
-                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                    if(ID is null) return;
+                    if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
             }
@@ -121,6 +122,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     Set(() => UsageName, ref _usageName, value);
                     Usage = ViewModelMainWindow.GetUsage(value);
                     Usage.Name = UsageName;
+                    if (ID is null) return;
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
@@ -176,6 +178,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (days != value)
                 {
                     Set(() => Days, ref days, value);
+                    if (ID is null) return;
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
