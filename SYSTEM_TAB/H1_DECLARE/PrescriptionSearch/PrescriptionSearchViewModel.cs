@@ -127,6 +127,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
+        private Prescription editedPrescription;
+        public Prescription EditedPrescription
+        {
+            get => editedPrescription;
+            set
+            {
+                Set(() => EditedPrescription, ref editedPrescription, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
@@ -165,7 +174,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
+            Messenger.Default.Register<Prescription>(this, "PrescriptionEdited", GetEditPrescription);
         }
+
+        private void GetEditPrescription(Prescription obj)
+        {
+
+        }
+
         #endregion
         #region CommandActions
         private void SearchAction()
@@ -235,6 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ShowPrescriptionEditWindowAction()
         {
             if(SelectedPrescription is null) return;
+            EditedPrescription = SelectedPrescription;
             PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription);
             prescriptionEdit.ShowDialog();
         }

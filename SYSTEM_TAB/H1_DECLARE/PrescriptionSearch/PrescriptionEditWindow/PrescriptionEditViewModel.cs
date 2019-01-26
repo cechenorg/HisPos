@@ -93,11 +93,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region InitialFunctions
         private void Init(Prescription selected)
         {
+            InitPrescription(selected);
+            IsEdit = Visibility.Hidden;
+            InitialItemsSources();
+            InitialCommandActions();
+            RegisterMessengers();
+        }
+
+        private void InitPrescription(Prescription selected)
+        {
             MainWindow.ServerConnection.OpenConnection();
             selected.Patient = selected.Patient.GetCustomerByCusId(selected.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
-            if(EditedPrescription.Treatment.Division != null)
+            if (EditedPrescription.Treatment.Division != null)
                 EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division.Id);
             EditedPrescription.Treatment.Pharmacist =
                 VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(EditedPrescription.Treatment.Pharmacist.IdNumber));
@@ -105,13 +114,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.Treatment.Copayment = VM.GetCopayment(EditedPrescription.Treatment.Copayment.Id);
             if (EditedPrescription.Treatment.PrescriptionCase != null)
                 EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase.Id);
-            if(EditedPrescription.Treatment.SpecialTreat != null)
+            if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = SpecialTreats.SingleOrDefault(s => s.Id.Equals(EditedPrescription.Treatment.SpecialTreat.Id));
-            IsEdit = Visibility.Hidden;
-            InitialItemsSources();
-            InitialCommandActions();
-            RegisterMessengers();
         }
+
         private void InitialItemsSources()
         {
             Institutions = VM.Institutions;
@@ -283,13 +289,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 }
                 EditedPrescription.Update();
+                Messenger.Default.Send(EditedPrescription,"PrescriptionEdited");
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
 
         private void RedoEditAction()
         {
-            EditedPrescription = OriginalPrescription;
+            InitPrescription((Prescription)OriginalPrescription.Clone());
         }
         #endregion
 
