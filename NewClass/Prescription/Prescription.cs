@@ -754,7 +754,11 @@ namespace His_Pos.NewClass.Prescription
             return success;
         }
 
-        private void Update(PrescriptionPoint original)
+        private void Update()
+        {
+
+        }
+        private void AdjustMedicines(Medicines originMedicines)
         {
 
         }
