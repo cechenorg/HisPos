@@ -283,7 +283,7 @@ namespace His_Pos.NewClass.Prescription
             conn.CloseConnection();
         }
 
-        public static void UpdatePrescription(int id)
+        public static void UpdatePrescription(int id,Prescription p)
         {
 
         }
