@@ -74,6 +74,16 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[ProductBuckle]", parameterList); 
         }
+        public static void ReturnInventory(string productID, double amount, string type, string source, string sourcdId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
+            DataBaseFunction.AddSqlParameter(parameterList, "ReturnValue", amount);
+            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
+            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ReturnInventory]", parameterList);
+        }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -164,7 +174,15 @@ namespace His_Pos.NewClass.Prescription
             //DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ps));
             //var table = MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
         }
-         
+        public static void UpdatePrescription(Prescription prescription, List<Pdata> prescriptionDetails)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataTable prescriptionMater = SetPrescriptionMaster(prescription);
+            prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
+        }
         public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY

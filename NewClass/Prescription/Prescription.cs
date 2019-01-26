@@ -756,11 +756,54 @@ namespace His_Pos.NewClass.Prescription
 
         private void Update()
         {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
 
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            CreateDeclareFileContent(details);//產生申報資料
+            PrescriptionDb.UpdatePrescription(this, details); 
         }
         private void AdjustMedicines(Medicines originMedicines)
         {
+            double oritotal = 0;
+            double newtotal = 0;
+            foreach (var m in originMedicines)
+            {
+                oritotal += m.TotalPrice;
+            }
+            foreach (var m in Medicines)
+            {
+                newtotal += m.TotalPrice;
+            } 
+            PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, newtotal - oritotal);
 
+            Medicines compareMeds = new Medicines();
+            foreach (var orm in originMedicines) {
+                Medicine medicine = new Medicine();
+                medicine.ID = orm.ID;
+                medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? orm.Amount : Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount; 
+                compareMeds.Add(medicine);
+            }
+            foreach (var nem in Medicines) {
+                if (originMedicines.Count(m => m.ID == nem.ID) == 0) {
+                    Medicine medicine = new Medicine();
+                    medicine.ID = nem.ID;
+                    medicine.Amount = nem.Amount;
+                    compareMeds.Add(medicine);
+                }
+            }
+            foreach (var com in compareMeds) {
+                if (com.Amount > 0)
+                    PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
+                else if (com.Amount < 0)
+                    PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()); 
+            }
+             
         }
     }
 }
