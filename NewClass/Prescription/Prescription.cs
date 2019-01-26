@@ -681,7 +681,6 @@ namespace His_Pos.NewClass.Prescription
             };
         }
         #endregion
-
         public bool GetCard()
         {
             var success = Card.GetBasicData();
@@ -753,6 +752,11 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionStatus.IsReadCard = true;
             }
             return success;
+        }
+
+        private void Update(PrescriptionPoint original)
+        {
+
         }
     }
 }
