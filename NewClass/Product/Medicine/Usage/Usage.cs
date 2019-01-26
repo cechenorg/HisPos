@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
                 Reg = new Regex(r.Field<string>("Usa_Regex"));
             }
             Days = r.Field<byte?>("Usa_Days")??0;
-            Times = r.Field<int?>("Usa_ID")??0;
+            Times = r.Field<byte?>("Usa_Times") ??0;
             PreDefault = r.Field<bool>("Usa_Default");
 
             PrintIcons[0] = r.Field<bool>("UsaPri_Morning");

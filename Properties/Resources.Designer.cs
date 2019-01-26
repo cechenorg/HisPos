@@ -823,6 +823,16 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 卡片資料與目前顧客資訊不符，
+        ///是否覆蓋? 的當地語系化字串。
+        /// </summary>
+        internal static string 卡片資料不符 {
+            get {
+                return ResourceManager.GetString("卡片資料不符", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 取得就醫序號... 的當地語系化字串。
         /// </summary>
         internal static string 取得就醫序號 {
@@ -940,6 +950,25 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 合作診所處方不可登錄，
+        ///請將調劑日期設定為今天 的當地語系化字串。
+        /// </summary>
+        internal static string 登錄合作診所處方 {
+            get {
+                return ResourceManager.GetString("登錄合作診所處方", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請確認處方病患資訊與健保卡資訊符合 的當地語系化字串。
+        /// </summary>
+        internal static string 確認卡片 {
+            get {
+                return ResourceManager.GetString("確認卡片", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 認證失敗 的當地語系化字串。
         /// </summary>
         internal static string 認證失敗 {
@@ -1017,6 +1046,15 @@ namespace His_Pos.Properties {
         internal static string 讀取成功 {
             get {
                 return ResourceManager.GetString("讀取成功", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 資料不符 的當地語系化字串。
+        /// </summary>
+        internal static string 資料不符 {
+            get {
+                return ResourceManager.GetString("資料不符", resourceCulture);
             }
         }
         

@@ -220,8 +220,8 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P8 = $"{m.NHIPrice:0000000.00}";
                 P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
-                P4 = m.Usage.Name;
-                P5 = m.Position.Name;
+                P4 = m.UsageName;
+                P5 = m.PositionName;
                 P10 = serial;
                 P11 = $"{m.Days:00}";
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
@@ -235,8 +235,8 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P7 = m.Amount.ToString();
                 var dosage = m.Dosage is null ? string.Empty : m.Dosage.ToString();
                 P3 = dosage;
-                P4 = m.Usage.Name;
-                P5 = m.Position.Name;
+                P4 = m.UsageName;
+                P5 = m.PositionName;
                 P8 = string.Empty;
                 P9 = string.Empty;
                 P10 = string.Empty;

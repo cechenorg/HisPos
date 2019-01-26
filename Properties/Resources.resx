@@ -462,4 +462,18 @@
   <data name="重新過卡或押金" xml:space="preserve">
     <value>尚未選擇異常代碼，請輸入押金金額或重新過卡後再次按下調劑按鈕</value>
   </data>
+  <data name="卡片資料不符" xml:space="preserve">
+    <value>卡片資料與目前顧客資訊不符，
+是否覆蓋?</value>
+  </data>
+  <data name="登錄合作診所處方" xml:space="preserve">
+    <value>合作診所處方不可登錄，
+請將調劑日期設定為今天</value>
+  </data>
+  <data name="確認卡片" xml:space="preserve">
+    <value>請確認處方病患資訊與健保卡資訊符合</value>
+  </data>
+  <data name="資料不符" xml:space="preserve">
+    <value>資料不符</value>
+  </data>
 </root>

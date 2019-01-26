@@ -283,6 +283,11 @@ namespace His_Pos.NewClass.Prescription
             conn.CloseConnection();
         }
 
+        public static void UpdatePrescription(int id)
+        {
+
+        }
+
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;
@@ -663,7 +668,5 @@ namespace His_Pos.NewClass.Prescription
             return detailTable;
         }
         #endregion
-
-      
     }
 }

@@ -96,9 +96,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime>("TreatmentDate");
-            if(!string.IsNullOrEmpty(r.Field<byte>("ChronicSequence").ToString()))
+            if(!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
-            if (!string.IsNullOrEmpty(r.Field<byte>("ChronicTotal").ToString()))
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
                 ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString()); 
             MainDisease = new DisCode();
             MainDisease.ID = r.Field<string>("MainDiseaseID");

@@ -34,5 +34,17 @@ namespace His_Pos.NewClass.Prescription {
         } 
         public bool IsDeposit { get; set; } //是否押金
         public bool IsReadCard { get; set; } //是否讀卡
+
+        public void Init()
+        {
+            IsGetCard = false;
+            IsRead = false;
+            IsAdjust = false;
+            IsSendOrder = false;
+            IsSendToSingde = false;
+            IsRegister = false;
+            IsReadCard = false;
+            IsDeclare = true;
+        }
     }
 }
