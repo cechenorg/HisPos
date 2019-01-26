@@ -24,7 +24,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescription : ObservableObject
+    public class Prescription : ObservableObject,ICloneable
     {
         public Prescription()
         {
@@ -45,19 +45,23 @@ namespace His_Pos.NewClass.Prescription
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines(); 
             PrescriptionPoint = new PrescriptionPoint(r);
-            if(r.Field<byte?>("DeclareFileID") != null)
-                DeclareFileID = r.Field<byte>("DeclareFileID");
+            if(r.Field<int?>("DeclareFileID") != null)
+                DeclareFileID = r.Field<int>("DeclareFileID");
             MedicineDays = r.Field<byte>("MedicineDays");
             switch (prescriptionSource) {
                 case PrescriptionSource.Normal:
                     Id = r.Field<int>("ID");
+                    MainWindow.ServerConnection.OpenConnection();
                     Medicines.GetDataByPrescriptionId(Id);
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.Normal);
+                    MainWindow.ServerConnection.CloseConnection();
                     break;
                 case PrescriptionSource.ChronicReserve:
                     Source = PrescriptionSource.ChronicReserve;
                     SourceId = r.Field<int>("ID").ToString();
+                    MainWindow.ServerConnection.OpenConnection();
                     Medicines.GetDataByReserveId(SourceId);
+                    MainWindow.ServerConnection.CloseConnection();
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
                     break;
             }
@@ -105,7 +109,7 @@ namespace His_Pos.NewClass.Prescription
         public IcCard Card { get; set; }
         public Treatment.Treatment Treatment { get; set; }//處方資料
         public PrescriptionSource Source { get; set; }
-        public string SourceId { get; }//合作診所.慢箋Id
+        public string SourceId { get; set; }//合作診所.慢箋Id
         public string OrderNumber { get; set; }//傳送藥健康單號
         public string Remark { get; }//回傳合作診所單號 
         public int MedicineDays { get; set; } //給藥日份
@@ -754,13 +758,35 @@ namespace His_Pos.NewClass.Prescription
             return success;
         }
 
-        private void Update()
+        public void Update()
         {
 
         }
-        private void AdjustMedicines(Medicines originMedicines)
+        public void AdjustMedicines(Medicines originMedicines)
         {
 
+        }
+
+        public object Clone()
+        {
+            Prescription p = new Prescription();
+            p.Treatment = (Treatment.Treatment)Treatment.Clone();
+            foreach (var m in Medicines)
+            {
+                p.Medicines.Add(m);
+            }
+            p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();
+            p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
+            p.DeclareContent = DeclareContent;
+            p.Patient = Patient.DeepCloneViaJson();
+            Card = new IcCard();
+            p.MedicalServiceID = MedicalServiceID;
+            p.DeclareFileID = DeclareFileID;
+            p.MedicineDays = MedicineDays;
+            p.SourceId = SourceId;
+            p.OrderNumber = OrderNumber;
+            p.Id = Id;
+            return p;
         }
     }
 }

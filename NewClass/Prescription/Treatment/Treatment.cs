@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -21,7 +22,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class Treatment:ObservableObject
+    public class Treatment:ObservableObject,ICloneable
     {
         public Treatment()
         {
@@ -101,12 +102,22 @@ namespace His_Pos.NewClass.Prescription.Treatment
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
                 ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString()); 
             MainDisease = new DisCode();
-            MainDisease.ID = r.Field<string>("MainDiseaseID");
+            if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
+            {
+                MainDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
+            }
             SubDisease = new DisCode();
-            SubDisease.ID = r.Field<string>("SecondDiseaseID");
+            if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
+            {
+                SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
+            }
             Pharmacist = new MedicalPersonnel(r);
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
             SpecialTreat = new SpeTre();
-            SpecialTreat.Id = r.Field<string>("SpecialTreatID");
+            if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
+            {
+                SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(r.Field<string>("SpecialTreatID")));
+            }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
             TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
@@ -501,6 +512,29 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SubDisease = null;
             SpecialTreat = null;
             PaymentCategory = null;
+        }
+
+        public object Clone()
+        {
+            Treatment t = new Treatment();
+            t.AdjustCase = VM.GetAdjustCase(AdjustCase.Id);
+            t.AdjustDate = AdjustDate;
+            t.ChronicSeq = ChronicSeq;
+            t.ChronicTotal = chronicTotal;
+            t.Copayment = VM.GetCopayment(Copayment.Id);
+            t.Division = VM.GetDivision(Division.Id);
+            t.Institution = Institution.DeepCloneViaJson();
+            t.MainDisease = MainDisease?.DeepCloneViaJson();
+            t.SubDisease = SubDisease?.DeepCloneViaJson();
+            t.MedicalNumber = MedicalNumber;
+            t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
+            t.SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(SpecialTreat.Id));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
+            t.TreatDate = TreatDate;
+            t.TempMedicalNumber = TempMedicalNumber;
+            return t;
         }
     }
 }
