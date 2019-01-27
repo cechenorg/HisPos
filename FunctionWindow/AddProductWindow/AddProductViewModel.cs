@@ -47,7 +47,15 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             }
         }
 
-        public bool IsEditing { get; set; }
+        private bool isEditing;
+        public bool IsEditing
+        {
+            get => isEditing;
+            private set
+            {
+                Set(() => IsEditing, ref isEditing, value);
+            }
+        }
         public bool IsProductSelected { get; set; } = false;
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
