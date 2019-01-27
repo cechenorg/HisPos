@@ -20,7 +20,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBox Width="300" Text="{Binding SearchString, Mode=TwoWay}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
+            <TextBox Name="SearchStringTextBox" Width="300" Text="{Binding SearchString, Mode=TwoWay}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding GetRelatedDataCommand}" Key="Enter"/>
                 </TextBox.InputBindings>

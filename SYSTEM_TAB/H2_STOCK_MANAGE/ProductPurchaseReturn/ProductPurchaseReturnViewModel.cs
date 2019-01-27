@@ -28,7 +28,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand<string> AddProductCommand { get; set; }
+        public RelayCommand<string> AddProductByInputCommand { get; set; }
+        public RelayCommand AddProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
@@ -105,7 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             InitVariables();
         }
-        private void AddProductAction(string searchString)
+        private void AddProductByInputAction(string searchString)
         {
             if (searchString.Length < 5)
             {
@@ -129,6 +130,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
             }
         }
+        private void AddProductAction()
+        {
+            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("");
+            productPurchaseReturnAddProductWindow.ShowDialog();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -148,7 +154,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
-            AddProductCommand = new RelayCommand<string>(AddProductAction);
+            AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
+            AddProductCommand = new RelayCommand(AddProductAction);
         }
         
         #region ----- Messenger Functions -----

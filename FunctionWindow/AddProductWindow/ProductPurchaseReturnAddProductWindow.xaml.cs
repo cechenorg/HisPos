@@ -31,7 +31,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
 
             DataContext = new AddProductViewModel(searchString, AddProductEnum.PruductPurchase);
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            SearchStringTextBox.Focus();
+
+            Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }
