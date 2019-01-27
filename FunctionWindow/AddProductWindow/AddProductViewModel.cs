@@ -46,7 +46,8 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 Set(() => ProStructCollectionView, ref proStructCollectionView, value);
             }
         }
-        public bool IsEditing { get; set; }
+
+        public bool IsEditing { get; set; } = false;
         public bool IsProductSelected { get; set; } = false;
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
@@ -73,22 +74,21 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         private AddProductEnum addProEnum { get; set; }
         #endregion
 
+        public AddProductViewModel(AddProductEnum addProductEnum)
+        {
+            RegisterCommand();
+            RegisterFilter(addProductEnum);
+            
+            SearchString = "";
+        }
+
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum)
         {
-            GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
-            ProductSelected = new RelayCommand(ProductSelectedAction);
-            addProEnum = addProductEnum;
+            RegisterCommand();
+            RegisterFilter(addProductEnum);
+
             SearchString = searchString;
             GetRelatedDataAction();
-            switch (addProductEnum)
-            {
-                case AddProductEnum.PruductPurchase:
-                    FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
-                    break;
-                case AddProductEnum.AddMedicine:
-                    FilterCommand = new RelayCommand(AddMedicineFilterAction);
-                    break;
-            }
         }
 
         private void ProductSelectedAction()
@@ -174,7 +174,25 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         #endregion
 
         #region ----- Define Functions -----
+        private void RegisterCommand()
+        {
+            GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
+            ProductSelected = new RelayCommand(ProductSelectedAction);
+        }
+        private void RegisterFilter(AddProductEnum addProductEnum)
+        {
+            addProEnum = addProductEnum;
 
+            switch (addProductEnum)
+            {
+                case AddProductEnum.PruductPurchase:
+                    FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
+                    break;
+                case AddProductEnum.AddMedicine:
+                    FilterCommand = new RelayCommand(AddMedicineFilterAction);
+                    break;
+            }
+        }
         #endregion
 
     }
