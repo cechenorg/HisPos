@@ -130,7 +130,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
             }
         }
-        public int SelectedMedicinesIndex { get; set; }
+
+        private int priviousSelectedIndex { get; set; }
+        private int selectedMedicinesIndex;
+        public int SelectedMedicinesIndex
+        {
+            get => selectedMedicinesIndex;
+            set
+            {
+                if (value != -1)
+                {
+                    Set(() => SelectedMedicinesIndex, ref selectedMedicinesIndex, value);
+                }
+            }
+        }
+
         private MedSelectWindow MedicineWindow { get; set; }
         private bool? isDeposit;
         private bool canSendOrder;
@@ -261,7 +275,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AddMedicineAction(string medicineID)
         {
-            if(string.IsNullOrEmpty(medicineID)) return;
+            if(SelectedMedicinesIndex < CurrentPrescription.Medicines.Count)
+                priviousSelectedIndex = SelectedMedicinesIndex;
+            if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
                 MessageWindow.ShowMessage(StringRes.ShortSearchString+"5", MessageType.WARNING);
@@ -534,11 +550,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
-            CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
+            if(priviousSelectedIndex < 0 || priviousSelectedIndex >= CurrentPrescription.Medicines.Count ) return;
+            CurrentPrescription.AddMedicineBySearch(selectedProduct.ID, priviousSelectedIndex);
             CurrentPrescription.CountPrescriptionPoint();
-            if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
+            if (priviousSelectedIndex == CurrentPrescription.Medicines.Count - 1)
                 CurrentPrescription.Medicines.Add(new Medicine());
-            Messenger.Default.Send(SelectedMedicinesIndex, "FocusDosage");
+            Messenger.Default.Send(priviousSelectedIndex, "FocusDosage");
         }
         #endregion
         #region CommandActions

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -87,6 +82,23 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 case AddProductEnum.AddMedicine:
                     FilterCommand = new RelayCommand(AddMedicineFilterAction);
                     break;
+            }
+            Messenger.Default.Register<NotificationMessage>(this,"MoveUp", MoveUp);
+            Messenger.Default.Register<NotificationMessage>(this, "MoveDown", MoveDown);
+        }
+
+        private void MoveUp(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("MoveUp") && !ProStructCollectionViewSource.View.IsCurrentBeforeFirst)
+            {
+                ProStructCollectionViewSource.View.MoveCurrentToPrevious();
+            }
+        }
+        private void MoveDown(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("MoveDown") && !ProStructCollectionViewSource.View.IsCurrentAfterLast)
+            {
+                ProStructCollectionViewSource.View.MoveCurrentToNext();
             }
         }
 

@@ -311,6 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
+
             EditedPrescription.AddMedicineBySearch(selectedProduct.ID, SelectedMedicinesIndex);
             EditedPrescription.CountPrescriptionPoint();
             if (SelectedMedicinesIndex == EditedPrescription.Medicines.Count - 1)

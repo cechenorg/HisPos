@@ -311,6 +311,16 @@ namespace His_Pos.NewClass.Prescription
                         break;
                 }
             }
+
+            if (Medicines[selectedMedicinesIndex].ID.EndsWith("00") ||
+                Medicines[selectedMedicinesIndex].ID.EndsWith("G0"))
+                Medicines[selectedMedicinesIndex].PositionName = "PO";
+            if(selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Dosage != null)
+                Medicines[selectedMedicinesIndex].Dosage = Medicines[selectedMedicinesIndex - 1].Dosage;
+            if (selectedMedicinesIndex > 0 && !string.IsNullOrEmpty(Medicines[selectedMedicinesIndex-1].UsageName))
+                Medicines[selectedMedicinesIndex].UsageName = Medicines[selectedMedicinesIndex - 1].UsageName;
+            if (selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Days != null)
+                Medicines[selectedMedicinesIndex].Days = Medicines[selectedMedicinesIndex - 1].Days;
         }
         public void DeleteReserve() {
             PrescriptionDb.DeleteReserve(SourceId);

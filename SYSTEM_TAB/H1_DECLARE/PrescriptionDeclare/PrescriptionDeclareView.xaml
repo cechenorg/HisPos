@@ -233,7 +233,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" CanUserAddRows="False"
-                      CanUserSortColumns="False" EnableRowVirtualization="False" SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      CanUserSortColumns="False" EnableRowVirtualization="False" SelectedItem="{Binding SelectedMedicine, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedMedicinesIndex,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="PrescriptionMedicines_SelectionChanged" >
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -300,7 +300,7 @@
                         <DataGridTemplateColumn x:Name="MedicineId" Width="130" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red"
+                                    <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red" PreviewKeyDown="MedicineID_OnPreviewKeyDown"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="14" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBox.InputBindings>
                                             <KeyBinding Command="{Binding DataContext.AddMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"

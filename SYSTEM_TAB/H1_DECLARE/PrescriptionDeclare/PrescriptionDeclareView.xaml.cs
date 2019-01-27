@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,6 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     /// </summary>
     public partial class PrescriptionDeclareView
     {
+        public int CurrentFocus { get; set; }
         public PrescriptionDeclareView()
         {
             InitializeComponent();
@@ -64,7 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!(sender is DataGrid dg)) return;
             var index = dg.SelectedIndex;
-            if(index == -1) return;
+            if (index == -1) return;
             ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = index;
         }
 
@@ -281,8 +283,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var dataGridCells = new List<TextBox>();
             NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
+            if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
+                rowIndex = dataGridCells.Count - 1;
             dataGridCells[rowIndex].Focus();
             dataGridCells[rowIndex].SelectionStart = 0;
+            focusGrid.SelectedIndex = rowIndex;
+            ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
+        }
+
+        private void MedicineID_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var focusIndex = GetCurrentRowIndex(sender);
+                PrescriptionMedicines.SelectedIndex = focusIndex;
+                ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = focusIndex;
+            }
         }
     }
 }
