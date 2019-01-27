@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
@@ -260,11 +261,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             fdlg.RestoreDirectory = true;
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
-            List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>();
-            int tempId = Prescription.GetPrescriptionId();
+            List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>(); 
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 doc.Load(fdlg.FileName);
+                string fileId;
+                string fileHead = doc.GetElementsByTagName("tdata")[0].InnerXml; 
+                DataTable filetable = PrescriptionDb.CheckImportDeclareFileExist(fileHead);
+                if (filetable.Rows.Count > 0)
+                    fileId = filetable.Rows[0]["newId"].ToString();
+                else {
+                    MessageWindow.ShowMessage("此申報檔已經匯入~!", MessageType.ERROR);
+                    return;
+                }
+
                 XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
                 XmlDocument data = new XmlDocument();
                 foreach (XmlNode node in ddatas)
@@ -272,8 +282,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
                     ddatasCollection.Add(d); 
-                } 
-
+                }
+                PrescriptionDb.ImportDeclareXml(ddatasCollection, fileId);
+                MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
             }
 
         }

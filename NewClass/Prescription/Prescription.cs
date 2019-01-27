@@ -340,9 +340,7 @@ namespace His_Pos.NewClass.Prescription
         public void AdjustPredictResere() {
             PrescriptionDb.AdjustPredictResere(Id.ToString());
         }
-        public static int GetPrescriptionId() {
-            return PrescriptionDb.GetPrescriptionId().Rows[0].Field<int>("MaxPreId"); 
-        }
+        
         #endregion
         public void AddCooperativePrescriptionMedicines() {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
@@ -786,7 +784,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var orm in originMedicines) {
                 Medicine medicine = new Medicine();
                 medicine.ID = orm.ID;
-                medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? orm.Amount : Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount; 
+                medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ?  Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1; 
                 compareMeds.Add(medicine);
             }
             foreach (var nem in Medicines) {
