@@ -675,7 +675,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     else
                     {
-                        if (error is null)
+                        if ((bool)isDeposit)
                         {
                             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
                         }
@@ -683,7 +683,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         {
                             HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false ,error);
                         }
-                       
                     }
                 }
                 else
@@ -694,6 +693,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                CurrentPrescription.PrescriptionStatus.UpdateStatus();
             };
             IsBusy = true;
             worker.RunWorkerAsync();

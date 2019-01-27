@@ -188,7 +188,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         private void PrintAction()
         {
-            GetCompletePrescriptionData();
+            GetCompletePrescriptionData(false);
             SelectedPrescription.CountPrescriptionPoint();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
             if ((bool)medBagPrint.DialogResult)
@@ -206,7 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         private void PrescriptionSelectedAction()
         {
-            GetCompletePrescriptionData();
+            GetCompletePrescriptionData(true);
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection")); 
         }
@@ -227,13 +227,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             CooPreCollectionViewSource.Filter += FilterByIsRead;
         }
 
-        private void GetCompletePrescriptionData()
+        private void GetCompletePrescriptionData(bool addMedicine)
         {
             MainWindow.ServerConnection.OpenConnection();
             SelectedPrescription.Patient = SelectedPrescription.Patient.Check();
             SelectedPrescription.Treatment.MainDisease.GetDataByCodeId(SelectedPrescription.Treatment.MainDisease.ID);
             SelectedPrescription.Treatment.SubDisease.GetDataByCodeId(SelectedPrescription.Treatment.SubDisease.ID);
-            SelectedPrescription.AddCooperativePrescriptionMedicines();
+            SelectedPrescription.AddCooperativePrescriptionMedicines(addMedicine);
             SelectedPrescription.UpdateCooperativePrescriptionIsRead();
             MainWindow.ServerConnection.CloseConnection();
         }

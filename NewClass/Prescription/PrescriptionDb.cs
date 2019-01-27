@@ -302,8 +302,11 @@ namespace His_Pos.NewClass.Prescription
             conn.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
             conn.CloseConnection();
         }
+        public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus)
+        {
 
-        
+        }
+
 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
@@ -686,5 +689,6 @@ namespace His_Pos.NewClass.Prescription
             return detailTable;
         }
         #endregion
+        
     }
 }
