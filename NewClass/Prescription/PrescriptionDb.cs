@@ -33,13 +33,7 @@ namespace His_Pos.NewClass.Prescription
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
         
-        public static int InsertReserve(Prescription prescription, List<Pdata> prescriptionDetails) { 
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", SetReserveMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReserve]", parameterList);
-            return Convert.ToInt32(table.Rows[0]["ResMas_ID"].ToString());
-        }
+        
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "@ecMas_Id", recMasId); 

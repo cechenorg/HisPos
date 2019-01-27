@@ -633,7 +633,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
                     
-            } 
+            }
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.PredictResere();
         }
@@ -647,9 +648,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
             }
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.UpdateReserve();
         }
         private void PrescribeFunction() {
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
