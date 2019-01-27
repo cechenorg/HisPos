@@ -27,10 +27,10 @@ namespace His_Pos.FunctionWindow {
         }
         #region ----- Define Actions -----
         private void YesAction() { 
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("YesAction")); 
+            Messenger.Default.Send(new NotificationMessage("YesAction")); 
         }
         private void NoAction() {
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("NoAction"));
+            Messenger.Default.Send(new NotificationMessage("NoAction"));
         }
         #endregion
 

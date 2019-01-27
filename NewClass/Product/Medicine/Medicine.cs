@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.Service;
+using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -28,7 +29,7 @@ namespace His_Pos.NewClass.Product.Medicine
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
             Usage = new Usage.Usage();
-            Position = new Position.Position();
+            Position = new Position.Position(); 
         }
         public Medicine(ProductStruct p) : base(p)
         {
@@ -37,8 +38,36 @@ namespace His_Pos.NewClass.Product.Medicine
             Price = p.SellPrice;
             NHIPrice = p.NHIPrice;
         }
-         
 
+        public Medicine(Item m)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            UsageName = m.Freq;
+            ViewModelMainWindow.CheckContainsPosition(m.Way);
+            PositionName = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Daily_dose);
+            Days = Convert.ToInt32(m.Days);
+            PaySelf = !string.IsNullOrEmpty(m.Remark) ;
+           
+            switch (m.Remark) {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    Price = 0;
+                    break;
+            }
+        }
+    
         private double amount;//總量
         public double Amount
         {
@@ -46,8 +75,26 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
+                CheckIsPriceReadOnly();
+                CountTotalPrice();
             }
         }
+
+        private void CountTotalPrice()
+        {
+            if(Amount <= 0) return;
+            if (PaySelf)
+            {
+                TotalPrice = Price > 0 ? 
+                    Math.Round(Amount * Price,MidpointRounding.AwayFromZero)
+                    : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                TotalPrice = Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
+            }
+        }
+
         private double? dosage;//每次用量
         public double? Dosage
         {
@@ -57,6 +104,9 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (dosage != value)
                 {
                     Set(() => Dosage, ref dosage, value);
+                    if(ID is null) return;
+                    if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -66,16 +116,15 @@ namespace His_Pos.NewClass.Product.Medicine
             get => _usageName;
             set
             {
+                
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
-                    Usage = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", "")));
-                    if (Usage != null)
-                    {
-                        Usage.Name = _usageName;
-                        if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null)
-                            CalculateAmount();
-                    }
+                    Usage = ViewModelMainWindow.GetUsage(value);
+                    Usage.Name = UsageName;
+                    if (ID is null) return;
+                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -88,6 +137,23 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (usage != value)
                 {
                     Set(() => Usage, ref usage, value);
+                }
+            }
+        }
+        private string _positionName;
+        public string PositionName
+        {
+            get => _positionName;
+            set
+            {
+                if (value != null)
+                {
+                    Set(() => PositionName, ref _positionName, value);
+                    Position = ViewModelMainWindow.GetPosition(_positionName);
+                    if (Position != null)
+                    {
+                        Position.Name = _positionName;
+                    }
                 }
             }
         }
@@ -112,6 +178,9 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (days != value)
                 {
                     Set(() => Days, ref days, value);
+                    if (ID is null) return;
+                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -124,6 +193,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (price != value)
                 {
                     Set(() => Price, ref price, value);
+                    CountTotalPrice();
                 }
             }
         }
@@ -148,9 +218,18 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (totalPrice != value)
                 {
                     Set(() => TotalPrice, ref totalPrice, value);
+                    CheckPrice();
                 }
             }
         }
+
+        private void CheckPrice()
+        {
+            if(Amount <=  0 || !PaySelf)return;
+            if (Price != TotalPrice / Amount)
+                Price = Math.Round(TotalPrice / Amount,2,MidpointRounding.AwayFromZero);
+        }
+
         private double inventory;//庫存
         public double Inventory
         {
@@ -172,9 +251,22 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (paySelf != value)
                 {
                     Set(() => PaySelf, ref paySelf, value);
+                    CheckIsPriceReadOnly();
+                    CountTotalPrice();
                 }
             }
         }
+
+        private void CheckIsPriceReadOnly()
+        {
+            if (Amount <= 0)
+                IsPriceReadOnly = true;
+            else
+            {
+                IsPriceReadOnly = !PaySelf;
+            }
+        }
+
         private string vendor;//製造商
         public string Vendor
         {
@@ -212,6 +304,8 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
         private bool enable;//是否停用
+        private Item m;
+
         public bool Enable
         {
             get => enable;
@@ -223,18 +317,27 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+
+        private bool isPriceReadOnly;
+        public bool IsPriceReadOnly {
+            get => isPriceReadOnly;
+            set
+            {
+                Set(() => IsPriceReadOnly, ref isPriceReadOnly, value);
+            }
+        }
+
         private void CalculateAmount()
         {
             if(Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
-            var tmpUsage = Usage;
-            var find = false;
-            foreach (var u in ViewModelMainWindow.Usages)
-            {
-                if (!UsageName.Equals(u.Name)) continue;
-                tmpUsage = u;
-                find = true;
-            }
-            Amount = find ? (double)Dosage * UsagesFunction.CheckUsage((int)Days, tmpUsage) : (double)Dosage * UsagesFunction.CheckUsage((int)Days);
+            Amount = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
+        }
+
+        public void CheckPaySelf(string adjustCaseId)
+        {
+            if (string.IsNullOrEmpty(adjustCaseId)) return;
+            if (adjustCaseId.Equals("0"))
+                PaySelf = true;
         }
     }
 }

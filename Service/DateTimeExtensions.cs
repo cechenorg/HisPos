@@ -167,5 +167,45 @@ namespace His_Pos.Service
             result.Days = days;
             return result;
         }
+        public static string NullableDateToTWCalender(DateTime? d, bool needSplit)
+        {
+            if (d is null) return string.Empty;
+            var convert = (DateTime) d;
+            var year = (convert.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (convert.Month).ToString().PadLeft(2, '0');
+            var day = (convert.Day).ToString().PadLeft(2, '0');
+            if (needSplit)
+                return year + "/" + month + "/" + day;
+            return year + month + day;
+        }
+
+        public static DateTime TWDateStringToDateOnly(string date)
+        {
+            var year = int.Parse(date.Substring(0, 3)) + 1911;
+            var month = int.Parse(date.Substring(3, 2));
+            var day = int.Parse(date.Substring(5, 2));
+            return new DateTime(year,month,day);
+        }
+
+        public static DateTime TWDateStringToDateTime(string date)
+        {
+            var year = int.Parse(date.Substring(0, 3)) + 1911;
+            var month = int.Parse(date.Substring(3, 2));
+            var day = int.Parse(date.Substring(5, 2));
+            var hour = int.Parse(date.Substring(7, 2));
+            var min = int.Parse(date.Substring(9, 2));
+            var sec = int.Parse(date.Substring(11, 2));
+            return new DateTime(year, month, day,hour,min,sec);
+        }
+        public static string ToStringWithSecond(DateTime d)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            var hour = (d.Hour).ToString().PadLeft(2, '0');
+            var minute = (d.Minute).ToString().PadLeft(2, '0');
+            var sec = (d.Second).ToString().PadLeft(2, '0');
+            return year + month + day + hour + minute + sec;
+        }
     }
 }

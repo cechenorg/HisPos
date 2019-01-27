@@ -135,59 +135,14 @@
   <data name="hisPrescriptionInquire" xml:space="preserve">
     <value>處方查詢</value>
   </data>
-  <data name="noDoctorMsg" xml:space="preserve">
-    <value>診治醫生未填寫</value>
-  </data>
-  <data name="noInstitutionMsg" xml:space="preserve">
-    <value>釋出院所未填寫</value>
-  </data>
-  <data name="noMedicineMsg" xml:space="preserve">
-    <value>處方未填寫</value>
-  </data>
-  <data name="noTreatmentDateMsg" xml:space="preserve">
-    <value>請選擇調劑日期</value>
-  </data>
-  <data name="hisPrescriptionDecDoctorIdNullMessage" xml:space="preserve">
-    <value>請填寫診治醫師代號</value>
-  </data>
   <data name="MedicineDaysOutOfRange" xml:space="preserve">
     <value>日劑藥費且為西醫一般案件，給藥日份不得超過3天</value>
-  </data>
-  <data name="TreatmentCodeNull" xml:space="preserve">
-    <value>非藥事居家照護者，至少需填寫一項國際疾病分類碼</value>
-  </data>
-  <data name="DivisionNull" xml:space="preserve">
-    <value>非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，需填寫就醫科別</value>
-  </data>
-  <data name="PrescriptionDateNull" xml:space="preserve">
-    <value>非藥事居家照護者，需填寫就醫日期</value>
-  </data>
-  <data name="InstitutionIdError" xml:space="preserve">
-    <value>非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，原處方機構代號不可為"N"</value>
-  </data>
-  <data name="MedicalCaseNull" xml:space="preserve">
-    <value>非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，需填寫原處方機構案件分類</value>
-  </data>
-  <data name="SpecialTreatmentCodeNull" xml:space="preserve">
-    <value>非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，需填寫原處方服務機構之特定治療項目代號</value>
-  </data>
-  <data name="ChronicSequenceNull" xml:space="preserve">
-    <value>慢性病連續處方箋需填寫連續處方箋調劑序號</value>
-  </data>
-  <data name="ChronicDeliveryTimesNull" xml:space="preserve">
-    <value>慢性病連續處方箋需填寫連續處方可調劑次數</value>
-  </data>
-  <data name="MedicalNumberNull" xml:space="preserve">
-    <value>慢性病連續處方箋需填寫原處方就醫序號</value>
   </data>
   <data name="MedicineDaysOutOfRange_1_7" xml:space="preserve">
     <value>一般處方箋給藥日份不得超過7天</value>
   </data>
   <data name="CaseCategoryNull" xml:space="preserve">
     <value>請選擇調劑案件(案件分類)</value>
-  </data>
-  <data name="ChronicAdjustCaseId" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="ProductPurchase" xml:space="preserve">
     <value>進退貨管理</value>
@@ -293,5 +248,232 @@
   </data>
   <data name="口服液劑" xml:space="preserve">
     <value>口服液劑(原瓶包裝)</value>
+  </data>
+  <data name="AdjustCaseError" xml:space="preserve">
+    <value>請選擇調劑案件
+</value>
+  </data>
+  <data name="AdjustDateError" xml:space="preserve">
+    <value>請填寫調劑日期
+</value>
+  </data>
+  <data name="ChronicSeqError" xml:space="preserve">
+    <value>慢箋請填寫調劑序號
+</value>
+  </data>
+  <data name="ChronicTimesError" xml:space="preserve">
+    <value>請填寫領藥次數與總領藥次數
+</value>
+  </data>
+  <data name="ChronicTotalError" xml:space="preserve">
+    <value>慢箋請填寫可調劑次數
+</value>
+  </data>
+  <data name="CopaymentError" xml:space="preserve">
+    <value>請填寫部分負擔
+</value>
+  </data>
+  <data name="DiseaseCodeError" xml:space="preserve">
+    <value>請填寫主診斷碼
+</value>
+  </data>
+  <data name="DivisionError" xml:space="preserve">
+    <value>請填寫就醫科別
+</value>
+  </data>
+  <data name="InstitutionError" xml:space="preserve">
+    <value>請填寫釋出院所
+</value>
+  </data>
+  <data name="MedicalNumberError" xml:space="preserve">
+    <value>請填寫就醫序號
+</value>
+  </data>
+  <data name="MedicalNumberError1" xml:space="preserve">
+    <value>請填寫就醫序號
+</value>
+  </data>
+  <data name="MedicineEmpty" xml:space="preserve">
+    <value>請填寫處方藥品
+</value>
+  </data>
+  <data name="PaymentCategoryError" xml:space="preserve">
+    <value>請填寫給付類別
+</value>
+  </data>
+  <data name="PharmacistIDError" xml:space="preserve">
+    <value>未選擇調劑藥師或調劑藥師身分證未填寫\n</value>
+  </data>
+  <data name="PrescriptionCaseError" xml:space="preserve">
+    <value>請選擇處方案件
+</value>
+  </data>
+  <data name="PrescriptoinOutOfDate" xml:space="preserve">
+    <value>處方已超過可領取時限
+</value>
+  </data>
+  <data name="TreatDateError" xml:space="preserve">
+    <value>請填寫就醫日期\n</value>
+  </data>
+  <data name="DiseaseCodeNotFound" xml:space="preserve">
+    <value>查無疾病代碼</value>
+  </data>
+  <data name="InsertPrescriptionSuccess" xml:space="preserve">
+    <value>處方登錄成功</value>
+  </data>
+  <data name="MedicineNotFound" xml:space="preserve">
+    <value>查無藥品</value>
+  </data>
+  <data name="PrintConfirm" xml:space="preserve">
+    <value>列印確認</value>
+  </data>
+  <data name="PrintMedBag" xml:space="preserve">
+    <value>是否列印藥袋</value>
+  </data>
+  <data name="PrintReceipt" xml:space="preserve">
+    <value>是否列印收據</value>
+  </data>
+  <data name="ShortSearchString" xml:space="preserve">
+    <value>搜尋字長度不得小於</value>
+  </data>
+  <data name="GetAdjustCases" xml:space="preserve">
+    <value>取得調劑案件...</value>
+  </data>
+  <data name="GetCopayments" xml:space="preserve">
+    <value>取得部分負擔...</value>
+  </data>
+  <data name="GetDivisions" xml:space="preserve">
+    <value>取得科別...</value>
+  </data>
+  <data name="GetInstitutions" xml:space="preserve">
+    <value>取得釋出院所...</value>
+  </data>
+  <data name="GetPaymentCategories" xml:space="preserve">
+    <value>取得給付類別...</value>
+  </data>
+  <data name="GetPositions" xml:space="preserve">
+    <value>取得藥品途徑...</value>
+  </data>
+  <data name="GetPrescriptionCases" xml:space="preserve">
+    <value>取得處方案件...</value>
+  </data>
+  <data name="GetSpecialTreats" xml:space="preserve">
+    <value>取得特定治療代碼...</value>
+  </data>
+  <data name="GetUsages" xml:space="preserve">
+    <value>取得藥品用法...</value>
+  </data>
+  <data name="MedBagPrinting" xml:space="preserve">
+    <value>藥袋列印中...</value>
+  </data>
+  <data name="ReceiptPrinting" xml:space="preserve">
+    <value>收據列印中...</value>
+  </data>
+  <data name="GetCooperativePrescriptions" xml:space="preserve">
+    <value>取得合作診所處方...</value>
+  </data>
+  <data name="SearchDateOutOfRange" xml:space="preserve">
+    <value>查詢日期範圍超出限制(3個月)</value>
+  </data>
+  <data name="StartDateEmpty" xml:space="preserve">
+    <value>請填寫起始日期</value>
+  </data>
+  <data name="StartDateOutOfRange" xml:space="preserve">
+    <value>起始日期不得大於結束日期</value>
+  </data>
+  <data name="健保局連線中" xml:space="preserve">
+    <value>與健保局連線認證中，請稍後...</value>
+  </data>
+  <data name="所置入非安全模組" xml:space="preserve">
+    <value>所置入非安全模組卡(檔)</value>
+  </data>
+  <data name="控制軟體異常" xml:space="preserve">
+    <value>讀卡機控制軟體異常，請檢查讀卡機設備</value>
+  </data>
+  <data name="未認證" xml:space="preserve">
+    <value>未認證</value>
+  </data>
+  <data name="檢查中" xml:space="preserve">
+    <value>檢查中...</value>
+  </data>
+  <data name="檢查健保卡" xml:space="preserve">
+    <value>健保IC卡檢查中...</value>
+  </data>
+  <data name="檢查安全模組" xml:space="preserve">
+    <value>安全模組檢查中...</value>
+  </data>
+  <data name="檢查醫事人員卡" xml:space="preserve">
+    <value>醫事人員卡檢查中...</value>
+  </data>
+  <data name="認證失敗" xml:space="preserve">
+    <value>認證失敗</value>
+  </data>
+  <data name="認證成功" xml:space="preserve">
+    <value>認證成功</value>
+  </data>
+  <data name="認證成功已驗" xml:space="preserve">
+    <value>認證成功(已驗PIN)</value>
+  </data>
+  <data name="認證成功未驗" xml:space="preserve">
+    <value>認證成功(未驗PIN)</value>
+  </data>
+  <data name="讀卡機異常" xml:space="preserve">
+    <value>讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞</value>
+  </data>
+  <data name="讀卡機逾時" xml:space="preserve">
+    <value>讀卡機逾時</value>
+  </data>
+  <data name="讀取健保卡" xml:space="preserve">
+    <value>健保卡資料讀取中...</value>
+  </data>
+  <data name="讀取失敗" xml:space="preserve">
+    <value>健保卡讀取失敗</value>
+  </data>
+  <data name="讀取成功" xml:space="preserve">
+    <value>健保卡讀取成功</value>
+  </data>
+  <data name="連接失敗" xml:space="preserve">
+    <value>讀卡機連接開啟失敗</value>
+  </data>
+  <data name="連接成功" xml:space="preserve">
+    <value>讀卡機連接開啟成功</value>
+  </data>
+  <data name="開啟讀卡機" xml:space="preserve">
+    <value>開啟讀卡機連接...</value>
+  </data>
+  <data name="驗證醫事人員卡" xml:space="preserve">
+    <value>醫事人員卡驗證中...</value>
+  </data>
+  <data name="取得就醫序號" xml:space="preserve">
+    <value>取得就醫序號...</value>
+  </data>
+  <data name="寫卡" xml:space="preserve">
+    <value>卡片資料寫入中...</value>
+  </data>
+  <data name="產生每日上傳資料" xml:space="preserve">
+    <value>產生每日上傳資料中...</value>
+  </data>
+  <data name="寫卡異常" xml:space="preserve">
+    <value>卡片寫入異常，請選擇異常代碼</value>
+  </data>
+  <data name="押金確認" xml:space="preserve">
+    <value>押金確認</value>
+  </data>
+  <data name="重新過卡或押金" xml:space="preserve">
+    <value>尚未選擇異常代碼，請輸入押金金額或重新過卡後再次按下調劑按鈕</value>
+  </data>
+  <data name="卡片資料不符" xml:space="preserve">
+    <value>卡片資料與目前顧客資訊不符，
+是否覆蓋?</value>
+  </data>
+  <data name="登錄合作診所處方" xml:space="preserve">
+    <value>合作診所處方不可登錄，
+請將調劑日期設定為今天</value>
+  </data>
+  <data name="確認卡片" xml:space="preserve">
+    <value>請確認處方病患資訊與健保卡資訊符合</value>
+  </data>
+  <data name="資料不符" xml:space="preserve">
+    <value>資料不符</value>
   </data>
 </root>

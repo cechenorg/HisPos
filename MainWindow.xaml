@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:His_Pos"
     xmlns:adminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2"
-    xmlns:prescriptionInquire="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire"
+    xmlns:prescriptionSearch="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
     xmlns:inventoryManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement"
     xmlns:productPurchase="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase"
     xmlns:productPurchaseRecord="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
@@ -55,8 +55,8 @@
         <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclareViewModel}">
             <prescriptionDeclare:PrescriptionDeclareView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
-            <prescriptionInquire:PrescriptionInquireView />
+        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModel}">
+            <prescriptionSearch:PrescriptionSearchView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
             <inventoryManagement:InventoryManagementView />

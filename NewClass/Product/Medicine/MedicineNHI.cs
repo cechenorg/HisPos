@@ -141,5 +141,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 Set(() => Source, ref source, value);
             }
         }
+        
     }
 }

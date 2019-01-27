@@ -2,71 +2,130 @@
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
-using JetBrains.Annotations;
+using His_Pos.NewClass.Prescription.IcData;
+using His_Pos.Service;
+using StringRes = His_Pos.Properties.Resources;
+using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
+using Div = His_Pos.NewClass.Prescription.Treatment.Division.Division;
+using DisCode = His_Pos.NewClass.Prescription.Treatment.DiseaseCode.DiseaseCode;
+using AdjCase = His_Pos.NewClass.Prescription.Treatment.AdjustCase.AdjustCase;
+using PayCat = His_Pos.NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory;
+using SpeTre = His_Pos.NewClass.Prescription.Treatment.SpecialTreat.SpecialTreat;
+using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class Treatment:ObservableObject
+    public class Treatment:ObservableObject,ICloneable
     {
         public Treatment()
         {
-            Institution = new Institution.Institution();
-            Division = new Division.Division();
+            Institution = new Ins();
+            Division = new Div();
             Pharmacist = new MedicalPersonnel();
-            MainDisease = new DiseaseCode.DiseaseCode();
-            SubDisease = new DiseaseCode.DiseaseCode();
-            AdjustCase = new AdjustCase.AdjustCase();
+            MainDisease = new DisCode();
+            SubDisease = new DisCode();
+            AdjustCase = new AdjCase();
             PrescriptionCase = new PrescriptionCase.PrescriptionCase();
-            PaymentCategory = new PaymentCategory.PaymentCategory();
-            SpecialTreat = new SpecialTreat.SpecialTreat();
-            Copayment = new Copayment.Copayment();
+            PaymentCategory = new PayCat();
+            SpecialTreat = new SpeTre();
+            Copayment = new Cop();
         }
-        public Treatment(CooperativePrescription c) {
-            Institution = ViewModelMainWindow.Institutions.Count(ins => ins.Id == c.DeclareXmlDocument.Prescription.From) == 0 ? new Institution.Institution() : ViewModelMainWindow.Institutions.Single(ins => ins.Id == c.DeclareXmlDocument.Prescription.From);
-            Division = ViewModelMainWindow.Divisions.Count(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject) == 0 ? new Division.Division() : ViewModelMainWindow.Divisions.Single(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject);
-            int diseaseCount = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease.Count;
-            MainDisease = new DiseaseCode.DiseaseCode();
-            SubDisease = new DiseaseCode.DiseaseCode();
-            for (int i = 0; i < 1; i++){
+        public Treatment(CooperativePrescription c)
+        {
+            var prescription = c.DeclareXmlDocument.Prescription;
+            var study = prescription.Study;
+            var diseases = study.Diseases.Disease;
+            var insurance = prescription.Insurance;
+            var chronic = prescription.Continous_prescription;
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
+            MainDisease = new DisCode();
+            SubDisease = new DisCode();
+            for (int i = 0; i < diseaseCount; i++){
                 switch (i) {
                     case 0:
-                            MainDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
+                            MainDisease.ID = diseases[i].Code;
                         break;
                     case 1:
-                            SubDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
+                            SubDisease.ID = diseases[i].Code;
                         break;
                 }
-            } 
-            PrescriptionCase = ViewModelMainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : ViewModelMainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
-            Copayment = ViewModelMainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : ViewModelMainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
+            }
+            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
+            Copayment = VM.GetCopayment(insurance.CopaymentCode);
+            int.TryParse(chronic.Count, out var seq);
+            if (seq != 0)
+                ChronicSeq = seq;
+            int.TryParse(chronic.Total, out var total);
+            if (total != 0)
+                ChronicTotal = total;
             if (ChronicSeq != null && ChronicTotal != null) {
-                OriginalMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = "IC0" + ChronicSeq;
-                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("2"));
+                AdjustCase = VM.GetAdjustCase("2");
+                TempMedicalNumber = OriginalMedicalNumber;
             }
             else {
-                MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
-                AdjustCase = ViewModelMainWindow.AdjustCases.Single(a => a.Id.Equals("1"));
+                MedicalNumber = insurance.MedicalNumber;
+                AdjustCase = VM.GetAdjustCase("1");
+                TempMedicalNumber = MedicalNumber;
             }
             TreatDate = Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
-            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
-            SpecialTreat = new SpecialTreat.SpecialTreat();
-            Pharmacist = new MedicalPersonnel();
+            PaymentCategory = VM.GetPaymentCategory("4");
+            SpecialTreat = new SpeTre();
+            Pharmacist = VM.CurrentPharmacy.GetPharmacist();
         }
 
         public Treatment(DataRow r)
         {
-
+            Division = VM.GetDivision(r.Field<string>("DivisionID"));
+            AdjustCase = VM.GetAdjustCase(r.Field<string>("AdjustCaseID"));
+            Copayment = VM.GetCopayment(r.Field<string>("CopaymentID"));
+            PrescriptionCase = VM.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID"));
+            Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
+            PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
+            AdjustDate = r.Field<DateTime>("AdjustDate");
+            TreatDate = r.Field<DateTime>("TreatmentDate");
+            if(!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
+                ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
+                ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString()); 
+            MainDisease = new DisCode();
+            if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
+            {
+                MainDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
+            }
+            SubDisease = new DisCode();
+            if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
+            {
+                SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
+            }
+            Pharmacist = new MedicalPersonnel(r);
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
+            SpecialTreat = new SpeTre();
+            if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
+            {
+                SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(r.Field<string>("SpecialTreatID")));
+            }
+            MedicalNumber = r.Field<string>("MedicalNumber");
+            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+            TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
         }
 
-        private Institution.Institution institution;//釋出院所 D21
-        public Institution.Institution Institution
+        #region Variables
+        private Ins institution;//釋出院所 D21
+        public Ins Institution
         {
             get => institution;
             set
@@ -75,8 +134,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private Division.Division division;//就醫科別 D13
-        public Division.Division Division
+        private Div division;//就醫科別 D13
+        public Div Division
         {
             get => division;
             set
@@ -115,18 +174,19 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DateTime adjustDate;//調劑日期 D23
-        public DateTime AdjustDate
+        private DateTime? adjustDate;//調劑日期 D23
+        public DateTime? AdjustDate
         {
             get => adjustDate;
             set
             {
                 Set(() => AdjustDate, ref adjustDate, value);
+                Messenger.Default.Send(new NotificationMessage("AdjustDateChanged"));
             }
         }
 
-        private DiseaseCode.DiseaseCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
-        public DiseaseCode.DiseaseCode MainDisease
+        private DisCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
+        public DisCode MainDisease
         {
             get => mainDisease;
             set
@@ -135,8 +195,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DiseaseCode.DiseaseCode subDisease;//副診斷代碼(國際疾病分類碼2) D9
-        public DiseaseCode.DiseaseCode SubDisease
+        private DisCode subDisease;//副診斷代碼(國際疾病分類碼2) D9
+        public DisCode SubDisease
         {
             get => subDisease;
             set
@@ -165,8 +225,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }//連續處方箋調劑序號 D35
 
-        private AdjustCase.AdjustCase adjustCase;//調劑案件 D1
-        public AdjustCase.AdjustCase AdjustCase
+        private AdjCase adjustCase;//調劑案件 D1
+        public AdjCase AdjustCase
         {
             get => adjustCase;
             set
@@ -185,8 +245,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private Copayment.Copayment copayment;//部分負擔代碼  D15
-        public Copayment.Copayment Copayment
+        private Cop copayment;//部分負擔代碼  D15
+        public Cop Copayment
         {
             get => copayment;
             set
@@ -195,8 +255,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private PaymentCategory.PaymentCategory paymentCategory;//給付類別 D5
-        public PaymentCategory.PaymentCategory PaymentCategory
+        private PayCat paymentCategory;//給付類別 D5
+        public PayCat PaymentCategory
         {
             get => paymentCategory;
             set
@@ -215,14 +275,266 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private SpecialTreat.SpecialTreat specialTreat;//特定治療代碼 D26
-        public SpecialTreat.SpecialTreat SpecialTreat
+        private SpeTre specialTreat;//特定治療代碼 D26
+        public SpeTre SpecialTreat
         {
             get => specialTreat;
             set
             {
                 Set(() => SpecialTreat, ref specialTreat, value);
             }
+        }
+        private string tempMedicalNumber;
+        public string TempMedicalNumber
+        {
+            get => tempMedicalNumber;
+            set
+            {
+                if (tempMedicalNumber != value)
+                {
+                    Set(() => TempMedicalNumber, ref tempMedicalNumber, value);
+                }
+            }
+        }
+        #endregion
+        #region NHIRulesCheckFunctions
+        private string CheckInstitution()
+        {
+            if (CheckIsHomeCare() || CheckIsQuitSmoking())
+            {
+                Institution = new Ins { Id = "N", Name = string.Empty };
+                return string.Empty;
+            }
+            return Institution is null ? StringRes.InstitutionError : string.Empty;
+        }
+        private string CheckAdjustCase()
+        {
+            if (string.IsNullOrEmpty(AdjustCase.Id))
+                return StringRes.AdjustCaseError;
+            return string.Empty;
+        }
+        private string CheckPrescriptionCase()
+        {
+            if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.Id))
+                return StringRes.PrescriptionCaseError;
+            return string.Empty;
+        }
+        private string CheckAdjustDate()
+        {
+            if (AdjustDate is null) return StringRes.AdjustDateError;
+            if (TreatDate == null || !(ChronicSeq is null)) return string.Empty;
+            var startDate = (DateTime)TreatDate;
+            var endDate = (DateTime)AdjustDate;
+            var holiday = 0;
+            while (startDate < endDate)
+            {
+                if ((int)startDate.DayOfWeek == 0 || (int)startDate.DayOfWeek == 6)
+                {
+                    holiday += 1;
+                }
+                startDate = startDate.AddDays(1);
+            }
+            if (new TimeSpan(endDate.Ticks - startDate.Ticks).Days - holiday > 3)
+            {
+                return StringRes.PrescriptoinOutOfDate;
+            }
+            return string.Empty;
+        }
+        private string CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(TempMedicalNumber))
+            {
+                if (!CheckIsHomeCare()) return StringRes.MedicalNumberError;
+                TempMedicalNumber = "N";
+                return string.Empty;
+            }
+            if (ChronicSeq is null)
+                MedicalNumber = TempMedicalNumber;
+            else
+            {
+                if (ChronicSeq > 1)
+                {
+                    MedicalNumber = "IC0" + ChronicSeq;
+                    OriginalMedicalNumber = TempMedicalNumber;
+                }
+                else
+                {
+                    MedicalNumber = TempMedicalNumber;
+                }
+            }
+            return string.Empty;
+        }
+        private string CheckCopayment()
+        {
+            if (CheckIsHomeCare())
+            {
+                Copayment = VM.GetCopayment("009");
+                return string.Empty;
+            }
+            return string.IsNullOrEmpty(Copayment.Id) ? StringRes.CopaymentError : string.Empty;
+        }
+        private string CheckPharmacist()
+        {
+            return string.IsNullOrEmpty(Pharmacist.IdNumber) ? StringRes.PharmacistIDError : string.Empty;
+        }
+        private string CheckDivision()
+        {
+            if (Division is null || string.IsNullOrEmpty(Division.Id))
+            {
+                if (CheckIsHomeCare() || CheckIsQuitSmoking())
+                    return string.Empty;
+                return StringRes.DivisionError;
+            }
+            return string.Empty;
+        }
+        private string CheckTreatDate()
+        {
+            if (TreatDate is null)
+            {
+                if (CheckIsHomeCare())
+                    return string.Empty;
+                return StringRes.TreatDateError;
+            }
+            return string.Empty;
+        }
+        private string CheckPaymentCategory()
+        {
+            if (PaymentCategory is null)
+            {
+                if (CheckIsHomeCare() || ChronicSeq != null || AdjustCase.Id.Equals("2"))
+                    return string.Empty;
+                return StringRes.PaymentCategoryError;
+            }
+            return string.Empty;
+        }
+        public bool CheckIsQuitSmoking()
+        {
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
+            return AdjustCase.Id.Equals("5");
+        }
+        public bool CheckIsHomeCare()
+        {
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
+            return AdjustCase.Id.Equals("D");
+        }
+        private string CheckDiseaseCode()
+        {
+            if (string.IsNullOrEmpty(MainDisease.ID))
+            {
+                if (CheckIsHomeCare())
+                    return string.Empty;
+                return StringRes.DiseaseCodeError;
+            }
+            return string.Empty;
+        }
+        private string CheckChronicTimes()
+        {
+            if (string.IsNullOrEmpty(AdjustCase.Id)) return string.Empty;
+            if (!AdjustCase.Id.Equals("2")) return string.Empty;
+            if (ChronicSeq is null && ChronicTotal is null)
+                return StringRes.ChronicTimesError; 
+            if (ChronicSeq is null)
+                return StringRes.ChronicSeqError;
+            if (ChronicTotal is null)
+                return StringRes.ChronicTotalError;
+            return string.Empty;
+        }
+        public string Check()
+        {
+            return
+             CheckInstitution() +
+             CheckAdjustCase() +
+             CheckPrescriptionCase() +
+             CheckAdjustDate() +
+             CheckPharmacist() +
+             CheckMedicalNumber() +
+             CheckCopayment() +
+             CheckDivision() +
+             CheckTreatDate() +
+             CheckPaymentCategory() +
+             CheckDiseaseCode() +
+             CheckChronicTimes();
+        }
+        #endregion
+
+        public void Initial()
+        {
+            Division = null;
+            SpecialTreat = null;
+            Pharmacist = VM.CurrentPharmacy.GetPharmacist();
+            TreatDate = DateTime.Today;
+            AdjustDate = DateTime.Today;
+            AdjustCase = VM.GetAdjustCase("1");
+            PrescriptionCase = VM.GetPrescriptionCases("09");
+            PaymentCategory = VM.GetPaymentCategory("4");
+            Copayment = VM.GetCopayment("I20");
+        }
+        public void GetLastMedicalNumber()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                if (HisApiBase.OpenCom())
+                {
+                    int iBufferLen = 7;
+                    byte[] pBuffer = new byte[7];
+                    var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                    if (res == 0)
+                    {
+                        TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                    }
+                    HisApiBase.CloseCom();
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+            };
+            worker.RunWorkerAsync();
+        }
+
+        public void Clear()
+        {
+            Institution =
+                new Ins
+                {
+                    Id = VM.CurrentPharmacy.Id,
+                    Name = VM.CurrentPharmacy.Name,
+                    FullName = VM.CurrentPharmacy.Id + VM.CurrentPharmacy.Name
+                };
+            PrescriptionCase = null;
+            TempMedicalNumber = string.Empty;
+            Copayment = null;
+            TreatDate = null;
+            ChronicSeq = null;
+            ChronicTotal = null;
+            Division = null;
+            MainDisease = null;
+            SubDisease = null;
+            SpecialTreat = null;
+            PaymentCategory = null;
+        }
+
+        public object Clone()
+        {
+            Treatment t = new Treatment();
+            t.AdjustCase = VM.GetAdjustCase(AdjustCase.Id);
+            t.AdjustDate = AdjustDate;
+            t.ChronicSeq = ChronicSeq;
+            t.ChronicTotal = chronicTotal;
+            t.Copayment = VM.GetCopayment(Copayment.Id);
+            t.Division = VM.GetDivision(Division.Id);
+            t.Institution = Institution.DeepCloneViaJson();
+            t.MainDisease = MainDisease?.DeepCloneViaJson();
+            t.SubDisease = SubDisease?.DeepCloneViaJson();
+            t.MedicalNumber = MedicalNumber;
+            t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
+            t.SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(SpecialTreat.Id));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
+            t.TreatDate = TreatDate;
+            t.TempMedicalNumber = TempMedicalNumber;
+            return t;
         }
     }
 }

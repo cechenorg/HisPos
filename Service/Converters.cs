@@ -329,7 +329,10 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is MedicineNHI || value is MedicineOTC) return true;
+            if (value is MedicineNHI || value is MedicineOTC)
+            {
+                return true;
+            }
             return false;
         }
 

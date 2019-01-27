@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson
 
         public MedicalPersonnel(Employee.Employee e)
         {
-            Id = e.Id;
+            Id = e.ID;
             Name = e.Name;
             IdNumber = e.IDNumber;
         }
@@ -17,8 +17,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         {
             Id = r.Field<int>("Emp_ID");
             Name = r.Field<string>("Emp_Name"); 
-             IdNumber = r.Field<string>("Emp_IDNumber");
+            IdNumber = r.Field<string>("Emp_IDNumber");
         }
+        
         public int Id { get; set; }
         public string Name { get; set; }
         public string IdNumber { get; set; }

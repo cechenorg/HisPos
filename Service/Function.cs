@@ -9,15 +9,16 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.Properties;
 using NChinese.Phonetic;
 using Newtonsoft.Json;
@@ -106,7 +107,7 @@ namespace His_Pos.Service
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\藥健康\\"+FileTypeName;
+            path += "\\Declare\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\";
@@ -234,7 +235,7 @@ namespace His_Pos.Service
             }
         }
 
-        public string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
+        public static string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
         {
             var tmpByteArr = new byte[length];
             Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
@@ -242,32 +243,26 @@ namespace His_Pos.Service
             return result;
         }
 
-        public void DailyUpload(XDocument dailyUpload)
+        public void DailyUpload(XDocument dailyUpload,string recCount)
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "每日上傳");
-                var fileName = filePath + ".xml";
-                var cs = new ConvertData();
-                var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+                var filePath = ExportXml(dailyUpload, "dailyUpload");
+                var fileName = filePath + ".zip";
+                var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
-                var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-                var element = dailyUpload.Root.Element("REC");
-                var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+                var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+                var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                HisApiBase.OpenCom();
-                if(MainWindow.Instance.HisApiErrorCode == 0 && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+                if (HisApiBase.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                     HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                 HisApiBase.CloseCom();
             }
             catch (Exception ex)
             {
                 MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
-                
                 return;
             }
-        }
-      
-    }
+        }    }
 }

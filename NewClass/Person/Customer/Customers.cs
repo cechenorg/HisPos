@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ImportDeclareXml;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -29,6 +31,13 @@ namespace His_Pos.NewClass.Person.Customer
                 Add(new Customer(r));
             }
         }
-
+        public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas) {
+            DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
+            Customers customers = new Customers();
+            foreach (DataRow r in table.Rows) {
+                customers.Add(new Customer(r));
+            }
+            return customers;
+        }
     }
 }

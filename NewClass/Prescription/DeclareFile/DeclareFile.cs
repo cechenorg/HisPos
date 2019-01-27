@@ -65,6 +65,12 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
     [XmlRoot(ElementName = "ddata")]
     public class Ddata
     {
+        public Ddata() { }
+        public Ddata(Prescription p, List<Pdata> details)
+        {
+            Dhead = new Dhead(p);
+            Dbody = new Dbody(p,details);
+        }
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
         [XmlElement(ElementName = "dbody")]
@@ -74,6 +80,40 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
     [XmlRoot(ElementName = "dhead")]
     public class Dhead
     {
+        public Dhead() { }
+        public Dhead(Prescription p)
+        {
+            var t = p.Treatment;
+            var point = p.PrescriptionPoint;
+            D1 = t.AdjustCase.Id;
+            D2 = string.Empty;
+            D3 = p.Patient.IDNumber;
+            D4 = string.Empty;
+            D5 = t.PaymentCategory?.Id;
+            D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
+            D7 = t.MedicalNumber;
+            D8 = t.MainDisease.ID;
+            D9 = t.SubDisease?.ID;
+            D13 = t.Division?.Id;
+            D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate, false);
+            D15 = t.Copayment.Id;
+            D16 = $"{point.ApplyPoint:00000000}";
+            D17 = $"{point.CopaymentPoint:0000}";
+            D18 = $"{point.TotalPoint:00000000}";
+            D20 = p.Patient.Name;
+            D21 = t.Institution.Id;
+            D22 = t.PrescriptionCase?.Id;
+            D23 = DateTimeExtensions.NullableDateToTWCalender(t.AdjustDate, false);
+            if (!t.CheckIsQuitSmoking() && !t.CheckIsHomeCare())
+            {
+                D24 = D21;
+            }
+            else
+            {
+                D24 = string.Empty;
+            }
+            D25 = t.Pharmacist.IdNumber;
+        }
         [XmlElement(ElementName = "d1")]
         public string D1 { get; set; }
         [XmlElement(ElementName = "d2")]
@@ -121,6 +161,25 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
     [XmlRoot(ElementName = "dbody")]
     public class Dbody
     {
+        public Dbody() { }
+        public Dbody(Prescription p, List<Pdata> details)
+        {
+            var t = p.Treatment;
+            var point = p.PrescriptionPoint;
+            D26 = t.SpecialTreat?.Id;
+            D30 = p.MedicineDays.ToString();
+            D31 = $"{point.SpecialMaterialPoint:0000000}";
+            D32 = "00000000";
+            D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString();
+            D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
+            D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
+            D37 = p.MedicalServiceID;
+            D38 = details.Single(pd => pd.P1.Equals("9")).P9;
+            D43 = t.OriginalMedicalNumber;
+            D44 = DateTimeExtensions.NullableDateToTWCalender(p.Card.NewBornBirthday, false);
+            Pdata = new List<Pdata>();
+            Pdata = details;
+        }
         [XmlElement(ElementName = "d26")]
         public string D26 { get; set; }
         [XmlElement(ElementName = "d30")]
@@ -161,8 +220,8 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P8 = $"{m.NHIPrice:0000000.00}";
                 P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
-                P4 = m.Usage.Name;
-                P5 = m.Position.Name;
+                P4 = m.UsageName;
+                P5 = m.PositionName;
                 P10 = serial;
                 P11 = $"{m.Days:00}";
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
@@ -176,8 +235,8 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P7 = m.Amount.ToString();
                 var dosage = m.Dosage is null ? string.Empty : m.Dosage.ToString();
                 P3 = dosage;
-                P4 = m.Usage.Name;
-                P5 = m.Position.Name;
+                P4 = m.UsageName;
+                P5 = m.PositionName;
                 P8 = string.Empty;
                 P9 = string.Empty;
                 P10 = string.Empty;

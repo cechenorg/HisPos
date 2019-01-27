@@ -85,23 +85,23 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public void SelectionChangedAction()
         {
             if (Customer is null) return;
-            Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == Customer.Id));
+            Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
             InitDataChanged(); 
         }
         public void DataChangeAction() {
             DataChanged();
         }
         public void CancelAction() {
-            Customer =  NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == Customer.Id));
+            Customer =  NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
             InitDataChanged(); 
         }
         public void SubmitAction()
         { 
             for (int i = 0; i < CustomerCollection.Count;i ++)
             {  
-                if (CustomerCollection[i].Id == Customer.Id) { 
+                if (CustomerCollection[i].ID == Customer.ID) { 
                     CustomerCollection[i] = Customer;
-                    Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.Id == CustomerCollection[i].Id));
+                    Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == CustomerCollection[i].ID));
                     break;
                 }
             }

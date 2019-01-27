@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Threading;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Person;
 using His_Pos.FunctionWindow;
-using His_Pos.Struct.IcData;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.HisApi
 {
@@ -177,6 +175,12 @@ namespace His_Pos.HisApi
         // 3.1 資料上傳
         [DllImport("csHis.dll")]
         public static extern int csUploadData(byte[] pUploadFileName, byte[] fFileSize, byte[] pNumber, byte[] pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csUploadDataPrec(byte[]pUploadFileName,byte[]pFileSize,byte[]pNumber,byte[]pPrecNumber,byte[]pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csDownloadData(byte[] pSAMID,byte[] pHospID,byte[] pNumber,byte[] pSendDate,byte[] pRecvDate,byte[] pServerRandom, byte[] pDownloadFileName);
         // 4.1 取得醫事人員卡狀態
         [DllImport("csHis.dll")]
         public static extern int hpcGetHPCStatus(int Req, ref int Status);
@@ -208,115 +212,94 @@ namespace His_Pos.HisApi
         //5.2 進行疾病診斷碼解押碼
         public static extern int hisGetICD10DeC(byte[] pIN, byte[] pOUT);
 
-        public static void OpenCom()
+        public static bool OpenCom()
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
-                {
-                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
-                    return;
-                }
-            });
-            MainWindow.Instance.SetCardReaderStatus("開啟讀卡機連接...");
-            ///MainWindow.Instance.HisApiErrorCode = csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
-            MainWindow.Instance.HisApiErrorCode = csOpenCom(0);
-            var res = MainWindow.Instance.HisApiErrorCode;
+            SetCardReaderStatus(StringRes.讀卡機異常);
+            SetCardReaderStatus(StringRes.開啟讀卡機);
+            var res = csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             SetStatus(res == 0,1);
-            MainWindow.Instance.SetCardReaderStatus(res == 0 ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
+            MainWindow.Instance.SetCardReaderStatus(res == 0 ? StringRes.連接成功 : StringRes.連接失敗);
+            return res == 0;
         }
 
         public static void CloseCom()
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
-                {
-                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
-                    return;
-                }
-            });
+            SetCardReaderStatus(StringRes.讀卡機異常);
             if (csCloseCom() == 0)
                 SetStatus(false,1);
         }
 
         public static void CheckCardStatus(int type)
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
-                {
-                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
-                    return;
-                }
-            });
+            int res = 4000;
+            SetCardReaderStatus(StringRes.讀卡機異常);
             OpenCom();
             string status;
             switch (type)
             {
                 case 1:
-                    status = "安全模組檢查中...";
+                    status = StringRes.檢查安全模組;
                     break;
                 case 2:
-                    status = "健保IC卡檢查中...";
+                    status = StringRes.檢查健保卡;
                     break;
                 case 3:
-                    status = "醫事人員卡檢查中...";
+                    status = StringRes.檢查醫事人員卡;
                     break;
                 default:
-                    status = "檢查中...";
+                    status = StringRes.檢查中;
                     break;
             }
             MainWindow.Instance.SetCardReaderStatus(status);
             try
             {
-                MainWindow.Instance.HisApiErrorCode = hisGetCardStatus(type);
+                res = hisGetCardStatus(type);
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
-                    
-                });
+                ShowMessage(StringRes.控制軟體異常);
             }
             switch (type)
             {
                 case 1:
-                    switch (MainWindow.Instance.HisApiErrorCode)
+                    switch (res)
                     {
                         case 4000:
-                            MainWindow.Instance.SetSamDcStatus("讀卡機逾時");
+                            MainWindow.Instance.SetSamDcStatus(StringRes.讀卡機逾時);
                             SetStatus(false, 2);
                             break;
                         case 1:
-                            MainWindow.Instance.SetHpcCardStatus("未認證");
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.未認證);
                             SetStatus(false, 2);
                             break;
                         case 2:
-                            MainWindow.Instance.SetHpcCardStatus("認證成功");
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.認證成功);
                             SetStatus(true, 2);
                             break;
                         default:
-                            MainWindow.Instance.SetHpcCardStatus("所置入非安全模組檔");
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.所置入非安全模組);
                             SetStatus(false, 2);
                             break;
                     }
                     break;
                 case 2:
-                    SetStatus(MainWindow.Instance.HisApiErrorCode == 2,4);
-                    MainWindow.Instance.SetCardReaderStatus("健保卡讀取失敗");
+                    SetStatus(res == 2,4);
+                    MainWindow.Instance.SetCardReaderStatus(StringRes.讀取失敗);
                     break;
                 case 3:
-                    switch (MainWindow.Instance.HisApiErrorCode)
+                    switch (res)
                     {
                         case 2:
-                            MainWindow.Instance.SetHpcCardStatus("認證成功(未驗PIN)");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.認證成功未驗);
+                            ViewModelMainWindow.IsHpcValid = true;
                             break;
                         case 3:
-                            MainWindow.Instance.SetHpcCardStatus("認證成功(已驗PIN)");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.認證成功已驗);
+                            ViewModelMainWindow.IsHpcValid = true;
                             break;
                         default:
-                            MainWindow.Instance.SetHpcCardStatus("未認證");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            MainWindow.Instance.SetHpcCardStatus(StringRes.未認證);
+                            ViewModelMainWindow.IsHpcValid = true;
                             break;
                     }
                     break;
@@ -326,43 +309,32 @@ namespace His_Pos.HisApi
 
         public static void VerifySamDc()
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
-                {
-                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
-                    return;
-                }
-            });
+            SetCardReaderStatus(StringRes.讀卡機異常);
             bool status;
-            MainWindow.Instance.SetSamDcStatus("與健保局連線認證中，請稍後...");
-            OpenCom();
-            if (!GetStatus(1))
+            int res = 0;
+            MainWindow.Instance.SetSamDcStatus(StringRes.健保局連線中);
+            if (!OpenCom())
             {
-                status = false;
-                MainWindow.Instance.SetSamDcStatus("認證失敗");
+                SetStatus(false, 2);
+                MainWindow.Instance.SetSamDcStatus(StringRes.認證失敗);
             }
             try
             {
-                MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
+                res = csVerifySAMDC();
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    ((ViewModelMainWindow) MainWindow.Instance.DataContext).HisApiException = true;
-                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
-                    
-                });
+                ShowMessage(StringRes.控制軟體異常);
             }
-            if (MainWindow.Instance.HisApiErrorCode == 0)
+            if (res == 0)
             {
                 status = true;
-                MainWindow.Instance.SetSamDcStatus("認證成功");
+                MainWindow.Instance.SetSamDcStatus(StringRes.認證成功);
             }
             else
             {
                 status = false;
-                MainWindow.Instance.SetSamDcStatus("未認證");
+                MainWindow.Instance.SetSamDcStatus(StringRes.未認證);
             }
             SetStatus(status,2);
             CloseCom();
@@ -370,22 +342,14 @@ namespace His_Pos.HisApi
 
         public static void ResetCardReader()
         {
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                ((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException = false;
+            Application.Current.Dispatcher.Invoke(delegate {
+                ViewModelMainWindow.HisApiException = false;
             });
             SetStatus(false,1);
             SetStatus(false, 2);
             SetStatus(false, 3);
-            OpenCom();
             bool isPassed = false;
-            Application.Current.Dispatcher.Invoke((Action)delegate
-            {
-                if (!((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened &&
-                    MainWindow.Instance.HisApiErrorCode != 0)
-                    isPassed = false;
-                else
-                    isPassed = true;
-            });
+            Application.Current.Dispatcher.Invoke(delegate { isPassed = OpenCom(); });
             if (!isPassed)
                 return;
             csSoftwareReset(3);
@@ -400,16 +364,16 @@ namespace His_Pos.HisApi
                 switch (type)
                 {
                     case 1:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = status;
+                        ViewModelMainWindow.IsConnectionOpened = status;
                         break;
                     case 2:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = status;
+                        ViewModelMainWindow.IsVerifySamDc = status;
                         break;
                     case 3:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = status;
+                        ViewModelMainWindow.IsHpcValid = status;
                         break;
                     case 4:
-                        status = ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid;
+                        status = ViewModelMainWindow.IsIcCardValid;
                         break;
                 }
             }
@@ -419,64 +383,78 @@ namespace His_Pos.HisApi
         public static bool GetStatus(int type)
         {
             bool status = false;
-            MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+            MainWindow.Instance.Dispatcher.Invoke(() =>
             {
                 switch (type)
                 {
                     case 1:
-                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened;
-                        break;
-                    case 2:
-                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc;
-                        break;
-                    case 3:
-                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid;
-                        break;
-                    case 4:
-                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid;
+                        status = ViewModelMainWindow.IsConnectionOpened;
+                        break;   
+                    case 2:      
+                        status = ViewModelMainWindow.IsVerifySamDc;
+                        break;   
+                    case 3:      
+                        status = ViewModelMainWindow.IsHpcValid;
+                        break;   
+                    case 4:      
+                        status = ViewModelMainWindow.IsIcCardValid;
                         break;
                 }
-            }));
+            });
             return status;
         }
 
         public static void VerifyHpcPin()
         {
-            MainWindow.Instance.SetCardReaderStatus("醫事人員卡驗證中...");
-            OpenCom();
-            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
+            int res = 0;
+            MainWindow.Instance.SetCardReaderStatus(StringRes.驗證醫事人員卡);
+            if (!OpenCom())
                 return;
             try
             {
-                MainWindow.Instance.HisApiErrorCode = hpcVerifyHPCPIN();
+                res = hpcVerifyHPCPIN();
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException = true;
-                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
-                    
-                });
+                ShowMessage(StringRes.控制軟體異常);
             }
 
-            if (MainWindow.Instance.HisApiErrorCode == 0)
+            if (res == 0)
             {
-                MainWindow.Instance.SetHpcCardStatus("已認證");
-                Application.Current.Dispatcher.Invoke((Action)delegate
+                MainWindow.Instance.SetHpcCardStatus(StringRes.認證成功);
+                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                    ViewModelMainWindow.IsHpcValid = true;
                 });
             }
             else
             {
-                MainWindow.Instance.SetHpcCardStatus("認證失敗");
-                Application.Current.Dispatcher.Invoke((Action)delegate
+                MainWindow.Instance.SetHpcCardStatus(StringRes.認證失敗);
+                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = false;
+                    ViewModelMainWindow.IsHpcValid = false;
                 });
             }
             CloseCom();
+        }
+
+        private static void SetCardReaderStatus(string message)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                if (ViewModelMainWindow.HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus(message);
+                }
+            });
+        }
+
+        private static void ShowMessage(string message)
+        {
+            Application.Current.Dispatcher.Invoke(delegate {
+                ViewModelMainWindow.HisApiException = true;
+                MessageWindow.ShowMessage(message, MessageType.ERROR);
+            });
         }
     }
 }

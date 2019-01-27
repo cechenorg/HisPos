@@ -9,7 +9,7 @@ namespace His_Pos.Service
 {
     public static class UsagesFunction
     {
-        public static int CheckUsage(int days, Usage usage = null)
+        public static int CheckUsage(int days, Usage usage)
         {
             var reg_QWxyz = new Regex(@"QW\d+");
             var reg_QWxyzAM = new Regex(@"QW\d+AM");

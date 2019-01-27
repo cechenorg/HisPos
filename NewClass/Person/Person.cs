@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Person
 
         public Person(DataRow r)
         {
-            Id = r.Field<int>("Person_Id");
+            ID = r.Field<int>("Person_Id");
             Name = r.Field<string>("Person_Name");
             IDNumber = r.Field<string>("Person_IDNumber");
             Gender = r.Field<string>("Person_Gender");
@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Person
             Line = r.Field<string>("Person_LINE");
             Note = r.Field<string>("Person_Note");
         }
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }//姓名
         public string Gender { get; set; }//性別
         public string IDNumber { get; set; }//身分證字號

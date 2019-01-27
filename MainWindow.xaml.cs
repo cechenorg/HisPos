@@ -6,30 +6,25 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
+using His_Pos.Class.Product;
 using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
-using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using His_Pos.NewClass.Prescription.Treatment.Copayment;
-using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
-using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
-using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos
 {
@@ -43,18 +38,6 @@ namespace His_Pos
 
         public static List<Feature> HisFeatures = new List<Feature>();
         public static MainWindow Instance;
-
-        private static int hisApiErrorCode;
-
-        public int HisApiErrorCode
-        {
-            get => hisApiErrorCode;
-            set
-            {
-                hisApiErrorCode = value;
-                SetCardReaderStatus(hisApiErrorCode);
-            }
-        }
 
         
         public MainWindow(Employee user)
@@ -119,8 +102,9 @@ namespace His_Pos
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
-
+            MainWindow.ServerConnection.OpenConnection();
             Collection<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
+            MainWindow.ServerConnection.CloseConnection();
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -192,17 +176,14 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Messenger.Default.Unregister<NotificationMessage>(this);
-            ///var d = new DeclareDb();
-            var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳","每日上傳確認");
-            var upload = (bool) dailyUploadConfirm.ShowDialog();
-            if (upload)
-               /// d.StartDailyUpload();
-            ///ProductDb.UpdateDailyStockValue();
-            ///DeclareDb declareDb = new DeclareDb();
-           /// declareDb.SendUnSendCooperClinicDeclare();
-            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
-                HisApiBase.CloseCom();
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            {
+                var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳", "每日上傳確認");
+                var upload = (bool)dailyUploadConfirm.DialogResult;
+                if (upload)
+                    UploadFunctions.StartDailyUpload(uploadTable);
+            }
             Environment.Exit(0);
         }
 
@@ -235,12 +216,12 @@ namespace His_Pos
 
         private void DuringVerify(object sender, ProgressChangedEventArgs e)
         {
-            SetSamDcStatus("安全模組認證中...");
+            SetSamDcStatus(StringRes.檢查安全模組);
         }
 
         private void AfterVerify(object sender, RunWorkerCompletedEventArgs e)
         {
-            SetSamDcStatus(((ViewModelMainWindow) DataContext).IsVerifySamDc ? "認證成功" : "認證失敗");
+            SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? StringRes.認證成功 : StringRes.認證失敗);
         }
 
         private static string GetEnumDescription(Enum value)

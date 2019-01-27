@@ -1,4 +1,6 @@
 ﻿using His_Pos.Database;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -51,7 +53,7 @@ namespace His_Pos.NewClass.Person.Customer
         public static DataTable SetCustomer(Customer c) {
             DataTable customerTable = CustomerTable();
             DataRow newRow = customerTable.NewRow();  
-            DataBaseFunction.AddColumnValue(newRow, "Cus_ID",c.Id);
+            DataBaseFunction.AddColumnValue(newRow, "Cus_ID",c.ID);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Name", c.Name);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", c.Gender);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Birthday", c.Birthday);
@@ -65,6 +67,20 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddColumnValue(newRow, "Cus_Note", c.Note);
             customerTable.Rows.Add(newRow);
             return customerTable;
+        }
+        public static DataTable SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> Ddatas) {
+            DataTable table = CustomerTable();
+            foreach (var d in Ddatas) {
+                DataRow newRow = table.NewRow(); 
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Name", d.D20);
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", d.D3.Substring(1,1) == "2" ? "男" : "女");
+                DataBaseFunction.AddColumnValue(newRow, "Cus_Birthday", Convert.ToDateTime((Convert.ToInt32(d.D6.Substring(0, 3)) + 1911).ToString() + "/" + d.D6.Substring(3, 2) + "/" + d.D6.Substring(5, 2))); 
+                DataBaseFunction.AddColumnValue(newRow, "Cus_IDNumber", d.D3);
+                table.Rows.Add(newRow);
+            }
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Customers", table);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList); 
         }
         public static DataTable CustomerTable()
         {

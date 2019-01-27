@@ -6,20 +6,30 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
+using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
 {
     public class Customer:Person
-    { 
+    {
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
         {
             ContactNote = r.Field<string>("Cus_UrgentNote");
             LastEdit = r.Field<DateTime?>("Cus_EditTime");
-        } 
+        }
+
+        public Customer(IcCard card)
+        {
+            Name = card.Name;
+            IDNumber = card.IDNumber;
+            Birthday = card.Birthday;
+            Gender = card.Gender;
+        }
+
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
@@ -43,7 +53,7 @@ namespace His_Pos.NewClass.Person.Customer
             return newcustomer;
         }
         public void UpdateEditTime() {
-            CustomerDb.UpdateEditTime(Id);
+            CustomerDb.UpdateEditTime(ID);
         }
 
         #endregion
@@ -58,7 +68,7 @@ namespace His_Pos.NewClass.Person.Customer
             return age;
         }
 
-        public DateTimeExtensions.Age CountAgeToMonth()
+        private DateTimeExtensions.Age CountAgeToMonth()
         {
             return DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
         }
@@ -91,6 +101,35 @@ namespace His_Pos.NewClass.Person.Customer
                 return 120;
             }
             return 100;
+        }
+
+        private string CheckBirthday()
+        {
+            if (Birthday is null) return "請填寫病患出生年月日\r\n";
+            return DateTime.Compare((DateTime) Birthday, DateTime.Today) > 0 ? "出生年月日不可大於今天\r\n" : string.Empty;
+        }
+
+        private string CheckIDNumber()
+        {
+            return string.IsNullOrEmpty(IDNumber) ? "請填寫病患身分證字號\r\n" : string.Empty;
+        }
+        private string CheckName()
+        {
+            return string.IsNullOrEmpty(Name) ? "請填寫病患姓名\r\n" : string.Empty;
+        }
+
+        public string CheckBasicData()
+        {
+            return
+            CheckBirthday()+
+            CheckIDNumber()+
+            CheckName();
+        }
+
+        public string CheckGender()
+        {
+            Gender = IDNumber[1].Equals('2') ? Properties.Resources.Female : Properties.Resources.Male;
+            return Gender;
         }
     }
 }

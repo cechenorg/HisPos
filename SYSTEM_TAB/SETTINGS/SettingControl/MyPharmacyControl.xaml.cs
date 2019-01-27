@@ -6,9 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.Class.Pharmacy;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 {
@@ -17,34 +17,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
     /// </summary>
     public partial class MyPharmacyControl : UserControl, INotifyPropertyChanged
     {
-        #region ----- Define Struct -----
-        public class MyPharmacy
-        {
-            public MyPharmacy(DataRow dataRow)
-            {
-                Name = dataRow["CURPHA_NAME"].ToString();
-                Id = dataRow["CURPHA_ID"].ToString();
-                Address = dataRow["CURPHA_ADDR"].ToString();
-                Telephone = dataRow["CURPHA_TEL"].ToString();
-                IsReaderNew = Boolean.Parse(dataRow["CURPHA_READERISNEW"].ToString());
-                ReaderCom = Int16.Parse(dataRow["CURPHA_READERCOM"].ToString());
-                VPN = dataRow["CURPHA_VPN"].ToString();
-            }
-
-            public string Name { get; set; }
-            public string Id { get; set; }
-            public string Address { get; set; }
-            public string Telephone { get; set; }
-            public bool IsReaderNew { get; set; }
-            public int ReaderCom { get; set; }
-            public string VPN { get; set; }
-        }
-        #endregion
-
+       
         #region ----- Define Variable -----
 
-        private MyPharmacy pharmacy;
-        public MyPharmacy myPharmacy
+        private Pharmacy pharmacy;
+        public Pharmacy myPharmacy
         {
             get { return pharmacy; }
             set
@@ -72,7 +49,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         {
             InitializeComponent();
 
-            ///myPharmacy = PharmacyDb.GetMyPharmacy();
+            MainWindow.ServerConnection.OpenConnection();
+            myPharmacy = Pharmacy.GetCurrentPharmacy();
+            MainWindow.ServerConnection.CloseConnection();
             DataContext = this;
         }
 
@@ -122,8 +101,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
         public void ResetPharmacy()
         {
-           ///myPharmacy = PharmacyDb.GetMyPharmacy();
-
+            MainWindow.ServerConnection.OpenConnection();
+            myPharmacy = Pharmacy.GetCurrentPharmacy();
+            MainWindow.ServerConnection.CloseConnection();
             ClearDataChangedStatus();
         }
 
@@ -141,9 +121,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
                 return;
             }
-
-            ///PharmacyDb.SetMyPharmacy(myPharmacy);
-
+            MainWindow.ServerConnection.OpenConnection();
+            myPharmacy.SetPharmacy();
+            MainWindow.ServerConnection.CloseConnection();
+             
             ClearDataChangedStatus();
         }
 
@@ -152,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             Regex VPNReg = new Regex(@"[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
             Match match;
 
-            match = VPNReg.Match(myPharmacy.VPN);
+            match = VPNReg.Match(myPharmacy.VpnIp);
 
             return match.Success;
         }
