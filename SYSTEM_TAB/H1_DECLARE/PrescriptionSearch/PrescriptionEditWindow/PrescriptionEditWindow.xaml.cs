@@ -64,12 +64,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!(selectedItem is IDeletable deletable)) return;
             if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
                 deletable.Source = "/Images/DeleteDot.png";
-            ((PrescriptionDeclareViewModel)DataContext).SelectedMedicine = (Medicine)selectedItem;
+            ((PrescriptionEditViewModel)DataContext).SelectedMedicine = (Medicine)selectedItem;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!(((PrescriptionDeclareViewModel)DataContext).SelectedMedicine is IDeletable)) return;
+            if (!(((PrescriptionEditViewModel)DataContext).SelectedMedicine is IDeletable)) return;
             switch (PrescriptionMedicines.SelectedItem)
             {
                 case MedicineNHI med:
