@@ -46,5 +46,10 @@ namespace His_Pos.NewClass.Prescription {
             IsReadCard = false;
             IsDeclare = true;
         }
+
+        public void UpdateStatus()
+        {
+            PrescriptionDb.UpdatePrescriptionStatus(this);
+        }
     }
 }
