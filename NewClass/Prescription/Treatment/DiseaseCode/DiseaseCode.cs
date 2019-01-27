@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using System.Data;
-using System.Runtime.CompilerServices;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using JetBrains.Annotations;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
 {
@@ -38,6 +38,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
                     FullName = ID + " " + Name;
                 }
             }
+        }
+        public static DiseaseCode GetDiseaseCodeByID(string id)
+        {
+            var d = new DiseaseCode();
+            MainWindow.ServerConnection.OpenConnection();
+            d.GetDataByCodeId(id);
+            MainWindow.ServerConnection.CloseConnection();
+            if (!string.IsNullOrEmpty(d.ID)) return d;
+            MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
+            return null;
         }
     }
 }

@@ -30,14 +30,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             InitializeComponent();
             DataContext = new PrescriptionEditViewModel(selected);
-
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
+                    Close();
+            });
+            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(sender is DataGrid dg)) return;
             var index = dg.SelectedIndex;
             if (index == -1) return;
-            ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = index;
+            ((PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = index;
         }
 
         private void DateControl_GotFocus(object sender, System.Windows.RoutedEventArgs e)
