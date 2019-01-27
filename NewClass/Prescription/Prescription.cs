@@ -346,7 +346,7 @@ namespace His_Pos.NewClass.Prescription
         }
         
         #endregion
-        public void AddCooperativePrescriptionMedicines() {
+        public void AddCooperativePrescriptionMedicines(bool addMedicine) {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
@@ -382,7 +382,8 @@ namespace His_Pos.NewClass.Prescription
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 Medicines[medCount] = temp; 
             }
-            Medicines.Add(new Medicine());
+            if(addMedicine)
+                Medicines.Add(new Medicine());
         }
         public void ConvertNHIandOTCPrescriptionMedicines()
         {
