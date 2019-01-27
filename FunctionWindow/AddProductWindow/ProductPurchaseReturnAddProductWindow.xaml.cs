@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -19,11 +20,18 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class ProductPurchaseReturnAddProductWindow : Window
     {
-        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum)
+        public ProductPurchaseReturnAddProductWindow(string searchString)
         {
             InitializeComponent();
 
-            DataContext = new AddProductViewModel(searchString, addProductEnum);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseAddProductView"))
+                    Close();
+            });
+
+            DataContext = new AddProductViewModel(searchString, AddProductEnum.PruductPurchase);
+            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }
