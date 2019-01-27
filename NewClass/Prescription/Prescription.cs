@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
@@ -21,7 +24,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescription : ObservableObject
+    public class Prescription : ObservableObject,ICloneable
     {
         public Prescription()
         {
@@ -42,18 +45,23 @@ namespace His_Pos.NewClass.Prescription
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines(); 
             PrescriptionPoint = new PrescriptionPoint(r);
-            DeclareFileID = int.Parse(r.Field<string>("DeclareFileID"));
+            if(r.Field<int?>("DeclareFileID") != null)
+                DeclareFileID = r.Field<int>("DeclareFileID");
             MedicineDays = r.Field<byte>("MedicineDays");
             switch (prescriptionSource) {
                 case PrescriptionSource.Normal:
                     Id = r.Field<int>("ID");
+                    MainWindow.ServerConnection.OpenConnection();
                     Medicines.GetDataByPrescriptionId(Id);
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.Normal);
+                    MainWindow.ServerConnection.CloseConnection();
                     break;
                 case PrescriptionSource.ChronicReserve:
                     Source = PrescriptionSource.ChronicReserve;
                     SourceId = r.Field<int>("ID").ToString();
+                    MainWindow.ServerConnection.OpenConnection();
                     Medicines.GetDataByReserveId(SourceId);
+                    MainWindow.ServerConnection.CloseConnection();
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
                     break;
             }
@@ -101,7 +109,7 @@ namespace His_Pos.NewClass.Prescription
         public IcCard Card { get; set; }
         public Treatment.Treatment Treatment { get; set; }//處方資料
         public PrescriptionSource Source { get; set; }
-        public string SourceId { get; }//合作診所.慢箋Id
+        public string SourceId { get; set; }//合作診所.慢箋Id
         public string OrderNumber { get; set; }//傳送藥健康單號
         public string Remark { get; }//回傳合作診所單號 
         public int MedicineDays { get; set; } //給藥日份
@@ -115,6 +123,7 @@ namespace His_Pos.NewClass.Prescription
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
+            PrescriptionStatus.Init();
             Medicines.Add(new Medicine());
         }
         private int CountCopaymentPoint()
@@ -143,14 +152,13 @@ namespace His_Pos.NewClass.Prescription
             return 200;
         }
 
-        private bool CheckFreeCopayment()
+        public bool CheckFreeCopayment()
         {
             if (Treatment.AdjustCase.Id.Equals("2") || Treatment.AdjustCase.Id.Equals("4"))
                 return true;
             switch (Treatment.Copayment.Id)
             {
                 case "009"://其他免負擔
-                case "I21"://藥費100元以下
                 case "I22"://免收
                     return true;
             }
@@ -325,9 +333,7 @@ namespace His_Pos.NewClass.Prescription
         public void AdjustPredictResere() {
             PrescriptionDb.AdjustPredictResere(Id.ToString());
         }
-        public static int GetPrescriptionId() {
-            return PrescriptionDb.GetPrescriptionId().Rows[0].Field<int>("MaxPreId"); 
-        }
+        
         #endregion
         public void AddCooperativePrescriptionMedicines() {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
@@ -357,7 +363,6 @@ namespace His_Pos.NewClass.Prescription
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionName = Medicines[medCount].Position.Name;
-                VM.CheckContainsUsage(temp.UsageName);
                 VM.CheckContainsPosition(temp.PositionName);
                 temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
@@ -386,8 +391,8 @@ namespace His_Pos.NewClass.Prescription
                             break;
                     }
                 }
-                temp.Usage.Name = Medicines[medCount].Usage.Name;
-                temp.Position.Name = Medicines[medCount].Position.Name;
+                temp.UsageName = Medicines[medCount].UsageName;
+                temp.PositionName = Medicines[medCount].PositionName;
                 temp.Days = Medicines[medCount].Days;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.Amount = Medicines[medCount].Amount; 
@@ -451,7 +456,6 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
                 {
-                    VM.CheckContainsUsage(med.UsageName);
                     med.Usage = VM.GetUsage(med.UsageName);
                 }
                 if (!string.IsNullOrEmpty(med.PositionName) && med.Position is null)
@@ -473,13 +477,34 @@ namespace His_Pos.NewClass.Prescription
         public void CountPrescriptionPoint()
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
-            if (PrescriptionPoint.MedicinePoint <= 100)
-                Treatment.Copayment = VM.GetCopayment("I21");
+            if (Treatment.AdjustCase.Id.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
+                (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
+            {
+                Treatment.Copayment = VM.GetCopayment("I22");
+            }
+            if (!CheckFreeCopayment())
+            {
+                if (PrescriptionPoint.MedicinePoint <= 100)
+                    Treatment.Copayment = VM.GetCopayment("I21");
+                else
+                {
+                    Treatment.Copayment = VM.GetCopayment("I20");
+                }
+                
+            }
             else
             {
-                Treatment.Copayment = VM.GetCopayment("I20");
+                if (Treatment.Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
+                {
+                    Treatment.Copayment = VM.GetCopayment("I20");
+                }
             }
-            PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+            if(!Treatment.Copayment.Id.Equals("I21"))
+                PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+            else
+            {
+                PrescriptionPoint.CopaymentPoint = 0;
+            }
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
@@ -492,7 +517,6 @@ namespace His_Pos.NewClass.Prescription
             d.Dbody.Pdata = details;
         }
         #endregion
-        
         #region PrintFunctions
         public void PrintMedBag(bool singleMode,bool receiptPrint)
         {
@@ -607,7 +631,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
                         new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                         new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
-                        new ReportParameter("MedicinePoint", PrescriptionPoint.MedicalServicePoint.ToString(CultureInfo.InvariantCulture)),
+                        new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString(CultureInfo.InvariantCulture)),
                         new ReportParameter("MedicineId", m.Id),
                         new ReportParameter("MedicineName", m.Name),
                         new ReportParameter("MedicineChineseName", m.ChiName),
@@ -648,26 +672,151 @@ namespace His_Pos.NewClass.Prescription
             };
         }
         #endregion
-
         public bool GetCard()
         {
-            if (!Card.GetBasicData()) return false;
-            Patient = new Customer(Card);
-            MainWindow.ServerConnection.OpenConnection();
-            var cus = Patient.Check();
-            MainWindow.ServerConnection.CloseConnection();
-            if (cus != null)
+            var success = Card.GetBasicData();
+            if (success)
             {
-                if (string.IsNullOrEmpty(cus.IDNumber) || !cus.IDNumber.Equals(Patient.IDNumber))
-                    cus.IDNumber = Patient.IDNumber;
-                if (cus.Birthday is null)
-                    cus.Birthday = Patient.Birthday;
-                else if(Patient.Birthday is null || DateTime.Compare((DateTime)cus.Birthday, (DateTime)Patient.Birthday) != 0)
-                    cus.Birthday = Patient.Birthday;
-                cus.Gender = Patient.Gender;
+                var cus = new Customer(Card);
+                MainWindow.ServerConnection.OpenConnection();
+                cus = cus.Check();
+                MainWindow.ServerConnection.CloseConnection();
+                if (Patient is null || string.IsNullOrEmpty(Patient.IDNumber) && string.IsNullOrEmpty(Patient.Name))
+                {
+                    Patient = cus;
+                    PrescriptionStatus.IsReadCard = true;
+                }
+                else
+                {
+                    var replace = true;
+                    if (!string.IsNullOrEmpty(Patient.IDNumber))
+                    {
+                        if (!Card.PatientBasicData.IDNumber.Equals(Patient.IDNumber))
+                        {
+                            Application.Current.Dispatcher.Invoke(delegate {
+                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
+                                if (!(bool)confirm.DialogResult)
+                                {
+                                    PrescriptionStatus.IsReadCard = false;
+                                    replace = false;
+                                }
+                            });
+                            if (!replace) return false;
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Patient.Name))
+                    {
+                        if (!Card.PatientBasicData.Name.Equals(Patient.Name) && !replace)
+                        {
+                            Application.Current.Dispatcher.Invoke(delegate {
+                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
+                                if (!(bool)confirm.DialogResult)
+                                {
+                                    PrescriptionStatus.IsReadCard = false;
+                                    replace = false;
+                                }
+                            });
+                            if (!replace) return false;
+                        }
+                    }
+                    if (Patient.Birthday != null)
+                    {
+                        if (DateTime.Compare(Card.PatientBasicData.Birthday, (DateTime)Patient.Birthday) != 0 && !replace)
+                        {
+                            Application.Current.Dispatcher.Invoke(delegate {
+                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
+                                if (!(bool)confirm.DialogResult)
+                                {
+                                    PrescriptionStatus.IsReadCard = false;
+                                    replace = false;
+                                }
+                            });
+                            if (!replace) return false;
+                        }
+                    }
+                    PrescriptionStatus.IsReadCard = true;
+                }
                 Patient = cus;
             }
-            return true;
+            else
+            {
+                PrescriptionStatus.IsReadCard = true;
+            }
+            return success;
+        }
+
+        public void Update()
+        {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            CreateDeclareFileContent(details);//產生申報資料
+            PrescriptionDb.UpdatePrescription(this, details); 
+        }
+        public void AdjustMedicines(Medicines originMedicines)
+        {
+            double oritotal = 0;
+            double newtotal = 0;
+            foreach (var m in originMedicines)
+            {
+                oritotal += m.TotalPrice;
+            }
+            foreach (var m in Medicines)
+            {
+                newtotal += m.TotalPrice;
+            } 
+            PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, newtotal - oritotal);
+
+            Medicines compareMeds = new Medicines();
+            foreach (var orm in originMedicines) {
+                Medicine medicine = new Medicine();
+                medicine.ID = orm.ID;
+                medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ?  Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1; 
+                compareMeds.Add(medicine);
+            }
+            foreach (var nem in Medicines) {
+                if (originMedicines.Count(m => m.ID == nem.ID) == 0) {
+                    Medicine medicine = new Medicine();
+                    medicine.ID = nem.ID;
+                    medicine.Amount = nem.Amount;
+                    compareMeds.Add(medicine);
+                }
+            }
+            foreach (var com in compareMeds) {
+                if (com.Amount > 0)
+                    PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
+                else if (com.Amount < 0)
+                    PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()); 
+            }
+             
+        }
+
+        public object Clone()
+        {
+            Prescription p = new Prescription();
+            p.Treatment = (Treatment.Treatment)Treatment.Clone();
+            foreach (var m in Medicines)
+            {
+                p.Medicines.Add(m);
+            }
+            p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();
+            p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
+            p.DeclareContent = DeclareContent;
+            p.Patient = Patient.DeepCloneViaJson();
+            Card = new IcCard();
+            p.MedicalServiceID = MedicalServiceID;
+            p.DeclareFileID = DeclareFileID;
+            p.MedicineDays = MedicineDays;
+            p.SourceId = SourceId;
+            p.OrderNumber = OrderNumber;
+            p.Id = Id;
+            return p;
         }
     }
 }

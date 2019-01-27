@@ -46,9 +46,8 @@ namespace His_Pos.NewClass.Product.Medicine
             ID = m.Id;
             ChineseName = m.Desc;
             EnglishName = m.Desc;
-            ViewModelMainWindow.CheckContainsUsage(m.Freq);
-            ViewModelMainWindow.CheckContainsPosition(m.Way);
             UsageName = m.Freq;
+            ViewModelMainWindow.CheckContainsPosition(m.Way);
             PositionName = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Daily_dose);
@@ -86,16 +85,13 @@ namespace His_Pos.NewClass.Product.Medicine
             if(Amount <= 0) return;
             if (PaySelf)
             {
-                if (Price > 0)
-                    TotalPrice = Amount * Price;
-                else
-                {
-                    TotalPrice = Amount * NHIPrice;
-                }
+                TotalPrice = Price > 0 ? 
+                    Math.Round(Amount * Price,MidpointRounding.AwayFromZero)
+                    : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
             }
             else
             {
-                TotalPrice = Amount * NHIPrice;
+                TotalPrice = Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
             }
         }
 
@@ -108,6 +104,9 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (dosage != value)
                 {
                     Set(() => Dosage, ref dosage, value);
+                    if(ID is null) return;
+                    if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -117,20 +116,15 @@ namespace His_Pos.NewClass.Product.Medicine
             get => _usageName;
             set
             {
+                
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
-                    Usage = ViewModelMainWindow.GetUsage(_usageName);
-                    if (Usage != null)
-                    {
-                        Usage.Name = _usageName;
-                        if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(_usageName) && Days != null)
-                            CalculateAmount();
-                    }
-                    else
-                    {
-
-                    }
+                    Usage = ViewModelMainWindow.GetUsage(value);
+                    Usage.Name = UsageName;
+                    if (ID is null) return;
+                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -184,6 +178,9 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (days != value)
                 {
                     Set(() => Days, ref days, value);
+                    if (ID is null) return;
+                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                        CalculateAmount();
                 }
             }
         }
@@ -230,7 +227,7 @@ namespace His_Pos.NewClass.Product.Medicine
         {
             if(Amount <=  0 || !PaySelf)return;
             if (Price != TotalPrice / Amount)
-                Price = TotalPrice / Amount;
+                Price = Math.Round(TotalPrice / Amount,2,MidpointRounding.AwayFromZero);
         }
 
         private double inventory;//庫存

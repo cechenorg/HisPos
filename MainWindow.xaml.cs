@@ -177,7 +177,7 @@ namespace His_Pos
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var uploadTable = UploadFunctions.CheckUpload();
-            if (uploadTable.Rows.Count > 0)
+            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
                 var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳", "每日上傳確認");
                 var upload = (bool)dailyUploadConfirm.DialogResult;

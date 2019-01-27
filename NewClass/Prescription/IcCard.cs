@@ -77,15 +77,36 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
             return false;
         }
-        public void GetMedicalNumber(byte makeUp)
+        public void GetMedicalNumber(byte makeUp,bool runBackground)
         {
             byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);//就醫類別長度3個char;
             byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);//新生兒就醫註記,長度2個char
             byte[] cTreatAfterCheck = { makeUp };//補卡註記
             int iBufferLen = 296;
             byte[] pBuffer = new byte[296];
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (runBackground)
+            {
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    if (HisApiBase.OpenCom())
+                    {
+                        var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                        if (res == 0)
+                        {
+                            MedicalNumberData = new SeqNumber(pBuffer);
+                            IsGetMedicalNumber = true;
+                        }
+                        HisApiBase.CloseCom();
+                    }
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    GetTreatDataNoNeedHPC();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
             {
                 if (HisApiBase.OpenCom())
                 {
@@ -97,12 +118,7 @@ namespace His_Pos.NewClass.Prescription
                     }
                     HisApiBase.CloseCom();
                 }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                GetTreatDataNoNeedHPC();
-            };
-            worker.RunWorkerAsync();
+            }
         }
 
         public void GetTreatDataNoNeedHPC()

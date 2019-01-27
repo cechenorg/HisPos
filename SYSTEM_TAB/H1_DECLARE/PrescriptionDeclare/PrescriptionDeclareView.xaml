@@ -89,7 +89,7 @@
                     <Button Content="合作診所處方" Background="DarkCyan" BorderThickness="0" Margin="20,0,0,0" Command="{Binding ShowCooperativeSelectionWindow}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatinetData}"/>
                 </StackPanel>
-                <Grid x:Name="TrementGrid" Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
+                <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -116,7 +116,7 @@
                         <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="Id" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Division_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}"/>
@@ -133,12 +133,13 @@
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MedicalNumber" Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
                               Text="{Binding CurrentPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth"/>
+                             InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="MedicalNumber_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
-                        <xctk:MaskedTextBox x:Name="TreatmentDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <xctk:MaskedTextBox x:Name="TreatDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        PreviewKeyDown="TreatDate_PreviewKeyDown">
                             <Binding Path="CurrentPrescription.Treatment.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
@@ -149,8 +150,10 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}"/>
-                        <xctk:MaskedTextBox x:Name="AdjustDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus">
-                            <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                        <xctk:MaskedTextBox x:Name="AdjustDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
+                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus"
+                                            PreviewKeyDown="AdjustDate_PreviewKeyDown">
+                            <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
                                     <service:DateValidationRule/>
@@ -164,7 +167,7 @@
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding CurrentPrescription.Treatment.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding GetDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=MainDiagnosis}" Key="Enter" />
+                                <KeyBinding Command="{Binding GetMainDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=MainDiagnosis}" Key="Enter" />
                             </TextBox.InputBindings>
                         </TextBox>
                     </StackPanel>
@@ -174,23 +177,23 @@
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding CurrentPrescription.Treatment.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding GetDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=SecondDiagnosis}" Key="Enter" />
+                                <KeyBinding Command="{Binding GetSubDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=SecondDiagnosis}" Key="Enter" />
                             </TextBox.InputBindings>
                         </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicTotal" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding CurrentPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False"/>
+                             Text="{Binding CurrentPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="ChronicTotal_PreviewKeyDown"/>
                         <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicSequence" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding CurrentPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding CurrentPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="ChronicSequence_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
-                        <ComboBox x:Name="AdjustCaseCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                        <ComboBox x:Name="AdjustCombo"  Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <command:EventToCommand Command="{Binding AdjustCaseSelectionChanged}"/>
@@ -200,26 +203,32 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
                         <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}"/>
-                        <ComboBox x:Name="TreatmentCaseCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                        <ComboBox x:Name="PrescriptionCaseCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" PreviewKeyDown="PrescriptionCaseCombo_OnPreviewKeyDown"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding PrescriptionCases}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding CurrentPrescription.Treatment.PrescriptionCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                         <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="CopaymentCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Copayments}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Copayments}" PreviewKeyDown="CopaymentCombo_PreviewKeyDown"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding CopaymentSelectionChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
                         <Label Content="給付類別" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="PaymentCategoryCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="False" ItemsSource="{Binding PaymentCategories}"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="False" ItemsSource="{Binding PaymentCategories}" PreviewKeyDown="PaymentCategoryCombo_PreviewKeyDown"
                               SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="特定治療" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="SpecialTreatCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="False" ItemsSource="{Binding SpecialTreats}"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="False" ItemsSource="{Binding SpecialTreats}" PreviewKeyDown="SpecialTreatCombo_PreviewKeyDown"
                               SelectedItem="{Binding CurrentPrescription.Treatment.SpecialTreat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Grid>
@@ -291,7 +300,7 @@
                         <DataGridTemplateColumn x:Name="MedicineId" Width="130" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" CaretBrush="Red"
+                                    <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="14" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBox.InputBindings>
                                             <KeyBinding Command="{Binding DataContext.AddMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -326,7 +335,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red"
-                                         Text="{Binding Dosage, Converter={StaticResource DoubleConverter}, Delay=400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                         Text="{Binding Dosage, Converter={StaticResource DoubleConverter}, Delay=400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -335,7 +344,8 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Usage" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth"
                                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="14" FontWeight="Bold" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                         IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -344,23 +354,23 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" CaretBrush="Red"
                                          CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
-                                         Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="40" Header="天數" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                    <TextBox x:Name="MedicineDays" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red"
+                                    <TextBox x:Name="MedicineDays" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True">
+                        <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown"
                                          Text="{Binding Amount, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -400,7 +410,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
-                                         Text="{Binding TotalPrice, Mode=TwoWay,Delay=400 ,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
+                                         Text="{Binding TotalPrice, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.MedicinePriceChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>

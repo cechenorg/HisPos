@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using MaterialDesignThemes.Wpf;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -126,13 +128,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
+        private Prescription editedPrescription;
+        public Prescription EditedPrescription
+        {
+            get => editedPrescription;
+            set
+            {
+                Set(() => EditedPrescription, ref editedPrescription, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
-
+        public RelayCommand ShowPrescriptionEditWindow { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
         {
@@ -158,11 +169,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
+            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
         }
+
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
+            Messenger.Default.Register<Prescription>(this, "PrescriptionEdited", GetEditPrescription);
         }
+
+        private void GetEditPrescription(Prescription obj)
+        {
+
+        }
+
         #endregion
         #region CommandActions
         private void SearchAction()
@@ -187,6 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
                 return;
             }
+            SearchPrescriptions.Clear();
             //依條件查詢對應處方
             MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
@@ -228,6 +249,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ImportDeclareFile();
             MainWindow.ServerConnection.CloseConnection();
         }
+        private void ShowPrescriptionEditWindowAction()
+        {
+            if(SelectedPrescription is null) return;
+            EditedPrescription = SelectedPrescription;
+            PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription);
+            prescriptionEdit.ShowDialog();
+        }
         #endregion
         #region Functions
         private void UpdateCollectionView()
@@ -260,11 +288,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             fdlg.RestoreDirectory = true;
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
-            List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>();
-            int tempId = Prescription.GetPrescriptionId();
+            List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>(); 
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 doc.Load(fdlg.FileName);
+                string fileId;
+                string fileHead = doc.GetElementsByTagName("tdata")[0].InnerXml; 
+                DataTable filetable = PrescriptionDb.CheckImportDeclareFileExist(fileHead);
+                if (filetable.Rows.Count > 0)
+                    fileId = filetable.Rows[0]["newId"].ToString();
+                else {
+                    MessageWindow.ShowMessage("此申報檔已經匯入~!", MessageType.ERROR);
+                    return;
+                }
+
                 XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
                 XmlDocument data = new XmlDocument();
                 foreach (XmlNode node in ddatas)
@@ -272,8 +309,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
                     ddatasCollection.Add(d); 
-                } 
-
+                }
+                PrescriptionDb.ImportDeclareXml(ddatasCollection, fileId);
+                MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
             }
 
         }

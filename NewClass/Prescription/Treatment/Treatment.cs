@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
@@ -19,7 +22,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class Treatment:ObservableObject
+    public class Treatment:ObservableObject,ICloneable
     {
         public Treatment()
         {
@@ -94,17 +97,27 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime>("TreatmentDate");
-            if(!string.IsNullOrEmpty(r.Field<byte>("ChronicSequence").ToString()))
+            if(!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
-            if (!string.IsNullOrEmpty(r.Field<byte>("ChronicTotal").ToString()))
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
                 ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString()); 
             MainDisease = new DisCode();
-            MainDisease.ID = r.Field<string>("MainDiseaseID");
+            if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
+            {
+                MainDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
+            }
             SubDisease = new DisCode();
-            SubDisease.ID = r.Field<string>("SecondDiseaseID");
+            if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
+            {
+                SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
+            }
             Pharmacist = new MedicalPersonnel(r);
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
             SpecialTreat = new SpeTre();
-            SpecialTreat.Id = r.Field<string>("SpecialTreatID");
+            if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
+            {
+                SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(r.Field<string>("SpecialTreatID")));
+            }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
             TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
@@ -458,17 +471,25 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public void GetLastMedicalNumber()
         {
-            if (HisApiBase.OpenCom())
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                int iBufferLen = 7;
-                byte[] pBuffer = new byte[7];
-                var res = HisApiBase.hisGetLastSeqNum(pBuffer,ref iBufferLen);
-                if (res == 0)
+                if (HisApiBase.OpenCom())
                 {
-                    TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                    int iBufferLen = 7;
+                    byte[] pBuffer = new byte[7];
+                    var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                    if (res == 0)
+                    {
+                        TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                    }
+                    HisApiBase.CloseCom();
                 }
-                HisApiBase.CloseCom();
-            }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+            };
+            worker.RunWorkerAsync();
         }
 
         public void Clear()
@@ -491,6 +512,29 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SubDisease = null;
             SpecialTreat = null;
             PaymentCategory = null;
+        }
+
+        public object Clone()
+        {
+            Treatment t = new Treatment();
+            t.AdjustCase = VM.GetAdjustCase(AdjustCase.Id);
+            t.AdjustDate = AdjustDate;
+            t.ChronicSeq = ChronicSeq;
+            t.ChronicTotal = chronicTotal;
+            t.Copayment = VM.GetCopayment(Copayment.Id);
+            t.Division = VM.GetDivision(Division.Id);
+            t.Institution = Institution.DeepCloneViaJson();
+            t.MainDisease = MainDisease?.DeepCloneViaJson();
+            t.SubDisease = SubDisease?.DeepCloneViaJson();
+            t.MedicalNumber = MedicalNumber;
+            t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
+            t.SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(SpecialTreat.Id));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
+            t.TreatDate = TreatDate;
+            t.TempMedicalNumber = TempMedicalNumber;
+            return t;
         }
     }
 }
