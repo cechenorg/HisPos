@@ -246,18 +246,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return details;
         }
-        public List<Pdata> SetImportDeclareXmlDetail() {
-            var details = new List<Pdata>();
-            //var serialNumber = 1;
-            //foreach (var med in Medicines)
-            //{
-            //    Pdata pdata = new Pdata(med, serialNumber.ToString());
-            //    if(med.)
-            //    details.Add();
-            //    serialNumber++;
-            //} 
-            return details;
-        }
+       
         private void CheckMedicalServiceData()
         {
             if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
@@ -339,7 +328,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.DeleteReserve(SourceId);
         }
         public void PredictResere() {
-            PrescriptionDb.PredictResere(SourceId);
+            PrescriptionDb.PredictResere(Id);
         }
         public void AdjustPredictResere() {
             PrescriptionDb.AdjustPredictResere(Id.ToString());

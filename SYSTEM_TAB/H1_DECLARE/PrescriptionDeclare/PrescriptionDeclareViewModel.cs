@@ -597,7 +597,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NormalAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            if (string.IsNullOrEmpty(CurrentPrescription.Id.ToString()))
+                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            else
+                CurrentPrescription.Update();
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
@@ -631,7 +634,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                     
             } 
-            CurrentPrescription.InsertReserve(); 
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.PredictResere();
         }
         
         private void ChronicRegister() {

@@ -166,6 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(Patient.IDNumber);
             ReservedPrescriptions = new Prescriptions();
             ReservedPrescriptions.GetReservePrescriptionByCusId(Patient.ID);
+            ReservedPrescriptions.GetRegisterPrescriptionByCusId(Patient.ID);
             UngetCardPrescriptions = new Prescriptions();
             UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
