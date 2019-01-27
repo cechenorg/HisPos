@@ -47,7 +47,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             }
         }
 
-        public bool IsEditing { get; set; } = false;
+        public bool IsEditing { get; set; }
         public bool IsProductSelected { get; set; } = false;
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
@@ -80,6 +80,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             RegisterFilter(addProductEnum);
             
             SearchString = "";
+            IsEditing = true;
         }
 
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum)
