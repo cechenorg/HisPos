@@ -329,6 +329,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     else  {
                         var e  = new CooperativeRemarkInsertWindow(); 
                         CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                        if (string.IsNullOrEmpty(CurrentPrescription.Remark))
+                            return;
                         CooperativeAdjust(); 
                     }
                     break;

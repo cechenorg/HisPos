@@ -324,7 +324,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //報表
                 case nameof(FeatureItem.庫存現值查詢):
-                    newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
                     newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };

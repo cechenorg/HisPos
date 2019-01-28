@@ -6,7 +6,7 @@
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow"
         mc:Ignorable="d"
-        Title="合作診所處方單號回報視窗" Height="300" Width="600">
+        Title="合作診所處方單號回報視窗" Height="300" Width="600" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <local:CooperativeRemarkInsertViesModel/>
     </Window.DataContext>

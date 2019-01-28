@@ -287,8 +287,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ///ProductDb.SaveStockTaking(_takingCollection);
             _takingCollection.Clear();
             CheckItems.Items.Filter = null;
-            if (EntrySearchView.Instance != null)
-                EntrySearchView.Instance.InitData();
+          
             InitToBegin(); 
         }
 
