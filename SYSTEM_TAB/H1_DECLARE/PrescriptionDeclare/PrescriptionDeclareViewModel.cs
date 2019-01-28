@@ -472,7 +472,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
         }
@@ -548,10 +548,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
-        private void GetSelectedProduct(ProductStruct selectedProduct)
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-            if(priviousSelectedIndex < 0 || priviousSelectedIndex >= CurrentPrescription.Medicines.Count ) return;
-            CurrentPrescription.AddMedicineBySearch(selectedProduct.ID, priviousSelectedIndex);
+            if (msg.Notification == nameof(PrescriptionDeclareViewModel))
+            if (priviousSelectedIndex < 0 || priviousSelectedIndex >= CurrentPrescription.Medicines.Count ) return;
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID, priviousSelectedIndex);
             CurrentPrescription.CountPrescriptionPoint();
             if (priviousSelectedIndex == CurrentPrescription.Medicines.Count - 1)
                 CurrentPrescription.Medicines.Add(new Medicine());

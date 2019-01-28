@@ -14,32 +14,13 @@
             <Setter Property="HorizontalAlignment"  Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-    </Window.Resources>
-    <Viewbox Stretch="Fill">
-        <Grid Margin="10,0,10,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="270"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <TextBox Width="300" Text="{Binding SearchString, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semibold" FontSize="20" Margin="5">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding GetRelatedDataCommand}" Key="Enter" />
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Rectangle Width="230"/>
-                <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="{Binding HideDisableProduct,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <command:EventToCommand Command="{Binding FilterCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
-            </StackPanel>
-            <DataGrid Name="MedicineGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" HorizontalAlignment="Left" CanUserSortColumns="True"
-                  AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProStructCollectionView}"
-                  SelectedItem="{Binding SelectedProductStruct,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionUnit="FullRow" Grid.ColumnSpan="2" PreviewKeyDown="Window_KeyDown">
+        <DataTemplate x:Key="EditingDataGrid" DataType="{x:Type local:AddProductViewModel}">
+            <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:AddProductViewModel}">
+            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
+                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}"
+                      SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding ProductSelected}"/>
@@ -102,6 +83,56 @@
                     <DataGridTextColumn Header="自費價" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding SellPrice}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
+        </DataTemplate>
+    </Window.Resources>
+    <Viewbox Stretch="Fill">
+        <Grid Margin="10,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="270"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
+                <TextBox Name="SearchStringTextBox" Width="300" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding StartEditingCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding GetRelatedDataCommand}" Key="Enter"/>
+                        <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
+                        <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Rectangle Width="230"/>
+                <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="{Binding HideDisableProduct,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <command:EventToCommand Command="{Binding FilterCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+            </StackPanel>
+            <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                <Setter Property="ContentTemplate" Value="{StaticResource EditingDataGrid}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+                <ContentControl.InputBindings>
+                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
+                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
+                </ContentControl.InputBindings>
+            </ContentControl>
             <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Grid.Column="1" Margin="41.102,9,230,9"/>
         </Grid>
     </Viewbox>

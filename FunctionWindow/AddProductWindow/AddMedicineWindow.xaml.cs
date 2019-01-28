@@ -31,25 +31,8 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     Close();
             });
             DataContext = new AddProductViewModel(search, AddProductEnum.AddMedicine);
-        
-            MedicineGrid.Focus();
+            SearchStringTextBox.Focus();
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
-        }
-
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Up)
-            {
-                Messenger.Default.Send(new NotificationMessage("MoveUp"));
-            }
-            else if(e.Key == Key.Down)
-            {
-                Messenger.Default.Send(new NotificationMessage("MoveDown"));
-            }
-            else
-            {
-                e.Handled = true;
-            }
         }
     }
 }

@@ -344,7 +344,7 @@ namespace His_Pos.ChromeTabViewModel
 
         public bool IsTabOpened(string tabName)
         {
-            const int MAX_OPENTAB = 2;
+            const int MAX_OPENTAB = 1;
             int tabCount = 1;
 
             foreach (TabBase tab in ItemCollection)
