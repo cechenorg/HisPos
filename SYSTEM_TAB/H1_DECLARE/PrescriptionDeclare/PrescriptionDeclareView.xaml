@@ -155,12 +155,17 @@
                         <xctk:MaskedTextBox x:Name="AdjustDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
                                             Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
                                             PreviewKeyDown="AdjustDate_PreviewKeyDown">
-                            <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                            <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
                                     <service:DateValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding ChronicSequenceTextChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </xctk:MaskedTextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
