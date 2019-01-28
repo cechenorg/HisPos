@@ -31,12 +31,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
 
             if (searchString.Equals(""))
-            {
                 DataContext = new AddProductViewModel(AddProductEnum.PruductPurchase);
-                SearchStringTextBox.Focus();
-            }
             else
                 DataContext = new AddProductViewModel(searchString, AddProductEnum.PruductPurchase);
+
+            SearchStringTextBox.Focus();
 
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }

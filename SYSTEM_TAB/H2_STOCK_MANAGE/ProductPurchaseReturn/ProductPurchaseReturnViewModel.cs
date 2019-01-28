@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -28,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand<string> AddProductByInputCommand { get; set; }
+        public RelayCommand<TextBox> AddProductByInputCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
@@ -61,12 +62,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             InitVariables();
             RegisterCommend();
-            RegisterMessenger();
-        }
-
-        ~ProductPurchaseReturnViewModel()
-        {
-            UnRegisterMessenger();
         }
 
         #region ----- Define Actions -----
@@ -106,8 +101,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             InitVariables();
         }
-        private void AddProductByInputAction(string searchString)
+        private void AddProductByInputAction(TextBox textBox)
         {
+            string searchString = textBox.Text;
+
             if (searchString.Length < 5)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
@@ -118,22 +115,30 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
                 productPurchaseReturnAddProductWindow.ShowDialog();
+                Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
             {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
+                Messenger.Default.Unregister(this);
             }
             else
             {
                 MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
             }
+
+            textBox.Text = "";
         }
         private void AddProductAction()
         {
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("");
             productPurchaseReturnAddProductWindow.ShowDialog();
+            Messenger.Default.Unregister(this);
         }
         #endregion
 
@@ -154,19 +159,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
-            AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
+            AddProductByInputCommand = new RelayCommand<TextBox>(AddProductByInputAction);
             AddProductCommand = new RelayCommand(AddProductAction);
         }
         
         #region ----- Messenger Functions -----
-        private void RegisterMessenger()
-        {
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-        }
-        private void UnRegisterMessenger()
-        {
-            Messenger.Default.Unregister(this);
-        }
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
