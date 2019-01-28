@@ -5,7 +5,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
 {
     public class Copayment : ObservableObject
     {
-        public Copayment() { }
+        public Copayment() {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
         public Copayment(DataRow r)
         {
             Id = r.Field<string>("Cop_ID");

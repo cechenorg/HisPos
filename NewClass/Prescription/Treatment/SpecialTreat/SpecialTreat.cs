@@ -8,7 +8,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
 {
     public class SpecialTreat : ObservableObject
     {
-        public SpecialTreat() { }
+        public SpecialTreat() {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
         public SpecialTreat(DataRow r)
         {
             Id = r.Field<string>("SpeTre_ID");

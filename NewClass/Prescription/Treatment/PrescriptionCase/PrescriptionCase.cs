@@ -5,7 +5,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
 {
     public class PrescriptionCase : ObservableObject
     {
-        public PrescriptionCase() { }
+        public PrescriptionCase() {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
         public PrescriptionCase(DataRow r)
         {
             Id = r.Field<string>("PreCase_ID");

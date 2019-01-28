@@ -5,7 +5,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
 {
     public class Division : ObservableObject
     {
-        public Division() {}
+        public Division() {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
 
         public Division(DataRow r)
         {

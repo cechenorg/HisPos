@@ -5,7 +5,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
 {
     public class PaymentCategory : ObservableObject
     {
-        public PaymentCategory() { }
+        public PaymentCategory() {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
 
         public PaymentCategory(DataRow r)
         {

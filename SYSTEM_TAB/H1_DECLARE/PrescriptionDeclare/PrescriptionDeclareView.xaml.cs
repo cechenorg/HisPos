@@ -249,8 +249,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             }
 
-            if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+            if ((firstChild is TextBox || firstChild is TextBlock ) && firstChild.Focusable)
+            {
                 firstChild.Focus();
+                if(firstChild is TextBox t)
+                    t.SelectAll();
+            }
         }
 
         private void MedicineTotal_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -286,7 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
                 rowIndex = dataGridCells.Count - 1;
             dataGridCells[rowIndex].Focus();
-            dataGridCells[rowIndex].SelectionStart = 0;
+            dataGridCells[rowIndex].SelectAll();
             focusGrid.SelectedIndex = rowIndex;
             ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
         }

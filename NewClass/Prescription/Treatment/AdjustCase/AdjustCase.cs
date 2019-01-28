@@ -5,7 +5,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
 {
     public class AdjustCase:ObservableObject
     {
-        public AdjustCase() { }
+        public AdjustCase()
+        {
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
 
         public AdjustCase(DataRow r)
         {
