@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
-            Inventory = row.Field<int>("Inv_Inventory");
+            Inventory = row.Field<double>("Inv_Inventory");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             NHIPrice = (double)row.Field<decimal>("Med_Price");

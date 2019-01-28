@@ -222,6 +222,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             set
             {
                 Set(() => ChronicSeq, ref chronicSeq, value);
+
             }
         }//連續處方箋調劑序號 D35
 

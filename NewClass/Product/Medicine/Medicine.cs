@@ -23,7 +23,7 @@ namespace His_Pos.NewClass.Product.Medicine
         public Medicine(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
-            Inventory = r.Field<int>("Inv_Inventory");
+            Inventory = r.Field<double>("Inv_Inventory");
             Vendor = r.Field<string>("Med_Manufactory");
             Control = r.Field<bool>("Med_IsCommon");
             Frozen = r.Field<bool>("Med_IsFrozen");

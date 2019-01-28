@@ -137,7 +137,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
-                        <xctk:MaskedTextBox x:Name="TreatDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                        <xctk:MaskedTextBox x:Name="TreatDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         PreviewKeyDown="TreatDate_PreviewKeyDown">
                             <Binding Path="CurrentPrescription.Treatment.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -151,7 +151,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}"/>
                         <xctk:MaskedTextBox x:Name="AdjustDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
-                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus"
+                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
                                             PreviewKeyDown="AdjustDate_PreviewKeyDown">
                             <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -163,7 +163,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
+                        <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding CurrentPrescription.Treatment.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
@@ -173,7 +173,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
                         <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
+                        <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding CurrentPrescription.Treatment.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
@@ -184,10 +184,10 @@
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicTotal" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding CurrentPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="ChronicTotal_PreviewKeyDown"/>
+                             Text="{Binding CurrentPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="ChronicTotal_PreviewKeyDown" InputScope="Number"/>
                         <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicSequence" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding CurrentPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="ChronicSequence_PreviewKeyDown"/>
+                             Text="{Binding CurrentPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="ChronicSequence_PreviewKeyDown" InputScope="Number"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
