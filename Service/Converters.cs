@@ -3,10 +3,10 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Product;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.Service
@@ -157,7 +157,7 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Product || value is ProductUnit) return true;
+            if (value is Product) return true;
             return false;
         }
 

@@ -58,6 +58,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
         protected int initProductCount = 0;
 
+        public int SelectedItemIndex { get; set; }
         public OrderTypeEnum OrderType { get; set; }
         public OrderStatusEnum OrderStatus { get; set; }
         public string ID { get; set; }

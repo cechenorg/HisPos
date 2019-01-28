@@ -105,6 +105,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             string searchString = textBox.Text;
 
+            //CurrentStoreOrder CurrentStoreOrder.SelectedItemIndex
+
             if (searchString.Length < 5)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
