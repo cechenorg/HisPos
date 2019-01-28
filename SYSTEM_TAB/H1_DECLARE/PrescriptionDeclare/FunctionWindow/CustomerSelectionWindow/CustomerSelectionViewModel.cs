@@ -108,14 +108,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             MainWindow.ServerConnection.OpenConnection();
             Customers.Init();
             MainWindow.ServerConnection.CloseConnection();
-            if (Customers.Count == 1)
-                ExecuteCustomerSelected();
-            else
+            CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
+            CustomersCollectionView = CustomersCollectionViewSource.View;
+            Searching = condition;
+            InitializeFilter(option);
+            if (CustomersCollectionView.Cast<Customer>().ToList().Count == 1)
             {
-                CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
-                CustomersCollectionView = CustomersCollectionViewSource.View;
-                Searching = condition;
-                InitializeFilter(option);
+                SelectedCustomer = CustomersCollectionView.Cast<Customer>().ToList()[0];
+                ExecuteCustomerSelected();
             }
         }
 

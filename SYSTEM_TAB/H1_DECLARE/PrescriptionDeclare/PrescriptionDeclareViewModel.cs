@@ -790,7 +790,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CheckCustomPrescriptions(bool isGetMakeUpPrescription)
         {
-            var customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card, isGetMakeUpPrescription);
+            CusPreSelectWindow customPrescriptionWindow = null;
+            customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card, isGetMakeUpPrescription);
         }
 
         private void ReadCard(bool showCusWindow)
