@@ -39,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+        public Medicine SelectedMedicine { get; set; }
 
         private bool CheckEdit()
         {
@@ -86,6 +87,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #endregion
         public PrescriptionEditViewModel(Prescription selected)
         {
+            MainWindow.ServerConnection.OpenConnection();
+            selected.ConvertNHIandOTCPrescriptionMedicines();
+            MainWindow.ServerConnection.CloseConnection();
             OriginalPrescription = selected;
             Init((Prescription)selected.Clone());
         }
@@ -307,6 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void GetSelectedProduct(ProductStruct selectedProduct)
         {
+
             EditedPrescription.AddMedicineBySearch(selectedProduct.ID, SelectedMedicinesIndex);
             EditedPrescription.CountPrescriptionPoint();
             if (SelectedMedicinesIndex == EditedPrescription.Medicines.Count - 1)

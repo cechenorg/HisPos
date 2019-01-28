@@ -193,19 +193,7 @@ namespace His_Pos.NewClass.Prescription
             CreateDeclareFileContent(details);//產生申報資料
             return PrescriptionDb.InsertPrescription(this, details);
         }
-        public int InsertReserve() {
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
-
-            CheckMedicalServiceData();//確認藥事服務資料
-            var details = SetPrescriptionDetail();//產生藥品資料
-            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            CreateDeclareFileContent(details);//產生申報資料
-            return PrescriptionDb.InsertReserve(this, details);
-        }
+      
         public void UpdateReserve() {
             if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
@@ -246,18 +234,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return details;
         }
-        public List<Pdata> SetImportDeclareXmlDetail() {
-            var details = new List<Pdata>();
-            //var serialNumber = 1;
-            //foreach (var med in Medicines)
-            //{
-            //    Pdata pdata = new Pdata(med, serialNumber.ToString());
-            //    if(med.)
-            //    details.Add();
-            //    serialNumber++;
-            //} 
-            return details;
-        }
+       
         private void CheckMedicalServiceData()
         {
             if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
@@ -334,19 +311,29 @@ namespace His_Pos.NewClass.Prescription
                         break;
                 }
             }
+
+            if (Medicines[selectedMedicinesIndex].ID.EndsWith("00") ||
+                Medicines[selectedMedicinesIndex].ID.EndsWith("G0"))
+                Medicines[selectedMedicinesIndex].PositionName = "PO";
+            if(selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Dosage != null)
+                Medicines[selectedMedicinesIndex].Dosage = Medicines[selectedMedicinesIndex - 1].Dosage;
+            if (selectedMedicinesIndex > 0 && !string.IsNullOrEmpty(Medicines[selectedMedicinesIndex-1].UsageName))
+                Medicines[selectedMedicinesIndex].UsageName = Medicines[selectedMedicinesIndex - 1].UsageName;
+            if (selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Days != null)
+                Medicines[selectedMedicinesIndex].Days = Medicines[selectedMedicinesIndex - 1].Days;
         }
         public void DeleteReserve() {
             PrescriptionDb.DeleteReserve(SourceId);
         }
         public void PredictResere() {
-            PrescriptionDb.PredictResere(SourceId);
+            PrescriptionDb.PredictResere(Id);
         }
         public void AdjustPredictResere() {
             PrescriptionDb.AdjustPredictResere(Id.ToString());
         }
         
         #endregion
-        public void AddCooperativePrescriptionMedicines() {
+        public void AddCooperativePrescriptionMedicines(bool addMedicine) {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
@@ -382,7 +369,8 @@ namespace His_Pos.NewClass.Prescription
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 Medicines[medCount] = temp; 
             }
-            Medicines.Add(new Medicine());
+            if(addMedicine)
+                Medicines.Add(new Medicine());
         }
         public void ConvertNHIandOTCPrescriptionMedicines()
         {

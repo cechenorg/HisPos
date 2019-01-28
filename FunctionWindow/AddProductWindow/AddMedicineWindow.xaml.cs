@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -29,6 +31,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     Close();
             });
             DataContext = new AddProductViewModel(search, AddProductEnum.AddMedicine);
+            SearchStringTextBox.Focus();
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }

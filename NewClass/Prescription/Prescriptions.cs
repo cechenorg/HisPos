@@ -64,6 +64,14 @@ namespace His_Pos.NewClass.Prescription
                 Add(new Prescription(r, PrescriptionSource.ChronicReserve));
             }
         }
+        public void GetRegisterPrescriptionByCusId(int cusID) //取得登錄慢箋
+        {
+            var table = PrescriptionDb.GetRegisterPrescriptionByCusId(cusID);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Prescription(r, PrescriptionSource.Normal));
+            }
+        }
         public void GetCooperaPrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
         {
             Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.Id, cusIDNum);

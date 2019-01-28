@@ -33,21 +33,15 @@ namespace His_Pos.NewClass.Prescription
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
         
-        public static int InsertReserve(Prescription prescription, List<Pdata> prescriptionDetails) { 
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", SetReserveMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReserve]", parameterList);
-            return Convert.ToInt32(table.Rows[0]["ResMas_ID"].ToString());
-        }
+        
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "@ecMas_Id", recMasId); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteReserve]", parameterList);  
         }
-        public static void PredictResere(string recMasId) {
+        public static void PredictResere(int preMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ReserveId", recMasId);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preMasId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictResere]", parameterList);
         }
         public static void AdjustPredictResere(string preMasId) {
@@ -156,6 +150,11 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByCusId]", parameterList);
         }
+        public static DataTable GetRegisterPrescriptionByCusId(int cusId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[RegisterPrescriptionByCusId]", parameterList);
+        } 
         public static void InsertCooperAdjust(Prescription prescription, List<Pdata> prescriptionDetails, string remark) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionId", prescription.Id);
@@ -303,8 +302,11 @@ namespace His_Pos.NewClass.Prescription
             conn.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
             conn.CloseConnection();
         }
+        public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus)
+        {
 
-        
+        }
+
 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
@@ -687,5 +689,6 @@ namespace His_Pos.NewClass.Prescription
             return detailTable;
         }
         #endregion
+        
     }
 }

@@ -130,7 +130,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
             }
         }
-        public int SelectedMedicinesIndex { get; set; }
+
+        private int priviousSelectedIndex { get; set; }
+        private int selectedMedicinesIndex;
+        public int SelectedMedicinesIndex
+        {
+            get => selectedMedicinesIndex;
+            set
+            {
+                if (value != -1)
+                {
+                    Set(() => SelectedMedicinesIndex, ref selectedMedicinesIndex, value);
+                }
+            }
+        }
+
         private MedSelectWindow MedicineWindow { get; set; }
         private bool? isDeposit;
         private bool canSendOrder;
@@ -261,7 +275,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AddMedicineAction(string medicineID)
         {
-            if(string.IsNullOrEmpty(medicineID)) return;
+            if(SelectedMedicinesIndex < CurrentPrescription.Medicines.Count)
+                priviousSelectedIndex = SelectedMedicinesIndex;
+            if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
                 MessageWindow.ShowMessage(StringRes.ShortSearchString+"5", MessageType.WARNING);
@@ -456,7 +472,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
         }
@@ -532,13 +548,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
-        private void GetSelectedProduct(ProductStruct selectedProduct)
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-            CurrentPrescription.AddMedicineBySearch(selectedProduct.ID,SelectedMedicinesIndex);
+            if (msg.Notification == nameof(PrescriptionDeclareViewModel))
+            if (priviousSelectedIndex < 0 || priviousSelectedIndex >= CurrentPrescription.Medicines.Count ) return;
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID, priviousSelectedIndex);
             CurrentPrescription.CountPrescriptionPoint();
-            if (SelectedMedicinesIndex == CurrentPrescription.Medicines.Count - 1)
+            if (priviousSelectedIndex == CurrentPrescription.Medicines.Count - 1)
                 CurrentPrescription.Medicines.Add(new Medicine());
-            Messenger.Default.Send(SelectedMedicinesIndex, "FocusDosage");
+            Messenger.Default.Send(priviousSelectedIndex, "FocusDosage");
         }
         #endregion
         #region CommandActions
@@ -597,7 +615,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NormalAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            if (string.IsNullOrEmpty(CurrentPrescription.Id.ToString()))
+                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            else
+                CurrentPrescription.Update();
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
@@ -630,8 +651,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
                     
-            } 
-            CurrentPrescription.InsertReserve(); 
+            }
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
+            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.PredictResere();
         }
         
         private void ChronicRegister() {
@@ -643,9 +666,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
             }
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.UpdateReserve();
         }
         private void PrescribeFunction() {
+            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
@@ -668,7 +693,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     else
                     {
-                        if (error is null)
+                        if ((bool)isDeposit)
                         {
                             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
                         }
@@ -676,7 +701,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         {
                             HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false ,error);
                         }
-                       
                     }
                 }
                 else
@@ -687,6 +711,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                CurrentPrescription.PrescriptionStatus.UpdateStatus();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
