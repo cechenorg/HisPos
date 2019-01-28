@@ -21,9 +21,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         internal static DataTable GetPurchaseProductByProductID(string iD)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("", iD));
+            parameters.Add(new SqlParameter("PRO_ID", iD));
 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductByProductID]", parameters);
         }
     }
 }

@@ -49,11 +49,17 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void AddProductByID(string iD)
         {
+            if (OrderProducts.Count(p => p.ID == iD) > 0)
+            {
+                MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
+                return;
+            }
+
             DataTable dataTable = PurchaseReturnProductDB.GetPurchaseProductByProductID(iD);
 
             PurchaseProduct purchaseProduct;
 
-            switch (dataTable.Rows[0].Field<string>(""))
+            switch (dataTable.Rows[0].Field<string>("TYPE"))
             {
                 case "O":
                     purchaseProduct = new PurchaseOTC(dataTable.Rows[0]);
