@@ -26,6 +26,7 @@ namespace His_Pos.NewClass
                 };
             if (json.Equals(@"{""sHospId"":null,""sRxId"":null,""sMedList"":[]}"))
                 return;
+            CooperativeClinicJson.CooperativeClinicJsonDb.InsertCooperJson(json);
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues);
         }

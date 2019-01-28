@@ -420,6 +420,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertViesModel .cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertWindow.xaml.cs">
+      <DependentUpon>CooperativeRemarkInsertWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml.cs">
       <DependentUpon>CooperativeSelectionWindow.xaml</DependentUpon>
@@ -1062,6 +1066,10 @@
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml">
       <SubType>Designer</SubType>

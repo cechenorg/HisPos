@@ -54,14 +54,6 @@ namespace His_Pos.Database
 
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
-            if (connection.State != ConnectionState.Open) {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    MessageWindow.ShowMessage("Plz Open Connection when execute " + procName, MessageType.ERROR);
-                    return;
-                });
-            }
-
             var table = new DataTable();
             try
             {
