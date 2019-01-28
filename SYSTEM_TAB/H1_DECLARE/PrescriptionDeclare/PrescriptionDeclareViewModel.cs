@@ -68,6 +68,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     Set(() => DeclareStatus, ref declareStatus, value);
                     CanSendOrder = declareStatus != PrescriptionDeclareStatus.Adjust;
+                    if (!CanSendOrder)
+                        CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
                 }
             }
         }
@@ -470,6 +472,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckPrescriptionVariable()
         {
             CurrentPrescription.CheckPrescriptionVariable();
+            CheckDeclareStatus();
         }
 
         private void InitialPrescription()
@@ -506,7 +509,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region EventAction
         private void AdjustCaseSelectionChangedAction()
         {
-            CheckDeclareStatus();
             if (CurrentPrescription.Treatment.AdjustCase != null &&
                 CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
             {
@@ -519,6 +521,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 NotPrescribe = true;
             }
             CurrentPrescription.CheckPrescriptionVariable();
+            CheckDeclareStatus();
         }
         private void CopaymentSelectionChangedAction()
         {
@@ -638,6 +641,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         }
                     }
                     else if (DateTime.Today.Date < ((DateTime)adjust).Date)
+                    {
+                        DeclareStatus = PrescriptionDeclareStatus.Register;
+                    }
+                    else if (DateTime.Today.Date > ((DateTime)adjust).Date)
                     {
                         DeclareStatus = PrescriptionDeclareStatus.Adjust;
                     }
