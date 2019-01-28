@@ -61,7 +61,11 @@
                 <DataGridTemplateColumn MinWidth="120" Header="商品代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Id" Text="{Binding ID}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" />
+                            <TextBox Text="{Binding ID}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding AddProductByInputCommand}" Key="Enter" CommandParameter="{Binding ID}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
