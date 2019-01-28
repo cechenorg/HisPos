@@ -9,7 +9,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
     public class Institution : ObservableObject
     {
-        public Institution(){}
+        public Institution(){
+            Id = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
          
         public Institution(DataRow r)
         {

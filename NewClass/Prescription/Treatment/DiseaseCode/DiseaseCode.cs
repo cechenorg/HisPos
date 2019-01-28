@@ -8,7 +8,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
 {
     public class DiseaseCode : ObservableObject
     {
-        public DiseaseCode() { }
+        public DiseaseCode() {
+            ID = string.Empty;
+            Name = string.Empty;
+            FullName = string.Empty;
+        }
         public DiseaseCode(DataRow r) {
             ID = r.Field<string>("DisCode_ID");
             Name = r.Field<string>("DisCode_ChiName");
