@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
+using His_Pos.Properties;
 using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow
@@ -188,6 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         private void PrintAction()
         {
+            if(SelectedPrescription is null) return;
             GetCompletePrescriptionData(false);
             SelectedPrescription.CountPrescriptionPoint();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
@@ -195,13 +197,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             {
                 var printBySingleMode = new MedBagSelectionWindow();
                 var singleMode = (bool)printBySingleMode.ShowDialog();
-                var receiptResult = new ConfirmWindow("是否列印收據", "列印收據");
                 var receiptPrint = false;
                 if (SelectedPrescription.PrescriptionPoint.AmountsPay > 0)
                 {
-                    receiptPrint = (bool)receiptResult.DialogResult;
+                    var receiptResult = new ConfirmWindow(Resources.PrintReceipt, Resources.PrintConfirm);
+                    if (receiptResult.DialogResult != null)
+                        receiptPrint = (bool)receiptResult.DialogResult;
                 }
-                SelectedPrescription.PrintMedBag(singleMode, receiptPrint,false);
+                SelectedPrescription.PrintMedBag(singleMode);
+                if(receiptPrint)
+                    SelectedPrescription.PrintReceipt();
             }
         }
         private void PrescriptionSelectedAction()

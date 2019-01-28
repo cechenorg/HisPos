@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                var usagePrint = "【" + GetPositionPrintName(m.Position) + "】" + GetUsagePrintName(m.Usage) + "每次" + m.Dosage + "(  )";
+                var usagePrint = "【" + GetPositionPrintName(m.Position).Trim() + "】" + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
                 Usage = usagePrint;
             }
         }
@@ -84,7 +84,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = m.Days + "天";
-                var usagePrint = "【" + GetPositionPrintName(m.PositionName) + "】" + GetUsagePrintName(m.Usage) + "用量:" + m.Dosage + "(  )"; ;
+                var usagePrint = "【" + GetPositionPrintName(m.PositionName).Trim() + "】" + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )"; ;
                 Usage = usagePrint;
                 Form = m.Form;
                 Total = m.Amount.ToString();
@@ -105,7 +105,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                var usagePrint = "【" + GetPositionPrintName(m.PositionName) + "】" + GetUsagePrintName(m.Usage) + "每次" + m.Dosage + "(  )";
+                var usagePrint = "【" + GetPositionPrintName(m.PositionName).Trim() + "】" + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
                 Usage = usagePrint;
             }
         }
@@ -127,7 +127,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 }
                 if (!string.IsNullOrEmpty(m.PositionName) && !string.IsNullOrEmpty(m.UsageName))
                 {
-                    var usagePrint = "【" + GetPositionPrintName(m.PositionName) + "】" + GetUsagePrintName(m.Usage) + "用量:" + m.Dosage + "(  )"; ;
+                    var usagePrint = "【" + GetPositionPrintName(m.PositionName).Trim() + "】" + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )"; ;
                     Usage = usagePrint;
                 }
                 else
@@ -166,7 +166,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 }
                 if (!string.IsNullOrEmpty(m.PositionName) && !string.IsNullOrEmpty(m.UsageName))
                 {
-                    var usagePrint = "【" + GetPositionPrintName(m.PositionName) + "】" + GetUsagePrintName(m.Usage) + "每次" + m.Dosage + "(  )";
+                    var usagePrint = "【" + GetPositionPrintName(m.PositionName).Trim() + "】" + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
                     Usage = usagePrint;
                 }
                 else

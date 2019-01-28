@@ -380,7 +380,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool) receiptResult.DialogResult;
                 }
-                CurrentPrescription.PrintMedBag(singleMode, receiptPrint,true);
+                CurrentPrescription.PrintMedBag(singleMode);
+                if(receiptPrint)
+                    CurrentPrescription.PrintReceipt();
             }
             else
             {
@@ -654,7 +656,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void NormalAdjust()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Id.ToString()))
-                CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+                CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             else
                 CurrentPrescription.Update();
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
@@ -665,7 +667,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CooperativeAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.InsertCooperAdjust();
             CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("合作自費");
@@ -674,7 +676,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ChronicAdjust()
         {
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.AdjustPredictResere(); 
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
@@ -691,7 +693,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.PredictResere();
         }
         
@@ -709,7 +711,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void PrescribeFunction() {
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-            CurrentPrescription.Id = CurrentPrescription.InsertPresription();
+            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
