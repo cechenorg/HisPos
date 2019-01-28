@@ -76,6 +76,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <TextBox Name="SearchStringTextBox" Width="300" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
                 <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding StartEditingCommand}"/>
                     <KeyBinding Command="{Binding GetRelatedDataCommand}" Key="Enter"/>
                 </TextBox.InputBindings>
             </TextBox>
@@ -90,6 +91,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}" Value="true">
                             <Setter Property="ContentTemplate" Value="{StaticResource EditingDataGrid}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

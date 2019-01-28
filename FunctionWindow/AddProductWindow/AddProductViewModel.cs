@@ -20,6 +20,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     {
         #region ----- Define Command -----
         public RelayCommand GetRelatedDataCommand { get; set; }
+        public RelayCommand StartEditingCommand { get; set; }
         public RelayCommand FilterCommand { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand ProductSelected { get; set; }
@@ -100,13 +101,6 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             GetRelatedDataAction();
         }
 
-        private void ProductSelectedAction()
-        {
-            if (string.IsNullOrEmpty(SelectedProductStruct.ID)) return;
-            Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
-            Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
-            Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
-        }
 
         ~AddProductViewModel()
         {
@@ -156,6 +150,13 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
 
         }
+        private void ProductSelectedAction()
+        {
+            if (string.IsNullOrEmpty(SelectedProductStruct.ID)) return;
+            Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
+            Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
+            Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
+        }
         private void AddMedicineFilterAction()
         {
             if(HideDisableProduct)
@@ -180,6 +181,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             //    e.Accepted = false;
             //}
         }
+
+        private void StartEditingAction()
+        {
+            IsEditing = true;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -187,6 +193,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
             GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
             ProductSelected = new RelayCommand(ProductSelectedAction);
+            StartEditingCommand = new RelayCommand(StartEditingAction);
         }
         private void RegisterFilter(AddProductEnum addProductEnum)
         {
@@ -202,6 +209,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     break;
             }
         }
+
         #endregion
 
     }
