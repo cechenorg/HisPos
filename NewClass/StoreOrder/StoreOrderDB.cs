@@ -35,5 +35,21 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
         }
+
+        internal static void SaveReturnOrder(ReturnOrder returnOrder)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("", returnOrder.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].", parameters);
+        }
+
+        internal static void SavePurchaseOrder(PurchaseOrder purchaseOrder)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("", purchaseOrder.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].", parameters);
+        }
     }
 }

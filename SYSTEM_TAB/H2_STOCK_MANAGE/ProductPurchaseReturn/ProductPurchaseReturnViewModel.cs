@@ -11,6 +11,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
@@ -27,7 +28,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand<string> AddProductCommand { get; set; }
+        public RelayCommand<string> AddProductByInputCommand { get; set; }
+        public RelayCommand AddProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
@@ -57,13 +59,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            AddOrderCommand = new RelayCommand(AddOrderAction);
-            DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
-            ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
-            ReloadCommand = new RelayCommand(ReloadAction);
-            AddProductCommand = new RelayCommand<string>(AddProductAction);
-
             InitVariables();
+            RegisterCommend();
+            RegisterMessenger();
+        }
+
+        ~ProductPurchaseReturnViewModel()
+        {
+            UnRegisterMessenger();
         }
 
         #region ----- Define Actions -----
@@ -92,24 +95,45 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void ToNextStatusAction()
         {
-            if(CurrentStoreOrder.CheckOrder())
+            if (CurrentStoreOrder.CheckOrder())
+            {
                 CurrentStoreOrder.MoveToNextStatus();
+                StoreOrderCollection.ClearDoneStoreOrder();
+            }
+
         }
         private void ReloadAction()
         {
             InitVariables();
         }
-        private void AddProductAction(string searchString)
+        private void AddProductByInputAction(string searchString)
         {
-            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, AddProductEnum.PruductPurchase);
-            productPurchaseReturnAddProductWindow.ShowDialog();
-
-            AddProductViewModel viewModel = productPurchaseReturnAddProductWindow.DataContext as AddProductViewModel;
-
-            if (viewModel.IsProductSelected)
+            if (searchString.Length < 5)
             {
-                CurrentStoreOrder.AddProductByID(viewModel.SelectedProductStruct.ID);
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
             }
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructsBySearchString(searchString).Count;
+            MainWindow.ServerConnection.CloseConnection();
+            if (productCount > 1)
+            {
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
+                productPurchaseReturnAddProductWindow.ShowDialog();
+            }
+            else if (productCount == 1)
+            {
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+            }
+        }
+        private void AddProductAction()
+        {
+            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("");
+            productPurchaseReturnAddProductWindow.ShowDialog();
         }
         #endregion
 
@@ -123,6 +147,37 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (StoreOrderCollection.Count > 0)
                 CurrentStoreOrder = StoreOrderCollection[0];
         }
+
+        private void RegisterCommend()
+        {
+            AddOrderCommand = new RelayCommand(AddOrderAction);
+            DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
+            ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
+            ReloadCommand = new RelayCommand(ReloadAction);
+            AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
+            AddProductCommand = new RelayCommand(AddProductAction);
+        }
+        
+        #region ----- Messenger Functions -----
+        private void RegisterMessenger()
+        {
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+        }
+        private void UnRegisterMessenger()
+        {
+            Messenger.Default.Unregister(this);
+        }
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
+        #endregion
+
         #endregion
     }
 }

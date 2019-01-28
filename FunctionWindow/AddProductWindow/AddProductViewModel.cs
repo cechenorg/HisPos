@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
@@ -14,6 +15,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     {
         #region ----- Define Command -----
         public RelayCommand GetRelatedDataCommand { get; set; }
+        public RelayCommand StartEditingCommand { get; set; }
         public RelayCommand FilterCommand { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand ProductSelected { get; set; }
@@ -40,7 +42,16 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 Set(() => ProStructCollectionView, ref proStructCollectionView, value);
             }
         }
-        public bool IsEditing { get; set; }
+
+        private bool isEditing;
+        public bool IsEditing
+        {
+            get => isEditing;
+            private set
+            {
+                Set(() => IsEditing, ref isEditing, value);
+            }
+        }
         public bool IsProductSelected { get; set; } = false;
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
@@ -67,47 +78,24 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         private AddProductEnum addProEnum { get; set; }
         #endregion
 
+        public AddProductViewModel(AddProductEnum addProductEnum)
+        {
+            RegisterCommand();
+            RegisterFilter(addProductEnum);
+            
+            SearchString = "";
+            IsEditing = true;
+        }
+
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum)
         {
-            GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
-            ProductSelected = new RelayCommand(ProductSelectedAction);
-            addProEnum = addProductEnum;
+            RegisterCommand();
+            RegisterFilter(addProductEnum);
+
             SearchString = searchString;
             GetRelatedDataAction();
-            switch (addProductEnum)
-            {
-                case AddProductEnum.PruductPurchase:
-                    FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
-                    break;
-                case AddProductEnum.AddMedicine:
-                    FilterCommand = new RelayCommand(AddMedicineFilterAction);
-                    break;
-            }
-            Messenger.Default.Register<NotificationMessage>(this,"MoveUp", MoveUp);
-            Messenger.Default.Register<NotificationMessage>(this, "MoveDown", MoveDown);
         }
 
-        private void MoveUp(NotificationMessage msg)
-        {
-            if (msg.Notification.Equals("MoveUp") && !ProStructCollectionViewSource.View.IsCurrentBeforeFirst)
-            {
-                ProStructCollectionViewSource.View.MoveCurrentToPrevious();
-            }
-        }
-        private void MoveDown(NotificationMessage msg)
-        {
-            if (msg.Notification.Equals("MoveDown") && !ProStructCollectionViewSource.View.IsCurrentAfterLast)
-            {
-                ProStructCollectionViewSource.View.MoveCurrentToNext();
-            }
-        }
-
-        private void ProductSelectedAction()
-        {
-            if (string.IsNullOrEmpty(SelectedProductStruct.ID)) return;
-            Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
-            Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
-        }
 
         ~AddProductViewModel()
         {
@@ -118,35 +106,44 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         #region ----- Define Actions -----
         private void GetRelatedDataAction()
         {
-            if (SearchString.Length > 4)
+            if (IsEditing)
             {
-                IsEditing = false;
-                HideDisableProduct = false;
-                MainWindow.ServerConnection.OpenConnection();
-                ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
-                MainWindow.ServerConnection.CloseConnection();
-                if (addProEnum == AddProductEnum.AddMedicine)
-                    ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p=>p.NHIPrice) };
+                if (SearchString.Length > 4)
+                {
+                    IsEditing = false;
+                    HideDisableProduct = false;
+                    MainWindow.ServerConnection.OpenConnection();
+                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (addProEnum == AddProductEnum.AddMedicine)
+                        ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p => p.NHIPrice) };
+                    else
+                    {
+                        ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
+                    }
+                    ProStructCollectionView = ProStructCollectionViewSource.View;
+                    ProStructCollectionViewSource.Filter += FilterByProductEnable;
+                    switch (ProductStructCollection.Count)
+                    {
+                        case 0:
+                            MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+                            break;
+                        case 1:
+                            SelectedProductStruct = ProductStructCollection[0];
+                            ProductSelectedAction();
+                            break;
+                        default:
+                            ProStructCollectionViewSource.View.MoveCurrentToFirst();
+                            SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
+                            break;
+                    }
+                }
                 else
-                {
-                    ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
-                }
-                ProStructCollectionView = ProStructCollectionViewSource.View;
-                ProStructCollectionViewSource.Filter += FilterByProductEnable;
-                switch (ProductStructCollection.Count)
-                {
-                    case 0:
-                        MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
-                        break;
-                    case 1:
-                        SelectedProductStruct = ProductStructCollection[0];
-                        ProductSelectedAction();
-                        break;
-                    default:
-                        ProStructCollectionViewSource.View.MoveCurrentToFirst();
-                        SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
-                        break;
-                }
+                    MessageWindow.ShowMessage("查詢ID需至少5碼", MessageType.WARNING);
+            }
+            else
+            {
+                ProductSelectedAction();
             }
         }
         private void ProductPurchaseFilterAction()
@@ -155,7 +152,30 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         }
         private void FocusUpDownAction(string direction)
         {
+            if (!IsEditing && ProductStructCollection.Count > 0)
+            {
+                int maxIndex = ProductStructCollection.Count - 1;
+                int currentIndex = ProductStructCollection.IndexOf(SelectedProductStruct);
 
+                switch (direction)
+                {
+                    case "UP":
+                        if (currentIndex > 0)
+                            SelectedProductStruct = ProductStructCollection[currentIndex - 1];
+                        break;
+                    case "DOWN":
+                        if (currentIndex < maxIndex)
+                            SelectedProductStruct = ProductStructCollection[currentIndex + 1];
+                        break;
+                }
+            }
+        }
+        private void ProductSelectedAction()
+        {
+            if (string.IsNullOrEmpty(SelectedProductStruct.ID)) return;
+            Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
+            Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
+            Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
         }
         private void AddMedicineFilterAction()
         {
@@ -181,9 +201,35 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             //    e.Accepted = false;
             //}
         }
+
+        private void StartEditingAction()
+        {
+            IsEditing = true;
+        }
         #endregion
 
         #region ----- Define Functions -----
+        private void RegisterCommand()
+        {
+            GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
+            ProductSelected = new RelayCommand(ProductSelectedAction);
+            FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
+            StartEditingCommand = new RelayCommand(StartEditingAction);
+        }
+        private void RegisterFilter(AddProductEnum addProductEnum)
+        {
+            addProEnum = addProductEnum;
+
+            switch (addProductEnum)
+            {
+                case AddProductEnum.PruductPurchase:
+                    FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
+                    break;
+                case AddProductEnum.AddMedicine:
+                    FilterCommand = new RelayCommand(AddMedicineFilterAction);
+                    break;
+            }
+        }
 
         #endregion
 

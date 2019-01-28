@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
@@ -75,44 +77,77 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Status Function -----
         public void MoveToNextStatus()
         {
+            switch (OrderStatus)
+            {
+                case OrderStatusEnum.NORMAL_UNPROCESSING:
+                    ToNormalProcessingStatus();
+                    break;
+                case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    ToWaitingStatus();
+                    break;
+                case OrderStatusEnum.WAITING:
+                    ToSingdeProcessingStatus();
+                    break;
+                case OrderStatusEnum.NORMAL_PROCESSING:
+                case OrderStatusEnum.SINGDE_PROCESSING:
+                    ToDoneStatus();
+                    break;
+                default:
+                    MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
+                    break;
+            }
 
+            SaveOrder();
         }
         private void ToWaitingStatus()
         {
+            bool isSuccess = SendOrderToSingde();
 
+            if (isSuccess)
+                OrderStatus = OrderStatusEnum.WAITING;
+            else
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
         }
         private void ToNormalProcessingStatus()
         {
-
+            OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
         }
         private void ToSingdeProcessingStatus()
         {
-
+            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
         private void ToDoneStatus()
         {
-
+            OrderStatus = OrderStatusEnum.DONE;
         }
         #endregion
 
         #region ----- Check Function -----
         public bool CheckOrder()
         {
-            return false;
+            switch (OrderStatus)
+            {
+                case OrderStatusEnum.NORMAL_UNPROCESSING:
+                case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    return CheckUnProcessingOrder();
+                case OrderStatusEnum.NORMAL_PROCESSING:
+                    return CheckNormalProcessingOrder();
+                case OrderStatusEnum.SINGDE_PROCESSING:
+                    return CheckSingdeProcessingOrder();
+                default:
+                    return false;
+            }
         }
-        public virtual bool CheckUnProcessingOrder()
-        {
-            return false;
-        }
-        public virtual bool CheckNormalProcessingOrder()
-        {
-            return false;
-        }
-        public virtual bool CheckSingdeProcessingOrder()
-        {
-            return false;
-        }
+
+        protected abstract bool CheckUnProcessingOrder();
+        protected abstract bool CheckNormalProcessingOrder();
+        protected abstract bool CheckSingdeProcessingOrder();
         #endregion
+
+        private bool SendOrderToSingde()
+        {
+            return false;
+        }
 
         public bool DeleteOrder()
         {
