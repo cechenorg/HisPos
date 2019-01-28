@@ -108,10 +108,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             MainWindow.ServerConnection.OpenConnection();
             Customers.Init();
             MainWindow.ServerConnection.CloseConnection();
-            CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
-            CustomersCollectionView = CustomersCollectionViewSource.View;
-            Searching = condition;
-            InitializeFilter(option);
+            if (Customers.Count == 1)
+                ExecuteCustomerSelected();
+            else
+            {
+                CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
+                CustomersCollectionView = CustomersCollectionViewSource.View;
+                Searching = condition;
+                InitializeFilter(option);
+            }
         }
 
         #region FilterFunctions

@@ -245,7 +245,8 @@ namespace His_Pos.Service
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-            if (!value.ToString().Contains(" ") && value.ToString().Length == 9)
+
+            if (value.ToString().Length == 9)
             {
                 var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
                 var month = int.Parse(value.ToString().Substring(4, 2));
@@ -339,6 +340,29 @@ namespace His_Pos.Service
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+    public class IntegerStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+            {
+                return string.Empty;
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+            {
+                return null;
+            }
+            else
+            {
+                return int.Parse(value.ToString());
+            }
         }
     }
 }

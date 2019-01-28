@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             }
         }
 
-        public CustomPrescriptionViewModel(Cus cus, IcCard card)
+        public CustomPrescriptionViewModel(Cus cus, IcCard card,bool isGetMakeUpPrescription)
         {
             Patient = cus;
             Card = card;

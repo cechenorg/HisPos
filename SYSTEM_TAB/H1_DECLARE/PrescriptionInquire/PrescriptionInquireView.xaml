@@ -27,7 +27,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,9">
                 <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox Name="start" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -39,7 +39,7 @@
                 </xctk:MaskedTextBox>
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
                 <xctk:MaskedTextBox Name="end" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">

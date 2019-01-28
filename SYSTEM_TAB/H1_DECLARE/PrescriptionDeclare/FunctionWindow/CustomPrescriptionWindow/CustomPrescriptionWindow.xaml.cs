@@ -11,10 +11,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomPrescriptionWindow : Window
     {
-        public CustomPrescriptionWindow(Cus cus,IcCard card)
+        public CustomPrescriptionWindow(Cus cus,IcCard card, bool isGetMakeUpPrescription)
         {
             InitializeComponent();
-            this.DataContext = new CustomPrescriptionViewModel(cus,card);
+            this.DataContext = new CustomPrescriptionViewModel(cus,card, isGetMakeUpPrescription);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)

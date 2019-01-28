@@ -159,7 +159,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
-        public RelayCommand GetPatinetData { get; set; }
+        public RelayCommand GetPatientData { get; set; }
         // ReSharper disable once InconsistentNaming
         public RelayCommand SearchCustomerByIDNumber { get; set; }
         public RelayCommand SearchCustomerByName { get; set; }
@@ -179,6 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
         public RelayCommand ClearButtonClick { get; set; }
+        public RelayCommand ChronicSequenceTextChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -358,9 +359,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
             {
                 var printBySingleMode = new MedBagSelectionWindow();
-                var singleMode = false;
-                if (printBySingleMode.DialogResult != null)
-                    singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
+                var singleMode = (bool)printBySingleMode.ShowDialog();
                 var receiptPrint = false;
                 if (CurrentPrescription.PrescriptionPoint.AmountsPay > 0)
                 {
@@ -368,7 +367,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool) receiptResult.DialogResult;
                 }
-                CurrentPrescription.PrintMedBag(singleMode, receiptPrint);
+                CurrentPrescription.PrintMedBag(singleMode, receiptPrint,true);
             }
             else
             {
@@ -436,7 +435,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void InitialCommandActions()
         {
             ShowCooperativeSelectionWindow = new RelayCommand(ShowCooperativeWindowAction);
-            GetPatinetData = new RelayCommand(GetPatientDataAction);
+            GetPatientData = new RelayCommand(GetPatientDataAction);
             SearchCustomerByIDNumber = new RelayCommand(SearchCusByIDNumAction);
             SearchCustomerByName = new RelayCommand(SearchCusByNameAction);
             SearchCustomerByBirthday = new RelayCommand(SearchCusByBirthAction);
@@ -454,12 +453,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             ClearButtonClick = new RelayCommand(ClearPrescription);
+            ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
+        }
+
+        private void CheckPrescriptionVariable()
+        {
+            CurrentPrescription.CheckPrescriptionVariable();
         }
 
         private void InitialPrescription()
         {
             CurrentPrescription = new Prescription();
             CurrentPrescription.InitialCurrentPrescription();
+            MainWindow.ServerConnection.OpenConnection();
+            PrescriptionCount = CurrentPrescription.UpdatePrescriptionCount();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void ClearPrescription()
         {
@@ -499,6 +507,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 NotPrescribe = true;
             }
+            CurrentPrescription.CheckPrescriptionVariable();
         }
         private void CopaymentSelectionChangedAction()
         {
@@ -520,8 +529,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetMainDiseaseCodeByIdAction(string id)
         {
-            if(string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName))
+            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusSubDisease"));
                 return;
@@ -535,8 +543,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSubDiseaseCodeByIdAction(string id)
         {
-            if (string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName))
+            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
                 return;
@@ -563,6 +570,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
             CurrentPrescription.Patient = receiveSelectedCustomer;
+            CheckCustomPrescriptions(false);
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
@@ -596,6 +604,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region GeneralFunctions
         private void CheckDeclareStatus()
         {
+            if(string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id)) return;
             if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
                 DeclareStatus = PrescriptionDeclareStatus.Prescribe;
             else
@@ -607,9 +616,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 else
                 {
-                    DeclareStatus = DateTime.Today.Date >= ((DateTime)adjust).Date ?
-                        PrescriptionDeclareStatus.Adjust :
-                        PrescriptionDeclareStatus.Register;
+                    if (DateTime.Today.Date == ((DateTime) adjust).Date)
+                    {
+                        if ((CurrentPrescription.Treatment.ChronicSeq != null && (int)CurrentPrescription.Treatment.ChronicSeq > 0) ||
+                            CurrentPrescription.Treatment.AdjustCase.Id.Equals("2"))
+                            DeclareStatus = PrescriptionDeclareStatus.Register;
+                        else
+                        {
+                            DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                        }
+                    }
+                    else if (DateTime.Today.Date < ((DateTime)adjust).Date)
+                    {
+                        DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                    }
                 }
             }
         }
@@ -750,9 +770,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountPrescriptionPoint();
         }
-        private void CheckCustomPrescriptions()
+        private void CheckCustomPrescriptions(bool isGetMakeUpPrescription)
         {
-            var customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
+            var customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card, isGetMakeUpPrescription);
         }
 
         private void ReadCard(bool showCusWindow)
@@ -780,7 +800,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
                 {
                     GetMedicalNumber(true);
-                    CheckCustomPrescriptions();
+                    CheckCustomPrescriptions(false);
                     return;
                 }
                 if (showCusWindow && !isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)

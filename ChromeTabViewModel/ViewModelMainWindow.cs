@@ -234,9 +234,22 @@ namespace His_Pos.ChromeTabViewModel
             }
             return new Usage();
         }
+        public static Usage FindUsageByQuickName(string quickName)
+        {
+            if (Usages.Count(u => u.QuickName.Equals(quickName)) == 1)
+            {
+                return Usages.SingleOrDefault(u => u.QuickName.Equals(quickName));
+            }
+            return null;
+        }
         public static Position GetPosition(string name)
         {
             return Positions.SingleOrDefault(c => c.Name.Equals(name));
+        }
+        public static SpecialTreat GetSpecialTreat(string id)
+        {
+            var result = SpecialTreats.SingleOrDefault(i => i.Id.Equals(id));
+            return result ?? new SpecialTreat();
         }
         public static void CheckContainsPosition(string name)
         {
@@ -244,7 +257,7 @@ namespace His_Pos.ChromeTabViewModel
             var positionNotFound = new Position { Name = name };
             Positions.Add(positionNotFound);
         }
-        public void StartPrintMedBag(ReportViewer r, Prescription p = null)
+        public void StartPrintMedBag(ReportViewer r,bool showLoginSuccess ,Prescription p = null)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -256,17 +269,17 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if(p is null)
+                if(p is null && showLoginSuccess)
                     MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
                 else
                 {
-                    p.PrintReceipt();
+                    p.PrintReceipt(showLoginSuccess);
                 }
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        public void StartPrintReceipt(ReportViewer r)
+        public void StartPrintReceipt(ReportViewer r,bool showLoginSuccess)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -278,7 +291,8 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                if(showLoginSuccess)
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             };
             IsBusy = true;
             worker.RunWorkerAsync();

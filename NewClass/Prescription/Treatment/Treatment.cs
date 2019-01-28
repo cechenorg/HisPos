@@ -116,7 +116,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SpecialTreat = new SpeTre();
             if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
             {
-                SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(r.Field<string>("SpecialTreatID")));
+                SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
@@ -530,7 +530,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.MedicalNumber = MedicalNumber;
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
             t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
-            t.SpecialTreat = VM.SpecialTreats.SingleOrDefault(s => s.Id.Equals(SpecialTreat.Id));
+            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat.Id);
             t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
             t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
             t.TreatDate = TreatDate;

@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <xctk:MaskedTextBox Name="StartDate" Width="150" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
-                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" PreviewKeyDown="Date_OnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -36,7 +36,7 @@
             </xctk:MaskedTextBox>
             <Label Content="~" FontSize="25" VerticalAlignment="Center"/>
             <xctk:MaskedTextBox Name="EndDate" Width="150" Margin="10,0,0,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
-                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" PreviewKeyDown="Date_OnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
