@@ -18,7 +18,7 @@
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:AddProductViewModel}">
             <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}"
-                      SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AddProductViewModel}}}">
+                      SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding ProductSelected}"/>
@@ -58,7 +58,7 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="商品編號" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="商品名稱" Width="300" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="商品名稱" Width="300" Binding="{Binding FullName}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="庫存" Width="50" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Inventory}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="載途量" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding OnTheWayAmount}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="安全量" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding SafeAmount}" IsReadOnly="True"/>
@@ -83,7 +83,7 @@
             <RadioButton Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
             <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
-        <ContentControl Grid.Row="1">
+        <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
