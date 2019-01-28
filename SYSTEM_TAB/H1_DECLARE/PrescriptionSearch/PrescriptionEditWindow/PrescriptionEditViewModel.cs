@@ -119,7 +119,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.Treatment.PrescriptionCase != null)
                 EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase.Id);
             if (EditedPrescription.Treatment.SpecialTreat != null)
-                EditedPrescription.Treatment.SpecialTreat = SpecialTreats.SingleOrDefault(s => s.Id.Equals(EditedPrescription.Treatment.SpecialTreat.Id));
+                EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat.Id);
         }
 
         private void InitialItemsSources()
@@ -172,7 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool)receiptResult.DialogResult;
                 }
-                EditedPrescription.PrintMedBag(singleMode, receiptPrint);
+                EditedPrescription.PrintMedBag(singleMode, receiptPrint,false);
             }
             else
             {

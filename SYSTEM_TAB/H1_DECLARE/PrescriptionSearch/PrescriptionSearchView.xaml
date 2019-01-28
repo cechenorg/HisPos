@@ -29,7 +29,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,10,0">
                     <Label Content="調劑日期" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
                     <xctk:MaskedTextBox Width="100" Margin="5,10,5,10" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -41,7 +41,7 @@
                     </xctk:MaskedTextBox>
                     <Label Content="~" VerticalContentAlignment="Center" Margin="0,10,0,10"/>
                     <xctk:MaskedTextBox Width="100" Margin="5,10,10,10" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">

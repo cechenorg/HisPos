@@ -201,7 +201,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 {
                     receiptPrint = (bool)receiptResult.DialogResult;
                 }
-                SelectedPrescription.PrintMedBag(singleMode, receiptPrint);
+                SelectedPrescription.PrintMedBag(singleMode, receiptPrint,false);
             }
         }
         private void PrescriptionSelectedAction()

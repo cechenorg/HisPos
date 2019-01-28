@@ -120,8 +120,16 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
-                    Usage = ViewModelMainWindow.GetUsage(value);
-                    Usage.Name = UsageName;
+                    Usage = ViewModelMainWindow.FindUsageByQuickName(value);
+                    if (Usage is null)
+                    {
+                        Usage = ViewModelMainWindow.GetUsage(value);
+                        Usage.Name = UsageName;
+                    }
+                    else
+                    {
+                        UsageName = Usage.Name;
+                    }
                     if (ID is null) return;
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();

@@ -10,6 +10,9 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.DeclareFile;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Service;
@@ -518,7 +521,7 @@ namespace His_Pos.NewClass.Prescription
         }
         #endregion
         #region PrintFunctions
-        public void PrintMedBag(bool singleMode,bool receiptPrint)
+        public void PrintMedBag(bool singleMode,bool receiptPrint,bool showLoginSuccess)
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -534,10 +537,10 @@ namespace His_Pos.NewClass.Prescription
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
                     if(receiptPrint)
-                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer,this);
+                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess,this);
                     else
                     {
-                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess);
                     }
                 }
             }
@@ -566,14 +569,14 @@ namespace His_Pos.NewClass.Prescription
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
                 if (receiptPrint)
-                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, this);
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer,showLoginSuccess, this);
                 else
                 {
-                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess);
                 }
             }
         }
-        public void PrintReceipt()
+        public void PrintReceipt(bool showLoginSuccess)
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -606,7 +609,7 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
+            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer, showLoginSuccess);
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {
@@ -817,6 +820,43 @@ namespace His_Pos.NewClass.Prescription
             p.OrderNumber = OrderNumber;
             p.Id = Id;
             return p;
+        }
+
+        public void CheckPrescriptionVariable()
+        {
+            if(Treatment.AdjustCase.Id != "0" && (!string.IsNullOrEmpty(Treatment.Institution.Id) && Treatment.Institution.Id.Equals(VM.CurrentPharmacy.Id)))
+                Treatment.Institution = new Institution();
+
+            if (Treatment.ChronicSeq is null && Treatment.AdjustCase.Id.Equals("2"))
+            {
+                Treatment.AdjustCase = VM.GetAdjustCase("1");
+            }
+
+            if (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0)
+            {
+                Treatment.AdjustCase = VM.GetAdjustCase("2");
+            }
+            
+
+            switch (Treatment.AdjustCase.Id)
+            {
+                case "1":
+                case "3":
+                    Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
+                    Treatment.Copayment = VM.GetCopayment("I20");
+                    break;
+                case "2":
+                    Treatment.PrescriptionCase = VM.GetPrescriptionCases("04");
+                    Treatment.Copayment = VM.GetCopayment("I22");
+                    break;
+                case "D":
+                    Treatment.PrescriptionCase = new PrescriptionCase();
+                    Treatment.Institution = VM.GetInstitution("N");
+                    Treatment.Copayment = VM.GetCopayment("009");
+                    Treatment.SpecialTreat = new SpecialTreat();
+                    Treatment.TreatDate = null;
+                    break;
+            }
         }
     }
 }

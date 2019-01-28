@@ -54,7 +54,7 @@
                          Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown" FontFamily="Segoe UI Semibold"/>
                 <Image Name="IcPatientBirthday" Width="30" Height="30" Source="/Images/birthday.png" Margin="0,10,10,10"/>
                 <xctk:MaskedTextBox Name="PatientBirthday" Width="100" Height="30" Margin="0,10,20,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" FontFamily="Segoe UI Semibold" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewKeyDown="PatientId_PreviewKeyDown">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" PreviewKeyDown="PatientId_PreviewKeyDown">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="CurrentPrescription.Customer.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -127,7 +127,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal" Width="255" Height="34">
                     <Label  Content="就醫日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" Width="85" Height="34"/>
                     <xctk:MaskedTextBox Name="TreatmentDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" PreviewKeyDown="Combo_PreviewKeyDown" InputMethod.IsInputMethodEnabled="False"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.TreatmentDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -141,7 +141,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal" Width="255" Height="34">
                     <Label Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" Width="85" Height="34"/>
                     <xctk:MaskedTextBox Name="AdjustDate" Width="170" Height="34" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" PreviewKeyDown="Combo_PreviewKeyDown" InputMethod.IsInputMethodEnabled="False"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" TextChanged="AdjustDate_TextChanged" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" TextChanged="AdjustDate_TextChanged" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
