@@ -343,7 +343,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (string.IsNullOrEmpty(CooperativeClinicMidicalNumber))
+                    if ( CurrentPrescription.Patient.IDNumber != CooperativeClinicMidicalNumber )
                         NormalAdjust();
                     else  {
                         var e  = new CooperativeRemarkInsertWindow(); 
