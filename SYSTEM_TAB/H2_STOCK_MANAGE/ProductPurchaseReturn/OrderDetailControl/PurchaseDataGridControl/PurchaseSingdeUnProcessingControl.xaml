@@ -63,7 +63,7 @@
                         <DataTemplate>
                             <TextBox Text="{Binding ID}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
                                 <TextBox.InputBindings>
-                                    <KeyBinding Command="{Binding AddProductByInputCommand}" Key="Enter" CommandParameter="{Binding ID}"/>
+                                    <KeyBinding Command="{Binding Path=DataContext.AddProductByInputCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}" Key="Enter" CommandParameter="{Binding ID}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
                         </DataTemplate>
