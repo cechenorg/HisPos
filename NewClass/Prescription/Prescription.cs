@@ -111,7 +111,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionSource Source { get; set; }
         public string SourceId { get; set; }//合作診所.慢箋Id
         public string OrderNumber { get; set; }//傳送藥健康單號
-        public string Remark { get; }//回傳合作診所單號 
+        public string Remark { get; set; }//回傳合作診所單號 
         public int MedicineDays { get; set; } //給藥日份
         public string MedicalServiceID { get; set; } //藥事服務代碼 
         public XDocument DeclareContent { get; set; } = new XDocument(); //申報檔內容
@@ -438,6 +438,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
         }
         public void UpdateCooperativePrescriptionStatus() {
+            if(!string.IsNullOrEmpty(SourceId))
             PrescriptionDb.UpdateCooperativePrescriptionStatus(SourceId);
         }
         public void InsertCooperAdjust() {

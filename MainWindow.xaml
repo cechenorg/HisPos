@@ -112,7 +112,7 @@
         <DataTemplate DataType="{x:Type declarefile:Export}">
             <declarefile:ExportView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type entrySearch:EntrySearch}">
+        <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
             <entrySearch:EntrySearchView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReport}">

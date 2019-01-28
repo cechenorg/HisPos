@@ -19,6 +19,11 @@ namespace His_Pos.NewClass.CooperativeClinicJson {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreMas_Id", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CooperAdjustMedicines]", parameterList); 
+        }
+        public static void InsertCooperJson(string json) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Content", json);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperJson]", parameterList);
         } 
     }
 }

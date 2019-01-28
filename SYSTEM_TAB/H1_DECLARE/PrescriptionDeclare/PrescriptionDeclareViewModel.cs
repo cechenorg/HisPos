@@ -34,6 +34,8 @@ using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
+using His_Pos.NewClass;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
 
 // ReSharper disable InconsistentNaming
 
@@ -156,6 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CanSendOrder, ref canSendOrder, value);
             }
         }
+        private string CooperativeClinicMidicalNumber = WebApi.GetCooperativeClinicId(ViewModelMainWindow.CurrentPharmacy.Id);
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -245,7 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(StringRes.ShortSearchString+"4",MessageType.WARNING);
                 return;
             }
-            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.Institution.FullName) && search.Equals(CurrentPrescription.Treatment.Institution.FullName))
+            if (CurrentPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(CurrentPrescription.Treatment.Institution.FullName) && search.Equals(CurrentPrescription.Treatment.Institution.FullName))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusDivision"));
                 return;
@@ -337,7 +340,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    NormalAdjust();
+                    if (string.IsNullOrEmpty(CooperativeClinicMidicalNumber))
+                        NormalAdjust();
+                    else  {
+                        var e  = new CooperativeRemarkInsertWindow(); 
+                        CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                        if (string.IsNullOrEmpty(CurrentPrescription.Remark))
+                            return;
+                        CooperativeAdjust(); 
+                    }
                     break;
                 case PrescriptionSource.Cooperative:
                     CooperativeAdjust();

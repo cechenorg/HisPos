@@ -377,6 +377,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\StockValue\StockValue.cs" />
+    <Compile Include="NewClass\StockValue\StockValueDb.cs" />
+    <Compile Include="NewClass\StockValue\StockValues.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
@@ -419,6 +422,10 @@
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertViesModel .cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertWindow.xaml.cs">
+      <DependentUpon>CooperativeRemarkInsertWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml.cs">
@@ -812,7 +819,7 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
@@ -1062,6 +1069,10 @@
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml">
       <SubType>Designer</SubType>
