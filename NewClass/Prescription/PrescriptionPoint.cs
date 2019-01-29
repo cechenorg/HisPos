@@ -66,8 +66,10 @@ namespace His_Pos.NewClass.Prescription {
             set
             {
                 Set(() => AmountsPay, ref amountPay, value);
+                CountChange();
             }
         }
+
         private int deposit;//押金
         public int Deposit
         {
@@ -84,6 +86,7 @@ namespace His_Pos.NewClass.Prescription {
             set
             {
                 Set(() => ActualReceive, ref actualReceive, value);
+                CountChange();
             }
         }
         private int amountSelfPay;//自費金額
@@ -94,6 +97,19 @@ namespace His_Pos.NewClass.Prescription {
             {
                 Set(() => AmountSelfPay, ref amountSelfPay, value);
             }
+        }
+        private int change;//自費金額
+        public int Change
+        {
+            get => change;
+            set
+            {
+                Set(() => Change, ref change, value);
+            }
+        }
+        private void CountChange()
+        {
+            Change = ActualReceive - AmountsPay;
         }
     }
     

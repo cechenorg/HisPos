@@ -18,14 +18,17 @@
             <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:AddProductViewModel}">
-            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
-                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}"
+            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled"
+                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" CanUserResizeColumns="False" CanUserResizeRows="False"
                       SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding ProductSelected}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <i:Interaction.Behaviors>
+                    <local:ScrollIntoViewBehavior/>
+                </i:Interaction.Behaviors>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -60,7 +63,7 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="藥品代號" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
-                    <DataGridTemplateColumn MinWidth="300" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn MaxWidth="300" Width="300" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
@@ -106,13 +109,6 @@
                     </TextBox.InputBindings>
                 </TextBox>
                 <Rectangle Width="230"/>
-                <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="{Binding HideDisableProduct,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <command:EventToCommand Command="{Binding FilterCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
             </StackPanel>
             <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}">
                 <ContentControl.Style>
@@ -133,7 +129,7 @@
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
                 </ContentControl.InputBindings>
             </ContentControl>
-            <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Grid.Column="1" Margin="41.102,9,230,9"/>
+            <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" />
         </Grid>
     </Viewbox>
 </Window>

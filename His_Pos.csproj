@@ -283,6 +283,7 @@
     <Compile Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml.cs">
       <DependentUpon>ProductPurchaseReturnAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FunctionWindow\AddProductWindow\ScrollIntoViewBehavior.cs" />
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindow.xaml.cs">
       <DependentUpon>ErrorUploadWindow.xaml</DependentUpon>
