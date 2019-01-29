@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.Service;
 
 namespace His_Pos.FunctionWindow
 {
@@ -49,6 +50,7 @@ namespace His_Pos.FunctionWindow
             MainWindow.ServerConnection.OpenConnection();
             Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
             MainWindow.ServerConnection.CloseConnection();
+            NewFunction.ExceptionLog(user.Name + " Login");
             if (user != null)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();

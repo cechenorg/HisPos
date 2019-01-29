@@ -615,7 +615,7 @@ namespace His_Pos.Service
             string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
             if (!File.Exists(logpath))  File.Create(logpath); 
             StreamWriter str = new StreamWriter(logpath);
-            str.WriteLine(DateTime.Now.ToString() + "  Error:" + log);
+            str.WriteLine(DateTime.Now.ToString() + "  Event:" + log);
             str.Close();
         }
     }

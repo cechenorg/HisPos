@@ -77,7 +77,7 @@ namespace His_Pos.Database
                 {
                     MessageWindow.ShowMessage(procName + sqlException.Message, MessageType.ERROR);
                 });
-                NewFunction.ExceptionLog(ex.Message);
+                NewFunction.ExceptionLog(sqlException.Message);
             }
             catch (Exception ex)
             {
