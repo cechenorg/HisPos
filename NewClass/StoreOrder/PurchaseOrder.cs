@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
@@ -36,7 +39,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderType = OrderTypeEnum.PURCHASE;
             PatientName = row.Field<string>("Cus_Name");
         }
-
+     
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
@@ -99,5 +102,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             throw new NotImplementedException();
         }
+        public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
+           string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
+            PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData); 
+        }
+
     }
 }

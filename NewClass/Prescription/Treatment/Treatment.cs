@@ -80,7 +80,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
-            TreatDate = Convert.ToDateTime(c.InsertDate);
+            TreatDate =  Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
@@ -96,8 +96,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
-            TreatDate = r.Field<DateTime>("TreatmentDate");
-            if(!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
+            TreatDate = r.Field<DateTime>("TreatmentDate"); 
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
                 ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString()); 

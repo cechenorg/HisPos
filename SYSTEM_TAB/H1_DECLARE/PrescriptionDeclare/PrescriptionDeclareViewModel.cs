@@ -36,6 +36,7 @@ using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 using His_Pos.NewClass;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
+using His_Pos.NewClass.StoreOrder;
 
 // ReSharper disable InconsistentNaming
 
@@ -682,17 +683,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessDepositCashFlow("自費");
             CurrentPrescription.ProcessSelfPayCashFlow("押金");
         }
-        private void NormalRegister() { 
+        private void NormalRegister() {
+            MedSendWindow medicinesSendSingdeWindow = null;
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
-                MedSendWindow medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
+                medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
                     return;
-                }
-                    
+                }  
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPresription();
             CurrentPrescription.PredictResere();
+            if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false) 
+                PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
+            //紀錄訂單and送單
         }
         
         private void ChronicRegister() {

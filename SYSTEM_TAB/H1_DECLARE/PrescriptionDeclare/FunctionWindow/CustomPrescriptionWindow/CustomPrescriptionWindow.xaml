@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
         Title="病患相關處方" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+    <Window.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+    </Window.Resources>
     <Viewbox>
         <xctk:BusyIndicator>
             <Grid>
@@ -77,7 +81,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -150,7 +154,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -243,7 +247,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Header="就醫日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.TreatDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -251,7 +255,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="調劑日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.AdjustDate, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Header="調劑日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Treatment.AdjustDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />

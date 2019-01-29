@@ -16,6 +16,7 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public abstract class StoreOrder: ObservableObject
     {
+        public StoreOrder() { }
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);

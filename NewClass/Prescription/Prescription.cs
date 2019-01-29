@@ -93,7 +93,7 @@ namespace His_Pos.NewClass.Prescription
             Card = new IcCard(); 
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
-            PrescriptionStatus.IsRead = c.IsRead.Equals("D");
+            PrescriptionStatus.IsRead = c.IsRead is null ? false : c.IsRead.Equals("D");
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }

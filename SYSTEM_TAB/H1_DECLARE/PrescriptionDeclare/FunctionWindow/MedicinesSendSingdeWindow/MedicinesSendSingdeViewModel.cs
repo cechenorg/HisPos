@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow
 {
@@ -38,8 +39,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             CancelCommand = new RelayCommand(CancelAction);
         }
         #region Action 
-        public void SubmmitAction() {
-            PrescriptionDb.SendDeclareOrderToSingde("test",Prescription,PrescriptionSendData);
+        public void SubmmitAction() { 
+           // PrescriptionDb.SendDeclareOrderToSingde("test",Prescription,PrescriptionSendData);
             Messenger.Default.Send(new NotificationMessage("CloseMedicinesSendSingde"));
         }
         public void CancelAction() {
