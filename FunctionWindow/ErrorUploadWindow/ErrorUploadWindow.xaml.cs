@@ -33,7 +33,7 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
                 }
             });
             this.DataContext = new ErrorUploadWindowViewModel(isGetMedicalNumber);
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }
