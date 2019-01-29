@@ -72,7 +72,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_ManufactoryID", "0");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "W");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
@@ -107,6 +107,46 @@ namespace His_Pos.NewClass.StoreOrder
                 detailId++;
             }
             return storeOrderDetailTable;
+        }
+
+        internal static void StoreOrderToWaiting(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
+        }
+
+        internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
+        {
+            string orderMedicines = "";
+
+            if (storeOrder is PurchaseOrder)
+            {
+                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                {
+                    orderMedicines += product.ID.PadRight(12, ' ');
+                    
+                    orderMedicines += product.OrderAmount.ToString().PadLeft(10, ' ');
+
+                    orderMedicines += product.Note;
+                    orderMedicines += "\r\n";
+                }
+            }
+            else
+            {
+                foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
+                {
+                    orderMedicines += product.ID.PadRight(12, ' ');
+
+                    //orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
+
+                    //orderMedicines += product.Note;
+                    orderMedicines += "\r\n";
+                }
+            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.Id}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
         }
 
         public static DataTable SetStoreOrderMaster(StoreOrder s) {
@@ -155,8 +195,8 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);

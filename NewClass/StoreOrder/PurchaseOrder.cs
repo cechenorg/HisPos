@@ -86,6 +86,15 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
                 OrderProducts.Add(purchaseProduct);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
+
+        public override void DeleteSelectedProduct()
+        {
+            OrderProducts.Remove((PurchaseProduct) SelectedItem);
+
+            RaisePropertyChanged(nameof(ProductCount));
         }
 
         protected override bool CheckUnProcessingOrder()
@@ -95,12 +104,19 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
                 return false;
             }
-            //else if()
-            //{
-                
-            //}
 
-            return false;
+            foreach (var product in OrderProducts)
+            {
+                if (product.OrderAmount + product.FreeAmount == 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", "");
+
+            return (bool)confirmWindow.DialogResult;
         }
 
         protected override bool CheckNormalProcessingOrder()

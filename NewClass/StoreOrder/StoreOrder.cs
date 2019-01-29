@@ -91,6 +91,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
+        public abstract void DeleteSelectedProduct();
 
         #region ----- Status Function -----
         public void MoveToNextStatus()
@@ -122,7 +123,15 @@ namespace His_Pos.NewClass.StoreOrder
             bool isSuccess = SendOrderToSingde();
 
             if (isSuccess)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+
+                SaveOrder();
                 OrderStatus = OrderStatusEnum.WAITING;
+                StoreOrderDB.StoreOrderToWaiting(ID);
+
+                MainWindow.ServerConnection.CloseConnection();
+            }
             else
                 MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
         }
@@ -156,7 +165,6 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
             }
         }
-
         protected abstract bool CheckUnProcessingOrder();
         protected abstract bool CheckNormalProcessingOrder();
         protected abstract bool CheckSingdeProcessingOrder();
@@ -164,7 +172,11 @@ namespace His_Pos.NewClass.StoreOrder
 
         private bool SendOrderToSingde()
         {
-            return false;
+            MainWindow.SingdeConnection.OpenConnection();
+            DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
+            MainWindow.SingdeConnection.CloseConnection();
+
+            return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
         public bool DeleteOrder()
