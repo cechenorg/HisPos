@@ -90,5 +90,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             throw new NotImplementedException();
         }
+
+        public override void DeleteSelectedProduct()
+        {
+            OrderProducts.Remove((ReturnProduct)SelectedItem);
+        }
     }
 }

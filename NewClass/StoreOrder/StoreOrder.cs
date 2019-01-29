@@ -91,6 +91,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
+        public abstract void DeleteSelectedProduct();
 
         #region ----- Status Function -----
         public void MoveToNextStatus()
@@ -164,7 +165,6 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
             }
         }
-
         protected abstract bool CheckUnProcessingOrder();
         protected abstract bool CheckNormalProcessingOrder();
         protected abstract bool CheckSingdeProcessingOrder();

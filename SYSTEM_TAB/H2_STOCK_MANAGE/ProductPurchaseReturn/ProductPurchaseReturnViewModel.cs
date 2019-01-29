@@ -31,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand DeleteOrderCommand { get; set; }
         public RelayCommand<TextBox> AddProductByInputCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
+        public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
@@ -141,6 +142,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
         }
+        private void DeleteProductAction()
+        {
+            CurrentStoreOrder.DeleteSelectedProduct();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -161,6 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
             AddProductByInputCommand = new RelayCommand<TextBox>(AddProductByInputAction);
+            DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
         }
         

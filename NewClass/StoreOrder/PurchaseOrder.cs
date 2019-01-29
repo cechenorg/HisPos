@@ -90,6 +90,13 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
+        public override void DeleteSelectedProduct()
+        {
+            OrderProducts.Remove((PurchaseProduct) SelectedItem);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
+
         protected override bool CheckUnProcessingOrder()
         {
             if (OrderProducts.Count == 0)
