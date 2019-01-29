@@ -85,7 +85,7 @@ namespace His_Pos.Database
                     parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
                 }
 
-                LogError(procName, parameValues, ex.Message);
+                //LogError(procName, parameValues, ex.Message);
 
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
