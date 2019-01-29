@@ -117,9 +117,36 @@ namespace His_Pos.NewClass.StoreOrder
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
         }
 
-        internal static bool SendStoreOrderToSingde(StoreOrder storeOrder)
+        internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
-            return false;
+            string orderMedicines = "";
+
+            if (storeOrder is PurchaseOrder)
+            {
+                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                {
+                    orderMedicines += product.ID.PadRight(12, ' ');
+                    
+                    orderMedicines += product.OrderAmount.ToString().PadLeft(10, ' ');
+
+                    orderMedicines += product.Note;
+                    orderMedicines += "\r\n";
+                }
+            }
+            else
+            {
+                foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
+                {
+                    orderMedicines += product.ID.PadRight(12, ' ');
+
+                    //orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
+
+                    //orderMedicines += product.Note;
+                    orderMedicines += "\r\n";
+                }
+            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.Id}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
         }
 
         public static DataTable SetStoreOrderMaster(StoreOrder s) {

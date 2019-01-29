@@ -173,10 +173,10 @@ namespace His_Pos.NewClass.StoreOrder
         private bool SendOrderToSingde()
         {
             MainWindow.SingdeConnection.OpenConnection();
-            bool isSuccess = StoreOrderDB.SendStoreOrderToSingde(this);
+            DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
             MainWindow.SingdeConnection.CloseConnection();
 
-            return isSuccess;
+            return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
         public bool DeleteOrder()

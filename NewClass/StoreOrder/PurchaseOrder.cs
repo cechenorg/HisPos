@@ -114,7 +114,9 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            return true;
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", "");
+
+            return (bool)confirmWindow.DialogResult;
         }
 
         protected override bool CheckNormalProcessingOrder()
