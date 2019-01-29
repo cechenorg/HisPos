@@ -82,6 +82,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => StartDate, ref startDate, value);
+                if (StartDate is null)
+                    CooPreCollectionViewSource.Filter -= FilterByStartDate;
+                else
+                    CooPreCollectionViewSource.Filter += FilterByStartDate;
             }
         }
 
@@ -92,6 +96,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => EndDate, ref endDate, value);
+                if (EndDate is null)
+                    CooPreCollectionViewSource.Filter -= FilterByEndDate;
+                else
+                    CooPreCollectionViewSource.Filter += FilterByEndDate;
             }
         }
 
@@ -103,6 +111,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => IDNumber, ref idNumber, value);
+                if (string.IsNullOrEmpty(IDNumber))
+                    CooPreCollectionViewSource.Filter -= FilterByIDNumber;
+                else
+                    CooPreCollectionViewSource.Filter += FilterByIDNumber;
             }
         }
 
@@ -113,6 +125,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => IsRead, ref isRead, value);
+                if (isRead != null)
+                {
+                    CooPreCollectionViewSource.Filter += FilterByIsRead;
+                    if (isNotRead != null)
+                    {
+                        CooPreCollectionViewSource.Filter += FilterByIsNotRead;
+                    }
+                }
             }
         }
 
@@ -123,6 +143,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => IsNotRead, ref isNotRead, value);
+                if (isNotRead != null)
+                {
+                    CooPreCollectionViewSource.Filter += FilterByIsNotRead;
+                    if (isRead != null)
+                    {
+                        CooPreCollectionViewSource.Filter += FilterByIsRead;
+                    }
+                }
             }
         }
         #endregion
@@ -147,30 +175,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         #region InitialFunctions
         private void InitialCommandActions()
         {
-            StartDateChanged = new RelayCommand(StartDateChangedAction);
-            EndDateChanged = new RelayCommand(EndDateChangedAction);
-            IDNumberChanged = new RelayCommand(IDNumberChangedAction);
-            IsReadChecked = new RelayCommand(IsReadCheckedAction);
             SelectionChanged = new RelayCommand(SelectionChangedAction);
             PrintMedBag = new RelayCommand(PrintAction);
             PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
         }
         #endregion
         #region CommandActions
-        private void StartDateChangedAction()
-        {
-            if (StartDate is null)
-                CooPreCollectionViewSource.Filter -= FilterByStartDate;
-            else
-                CooPreCollectionViewSource.Filter += FilterByStartDate;
-        }
-        private void EndDateChangedAction()
-        {
-            if (EndDate is null)
-                CooPreCollectionViewSource.Filter -= FilterByEndDate;
-            else
-                CooPreCollectionViewSource.Filter += FilterByEndDate;
-        }
         private void IDNumberChangedAction()
         {
             if (string.IsNullOrEmpty(IDNumber))
@@ -184,8 +194,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         private void SelectionChangedAction()
         {
-            if (SelectedPrescription != null)
-                CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.ID);
+            //if (SelectedPrescription != null)
+                //CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.ID);
         }
         private void PrintAction()
         {
@@ -230,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             CooPreCollectionViewSource.Filter += FilterByStartDate;
             CooPreCollectionViewSource.Filter += FilterByEndDate;
             CooPreCollectionViewSource.Filter += FilterByIsRead;
+            CooPreCollectionViewSource.Filter += FilterByIsNotRead;
         }
         #endregion
         #region Filter
@@ -274,24 +285,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (IsRead != null && (src.PrescriptionStatus.IsRead && (bool)IsRead))
+            else if (src.PrescriptionStatus.IsRead && (bool)IsRead)
+                e.Accepted = true;
+            else
             {
-                if(StartDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) < 0)
-                    e.Accepted = false;
-                else if (EndDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) > 0)
-                    e.Accepted = false;
-                else
-                    e.Accepted = true;
+                e.Accepted = false;
             }
-            else if (IsNotRead != null && (!src.PrescriptionStatus.IsRead && (bool)IsNotRead))
-            {
-                if (StartDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) < 0)
-                    e.Accepted = false;
-                else if (EndDate != null && DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) > 0)
-                    e.Accepted = false;
-                else
-                    e.Accepted = true;
-            }
+            
+        }
+        private void FilterByIsNotRead(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Prescription src))
+                e.Accepted = false;
+            else if (src.PrescriptionStatus.IsRead && (bool)IsNotRead)
+                e.Accepted = true;
             else
             {
                 e.Accepted = false;
