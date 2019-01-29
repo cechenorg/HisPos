@@ -257,29 +257,28 @@ namespace His_Pos.ChromeTabViewModel
             var positionNotFound = new Position { Name = name };
             Positions.Add(positionNotFound);
         }
-        public void StartPrintMedBag(ReportViewer r,bool showLoginSuccess ,Prescription p = null)
+        public void StartPrintMedBag(ReportViewer r)
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.MedBagPrinting;
-                Export(r.LocalReport, 22, 24);
-                ReportPrint(Properties.Settings.Default.MedBagPrinter);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                if(p is null && showLoginSuccess)
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                else
-                {
-                    p.PrintReceipt(showLoginSuccess);
-                }
-            };
             IsBusy = true;
-            worker.RunWorkerAsync();
+            BusyContent = StringRes.MedBagPrinting;
+            Export(r.LocalReport, 22, 24);
+            ReportPrint(Properties.Settings.Default.MedBagPrinter);
+            IsBusy = false;
+            //var worker = new BackgroundWorker();
+            //worker.DoWork += (o, ea) =>
+            //{
+            //    BusyContent = StringRes.MedBagPrinting;
+            //    Export(r.LocalReport, 22, 24);
+            //    ReportPrint(Properties.Settings.Default.MedBagPrinter);
+            //};
+            //worker.RunWorkerCompleted += (o, ea) =>
+            //{
+            //    IsBusy = false;
+            //};
+            //IsBusy = true;
+            //worker.RunWorkerAsync();
         }
-        public void StartPrintReceipt(ReportViewer r,bool showLoginSuccess)
+        public void StartPrintReceipt(ReportViewer r)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -291,8 +290,6 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if(showLoginSuccess)
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -329,9 +326,6 @@ namespace His_Pos.ChromeTabViewModel
         {
             if (m_streams == null || m_streams.Count == 0)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("ReportPrint:m_streams null", MessageType.ERROR);
-                });
                 return;
             }
             try

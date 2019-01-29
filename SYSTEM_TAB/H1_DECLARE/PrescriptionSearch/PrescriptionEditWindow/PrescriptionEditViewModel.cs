@@ -172,7 +172,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool)receiptResult.DialogResult;
                 }
-                EditedPrescription.PrintMedBag(singleMode, receiptPrint,false);
+                EditedPrescription.PrintMedBag(singleMode);
+                if(receiptPrint)
+                    EditedPrescription.PrintReceipt();
             }
             else
             {

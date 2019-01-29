@@ -183,7 +183,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #region Function
-        public int InsertPresription()
+        public int InsertPrescription()
         {
             if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
@@ -512,6 +512,15 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
         }
         private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
         {
@@ -522,7 +531,7 @@ namespace His_Pos.NewClass.Prescription
         }
         #endregion
         #region PrintFunctions
-        public void PrintMedBag(bool singleMode,bool receiptPrint,bool showLoginSuccess)
+        public void PrintMedBag(bool singleMode)
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -537,12 +546,7 @@ namespace His_Pos.NewClass.Prescription
                     rptViewer.LocalReport.SetParameters(parameters);
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
-                    if(receiptPrint)
-                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess,this);
-                    else
-                    {
-                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess);
-                    }
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
                 }
             }
             else
@@ -569,15 +573,10 @@ namespace His_Pos.NewClass.Prescription
                 var rd = new ReportDataSource("DataSet1", dataTable);
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
-                if (receiptPrint)
-                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer,showLoginSuccess, this);
-                else
-                {
-                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer, showLoginSuccess);
-                }
+                ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
             }
         }
-        public void PrintReceipt(bool showLoginSuccess)
+        public void PrintReceipt()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -586,7 +585,7 @@ namespace His_Pos.NewClass.Prescription
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var doctor = string.Empty;
-            var cusGender = string.IsNullOrEmpty(Patient.Gender)?Patient.CheckGender(): Patient.Gender;
+            var cusGender = Patient.CheckGender();
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
@@ -610,13 +609,14 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer, showLoginSuccess);
+            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
+            var cusGender = Patient.CheckGender();
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
@@ -625,7 +625,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                         new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
                         new ReportParameter("PatientName", Patient.Name),
-                        new ReportParameter("PatientGender_Birthday",(Patient.Gender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
+                        new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                         new ReportParameter("TreatmentDate", treatmentDateChi),
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",Treatment.Division.Name),
@@ -655,6 +655,7 @@ namespace His_Pos.NewClass.Prescription
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
+            var cusGender = Patient.CheckGender();
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",
@@ -663,7 +664,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                 new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
                 new ReportParameter("PatientName", Patient.Name),
-                new ReportParameter("PatientGender_Birthday",Patient.Gender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
+                new ReportParameter("PatientGender_Birthday",cusGender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
                 new ReportParameter("Hospital", Treatment.Institution.Name),
                 new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
