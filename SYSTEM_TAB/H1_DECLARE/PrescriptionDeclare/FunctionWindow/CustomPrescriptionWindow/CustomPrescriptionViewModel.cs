@@ -203,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void CustomPrescriptionSelected()
         {
+            SelectedPrescription.ConvertNHIandOTCPrescriptionMedicines();
             Messenger.Default.Send(SelectedPrescription,"CustomPrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
         }
