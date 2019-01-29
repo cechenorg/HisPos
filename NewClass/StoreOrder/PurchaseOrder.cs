@@ -10,6 +10,7 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.PurchaseReturn;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -130,7 +131,13 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
-            PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData); 
+            try
+            {
+                PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData);
+            }
+            catch (Exception ex) {
+                NewFunction.ExceptionLog(ex.Message);
+            } 
         }
 
     }

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -608,6 +609,13 @@ namespace His_Pos.Service
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
                 return new NewClass.Prescription.Treatment.Division.Division();
             return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
+        }
+        public static void ExceptionLog(string log) {
+            string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
+            if (!File.Exists(logpath))  File.Create(logpath); 
+            StreamWriter str = new StreamWriter(logpath);
+            str.WriteLine(log);
+            str.Close();
         }
     }
 }
