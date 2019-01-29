@@ -22,25 +22,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
             });
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
 
         public CustomerSelectionWindow(string condition,int option)
         {
             InitializeComponent();
-            this.DataContext = new CustomerSelectionViewModel(condition,option);
+            customerSelection = new CustomerSelectionViewModel(condition, option);
+            DataContext = new CustomerSelectionViewModel(condition,option);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
             });
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
 
         private void CustomerSelectionWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            e.Cancel = true;
             this.Visibility = Visibility.Collapsed;
+            Messenger.Default.Unregister(this);
+            e.Cancel = true;
         }
     }
 }

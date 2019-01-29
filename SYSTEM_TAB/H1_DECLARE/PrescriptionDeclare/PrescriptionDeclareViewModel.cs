@@ -151,6 +151,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
+        private CusSelectWindow customerSelectionWindow { get; set; }
         private bool? isDeposit;
         private bool canSendOrder;
         public bool CanSendOrder
@@ -587,7 +588,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region MessengerReceiveActions
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
+            if((receiveSelectedCustomer != null && CurrentPrescription.Patient != null) && receiveSelectedCustomer.ID == CurrentPrescription.Patient.ID)
+                return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
+            //customerSelectionWindow.Close();
             CheckCustomPrescriptions(false);
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
@@ -836,7 +840,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 if (showCusWindow && !isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
                 {
-                    CusSelectWindow customerSelectionWindow = null;
+                    customerSelectionWindow = null;
                     customerSelectionWindow = new CusSelectWindow();
                 }
                 if(!showCusWindow)

@@ -47,7 +47,6 @@ namespace His_Pos.NewClass.Product.Medicine
             ChineseName = m.Desc;
             EnglishName = m.Desc;
             UsageName = m.Freq;
-            ViewModelMainWindow.CheckContainsPosition(m.Way);
             PositionName = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Daily_dose);

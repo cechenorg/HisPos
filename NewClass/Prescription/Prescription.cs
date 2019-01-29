@@ -365,8 +365,7 @@ namespace His_Pos.NewClass.Prescription
                     MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
-                temp.PositionName = Medicines[medCount].Position.Name;
-                VM.CheckContainsPosition(temp.PositionName);
+                temp.PositionName = Medicines[medCount].PositionName;
                 temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
@@ -465,7 +464,6 @@ namespace His_Pos.NewClass.Prescription
                 }
                 if (!string.IsNullOrEmpty(med.PositionName) && med.Position is null)
                 {
-                    VM.CheckContainsPosition(med.PositionName);
                     med.Position = VM.GetPosition(med.PositionName);
                 }
             }

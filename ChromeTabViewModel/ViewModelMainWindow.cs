@@ -244,18 +244,17 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Position GetPosition(string name)
         {
-            return Positions.SingleOrDefault(c => c.Name.Equals(name));
+            if (string.IsNullOrEmpty(name)) return new Position();
+            if (Positions.Count(p => p.Name.Equals(name)) != 0)
+            {
+                return Positions.SingleOrDefault(p => p.Name.Equals(name));
+            }
+            return new Position { Name = name };
         }
         public static SpecialTreat GetSpecialTreat(string id)
         {
             var result = SpecialTreats.SingleOrDefault(i => i.Id.Equals(id));
             return result ?? new SpecialTreat();
-        }
-        public static void CheckContainsPosition(string name)
-        {
-            if (Positions.Count(p => p.Name.Equals(name)) != 0) return;
-            var positionNotFound = new Position { Name = name };
-            Positions.Add(positionNotFound);
         }
         public void StartPrintMedBag(ReportViewer r)
         {
