@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Product.Medicine
             UsageName = m.Freq;
             PositionName = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
-            Dosage = Convert.ToDouble(m.Daily_dose);
+            Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
             PaySelf = !string.IsNullOrEmpty(m.Remark) ;
            
