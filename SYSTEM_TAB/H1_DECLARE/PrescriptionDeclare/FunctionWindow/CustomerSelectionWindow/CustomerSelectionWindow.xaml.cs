@@ -9,16 +9,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomerSelectionWindow : Window
     {
+        private CustomerSelectionViewModel customerSelection { get; set; }
         public CustomerSelectionWindow()
         {
             InitializeComponent();
-            this.DataContext = new CustomerSelectionViewModel("", 1);
+            customerSelection = new CustomerSelectionViewModel("", 1);
+            DataContext = customerSelection;
+            if (customerSelection.ShowDialog)
+                ShowDialog();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
-                if (notificationMessage.Notification.Equals("ShowCustomerSelection"))
-                    ShowDialog();
             });
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }

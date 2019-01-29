@@ -103,6 +103,11 @@
                     <Label Content="慢箋預約處方" Style="{StaticResource BoldLabelContent18}"/>
                     <DataGrid Name="Reserved"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding ReservedPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Reserved_SelectionChanged" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />

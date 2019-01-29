@@ -78,6 +78,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private bool showDialog;
+        public bool ShowDialog
+        {
+            get => showDialog;
+            set
+            {
+                Set(() => ShowDialog, ref showDialog, value);
+            }
+        }
 
         public CustomPrescriptionViewModel(Cus cus, IcCard card,bool isGetMakeUpPrescription)
         {
@@ -176,9 +185,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (UngetCardPrescriptions.Count == 0)
                 UngetCardVisible = Visibility.Collapsed;
             if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || UngetCardPrescriptions.Count > 0)
-            {
-                Messenger.Default.Send(new NotificationMessage("ShowCustomPrescription"));
-            }
+                ShowDialog = true;
+            else
+                ShowDialog = false;
         }
 
         private void RegisterMessenger()
