@@ -15,13 +15,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             InitializeComponent();
             customerSelection = new CustomerSelectionViewModel("", 1);
             DataContext = customerSelection;
-            if (customerSelection.ShowDialog)
-                ShowDialog();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
+                {
                     Close();
+                }
             });
+            if (customerSelection.ShowDialog)
+                ShowDialog();
         }
 
         public CustomerSelectionWindow(string condition,int option)

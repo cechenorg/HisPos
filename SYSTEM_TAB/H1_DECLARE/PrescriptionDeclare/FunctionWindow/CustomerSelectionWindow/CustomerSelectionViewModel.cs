@@ -106,8 +106,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             MainWindow.ServerConnection.OpenConnection();
             SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.ID);
             MainWindow.ServerConnection.CloseConnection();
-            Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
+            Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
         }
         #endregion
         public CustomerSelectionViewModel(string condition, int option)
