@@ -39,10 +39,10 @@
             <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="ProcessIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
-            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
-            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
