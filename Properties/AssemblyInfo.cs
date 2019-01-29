@@ -50,4 +50,4 @@ using System.Windows;
 // 指定為預設值: 
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0.2")]
-[assembly: AssemblyFileVersion("2.0.0.2)]
+[assembly: AssemblyFileVersion("2.0.0.2")]
