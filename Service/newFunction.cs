@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
@@ -614,7 +615,7 @@ namespace His_Pos.Service
             string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
             if (!File.Exists(logpath))  File.Create(logpath); 
             StreamWriter str = new StreamWriter(logpath);
-            str.WriteLine(log);
+            str.WriteLine(DateTime.Now.ToString() + "  Error:" + log);
             str.Close();
         }
     }
