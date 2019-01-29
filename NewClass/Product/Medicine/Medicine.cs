@@ -13,7 +13,7 @@ using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
-    public class Medicine:Product
+    public class Medicine:Product, IDeletableProduct
     {
         public Medicine() : base()
         {
@@ -345,6 +345,17 @@ namespace His_Pos.NewClass.Product.Medicine
             if (string.IsNullOrEmpty(adjustCaseId)) return;
             if (adjustCaseId.Equals("0"))
                 PaySelf = true;
+        }
+
+        private bool isSelected;
+
+        public bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                Set(() => IsSelected, ref isSelected, value);
+            }
         }
     }
 }

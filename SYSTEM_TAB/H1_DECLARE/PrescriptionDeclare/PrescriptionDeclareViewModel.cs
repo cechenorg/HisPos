@@ -8,6 +8,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
@@ -132,11 +133,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get => selectedMedicine;
             set
             {
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                    ((IDeletableProduct) SelectedMedicine).IsSelected = false;
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                    ((IDeletableProduct)SelectedMedicine).IsSelected = true;
             }
         }
 
-        private int priviousSelectedIndex { get; set; }
+        public int priviousSelectedIndex { get; set; }
         private int selectedMedicinesIndex;
         public int SelectedMedicinesIndex
         {
@@ -187,6 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand PrescribeButtonClick { get; set; }
         public RelayCommand ClearButtonClick { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
+        public RelayCommand DeleteMedicine { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -283,8 +289,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AddMedicineAction(string medicineID)
         {
-            if(SelectedMedicinesIndex < CurrentPrescription.Medicines.Count)
-                priviousSelectedIndex = SelectedMedicinesIndex;
             if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
@@ -471,6 +475,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             ClearButtonClick = new RelayCommand(ClearPrescription);
             ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
+            DeleteMedicine = new RelayCommand(DeleteMedicineAction);
         }
 
         private void CheckPrescriptionVariable()
@@ -499,7 +504,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
-            Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
             Messenger.Default.Register<Prescription>(this, "CustomPrescriptionSelected", GetCustomPrescription);
         }
@@ -577,12 +581,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification == nameof(PrescriptionDeclareViewModel))
-            if (priviousSelectedIndex < 0 || priviousSelectedIndex >= CurrentPrescription.Medicines.Count ) return;
-            CurrentPrescription.AddMedicineBySearch(msg.Content.ID, priviousSelectedIndex);
-            CurrentPrescription.CountPrescriptionPoint();
-            if (priviousSelectedIndex == CurrentPrescription.Medicines.Count - 1)
-                CurrentPrescription.Medicines.Add(new Medicine());
-            Messenger.Default.Send(priviousSelectedIndex, "FocusDosage");
+            {
+                var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
+                if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
+                CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
+                CurrentPrescription.CountPrescriptionPoint();
+                if (selected == CurrentPrescription.Medicines.Count - 1)
+                    CurrentPrescription.Medicines.Add(new Medicine());
+                Messenger.Default.Send(selected, "FocusDosage");
+            }
         }
         #endregion
         #region MessengerReceiveActions
@@ -601,26 +608,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //CurrentPrescription.ConvertNHIandOTCPrescriptionMedicines();
             //MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint();
+            priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
         }
-        private void DeleteMedicine(NotificationMessage obj)
+        private void DeleteMedicineAction()
         {
-            if(CurrentPrescription.Medicines.Count <= SelectedMedicinesIndex) return;
-            var m = CurrentPrescription.Medicines[SelectedMedicinesIndex];
-            if (m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) ||
-                m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
-            {
-                CurrentPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
-                CurrentPrescription.CountPrescriptionPoint();
-                if (CurrentPrescription.Medicines.Count == 0)
-                {
-                    CurrentPrescription.Medicines.Add(new Medicine());
-                }
-            }
-                
+            CurrentPrescription.Medicines.RemoveAt(CurrentPrescription.Medicines.IndexOf(SelectedMedicine));
+            CurrentPrescription.CountPrescriptionPoint();
         }
         private void GetCustomPrescription(Prescription p)
         {

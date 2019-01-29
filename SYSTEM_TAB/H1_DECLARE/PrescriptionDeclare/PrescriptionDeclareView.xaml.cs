@@ -297,14 +297,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
         }
 
-        private void MedicineID_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void MedicineID_OnTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                var focusIndex = GetCurrentRowIndex(sender);
-                PrescriptionMedicines.SelectedIndex = focusIndex;
-                ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = focusIndex;
-            }
+            var focusIndex = GetCurrentRowIndex(sender);
+            ((PrescriptionDeclareViewModel)DataContext).priviousSelectedIndex = focusIndex;
         }
     }
 }
