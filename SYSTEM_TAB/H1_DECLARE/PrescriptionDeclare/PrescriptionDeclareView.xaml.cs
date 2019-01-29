@@ -207,6 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     ref dataGridTextBox);
                 dataGridTextBox[0].Focus();
                 dataGridTextBox[0].SelectionStart = 0;
+                PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
             }
         }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
