@@ -289,6 +289,7 @@
     </Compile>
     <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
+    <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />

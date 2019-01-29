@@ -94,8 +94,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             SearchString = searchString;
             GetRelatedDataAction();
         }
-
-
+        
         ~AddProductViewModel()
         {
             SearchString = string.Empty;
