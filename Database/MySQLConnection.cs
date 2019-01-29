@@ -2,6 +2,7 @@
 using System.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Service;
 using MySql.Data.MySqlClient;
 
 namespace His_Pos.Database
@@ -38,10 +39,7 @@ namespace His_Pos.Database
             }
             catch (Exception ex)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
-                });
+                NewFunction.ExceptionLog(ex.Message);
             }
 
             return table;
