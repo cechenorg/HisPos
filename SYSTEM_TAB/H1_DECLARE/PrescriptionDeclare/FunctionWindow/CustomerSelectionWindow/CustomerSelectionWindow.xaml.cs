@@ -16,6 +16,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
+                if (notificationMessage.Notification.Equals("ShowCustomerSelection"))
+                    ShowDialog();
             });
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }

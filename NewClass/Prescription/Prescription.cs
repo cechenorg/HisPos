@@ -81,6 +81,7 @@ namespace His_Pos.NewClass.Prescription
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
+            PrescriptionStatus.IsCooperativeVIP = Remark.EndsWith("Y");
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Treatment = new Treatment.Treatment(c);
             Patient = new Customer

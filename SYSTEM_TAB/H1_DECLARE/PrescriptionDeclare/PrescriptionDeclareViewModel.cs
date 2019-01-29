@@ -223,26 +223,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void SearchCusByIDNumAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber)) return;
-            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
-            customerSelectionWindow.ShowDialog();
+            CusSelectWindow customerSelectionWindow = null;
+            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
         }
         private void SearchCusByNameAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name)) return;
-            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
-            customerSelectionWindow.ShowDialog();
+            CusSelectWindow customerSelectionWindow = null;
+            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
         }
         private void SearchCusByBirthAction()
         {
             if (CurrentPrescription.Patient.Birthday is null) return;
-            var customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
-            customerSelectionWindow.ShowDialog();
+            CusSelectWindow customerSelectionWindow = null;
+            customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
         }
         private void SearchCustomerByTelAction()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel)) return;
-            var customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
-            customerSelectionWindow.ShowDialog();
+            CusSelectWindow customerSelectionWindow = null;
+            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
         }
         private void ShowInsSelectionWindowAction(string search)
         {
@@ -824,8 +824,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 if (showCusWindow && !isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
                 {
-                    var customerSelectionWindow = new CusSelectWindow();
-                    customerSelectionWindow.ShowDialog();
+                    CusSelectWindow customerSelectionWindow = null;
+                    customerSelectionWindow = new CusSelectWindow();
                 }
                 if(!showCusWindow)
                     StartAdjust();

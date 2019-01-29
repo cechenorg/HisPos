@@ -117,6 +117,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 SelectedCustomer = CustomersCollectionView.Cast<Customer>().ToList()[0];
                 ExecuteCustomerSelected();
             }
+            else
+            {
+                Messenger.Default.Send(new NotificationMessage("ShowCustomerSelection"));
+            }
         }
 
         #region FilterFunctions
