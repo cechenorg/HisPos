@@ -145,6 +145,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 MainDiagnosis.Focus();
                 MainDiagnosis.SelectionStart = 0;
+                e.Handled = true;
             }
         }
 
@@ -154,6 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 ChronicSequence.Focus();
                 ChronicSequence.SelectionStart = 0;
+              
             }
         }
 

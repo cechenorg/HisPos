@@ -32,7 +32,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
             DataContext = new AddProductViewModel(search, AddProductEnum.AddMedicine);
             SearchStringTextBox.Focus();
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }
