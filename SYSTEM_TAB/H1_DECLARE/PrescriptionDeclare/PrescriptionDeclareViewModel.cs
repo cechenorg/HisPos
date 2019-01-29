@@ -500,6 +500,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
+            Messenger.Default.Register<Prescription>(this, "CustomPrescriptionSelected", GetCustomPrescription);
         }
 
         private void AdjustDateChanged(NotificationMessage adjustChange)
@@ -583,7 +584,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Send(priviousSelectedIndex, "FocusDosage");
         }
         #endregion
-        #region CommandActions
+        #region MessengerReceiveActions
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
             CurrentPrescription.Patient = receiveSelectedCustomer;
@@ -616,6 +617,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
                 
+        }
+        private void GetCustomPrescription(Prescription p)
+        {
+            CurrentPrescription = p;
+            CurrentPrescription.CountPrescriptionPoint();
         }
         #endregion
         #region GeneralFunctions

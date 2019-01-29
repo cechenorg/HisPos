@@ -24,10 +24,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public Prescriptions UngetCardPrescriptions { get; set; }
         public Prescription SelectedPrescription { get; set; }
         public RelayCommand MakeUpClick { get; set; }
-        public RelayCommand CancleClick { get; set; }
-        public RelayCommand ConfirmClick { get; set; }
+        public RelayCommand PrescriptionSelected { get; set; }
         public Cus Patient { get; set; }
         public IcCard Card { get; set; }
+        private bool isSelectCooperative { get; set; }
         private Visibility cooperativeVisible;
 
         public Visibility CooperativeVisible
@@ -78,6 +78,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private bool showDialog;
+        public bool ShowDialog
+        {
+            get => showDialog;
+            set
+            {
+                Set(() => ShowDialog, ref showDialog, value);
+            }
+        }
 
         public CustomPrescriptionViewModel(Cus cus, IcCard card,bool isGetMakeUpPrescription)
         {
@@ -91,8 +100,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private void InitialCommand()
         {
             MakeUpClick = new RelayCommand(MakeUpClickAction);
-            CancleClick = new RelayCommand(CancleClickAction);
-            ConfirmClick = new RelayCommand(ConfirmClickAction);
+            PrescriptionSelected = new RelayCommand(CustomPrescriptionSelected);
         }
 
         private void ConfirmClickAction()
@@ -100,7 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (SelectedPrescription is null)
                 MessageWindow.ShowMessage("尚未選擇處方", MessageType.ERROR);
             else
-                GetSelectedCustomPrescription(SelectedPrescription);
+                CustomPrescriptionSelected();
                 
         }
 
@@ -176,22 +184,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 ReservedVisible = Visibility.Collapsed;
             if (UngetCardPrescriptions.Count == 0)
                 UngetCardVisible = Visibility.Collapsed;
-            if (CooperativePrescriptions.Count == 0 && ReservedPrescriptions.Count == 0 && UngetCardPrescriptions.Count == 0)
-                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+            if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || UngetCardPrescriptions.Count > 0)
+                ShowDialog = true;
             else
-            {
-                Messenger.Default.Send(new NotificationMessage("ShowCustomPrescription"));
-            }
+                ShowDialog = false;
         }
 
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<Prescription>(this, "GetSelectedCustomPrescription", GetSelectedCustomPrescription);
+            Messenger.Default.Register<Prescription>(this,"ReservedSelected", GetReservePrescription);
+            Messenger.Default.Register<Prescription>(this, "CooperativeSelected", GetCooperativePrescription);
         }
 
-        private void GetSelectedCustomPrescription(Prescription p)
+        private void GetReservePrescription(Prescription p)
         {
+            isSelectCooperative = false;
             SelectedPrescription = p;
+        }
+
+        private void GetCooperativePrescription(Prescription p)
+        {
+            isSelectCooperative = true;
+            SelectedPrescription = p;
+        }
+
+        private void CustomPrescriptionSelected()
+        {
+            SelectedPrescription.GetCompletePrescriptionData(true);
             Messenger.Default.Send(SelectedPrescription,"CustomPrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
         }

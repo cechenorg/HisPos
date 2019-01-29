@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
@@ -11,10 +12,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomPrescriptionWindow : Window
     {
+        private CustomPrescriptionViewModel customPrescriptionViewModel { get; set; }
         public CustomPrescriptionWindow(Cus cus,IcCard card, bool isGetMakeUpPrescription)
         {
             InitializeComponent();
-            this.DataContext = new CustomPrescriptionViewModel(cus,card, isGetMakeUpPrescription);
+            customPrescriptionViewModel = new CustomPrescriptionViewModel(cus, card, isGetMakeUpPrescription);
+            DataContext = customPrescriptionViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)
@@ -22,12 +25,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     case "CloseCustomPrescription":
                         Close();
                         break;
-                    case "ShowCustomPrescription":
-                        ShowDialog();
-                        break;
                 }
             });
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            if (customPrescriptionViewModel.ShowDialog)
+                ShowDialog();
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
 
         private void Reserved_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -47,6 +49,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Reserved.SelectedIndex = -1;
                 Messenger.Default.Send((Prescription)d.SelectedItem, "CooperativeSelected");
             }
+        }
+
+        private void CustomPrescriptionWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visibility = Visibility.Collapsed;
         }
     }
 }

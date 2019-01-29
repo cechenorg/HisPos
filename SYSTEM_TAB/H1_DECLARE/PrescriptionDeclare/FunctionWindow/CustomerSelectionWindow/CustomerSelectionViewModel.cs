@@ -77,6 +77,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => SelectedCustomer, ref selectedCustomer, value);
             }
         }
+
+        private bool showDialog;
+        public bool ShowDialog
+        {
+            get => showDialog;
+            set
+            {
+                Set(() => ShowDialog, ref showDialog, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand SearchingTextChanged { get; set; }
@@ -114,12 +124,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             InitializeFilter(option);
             if (CustomersCollectionView.Cast<Customer>().ToList().Count == 1)
             {
+                ShowDialog = false;
                 SelectedCustomer = CustomersCollectionView.Cast<Customer>().ToList()[0];
                 ExecuteCustomerSelected();
             }
             else
             {
-                Messenger.Default.Send(new NotificationMessage("ShowCustomerSelection"));
+                ShowDialog = true;
             }
         }
 

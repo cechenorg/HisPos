@@ -12,7 +12,8 @@
         Title="顧客選擇" WindowStartupLocation="CenterScreen"
         Name="CustomSelectWindow"
         d:DesignHeight="475" d:DesignWidth="680" 
-        Width="680" Height="475" >
+        Width="680" Height="475" 
+        Closing="CustomerSelectionWindow_OnClosing">
     <Window.Resources>
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
         <service:DateConverter x:Key="BirthDayConverter"/>
