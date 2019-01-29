@@ -7,7 +7,8 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="病患相關處方" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+        Title="病患相關處方" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="Height"
+        Closing="CustomPrescriptionWindow_OnClosing">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>

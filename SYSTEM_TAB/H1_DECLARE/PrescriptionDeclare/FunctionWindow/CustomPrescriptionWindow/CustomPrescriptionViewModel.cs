@@ -175,9 +175,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 ReservedVisible = Visibility.Collapsed;
             if (UngetCardPrescriptions.Count == 0)
                 UngetCardVisible = Visibility.Collapsed;
-            if (CooperativePrescriptions.Count == 0 && ReservedPrescriptions.Count == 0 && UngetCardPrescriptions.Count == 0)
-                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
-            else
+            if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || UngetCardPrescriptions.Count > 0)
             {
                 Messenger.Default.Send(new NotificationMessage("ShowCustomPrescription"));
             }

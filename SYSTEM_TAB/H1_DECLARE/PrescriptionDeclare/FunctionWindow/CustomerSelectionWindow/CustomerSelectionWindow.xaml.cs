@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow
@@ -11,7 +12,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public CustomerSelectionWindow()
         {
             InitializeComponent();
-            this.DataContext = new CustomerSelectionViewModel("",1);
+            this.DataContext = new CustomerSelectionViewModel("", 1);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
@@ -32,6 +33,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     Close();
             });
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+        }
+
+        private void CustomerSelectionWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visibility = Visibility.Collapsed;
         }
     }
 }
