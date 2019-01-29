@@ -19,6 +19,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set { Set(() => IsSelected, ref isSelected, value); }
         }
         public double Inventory { get; }
+        public string UnitName { get; set; }
+        public double UnitAmount { get; set; }
         public int SafeAmount { get; }
         public int BasicAmount { get; }
         public double OnTheWayAmount { get; }
@@ -48,6 +50,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = dataRow.Field<double>("Inv_OnTheWay");
             LastPrice = (double)dataRow.Field<decimal>("Pro_LastPrice");
+            UnitName = dataRow.Field<string>("StoOrdDet_UnitName");
+            UnitAmount = dataRow.Field<double>("StoOrdDet_UnitAmount");
             OrderAmount = dataRow.Field<double> ("StoOrdDet_OrderAmount");
             RealAmount = dataRow.Field<double>("StoOrdDet_RealAmount");
             FreeAmount = dataRow.Field<double>("StoOrdDet_FreeAmount");

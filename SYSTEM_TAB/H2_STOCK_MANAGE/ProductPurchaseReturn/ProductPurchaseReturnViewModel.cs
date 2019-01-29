@@ -93,9 +93,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (CurrentStoreOrder.CheckOrder())
             {
                 CurrentStoreOrder.MoveToNextStatus();
-                StoreOrderCollection.ClearDoneStoreOrder();
+                StoreOrderCollection.ReloadCollection();
             }
-
         }
         private void ReloadAction()
         {

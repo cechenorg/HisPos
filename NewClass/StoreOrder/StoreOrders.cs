@@ -32,9 +32,9 @@ namespace His_Pos.NewClass.StoreOrder
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
         }
 
-        public void ClearDoneStoreOrder()
+        public void ReloadCollection()
         {
-
+            
         }
     }
 }

@@ -122,7 +122,15 @@ namespace His_Pos.NewClass.StoreOrder
             bool isSuccess = SendOrderToSingde();
 
             if (isSuccess)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+
+                SaveOrder();
                 OrderStatus = OrderStatusEnum.WAITING;
+                StoreOrderDB.StoreOrderToWaiting(ID);
+
+                MainWindow.ServerConnection.CloseConnection();
+            }
             else
                 MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
         }
@@ -164,7 +172,11 @@ namespace His_Pos.NewClass.StoreOrder
 
         private bool SendOrderToSingde()
         {
-            return false;
+            MainWindow.SingdeConnection.OpenConnection();
+            bool isSuccess = StoreOrderDB.SendStoreOrderToSingde(this);
+            MainWindow.SingdeConnection.CloseConnection();
+
+            return isSuccess;
         }
 
         public bool DeleteOrder()

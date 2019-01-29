@@ -86,6 +86,8 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
                 OrderProducts.Add(purchaseProduct);
+
+            RaisePropertyChanged(nameof(ProductCount));
         }
 
         protected override bool CheckUnProcessingOrder()
