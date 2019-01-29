@@ -4,12 +4,20 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseProduct : Product
+    public class PurchaseProduct : Product, IDeletableProduct
     {
         #region ----- Define Variables -----
+        private bool isSelected = false;
+
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set { Set(() => IsSelected, ref isSelected, value); }
+        }
         public double Inventory { get; }
         public int SafeAmount { get; }
         public int BasicAmount { get; }
@@ -53,6 +61,19 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
+        }
+
+        public void CopyOldProductData(PurchaseProduct purchaseProduct)
+        {
+            OrderAmount = purchaseProduct.OrderAmount;
+            RealAmount = purchaseProduct.RealAmount;
+            FreeAmount = purchaseProduct.FreeAmount;
+            Price = purchaseProduct.Price;
+            SubTotal = purchaseProduct.SubTotal;
+            Invoice = purchaseProduct.Invoice;
+            ValidDate = purchaseProduct.ValidDate;
+            BatchNumber = purchaseProduct.BatchNumber;
+            Note = purchaseProduct.Note;
         }
     }
 }

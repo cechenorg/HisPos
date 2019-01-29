@@ -105,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             string searchString = textBox.Text;
 
-            //CurrentStoreOrder CurrentStoreOrder.SelectedItemIndex
+            if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
 
             if (searchString.Length < 5)
             {

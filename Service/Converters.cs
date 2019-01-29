@@ -11,6 +11,24 @@ using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.Service
 {
+    public class SentinelConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value != null && string.Equals("{NewItemPlaceholder}", value.ToString(), StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            return value;
+        }
+    }
+
     public class TextBoxDateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

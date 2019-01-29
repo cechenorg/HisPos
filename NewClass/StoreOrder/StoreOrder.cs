@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
@@ -54,11 +55,26 @@ namespace His_Pos.NewClass.StoreOrder
 
             initProductCount = row.Field<int>("ProductCount");
         }
-        
+
         #region ----- Define Variables -----
+        private Product.Product selectedItem;
+
         protected int initProductCount = 0;
 
-        public int SelectedItemIndex { get; set; }
+        public Product.Product SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                if(selectedItem != null)
+                    ((IDeletableProduct) selectedItem).IsSelected = false;
+
+                Set(() => SelectedItem, ref selectedItem, value);
+
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = true;
+            }
+        }
         public OrderTypeEnum OrderType { get; set; }
         public OrderStatusEnum OrderStatus { get; set; }
         public string ID { get; set; }
@@ -153,7 +169,7 @@ namespace His_Pos.NewClass.StoreOrder
         public bool DeleteOrder()
         {
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
-            return dataTable.Rows[0].Field<bool>("Usa_PrintName");
+            return dataTable.Rows[0].Field<bool>("");
         }
         
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)

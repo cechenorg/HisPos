@@ -72,7 +72,17 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            OrderProducts.Add(purchaseProduct);
+            if (SelectedItem is PurchaseProduct)
+            {
+                int selectedProductIndex = OrderProducts.IndexOf((PurchaseProduct)SelectedItem);
+
+                purchaseProduct.CopyOldProductData((PurchaseProduct)SelectedItem);
+
+                OrderProducts.RemoveAt(selectedProductIndex);
+                OrderProducts.Insert(selectedProductIndex, purchaseProduct);
+            }
+            else
+                OrderProducts.Add(purchaseProduct);
         }
 
         protected override bool CheckUnProcessingOrder()
