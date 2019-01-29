@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                switch (row.Field<string>("Usa_PrintName"))
+                switch (row.Field<string>("TYPE"))
                 {
                     case "O":
                         Add(new PurchaseOTC(row));

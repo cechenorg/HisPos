@@ -48,9 +48,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = dataRow.Field<double>("Inv_OnTheWay");
             LastPrice = (double)dataRow.Field<decimal>("Pro_LastPrice");
-            OrderAmount = (double)dataRow.Field<decimal> ("StoOrdDet_OrderAmount");
-            RealAmount = (double)dataRow.Field<decimal>("StoOrdDet_RealAmount");
-            FreeAmount = (double)dataRow.Field<decimal>("StoOrdDet_FreeAmount");
+            OrderAmount = dataRow.Field<double> ("StoOrdDet_OrderAmount");
+            RealAmount = dataRow.Field<double>("StoOrdDet_RealAmount");
+            FreeAmount = dataRow.Field<double>("StoOrdDet_FreeAmount");
             Price = (double)dataRow.Field<decimal>("StoOrdDet_Price");
             SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
             Invoice = dataRow.Field<string>("StoOrdDet_Invoice");
