@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
             });
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
 
         public CustomerSelectionWindow(string condition,int option)
@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 if (notificationMessage.Notification.Equals("CloseCustomerSelection"))
                     Close();
             });
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }

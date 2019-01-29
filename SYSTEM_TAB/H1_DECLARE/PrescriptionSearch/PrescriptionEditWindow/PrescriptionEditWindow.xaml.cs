@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

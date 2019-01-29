@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 if (notificationMessage.Notification.Equals("CloseCooperativeSelection"))
                     Close();
             });
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }
