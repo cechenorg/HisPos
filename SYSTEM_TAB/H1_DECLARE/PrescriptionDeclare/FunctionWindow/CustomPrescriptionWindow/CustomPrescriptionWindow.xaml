@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="病患相關處方" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="Height">
     <Window.Resources>
@@ -23,6 +24,11 @@
                     <Label Content="合作診所處方" Style="{StaticResource BoldLabelContent18}"/>
                     <DataGrid Name="Cooperative" Margin="0,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CooperativePrescriptions,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Cooperative_SelectionChanged" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -186,8 +192,7 @@
                         <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
                         <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="650,0,0,0" VerticalAlignment="Center" Command="{Binding GetPatinetData}"/>
                     </StackPanel>
-                    <DataGrid Margin="10" AutoGenerateColumns="False" CanUserAddRows="False"
-                      CanUserSortColumns="False" EnableRowVirtualization="False"
+                    <DataGrid Margin="10" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
@@ -225,7 +230,7 @@
                                 <Setter Property="Height" Value="40" />
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                                        <Setter Property="Background" Value="Transparent" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -265,10 +270,6 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10">
-                    <Button Content="取消" Background="DimGray" BorderThickness="0" Margin="680,0,0,0" VerticalAlignment="Center" Command="{Binding CancleClick}"/>
-                    <Button Content="確認" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0" VerticalAlignment="Center" Command="{Binding ConfirmClick}"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
