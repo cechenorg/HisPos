@@ -135,6 +135,8 @@ namespace His_Pos.NewClass.Prescription
             if (CheckFreeCopayment())
                 return 0;
             var point = PrescriptionPoint.MedicinePoint;
+            if (point <= 100)
+                return 0;
             if (point > 100 && point <= 200)
                 return 20;
             if (point >= 201 && point <= 300)
