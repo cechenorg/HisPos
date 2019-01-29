@@ -566,7 +566,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSubDiseaseCodeByIdAction(string id)
         {
-            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
+            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.SubDisease.FullName) && id.Equals(CurrentPrescription.Treatment.SubDisease.FullName)))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
                 return;
