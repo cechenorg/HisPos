@@ -373,13 +373,11 @@ namespace His_Pos.Service
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is null || string.IsNullOrEmpty(value.ToString()))
-            {
-                return null;
-            }
+            if (int.TryParse(value.ToString(), out int _))
+                return int.Parse(value.ToString());
             else
             {
-                return int.Parse(value.ToString());
+                return null;
             }
         }
     }
