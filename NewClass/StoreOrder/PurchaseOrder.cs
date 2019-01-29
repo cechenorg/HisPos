@@ -104,12 +104,17 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
                 return false;
             }
-            //else if()
-            //{
-                
-            //}
 
-            return false;
+            foreach (var product in OrderProducts)
+            {
+                if (product.OrderAmount + product.FreeAmount == 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         protected override bool CheckNormalProcessingOrder()
