@@ -50,12 +50,11 @@ namespace His_Pos.NewClass.StoreOrder
         internal static void SavePurchaseOrder(PurchaseOrder purchaseOrder)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("", purchaseOrder.ID));
+            parameters.Add(new SqlParameter("STOORD_ID", purchaseOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
+            parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].", parameters);
-        }
-        public static DataTable GetStoreOrderDetailId() {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDetailId]");
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
         public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas,Prescription.Prescription p) {
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
@@ -83,8 +82,9 @@ namespace His_Pos.NewClass.StoreOrder
             storeOrderMasterTable.Rows.Add(newRow);
             return storeOrderMasterTable; 
         }
-        public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas) {
-            int detailId = GetStoreOrderDetailId().Rows[0].Field<int>("StoOrdDet_ID");
+        public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
+        {
+            int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             foreach (var pro in datas)
             {
@@ -115,7 +115,8 @@ namespace His_Pos.NewClass.StoreOrder
             switch (s.OrderType) {
                 case OrderTypeEnum.PURCHASE:
                     newRow["StoOrd_ID"] = DBNull.Value;
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", ViewModelMainWindow.CurrentUser.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrd_ID", s.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", s.OrderEmployeeName);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveEmployeeID",null );
                     DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
@@ -146,7 +147,7 @@ namespace His_Pos.NewClass.StoreOrder
             return storeOrderMasterTable; 
         }
         public static DataTable SetPurchaseOrderDetail(PurchaseOrder p) {
-            int detailId = GetStoreOrderDetailId().Rows[0].Field<int>("StoOrdDet_ID");
+            int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             foreach (var pro in p.OrderProducts) {
                 DataRow newRow = storeOrderDetailTable.NewRow();
@@ -156,7 +157,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate",pro.ValidDate);
