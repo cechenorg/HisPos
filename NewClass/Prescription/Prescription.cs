@@ -860,5 +860,16 @@ namespace His_Pos.NewClass.Prescription
                     break;
             }
         }
+
+        public void GetCompletePrescriptionData(bool addMedicine)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            Patient = Patient.Check();
+            Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
+            Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
+            AddCooperativePrescriptionMedicines(addMedicine);
+            UpdateCooperativePrescriptionIsRead();
+            MainWindow.ServerConnection.CloseConnection();
+        }
     }
 }
