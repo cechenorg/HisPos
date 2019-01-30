@@ -50,11 +50,12 @@ namespace His_Pos.FunctionWindow
             MainWindow.ServerConnection.OpenConnection();
             Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
             MainWindow.ServerConnection.CloseConnection();
-            NewFunction.ExceptionLog(user.Name + " Login");
+            
             if (user != null)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
+                NewFunction.ExceptionLog(user.Name + " Login");
                 MainWindow mainWindow = new MainWindow(user);
                 mainWindow.Show();
                 Messenger.Default.Send(new NotificationMessage("CloseLogin"));
