@@ -613,7 +613,7 @@ namespace His_Pos.Service
         }
         public static void ExceptionLog(string log) {
             string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
-            StreamWriter str = new StreamWriter(logpath);
+            StreamWriter str = new StreamWriter(logpath, true);
             str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
             str.Close();
         }
