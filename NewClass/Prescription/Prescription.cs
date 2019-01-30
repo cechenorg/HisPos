@@ -81,11 +81,7 @@ namespace His_Pos.NewClass.Prescription
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
-            if (Remark == "1080130000093080N")
-            {
-                var a = 1;
-
-            }
+          
             PrescriptionStatus.IsCooperativeVIP = Remark.EndsWith("Y");
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Treatment = new Treatment.Treatment(c);
