@@ -31,9 +31,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
 
             if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(AddProductEnum.PruductPurchase);
+                DataContext = new AddProductViewModel(AddProductEnum.ProductPurchase);
             else
-                DataContext = new AddProductViewModel(searchString, AddProductEnum.PruductPurchase);
+                DataContext = new AddProductViewModel(searchString, AddProductEnum.ProductPurchase);
 
             SearchStringTextBox.Focus();
 

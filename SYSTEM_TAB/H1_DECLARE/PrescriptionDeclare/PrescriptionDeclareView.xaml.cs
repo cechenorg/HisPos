@@ -75,23 +75,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }
 
-        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var selectedItem =  (sender as DataGridRow)?.Item;
-            if (!(selectedItem is IDeletable deletable)) return;
-            if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
-                deletable.Source = string.Empty;
-        }
-
-        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var selectedItem = (sender as DataGridRow)?.Item;
-            if (!(selectedItem is IDeletable deletable)) return;
-            if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
-                deletable.Source = "/Images/DeleteDot.png";
-            ((PrescriptionDeclareViewModel) DataContext).SelectedMedicine = (Medicine)selectedItem;
-        }
-
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(((PrescriptionDeclareViewModel) DataContext).SelectedMedicine is IDeletable)) return;

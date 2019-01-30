@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Interface;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -29,14 +20,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public PrescriptionEditWindow(Prescription selected)
         {
             InitializeComponent();
-            DataContext = new PrescriptionEditViewModel(selected);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+            DataContext = new PrescriptionEditViewModel(selected);
+            Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
+        private void FocusDosage(int currentIndex)
+        {
+            FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);
+        }
+
+        private void FocusChronicTotal(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("FocusChronicTotal"))
+            {
+                ChronicTotal.Focus();
+                ChronicTotal.SelectionStart = 0;
+            }
+        }
+
+        private void FocusSubDisease(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("FocusSubDisease"))
+            {
+                SecondDiagnosis.Focus();
+                SecondDiagnosis.SelectionStart = 0;
+            }
+        }
+
+        private void FocusDivision(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("FocusDivision"))
+            {
+                DivisionCombo.Focus();
+            }
+        }
+
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(sender is DataGrid dg)) return;
@@ -48,23 +70,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void DateControl_GotFocus(object sender, System.Windows.RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
-        }
-
-        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var selectedItem = (sender as DataGridRow)?.Item;
-            if (!(selectedItem is IDeletable deletable)) return;
-            if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
-                deletable.Source = string.Empty;
-        }
-
-        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var selectedItem = (sender as DataGridRow)?.Item;
-            if (!(selectedItem is IDeletable deletable)) return;
-            if (selectedItem is MedicineNHI || selectedItem is MedicineOTC)
-                deletable.Source = "/Images/DeleteDot.png";
-            ((PrescriptionEditViewModel)DataContext).SelectedMedicine = (Medicine)selectedItem;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -120,6 +125,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 MainDiagnosis.Focus();
                 MainDiagnosis.SelectionStart = 0;
+                e.Handled = true;
             }
         }
 
@@ -129,6 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 ChronicSequence.Focus();
                 ChronicSequence.SelectionStart = 0;
+
             }
         }
 
@@ -180,6 +187,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     ref dataGridTextBox);
                 dataGridTextBox[0].Focus();
                 dataGridTextBox[0].SelectionStart = 0;
+                PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
             }
         }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -225,7 +233,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
 
             if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+            {
                 firstChild.Focus();
+                if (firstChild is TextBox t)
+                    t.SelectAll();
+            }
         }
 
         private void MedicineTotal_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -258,8 +270,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             var dataGridCells = new List<TextBox>();
             NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
+            if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
+                rowIndex = dataGridCells.Count - 1;
             dataGridCells[rowIndex].Focus();
-            dataGridCells[rowIndex].SelectionStart = 0;
+            dataGridCells[rowIndex].SelectAll();
+            focusGrid.SelectedIndex = rowIndex;
+            ((PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
+        }
+
+        private void MedicineID_OnTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var focusIndex = GetCurrentRowIndex(sender);
+            ((PrescriptionEditViewModel)DataContext).priviousSelectedIndex = focusIndex;
         }
     }
 }

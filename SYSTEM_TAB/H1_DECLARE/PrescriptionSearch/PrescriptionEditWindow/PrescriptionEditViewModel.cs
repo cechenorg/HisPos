@@ -5,6 +5,8 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -39,7 +41,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
-        public Medicine SelectedMedicine { get; set; }
+        private Medicine selectedMedicine;
+        public Medicine SelectedMedicine
+        {
+            get => selectedMedicine;
+            set
+            {
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                    ((IDeletableProduct)SelectedMedicine).IsSelected = false;
+                Set(() => SelectedMedicine, ref selectedMedicine, value);
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                    ((IDeletableProduct)SelectedMedicine).IsSelected = true;
+            }
+        }
 
         private bool CheckEdit()
         {
@@ -50,7 +64,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
-        public int SelectedMedicinesIndex { get; set; }
         private Visibility isEdit;
         public Visibility IsEdit
         {
@@ -60,7 +73,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => IsEdit, ref isEdit, value);
             }
         }
-
+        public int priviousSelectedIndex { get; set; }
+        private int selectedMedicinesIndex;
+        public int SelectedMedicinesIndex
+        {
+            get => selectedMedicinesIndex;
+            set
+            {
+                if (value != -1)
+                {
+                    Set(() => SelectedMedicinesIndex, ref selectedMedicinesIndex, value);
+                }
+            }
+        }
         #region Commands
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -150,7 +175,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<ProductStruct>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, "SelectedProduct", GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
         }
         #endregion
@@ -268,12 +293,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID,AddProductEnum.PrescriptionEdit);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
             }
             else
             {
@@ -311,15 +336,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
         }
-        private void GetSelectedProduct(ProductStruct selectedProduct)
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-
-            EditedPrescription.AddMedicineBySearch(selectedProduct.ID, SelectedMedicinesIndex);
-            EditedPrescription.CountPrescriptionPoint();
-            if (SelectedMedicinesIndex == EditedPrescription.Medicines.Count - 1)
-                EditedPrescription.Medicines.Add(new Medicine());
-            Messenger.Default.Send(SelectedMedicinesIndex, "FocusDosage");
+            if (msg.Notification == nameof(PrescriptionEditViewModel))
+            {
+                var selected = EditedPrescription.Medicines.IndexOf(SelectedMedicine);
+                if (selected < 0 || selected >= EditedPrescription.Medicines.Count) return;
+                EditedPrescription.AddMedicineBySearch(msg.Content.ID, selected);
+                EditedPrescription.CountPrescriptionPoint();
+                if (selected == EditedPrescription.Medicines.Count - 1)
+                    EditedPrescription.Medicines.Add(new Medicine());
+                Messenger.Default.Send(selected, "FocusDosage");
+            }
         }
+
         private void DeleteMedicine(NotificationMessage obj)
         {
             if (EditedPrescription.Medicines.Count <= SelectedMedicinesIndex) return;

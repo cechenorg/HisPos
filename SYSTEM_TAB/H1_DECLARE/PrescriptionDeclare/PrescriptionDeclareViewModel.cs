@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
@@ -185,7 +186,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
-        public RelayCommand<string> EditMedicine { get; set; }
         public RelayCommand MedicinePriceChanged { get; set; }
         public RelayCommand AdjustButtonClick { get; set; }
         public RelayCommand RegisterButtonClick { get; set; }
@@ -300,12 +300,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID,AddProductEnum.PrescriptionDeclare);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID);
+                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare);
             }
             else
             {
@@ -604,9 +604,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
-            //MainWindow.ServerConnection.OpenConnection();
-            //CurrentPrescription.ConvertNHIandOTCPrescriptionMedicines();
-            //MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
         }
