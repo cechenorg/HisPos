@@ -812,10 +812,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 BusyContent = StringRes.讀取健保卡;
                 isGetCard = CurrentPrescription.GetCard();
+
                 if (!showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
                 {
                     BusyContent = StringRes.取得就醫序號;
-                    GetMedicalNumber(false);
+                    GetMedicalNumber();
+                }
+                if (showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
+                {
+                    GetMedicalNumber();
+                    CheckCustomPrescriptions(false);
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -824,12 +830,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (!CurrentPrescription.PrescriptionStatus.IsReadCard)
                 {
                     MessageWindow.ShowMessage(StringRes.確認卡片, MessageType.WARNING);
-                    return;
-                }
-                if (showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
-                {
-                    GetMedicalNumber(true);
-                    CheckCustomPrescriptions(false);
                     return;
                 }
                 if (showCusWindow && !isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
@@ -844,12 +844,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerAsync();
         }
 
-        private void GetMedicalNumber(bool runBackground)
+        private void GetMedicalNumber()
         {
             CurrentPrescription.PrescriptionStatus.IsGetCard = true;
-            if(runBackground)
-                CurrentPrescription.Treatment.GetLastMedicalNumber();
-            CurrentPrescription.Card.GetMedicalNumber(1, runBackground);
+            CurrentPrescription.Treatment.GetLastMedicalNumber();
+            CurrentPrescription.Card.GetMedicalNumber(1);
         }
         #endregion
     }
