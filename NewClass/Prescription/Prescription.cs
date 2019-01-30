@@ -687,69 +687,10 @@ namespace His_Pos.NewClass.Prescription
             if (success)
             {
                 var cus = new Customer(Card);
-                MainWindow.ServerConnection.OpenConnection();
-                cus = cus.Check();
-                MainWindow.ServerConnection.CloseConnection();
-                if (Patient is null || string.IsNullOrEmpty(Patient.IDNumber) && string.IsNullOrEmpty(Patient.Name))
-                {
-                    Patient = cus;
-                    PrescriptionStatus.IsReadCard = true;
-                }
-                else
-                {
-                    var replace = true;
-                    if (!string.IsNullOrEmpty(Patient.IDNumber))
-                    {
-                        if (!Card.PatientBasicData.IDNumber.Equals(Patient.IDNumber))
-                        {
-                            Application.Current.Dispatcher.Invoke(delegate {
-                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
-                                if (!(bool)confirm.DialogResult)
-                                {
-                                    PrescriptionStatus.IsReadCard = false;
-                                    replace = false;
-                                }
-                            });
-                            if (!replace) return false;
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Patient.Name))
-                    {
-                        if (!Card.PatientBasicData.Name.Equals(Patient.Name) && !replace)
-                        {
-                            Application.Current.Dispatcher.Invoke(delegate {
-                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
-                                if (!(bool)confirm.DialogResult)
-                                {
-                                    PrescriptionStatus.IsReadCard = false;
-                                    replace = false;
-                                }
-                            });
-                            if (!replace) return false;
-                        }
-                    }
-                    if (Patient.Birthday != null)
-                    {
-                        if (DateTime.Compare(Card.PatientBasicData.Birthday, (DateTime)Patient.Birthday) != 0 && !replace)
-                        {
-                            Application.Current.Dispatcher.Invoke(delegate {
-                                ConfirmWindow confirm = new ConfirmWindow(StringRes.卡片資料不符, StringRes.資料不符);
-                                if (!(bool)confirm.DialogResult)
-                                {
-                                    PrescriptionStatus.IsReadCard = false;
-                                    replace = false;
-                                }
-                            });
-                            if (!replace) return false;
-                        }
-                    }
-                    PrescriptionStatus.IsReadCard = true;
-                }
                 Patient = cus;
-            }
-            else
-            {
-                PrescriptionStatus.IsReadCard = true;
+                MainWindow.ServerConnection.OpenConnection();
+                Patient = Patient.Check();
+                MainWindow.ServerConnection.CloseConnection();
             }
             return success;
         }

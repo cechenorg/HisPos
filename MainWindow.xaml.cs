@@ -224,7 +224,7 @@ namespace His_Pos
             SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? StringRes.認證成功 : StringRes.認證失敗);
         }
 
-        private static string GetEnumDescription(Enum value)
+        public static string GetEnumDescription(Enum value)
         {
             var fi = value.GetType().GetField(value.ToString());
             if (fi == null) return string.Empty;

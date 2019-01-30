@@ -321,19 +321,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                if(!CurrentPrescription.PrescriptionStatus.IsReadCard)
+                if(string.IsNullOrEmpty(CurrentPrescription.Card.PatientBasicData.IDNumber))
                     ReadCard(false);
                 else
                 {
                     StartAdjust();
                 }
+                
             }
         }
 
         private void StartAdjust()
         {
             ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
-            if ((!CurrentPrescription.PrescriptionStatus.IsGetCard || !CurrentPrescription.Card.IsGetMedicalNumber) && CurrentPrescription.PrescriptionStatus.IsReadCard && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
+            if (!CurrentPrescription.Card.IsGetMedicalNumber && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
             {
                 var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
                 e.ShowDialog();
@@ -812,33 +813,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 BusyContent = StringRes.讀取健保卡;
                 isGetCard = CurrentPrescription.GetCard();
-
-                if (!showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
-                {
-                    BusyContent = StringRes.取得就醫序號;
+                if (isGetCard)
                     GetMedicalNumber();
-                }
-                if (showCusWindow && isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
-                {
-                    GetMedicalNumber();
-                    CheckCustomPrescriptions(false);
-                }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if (!CurrentPrescription.PrescriptionStatus.IsReadCard)
+                if (showCusWindow)
                 {
-                    MessageWindow.ShowMessage(StringRes.確認卡片, MessageType.WARNING);
-                    return;
+                    if(isGetCard)
+                        CheckCustomPrescriptions(false);
+                    else
+                    {
+                        MessageWindow.ShowMessage("卡片讀取異常",MessageType.WARNING);
+                        customerSelectionWindow = null;
+                        customerSelectionWindow = new CusSelectWindow();
+                    }
                 }
-                if (showCusWindow && !isGetCard && CurrentPrescription.PrescriptionStatus.IsReadCard)
+                else
                 {
-                    customerSelectionWindow = null;
-                    customerSelectionWindow = new CusSelectWindow();
-                }
-                if(!showCusWindow)
                     StartAdjust();
+                }
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -847,8 +842,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetMedicalNumber()
         {
             CurrentPrescription.PrescriptionStatus.IsGetCard = true;
+            BusyContent = "取得最近一次就醫序號...";
             CurrentPrescription.Treatment.GetLastMedicalNumber();
+            BusyContent = StringRes.取得就醫序號;
             CurrentPrescription.Card.GetMedicalNumber(1);
+            BusyContent = "取得就醫可用次數...";
+            CurrentPrescription.Card.GetRegisterBasic();
         }
         #endregion
     }

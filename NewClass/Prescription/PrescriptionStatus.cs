@@ -33,7 +33,6 @@ namespace His_Pos.NewClass.Prescription {
             }
         } 
         public bool IsDeposit { get; set; } //是否押金
-        public bool IsReadCard { get; set; } //是否讀卡
         public bool IsCooperativeVIP { get; set; }
         public void Init()
         {
@@ -43,7 +42,6 @@ namespace His_Pos.NewClass.Prescription {
             IsSendOrder = false;
             IsSendToSingde = false;
             IsRegister = false;
-            IsReadCard = false;
             IsDeclare = true;
             IsCooperativeVIP = false;
         }

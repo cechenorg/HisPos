@@ -473,28 +473,13 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public void GetLastMedicalNumber()
         {
-            if (HisApiBase.OpenCom())
-            {
-                int iBufferLen = 7;
-                byte[] pBuffer = new byte[7];
-                var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
-                HisApiBase.CloseCom();
-                int count = 0;
-                while (res != 0)
-                {
-                    count++;
-                    Thread.Sleep(1000);
-                    HisApiBase.OpenCom();
-                    res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
-                    HisApiBase.CloseCom();
-                    if (count == 3)
-                        break;
-                }
-                if (res == 0)
-                {
-                    TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
-                }
-            }
+            HisApiBase.OpenCom();
+            int iBufferLen = 7;
+            byte[] pBuffer = new byte[7];
+            var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+            if (res == 0)
+                TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+            HisApiBase.CloseCom();
         }
 
         public void Clear()
