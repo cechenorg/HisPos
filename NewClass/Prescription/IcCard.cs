@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -30,94 +31,98 @@ namespace His_Pos.NewClass.Prescription
         public bool IsGetMedicalNumber { get; set; }
         public bool GetBasicData()
         {
-            if (ViewModelMainWindow.IsVerifySamDc)
+            var strLength = 72;
+            var icData = new byte[72];
+            if (HisApiBase.OpenCom())
             {
-                var strLength = 72;
-                var icData = new byte[72];
-                if (HisApiBase.OpenCom())
+                MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
+                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                HisApiBase.CloseCom();
+                int count = 0;
+                while (res != 0)
                 {
-                    MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                    var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    count++;
+                    Thread.Sleep(1000);
+                    HisApiBase.OpenCom();
+                    res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    HisApiBase.CloseCom();
+                    if (count == 3)
+                        break;
+                }
+                if (res == 0)
+                {
+                    byte[] BasicDataArr = new byte[72];
+                    MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
+                    icData.CopyTo(BasicDataArr, 0);
+                    PatientBasicData = new BasicData(icData);
+                    CardNumber = PatientBasicData.CardNumber;
+                    Name = PatientBasicData.Name;
+                    Birthday = PatientBasicData.Birthday;
+                    Gender = PatientBasicData.Gender;
+                    IDNumber = PatientBasicData.IDNumber;
+                    CardReleaseDate = PatientBasicData.CardReleaseDate;
+                    HisApiBase.OpenCom();
+                    byte[] pBuffer = new byte[9];
+                    strLength = 9;
+                    res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
+                    HisApiBase.CloseCom();
+                    int count2 = 0;
+                    while (res != 0)
+                    {
+                        count2++;
+                        Thread.Sleep(1000);
+                        HisApiBase.OpenCom();
+                        res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
+                        HisApiBase.CloseCom();
+                        if (count == 3)
+                            break;
+                    }
                     if (res == 0)
                     {
-                        byte[] BasicDataArr = new byte[72];
-                        MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
-                        icData.CopyTo(BasicDataArr, 0);
-                        PatientBasicData = new BasicData(icData);
+                        ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
+                        AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 7));
                         HisApiBase.CloseCom();
-                        CardNumber = PatientBasicData.CardNumber;
-                        Name = PatientBasicData.Name;
-                        Birthday = PatientBasicData.Birthday;
-                        Gender = PatientBasicData.Gender;
-                        IDNumber = PatientBasicData.IDNumber;
-                        CardReleaseDate = PatientBasicData.CardReleaseDate;
-                        HisApiBase.CloseCom();
-                        HisApiBase.OpenCom();
-                        byte[] pBuffer = new byte[9];
-                        strLength = 9;
-                        res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
-                        if (res == 0)
+                        if (AvailableTimes == 0)
                         {
-                            ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
-                            AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 7));
+                            HisApiBase.OpenCom();
+                            HisApiBase.csUpdateHCContents();
                             HisApiBase.CloseCom();
-                            if (AvailableTimes == 0)
-                            {
-                                HisApiBase.OpenCom();
-                                HisApiBase.csUpdateHCContents();
-                                HisApiBase.CloseCom();
-                            }
                         }
-                        return true;
                     }
-                    HisApiBase.CloseCom();
+                    return true;
                 }
-                return false;
+                HisApiBase.CloseCom();
             }
-            MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
             return false;
         }
-        public void GetMedicalNumber(byte makeUp,bool runBackground)
+        public void GetMedicalNumber(byte makeUp)
         {
             byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);//就醫類別長度3個char;
             byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);//新生兒就醫註記,長度2個char
             byte[] cTreatAfterCheck = { makeUp };//補卡註記
             int iBufferLen = 296;
             byte[] pBuffer = new byte[296];
-            if (runBackground)
+            if (HisApiBase.OpenCom())
             {
-                var worker = new BackgroundWorker();
-                worker.DoWork += (o, ea) =>
+                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                HisApiBase.CloseCom();
+                int count = 0;
+                while (res != 0)
                 {
-                    if (HisApiBase.OpenCom())
-                    {
-                        var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
-                        if (res == 0)
-                        {
-                            MedicalNumberData = new SeqNumber(pBuffer);
-                            IsGetMedicalNumber = true;
-                        }
-                        HisApiBase.CloseCom();
-                    }
-                };
-                worker.RunWorkerCompleted += (o, ea) =>
-                {
-                    GetTreatDataNoNeedHPC();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                if (HisApiBase.OpenCom())
-                {
-                    var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
-                    if (res == 0)
-                    {
-                        MedicalNumberData = new SeqNumber(pBuffer);
-                        IsGetMedicalNumber = true;
-                    }
+                    count++;
+                    Thread.Sleep(1000);
+                    HisApiBase.OpenCom();
+                    res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
                     HisApiBase.CloseCom();
+                    if (count == 3)
+                        break;
                 }
+                if (res == 0)
+                {
+                    MedicalNumberData = new SeqNumber(pBuffer);
+                    IsGetMedicalNumber = true;
+                }
+                
             }
         }
 

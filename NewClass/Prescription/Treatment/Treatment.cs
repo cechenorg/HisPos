@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -472,25 +473,28 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public void GetLastMedicalNumber()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (HisApiBase.OpenCom())
             {
-                if (HisApiBase.OpenCom())
+                int iBufferLen = 7;
+                byte[] pBuffer = new byte[7];
+                var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                HisApiBase.CloseCom();
+                int count = 0;
+                while (res != 0)
                 {
-                    int iBufferLen = 7;
-                    byte[] pBuffer = new byte[7];
-                    var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
-                    if (res == 0)
-                    {
-                        TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
-                    }
+                    count++;
+                    Thread.Sleep(1000);
+                    HisApiBase.OpenCom();
+                    res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
                     HisApiBase.CloseCom();
+                    if (count == 3)
+                        break;
                 }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-            };
-            worker.RunWorkerAsync();
+                if (res == 0)
+                {
+                    TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                }
+            }
         }
 
         public void Clear()
