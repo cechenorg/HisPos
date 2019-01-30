@@ -1,15 +1,13 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Interactivity;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
@@ -116,14 +114,13 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     MainWindow.ServerConnection.OpenConnection();
                     ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
                     MainWindow.ServerConnection.CloseConnection();
-                    if (addProEnum == AddProductEnum.AddMedicine)
+                    if (addProEnum == AddProductEnum.PrescriptionDeclare || addProEnum == AddProductEnum.PrescriptionEdit)
                         ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p => p.NHIPrice) };
                     else
                     {
                         ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
                     }
                     ProStructCollectionView = ProStructCollectionViewSource.View;
-                    ProStructCollectionViewSource.Filter += FilterByProductEnable;
                     switch (ProductStructCollection.Count)
                     {
                         case 0:
@@ -177,38 +174,17 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
             switch (addProEnum)
             {
-                case AddProductEnum.PruductPurchase:
+                case AddProductEnum.ProductPurchase:
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
-                case AddProductEnum.AddMedicine:
+                case AddProductEnum.PrescriptionDeclare:
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(PrescriptionDeclareViewModel)));
+                    break;
+                case AddProductEnum.PrescriptionEdit:
+                    Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(PrescriptionEditViewModel)));
                     break;
             }
             Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));
-        }
-        private void AddMedicineFilterAction()
-        {
-            if(HideDisableProduct)
-                ProStructCollectionViewSource.Filter += FilterByProductEnable;
-            else
-            {
-                ProStructCollectionViewSource.Filter -= FilterByProductEnable;
-            }
-        }
-        private void FilterByProductEnable(object sender, FilterEventArgs e)
-        {
-            if (!(e.Item is ProductStruct src))
-                e.Accepted = false;
-            else
-            {
-                e.Accepted = true;
-            }
-            //else if (src.IsEnable)
-            //    e.Accepted = true;
-            //else
-            //{
-            //    e.Accepted = false;
-            //}
         }
 
         private void StartEditingAction()
@@ -231,7 +207,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
             switch (addProductEnum)
             {
-                case AddProductEnum.PruductPurchase:
+                case AddProductEnum.ProductPurchase:
                     FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
                     break;
             }

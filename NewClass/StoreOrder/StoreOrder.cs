@@ -186,8 +186,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         public bool DeleteOrder()
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要刪除?", "刪除");
+
+            if (!(bool) confirmWindow.DialogResult)
+                return false;
+
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
-            return dataTable.Rows[0].Field<bool>("");
+            return dataTable.Rows[0].Field<bool>("RESULT");
         }
         
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)

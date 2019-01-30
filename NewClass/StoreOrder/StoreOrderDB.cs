@@ -14,9 +14,12 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public class StoreOrderDB
     {
-        internal static DataTable RemoveStoreOrderByID(string iD)
+        internal static DataTable RemoveStoreOrderByID(string storeOrderID)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
 
         internal static DataTable GetDonePurchaseOrdersInOneWeek()
