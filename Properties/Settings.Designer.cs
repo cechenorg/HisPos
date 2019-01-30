@@ -97,7 +97,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("HISPOS_Develop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("HISPOS_Test")]
         public string SystemSerialNumber {
             get {
                 return ((string)(this["SystemSerialNumber"]));
