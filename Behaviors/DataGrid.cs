@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 
-namespace His_Pos.FunctionWindow.AddProductWindow
+namespace His_Pos.Behaviors
 {
-    public class ScrollIntoViewBehavior : Behavior<DataGrid>
+    public class ScrollIntoView : Behavior<DataGrid>
     {
         protected override void OnAttached()
         {
