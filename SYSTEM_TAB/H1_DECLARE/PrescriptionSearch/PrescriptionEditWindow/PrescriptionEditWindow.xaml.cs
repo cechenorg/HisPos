@@ -67,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ((PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = index;
         }
 
-        private void DateControl_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }

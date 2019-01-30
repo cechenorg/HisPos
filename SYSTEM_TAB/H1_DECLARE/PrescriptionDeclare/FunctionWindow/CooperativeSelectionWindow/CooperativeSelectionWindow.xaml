@@ -87,34 +87,8 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>
-                        <CheckBox Name="NotReadCheckBox" BorderBrush="DimGray" Content="未讀" IsChecked="{Binding IsNotRead,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="0,0,0,0" Background="RoyalBlue">
-                            <!--<i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Checked">
-                                    <command:EventToCommand
-                                        Command="{Binding IsReadChecked}"
-                                        CommandParameter="{Binding IsChecked, ElementName=NotReadCheckBox}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="Unchecked">
-                                    <command:EventToCommand
-                                        Command="{Binding IsReadChecked}"
-                                        CommandParameter="{Binding IsChecked, ElementName=NotReadCheckBox}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>-->
-                        </CheckBox>
-                        <CheckBox Name="IsReadCheckBox" BorderBrush="DimGray" Content="已讀" IsChecked="{Binding IsRead,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0" Background="RoyalBlue">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Checked">
-                                    <command:EventToCommand
-                                        Command="{Binding IsReadChecked}"
-                                        CommandParameter="{Binding IsChecked, ElementName=IsReadCheckBox}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="Unchecked">
-                                    <command:EventToCommand
-                                        Command="{Binding IsReadChecked}"
-                                        CommandParameter="{Binding IsChecked, ElementName=IsReadCheckBox}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </CheckBox>
+                        <CheckBox Name="NotReadCheckBox" BorderBrush="DimGray" Content="未讀" IsChecked="{Binding IsNotRead,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="0,0,0,0" Background="RoyalBlue"/>
+                        <CheckBox Name="IsReadCheckBox" BorderBrush="DimGray" Content="已讀" IsChecked="{Binding IsRead,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0" Background="RoyalBlue"/>
                     </StackPanel>
                     <DataGrid Name="PrescriptionsGrid" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="{StaticResource GridDarkerBackGround}" 
                               AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding CooPreCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
