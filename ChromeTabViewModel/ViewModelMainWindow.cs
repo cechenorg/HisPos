@@ -190,12 +190,9 @@ namespace His_Pos.ChromeTabViewModel
             {
                 IsBusy = false;
             };
-            NewFunction.ExceptionLog("IsBusyStart");
 
             IsBusy = true;
             worker.RunWorkerAsync();
-
-            NewFunction.ExceptionLog("IsBusyEnd");
         }
 
         public static Institution GetInstitution(string id)
