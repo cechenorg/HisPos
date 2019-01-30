@@ -85,9 +85,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             MainWindow.ServerConnection.OpenConnection();
             bool isSuccess = CurrentStoreOrder.DeleteOrder();
             MainWindow.ServerConnection.CloseConnection();
-            
+
             if (isSuccess)
+            {
                 StoreOrderCollection.Remove(CurrentStoreOrder);
+                CurrentStoreOrder = StoreOrderCollection.FirstOrDefault();
+            }
         }
         private void ToNextStatusAction()
         {

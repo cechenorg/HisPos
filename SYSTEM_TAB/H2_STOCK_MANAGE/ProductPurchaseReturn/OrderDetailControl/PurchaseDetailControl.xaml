@@ -43,8 +43,8 @@
             <TextBlock Text="進貨" Foreground="Green" FontFamily="Segoe UI Semibold" FontSize="22" VerticalAlignment="Center" Margin="25,0,0,0"/>
             <Label Content="採購人" Foreground="Black" Margin="20,0,0,0" Style="{StaticResource BoldLabelContent18}"/>
             <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
-            <Label Content="病患" Foreground="Black" Margin="600,0,0,0" Style="{StaticResource BoldLabelContent18}"/>
-            <Label Content="{Binding PatientName}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+            <Label Content="病患" Foreground="Black" Margin="600,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding PatientName, Converter={StaticResource EqualityToVisibilityConverter}}"/>
+            <Label Content="{Binding PatientName}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
