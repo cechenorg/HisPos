@@ -118,47 +118,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             }
         }
 
-        private bool? isRead;
-        public bool? IsRead
+        private bool isRead;
+        public bool IsRead
         {
             get => isRead;
             set
             {
                 Set(() => IsRead, ref isRead, value);
-                if (isRead != null)
-                {
-                    CooPreCollectionViewSource.Filter += FilterByIsRead;
-                    if (isNotRead != null)
-                    {
-                        CooPreCollectionViewSource.Filter += FilterByIsNotRead;
-                    }
-                }
+                CooPreCollectionViewSource.Filter += FilterByIsRead;
             }
         }
 
-        private bool? isNotRead;
-        public bool? IsNotRead
+        private bool isNotRead;
+        public bool IsNotRead
         {
             get => isNotRead;
             set
             {
                 Set(() => IsNotRead, ref isNotRead, value);
-                if (isNotRead != null)
-                {
-                    CooPreCollectionViewSource.Filter += FilterByIsNotRead;
-                    if (isRead != null)
-                    {
-                        CooPreCollectionViewSource.Filter += FilterByIsRead;
-                    }
-                }
+                CooPreCollectionViewSource.Filter += FilterByIsNotRead;
             }
         }
         #endregion
         #region Commands
-        public RelayCommand StartDateChanged { get; set; }
-        public RelayCommand EndDateChanged { get; set; }
-        public RelayCommand IDNumberChanged { get; set; }
-        public RelayCommand IsReadChecked { get; set; }
         public RelayCommand SelectionChanged { get; set; }
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
@@ -188,14 +170,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             else
                 CooPreCollectionViewSource.Filter += FilterByIDNumber;
         }
-        private void IsReadCheckedAction()
-        {
-            CooPreCollectionViewSource.Filter += FilterByIsRead;
-        }
         private void SelectionChangedAction()
         {
-            //if (SelectedPrescription != null)
-                //CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.ID);
+
         }
         private void PrintAction()
         {
@@ -233,14 +210,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             CooperativePrescriptions = receivePrescriptions;
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
             CooPreCollectionView = CooPreCollectionViewSource.View;
-            IsNotRead = true;
+            cooPreCollectionViewSource.Filter += FilterByIsNotRead;
+            cooPreCollectionViewSource.Filter += FilterByIsRead;
             IsRead = false;
+            IsNotRead = true;
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
-            CooPreCollectionViewSource.Filter += FilterByStartDate;
-            CooPreCollectionViewSource.Filter += FilterByEndDate;
-            CooPreCollectionViewSource.Filter += FilterByIsRead;
-            CooPreCollectionViewSource.Filter += FilterByIsNotRead;
         }
         #endregion
         #region Filter
@@ -248,10 +223,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (StartDate is null)
-                e.Accepted = true;
-            else if (DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)StartDate) >= 0)
-                e.Accepted = true;
+            else if (DateTime.Compare((DateTime) src.Treatment.TreatDate, (DateTime) StartDate) >= 0)
+            {
+                if (IsRead && IsNotRead)
+                {
+                    e.Accepted = true;
+                }
+                else if (IsRead && !IsNotRead)
+                {
+                    if (!src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+                else if (!IsRead && IsNotRead)
+                {
+                    if (src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+            }
             else
             {
                 e.Accepted = false;
@@ -261,47 +251,107 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (EndDate is null)
-                e.Accepted = true;
             else if (DateTime.Compare((DateTime)src.Treatment.TreatDate, (DateTime)EndDate) <= 0)
-                e.Accepted = true;
+            {
+                if (IsRead && IsNotRead)
+                {
+                    e.Accepted = true;
+                }
+                else if (IsRead && !IsNotRead)
+                {
+                    if (!src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+                else if (!IsRead && IsNotRead)
+                {
+                    if (src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+            }
             else
             {
                 e.Accepted = false;
             }
         }
+
         private void FilterByIDNumber(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
             else if (IDNumber is null || src.Patient.IDNumber.Contains(IDNumber))
-                e.Accepted = true;
+            {
+                if (IsRead && IsNotRead)
+                {
+                    e.Accepted = true;
+                }
+                else if (IsRead && !IsNotRead)
+                {
+                    if(!src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+                else if (!IsRead && IsNotRead)
+                {
+                    if (src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+            }
             else
             {
                 e.Accepted = false;
             }
         }
+
         private void FilterByIsRead(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (src.PrescriptionStatus.IsRead && (bool)IsRead)
-                e.Accepted = true;
             else
             {
-                e.Accepted = false;
+                if (IsRead && IsNotRead)
+                {
+                    e.Accepted = true;
+                }
+                else if (IsRead && !IsNotRead)
+                {
+                    if (!src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+                else if (!IsRead && IsNotRead)
+                {
+                    if (src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
             }
-            
+
         }
         private void FilterByIsNotRead(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (src.PrescriptionStatus.IsRead && (bool)IsNotRead)
-                e.Accepted = true;
             else
             {
-                e.Accepted = false;
+                if (IsRead && IsNotRead)
+                {
+                    e.Accepted = true;
+                }
+                else if (IsRead && !IsNotRead)
+                {
+                    if (!src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
+                else if (!IsRead && IsNotRead)
+                {
+                    if (src.PrescriptionStatus.IsRead)
+                        e.Accepted = false;
+                    e.Accepted = true;
+                }
             }
         }
         #endregion

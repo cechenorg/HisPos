@@ -267,9 +267,9 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                        <ContextMenu x:Key="MedcineContextMenu" x:Name="MedContextMenu" StaysOpen="true" >
+                        <!--<ContextMenu x:Key="MedcineContextMenu" x:Name="MedContextMenu" StaysOpen="true" >
                             <MenuItem Header="申報不扣庫" x:Name="IsBuckle" />
-                        </ContextMenu>
+                        </ContextMenu>-->
                     </DataGrid.Resources>
                     <DataGrid.Background>
                         <StaticResource ResourceKey="GridBackGround"/>

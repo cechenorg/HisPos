@@ -124,7 +124,7 @@ namespace His_Pos.NewClass.Prescription
         public int MedicineDays { get; set; } //給藥日份
         public string MedicalServiceID { get; set; } //藥事服務代碼 
         public XDocument DeclareContent { get; set; } = new XDocument(); //申報檔內容
-        public int DeclareFileID { get; set; } //申報檔ID
+        public int? DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
