@@ -55,16 +55,16 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding OrderStatus}" Value="SINGDE_UNPROCESSING">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus}" Value="WAITING">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus}" Value="NORMAL_PROCESSING">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus}" Value="SINGDE_PROCESSING">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
                         </DataTrigger>
                     </Style.Triggers>

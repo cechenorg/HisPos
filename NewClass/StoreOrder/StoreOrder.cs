@@ -59,6 +59,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ----- Define Variables -----
         private Product.Product selectedItem;
+        private OrderStatusEnum orderStatus;
 
         protected int initProductCount = 0;
 
@@ -77,7 +78,11 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
         public OrderTypeEnum OrderType { get; set; }
-        public OrderStatusEnum OrderStatus { get; set; }
+        public OrderStatusEnum OrderStatus
+        {
+            get { return orderStatus; }
+            set { Set(() => OrderStatus, ref orderStatus, value); }
+        }
         public string ID { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }

@@ -4,7 +4,11 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Product;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -40,8 +44,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
             get => search;
             set { Set(() => Search, ref search, value); }
         }
+        private bool isEditing = true;
+        public bool IsEditing
+        {
+            get => isEditing;
+            private set
+            {
+                Set(() => IsEditing, ref isEditing, value);
+            }
+        }
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
+        public RelayCommand<string> FocusUpDownCommand { get; set; }
         private Institution selectedInstitution;
         public Institution SelectedInstitution
         {
@@ -50,8 +64,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         }
         private void ExecuteSearchTextChanged()
         {
-            if(Search.Length < 4) return;
-            InsCollectionViewSource.Filter += FilterBySearchText;
+            if (IsEditing)
+            {
+                if (Search.Length >= 4)
+                {
+                    IsEditing = false;
+                    InsCollectionViewSource.Filter += FilterBySearchText;
+                    switch (Institutions.Count)
+                    {
+                        case 0:
+                            MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
+                            break;
+                        default:
+                            InsCollectionViewSource.View.MoveCurrentToFirst();
+                            SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
+                            break;
+                    }
+                }
+                else
+                    MessageWindow.ShowMessage("查詢ID需至少4碼", MessageType.WARNING);
+            }
+            else
+            {
+                ExecuteInstitutionSelected();
+            }
         }
         private void ExecuteInstitutionSelected()
         {
@@ -71,13 +107,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         }
         public InstitutionSelectionViewModel(string searchText)
         {
+            Institutions = ViewModelMainWindow.Institutions;
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             InstitutionSelected = new RelayCommand(ExecuteInstitutionSelected);
-            Search = searchText;
-            Institutions = ViewModelMainWindow.Institutions;
+            FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             InsCollectionViewSource = new CollectionViewSource { Source = Institutions };
             InsCollectionView = InsCollectionViewSource.View;
-            InsCollectionViewSource.Filter += FilterBySearchText;
+            Search = searchText;
+            ExecuteSearchTextChanged();
+        }
+
+        ~InstitutionSelectionViewModel()
+        {
+            Search = string.Empty;
+            Messenger.Default.Unregister(this);
+        }
+
+        private void FocusUpDownAction(string direction)
+        {
+            if (!IsEditing && Institutions.Count > 0)
+            {
+                int maxIndex = Institutions.Count - 1;
+
+                switch (direction)
+                {
+                    case "UP":
+                        if (InsCollectionView.CurrentPosition > 0)
+                            InsCollectionView.MoveCurrentToPrevious();
+                        break;
+                    case "DOWN":
+                        if (InsCollectionView.CurrentPosition < maxIndex)
+                            InsCollectionView.MoveCurrentToNext();
+                        break;
+                }
+                SelectedInstitution = (Institution)InsCollectionView.CurrentItem;
+            }
         }
     }
 }
