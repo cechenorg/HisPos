@@ -27,6 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
+using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
@@ -189,8 +190,12 @@ namespace His_Pos.ChromeTabViewModel
             {
                 IsBusy = false;
             };
+            NewFunction.ExceptionLog("IsBusyStart");
+
             IsBusy = true;
             worker.RunWorkerAsync();
+
+            NewFunction.ExceptionLog("IsBusyEnd");
         }
 
         public static Institution GetInstitution(string id)
