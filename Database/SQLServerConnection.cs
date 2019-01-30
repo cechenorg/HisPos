@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Service;
 
 namespace His_Pos.Database
 {
@@ -76,6 +77,7 @@ namespace His_Pos.Database
                 {
                     MessageWindow.ShowMessage(procName + sqlException.Message, MessageType.ERROR);
                 });
+                NewFunction.ExceptionLog(sqlException.Message);
             }
             catch (Exception ex)
             {
@@ -84,8 +86,7 @@ namespace His_Pos.Database
                 {
                     parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
                 }
-
-                //LogError(procName, parameValues, ex.Message);
+                NewFunction.ExceptionLog(ex.Message); 
 
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
