@@ -90,9 +90,9 @@
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <RadioButton Content="只有此供應商" Tag="0" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+            <!--<RadioButton Content="只有此供應商" Tag="0" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
             <RadioButton Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>-->
         </StackPanel>
         <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
