@@ -36,5 +36,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             
         }
+
+        internal void UpdateSingdeOrderStatus(DataTable dataTable)
+        {
+            
+        }
     }
 }

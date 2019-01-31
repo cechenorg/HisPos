@@ -65,6 +65,10 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas)); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList); 
         }
+        internal static DataTable GetSingdeOrderNewStatus(string dateTime)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.Id}', '{dateTime}')");
+        }
         #region TableSet
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p) {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
@@ -151,7 +155,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.Id}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
         }
-
+        
         public static DataTable SetStoreOrderMaster(StoreOrder s) {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
             DataRow newRow = storeOrderMasterTable.NewRow(); 

@@ -81,11 +81,6 @@ namespace His_Pos.Database
             }
             catch (Exception ex)
             {
-                string parameValues = string.Empty;
-                foreach (SqlParameter row in parameterList)
-                {
-                    parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
-                }
                 NewFunction.ExceptionLog(ex.Message); 
 
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {

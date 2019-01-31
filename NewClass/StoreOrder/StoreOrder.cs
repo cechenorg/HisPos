@@ -191,6 +191,11 @@ namespace His_Pos.NewClass.StoreOrder
             if (!(bool) confirmWindow.DialogResult)
                 return false;
 
+            if (OrderManufactory.ID.Equals("0"))
+            {
+
+            }
+
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
