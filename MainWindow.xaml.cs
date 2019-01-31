@@ -207,11 +207,7 @@ namespace His_Pos
 
         private void VerifySam(object sender, DoWorkEventArgs e)
         {
-            HisApiBase.CheckCardStatus(1);
-            if (!HisApiBase.GetStatus(2))
-            {
-                HisApiBase.VerifySamDc();
-            }
+            HisApiBase.VerifySamDc();
         }
 
         private void DuringVerify(object sender, ProgressChangedEventArgs e)

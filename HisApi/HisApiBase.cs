@@ -214,7 +214,6 @@ namespace His_Pos.HisApi
 
         public static bool OpenCom()
         {
-            SetCardReaderStatus(StringRes.讀卡機異常);
             SetCardReaderStatus(StringRes.開啟讀卡機);
             var res = csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             SetStatus(res == 0,1);
@@ -224,7 +223,6 @@ namespace His_Pos.HisApi
 
         public static void CloseCom()
         {
-            SetCardReaderStatus(StringRes.讀卡機異常);
             if (csCloseCom() == 0)
                 SetStatus(false,1);
         }

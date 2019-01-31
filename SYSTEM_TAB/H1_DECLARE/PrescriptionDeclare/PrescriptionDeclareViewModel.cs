@@ -168,6 +168,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CanSendOrder, ref canSendOrder, value);
             }
         }
+        private bool canAdjust;
+        public bool CanAdjust
+        {
+            get => canAdjust;
+            set
+            {
+                Set(() => CanAdjust, ref canAdjust, value);
+            }
+        }
         private string CooperativeClinicMidicalNumber = WebApi.GetCooperativeClinicId(ViewModelMainWindow.CurrentPharmacy.Id);
         #endregion
         #region Commands
@@ -198,8 +207,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             SelectedMedicinesIndex = 0;
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
+            InitialView();
             InitializeVariables();
         }
+
+        private void InitialView()
+        {
+            InitialItemsSources();
+            InitialCommandActions();
+            RegisterMessengers();
+        }
+
         ~PrescriptionDeclareViewModel()
         {
             Messenger.Default.Unregister(this);
@@ -438,9 +456,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void InitializeVariables()
         {
             NotPrescribe = true;
-            InitialItemsSources();
-            InitialCommandActions();
-            RegisterMessengers();
+            CanAdjust = false;
             InitialPrescription();
         }
         private void InitialItemsSources()
@@ -495,6 +511,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ClearPrescription()
         {
+            InitializeVariables();
             InitialPrescription();
             isDeposit = null;
         }
@@ -807,26 +824,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ReadCard(bool showCusWindow)
         {
+            CanAdjust = false;
             var isGetCard = false;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.讀取健保卡;
                 isGetCard = CurrentPrescription.GetCard();
-                if (isGetCard)
-                    GetMedicalNumber();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
                 if (showCusWindow)
                 {
-                    if(isGetCard)
-                        CheckCustomPrescriptions(false);
+                    if (isGetCard)
+                    {
+                        CheckCustomPrescriptions(true);
+                        GetMedicalNumber();
+                    }
                     else
                     {
-                        MessageWindow.ShowMessage("卡片讀取異常",MessageType.WARNING);
-                        customerSelectionWindow = null;
+                        CanAdjust = true;
+                        CusSelectWindow customerSelectionWindow = null;
                         customerSelectionWindow = new CusSelectWindow();
                     }
                 }
@@ -841,13 +860,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetMedicalNumber()
         {
-            CurrentPrescription.PrescriptionStatus.IsGetCard = true;
-            BusyContent = "取得最近一次就醫序號...";
-            CurrentPrescription.Treatment.GetLastMedicalNumber();
-            BusyContent = StringRes.取得就醫序號;
-            CurrentPrescription.Card.GetMedicalNumber(1);
-            BusyContent = "取得就醫可用次數...";
-            CurrentPrescription.Card.GetRegisterBasic();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                CurrentPrescription.PrescriptionStatus.IsGetCard = true;
+                CurrentPrescription.Treatment.GetLastMedicalNumber();
+                CurrentPrescription.Card.GetMedicalNumber(1);
+                CurrentPrescription.Card.GetRegisterBasic();
+                if (CurrentPrescription.Card.AvailableTimes != null)
+                {
+                    if (CurrentPrescription.Card.AvailableTimes == 0)
+                    {
+                        CurrentPrescription.Card.UpdateCard();
+                    }
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) => { CanAdjust = true; };
+            worker.RunWorkerAsync();
         }
         #endregion
     }
