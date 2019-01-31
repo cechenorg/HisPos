@@ -17,7 +17,6 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public abstract class StoreOrder: ObservableObject
     {
-        public StoreOrder() { }
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -77,12 +76,12 @@ namespace His_Pos.NewClass.StoreOrder
                     ((IDeletableProduct)selectedItem).IsSelected = true;
             }
         }
-        public OrderTypeEnum OrderType { get; set; }
         public OrderStatusEnum OrderStatus
         {
             get { return orderStatus; }
             set { Set(() => OrderStatus, ref orderStatus, value); }
         }
+        public OrderTypeEnum OrderType { get; set; }
         public string ID { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
@@ -93,10 +92,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ----- Define Functions -----
 
+        #region ----- Abstract Function -----
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
+        protected abstract void GetOrderProductsFromSingde();
+        #endregion
 
         #region ----- Status Function -----
         public void MoveToNextStatus()
@@ -144,9 +146,13 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
         }
-        private void ToSingdeProcessingStatus()
+        protected void ToSingdeProcessingStatus()
         {
             OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+        }
+        protected void ToScrapStatus()
+        {
+            StoreOrderDB.RemoveStoreOrderByID(ID);
         }
         private void ToDoneStatus()
         {
@@ -175,6 +181,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract bool CheckSingdeProcessingOrder();
         #endregion
 
+        #region ----- Singde Function -----
         private bool SendOrderToSingde()
         {
             MainWindow.SingdeConnection.OpenConnection();
@@ -183,6 +190,22 @@ namespace His_Pos.NewClass.StoreOrder
 
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+        public void UpdateOrderDataFromSingde(DataRow dataRow)
+        {
+            int orderFlag = dataRow.Field<int>("FLAG");
+            bool isShipment = dataRow.Field<bool>("IS_SHIPMENT");
+
+            if (orderFlag == 2)
+                ToScrapStatus();
+            else if (isShipment)
+            {
+                GetOrderProductsFromSingde();
+                SaveOrder();
+
+                //Update
+            }
+        }
+        #endregion
 
         public bool DeleteOrder()
         {

@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderType = OrderTypeEnum.RETURN;
         }
 
+        #region ----- Override Function -----
         public override void GetOrderProducts()
         {
             OrderProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
@@ -95,5 +96,13 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderProducts.Remove((ReturnProduct)SelectedItem);
         }
+
+        protected override void GetOrderProductsFromSingde()
+        {
+            DataTable dataTable = StoreOrderDB.GetOrderProductsFromSingde(ID);
+
+        }
+
+        #endregion
     }
 }

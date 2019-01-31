@@ -39,7 +39,16 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal void UpdateSingdeOrderStatus(DataTable dataTable)
         {
-            
+            foreach (var storeOrder in Items)
+            {
+                if (storeOrder.OrderStatus == OrderStatusEnum.WAITING)
+                {
+                    DataRow[] dataRows = dataTable.Select("ORDER_ID = " + storeOrder.ID);
+
+                    if (dataRows.Length > 0)
+                        storeOrder.UpdateOrderDataFromSingde(dataRows[0]);
+                }
+            }
         }
     }
 }

@@ -176,7 +176,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
-                MainWindow.ServerConnection.CloseConnection();
 
                 List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.ID).ToList();
                 string dateTime = DateTime.Now.ToShortDateString();
@@ -185,10 +184,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dateTime = storeOrders[0].ID.Substring(1, 8);
 
                 MainWindow.SingdeConnection.OpenConnection();
+
                 BusyContent = "取得杏德訂單最新狀態...";
                 DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
                 StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
+
                 MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
             };
 
             backgroundWorker.RunWorkerCompleted += (sender, args) =>

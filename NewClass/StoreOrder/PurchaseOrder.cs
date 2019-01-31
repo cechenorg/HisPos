@@ -40,7 +40,8 @@ namespace His_Pos.NewClass.StoreOrder
             OrderType = OrderTypeEnum.PURCHASE;
             PatientName = row.Field<string>("Cus_Name");
         }
-     
+
+        #region ----- Override Function -----
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
@@ -98,6 +99,15 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
+        protected override void GetOrderProductsFromSingde()
+        {
+            OrderProducts = PurchaseProducts.GetSingdeProductsByStoreOrderID(ID);
+
+            SaveOrder();
+
+
+        }
+
         protected override bool CheckUnProcessingOrder()
         {
             if (OrderProducts.Count == 0)
@@ -129,6 +139,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             throw new NotImplementedException();
         }
+        #endregion
+
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try

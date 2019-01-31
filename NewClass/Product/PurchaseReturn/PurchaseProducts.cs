@@ -33,5 +33,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
         }
+
+        internal static PurchaseProducts GetSingdeProductsByStoreOrderID(string iD)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
