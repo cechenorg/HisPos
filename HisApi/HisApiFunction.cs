@@ -38,6 +38,7 @@ namespace His_Pos.HisApi
                         startIndex += 40;
                     }
                 }
+                HisApiBase.CloseCom();
             }
             return signList;
         }

@@ -389,8 +389,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             MainWindow.ServerConnection.CloseConnection();
             CreateDailyUploadData(errorCode);
-            PrintMedBag();
-            ClearPrescription();
         }
 
         private void PrintMedBag()
@@ -504,7 +502,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.重置讀卡機;
-                HisApiBase.csSoftwareReset(0);
+                HisApiBase.csSoftwareReset(3);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -797,6 +795,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 IsBusy = false;
                 CurrentPrescription.PrescriptionStatus.UpdateStatus();
+                PrintMedBag();
+                ClearPrescription();
             };
             IsBusy = true;
             worker.RunWorkerAsync();

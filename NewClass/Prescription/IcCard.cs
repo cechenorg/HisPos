@@ -38,7 +38,7 @@ namespace His_Pos.NewClass.Prescription
             if (HisApiBase.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
@@ -60,6 +60,7 @@ namespace His_Pos.NewClass.Prescription
                 {
                     MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
                 });
+                HisApiBase.CloseCom();
             }
             return false;
         }
@@ -77,7 +78,6 @@ namespace His_Pos.NewClass.Prescription
                 {
                     MedicalNumberData = new SeqNumber(pBuffer);
                     IsGetMedicalNumber = true;
-                    HisApiBase.CloseCom();
                 }
                 else
                 {
@@ -87,6 +87,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
                     });
                 }
+                HisApiBase.CloseCom();
             }
         }
 
@@ -125,7 +126,6 @@ namespace His_Pos.NewClass.Prescription
                 {
                     ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
                     AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 7));
-                    HisApiBase.CloseCom();
                 }
                 else
                 {
@@ -135,6 +135,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("取得就醫可用次數異常 " + res + ":" + registerBasicErr, MessageType.WARNING);
                     });
                 }
+                HisApiBase.CloseCom();
             }
         }
 
