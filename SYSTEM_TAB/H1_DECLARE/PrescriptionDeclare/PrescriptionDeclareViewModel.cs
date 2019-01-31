@@ -498,18 +498,38 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ResetCardReaderAction()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            Reset(true);
+        }
+
+        private void Reset(bool busy)
+        {
+            if (busy)
             {
-                BusyContent = StringRes.重置讀卡機;
-                HisApiBase.csSoftwareReset(3);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    BusyContent = StringRes.重置讀卡機;
+                    HisApiBase.csSoftwareReset(3);
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    IsBusy = false;
+                };
+                IsBusy = true;
+                worker.RunWorkerAsync();
+            }
+            else
             {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    HisApiBase.csSoftwareReset(3);
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                };
+                worker.RunWorkerAsync();
+            }
         }
 
         private void CheckPrescriptionVariable()
@@ -771,8 +791,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     if (CurrentPrescription.Card.IsGetMedicalNumber)
                     {
-                        if(CreatePrescriptionSign())
-                            HisAPI.CreatDailyUploadData(CurrentPrescription,false);
+                        if (CreatePrescriptionSign())
+                        {
+                            Reset(false);
+                            HisAPI.CreatDailyUploadData(CurrentPrescription, false);
+                        }
                     }
                     else
                     {
