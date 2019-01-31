@@ -555,17 +555,11 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                foreach (var m in medBagMedicines.GroupBy(info => info.Usage)
-                    .Select(group => new { UsageName = group.Key, count = group.Count() })
-                    .OrderBy(x => x.UsageName))
+                var i = 1;
+                foreach (var med in medBagMedicines)
                 {
-                    var i = 1;
-                    foreach (var med in medBagMedicines)
-                    {
-                        if (!med.Usage.Equals(m.UsageName)) continue;
-                        med.MedNo = i.ToString();
-                        i++;
-                    }
+                    med.MedNo = i.ToString();
+                    i++;
                 }
                 var json = JsonConvert.SerializeObject(medBagMedicines);
                 var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
