@@ -9,6 +9,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -202,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ClearButtonClick { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
+        public RelayCommand ResetCardReader { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -493,6 +495,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ClearButtonClick = new RelayCommand(ClearPrescription);
             ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
+            ResetCardReader = new RelayCommand(ResetCardReaderAction);
+        }
+
+        private void ResetCardReaderAction()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.重置讀卡機;
+                HisApiBase.csSoftwareReset(0);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void CheckPrescriptionVariable()

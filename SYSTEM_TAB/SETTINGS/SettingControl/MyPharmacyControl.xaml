@@ -32,6 +32,7 @@
                 <TextBlock Text="COM" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40,0,0,0"/>
                 <ComboBox Margin="10,0,0,0" Width="150" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center"
                           ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedIndex="{Binding ReaderCom, Mode=TwoWay}" SelectionChanged="Pharmacy_OnDataChanged">
+                    <TextBlock Text="COM0" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                     <TextBlock Text="COM1" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                     <TextBlock Text="COM2" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                     <TextBlock Text="COM3" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>

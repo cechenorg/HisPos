@@ -476,4 +476,7 @@
   <data name="資料不符" xml:space="preserve">
     <value>資料不符</value>
   </data>
+  <data name="重置讀卡機" xml:space="preserve">
+    <value>讀卡機重置中...</value>
+  </data>
 </root>

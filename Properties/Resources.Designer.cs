@@ -1086,6 +1086,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 讀卡機重置中... 的當地語系化字串。
+        /// </summary>
+        internal static string 重置讀卡機 {
+            get {
+                return ResourceManager.GetString("重置讀卡機", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 開啟讀卡機連接... 的當地語系化字串。
         /// </summary>
         internal static string 開啟讀卡機 {
