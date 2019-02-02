@@ -32,12 +32,12 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void GetReservePrescription()
+        public void GetReservePrescription(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
         {
-            var table = PrescriptionDb.GetReservePrescriptionsData();
+            var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, adj, ins, pharmacist);
             foreach (DataRow r in table.Rows)
             {
-                Add(new Prescription(r, PrescriptionSource.Normal));
+                Add(new Prescription(r, PrescriptionSource.Cooperative));
             }
         }
         public void GetPrescriptionsByCusId(int cusID) //取得處方
