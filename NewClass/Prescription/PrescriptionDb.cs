@@ -143,11 +143,11 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
         }
 
-        public static DataTable GetPrescriptionsByCusId(int cusId)
+        public static DataTable GetPrescriptionsByCusIdNumber(string cusIdnumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId); 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusId]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIdNumber", cusIdnumber); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusIdNumber]", parameterList);
         }
         public static DataTable GetReservePrescriptionByCusId(int cusId)
         {
