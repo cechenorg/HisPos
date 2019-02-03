@@ -366,7 +366,7 @@
   <data name="MedBagPrinting" xml:space="preserve">
     <value>藥袋列印中...</value>
   </data>
-  <data name="ReceiptPrinting" xml:space="preserve">
+  <data name="收據列印" xml:space="preserve">
     <value>收據列印中...</value>
   </data>
   <data name="GetCooperativePrescriptions" xml:space="preserve">
@@ -478,5 +478,8 @@
   </data>
   <data name="重置讀卡機" xml:space="preserve">
     <value>讀卡機重置中...</value>
+  </data>
+  <data name="押金單據列印" xml:space="preserve">
+    <value>押金單據列印中...</value>
   </data>
 </root>

@@ -279,12 +279,12 @@ namespace His_Pos.ChromeTabViewModel
             //IsBusy = true;
             //worker.RunWorkerAsync();
         }
-        public void StartPrintReceipt(ReportViewer r)
+        public void StartPrintReceipt(ReportViewer r,bool receipt)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = StringRes.ReceiptPrinting;
+                BusyContent = receipt ? StringRes.收據列印 : StringRes.押金單據列印;
                 Export(r.LocalReport, 25.4, 9.3);
                 ReportPrint(Properties.Settings.Default.ReceiptPrinter);
             };

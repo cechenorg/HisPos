@@ -607,7 +607,32 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
+            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer,true);
+        }
+        public void PrintDepositSheet()
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var adjustDate =
+                DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
+            var dateString = DateTimeExtensions.ConvertDateStringSplitToChinese(adjustDate);
+            var printTime = adjustDate + "(" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ")";
+
+            var parameters = new List<ReportParameter>
+            {
+                new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
+                new ReportParameter("PatientName", Patient.Name),
+                new ReportParameter("AdjustDate", dateString),
+                new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
+                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive)),
+                new ReportParameter("PrintTime", printTime)
+            };
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer,false);
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {

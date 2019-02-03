@@ -207,5 +207,11 @@ namespace His_Pos.Service
             var sec = (d.Second).ToString().PadLeft(2, '0');
             return year + month + day + hour + minute + sec;
         }
+
+        public static string ConvertDateStringSplitToChinese(string date)
+        {
+            var dateSplit = date.Split('/');
+            return dateSplit[0] + "年" + dateSplit[1] + "月" + dateSplit[2] + "日";
+        }
     }
 }

@@ -697,15 +697,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 收據列印中... 的當地語系化字串。
-        /// </summary>
-        internal static string ReceiptPrinting {
-            get {
-                return ResourceManager.GetString("ReceiptPrinting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 報表系統 的當地語系化字串。
         /// </summary>
         internal static string ReportSystem {
@@ -878,6 +869,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 押金單據列印中... 的當地語系化字串。
+        /// </summary>
+        internal static string 押金單據列印 {
+            get {
+                return ResourceManager.GetString("押金單據列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 押金確認 的當地語系化字串。
         /// </summary>
         internal static string 押金確認 {
@@ -892,6 +892,15 @@ namespace His_Pos.Properties {
         internal static string 控制軟體異常 {
             get {
                 return ResourceManager.GetString("控制軟體異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 收據列印中... 的當地語系化字串。
+        /// </summary>
+        internal static string 收據列印 {
+            get {
+                return ResourceManager.GetString("收據列印", resourceCulture);
             }
         }
         
