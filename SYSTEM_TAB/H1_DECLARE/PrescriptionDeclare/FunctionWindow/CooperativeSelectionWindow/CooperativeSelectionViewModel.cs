@@ -172,7 +172,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         private void SelectionChangedAction()
         {
-
+            if (SelectedPrescription is null) return;
+            CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.IDNumber);
+            CustomerHistories.Insert(0,new CooperativeViewHistory(SelectedPrescription));
         }
         private void PrintAction()
         {

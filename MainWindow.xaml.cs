@@ -18,6 +18,8 @@ using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
+using His_Pos.NewClass;
+using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.IcData.Upload;
@@ -176,6 +178,10 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            MainWindow.ServerConnection.OpenConnection();
+            WebApi.SendToCooperClinic();
+            CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+            MainWindow.ServerConnection.CloseConnection();
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {

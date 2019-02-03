@@ -352,10 +352,7 @@ namespace His_Pos.ChromeTabViewModel
             return stream;
         }
         public void WindowCloseAction() {
-            MainWindow.ServerConnection.OpenConnection();
-            WebApi.SendToCooperClinic();
-            CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
-            MainWindow.ServerConnection.CloseConnection();
+           
         }
         private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
         {

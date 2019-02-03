@@ -125,10 +125,15 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
-        public static DataTable GetReservePrescriptionsData()
+        public static DataTable GetReservePrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
         {
-            var table = new DataTable();
-            return table;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
         }
       
         public static DataTable GetPrescriptionsNoGetCardByCusId(int cusId)
@@ -138,11 +143,11 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
         }
 
-        public static DataTable GetPrescriptionsByCusId(int cusId)
+        public static DataTable GetPrescriptionsByCusIdNumber(string cusIdnumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId); 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusId]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIdNumber", cusIdnumber); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsByCusIdNumber]", parameterList);
         }
         public static DataTable GetReservePrescriptionByCusId(int cusId)
         {

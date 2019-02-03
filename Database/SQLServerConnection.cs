@@ -60,7 +60,7 @@ namespace His_Pos.Database
             {
                 var myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." +  procName, connection);
                 myCommand.CommandType = CommandType.StoredProcedure;
-
+                myCommand.CommandTimeout = 120;
                 if (parameterList != null)
                     foreach (var param in parameterList)
                     {

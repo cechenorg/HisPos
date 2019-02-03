@@ -715,7 +715,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NormalAdjust()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Id.ToString()))
+            if (CurrentPrescription.Id == 0)
                 CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             else
                 CurrentPrescription.Update();

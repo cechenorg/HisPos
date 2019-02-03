@@ -217,8 +217,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void ReserveSearchAction()
         {
+            SearchPrescriptions.Clear();
             //查詢預約慢箋
-            SearchPrescriptions.GetReservePrescription();
+            SearchPrescriptions.GetReservePrescription(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
             UpdateCollectionView();
         }
         private void GetInstitutionAction(string search)
