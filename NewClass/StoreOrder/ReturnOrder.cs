@@ -99,7 +99,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override void GetOrderProductsFromSingde()
         {
-            DataTable dataTable = StoreOrderDB.GetOrderProductsFromSingde(ID);
+            //DataTable dataTable = StoreOrderDB.GetOrderProductsFromSingde(ID);
 
         }
 
