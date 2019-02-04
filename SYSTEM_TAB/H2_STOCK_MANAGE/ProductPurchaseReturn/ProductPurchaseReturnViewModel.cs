@@ -74,7 +74,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            InitVariables();
+            TabName = MainWindow.HisFeatures[1].Functions[1];
+            Icon = MainWindow.HisFeatures[1].Icon;
             RegisterCommend();
         }
 

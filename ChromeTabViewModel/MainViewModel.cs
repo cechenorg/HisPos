@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
@@ -269,7 +270,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = new ProductPurchaseReturnViewModel() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = (Application.Current.FindResource("ProductPurchaseReturnLocator") as ProductPurchaseReturnLocator).ProductPurchaseReturn; //new ProductPurchaseReturnViewModel() ;
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
