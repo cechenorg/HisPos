@@ -340,7 +340,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!ActualReceive.Value</Value>
+                    <Value>=Parameters!Deposit.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <FontSize>11pt</FontSize>
