@@ -55,11 +55,14 @@ namespace His_Pos.NewClass.Prescription
                     HisApiBase.CloseCom();
                     return true;
                 }
-                var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                Application.Current.Dispatcher.Invoke(delegate
+                else
                 {
-                    MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
-                });
+                    var description = MainWindow.GetEnumDescription((ErrorCode)res);
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
+                    });
+                }
                 HisApiBase.CloseCom();
             }
             return false;

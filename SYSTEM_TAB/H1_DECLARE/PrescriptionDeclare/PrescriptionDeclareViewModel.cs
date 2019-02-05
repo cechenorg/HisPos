@@ -42,7 +42,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Cooperati
 using His_Pos.NewClass.StoreOrder;
 
 // ReSharper disable InconsistentNaming
-
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     public class PrescriptionDeclareViewModel : TabBase
@@ -158,7 +157,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
-        private CusSelectWindow customerSelectionWindow { get; set; }
         private bool? isDeposit;
         private bool canSendOrder;
         public bool CanSendOrder
