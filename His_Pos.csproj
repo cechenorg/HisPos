@@ -422,6 +422,10 @@
     <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageView.xaml.cs">
+      <DependentUpon>DeclareFileManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
@@ -1013,6 +1017,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
