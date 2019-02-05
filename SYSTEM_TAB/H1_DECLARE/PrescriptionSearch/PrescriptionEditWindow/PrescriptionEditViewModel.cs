@@ -313,7 +313,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (CheckEdit())
             {
-                var error = EditedPrescription.CheckPrescriptionRule();
+                var error = EditedPrescription.CheckPrescriptionRule(false);
                 if (!string.IsNullOrEmpty(error))
                 {
                     MessageWindow.ShowMessage(error, MessageType.ERROR);

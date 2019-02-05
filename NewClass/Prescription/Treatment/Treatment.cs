@@ -342,8 +342,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             return string.Empty;
         }
-        private string CheckMedicalNumber()
+        private string CheckMedicalNumber(bool noCard)
         {
+            if(noCard)
+                return string.Empty;
             if (string.IsNullOrEmpty(TempMedicalNumber))
             {
                 if (!CheckIsHomeCare()) return StringRes.MedicalNumberError;
@@ -441,7 +443,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 return StringRes.ChronicTotalError;
             return string.Empty;
         }
-        public string Check()
+        public string Check(bool noCard)
         {
             return
              CheckInstitution() +
@@ -449,7 +451,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckPrescriptionCase() +
              CheckAdjustDate() +
              CheckPharmacist() +
-             CheckMedicalNumber() +
+             CheckMedicalNumber(noCard) +
              CheckCopayment() +
              CheckDivision() +
              CheckTreatDate() +

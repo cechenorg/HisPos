@@ -111,6 +111,10 @@ namespace His_Pos.NewClass.Prescription {
         {
             Change = ActualReceive - AmountsPay;
         }
+        public void CountDeposit()
+        {
+            Deposit = MedicalServicePoint + MedicinePoint - CopaymentPoint;
+        }
     }
     
 }

@@ -452,9 +452,9 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
         #region DeclareFunctions
-        public string CheckPrescriptionRule()//檢查健保邏輯
+        public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
         {
-            return CheckMedicines() + Treatment.Check() + Patient.CheckBasicData();
+            return CheckMedicines() + Treatment.Check(noCard) + Patient.CheckBasicData();
         }
         public string CheckMedicines()
         {
@@ -625,7 +625,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("AdjustDate", dateString),
-                new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
+                new ReportParameter("ActualReceive", PrescriptionPoint.Deposit.ToString()),
                 new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive)),
                 new ReportParameter("PrintTime", printTime)
             };

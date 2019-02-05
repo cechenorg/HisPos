@@ -612,7 +612,7 @@
                             </ContentControl>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,8,0" Orientation="Horizontal">
-                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding ClearButtonClick}" Margin="55,0,0,0"/>
+                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding NoCardAdjust}" Margin="55,0,0,0"/>
                             <Button Width="180" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}" Margin="20,0,0,0"/>
                         </StackPanel>
                     </Grid>
