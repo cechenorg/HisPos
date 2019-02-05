@@ -34,5 +34,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public bool Common { get; set; }
         public bool IsCooperative { get; set; }
+        #region Function
+        public void UpdateUsedTime() {
+            InstitutionDb.UpdateUsedTime(Id);
+        }
+        #endregion
     }
 }
