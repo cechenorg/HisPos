@@ -52,7 +52,7 @@ namespace His_Pos.NewClass.Product.Medicine
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
             PaySelf = !string.IsNullOrEmpty(m.Remark) ;
-           
+            IsBuckle = false;
             switch (m.Remark) {
                 case "":
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
@@ -261,6 +261,13 @@ namespace His_Pos.NewClass.Product.Medicine
                     CountTotalPrice();
                 }
             }
+        }
+        private bool isBuckle;
+        public bool IsBuckle {
+            get => isBuckle;
+            set {
+                Set(() => IsBuckle, ref isBuckle, value);
+            } 
         }
 
         private void CheckIsPriceReadOnly()

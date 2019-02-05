@@ -202,7 +202,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand ResetCardReader { get; set; }
-        public RelayCommand NoCardAdjust { get; set; }
+        public RelayCommand NoCardAdjust { get; set; } 
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -501,8 +501,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
-            NoCardAdjust = new RelayCommand(NoCardAdjustAction);
+            NoCardAdjust = new RelayCommand(NoCardAdjustAction); 
         }
+         
         private void NoCardAdjustAction()
         {
             ConfirmWindow noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");

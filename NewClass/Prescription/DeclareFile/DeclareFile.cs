@@ -227,6 +227,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
                 P13 = P12;
                 PaySelf = false;
+                IsBuckle = true;
             }
             else
             {
@@ -245,6 +246,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                 P12 = string.Empty;
                 P13 = P12;
                 PaySelf = m.PaySelf;
+                IsBuckle = true;
             }
         }
 
@@ -279,6 +281,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
                     P13 = P12;
                     PaySelf = false;
+                    IsBuckle = true;
                     break;
                 case PDataType.SimpleForm:
                     P1 = "1";
@@ -308,6 +311,7 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
                     P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today.AddDays(amount-1));
                     PaySelf = false;
+                    IsBuckle = true;
                     break;
             }
         }
@@ -343,5 +347,6 @@ namespace His_Pos.NewClass.Prescription.DeclareFile
         public string P15 { get; set; }
         [XmlIgnore]
         public bool PaySelf { get; set; }
+        public bool IsBuckle { get; set; }
     }
 }
