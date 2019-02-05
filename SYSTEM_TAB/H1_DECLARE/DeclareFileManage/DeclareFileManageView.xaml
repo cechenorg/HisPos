@@ -16,6 +16,9 @@
         <service:ReleaseInsConverter x:Key="ReleaseInsConverter"/>
         <service:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:DeclareFileManageViewModel/>
+    </UserControl.DataContext>
     <Viewbox Name="ExportViewBox" Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
             <Grid.RowDefinitions>
@@ -60,9 +63,9 @@
                                             <Label Content="{Binding DeclareYear}" FontSize="14" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" Margin="0,-15,0,0"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="8,0,0,0">
-                                            <Image  Source="..\..\Images\Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                            <Image  Source="/Images/Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
                                             <Label  Content="{Binding FileContent.Tdata.T2}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                            <Image Source="..\..\Images\Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
+                                            <Image Source="/Images/Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
                                             <!--Content="{Binding DeclareFile.TotalPoint}"-->
                                             <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
                                         </StackPanel>
@@ -71,7 +74,6 @@
                                             <Label Content="{Binding NormalCount}" FontSize="16" Width="45" FontFamily="Segoe UI Semi"  HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                             <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                             <Label Content="{Binding ChronicCount}" FontSize="16" Width="45" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                            <Image Source="..\..\Images\DeleteDot.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
@@ -84,7 +86,7 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="10" Height="50">
-                            <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
                             <xctk:MaskedTextBox Name="Start" Width="100" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                                 <xctk:MaskedTextBox.Text>
@@ -108,10 +110,10 @@
                                     </Binding>
                                 </xctk:MaskedTextBox.Text>
                             </xctk:MaskedTextBox>
-                            <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
-                            <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                            <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding Path=AdjustCaseCollection,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                            <ComboBox Name="HisPerson" ItemsSource="{Binding MedicalPersonnels}" Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
+                            <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                            <ComboBox Name="AdjustCaseCombo" ItemsSource="{Binding AdjustCases}" DisplayMemberPath="FullName" Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Height="50">
                             <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
