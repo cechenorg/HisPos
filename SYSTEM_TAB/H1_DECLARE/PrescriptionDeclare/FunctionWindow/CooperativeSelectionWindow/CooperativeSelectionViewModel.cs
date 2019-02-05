@@ -233,7 +233,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                             e.Accepted = false;
                         }
                     }
+                    else
+                    {
+                        e.Accepted = false;
+                    }
                 }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+            else
+            {
+                e.Accepted = false;
             }
         }
         #endregion
