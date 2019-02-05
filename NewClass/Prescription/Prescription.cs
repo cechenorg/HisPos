@@ -625,8 +625,8 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("AdjustDate", dateString),
-                new ReportParameter("ActualReceive", PrescriptionPoint.Deposit.ToString()),
-                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive)),
+                new ReportParameter("Deposit", PrescriptionPoint.Deposit.ToString()),
+                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.Deposit)),
                 new ReportParameter("PrintTime", printTime)
             };
             rptViewer.LocalReport.SetParameters(parameters);
