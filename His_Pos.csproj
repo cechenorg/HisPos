@@ -290,6 +290,9 @@
     </Compile>
     <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
+    <Compile Include="GeneralCustomControl\ProductStatusIcon.xaml.cs">
+      <DependentUpon>ProductStatusIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
@@ -1005,6 +1008,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GeneralCustomControl\ProductStatusIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
