@@ -7,6 +7,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
+        xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         mc:Ignorable="d" Height="400" Width="725" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
@@ -62,7 +63,16 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="商品編號" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="商品名稱" Width="300" Binding="{Binding FullName}" IsReadOnly="True"/>
+                    <DataGridTemplateColumn Width="300" Header="商品名稱" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
+                                    <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="庫存" Width="50" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Inventory}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="載途量" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding OnTheWayAmount}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="安全量" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding SafeAmount}" IsReadOnly="True"/>
