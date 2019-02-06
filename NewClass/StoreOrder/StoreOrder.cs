@@ -111,9 +111,6 @@ namespace His_Pos.NewClass.StoreOrder
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();
                     break;
-                case OrderStatusEnum.WAITING:
-                    ToSingdeProcessingStatus();
-                    break;
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
                     ToDoneStatus();
@@ -145,10 +142,6 @@ namespace His_Pos.NewClass.StoreOrder
         private void ToNormalProcessingStatus()
         {
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
-        }
-        protected void ToSingdeProcessingStatus()
-        {
-            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
         protected void ToScrapStatus()
         {
