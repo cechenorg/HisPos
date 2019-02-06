@@ -10,6 +10,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
              x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.PrescriptionDeclareView"
              mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -268,9 +269,9 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                        <!--<ContextMenu x:Key="MedcineContextMenu" x:Name="MedContextMenu" StaysOpen="true" >
-                            <MenuItem Header="申報不扣庫" x:Name="IsBuckle" />
-                        </ContextMenu>-->
+                        <ContextMenu x:Key="MedicineContextMenu" x:Name="MedContextMenu" StaysOpen="true" >
+                            <MenuItem Header="申報不扣庫" x:Name="IsBuckle" Command="{Binding DataContext.MedicineNoBuckleClick,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"/>
+                        </ContextMenu>
                     </DataGrid.Resources>
                     <DataGrid.Background>
                         <StaticResource ResourceKey="GridBackGround"/>
@@ -283,7 +284,7 @@
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
-                            <Setter Property="ContextMenu" Value="{DynamicResource MedcineContextMenu}"/>
+                            <Setter Property="ContextMenu" Value="{StaticResource MedicineContextMenu}"/>
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="BorderBrush" Value="Transparent" />
                             <Setter Property="FontSize" Value="16" />
