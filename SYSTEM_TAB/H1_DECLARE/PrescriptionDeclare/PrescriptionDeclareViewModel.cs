@@ -458,10 +458,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
             NoCardAdjust = new RelayCommand(NoCardAdjustAction);
-            MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
         }
-
-        
+        private void NoCardAdjustAction()
+        {
+            ConfirmWindow noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");
+            if (!(bool) noCard.DialogResult) return;
+            var error = CurrentPrescription.CheckPrescriptionRule(true);
+            if (!string.IsNullOrEmpty(error))
+            {
+                MessageWindow.ShowMessage(error, MessageType.ERROR);
+            }
+            else
+            {
+                StartNoCardAdjust();
+            }
+        }
         private void StartNoCardAdjust()
         {
             CurrentPrescription.PrescriptionStatus.SetNoCardSatus();

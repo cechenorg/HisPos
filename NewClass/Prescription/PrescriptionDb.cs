@@ -436,6 +436,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", pdata.P8);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", pdata.PaySelf);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -496,6 +497,7 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_SerialNumber", typeof(int));
             detailTable.Columns.Add("PreDet_MedicineDays", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
+            detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
             return detailTable;
         }
         public static DataTable SetReserveMaster(Prescription p) {
@@ -561,6 +563,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "ResDet_Price", pdata.P8);
                 DataBaseFunction.AddColumnValue(newRow, "ResDet_MedicineDays", pdata.P11);
                 DataBaseFunction.AddColumnValue(newRow, "ResDet_PaySelf", pdata.PaySelf);
+                DataBaseFunction.AddColumnValue(newRow, "ResDet_IsBuckle", pdata.IsBuckle);
+                
                 reserveDetailTable.Rows.Add(newRow); 
             } 
             return reserveDetailTable;
@@ -632,6 +636,7 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", pdata.P8);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", false);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", false);
                     prescriptionDetailTable.Rows.Add(newRow);
                 }
                 preId++;
@@ -691,6 +696,7 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("ResDet_SerialNumber", typeof(int));
             detailTable.Columns.Add("ResDet_MedicineDays", typeof(int));
             detailTable.Columns.Add("ResDet_PaySelf", typeof(bool));
+            detailTable.Columns.Add("ResDet_IsBuckle", typeof(bool));
             return detailTable;
         }
         #endregion

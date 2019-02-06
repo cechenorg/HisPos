@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using His_Pos.Database;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
@@ -8,11 +11,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Institution]");
         }
-
-        public static DataTable GetCommonInstitutions()
+        public static DataTable GetCommonInstitution() {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CommonInstitution]"); 
+        }
+        public static void UpdateUsedTime(string insId)
         {
-            var table = new DataTable();
-            return table;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", insId);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InstitutionUsedTime]", parameterList); 
         }
     }
 }

@@ -198,6 +198,7 @@ namespace His_Pos.NewClass.Prescription
                                            PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
             PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             CreateDeclareFileContent(details);//產生申報資料
+            Treatment.Institution.UpdateUsedTime();
             return PrescriptionDb.InsertPrescription(this, details);
         }
       
@@ -212,6 +213,7 @@ namespace His_Pos.NewClass.Prescription
                                            PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
             PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             CreateDeclareFileContent(details);//產生申報資料
+            Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.UpdateReserve(this, details);
         }
         public List<Pdata> SetPrescriptionDetail()
@@ -449,6 +451,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.UpdateCooperativePrescriptionStatus(SourceId);
         }
         public void InsertCooperAdjust() {
+            Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
         #region DeclareFunctions
