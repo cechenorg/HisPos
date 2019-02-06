@@ -97,7 +97,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void DeleteOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
             bool isSuccess = CurrentStoreOrder.DeleteOrder();
+            MainWindow.SingdeConnection.CloseConnection();
             MainWindow.ServerConnection.CloseConnection();
 
             if (isSuccess)

@@ -137,7 +137,7 @@ namespace His_Pos.NewClass.StoreOrder
                 MainWindow.ServerConnection.CloseConnection();
             }
             else
-                MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後再試", MessageType.ERROR);
         }
         private void ToNormalProcessingStatus()
         {
@@ -204,14 +204,20 @@ namespace His_Pos.NewClass.StoreOrder
 
         public bool DeleteOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要刪除?", "刪除");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要作廢?", "作廢");
 
             if (!(bool) confirmWindow.DialogResult)
                 return false;
 
-            if (OrderManufactory.ID.Equals("0"))
+            if (OrderManufactory.ID.Equals("0") && OrderStatus == OrderStatusEnum.WAITING)
             {
+                bool isSuccess = StoreOrderDB.RemoveSingdeStoreOrderByID(ID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");
 
+                if (!isSuccess)
+                {
+                    MessageWindow.ShowMessage("作廢杏德訂單失敗 請稍後再試", MessageType.ERROR);
+                    return false;
+                }
             }
 
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);

@@ -78,6 +78,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.Id}', '{dateTime}')");
         }
+        public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.Id}', '{storeOrderID}')");
+        }
+
         #region TableSet
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p) {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
@@ -321,5 +326,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
         #endregion
+
+        
     }
 }
