@@ -50,5 +50,13 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
         }
+
+        internal void AddNewOrdersFromSingde(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                StoreOrderDB.AddNewStoreOrderFromSingde(row);
+            }
+        }
     }
 }

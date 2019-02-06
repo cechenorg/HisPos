@@ -143,6 +143,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
         }
+        private void ToSingdeProcessingStatus()
+        {
+            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+        }
         protected void ToScrapStatus()
         {
             StoreOrderDB.RemoveStoreOrderByID(ID);
@@ -198,7 +202,10 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else if (isShipment)
+            {
                 UpdateOrderProductsFromSingde();
+                ToSingdeProcessingStatus();
+            }
         }
         #endregion
 
