@@ -11,7 +11,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Prescription.DeclareFile;
 using His_Pos.NewClass.Product.Medicine;
 using System.Xml.Linq;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -20,6 +19,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using System.Linq;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 
 namespace His_Pos.NewClass.Prescription
 {

@@ -262,8 +262,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private bool isBuckle;
-        public bool IsBuckle {
+        private bool? isBuckle;
+        public bool? IsBuckle {
             get => isBuckle;
             set {
                 Set(() => IsBuckle, ref isBuckle, value);

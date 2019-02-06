@@ -96,15 +96,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (e.Key == Key.Enter && DivisionCombo.SelectedItem != null)
             {
-                MedicalNumber.Focus();
-                MedicalNumber.SelectAll();
-            }
-        }
-
-        private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
                 TreatDate.Focus();
                 TreatDate.SelectionStart = 0;
             }
@@ -281,7 +272,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void MedicineID_OnTextInput(object sender, TextCompositionEventArgs e)
         {
             var focusIndex = GetCurrentRowIndex(sender);
-            ((PrescriptionEditViewModel)DataContext).priviousSelectedIndex = focusIndex;
+            ((PrescriptionEditViewModel)DataContext).previousSelectedIndex = focusIndex;
         }
     }
 }
