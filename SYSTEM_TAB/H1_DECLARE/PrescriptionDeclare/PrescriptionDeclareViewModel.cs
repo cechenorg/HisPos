@@ -459,51 +459,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
             NoCardAdjust = new RelayCommand(NoCardAdjustAction);
         }
-        private void NoCardAdjustAction()
-        {
-            ConfirmWindow noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");
-            if (!(bool) noCard.DialogResult) return;
-            var error = CurrentPrescription.CheckPrescriptionRule(true);
-            if (!string.IsNullOrEmpty(error))
-            {
-                MessageWindow.ShowMessage(error, MessageType.ERROR);
-            }
-            else
-            {
-                StartNoCardAdjust();
-            }
-        }
-        private void StartNoCardAdjust()
-        {
-            CurrentPrescription.PrescriptionStatus.SetNoCardSatus();
-            CurrentPrescription.PrescriptionPoint.CountDeposit();
-            MainWindow.ServerConnection.OpenConnection();
-            switch (CurrentPrescription.Source)
-            {
-                case PrescriptionSource.Normal:
-                    if (CurrentPrescription.Treatment.Institution.Id != CooperativeInstitutionID)
-                        NormalAdjust(true);
-                    else
-                    {
-                        var e = new CooperativeRemarkInsertWindow();
-                        CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                        if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
-                            return;
-                        CooperativeAdjust(true);
-                    }
-                    break;
-                case PrescriptionSource.Cooperative:
-                    CooperativeAdjust(true);
-                    break;
-                case PrescriptionSource.ChronicReserve:
-                    ChronicAdjust(true);
-                    break;
-            }
-            MainWindow.ServerConnection.CloseConnection();
-            CurrentPrescription.PrescriptionStatus.UpdateStatus();
-            PrintMedBag(true);
-            ClearPrescription();
-        }
 
         private void InitialPrescription()
         {
@@ -992,6 +947,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CheckPrescriptionVariable();
             CheckDeclareStatus();
+        }
+        private void StartNoCardAdjust()
+        {
+            CurrentPrescription.PrescriptionStatus.SetNoCardSatus();
+            CurrentPrescription.PrescriptionPoint.CountDeposit();
+            MainWindow.ServerConnection.OpenConnection();
+            switch (CurrentPrescription.Source)
+            {
+                case PrescriptionSource.Normal:
+                    if (CurrentPrescription.Treatment.Institution.Id != CooperativeInstitutionID)
+                        NormalAdjust(true);
+                    else
+                    {
+                        var e = new CooperativeRemarkInsertWindow();
+                        CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                        if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
+                            return;
+                        CooperativeAdjust(true);
+                    }
+                    break;
+                case PrescriptionSource.Cooperative:
+                    CooperativeAdjust(true);
+                    break;
+                case PrescriptionSource.ChronicReserve:
+                    ChronicAdjust(true);
+                    break;
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription.PrescriptionStatus.UpdateStatus();
+            PrintMedBag(true);
+            ClearPrescription();
         }
         #endregion
     }
