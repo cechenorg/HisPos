@@ -188,7 +188,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 BusyContent = "取得杏德訂單最新狀態...";
                 DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                if(dataTable.Rows.Count > 0)
+                    StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
 
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();

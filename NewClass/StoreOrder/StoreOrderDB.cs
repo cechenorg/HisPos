@@ -234,19 +234,19 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 string dateString = row.Field<string>("VALIDDATE");
                 DateTime? validDate = null;
-                if (dateString.Length >= 7)
+                if (dateString != null)
                     validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
 
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", row.Field<string>("PRO_ID"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", row.Field<double>("AMOUNT"));
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", row.Field<double>("AMOUNT"));
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", row.Field<double>("PRICE") / row.Field<double>("AMOUNT"));
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", row.Field<double>("PRICE"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", row.Field<float>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", row.Field<float>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", row.Field<float>("PRICE") / row.Field<float>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", row.Field<float>("PRICE"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", validDate);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", row.Field<string>("BATCHNUM"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);

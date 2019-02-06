@@ -18,7 +18,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SingdeServer" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Database=rx_center;Server=59.124.201.229;Port=3310;User Id=pharm;Password=qwaszx101819;SslMode=none</Value>
+      <Value Profile="(Default)">Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none</Value>
     </Setting>
     <Setting Name="SystemSerialNumber" Type="System.String" Scope="User">
       <Value Profile="(Default)">HISPOS_Develop</Value>
