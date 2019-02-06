@@ -20,6 +20,9 @@ namespace His_Pos.NewClass.Product
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             NHIPrice = (double)row.Field<decimal>("Med_Price");
             SellPrice = (double)row.Field<decimal>("Unit_Price");
+            IsCommon = row.Field<bool>("Med_IsCommon");
+            IsFrozen = row.Field<bool>("Med_IsFrozen");
+            ControlLevel = row.Field<byte?>("Med_Control");
             //IsEnable = row.Field<bool>("Is_Enable");
         }
 
@@ -41,6 +44,9 @@ namespace His_Pos.NewClass.Product
         public int BasicAmount { get; set; }
         public double NHIPrice { get; set; }
         public double SellPrice { get; set; }
+        public int? ControlLevel { get; set; }
+        public bool IsCommon { get; set; }
+        public bool IsFrozen { get; set; }
         //public bool IsEnable { get; set; }
     }
 }
