@@ -205,12 +205,7 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else if (isShipment)
-            {
                 UpdateOrderProductsFromSingde();
-                SaveOrder();
-
-                //Update
-            }
         }
         #endregion
 
