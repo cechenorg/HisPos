@@ -5,7 +5,8 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -26,17 +27,17 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 }
             }
         }
-       
-
         
         internal static PurchaseProducts GetProductsByStoreOrderID(string orederID)
         {
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
         }
 
-        internal static PurchaseProducts GetSingdeProductsByStoreOrderID(string iD)
+        internal static void UpdateSingdeProductsByStoreOrderID(string orederID)
         {
-            throw new NotImplementedException();
+            DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
+
+            StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID);
         }
     }
 }

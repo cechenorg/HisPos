@@ -76,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             TabName = MainWindow.HisFeatures[1].Functions[1];
             Icon = MainWindow.HisFeatures[1].Icon;
-            RegisterCommend();
+            RegisterCommand();
         }
 
         #region ----- Define Actions -----
@@ -169,37 +169,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void InitVariables()
         {
             IsBusy = true;
-
-            MainWindow.ServerConnection.OpenConnection();
-            BusyContent = "取得訂單資料...";
-            StoreOrderCollection = StoreOrders.GetOrdersNotDone();
-            if (StoreOrderCollection.Count > 0)
-                CurrentStoreOrder = StoreOrderCollection[0];
-            MainWindow.ServerConnection.CloseConnection();
-            IsBusy = false;
-
+            
             BackgroundWorker backgroundWorker = new BackgroundWorker();
 
             backgroundWorker.DoWork += (sender, args) =>
             {
-                //MainWindow.ServerConnection.OpenConnection();
+                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得訂單資料...";
-                //StoreOrderCollection = StoreOrders.GetOrdersNotDone();
+                StoreOrderCollection = StoreOrders.GetOrdersNotDone();
 
-                //List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.ID).ToList();
-                //string dateTime = DateTime.Now.ToShortDateString();
+                List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.ID).ToList();
+                string dateTime = DateTime.Now.ToShortDateString();
 
-                //if (storeOrders.Count > 0)
-                //    dateTime = storeOrders[0].ID.Substring(1, 8);
+                if (storeOrders.Count > 0)
+                    dateTime = storeOrders[0].ID.Substring(1, 8);
 
-                //MainWindow.SingdeConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
 
-                //BusyContent = "取得杏德訂單最新狀態...";
-                //DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                //StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                BusyContent = "取得杏德訂單最新狀態...";
+                DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
+                StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
 
-                //MainWindow.SingdeConnection.CloseConnection();
-                //MainWindow.ServerConnection.CloseConnection();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
             };
 
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
@@ -213,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             backgroundWorker.RunWorkerAsync();
         }
 
-        private void RegisterCommend()
+        private void RegisterCommand()
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);

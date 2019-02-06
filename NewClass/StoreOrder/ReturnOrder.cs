@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderProducts.Remove((ReturnProduct)SelectedItem);
         }
 
-        protected override void GetOrderProductsFromSingde()
+        protected override void UpdateOrderProductsFromSingde()
         {
             //DataTable dataTable = StoreOrderDB.GetOrderProductsFromSingde(ID);
 

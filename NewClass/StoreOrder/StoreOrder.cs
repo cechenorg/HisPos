@@ -15,7 +15,7 @@ using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public abstract class StoreOrder: ObservableObject
+    public abstract class StoreOrder: ObservableObject, ICloneable
     {
         public StoreOrder(DataRow row)
         {
@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
-        protected abstract void GetOrderProductsFromSingde();
+        protected abstract void UpdateOrderProductsFromSingde();
         #endregion
 
         #region ----- Status Function -----
@@ -196,10 +196,17 @@ namespace His_Pos.NewClass.StoreOrder
             bool isShipment = dataRow.Field<bool>("IS_SHIPMENT");
 
             if (orderFlag == 2)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
+                });
+
                 ToScrapStatus();
+            }
             else if (isShipment)
             {
-                GetOrderProductsFromSingde();
+                UpdateOrderProductsFromSingde();
                 SaveOrder();
 
                 //Update
@@ -222,7 +229,12 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
-        
+
+        public object Clone()
+        {
+            return this;
+        }
+
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);

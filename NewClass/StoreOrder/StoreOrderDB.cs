@@ -37,6 +37,15 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
+        internal static void UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", orederID));
+            parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
+        }
+
         internal static DataTable GetNotDoneStoreOrders()
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
@@ -57,7 +66,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
+            new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
         public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas,Prescription.Prescription p) {
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
@@ -193,7 +202,7 @@ namespace His_Pos.NewClass.StoreOrder
             storeOrderMasterTable.Rows.Add(newRow); 
             return storeOrderMasterTable; 
         }
-        public static DataTable SetPurchaseOrderDetail(PurchaseOrder p) {
+        private static DataTable SetPurchaseOrderDetail(PurchaseOrder p) {
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             foreach (var pro in p.OrderProducts) {
@@ -216,6 +225,37 @@ namespace His_Pos.NewClass.StoreOrder
                 detailId++;
             } 
             return storeOrderDetailTable; 
+        }
+        private static DataTable SetPurchaseOrderDetail(DataTable table, string storeOrderID)
+        {
+            int detailId = 1;
+            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+            foreach (DataRow row in table.Rows)
+            {
+                string dateString = row.Field<string>("VALIDDATE");
+                DateTime? validDate = null;
+                if (dateString.Length >= 7)
+                    validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
+
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", row.Field<string>("PRO_ID"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", row.Field<double>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", row.Field<double>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", row.Field<double>("PRICE") / row.Field<double>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", row.Field<double>("PRICE"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", validDate);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", row.Field<string>("BATCHNUM"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;
+            }
+            return storeOrderDetailTable;
         }
         public static DataTable StoreOrderMasterTable() {
             DataTable masterTable = new DataTable();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,16 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void SaveOrder()
         {
-            StoreOrderDB.SavePurchaseOrder(this);
+            PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD)
@@ -99,13 +109,9 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
-        protected override void GetOrderProductsFromSingde()
+        protected override void UpdateOrderProductsFromSingde()
         {
-            OrderProducts = PurchaseProducts.GetSingdeProductsByStoreOrderID(ID);
-
-            SaveOrder();
-
-
+            PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID);
         }
 
         protected override bool CheckUnProcessingOrder()
