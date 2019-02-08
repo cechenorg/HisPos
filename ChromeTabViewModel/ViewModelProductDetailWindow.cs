@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelProductDetailWindow : ProductDetailViewModel, IViewModelProdcutDetailWindow
+    public class ViewModelProductDetailWindow : ProductDetailViewModel, IChromeTabViewModel
     {
         private bool _canMoveTabs;
         public bool CanMoveTabs
