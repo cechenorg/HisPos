@@ -482,4 +482,10 @@
   <data name="押金單據列印" xml:space="preserve">
     <value>押金單據列印中...</value>
   </data>
+  <data name="更新卡片" xml:space="preserve">
+    <value>就醫次數不足，更新中...</value>
+  </data>
+  <data name="檢查就醫次數" xml:space="preserve">
+    <value>就醫次數檢查中...</value>
+  </data>
 </root>

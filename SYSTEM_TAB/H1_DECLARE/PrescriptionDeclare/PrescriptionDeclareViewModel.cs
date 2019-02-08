@@ -401,7 +401,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void NoCardAdjustAction()
         {
-            ConfirmWindow noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");
+            var noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");
             if (!(bool)noCard.DialogResult) return;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
@@ -829,16 +829,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 CurrentPrescription.PrescriptionStatus.IsGetCard = true;
-                CurrentPrescription.Treatment.GetLastMedicalNumber();
-                CurrentPrescription.Card.GetMedicalNumber(1);
+                BusyContent = StringRes.檢查就醫次數;
                 CurrentPrescription.Card.GetRegisterBasic();
                 if (CurrentPrescription.Card.AvailableTimes != null)
                 {
                     if (CurrentPrescription.Card.AvailableTimes == 0)
                     {
+                        BusyContent = StringRes.更新卡片;
                         CurrentPrescription.Card.UpdateCard();
                     }
                 }
+                BusyContent = StringRes.取得就醫序號;
+                CurrentPrescription.Treatment.GetLastMedicalNumber();
+                CurrentPrescription.Card.GetMedicalNumber(1);
             };
             worker.RunWorkerCompleted += (o, ea) => { CanAdjust = true; };
             worker.RunWorkerAsync();
