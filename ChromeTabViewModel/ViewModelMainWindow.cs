@@ -317,8 +317,9 @@ namespace His_Pos.ChromeTabViewModel
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow.ShowMessage("Export:"+ ex.Message, MessageType.ERROR);
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("Export:" + ex.Message, MessageType.ERROR);
                 });
             }
         }
