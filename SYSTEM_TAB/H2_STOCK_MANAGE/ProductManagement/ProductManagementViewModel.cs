@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.ProductManagement;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 {
@@ -13,5 +17,61 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             return this;
         }
+
+        #region ----- Define Command -----
+        public RelayCommand SearchCommand { get; set; }
+        #endregion
+
+        #region ----- Define Variables -----
+
+        #region ///// Search Condition /////
+        public string SearchID { get; set; } = "";
+        public string SearchName { get; set; } = "";
+        public bool SearchIsEnable { get; set; }
+        public bool SearchIsInventoryZero { get; set; }
+        #endregion
+
+        private ProductManageStructs searchProductCollection;
+        private double totalStockValue;
+
+        public ProductManageStructs SearchProductCollection
+        {
+            get { return searchProductCollection; }
+            set { Set(() => SearchProductCollection, ref searchProductCollection, value); }
+        }
+        public double TotalStockValue
+        {
+            get { return totalStockValue; }
+            set { Set(() => TotalStockValue, ref totalStockValue, value); }
+        }
+
+        #endregion
+
+        public ProductManagementViewModel()
+        {
+            RegisterCommand();
+        }
+
+        #region ----- Define Actions -----
+        private void SearchAction()
+        {
+            if (!IsSearchConditionValid()) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID, SearchName, SearchIsEnable, SearchIsInventoryZero);
+            MainWindow.ServerConnection.CloseConnection();
+        }
+        #endregion
+
+        #region ----- Define Functions -----
+        private void RegisterCommand()
+        {
+            SearchCommand = new RelayCommand(SearchAction);
+        }
+        private bool IsSearchConditionValid()
+        {
+            return true;
+        }
+        #endregion
     }
 }

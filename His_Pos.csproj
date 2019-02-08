@@ -370,6 +370,10 @@
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />

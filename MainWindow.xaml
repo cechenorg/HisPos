@@ -37,6 +37,7 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -58,8 +59,8 @@
         <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModel}">
             <prescriptionSearch:PrescriptionSearchView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
-            <inventoryManagement:InventoryManagementView />
+        <DataTemplate DataType="{x:Type productManagement:ProductManagementViewModel}">
+            <productManagement:ProductManagementView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <productPurchaseReturn:ProductPurchaseReturnView/>

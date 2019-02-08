@@ -224,7 +224,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductCommand = new RelayCommand(AddProductAction);
         }
         
-        #region ----- Messenger Functions -----
+        #region ///// Messenger Functions /////
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))

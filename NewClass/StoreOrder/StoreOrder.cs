@@ -17,6 +17,40 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public abstract class StoreOrder: ObservableObject, ICloneable
     {
+        #region ----- Define Variables -----
+        private Product.Product selectedItem;
+        private OrderStatusEnum orderStatus;
+
+        protected int initProductCount = 0;
+
+        public Product.Product SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = false;
+
+                Set(() => SelectedItem, ref selectedItem, value);
+
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = true;
+            }
+        }
+        public OrderStatusEnum OrderStatus
+        {
+            get { return orderStatus; }
+            set { Set(() => OrderStatus, ref orderStatus, value); }
+        }
+        public OrderTypeEnum OrderType { get; set; }
+        public string ID { get; set; }
+        public Manufactory.Manufactory OrderManufactory { get; set; }
+        public WareHouse.WareHouse OrderWarehouse { get; set; }
+        public string OrderEmployeeName { get; set; }
+        public string Note { get; set; }
+        public double TotalPrice { get; set; }
+        #endregion
+
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -55,44 +89,10 @@ namespace His_Pos.NewClass.StoreOrder
 
             initProductCount = row.Field<int>("ProductCount");
         }
-
-        #region ----- Define Variables -----
-        private Product.Product selectedItem;
-        private OrderStatusEnum orderStatus;
-
-        protected int initProductCount = 0;
-
-        public Product.Product SelectedItem
-        {
-            get { return selectedItem; }
-            set
-            {
-                if(selectedItem != null)
-                    ((IDeletableProduct) selectedItem).IsSelected = false;
-
-                Set(() => SelectedItem, ref selectedItem, value);
-
-                if (selectedItem != null)
-                    ((IDeletableProduct)selectedItem).IsSelected = true;
-            }
-        }
-        public OrderStatusEnum OrderStatus
-        {
-            get { return orderStatus; }
-            set { Set(() => OrderStatus, ref orderStatus, value); }
-        }
-        public OrderTypeEnum OrderType { get; set; }
-        public string ID { get; set; }
-        public Manufactory.Manufactory OrderManufactory { get; set; }
-        public WareHouse.WareHouse OrderWarehouse { get; set; }
-        public string OrderEmployeeName { get; set; }
-        public string Note { get; set; }
-        public double TotalPrice { get; set; }
-        #endregion
-
+        
         #region ----- Define Functions -----
 
-        #region ----- Abstract Function -----
+        #region ///// Abstract Function /////
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
@@ -100,7 +100,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract void UpdateOrderProductsFromSingde();
         #endregion
 
-        #region ----- Status Function -----
+        #region ///// Status Function /////
         public void MoveToNextStatus()
         {
             switch (OrderStatus)
@@ -157,7 +157,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
-        #region ----- Check Function -----
+        #region ///// Check Function /////
         public bool CheckOrder()
         {
             switch (OrderStatus)
@@ -178,7 +178,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract bool CheckSingdeProcessingOrder();
         #endregion
 
-        #region ----- Singde Function -----
+        #region ///// Singde Function /////
         private bool SendOrderToSingde()
         {
             MainWindow.SingdeConnection.OpenConnection();
