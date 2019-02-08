@@ -25,7 +25,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCurrentPharmacy]", parameterList);
               
         }
-
+        public static void InsertPharmacy(Pharmacy p) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CurPha_ID", p.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "CurPha_Name", p.Name);
+            DataBaseFunction.AddSqlParameter(parameterList, "CurPha_Address", p.Address);
+            DataBaseFunction.AddSqlParameter(parameterList, "CurPha_Telephone", p.Tel); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCurrentPharmacy]", parameterList);
+        }
 
     }
 }

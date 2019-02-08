@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,20 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
         public VerifyPharmacyWindow()
         {
             InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                switch (notificationMessage.Notification)
+                {
+                    case "CloseVerifyPharmacyWindow":
+                        Close();
+                        break;
+                }
+            });
             ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            Messenger.Default.Unregister<NotificationMessage>(this);
         }
     }
 }

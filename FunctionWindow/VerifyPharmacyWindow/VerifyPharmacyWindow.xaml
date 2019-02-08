@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.FunctionWindow.VerifyPharmacyWindow"
         mc:Ignorable="d"
+        Closing="Window_Closing"
         Title="VerifyPharmacyWindow" Height="330" Width="800">
     <Window.DataContext>
         <local:VerifyPharmacyViewModel/>
@@ -21,7 +22,7 @@
         <StackPanel Orientation="Horizontal">
             <Rectangle Width="150"/>
             <Label Content="請輸入認證碼" Style="{StaticResource BoldLabelHeader25}"/>
-            <TextBox  VerticalAlignment="Center" FontSize="18" Width="300" Height="35"/>
+            <TextBox  VerticalAlignment="Center" FontSize="18" Width="300" Height="35" Text="{Binding VerifyNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Rectangle Width="95"/>
             <Button Content="認證" Height="35" FontSize="20" Background="DarkCyan" Command="{Binding VerifyCommand}"/>
         </StackPanel>
@@ -41,9 +42,9 @@
             <Label Content="地址"  Style="{StaticResource BoldLabelHeader25}"/>
             <Label Content="{Binding PharmacyAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelHeader25}"/>
         </StackPanel>
-        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10,0,0,0">
-            <Rectangle Width="700"/>
-            <Button Content="確定" Height="35" FontSize="20" Background="RoyalBlue" Command="{Binding SubmmitCommand}" IsEnabled="{Binding Isverify,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" /> 
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10,0,0,10">
+            <Rectangle Width="695"/>
+            <Button Content="確定" Height="35" FontSize="20" Background="RoyalBlue" Command="{Binding SubmitCommand}" IsEnabled="{Binding Isverify,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" /> 
         </StackPanel>
     </Grid>
 </Window>

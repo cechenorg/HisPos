@@ -24,8 +24,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             VpnIp = r.Field<string>("CurPha_VPN");
             NewReader = r.Field<bool>("CurPha_ReaderIsNew");
         }
-
-        public string Id { get; set; }
+        private string id;
+        public string Id {
+            get { return id; }
+            set { Set(() => Id,ref id,value); }
+        }
         public string Name { get; set; } 
         public string Address { get; set; }
         public string Tel { get; set; }
@@ -50,6 +53,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         }
         public void SetPharmacy() {
             PharmacyDb.SetPharmacy(this);
+        }
+        public void InsertPharmacy() {
+            PharmacyDb.InsertPharmacy(this);
         }
         #endregion
     }

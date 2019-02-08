@@ -109,7 +109,6 @@ namespace His_Pos.Service
                         
                         break;
                     default:
-                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
             }

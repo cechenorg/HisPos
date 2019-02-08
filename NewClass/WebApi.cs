@@ -37,6 +37,8 @@ namespace His_Pos.NewClass
                 };
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetCooperativeClinicId", keyValues);
+            if (table.Count == 0)
+                return string.Empty;
             return table[0].SelectSingleNode("ArrayOfString/string").InnerText;
         }
         internal static XmlDocument GetPharmacyInfoByVerify(string verifyKey) {
@@ -47,6 +49,15 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetPharmacyInfoByRemark", keyValues);
             return table[0];
+        }
+        internal static void UpdatePharmacyMedicalNum(string medicalNum) {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                     {"VerifyKey", Properties.Settings.Default.SystemSerialNumber },
+                     {"MedicalNum", medicalNum }
+                };
+            HttpMethod httpMethod = new HttpMethod();
+            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdatePharmacyMedicalNum", keyValues);
         }
     }
 }
