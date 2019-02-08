@@ -29,14 +29,7 @@ namespace His_Pos.NewClass
             CooperativeClinicJson.CooperativeClinicJsonDb.InsertCooperJson(json);
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues);
-        }
-
-        internal static void SyncServerData(string localIP) {
-            Dictionary<string, string> keyValues;
-            keyValues = new Dictionary<string, string> { { "ip", localIP }, { "file", "" } };
-            HttpMethod httpMethod = new HttpMethod();
-            httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SyncServerData", keyValues);
-        }
+        } 
         internal static string GetCooperativeClinicId(string medicalNum) {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
@@ -45,6 +38,15 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetCooperativeClinicId", keyValues);
             return table[0].SelectSingleNode("ArrayOfString/string").InnerText;
+        }
+        internal static XmlDocument GetPharmacyInfoByVerify(string verifyKey) {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                     {"verifyKey", verifyKey }
+                };
+            HttpMethod httpMethod = new HttpMethod();
+            List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetPharmacyInfoByRemark", keyValues);
+            return table[0];
         }
     }
 }

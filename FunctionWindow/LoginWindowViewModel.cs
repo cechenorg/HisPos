@@ -38,9 +38,8 @@ namespace His_Pos.FunctionWindow
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
 
-            if (!IsConnectionDataValid())
-            {
-                InitConnectionWindow initConnectionWindow = new InitConnectionWindow();
+            if (CheckSettingFileExist()) {
+                VerifyPharmacyWindow.VerifyPharmacyWindow verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow(); 
             }
         }
 
@@ -79,7 +78,13 @@ namespace His_Pos.FunctionWindow
             SQLServerConnection localConnection = new SQLServerConnection();
             return localConnection.CheckConnection();
         }
+        private static bool CheckSettingFileExist() {
+             
+            if (!Directory.Exists("C:\\Program Files\\HISPOS"))
+                Directory.CreateDirectory("C:\\Program Files\\HISPOS"); 
 
+            return File.Exists("C:\\Program Files\\HISPOS\\settings.singde"); 
+        }
         private static void CheckSettingFiles()
         {
             string folderPath = "C:\\Program Files\\HISPOS";
