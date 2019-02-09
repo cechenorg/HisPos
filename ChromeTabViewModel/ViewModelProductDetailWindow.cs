@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
@@ -14,6 +15,11 @@ namespace His_Pos.ChromeTabViewModel
         #region ----- Define Variables -----
         private bool _canMoveTabs;
         private bool _showAddButton;
+
+        public double WindowWidth => SystemParameters.WorkArea.Width * 0.8;
+        public double WindowHeight => SystemParameters.WorkArea.Height * 0.8;
+        public double StartTop => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
+        public double StartLeft => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
 
         public bool CanMoveTabs
         {

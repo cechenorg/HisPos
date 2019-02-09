@@ -6,10 +6,19 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
              mc:Ignorable="d">
     <UserControl.DataContext>
         <local:ProductManagementViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <DataTemplate x:Key="MedicineIcon" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <Image Source="/Images/BlueDot.png" Width="18"/>
+        </DataTemplate>
+        <DataTemplate x:Key="OTCIcon" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <Image Source="/Images/OrangeDot.png" Width="18"/>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -65,7 +74,18 @@
                 <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image MinWidth="18" MaxWidth="18" Height="18" Source="{Binding TypeIcon}" Margin="10,0,0,0"/>
+                            <ContentControl Width="20">
+                                <ContentControl.Style>
+                                    <Style TargetType="{x:Type ContentControl}">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource MedicineIcon}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ProductType}" Value="OTC">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource OTCIcon}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

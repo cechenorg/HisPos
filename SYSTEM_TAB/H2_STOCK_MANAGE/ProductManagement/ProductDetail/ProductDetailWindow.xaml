@@ -6,15 +6,18 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
+        xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelProductDetailWindow}"
-        Title="ProductDetail" Height="{Binding RelativeSource={RelativeSource Self}, Path=WindowHeight}" 
-        Width="{Binding RelativeSource={RelativeSource Self}, Path=WindowWidth}"
-        Left="{Binding RelativeSource={RelativeSource Self}, Path=StartLeft}" 
-        Top="{Binding RelativeSource={RelativeSource Self}, Path=StartTop}"
+        Title="ProductDetail" Height="{Binding WindowHeight}" 
+        Width="{Binding  WindowWidth}"
+        Left="{Binding StartLeft}" 
+        Top="{Binding StartTop}"
         Closed="ProductDetailWindow_OnClosed">
     <Window.Resources>
-        
+        <DataTemplate DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <medicineControl:MedicineControlView/>
+        </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Height="930" Width="1600">
