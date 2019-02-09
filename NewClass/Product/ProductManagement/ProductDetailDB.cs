@@ -20,5 +20,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
+
+        internal static ProductManageMedicine GetProductManageMedicineByID(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

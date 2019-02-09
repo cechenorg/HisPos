@@ -64,7 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((ProductManageStruct)row.Item).ID, nameof(ProductManagementView)));
+            Messenger.Default.Send(new NotificationMessage<ProductManageStruct>(this, (ProductManageStruct)row.Item, nameof(ProductManagementView)));
         }
     }
 }

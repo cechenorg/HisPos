@@ -371,6 +371,7 @@
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />

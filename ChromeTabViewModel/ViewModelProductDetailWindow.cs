@@ -3,15 +3,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 
 namespace His_Pos.ChromeTabViewModel
 {
     public class ViewModelProductDetailWindow : ProductDetailViewModel, IChromeTabViewModel
     {
-        #region ----- Define Command -----
-        #endregion
-
         #region ----- Define Variables -----
         private bool _canMoveTabs;
         private bool _showAddButton;
@@ -57,23 +55,16 @@ namespace His_Pos.ChromeTabViewModel
 
             RegisterMessenger();
         }
-        
-        #region ----- Define Actions -----
-        #endregion
 
         #region ----- Define Functions -----
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedProductDetail);
+            Messenger.Default.Register<NotificationMessage<ProductManageStruct>>(this, GetSelectedProductDetail);
         }
-        private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
+        private void GetSelectedProductDetail(NotificationMessage<ProductManageStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductManagementView))
-            {
-                //MainWindow.ServerConnection.OpenConnection();
-
-                //MainWindow.ServerConnection.CloseConnection();
-            }
+                AddTabCommandAction(notificationMessage.Content);
         }
         #endregion
     }
