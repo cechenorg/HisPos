@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -43,6 +45,35 @@ namespace His_Pos.ChromeTabViewModel
 
             CanMoveTabs = true;
             ShowAddButton = false;
+
+            RegisterMessenger();
         }
+
+        #region ----- Define Command -----
+        #endregion
+
+        #region ----- Define Variables -----
+        #endregion
+
+        #region ----- Define Actions -----
+        #endregion
+
+        #region ----- Define Functions -----
+        private void RegisterMessenger()
+        {
+            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedProductDetail);
+        }
+        private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductManagementView))
+            {
+
+
+                //MainWindow.ServerConnection.OpenConnection();
+
+                //MainWindow.ServerConnection.CloseConnection();
+            }
+        }
+        #endregion
     }
 }

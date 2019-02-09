@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d">
     <UserControl.DataContext>
         <local:ProductManagementViewModel/>
@@ -17,15 +18,15 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
             <Label Content="商品代碼" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16"/>
+            <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchName, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16"/>
+            <TextBox Text="{Binding SearchName, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <CheckBox Content="顯示無庫存" IsChecked="{Binding SearchIsInventoryZero, Mode=TwoWay}" Background="RoyalBlue" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <CheckBox Content="顯示已停用" IsChecked="{Binding SearchIsEnable, Mode=TwoWay}" Margin="10,0,20,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <Rectangle Width="510"/>
-            <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding SearchCommand}"/>
+            <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Command="{Binding SearchCommand}"/>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding SearchProductCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+        <DataGrid Name="ProductDataGrid" ItemsSource="{Binding SearchProductCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="1">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -53,6 +54,8 @@
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseEnter" Handler="DataGridRow_OnMouseEnter"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_OnMouseDoubleClick"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Height" Value="40"/>
@@ -129,11 +132,11 @@
         <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
             <!--<Button Content="+ 新增產品" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="AddNewProduct"/>-->
             <Label Content="查詢結果  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding SearchProductCollection.Count}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding SearchProductCollection.Count, FallbackValue=0}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
             <Label Content="筆" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Rectangle Width="540"/>
             <Label Content="查詢範圍庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding SearchProductCollection.TotalStockValueInRange, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding SearchProductCollection.TotalStockValueInRange, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
             <Label Content="庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Label Content="{Binding TotalStockValue, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
         </StackPanel>
