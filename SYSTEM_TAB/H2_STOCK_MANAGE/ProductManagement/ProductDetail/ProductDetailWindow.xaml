@@ -12,7 +12,7 @@
         Width="{Binding RelativeSource={RelativeSource Self}, Path=WindowWidth}"
         Left="{Binding RelativeSource={RelativeSource Self}, Path=StartLeft}" 
         Top="{Binding RelativeSource={RelativeSource Self}, Path=StartTop}"
-        >
+        Closed="ProductDetailWindow_OnClosed">
     <Window.Resources>
         
     </Window.Resources>

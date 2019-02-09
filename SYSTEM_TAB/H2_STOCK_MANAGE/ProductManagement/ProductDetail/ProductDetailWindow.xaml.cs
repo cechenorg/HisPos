@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
 {
@@ -19,9 +20,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
     /// </summary>
     public partial class ProductDetailWindow : Window
     {
+        private static ProductDetailWindow Instance { get; set; }
+
         public ProductDetailWindow()
         {
             InitializeComponent();
+            Show();
+        }
+
+        public static void ShowProductDetailWindow()
+        {
+            if (Instance is null)
+                Instance = new ProductDetailWindow();
+        }
+        private void ProductDetailWindow_OnClosed(object sender, EventArgs e)
+        {
+            Instance = null;
         }
     }
 }

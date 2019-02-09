@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 {
@@ -60,6 +61,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             DataGridRow row = sender as DataGridRow;
 
             if (row?.Item is null) return;
+
+            ProductDetailWindow.ShowProductDetailWindow();
 
             Messenger.Default.Send(new NotificationMessage<string>(this, ((ProductManageStruct)row.Item).ID, nameof(ProductManagementView)));
         }

@@ -8,7 +8,13 @@ namespace His_Pos.ChromeTabViewModel
 {
     public class ViewModelProductDetailWindow : ProductDetailViewModel, IChromeTabViewModel
     {
+        #region ----- Define Command -----
+        #endregion
+
+        #region ----- Define Variables -----
         private bool _canMoveTabs;
+        private bool _showAddButton;
+
         public bool CanMoveTabs
         {
             get { return _canMoveTabs; }
@@ -20,8 +26,6 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
-        //this property is to show you can bind the visibility of the add button
-        private bool _showAddButton;
         public bool ShowAddButton
         {
             get { return _showAddButton; }
@@ -33,14 +37,13 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
+        #endregion
 
         public ViewModelProductDetailWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
           
-            //This sort description is what keeps the source collection sorted, based on tab number. 
-            //You can also use the sort description to manually sort the tabs, based on your own criterias.
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
 
             CanMoveTabs = true;
@@ -48,13 +51,7 @@ namespace His_Pos.ChromeTabViewModel
 
             RegisterMessenger();
         }
-
-        #region ----- Define Command -----
-        #endregion
-
-        #region ----- Define Variables -----
-        #endregion
-
+        
         #region ----- Define Actions -----
         #endregion
 
@@ -67,8 +64,6 @@ namespace His_Pos.ChromeTabViewModel
         {
             if (notificationMessage.Notification == nameof(ProductManagementView))
             {
-
-
                 //MainWindow.ServerConnection.OpenConnection();
 
                 //MainWindow.ServerConnection.CloseConnection();
