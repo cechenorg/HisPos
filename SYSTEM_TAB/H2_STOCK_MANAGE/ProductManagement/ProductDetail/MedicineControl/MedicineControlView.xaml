@@ -179,20 +179,20 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Label Content="副作用" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25"/>
-                    <RichTextBox Name="SideEffectBox" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" VerticalScrollBarVisibility="Visible" />
+                    <Label Content="副作用" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
+                    <TextBox Text="{Binding Medicine.SideEffect, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Label Content="適應症" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25"/>
-                    <RichTextBox Name="IndicationBox" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" VerticalScrollBarVisibility="Visible"/>
+                    <Label Content="適應症" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
+                    <TextBox Text="{Binding Medicine.Indication, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <TextBlock Text="注意事項" Width="52" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="25,0,25,0"/>
-                    <RichTextBox Name="WarningBox" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" VerticalScrollBarVisibility="Visible"/>
+                    <TextBlock Text="注意事項" Width="52" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="25,0,25,0" Foreground="Black"/>
+                    <TextBox Text="{Binding Medicine.Warnings, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <Label Content="備註" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25"/>
-                    <RichTextBox Name="NoteBox" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" VerticalScrollBarVisibility="Visible"/>
+                    <Label Content="備註" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
+                    <TextBox Text="{Binding Medicine.Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
