@@ -13,10 +13,10 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="MedicineIcon" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
-            <Image Source="/Images/BlueDot.png" Width="18"/>
+            <Image Source="/Images/BlueDot.png" Width="15"/>
         </DataTemplate>
         <DataTemplate x:Key="OTCIcon" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
-            <Image Source="/Images/OrangeDot.png" Width="18"/>
+            <Image Source="/Images/OrangeDot.png" Width="15"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
@@ -74,7 +74,7 @@
                 <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl Width="20">
+                            <ContentControl Margin="10,0,0,0">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource MedicineIcon}" />

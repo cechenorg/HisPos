@@ -1,5 +1,8 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System.Data;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
@@ -22,7 +25,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Variables -----
         public ProductManageMedicine Medicine { get; set; }
         public ProductManageMedicine BackUpMedicine { get; set; }
+        public ProductManageMedicineDetail MedicineDetail { get; set; }
         #endregion
+        
+        public MedicineControlViewModel()
+        {
+        }
 
         public MedicineControlViewModel(string id)
         {
@@ -65,8 +73,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void InitMedicineData(string id)
         {
             MainWindow.ServerConnection.OpenConnection();
-            Medicine = ProductDetailDB.GetProductManageMedicineByID(id);
+            DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(id);
             MainWindow.ServerConnection.CloseConnection();
+
+            if (manageMedicineDataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
+            MedicineDetail = new ProductManageMedicineDetail(manageMedicineDataTable.Rows[0]);
 
             BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
         }

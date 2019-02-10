@@ -137,10 +137,10 @@ namespace His_Pos.ChromeTabViewModel
             switch (newProduct.ProductType)
             {
                 case ProductTypeEnum.OTC:
-                    newTab = new OtcDetailView() { TabName = newProduct.ID, Icon = "..\\..\\Images\\OrangeDot.png" };
+                    newTab = new OtcDetailView() { TabName = newProduct.ID, Icon = "/Images/OrangeDot.png" };
                     break;
                 case ProductTypeEnum.Medicine:
-                    newTab = new MedicineControlViewModel(newProduct.ID) { TabName = newProduct.ID, Icon = "..\\..\\Images\\BlueDot.png" };
+                    newTab = new MedicineControlViewModel(newProduct.ID) { TabName = newProduct.ID, Icon = "/Images/BlueDot.png" };
                     break;
                 default:
                     return;

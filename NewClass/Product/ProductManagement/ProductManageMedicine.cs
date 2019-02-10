@@ -11,41 +11,38 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         private ProductManageMedicine() { }
 
-        public ProductManageMedicine(DataRow dataRow) : base(dataRow)
+        public ProductManageMedicine(DataRow row) : base(row)
         {
-            Status = dataRow["PRO_STATUS"].ToString().Equals("1");
-            StockValue = dataRow["TOTAL"].ToString();
-            Location = dataRow["PRO_LOCATION"].ToString();
-            Note = dataRow["PRO_DESCRIPTION"].ToString();
-            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
-            Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
-            Control = dataRow["HISMED_CONTROL"].ToString();
-            Common = dataRow["HISMED_COMMON"].ToString().Equals("True");
-            WareHouse = dataRow["PROWAR_NAME"].ToString();
-            WareHouseId = dataRow["PROWAR_ID"].ToString();
-            Indication = dataRow["HISMED_INDICATION"].ToString();
-            SideEffect = dataRow["HISMED_SIDEFFECT"].ToString();
-            BarCode = dataRow["PRO_BARCODE"].ToString();
-            Warnings = dataRow["HISMED_NOTE"].ToString();
+            Status = row.Field<bool>("Pro_IsEnable");
+            StockValue = row.Field<double>("STOCK_VALUE");
+            Note = row.Field<string>("Pro_Note");
+            IsCommon = row.Field<bool>("Med_IsCommon");
+            Indication = row.Field<string>("Med_Indication");
+            SideEffect = row.Field<string>("Med_SideEffect");
+            BarCode = row.Field<string>("Pro_BarCode");
+            Warnings = row.Field<string>("Med_Warning");
+            Inventory = row.Field<double>("Inv_Inventory");
+            SafeAmount = row.Field<int?>("Inv_SafeAmount");
+            BasicAmount = row.Field<int?>("Inv_BasicAmount");
+            MinOrderAmount = row.Field<int>("Pro_MinOrder");
         }
-        public string Location { get; set; }
+        
         public bool Status { get; set; }
-        public bool Frozen { get; set; }
-        public string Control { get; set; }
-        public bool Common { get; set; }
+        public bool IsCommon { get; set; }
         public string Note { get; set; }
-        public string Ingredient { get; set; }
         public string Indication { get; set; }
         public string Warnings { get; set; }
         public string SideEffect { get; set; }
-        public string WareHouseId { get; set; }
-        public string WareHouse { get; set; }
         public string BarCode { get; set; }
-        public string StockValue { get; set; }
+        public double StockValue { get; set; }
+        public double Inventory { get; set; }
+        public int? SafeAmount { get; set; }
+        public int? BasicAmount { get; set; }
+        public int MinOrderAmount { get; set; }
 
         public object Clone()
         {
-            throw new NotImplementedException();
+            return new ProductManageMedicine();
         }
     }
 }

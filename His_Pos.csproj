@@ -372,6 +372,7 @@
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicineDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />
@@ -657,6 +658,10 @@
       <DependentUpon>MedicineControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml.cs">
+      <DependentUpon>OTCControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml.cs">
       <DependentUpon>ProductDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1154,6 +1159,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1621,7 +1630,6 @@
     <Folder Include="Class\Position\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
-    <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
   <ItemGroup>

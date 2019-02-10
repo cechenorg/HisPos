@@ -32,6 +32,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
         {
             if (Instance is null)
                 Instance = new ProductDetailWindow();
+
+            Instance.Activate();
         }
         private void ProductDetailWindow_OnClosed(object sender, EventArgs e)
         {
