@@ -93,6 +93,14 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.Id}', '{storeOrderID}')");
         }
+        internal static void StoreOrderToDone(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToDone]", parameters);
+        }
 
         #region TableSet
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p) {
@@ -114,6 +122,7 @@ namespace His_Pos.NewClass.StoreOrder
             storeOrderMasterTable.Rows.Add(newRow);
             return storeOrderMasterTable; 
         }
+
         public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
         {
             int detailId = 1;

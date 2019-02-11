@@ -112,7 +112,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             if (CurrentStoreOrder.CheckOrder())
             {
+                MainWindow.ServerConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
+                MainWindow.ServerConnection.CloseConnection();
                 StoreOrderCollection.ReloadCollection();
             }
         }
