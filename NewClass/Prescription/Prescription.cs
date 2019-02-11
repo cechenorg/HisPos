@@ -503,7 +503,6 @@ namespace His_Pos.NewClass.Prescription
                 {
                     Treatment.Copayment = VM.GetCopayment("I20");
                 }
-                
             }
             else
             {
@@ -591,28 +590,55 @@ namespace His_Pos.NewClass.Prescription
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var doctor = string.Empty;
-            var cusGender = Patient.ID.Equals(0) ? " " : Patient.CheckGender();
-            var parameters = new List<ReportParameter>
+            if (Treatment.AdjustCase.Id.Equals("0"))
             {
-                new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                new ReportParameter("PatientName", Patient.ID.Equals(0)?" ":Patient.Name),
-                new ReportParameter("Gender", cusGender),
-                new ReportParameter("Birthday",Patient.ID.Equals(0)?" ":
-                    DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
-                new ReportParameter("AdjustDate", adjustDate),
-                new ReportParameter("Hospital", Treatment.Institution.Name),
-                new ReportParameter("Doctor", doctor), //病歷號
-                new ReportParameter("MedicalNumber", Treatment.TempMedicalNumber),
-                new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
-                new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
-                new ReportParameter("CopaymentCost", PrescriptionPoint.CopaymentPoint.ToString()),
-                new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
-                new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
-                new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
-                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
-            };
-            rptViewer.LocalReport.SetParameters(parameters);
+                var parameters = new List<ReportParameter>
+                {
+                    new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
+                    new ReportParameter("PatientName", Patient.ID.Equals(0)?string.Empty:Patient.Name),
+                    new ReportParameter("Gender", string.Empty),
+                    new ReportParameter("Birthday",Patient.ID.Equals(0)?string.Empty:
+                        DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
+                    new ReportParameter("AdjustDate", adjustDate),
+                    new ReportParameter("Hospital", Treatment.Institution.Name),
+                    new ReportParameter("Doctor", doctor), //病歷號
+                    new ReportParameter("MedicalNumber", Treatment.TempMedicalNumber),
+                    new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
+                    new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
+                    new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
+                    new ReportParameter("CopaymentCost", PrescriptionPoint.CopaymentPoint.ToString()),
+                    new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
+                    new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
+                    new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
+                    new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
+                };
+                rptViewer.LocalReport.SetParameters(parameters);
+            }
+            else
+            {
+                var cusGender = Patient.ID.Equals(0) ? string.Empty : Patient.CheckGender();
+                var parameters = new List<ReportParameter>
+                {
+                    new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
+                    new ReportParameter("PatientName", Patient.ID.Equals(0)?string.Empty:Patient.Name),
+                    new ReportParameter("Gender", cusGender),
+                    new ReportParameter("Birthday",Patient.ID.Equals(0)?string.Empty:
+                        DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
+                    new ReportParameter("AdjustDate", adjustDate),
+                    new ReportParameter("Hospital", Treatment.Institution.Name),
+                    new ReportParameter("Doctor", doctor), //病歷號
+                    new ReportParameter("MedicalNumber", Treatment.TempMedicalNumber),
+                    new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
+                    new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
+                    new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
+                    new ReportParameter("CopaymentCost", PrescriptionPoint.CopaymentPoint.ToString()),
+                    new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
+                    new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
+                    new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
+                    new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
+                };
+                rptViewer.LocalReport.SetParameters(parameters);
+            }
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
             ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer,true);

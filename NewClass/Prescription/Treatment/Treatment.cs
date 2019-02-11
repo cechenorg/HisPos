@@ -86,6 +86,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
             Pharmacist = VM.CurrentPharmacy.GetPharmacist();
+            Copayment = new Cop();
         }
 
         public Treatment(DataRow r)
