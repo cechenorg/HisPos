@@ -95,7 +95,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="8,0,0,0">
                                             <Image  Source="/Images/Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                                            <Label  Content="{Binding FileContent.Tdata.T2}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                            <Label  Content="{Binding PharmacyID}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
                                             <Image Source="/Images/Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
                                             <!--Content="{Binding DeclareFile.TotalPoint}"-->
                                             <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
@@ -113,7 +113,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" DataContext="{Binding SelectedFile}">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="10" Height="50">
@@ -121,7 +121,7 @@
                             <xctk:MaskedTextBox Name="Start" Width="100" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                                 <xctk:MaskedTextBox.Text>
-                                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
@@ -133,7 +133,7 @@
                             <xctk:MaskedTextBox Name="End" Width="100" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                                 <xctk:MaskedTextBox.Text>
-                                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
@@ -142,24 +142,26 @@
                                 </xctk:MaskedTextBox.Text>
                             </xctk:MaskedTextBox>
                             <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                            <ComboBox Name="HisPerson" ItemsSource="{Binding MedicalPersonnels}" Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
+                            <ComboBox Name="HisPerson" ItemsSource="{Binding DataContext.MedicalPersonnels,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" SelectedItem="{Binding SelectedPharmacist,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
                             <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                            <ComboBox Name="AdjustCaseCombo" ItemsSource="{Binding AdjustCases}" DisplayMemberPath="FullName" Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                            <ComboBox Name="AdjustCaseCombo" ItemsSource="{Binding DataContext.AdjustCases,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" SelectedItem="{Binding SelectedAdjustCase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="FullName" Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Height="50">
                             <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" CaretBrush="Red"
-                                     Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.Institution.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                     Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.InputBindings>
-                                    <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
+                                    <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                                 </TextBox.InputBindings>
                             </TextBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <DataGrid
-                     Name="PrescriptionList" Height="630"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
-                     CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10" ItemsSource="{Binding Path=PrescriptionCollection,UpdateSourceTrigger=PropertyChanged}">
+                     Name="PrescriptionList" Height="630"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding DataContext.SelectedPrescription,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                     CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10" ItemsSource="{Binding DeclarePrescriptions,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True" />

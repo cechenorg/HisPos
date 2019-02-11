@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -161,6 +162,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             MainWindow.ServerConnection.OpenConnection();
             Employee.WorkPositionID = WorkPositions.Single(w => w.WorkPositionName == Employee.WorkPositionName).WorkPositionId;
             Employee = Employee.Save();
+            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Clear();
+            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
             MainWindow.ServerConnection.CloseConnection();
             InitDataChanged(); 
         }
