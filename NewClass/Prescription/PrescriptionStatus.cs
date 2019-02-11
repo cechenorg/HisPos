@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.Prescription {
             IsCooperativeVIP = false;
         }
 
-        public void UpdateStatus()
+        public void UpdateStatus(int id)
         {
             PrescriptionDb.UpdatePrescriptionStatus(this);
         }
