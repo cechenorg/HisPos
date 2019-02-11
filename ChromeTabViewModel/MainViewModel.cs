@@ -9,17 +9,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
@@ -263,7 +260,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.匯出申報檔):
-                    newTab = new Export() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
                 //商品管理
                 case nameof(FeatureItem.商品查詢):

@@ -26,7 +26,7 @@
     xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
-    xmlns:declarefile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.Export"
+    xmlns:declareFile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage"
     xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
     xmlns:purchaseReturnReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
     xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
@@ -110,8 +110,8 @@
         <DataTemplate DataType="{x:Type index:Index}">
             <index:IndexView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type declarefile:Export}">
-            <declarefile:ExportView/>
+        <DataTemplate DataType="{x:Type declareFile:DeclareFileManageViewModel}">
+            <declareFile:DeclareFileManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
             <entrySearch:EntrySearchView/>

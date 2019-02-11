@@ -14,24 +14,55 @@
         <service:BrushColorConverter x:Key="BoolToBrush"/>
         <service:DivisionConverter x:Key="DivisionConverter"/>
         <service:ReleaseInsConverter x:Key="ReleaseInsConverter"/>
-        <service:DateConverter x:Key="DateConverter"/>
+        <service:DateConverterNoDate x:Key="DateConverterNoDate"/>
+        <service:NullableDateConverter x:Key="NullableDateConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <local:DeclareFileManageViewModel/>
     </UserControl.DataContext>
     <Viewbox Name="ExportViewBox" Stretch="Fill">
-        <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
+        <Grid Background="{StaticResource GridDarkerBackGround}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="839"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320"/>
-                <ColumnDefinition Width="1055"/>
+                <ColumnDefinition Width="345"/>
+                <ColumnDefinition Width="1035"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
-                <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Path=DeclareFiles,UpdateSourceTrigger=PropertyChanged}"
-                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
-                      Height="839" AutoGenerateColumns="False">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8"/>
+                    </StackPanel.Background>
+                    <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
+                    <xctk:MaskedTextBox Width="60" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center"  FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                        <xctk:MaskedTextBox.Text>
+                            <Binding Path="DecStart" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                     ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">
+                                <Binding.ValidationRules>
+                                    <service:DateValidationRuleNoDate/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </xctk:MaskedTextBox.Text>
+                    </xctk:MaskedTextBox>
+                    <Label Content=" ~ " Style="{StaticResource BoldLabelContent18}"/>
+                    <xctk:MaskedTextBox Width="60" Height="35" HorizontalContentAlignment="Center"  FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                        <xctk:MaskedTextBox.Text>
+                            <Binding Path="DecEnd" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                     ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">
+                                <Binding.ValidationRules>
+                                    <service:DateValidationRuleNoDate/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </xctk:MaskedTextBox.Text>
+                    </xctk:MaskedTextBox>
+                    <Button Margin="10" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue"/>
+                </StackPanel>
+                <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DecFilePreViewCollectionView,UpdateSourceTrigger=PropertyChanged}"
+                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
+                       AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="320">
                             <DataGridTemplateColumn.CellStyle>
@@ -87,11 +118,11 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="10" Height="50">
                             <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                            <xctk:MaskedTextBox Name="Start" Width="100" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                            <xctk:MaskedTextBox Name="Start" Width="100" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>
@@ -99,11 +130,11 @@
                                 </xctk:MaskedTextBox.Text>
                             </xctk:MaskedTextBox>
                             <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                            <xctk:MaskedTextBox Name="End" Width="100" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                            <xctk:MaskedTextBox Name="End" Width="100" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>

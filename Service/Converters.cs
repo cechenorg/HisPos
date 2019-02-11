@@ -381,4 +381,53 @@ namespace His_Pos.Service
             }
         }
     }
+    public class DateValidationRuleNoDate : ValidationRule
+    {
+        private const string InvalidInput = "日期格式錯誤";
+
+        // Implementing the abstract method in the Validation Rule class
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            if (string.IsNullOrEmpty((string)value)) return new ValidationResult(true, null);
+
+            if (value.ToString().Length == 6)
+            {
+                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+                var month = int.Parse(value.ToString().Substring(4, 2));
+                var dateStr = year + "/" + month;
+                // Validates weather Non numeric values are entered as the Age
+                if (!DateTime.TryParse(dateStr, out _))
+                {
+                    return new ValidationResult(false, InvalidInput);
+                }
+            }
+            else if (value.ToString().Contains(" ") || value.ToString().Length != 9)
+            {
+                return new ValidationResult(false, InvalidInput);
+            }
+            return new ValidationResult(true, null);
+        }
+    }
+    public class DateConverterNoDate : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
+            var result = value.ConvertTo<DateTime>().Year > 1911
+                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true).Substring(0,6)
+                : string.Empty;
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime? result = null;
+            if (value == null || value.ToString().Length != 6) return result;
+            var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+            var month = int.Parse(value.ToString().Substring(4, 2));
+            result = new DateTime(year, month, 1);
+            return result;
+        }
+    }
 }

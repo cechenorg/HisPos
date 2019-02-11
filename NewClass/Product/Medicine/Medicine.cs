@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Product.Medicine
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double>("Inv_Inventory");
             Vendor = r.Field<string>("Med_Manufactory");
-            Control = r.Field<bool>("Med_IsCommon");
+            Common = r.Field<bool>("Med_IsCommon");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
             Usage = new Usage.Usage();
@@ -292,15 +292,15 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private bool control;//是否為管制藥品
-        public bool Control
+        private bool common;//是否為常備藥品
+        public bool Common
         {
-            get => control;
+            get => common;
             set
             {
-                if (control != value)
+                if (common != value)
                 {
-                    Set(() => Control, ref control, value);
+                    Set(() => Common, ref common, value);
                 }
             }
         }
@@ -361,6 +361,16 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => IsSelected, ref isSelected, value);
+            }
+        }
+        private int? controlLevel;
+
+        public int? ControlLevel
+        {
+            get => controlLevel;
+            set
+            {
+                Set(() => ControlLevel, ref controlLevel, value);
             }
         }
     }
