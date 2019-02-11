@@ -650,7 +650,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.InsertCooperAdjust();
-            CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
+            if(CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
+                CurrentPrescription.ProcessVipCopaymentCashFlow("合作部分負擔");
+            else
+                CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessDepositCashFlow("合作自費");
             if (noCard)
                 CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
@@ -875,6 +878,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
+                        var isVip = new ConfirmWindow("是否免收部分負擔?", "是否免收部分負擔");
+                        CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult ? true : false;
                         CooperativeAdjust(false);
                     }
                     break;

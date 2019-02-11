@@ -430,7 +430,10 @@ namespace His_Pos.NewClass.Prescription
             }
             PrescriptionDb.ProcessEntry(entryName, source, sourceId , total * -1);
         }
-
+        public void ProcessVipCopaymentCashFlow(string name)//計算VIP部分金流
+       {
+            PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, 0);
+        }
         public void ProcessCopaymentCashFlow(string name)//計算部分金流
         {
             PrescriptionDb.ProcessCashFlow(name, "PreMasId", Id, PrescriptionPoint.CopaymentPoint);
