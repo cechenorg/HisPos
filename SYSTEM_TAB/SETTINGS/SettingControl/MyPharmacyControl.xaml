@@ -17,7 +17,7 @@
         <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="0,0,0,1" Width="450"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="機構代碼" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Text="{Binding Id}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Text="{Binding Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" TextChanged="Pharmacy_OnDataChanged" HorizontalAlignment="Center" Margin="20,0,0,0"/>
         </StackPanel>
         <TextBlock Grid.Row="2" Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
         <TextBlock Grid.Row="3" Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>

@@ -25,8 +25,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.0.77,59086;Persist Security Info=True;User ID=singde;Password" +
-            "=city1234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SQL_local {
             get {
                 return ((string)(this["SQL_local"]));
@@ -38,8 +37,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=59.124.201.229,59087;Persist Security Info=True;User ID=singde;Passwo" +
-            "rd=city1234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SQL_global {
             get {
                 return ((string)(this["SQL_global"]));
@@ -97,7 +95,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("HISPOS_Develop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SystemSerialNumber {
             get {
                 return ((string)(this["SystemSerialNumber"]));

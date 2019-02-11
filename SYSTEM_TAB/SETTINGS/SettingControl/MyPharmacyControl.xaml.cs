@@ -8,6 +8,7 @@ using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
@@ -118,13 +119,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             {
                 MessageWindow.ShowMessage("VPN 格式錯誤!", MessageType.ERROR);
                 
-
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
             myPharmacy.SetPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-             
+            WebApi.UpdatePharmacyMedicalNum(myPharmacy.Id);
             ClearDataChangedStatus();
         }
 
@@ -147,5 +147,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         {
             HisApiBase.VerifyHpcPin();
         }
+
+        
     }
 }
