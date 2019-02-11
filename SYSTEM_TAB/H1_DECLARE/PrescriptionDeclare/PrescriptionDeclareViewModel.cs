@@ -740,7 +740,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                MainWindow.ServerConnection.OpenConnection();
                 CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
+                MainWindow.ServerConnection.CloseConnection();
                 PrintMedBag(false);
                 ClearPrescription();
             };
@@ -977,8 +979,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     ChronicAdjust(true);
                     break;
             }
-            MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
+            MainWindow.ServerConnection.CloseConnection();
             PrintMedBag(true);
             ClearPrescription();
         }

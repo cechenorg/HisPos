@@ -48,7 +48,7 @@ namespace His_Pos.NewClass.Prescription {
 
         public void UpdateStatus(int id)
         {
-            PrescriptionDb.UpdatePrescriptionStatus(this);
+            PrescriptionDb.UpdatePrescriptionStatus(this,id);
         }
 
         public void SetNoCardSatus()
