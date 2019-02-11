@@ -11,6 +11,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -101,6 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
 
         #region Commands
+        public RelayCommand GetPreviewPrescriptions { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         #endregion
         public DeclareFileManageViewModel()
@@ -122,7 +124,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialCommands()
         {
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
+            GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
         }
+
+        private void GetPreviewPrescriptionsActions()
+        {
+            var prescriptions = new Prescriptions();
+            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd,null,null,null);
+            
+        }
+
         #endregion
         #region CommandActions
         private void ShowInsSelectionWindowAction(string search)
