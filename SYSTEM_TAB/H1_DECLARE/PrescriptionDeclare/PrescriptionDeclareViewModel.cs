@@ -390,6 +390,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             PrescribeFunction();
             MainWindow.ServerConnection.CloseConnection();
+            var receiptPrint = false;
+            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+            if (receiptResult.DialogResult != null)
+                receiptPrint = (bool)receiptResult.DialogResult;
+            if (receiptPrint)
+                CurrentPrescription.PrintReceipt();
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
@@ -695,7 +701,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.UpdateReserve();
         }
-        private void PrescribeFunction() {
+        private void PrescribeFunction()
+        {
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.ID.ToString()))
+                CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());

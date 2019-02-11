@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
-            TreatDate = r.Field<DateTime>("TreatmentDate"); 
+            TreatDate = r.Field<DateTime?>("TreatmentDate"); 
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
@@ -515,17 +515,17 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.AdjustDate = AdjustDate;
             t.ChronicSeq = ChronicSeq;
             t.ChronicTotal = chronicTotal;
-            t.Copayment = VM.GetCopayment(Copayment.Id);
-            t.Division = VM.GetDivision(Division.Id);
+            t.Copayment = VM.GetCopayment(Copayment?.Id);
+            t.Division = VM.GetDivision(Division?.Id);
             t.Institution = Institution.DeepCloneViaJson();
             t.MainDisease = MainDisease?.DeepCloneViaJson();
             t.SubDisease = SubDisease?.DeepCloneViaJson();
             t.MedicalNumber = MedicalNumber;
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
-            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
-            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat.Id);
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.Id);
+            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.Id);
             t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
-            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.Id);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;
             return t;

@@ -161,7 +161,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool CheckFreeCopayment()
         {
-            if (Treatment.AdjustCase.Id.Equals("2") || Treatment.AdjustCase.Id.Equals("4"))
+            if (Treatment.AdjustCase.Id.Equals("2") || Treatment.AdjustCase.Id.Equals("4") || Treatment.AdjustCase.Id.Equals("0"))
                 return true;
             switch (Treatment.Copayment.Id)
             {
@@ -190,14 +190,15 @@ namespace His_Pos.NewClass.Prescription
         {
             if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
-
-            CheckMedicalServiceData();//確認藥事服務資料
+            if (!Treatment.AdjustCase.Id.Equals("0"))
+                CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
             PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
                                            PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
             PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            CreateDeclareFileContent(details);//產生申報資料
+            if(!Treatment.AdjustCase.Id.Equals("0"))
+                CreateDeclareFileContent(details);//產生申報資料
             Treatment.Institution.UpdateUsedTime();
             return PrescriptionDb.InsertPrescription(this, details);
         }
@@ -226,20 +227,23 @@ namespace His_Pos.NewClass.Prescription
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
-            details.Add(medicalService);
-            int dailyPrice = CheckIfSimpleFormDeclare();
-            if (dailyPrice > 0)
+            if (!Treatment.AdjustCase.Id.Equals("0"))
             {
-                foreach (var d in details)
+                var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
+                details.Add(medicalService);
+                int dailyPrice = CheckIfSimpleFormDeclare();
+                if (dailyPrice > 0)
                 {
-                    if (!d.P1.Equals("1")) continue;
-                    d.P1 = "4";
-                    d.P8 = $"{0.00:0000000.00}";
-                    d.P9 = "00000000";
+                    foreach (var d in details)
+                    {
+                        if (!d.P1.Equals("1")) continue;
+                        d.P1 = "4";
+                        d.P8 = $"{0.00:0000000.00}";
+                        d.P9 = "00000000";
+                    }
+                    var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
+                    details.Add(simpleForm);
                 }
-                var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
-                details.Add(simpleForm);
             }
             return details;
         }
@@ -503,12 +507,13 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                if (Treatment.Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
+                if (Treatment.Copayment != null)
                 {
-                    Treatment.Copayment = VM.GetCopayment("I20");
+                    if (Treatment.Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
+                        Treatment.Copayment = VM.GetCopayment("I20");
                 }
             }
-            if(!Treatment.Copayment.Id.Equals("I21"))
+            if(Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
                 PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
             else
             {
@@ -586,13 +591,13 @@ namespace His_Pos.NewClass.Prescription
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var doctor = string.Empty;
-            var cusGender = Patient.CheckGender();
+            var cusGender = Patient.ID.Equals(0) ? " " : Patient.CheckGender();
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                new ReportParameter("PatientName", Patient.Name),
+                new ReportParameter("PatientName", Patient.ID.Equals(0)?" ":Patient.Name),
                 new ReportParameter("Gender", cusGender),
-                new ReportParameter("Birthday",
+                new ReportParameter("Birthday",Patient.ID.Equals(0)?" ":
                     DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                 new ReportParameter("AdjustDate", adjustDate),
                 new ReportParameter("Hospital", Treatment.Institution.Name),
