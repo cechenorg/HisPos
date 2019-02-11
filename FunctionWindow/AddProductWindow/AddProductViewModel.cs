@@ -82,16 +82,19 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
         public AddProductViewModel(AddProductEnum addProductEnum)
         {
+            addProEnum = addProductEnum;
             RegisterCommand();
-            RegisterFilter(addProductEnum);
+            RegisterFilter();
             
             SearchString = "";
         }
 
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum)
         {
+            addProEnum = addProductEnum;
             RegisterCommand();
-            RegisterFilter(addProductEnum);
+            RegisterFilter();
+
             SearchString = searchString;
             GetRelatedDataAction();
         }
@@ -121,13 +124,14 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                         ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
                     }
                     ProStructCollectionView = ProStructCollectionViewSource.View;
-                    switch (ProductStructCollection.Count)
+                    AddFilter();
+                    switch (ProStructCollectionView.Cast<object>().Count())
                     {
                         case 0:
                             MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
                             break;
                         case 1:
-                            SelectedProductStruct = ProductStructCollection[0];
+                            SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
                             ProductSelectedAction();
                             break;
                         default:
@@ -135,6 +139,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                             SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
                             break;
                     }
+
                 }
                 else
                     MessageWindow.ShowMessage("查詢ID需至少5碼", MessageType.WARNING);
@@ -147,6 +152,13 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         private void ProductPurchaseFilterAction()
         {
 
+        }
+        private void ProductReturnFilter(object sender, FilterEventArgs e)
+        {
+            if (((ProductStruct) e.Item).Inventory > 0)
+                e.Accepted = true;
+            else
+                e.Accepted = false;
         }
         private void FocusUpDownAction(string direction)
         {
@@ -174,6 +186,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             Messenger.Default.Send(SelectedProductStruct, "SelectedProduct");
             switch (addProEnum)
             {
+                case AddProductEnum.ProductReturn:
                 case AddProductEnum.ProductPurchase:
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
@@ -201,14 +214,22 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             StartEditingCommand = new RelayCommand(StartEditingAction);
         }
-        private void RegisterFilter(AddProductEnum addProductEnum)
+        private void RegisterFilter()
         {
-            addProEnum = addProductEnum;
-
-            switch (addProductEnum)
+            switch (addProEnum)
             {
                 case AddProductEnum.ProductPurchase:
                     FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
+                    break;
+            }
+        }
+
+        private void AddFilter()
+        {
+            switch (addProEnum)
+            {
+                case AddProductEnum.ProductReturn:
+                    ProStructCollectionViewSource.Filter += ProductReturnFilter;
                     break;
             }
         }
