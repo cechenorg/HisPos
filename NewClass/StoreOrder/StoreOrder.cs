@@ -152,6 +152,8 @@ namespace His_Pos.NewClass.StoreOrder
             SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
             StoreOrderDB.StoreOrderToDone(ID);
+
+            MessageWindow.ShowMessage("已完成"+ (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         #endregion
 
