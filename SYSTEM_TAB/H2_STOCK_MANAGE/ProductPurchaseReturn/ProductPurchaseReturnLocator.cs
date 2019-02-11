@@ -10,7 +10,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<ProductPurchaseReturnViewModel>();
-            Console.WriteLine("GOGO");
         }
         
         public ProductPurchaseReturnViewModel ProductPurchaseReturn{ get { return ServiceLocator.Current.GetInstance<ProductPurchaseReturnViewModel>(); } }

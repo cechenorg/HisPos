@@ -85,8 +85,8 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=pharm;Password=qwaszx1" +
-            "01819;SslMode=none")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMo" +
+            "de=none")]
         public string SingdeServer {
             get {
                 return ((string)(this["SingdeServer"]));

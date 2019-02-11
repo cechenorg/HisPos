@@ -290,6 +290,9 @@
     </Compile>
     <Compile Include="FunctionWindow\ErrorUploadWindow\ErrorUploadWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
+    <Compile Include="GeneralCustomControl\ProductStatusIcon.xaml.cs">
+      <DependentUpon>ProductStatusIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FunctionWindow\VerifyPharmacyWindow\VerifyPharmacyViewModel.cs" />
     <Compile Include="FunctionWindow\VerifyPharmacyWindow\VerifyPharmacyWindow.xaml.cs">
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
@@ -371,6 +374,12 @@
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicineDetail.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
@@ -653,6 +662,21 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlView.xaml.cs">
+      <DependentUpon>MedicineControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml.cs">
+      <DependentUpon>OTCControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml.cs">
+      <DependentUpon>ProductDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementView.xaml.cs">
+      <DependentUpon>ProductManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindow.xaml.cs">
       <DependentUpon>AddNewOrderWindow.xaml</DependentUpon>
     </Compile>
@@ -995,10 +1019,9 @@
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChromeTabViewModel\IViewModelMainWindow.cs" />
-    <Compile Include="ChromeTabViewModel\IViewModelProdcutDetailWindow.cs" />
+    <Compile Include="ChromeTabViewModel\IChromeTabViewModel.cs" />
     <Compile Include="ChromeTabViewModel\MainViewModel.cs" />
     <Compile Include="ChromeTabViewModel\ProductDetailViewModel.cs" />
-    <Compile Include="ChromeTabViewModel\ProductDetailViewModelLocator.cs" />
     <Compile Include="ChromeTabViewModel\TabBase.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelLocator.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
@@ -1017,6 +1040,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\VerifyPharmacyWindow\VerifyPharmacyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GeneralCustomControl\ProductStatusIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1141,6 +1168,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

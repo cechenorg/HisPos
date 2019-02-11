@@ -7,16 +7,18 @@ using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 
 namespace His_Pos.ChromeTabViewModel
 {
     public class ProductDetailViewModel : ViewModelBase
     {
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
-        public RelayCommand<object> AddTabCommand { get; set; }
+        public RelayCommand<ProductManageStruct> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -52,7 +54,7 @@ namespace His_Pos.ChromeTabViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
+            this.AddTabCommand = new RelayCommand<ProductManageStruct>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -119,28 +121,26 @@ namespace His_Pos.ChromeTabViewModel
                 
         }
         
-        public void AddTabCommandAction(object featureItem)
+        public void AddTabCommandAction(ProductManageStruct newProduct)
         {
             TabBase newTab;
-
-            ProductDetail.NewProductTab newProductTab = (ProductDetail.NewProductTab)featureItem;
-
+            
             foreach (TabBase tab in ItemCollection)
             {
-                if (tab.TabName == newProductTab.Id)
+                if (tab.TabName == newProduct.ID)
                 {
                     this.SelectedTab = tab;
                     return;
                 }
             }
 
-            switch (newProductTab.Type)
+            switch (newProduct.ProductType)
             {
-                case SearchType.OTC:
-                    newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\OrangeDot.png" };
+                case ProductTypeEnum.OTC:
+                    newTab = new OtcDetailView() { TabName = newProduct.ID, Icon = "/Images/OrangeDot.png" };
                     break;
-                case SearchType.MED:
-                    newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\BlueDot.png" };
+                case ProductTypeEnum.Medicine:
+                    newTab = new MedicineControlViewModel(newProduct.ID) { TabName = newProduct.ID, Icon = "/Images/BlueDot.png" };
                     break;
                 default:
                     return;

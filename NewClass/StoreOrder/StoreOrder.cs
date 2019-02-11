@@ -15,9 +15,42 @@ using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public abstract class StoreOrder: ObservableObject
+    public abstract class StoreOrder: ObservableObject, ICloneable
     {
-        public StoreOrder() { }
+        #region ----- Define Variables -----
+        private Product.Product selectedItem;
+        private OrderStatusEnum orderStatus;
+
+        protected int initProductCount = 0;
+
+        public Product.Product SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = false;
+
+                Set(() => SelectedItem, ref selectedItem, value);
+
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = true;
+            }
+        }
+        public OrderStatusEnum OrderStatus
+        {
+            get { return orderStatus; }
+            set { Set(() => OrderStatus, ref orderStatus, value); }
+        }
+        public OrderTypeEnum OrderType { get; set; }
+        public string ID { get; set; }
+        public Manufactory.Manufactory OrderManufactory { get; set; }
+        public WareHouse.WareHouse OrderWarehouse { get; set; }
+        public string OrderEmployeeName { get; set; }
+        public string Note { get; set; }
+        public double TotalPrice { get; set; }
+        #endregion
+
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -56,49 +89,18 @@ namespace His_Pos.NewClass.StoreOrder
 
             initProductCount = row.Field<int>("ProductCount");
         }
-
-        #region ----- Define Variables -----
-        private Product.Product selectedItem;
-        private OrderStatusEnum orderStatus;
-
-        protected int initProductCount = 0;
-
-        public Product.Product SelectedItem
-        {
-            get { return selectedItem; }
-            set
-            {
-                if(selectedItem != null)
-                    ((IDeletableProduct) selectedItem).IsSelected = false;
-
-                Set(() => SelectedItem, ref selectedItem, value);
-
-                if (selectedItem != null)
-                    ((IDeletableProduct)selectedItem).IsSelected = true;
-            }
-        }
-        public OrderTypeEnum OrderType { get; set; }
-        public OrderStatusEnum OrderStatus
-        {
-            get { return orderStatus; }
-            set { Set(() => OrderStatus, ref orderStatus, value); }
-        }
-        public string ID { get; set; }
-        public Manufactory.Manufactory OrderManufactory { get; set; }
-        public WareHouse.WareHouse OrderWarehouse { get; set; }
-        public string OrderEmployeeName { get; set; }
-        public string Note { get; set; }
-        public double TotalPrice { get; set; }
-        #endregion
-
+        
         #region ----- Define Functions -----
 
+        #region ///// Abstract Function /////
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
+        protected abstract void UpdateOrderProductsFromSingde();
+        #endregion
 
-        #region ----- Status Function -----
+        #region ///// Status Function /////
         public void MoveToNextStatus()
         {
             switch (OrderStatus)
@@ -108,9 +110,6 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();
-                    break;
-                case OrderStatusEnum.WAITING:
-                    ToSingdeProcessingStatus();
                     break;
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
@@ -138,7 +137,7 @@ namespace His_Pos.NewClass.StoreOrder
                 MainWindow.ServerConnection.CloseConnection();
             }
             else
-                MessageWindow.ShowMessage("傳送杏德失敗 請稍後在嘗試", MessageType.ERROR);
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後再試", MessageType.ERROR);
         }
         private void ToNormalProcessingStatus()
         {
@@ -148,13 +147,17 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
+        protected void ToScrapStatus()
+        {
+            StoreOrderDB.RemoveStoreOrderByID(ID);
+        }
         private void ToDoneStatus()
         {
             OrderStatus = OrderStatusEnum.DONE;
         }
         #endregion
 
-        #region ----- Check Function -----
+        #region ///// Check Function /////
         public bool CheckOrder()
         {
             switch (OrderStatus)
@@ -175,6 +178,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract bool CheckSingdeProcessingOrder();
         #endregion
 
+        #region ///// Singde Function /////
         private bool SendOrderToSingde()
         {
             MainWindow.SingdeConnection.OpenConnection();
@@ -183,18 +187,55 @@ namespace His_Pos.NewClass.StoreOrder
 
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+        public void UpdateOrderDataFromSingde(DataRow dataRow)
+        {
+            int orderFlag = dataRow.Field<sbyte>("FLAG");
+            bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
+
+            if (orderFlag == 2)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
+                });
+
+                ToScrapStatus();
+            }
+            else if (isShipment)
+            {
+                UpdateOrderProductsFromSingde();
+                ToSingdeProcessingStatus();
+            }
+        }
+        #endregion
 
         public bool DeleteOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要刪除?", "刪除");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要作廢?", "作廢");
 
             if (!(bool) confirmWindow.DialogResult)
                 return false;
 
+            if (OrderManufactory.ID.Equals("0") && OrderStatus == OrderStatusEnum.WAITING)
+            {
+                bool isSuccess = StoreOrderDB.RemoveSingdeStoreOrderByID(ID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+
+                if (!isSuccess)
+                {
+                    MessageWindow.ShowMessage("作廢杏德訂單失敗 請稍後再試", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
-        
+
+        public object Clone()
+        {
+            return this;
+        }
+
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);

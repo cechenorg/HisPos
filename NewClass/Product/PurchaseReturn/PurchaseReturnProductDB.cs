@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -24,6 +25,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             parameters.Add(new SqlParameter("PRO_ID", iD));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductByProductID]", parameters);
+        }
+
+        internal static DataTable GetSingdeProductsByStoreOrderID(string orederID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
         }
     }
 }
