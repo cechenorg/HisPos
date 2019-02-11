@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.Product.Medicine
             ATCCode = r.Field<string>("Med_ATC");
             SingleCompound = r.Field<string>("Med_SingleCompound");
             Form = r.Field<string>("Med_Form");
-            ControlLevel = r.Field<int?>("Med_Control");
+            ControlLevel = r.Field<byte?>("Med_Control");
             Note = r.Field<string>("Med_NhiNote");
             Warning = r.Field<string>("Med_Warning"); 
 			 
@@ -93,18 +93,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (form != value)
                 {
                     Set(() => Form, ref form, value);
-                }
-            }
-        }
-        private int? controlLevel;//管制級別
-        public int? ControlLevel
-        {
-            get => controlLevel;
-            set
-            {
-                if (controlLevel != value)
-                {
-                    Set(() => ControlLevel, ref controlLevel, value);
                 }
             }
         }

@@ -162,6 +162,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
+            StartDate = new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+            EndDate = DateTime.Today;
         }
         private void InitialCommands()
         {
