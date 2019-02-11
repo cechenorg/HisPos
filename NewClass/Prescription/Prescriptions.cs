@@ -80,6 +80,9 @@ namespace His_Pos.NewClass.Prescription
                 Add(r);
             }
         }
-       
+        public static void PredictThreeMonthPrescription() {
+            PrescriptionDb.PredictThreeMonthPrescription();
+        }
+         
     }
 }

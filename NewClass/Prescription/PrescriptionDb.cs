@@ -189,7 +189,11 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Head", head);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[CheckImportDeclareFileExist]", parameterList);
-        } 
+        }
+        public static void PredictThreeMonthPrescription() {
+            MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
+        }
+         
         public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY

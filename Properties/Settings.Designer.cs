@@ -104,5 +104,17 @@ namespace His_Pos.Properties {
                 this["SystemSerialNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DeclareXmlPath {
+            get {
+                return ((string)(this["DeclareXmlPath"]));
+            }
+            set {
+                this["DeclareXmlPath"] = value;
+            }
+        }
     }
 }
