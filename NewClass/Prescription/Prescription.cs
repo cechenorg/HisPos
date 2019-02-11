@@ -562,12 +562,6 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                var i = 1;
-                foreach (var med in medBagMedicines)
-                {
-                    med.MedNo = i.ToString();
-                    i++;
-                }
                 var json = JsonConvert.SerializeObject(medBagMedicines);
                 var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
                 rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";

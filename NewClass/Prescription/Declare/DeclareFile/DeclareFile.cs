@@ -340,6 +340,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public string P15 { get; set; }
         [XmlIgnore]
         public bool PaySelf { get; set; }
+        [XmlIgnore]
         public bool IsBuckle { get; set; }
     }
 }

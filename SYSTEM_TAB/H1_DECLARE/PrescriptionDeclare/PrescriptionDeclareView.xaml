@@ -571,8 +571,8 @@
                             <TextBox x:Name="CopaymentText"  Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
                                      Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Margin="20,0,0,0" Content="應收 $" Style="{StaticResource BoldLabelContent18}"/>
-                            <Label x:Name="CustomPayText" Width="90" Height="35"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                   Content="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox x:Name="CustomPayText" Width="90" Height="35"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2" Margin="10,0,10,0" Orientation="Horizontal">
                             <Label Content="已付 $" Style="{StaticResource BoldLabelContent18}"/>

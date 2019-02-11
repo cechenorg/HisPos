@@ -1,15 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
