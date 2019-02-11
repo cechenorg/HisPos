@@ -108,8 +108,8 @@ namespace His_Pos.FunctionWindow
                 string ReceiptPrinter = fileReader.ReadLine();
                 string ReportPrinter = fileReader.ReadLine();
                 Properties.Settings.Default.MedBagPrinter = MedBagPrinter.Substring(2, MedBagPrinter.Length - 2); 
-                Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(2, ReceiptPrinter.Length - 2);
-                Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(2, ReportPrinter.Length - 2);
+                Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(3, ReceiptPrinter.Length - 2);
+                Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(3, ReportPrinter.Length - 2);
                 Properties.Settings.Default.Save();
             }
         }
