@@ -30,7 +30,8 @@ namespace His_Pos.FunctionWindow
         }
 
         private void UserName_OnKeyUp(object sender, KeyEventArgs e)
-        {
+        
+            {
             if (e.Key == Key.Enter)
                 Password.Focus();
         }

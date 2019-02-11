@@ -7,10 +7,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Service;
@@ -38,8 +40,12 @@ namespace His_Pos.FunctionWindow
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
 
-            if (!CheckSettingFileExist()) {
-                VerifyPharmacyWindow.VerifyPharmacyWindow verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow(); 
+            if (!CheckSettingFileExist())
+            {
+                VerifyPharmacyWindow.VerifyPharmacyWindow verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow();
+            }
+            else {
+                ReadSettingFile();
             }
         }
 
@@ -77,6 +83,35 @@ namespace His_Pos.FunctionWindow
             CheckSettingFiles();
             SQLServerConnection localConnection = new SQLServerConnection();
             return localConnection.CheckConnection();
+        }
+        public static void ReadSettingFile() {
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string verifynum = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+               verifynum = fileReader.ReadLine();
+                verifynum = verifynum.Substring(2,verifynum.Length-2);
+               XmlDocument xml = WebApi.GetPharmacyInfoByVerify(verifynum);
+               string PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
+               string MedicalNum = xml.SelectSingleNode("CurrentPharmacyInfo/MedicalNum").InnerText;
+               string PharmacyTel = xml.SelectSingleNode("CurrentPharmacyInfo/Telphone").InnerText;
+               string PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
+               string dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
+                Properties.Settings.Default.SQL_local =
+                string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+                Properties.Settings.Default.SQL_global =
+                   string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+                Properties.Settings.Default.SystemSerialNumber = verifynum;
+                string MedBagPrinter = fileReader.ReadLine();
+                string ReceiptPrinter = fileReader.ReadLine();
+                string ReportPrinter = fileReader.ReadLine();
+                Properties.Settings.Default.MedBagPrinter = MedBagPrinter.Substring(2, MedBagPrinter.Length - 2); 
+                Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(2, ReceiptPrinter.Length - 2);
+                Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(2, ReportPrinter.Length - 2);
+                Properties.Settings.Default.Save();
+            }
         }
         private static bool CheckSettingFileExist() { 
             if (!Directory.Exists("C:\\Program Files\\HISPOS"))
