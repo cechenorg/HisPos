@@ -49,26 +49,36 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void AddProductByID(string iD)
         {
+            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
 
+            ReturnProduct returnProduct;
 
-            //DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
+            switch (dataTable.Rows[0].Field<string>(""))
+            {
+                case "O":
+                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
+                    break;
+                case "M":
+                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
+                    break;
+                default:
+                    returnProduct = new ReturnProduct();
+                    break;
+            }
 
-            //ReturnProduct returnProduct;
+            if (SelectedItem is ReturnProduct)
+            {
+                int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
 
-            //switch (dataTable.Rows[0].Field<string>(""))
-            //{
-            //    case "O":
-            //        returnProduct = new ReturnOTC(dataTable.Rows[0]);
-            //        break;
-            //    case "M":
-            //        returnProduct = new ReturnMedicine(dataTable.Rows[0]);
-            //        break;
-            //    default:
-            //        returnProduct = new ReturnProduct();
-            //        break;
-            //} 
+                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
 
-            //OrderProducts.Add(returnProduct);
+                OrderProducts.RemoveAt(selectedProductIndex);
+                OrderProducts.Insert(selectedProductIndex, returnProduct);
+            }
+            else
+                OrderProducts.Add(returnProduct);
+
+            RaisePropertyChanged(nameof(ProductCount));
         }
 
         protected override bool CheckUnProcessingOrder()

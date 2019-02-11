@@ -182,6 +182,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     orderMedicines += product.ID.PadRight(12, ' ');
 
+                    //12 10 6 20 7
                     //orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
 
                     //orderMedicines += product.Note;

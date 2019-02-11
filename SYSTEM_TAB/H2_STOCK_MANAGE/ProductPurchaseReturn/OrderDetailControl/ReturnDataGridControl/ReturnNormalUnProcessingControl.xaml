@@ -1,10 +1,9 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl.ReturnUnProcessingControl"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl.ReturnNormalUnProcessingControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl"
-             xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
@@ -12,6 +11,7 @@
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <service:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        <service:SentinelConverter x:Key="SentinelConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}" FrozenColumnCount="3">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}" FrozenColumnCount="3" SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -56,15 +56,22 @@
                 <DataGridTemplateColumn Width="30">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}"/>
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Image.InputBindings>
+                                    <MouseBinding Command="{Binding Path=DataContext.DeleteProductCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                </Image.InputBindings>
+                            </Image>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn MinWidth="110" Header="商品代碼">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Id" Text="{Binding Id, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"
-                                     HorizontalContentAlignment="Center" />
+                            <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding Path=DataContext.AddProductByInputCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Key="Enter" CommandParameter="{Binding ElementName=ProductIDTextbox}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -73,7 +80,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
-                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Name}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

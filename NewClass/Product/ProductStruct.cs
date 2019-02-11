@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Product
             Inventory = row.Field<double>("Inv_Inventory");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
+            OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
             NHIPrice = (double)row.Field<decimal>("Med_Price");
             SellPrice = (double)row.Field<decimal>("Unit_Price");
             IsCommon = row.Field<bool>("Med_IsCommon");
@@ -40,6 +41,7 @@ namespace His_Pos.NewClass.Product
         public double Inventory { get; set; }
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }
+        public double OnTheWayAmount { get; set; }
         public double NHIPrice { get; set; }
         public double SellPrice { get; set; }
         public int? ControlLevel { get; set; }
