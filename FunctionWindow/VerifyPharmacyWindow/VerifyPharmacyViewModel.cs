@@ -81,12 +81,12 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             Isverify = true;
         }
         private void SubmitAction() {
-             
-
+              
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
             File.Create(filePath).Dispose(); 
             using (TextWriter fileWriter = new StreamWriter(filePath))
-            { 
+            {
+                fileWriter.WriteLine("V " + VerifyNumber);
                 fileWriter.WriteLine("M ");
                 fileWriter.WriteLine("Rc ");
                 fileWriter.WriteLine("Rp ");

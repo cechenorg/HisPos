@@ -162,8 +162,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
             using (StreamReader fileReader = new StreamReader(filePath))
             {
-                leftLines = fileReader.ReadLine() + "\n";
-                leftLines += fileReader.ReadLine();
+                leftLines = fileReader.ReadLine();
             }
 
             using (TextWriter fileWriter = new StreamWriter(filePath, false))

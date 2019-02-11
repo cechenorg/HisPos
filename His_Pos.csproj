@@ -843,6 +843,10 @@
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\Export.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
+      <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclareViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReport.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml.cs">
       <DependentUpon>CooperativeAdjustReportView.xaml</DependentUpon>
@@ -1385,6 +1389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
