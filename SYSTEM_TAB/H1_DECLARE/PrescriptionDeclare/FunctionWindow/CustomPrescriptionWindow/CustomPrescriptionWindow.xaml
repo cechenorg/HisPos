@@ -193,9 +193,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Vertical" Visibility="{Binding UngetCardVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                <!--<StackPanel Grid.Row="2" Orientation="Vertical" Visibility="{Binding UngetCardVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel Orientation="Horizontal" Height="35" Margin="10,0,10,0">
-                        <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
+                        <Label Content="已登錄處方" Style="{StaticResource BoldLabelContent18}" />
                         <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="650,0,0,0" VerticalAlignment="Center" Command="{Binding GetPatinetData}"/>
                     </StackPanel>
                     <DataGrid Margin="10" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False"
@@ -276,7 +276,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </StackPanel>-->
             </Grid>
         </xctk:BusyIndicator>
     </Viewbox>
