@@ -1,15 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
@@ -86,6 +82,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
             Pharmacist = VM.CurrentPharmacy.GetPharmacist();
+            Copayment = new Cop();
         }
 
         public Treatment(DataRow r)
@@ -97,7 +94,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
-            TreatDate = r.Field<DateTime>("TreatmentDate"); 
+            TreatDate = r.Field<DateTime?>("TreatmentDate"); 
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
@@ -515,17 +512,17 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.AdjustDate = AdjustDate;
             t.ChronicSeq = ChronicSeq;
             t.ChronicTotal = chronicTotal;
-            t.Copayment = VM.GetCopayment(Copayment.Id);
-            t.Division = VM.GetDivision(Division.Id);
+            t.Copayment = VM.GetCopayment(Copayment?.Id);
+            t.Division = VM.GetDivision(Division?.Id);
             t.Institution = Institution.DeepCloneViaJson();
             t.MainDisease = MainDisease?.DeepCloneViaJson();
             t.SubDisease = SubDisease?.DeepCloneViaJson();
             t.MedicalNumber = MedicalNumber;
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
-            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory.Id);
-            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat.Id);
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.Id);
+            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.Id);
             t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
-            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase.Id);
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.Id);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;
             return t;

@@ -216,12 +216,12 @@ namespace His_Pos.ChromeTabViewModel
         public static PrescriptionCase GetPrescriptionCases(string id)
         {
             var result = PrescriptionCases.SingleOrDefault(i => i.Id.Equals(id));
-            return result?? PrescriptionCases.Single(i => i.Id.Equals("4"));
+            return result;
         }
         public static Copayment GetCopayment(string id)
         {
             var result = Copayments.SingleOrDefault(i => i.Id.Equals(id));
-            return result ?? Copayments.SingleOrDefault(i => i.Id.Equals("I20"));
+            return result;
         }
         public static Usage GetUsage(string name)
         {
@@ -297,31 +297,46 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void Export(LocalReport report, double width, double height)
         {
-            try
-            {
-                string deviceInfo =
-                    @"<DeviceInfo>
+            string deviceInfo =
+                @"<DeviceInfo>
                 <OutputFormat>EMF</OutputFormat>" +
-                    "  <PageWidth>" + width + "cm</PageWidth>" +
-                    "  <PageHeight>" + height + "cm</PageHeight>" +
-                    "  <MarginTop>0cm</MarginTop>" +
-                    "  <MarginLeft>0cm</MarginLeft>" +
-                    "  <MarginRight>0cm</MarginRight>" +
-                    "  <MarginBottom>0cm</MarginBottom>" +
-                    "</DeviceInfo>";
-                Warning[] warnings;
-                m_streams = new List<Stream>();
-                report.Render("Image", deviceInfo, CreateStream, out warnings);
-                foreach (Stream stream in m_streams)
-                    stream.Position = 0;
-            }
-            catch (Exception ex)
-            {
-                Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    MessageWindow.ShowMessage("Export:" + ex.Message, MessageType.ERROR);
-                });
-            }
+                "  <PageWidth>" + width + "cm</PageWidth>" +
+                "  <PageHeight>" + height + "cm</PageHeight>" +
+                "  <MarginTop>0cm</MarginTop>" +
+                "  <MarginLeft>0cm</MarginLeft>" +
+                "  <MarginRight>0cm</MarginRight>" +
+                "  <MarginBottom>0cm</MarginBottom>" +
+                "</DeviceInfo>";
+            Warning[] warnings;
+            m_streams = new List<Stream>();
+            report.Render("Image", deviceInfo, CreateStream, out warnings);
+            foreach (Stream stream in m_streams)
+                stream.Position = 0;
+            //try
+            //{
+            //    string deviceInfo =
+            //        @"<DeviceInfo>
+            //    <OutputFormat>EMF</OutputFormat>" +
+            //        "  <PageWidth>" + width + "cm</PageWidth>" +
+            //        "  <PageHeight>" + height + "cm</PageHeight>" +
+            //        "  <MarginTop>0cm</MarginTop>" +
+            //        "  <MarginLeft>0cm</MarginLeft>" +
+            //        "  <MarginRight>0cm</MarginRight>" +
+            //        "  <MarginBottom>0cm</MarginBottom>" +
+            //        "</DeviceInfo>";
+            //    Warning[] warnings;
+            //    m_streams = new List<Stream>();
+            //    report.Render("Image", deviceInfo, CreateStream, out warnings);
+            //    foreach (Stream stream in m_streams)
+            //        stream.Position = 0;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Application.Current.Dispatcher.Invoke((Action)delegate
+            //    {
+            //        MessageWindow.ShowMessage("Export:" + ex.Message, MessageType.ERROR);
+            //    });
+            //}
         }
 
         private void ReportPrint(string printer)

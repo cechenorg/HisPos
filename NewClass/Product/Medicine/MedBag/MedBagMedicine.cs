@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                var usagePrint = GetPositionPrintName(m.Position) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
+                var usagePrint = GetPositionPrintName(m.Position) + GetUsagePrintName(m.Usage).Trim() + "每次";
                 Usage = usagePrint;
             }
         }
@@ -73,7 +73,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             Indication = string.Empty;
             Dosage = string.Empty;
         }
-        public MedBagMedicine(MedicineNHI m, bool isSingle)
+        public MedBagMedicine(MedicineNHI m, bool isSingle,int? medNo = null)
         {
             Id = m.ID;
             if (isSingle)
@@ -84,7 +84,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = m.Days + "天";
-                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )"; ;
+                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
                 Usage = usagePrint;
                 Form = m.Form;
                 Total = m.Amount.ToString();
@@ -92,6 +92,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
+                MedNo = ((int)medNo).ToString();
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
@@ -105,11 +106,11 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                var usagePrint =  GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
+                var usagePrint =  GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
                 Usage = usagePrint;
             }
         }
-        public MedBagMedicine(MedicineOTC m, bool isSingle)
+        public MedBagMedicine(MedicineOTC m, bool isSingle, int? medNo = null)
         {
             Id = m.ID;
             if (isSingle)
@@ -140,6 +141,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
+                MedNo = ((int)medNo).ToString();
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + string.Empty;
                 SideEffect = "副作用:" + string.Empty;
@@ -166,7 +168,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 }
                 if (!string.IsNullOrEmpty(m.PositionName) && !string.IsNullOrEmpty(m.UsageName))
                 {
-                    var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "(  )";
+                    var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim();
                     Usage = usagePrint;
                 }
                 else

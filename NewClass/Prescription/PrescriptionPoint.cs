@@ -66,6 +66,7 @@ namespace His_Pos.NewClass.Prescription {
             set
             {
                 Set(() => AmountsPay, ref amountPay, value);
+                ActualReceive = value;
                 CountChange();
             }
         }

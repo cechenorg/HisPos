@@ -142,7 +142,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Content="顧客處方紀錄" Style="{StaticResource BoldLabelContent18}" />
-                    <DataGrid  Name="CustomerHistoryGrid" Grid.Row="1" Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}"
+                    <DataGrid  Name="CustomerHistoryGrid" Grid.Row="1" Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" MaxHeight="228"
                         CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" GridLinesVisibility="Horizontal"
                         ItemsSource="{Binding CustomerHistories,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedHistory,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.RowStyle>
@@ -198,7 +198,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DataGrid  Grid.Row="2" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" Margin="0,0,10,10" DataContext="{Binding SelectedHistory}"
+                    <DataGrid  Grid.Row="2" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" Margin="0,0,10,10" DataContext="{Binding SelectedHistory}" MaxHeight="227"
                             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">

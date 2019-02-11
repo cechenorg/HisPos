@@ -160,15 +160,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
             if (EditedPrescription.Treatment.Division != null)
-                EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division.Id);
+                EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.Id);
             EditedPrescription.Treatment.Pharmacist =
                 VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(EditedPrescription.Treatment.Pharmacist.IdNumber));
             EditedPrescription.Treatment.AdjustCase = VM.GetAdjustCase(EditedPrescription.Treatment.AdjustCase.Id);
-            EditedPrescription.Treatment.Copayment = VM.GetCopayment(EditedPrescription.Treatment.Copayment.Id);
+            EditedPrescription.Treatment.Copayment = VM.GetCopayment(EditedPrescription.Treatment.Copayment?.Id);
             if (EditedPrescription.Treatment.PrescriptionCase != null)
-                EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase.Id);
+                EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.Id);
             if (EditedPrescription.Treatment.SpecialTreat != null)
-                EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat.Id);
+                EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.Id);
         }
 
         private void InitialItemsSources()

@@ -28,10 +28,10 @@ namespace His_Pos.NewClass.Product.Medicine
             DataTable table = MedicineDb.GetDataByPrescriptionId(preId);
             foreach (DataRow r in table.Rows) {
                 Medicine med = new Medicine(r);
-                med.Dosage = r.Field<double>("Dosage");
+                med.Dosage = r.Field<double?>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
                 med.PositionName = r.Field<string>("Position");
-                med.Days = r.Field<short>("MedicineDays");
+                med.Days = r.Field<short?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool?>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
