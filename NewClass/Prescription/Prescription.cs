@@ -428,7 +428,7 @@ namespace His_Pos.NewClass.Prescription
             { 
                 total += m.TotalPrice;
             }
-            PrescriptionDb.ProcessEntry(entryName, source, sourceId , total);
+            PrescriptionDb.ProcessEntry(entryName, source, sourceId , total * -1);
         }
 
         public void ProcessCopaymentCashFlow(string name)//計算部分金流
@@ -743,7 +743,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 newtotal += m.TotalPrice;
             } 
-            PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, newtotal - oritotal);
+            PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, (newtotal - oritotal) * -1);
 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originMedicines) {
