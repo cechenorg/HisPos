@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -13,7 +14,7 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
         }
 
         private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
-           /// ChronicDb.PredictXmlChronic();
+            Prescriptions.PredictThreeMonthPrescription();
             MessageWindow.ShowMessage("預約慢箋完成!",MessageType.SUCCESS);
             
         }
