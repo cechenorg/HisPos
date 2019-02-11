@@ -285,7 +285,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ImportDeclareFile() {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "選擇申報檔";
-            fdlg.InitialDirectory = @"c:\";   //@是取消转义字符的意思
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
             fdlg.Filter = "Xml健保申報檔案|*.xml";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
@@ -294,6 +294,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>(); 
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName.Replace("\\" + fdlg.SafeFileName, "");
+                Properties.Settings.Default.Save();
                 doc.Load(fdlg.FileName);
                 string fileId;
                 string fileHead = doc.GetElementsByTagName("tdata")[0].InnerXml; 
