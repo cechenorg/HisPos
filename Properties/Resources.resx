@@ -488,4 +488,7 @@
   <data name="檢查就醫次數" xml:space="preserve">
     <value>就醫次數檢查中...</value>
   </data>
+  <data name="ControlMedicineDeclare" xml:space="preserve">
+    <value>管制藥品簿冊申報</value>
+  </data>
 </root>

@@ -34,6 +34,7 @@
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
+    xmlns:controlMedicineDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
@@ -125,6 +126,9 @@
         <DataTemplate DataType="{x:Type cooperativeEntry:CooperativeEntry}">
             <cooperativeEntry:CooperativeEntryView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type controlMedicineDeclare:ControlMedicineDeclareViewModel}">
+            <controlMedicineDeclare:ControlMedicineDeclare/>
+        </DataTemplate> 
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
