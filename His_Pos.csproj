@@ -713,11 +713,14 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalProcessingControl.xaml.cs">
       <DependentUpon>ReturnNormalProcessingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalUnProcessingControl.xaml.cs">
+      <DependentUpon>ReturnNormalUnProcessingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml.cs">
       <DependentUpon>ReturnSingdeProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml.cs">
-      <DependentUpon>ReturnUnProcessingControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeUnProcessingControl.xaml.cs">
+      <DependentUpon>ReturnSingdeUnProcessingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnWaitingControl.xaml.cs">
       <DependentUpon>ReturnWaitingControl.xaml</DependentUpon>
@@ -1237,11 +1240,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalUnProcessingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeUnProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -65,9 +65,11 @@ namespace His_Pos.NewClass.StoreOrder
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("", returnOrder.ID));
+            parameters.Add(new SqlParameter("STOORD_ID", returnOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
+            parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].", parameters);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
         internal static void SavePurchaseOrder(PurchaseOrder purchaseOrder)
@@ -93,6 +95,14 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.Id}', '{storeOrderID}')");
         }
+        internal static void StoreOrderToDone(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToDone]", parameters);
+        }
 
         #region TableSet
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p) {
@@ -114,6 +124,7 @@ namespace His_Pos.NewClass.StoreOrder
             storeOrderMasterTable.Rows.Add(newRow);
             return storeOrderMasterTable; 
         }
+
         public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
         {
             int detailId = 1;
@@ -171,6 +182,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     orderMedicines += product.ID.PadRight(12, ' ');
 
+                    //12 10 6 20 7
                     //orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
 
                     //orderMedicines += product.Note;
@@ -247,6 +259,33 @@ namespace His_Pos.NewClass.StoreOrder
             } 
             return storeOrderDetailTable; 
         }
+        private static DataTable SetReturnOrderDetail(ReturnOrder r)
+        {
+            int detailId = 1;
+            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+            foreach (var pro in r.OrderProducts)
+            {
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", r.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.ReturnAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.BatchLimit);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;
+            }
+            return storeOrderDetailTable;
+        }
+
         private static DataTable SetPurchaseOrderDetail(DataTable table, string storeOrderID)
         {
             int detailId = 1;

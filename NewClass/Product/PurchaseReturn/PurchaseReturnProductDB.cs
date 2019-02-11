@@ -31,5 +31,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
         }
+
+        internal static DataTable GetReturnProductByProductID(string iD)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

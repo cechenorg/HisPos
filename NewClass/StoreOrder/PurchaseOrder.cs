@@ -51,15 +51,15 @@ namespace His_Pos.NewClass.StoreOrder
         public override void SaveOrder()
         {
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+            StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            //BackgroundWorker backgroundWorker = new BackgroundWorker();
 
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += (sender, args) =>
+            //{
+            //    StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            //};
 
-            backgroundWorker.DoWork += (sender, args) =>
-            {
-                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            };
-
-            backgroundWorker.RunWorkerAsync();
+            //backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD)
@@ -131,7 +131,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -143,7 +143,9 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            throw new NotImplementedException();
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+
+            return (bool)confirmWindow.DialogResult;
         }
         #endregion
 

@@ -128,13 +128,9 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isSuccess)
             {
-                MainWindow.ServerConnection.OpenConnection();
-
                 SaveOrder();
                 OrderStatus = OrderStatusEnum.WAITING;
                 StoreOrderDB.StoreOrderToWaiting(ID);
-
-                MainWindow.ServerConnection.CloseConnection();
             }
             else
                 MessageWindow.ShowMessage("傳送杏德失敗 請稍後再試", MessageType.ERROR);
@@ -153,7 +149,11 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToDoneStatus()
         {
+            SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
+            StoreOrderDB.StoreOrderToDone(ID);
+
+            MessageWindow.ShowMessage("已完成"+ (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         #endregion
 
