@@ -47,7 +47,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
         {
             NewProduct = newProduct;
 
-            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id, (NewProduct is InventoryMedicine) ? SearchType.MED : SearchType.OTC));
+            //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id, (NewProduct is InventoryMedicine) ? SearchType.MED : SearchType.OTC));
         }
 
         private void ProductDetail_OnClosed(object sender, EventArgs e)

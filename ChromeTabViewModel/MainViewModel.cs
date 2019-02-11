@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
@@ -17,6 +18,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
@@ -265,11 +267,11 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
-                    newTab = new InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = new ProductPurchaseReturnViewModel() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = (Application.Current.FindResource("ProductPurchaseReturnLocator") as ProductPurchaseReturnLocator).ProductPurchaseReturn;
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):

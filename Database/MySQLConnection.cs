@@ -19,7 +19,11 @@ namespace His_Pos.Database
             }
             catch (Exception e)
             {
-                MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+                System.Windows.Application.Current.Dispatcher.Invoke((Action) delegate
+                {
+                    MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+                        
+                });
             }
         }
 

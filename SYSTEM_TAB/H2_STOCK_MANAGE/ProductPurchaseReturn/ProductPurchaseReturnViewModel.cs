@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Define Variables -----
         private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
+        private bool isBusy;
+        private string busyContent;
 
+        public bool IsBusy
+        {
+            get => isBusy;
+            set {Set(() => IsBusy, ref isBusy, value);}
+        }
+        public string BusyContent
+        {
+            get => busyContent;
+            set {Set(() => BusyContent, ref busyContent, value);}
+        }
         public StoreOrders StoreOrderCollection
         {
             get { return storeOrderCollection; }
@@ -61,8 +74,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            InitVariables();
-            RegisterCommend();
+            TabName = MainWindow.HisFeatures[1].Functions[1];
+            Icon = MainWindow.HisFeatures[1].Icon;
+            RegisterCommand();
         }
 
         #region ----- Define Actions -----
@@ -83,7 +97,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void DeleteOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
             bool isSuccess = CurrentStoreOrder.DeleteOrder();
+            MainWindow.SingdeConnection.CloseConnection();
             MainWindow.ServerConnection.CloseConnection();
 
             if (isSuccess)
@@ -154,15 +170,50 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Define Functions -----
         private void InitVariables()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = StoreOrders.GetOrdersNotDone();
-            MainWindow.ServerConnection.CloseConnection();
+            IsBusy = true;
+            
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
 
-            if (StoreOrderCollection.Count > 0)
-                CurrentStoreOrder = StoreOrderCollection[0];
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+
+                BusyContent = "取得杏德新訂單...";
+                DataTable dataTable = StoreOrderDB.GetNewSingdeOrders();
+                if (dataTable.Rows.Count > 0)
+                    StoreOrderCollection.AddNewOrdersFromSingde(dataTable);
+
+                BusyContent = "取得訂單資料...";
+                StoreOrderCollection = StoreOrders.GetOrdersNotDone();
+
+                List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.ID).ToList();
+                string dateTime = DateTime.Now.ToShortDateString();
+
+                if (storeOrders.Count > 0)
+                    dateTime = storeOrders[0].ID.Substring(1, 8);
+                
+                BusyContent = "取得杏德訂單最新狀態...";
+                dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
+                if(dataTable.Rows.Count > 0)
+                    StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (StoreOrderCollection.Count > 0)
+                    CurrentStoreOrder = StoreOrderCollection[0];
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
-        private void RegisterCommend()
+        private void RegisterCommand()
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
@@ -173,7 +224,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductCommand = new RelayCommand(AddProductAction);
         }
         
-        #region ----- Messenger Functions -----
+        #region ///// Messenger Functions /////
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))

@@ -34,7 +34,7 @@ using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow
+    public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
     {
         //this property is to show you can lock the tabs with a binding
         private bool _canMoveTabs;

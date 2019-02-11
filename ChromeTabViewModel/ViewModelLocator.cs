@@ -29,22 +29,29 @@ namespace His_Pos.ChromeTabViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             
-                // Create run time view services and models
-                SimpleIoc.Default.Register<IViewModelMainWindow, ViewModelMainWindow>();
+            SimpleIoc.Default.Register<ViewModelMainWindow>();
+            SimpleIoc.Default.Register<ViewModelProductDetailWindow>();
 
         }
      
-        public IViewModelMainWindow ViewModelMainWindow
+        public ViewModelMainWindow ViewModelMainWindow
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IViewModelMainWindow>();
+                return ServiceLocator.Current.GetInstance<ViewModelMainWindow>();
+            }
+        }
+
+        public ViewModelProductDetailWindow ViewModelProductDetailWindow
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ViewModelProductDetailWindow>();
             }
         }
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
         }
     }
 }

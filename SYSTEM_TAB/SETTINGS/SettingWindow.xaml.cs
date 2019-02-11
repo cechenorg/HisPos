@@ -82,16 +82,16 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
 
             using (StreamReader fileReader = new StreamReader(filePath))
             {
+              // string newLine = fileReader.ReadLine();
+              // Match match = localReg.Match(newLine);
+              // Properties.Settings.Default.SQL_local = match.Groups[1].Value;
+              //
+              // newLine = fileReader.ReadLine();
+              // match = globalReg.Match(newLine);
+              // Properties.Settings.Default.SQL_global = match.Groups[1].Value;
+
                 string newLine = fileReader.ReadLine();
-                Match match = localReg.Match(newLine);
-                Properties.Settings.Default.SQL_local = match.Groups[1].Value;
-
-                newLine = fileReader.ReadLine();
-                match = globalReg.Match(newLine);
-                Properties.Settings.Default.SQL_global = match.Groups[1].Value;
-
-                newLine = fileReader.ReadLine();
-                match = medReg.Match(newLine);
+                Match match = medReg.Match(newLine);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
 
                 newLine = fileReader.ReadLine();

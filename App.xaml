@@ -16,9 +16,6 @@
                     <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>
-                    <chromeTabViewModel:ProductDetailViewModelLocator x:Key="ProductDetailViewModelLocator" d:IsDataSource="True" />
-                </ResourceDictionary>
-                <ResourceDictionary>
                     <productPurchaseReturn:ProductPurchaseReturnLocator x:Key="ProductPurchaseReturnLocator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>

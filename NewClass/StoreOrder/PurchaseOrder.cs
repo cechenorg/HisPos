@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,8 @@ namespace His_Pos.NewClass.StoreOrder
             OrderType = OrderTypeEnum.PURCHASE;
             PatientName = row.Field<string>("Cus_Name");
         }
-     
+
+        #region ----- Override Function -----
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
@@ -48,7 +50,16 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void SaveOrder()
         {
-            StoreOrderDB.SavePurchaseOrder(this);
+            PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD)
@@ -98,6 +109,11 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
+        protected override void UpdateOrderProductsFromSingde()
+        {
+            PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID);
+        }
+
         protected override bool CheckUnProcessingOrder()
         {
             if (OrderProducts.Count == 0)
@@ -129,6 +145,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             throw new NotImplementedException();
         }
+        #endregion
+
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try
