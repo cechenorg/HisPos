@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 med.PositionName = r.Field<string>("Position");
                 med.Days = r.Field<short?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
-                med.IsBuckle = r.Field<bool?>("IsBuckle");
+                med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
                 Add(med);
             }

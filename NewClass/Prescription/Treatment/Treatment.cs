@@ -102,12 +102,12 @@ namespace His_Pos.NewClass.Prescription.Treatment
             MainDisease = new DisCode();
             if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
             {
-                MainDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
+              //  MainDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
             }
             SubDisease = new DisCode();
             if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
             {
-                SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
+                //SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
             }
             Pharmacist = new MedicalPersonnel(r);
             Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
