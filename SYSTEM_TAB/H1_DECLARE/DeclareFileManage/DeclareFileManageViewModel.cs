@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,12 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 // ReSharper disable InconsistentNaming
@@ -90,8 +93,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             }
         }
 
-        private Prescription selectedPrescription;
-        public Prescription SelectedPrescription
+        private DeclarePrescription selectedPrescription;
+        public DeclarePrescription SelectedPrescription
         {
             get => selectedPrescription;
             set
@@ -103,6 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand ShowPrescriptionEditWindow { get; set; }
         #endregion
         public DeclareFileManageViewModel()
         {
@@ -123,12 +127,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
+            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
         }
 
         private void GetPreviewPrescriptionsActions()
         {
-            var prescriptions = new Prescriptions();
-            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd,null,null,null);
+            var prescriptions = new DeclarePrescriptions();
+            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
             
         }
 
@@ -154,6 +159,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
+        }
+        private void ShowPrescriptionEditWindowAction()
+        {
+            if (SelectedPrescription is null) return;
+            Prescription selected =
+                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPrescription.ID).Rows[0],
+                    PrescriptionSource.Normal);
+            selected.GetCompletePrescriptionData(true);
+            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected);
+            prescriptionEdit.ShowDialog();
         }
         #endregion
         #endregion

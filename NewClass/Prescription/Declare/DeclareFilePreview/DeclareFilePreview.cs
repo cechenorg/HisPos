@@ -8,6 +8,7 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Person;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using AdjustCase = His_Pos.NewClass.Prescription.Treatment.AdjustCase.AdjustCase;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
@@ -94,6 +95,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                 Set(() => PrescriptionsCollectionView, ref prescriptionsCollectionView, value);
             }
         }
-        public Prescriptions DeclarePrescriptions { get; set; }
+        public DeclarePrescriptions DeclarePrescriptions { get; set; }
     }
 }

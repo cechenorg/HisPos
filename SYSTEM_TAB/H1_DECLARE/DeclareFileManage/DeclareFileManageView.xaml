@@ -7,6 +7,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -97,7 +98,6 @@
                                             <Image  Source="/Images/Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
                                             <Label  Content="{Binding PharmacyID}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
                                             <Image Source="/Images/Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
-                                            <!--Content="{Binding DeclareFile.TotalPoint}"-->
                                             <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
@@ -162,6 +162,11 @@
                 <DataGrid
                      Name="PrescriptionList" Height="630"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding DataContext.SelectedPrescription,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                      CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10" ItemsSource="{Binding DeclarePrescriptions,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataContext.ShowPrescriptionEditWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True" />
