@@ -320,7 +320,12 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "IsDeclare", prescriptionStatus.IsDeclare);
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStatus]", parameterList);
         }
-
+        public static DataTable GetPrescriptionByID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ID", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[]", parameterList);
+        }
 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {

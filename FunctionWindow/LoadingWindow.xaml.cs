@@ -545,75 +545,6 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void GetMedicinesData(PrescriptionDec2View prescriptionDec2View)
-        {
-            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得處方資料...");
-                prescriptionDec2View.DeclareMedicines = null;///MedicineDb.GetDeclareMedicine();
-                prescriptionDec2View.Hospitals = ViewModelMainWindow.Institutions;
-                prescriptionDec2View.Divisions = ViewModelMainWindow.Divisions;
-                prescriptionDec2View.PrescriptionCases = ViewModelMainWindow.PrescriptionCases;
-                prescriptionDec2View.PaymentCategories = ViewModelMainWindow.PaymentCategories;
-                prescriptionDec2View.Copayments = ViewModelMainWindow.Copayments;
-                prescriptionDec2View.AdjustCases = ViewModelMainWindow.AdjustCases;
-                prescriptionDec2View.SpecialCodes = ViewModelMainWindow.SpecialTreats;
-                prescriptionDec2View.Usages = ViewModelMainWindow.Usages;
-               /// prescriptionDec2View.MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
-                prescriptionDec2View.Positions = null;/// PositionDb.GetData();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
-                    prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    prescriptionDec2View.DataContext = prescriptionDec2View;
-                    var isMedicalPerson = false;
-                    foreach (var m in prescriptionDec2View.MedicalPersonnels)
-                    {
-                        if (!m.Id.Equals(ViewModelMainWindow.CurrentUser.ID)) continue;
-                        isMedicalPerson = true;
-                        break;
-                    }
-                    if (isMedicalPerson)
-                    {
-                        prescriptionDec2View.CurrentPrescription.Pharmacy.MedicalPersonnel =
-                            prescriptionDec2View.MedicalPersonnels.SingleOrDefault(p =>
-                                p.Id.Equals(ViewModelMainWindow.CurrentUser.ID));
-                    }
-                    else
-                    {
-                        prescriptionDec2View.HisPerson.SelectedIndex = 0;
-                    }
-                    prescriptionDec2View.CurrentPrescription.Treatment.Copayment = prescriptionDec2View.Copayments.SingleOrDefault(c => c.Name.Equals("加收部分負擔"));
-                    prescriptionDec2View.CurrentPrescription.Treatment.PaymentCategory = prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Name.Equals("普通疾病"));
-                    prescriptionDec2View.CurrentPrescription.Treatment.AdjustCase = prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
-                    prescriptionDec2View.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = prescriptionDec2View.PrescriptionCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
-                    
-                    if (ViewModelMainWindow.CurrentUser.AuthorityValue.Equals("3"))
-                    {
-                        for (int i = 0; i < prescriptionDec2View.MedicalPersonnels.Count; i++)
-                        {
-                            if (prescriptionDec2View.MedicalPersonnels[i].Name.Equals(ViewModelMainWindow.CurrentUser.Name))
-                            {
-                                prescriptionDec2View.HisPerson.SelectedIndex = i;
-                            }
-                        }
-                    }
-                        
-                    prescriptionDec2View.DataContext = prescriptionDec2View;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
         public void MergeProductStockTaking(StockTakingView stockTakingView)
         {
             stockTakingView.AddItems.IsEnabled = false;
@@ -711,64 +642,7 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void LoadIcData(PrescriptionDec2View prescriptionDec2View)
-        {
-            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("卡片資料讀取中...");
-                prescriptionDec2View.LoadPatentDataFromIcCard();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    
-                }));
-            };
-            backgroundWorker.ProgressChanged += (s, o) =>
-            {
-                ChangeLoadingMessage("卡片資料讀取中...");
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.NotifyPropertyChanged(nameof(prescriptionDec2View.CurrentPrescription));
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
-        public void LoginIcData(PrescriptionDec2View prescriptionDec2View, IcErrorCodeWindow.IcErrorCode errorCode = null)
-        {
-            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("卡片資料寫入中...");
-                prescriptionDec2View.LogInIcData();
-                if (prescriptionDec2View.IsMedicalNumberGet)
-                    prescriptionDec2View.CreatIcUploadData();
-                else
-                {
-                    if(!prescriptionDec2View.CurrentPrescription.IsDeposit)
-                        prescriptionDec2View.CreatIcErrorUploadData(errorCode);
-                }
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
+        
         public void PrintInventoryCheckSheet(ReportViewer rptViewer,StockTakingView stockTakingView)
         {
             stockTakingView.StockTakingViewBox.IsEnabled = false;
@@ -788,80 +662,6 @@ namespace His_Pos.FunctionWindow
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     stockTakingView.StockTakingViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
-        public void PrintMedbag(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View,bool printReceipt)
-        {
-            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("藥袋列印中...");
-                Export(rptViewer.LocalReport,22,24);
-                ReportPrint(Properties.Settings.Default.MedBagPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    if(!printReceipt)
-                        prescriptionDec2View.ClearPrescription();
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
-        public void PrintReceipt(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View)
-        {
-            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("收據列印中...");
-                Export(rptViewer.LocalReport, 25.4, 9.3);
-                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    prescriptionDec2View.ClearPrescription();
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-        public void PrintCooperativeReceipt(ReportViewer rptViewer, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow) {
-            cooperativePrescriptSelectWindow.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("收據列印中...");
-                Export(rptViewer.LocalReport, 25.4, 9.3);
-                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    cooperativePrescriptSelectWindow.IsEnabled = true;
-                    
                     Close();
                 }));
             };
@@ -889,28 +689,7 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void PrintMedbagFromCooperativeSelect(ReportViewer rptViewer, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow, bool printReceipt) {
-            cooperativePrescriptSelectWindow.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("藥袋列印中...");
-                Export(rptViewer.LocalReport, 22, 24);
-                ReportPrint(Properties.Settings.Default.MedBagPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    cooperativePrescriptSelectWindow.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
         public void PrintReceiptFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire) {
             prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
@@ -1066,27 +845,6 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void ResetCardReader(PrescriptionDec2View instance)
-        {
-            instance.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("讀卡機重置中...");
-                HisApiBase.ResetCardReader();
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    instance.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+       
     }
 }

@@ -68,7 +68,6 @@ namespace His_Pos.NewClass.Prescription
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
                     break;
             }
-            
         }
         public Prescription(CooperativePrescription c) {
             #region CooPreVariable

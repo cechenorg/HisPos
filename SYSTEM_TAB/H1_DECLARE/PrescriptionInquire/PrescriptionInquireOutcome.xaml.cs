@@ -41,8 +41,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
     /// </summary>
     public partial class PrescriptionInquireOutcome : Window, INotifyPropertyChanged
     {
-        private IcErrorCodeWindow icErrorWindow;
-        public IcErrorCodeWindow.IcErrorCode SelectedErrorCode { get; set; }
         public static bool IsAdjust = false;
         public bool IsGetMedicalNumber { get; set; }
         public readonly byte[] BasicDataArr = new byte[72];
@@ -724,7 +722,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 if (IsGetMedicalNumber)
                     CreatIcUploadData();
                 else
-                    CreatIcErrorUploadData(SelectedErrorCode);
+                    //CreatIcErrorUploadData(SelectedErrorCode);
                 ///ProductDb.InsertCashFow("補卡退還押金", (int.Parse(DeclareTrade.Deposit)*-1).ToString(), "DecMasId", InquiredPrescription.DecMasId);
                 ///DeclareDb.UpdateDeclareRegisterMakeUp(InquiredPrescription.DecMasId);
                 MessageWindow.ShowMessage("補卡作業已完成", MessageType.SUCCESS);
@@ -859,71 +857,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
             }
         }
-
-        //異常上傳
-        public void CreatIcErrorUploadData(IcErrorCodeWindow.IcErrorCode errorCode)
-        {
-            Action creatIcUploadDataDelegate = delegate ()
-            {
-                try
-                {
-                    var medicalDatas = new List<MedicalData>();
-                    if (icErrorWindow.SelectedItem == null) return;
-                    var icData = new IcData(InquiredPrescription.Prescription, errorCode, InquiredPrescription);
-                    var mainMessage = new MainMessage(icData);
-                    var headerMessage = new Header { DataFormat = "2" };
-                    var icRecord = new Rec(headerMessage, mainMessage);
-
-                    for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
-                    {
-                        if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
-                            continue;
-                        var medicalData = new MedicalData
-                        {
-                            MedicalOrderTreatDateTime = icData.TreatmentDateTime,
-                            MedicalOrderCategory = InquiredPrescription.DeclareDetails[i].P1MedicalOrder,
-                            TreatmentProjectCode = InquiredPrescription.DeclareDetails[i].P2MedicalId,
-                            Usage = InquiredPrescription.DeclareDetails[i].P4Usage,
-                            Days = InquiredPrescription.DeclareDetails[i].P11Days.ToString(),
-                            TotalAmount = InquiredPrescription.DeclareDetails[i].P7Total.ToString(),
-                        };
-                        if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].P5Position))
-                            medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].P5Position;
-                        switch (medicalData.MedicalOrderCategory)
-                        {
-                            case "1":
-                            case "A":
-                                medicalData.PrescriptionDeliveryMark = "01";
-                                break;
-                            case "2":
-                            case "B":
-                                medicalData.PrescriptionDeliveryMark = "06";
-                                break;
-                            case "3":
-                            case "C":
-                            case "4":
-                            case "D":
-                            case "5":
-                            case "E":
-                                medicalData.PrescriptionDeliveryMark = "04";
-                                break;
-                        }
-                        medicalDatas.Add(medicalData);
-                    }
-
-                    icRecord.MainMessage.MedicalMessageList = medicalDatas;
-                    icRecord.SerializeObject();
-                    var d = new DeclareDb();
-                    ///d.InsertDailyUpload(icRecord.SerializeObject());
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                    
-                }
-            };
-            Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
-        }
+        
         #endregion
         private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (sender is TextBox t)
@@ -937,7 +871,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
         private void ButtonPrintMedBag_Click(object sender, RoutedEventArgs e) {
             var declareData = new DeclareData(InquiredPrescription.Prescription);
             int.TryParse(DeclareTrade.ReceiveMoney, out var receive);
-            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.D33DrugsPoint, 0, 0, "查詢", receive, null, Instance);
+            //NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.D33DrugsPoint, 0, 0, "查詢", receive, null, Instance);
         }
 
         private void ReadCustomerTreatRecord()
@@ -1099,9 +1033,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             }
             else
             {
-                var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
-                if (disease.DiseaseCollection.Count > 1)
-                    disease.Show();
+                //var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
+                //if (disease.DiseaseCollection.Count > 1)
+                //    disease.Show();
             }
         }
 

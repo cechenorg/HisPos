@@ -188,9 +188,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
          
         private void ShowPrescription_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            var selectedItem = (sender as DataGridRow).Item;
-            MainWindow.Instance.AddNewTab("處方登錄");
-            PrescriptionDec2View.IndexViewDecMasId = ((DailyTakeChronicList)selectedItem).DecMasId;
+            //var selectedItem = (sender as DataGridRow).Item;
+            //MainWindow.Instance.AddNewTab("處方登錄");
+            //PrescriptionDec2View.IndexViewDecMasId = ((DailyTakeChronicList)selectedItem).DecMasId;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
