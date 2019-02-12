@@ -420,7 +420,7 @@ namespace His_Pos.NewClass.Prescription
         { 
             foreach (var m in Medicines)
             { 
-                if(!string.IsNullOrEmpty(m.ID))
+                if(!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle)
                 PrescriptionDb.ProcessInventory(m.ID, m.Amount, type, source, sourceId);
             }
         }
@@ -430,7 +430,8 @@ namespace His_Pos.NewClass.Prescription
             double total = 0;//總金額
             foreach (var m in Medicines)
             { 
-                total += m.TotalPrice;
+                if((bool)m.IsBuckle)
+                    total += m.TotalPrice;
             }
             PrescriptionDb.ProcessEntry(entryName, source, sourceId , total * -1);
         }
@@ -765,30 +766,41 @@ namespace His_Pos.NewClass.Prescription
             double newtotal = 0;
             foreach (var m in originMedicines)
             {
+                if((bool)m.IsBuckle)
                 oritotal += m.TotalPrice;
             }
             foreach (var m in Medicines)
             {
-                newtotal += m.TotalPrice;
+                if ((bool)m.IsBuckle)
+                    newtotal += m.TotalPrice;
             } 
             PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, (newtotal - oritotal) * -1);
 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originMedicines) {
-                Medicine medicine = new Medicine();
-                medicine.ID = orm.ID;
-                medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ?  Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1; 
-                compareMeds.Add(medicine);
+                if ((bool)orm.IsBuckle){
+                    Medicine medicine = new Medicine();
+                    medicine.ID = orm.ID;
+                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1;
+                    compareMeds.Add(medicine);
+                }
+               
             }
             foreach (var nem in Medicines) {
-                if (originMedicines.Count(m => m.ID == nem.ID) == 0) {
-                    Medicine medicine = new Medicine();
-                    medicine.ID = nem.ID;
-                    medicine.Amount = nem.Amount;
-                    compareMeds.Add(medicine);
+                if ((bool)nem.IsBuckle)
+                {
+                    if (originMedicines.Count(m => m.ID == nem.ID) == 0)
+                    {
+                        Medicine medicine = new Medicine();
+                        medicine.ID = nem.ID;
+                        medicine.Amount = nem.Amount;
+                        compareMeds.Add(medicine);
+                    }
+                   
                 }
             }
             foreach (var com in compareMeds) {
+
                 if (com.Amount > 0)
                     PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
                 else if (com.Amount < 0)

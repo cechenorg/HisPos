@@ -402,7 +402,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void MedicineNoBuckleAction()
         {
-            Console.WriteLine(SelectedMedicine.ID);
+        
+            SelectedMedicine.IsBuckle = !SelectedMedicine.IsBuckle; 
         }
 
         private void NoCardAdjustAction()
@@ -464,6 +465,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
             NoCardAdjust = new RelayCommand(NoCardAdjustAction);
+            MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
         }
 
         private void InitialPrescription()

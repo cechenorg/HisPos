@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Product.Medicine
         {
             Usage = new Usage.Usage();
             Position = new Position.Position();
+            IsBuckle = true;
         }
         public Medicine(DataRow r) : base(r)
         {
@@ -262,13 +263,15 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private bool? isBuckle;
-        public bool? IsBuckle {
+        private bool isBuckle = true;
+        public bool IsBuckle
+        {
             get => isBuckle;
-            set {
+            set
+            {
                 Set(() => IsBuckle, ref isBuckle, value);
-            } 
-        }
+            }
+        } 
 
         private void CheckIsPriceReadOnly()
         {
