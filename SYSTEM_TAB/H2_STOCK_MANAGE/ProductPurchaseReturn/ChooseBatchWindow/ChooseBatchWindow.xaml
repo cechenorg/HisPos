@@ -65,7 +65,7 @@
                 <DataGridTemplateColumn Header="退貨量" Width="80">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding ReturnAmount, Mode=TwoWay}" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False"/>
+                            <TextBox Text="{Binding ReturnAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
