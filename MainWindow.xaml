@@ -65,7 +65,7 @@
         <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <productPurchaseReturn:ProductPurchaseReturnView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecord}">
+        <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecordViewModel}">
             <productPurchaseRecord:ProductPurchaseRecordView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTaking:StockTaking}">

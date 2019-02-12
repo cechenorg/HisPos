@@ -937,7 +937,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="Service\MoreLinq\MoreEnumerable.DistinctBy.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
@@ -1664,6 +1664,7 @@
     <Folder Include="Class\Position\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderDetailControl\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
   <ItemGroup>

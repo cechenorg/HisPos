@@ -275,7 +275,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
-                    newTab = new ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductPurchaseRecordViewModel() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
