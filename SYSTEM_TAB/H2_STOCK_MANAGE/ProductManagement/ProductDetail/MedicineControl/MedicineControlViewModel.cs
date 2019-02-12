@@ -68,12 +68,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Actions -----
         private void ConfirmChangeAction()
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認修改資料?", "");
+
+            if(!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            Medicine.Save();
+            MainWindow.ServerConnection.CloseConnection();
+
+            BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
             IsDataChanged = false;
         }
         private void CancelChangeAction()
         {
             Medicine = BackUpMedicine.Clone() as ProductManageMedicine;
-
             IsDataChanged = false;
         }
         private void SyncDataAction()

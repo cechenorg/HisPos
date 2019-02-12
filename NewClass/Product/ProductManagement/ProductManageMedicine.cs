@@ -44,5 +44,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             return MemberwiseClone() as ProductManageMedicine;
         }
+
+        public void Save()
+        {
+            ProductDetailDB.UpdateMedicineDetailData(this);
+        }
     }
 }
