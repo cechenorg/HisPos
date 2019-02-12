@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "start", start);
             DataBaseFunction.AddSqlParameter(parameterList, "end", end);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[]", parameterList);
         }
     }
 }

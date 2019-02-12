@@ -173,43 +173,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
 
-        public IcData(Class.Prescription current,IcErrorCodeWindow.IcErrorCode errorCode,DeclareData currentDeclareData)
-        {
-            IDNumber = current.Customer.IcCard.IcNumber;
-            BirthDay = DateTimeEx.ConvertToTaiwanCalender(current.Customer.Birthday, false);
-            var pBuffer = new byte[13];
-            var iBufferlength = 13;
-            var now = DateTime.Now;
-            if (HisApiBase.GetStatus(1) && HisApiBase.GetStatus(2))
-            {
-                if (HisApiBase.csGetDateTime(pBuffer, ref iBufferlength) == 0)
-                {
-                    TreatmentDateTime = ConvertData.ByToString(pBuffer, 0, iBufferlength);
-                    HisApiBase.CloseCom();
-                }
-                else
-                {
-                    TreatmentDateTime = (now.Year - 1911) + now.Month.ToString().PadLeft(2, '0') +
-                                        now.Day.ToString().PadLeft(2, '0') + now.Hour.ToString().PadLeft(2, '0') +
-                                        now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
-                }
-            }
-            else
-            {
-                TreatmentDateTime = (now.Year - 1911) + now.Month.ToString().PadLeft(2, '0') +
-                                    now.Day.ToString().PadLeft(2, '0') + now.Hour.ToString().PadLeft(2, '0') +
-                                    now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
-            }
-            PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
-            MedicalNumber = errorCode.Id;
-            MedicalPersonIcNumber = current.Pharmacy.MedicalPersonnel.IcNumber;
-            MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;
-            if (!string.IsNullOrEmpty(current.Treatment.MedicalInfo.SecondDiseaseCode.Id))
-                SecondDiagnosisCode = current.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            MedicalFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
-                             currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
-            CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
-        }
+        
         //1,3 V  2,4 ~
         [XmlElement(ElementName = "A11")]
         public string CardNo { get; set; }//卡片號碼 (get by HISAPI : csGetCardNo)

@@ -221,8 +221,8 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
-                if(PrescriptionDec2View.Instance != null)
-                    PrescriptionDec2View.Instance.CountMedicinesCost();
+                //if(PrescriptionDec2View.Instance != null)
+                //    PrescriptionDec2View.Instance.CountMedicinesCost();
                 NotifyPropertyChanged(nameof(TotalPrice));
             }
         }
