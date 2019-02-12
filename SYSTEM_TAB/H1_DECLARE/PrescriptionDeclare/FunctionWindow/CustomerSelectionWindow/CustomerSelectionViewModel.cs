@@ -126,7 +126,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 ShowDialog = false;
                 SelectedCustomer = CustomersCollectionView.Cast<Customer>().ToList()[0];
-                ExecuteCustomerSelected();
+                if(SelectedCustomer.ID != 0)
+                    ExecuteCustomerSelected();
             }
             else
             {

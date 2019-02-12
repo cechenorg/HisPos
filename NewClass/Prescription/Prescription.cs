@@ -231,18 +231,21 @@ namespace His_Pos.NewClass.Prescription
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
-                int dailyPrice = CheckIfSimpleFormDeclare();
-                if (dailyPrice > 0)
+                if (MedicineDays <= 3)
                 {
-                    foreach (var d in details)
+                    int dailyPrice = CheckIfSimpleFormDeclare();
+                    if (dailyPrice > 0)
                     {
-                        if (!d.P1.Equals("1")) continue;
-                        d.P1 = "4";
-                        d.P8 = $"{0.00:0000000.00}";
-                        d.P9 = "00000000";
+                        foreach (var d in details)
+                        {
+                            if (!d.P1.Equals("1")) continue;
+                            d.P1 = "4";
+                            d.P8 = $"{0.00:0000000.00}";
+                            d.P9 = "00000000";
+                        }
+                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
+                        details.Add(simpleForm);
                     }
-                    var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
-                    details.Add(simpleForm);
                 }
             }
             return details;
@@ -560,7 +563,10 @@ namespace His_Pos.NewClass.Prescription
                     rptViewer.LocalReport.SetParameters(parameters);
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
-                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                    MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+                    {
+                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                    }));
                 }
             }
             else
@@ -575,7 +581,10 @@ namespace His_Pos.NewClass.Prescription
                 var rd = new ReportDataSource("DataSet1", dataTable);
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
-                ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+                }));
             }
         }
         public void PrintReceipt()
@@ -586,25 +595,25 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
-            var doctor = string.Empty;
+            var cusGender = Patient.CheckGender();
             if (Treatment.AdjustCase.Id.Equals("0"))
             {
+                var birth = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true);
                 var parameters = new List<ReportParameter>
                 {
                     new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                    new ReportParameter("PatientName", Patient.ID.Equals(0)?string.Empty:Patient.Name),
-                    new ReportParameter("Gender", string.Empty),
-                    new ReportParameter("Birthday",Patient.ID.Equals(0)?string.Empty:
-                        DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
+                    new ReportParameter("PatientName", Patient.ID.Equals(0)?" ":Patient.Name),
+                    new ReportParameter("Gender", cusGender),
+                    new ReportParameter("Birthday",string.IsNullOrEmpty(birth)?"  /  /  ":birth),
                     new ReportParameter("AdjustDate", adjustDate),
                     new ReportParameter("Hospital", Treatment.Institution.Name),
-                    new ReportParameter("Doctor", doctor), //病歷號
-                    new ReportParameter("MedicalNumber", Treatment.TempMedicalNumber),
-                    new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
-                    new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
-                    new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
-                    new ReportParameter("CopaymentCost", PrescriptionPoint.CopaymentPoint.ToString()),
-                    new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
+                    new ReportParameter("Doctor", " "), //病歷號
+                    new ReportParameter("MedicalNumber"," "),
+                    new ReportParameter("MedicineCost", PrescriptionPoint.AmountSelfPay.ToString()),
+                    new ReportParameter("MedicalServiceCost", (PrescriptionPoint.AmountsPay - PrescriptionPoint.AmountSelfPay).ToString()),
+                    new ReportParameter("TotalMedicalCost","0"),
+                    new ReportParameter("CopaymentCost", "0"),
+                    new ReportParameter("HcPay", "0"),
                     new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
                     new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
                     new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
@@ -613,18 +622,17 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                var cusGender = Patient.ID.Equals(0) ? string.Empty : Patient.CheckGender();
                 var parameters = new List<ReportParameter>
                 {
                     new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                    new ReportParameter("PatientName", Patient.ID.Equals(0)?string.Empty:Patient.Name),
+                    new ReportParameter("PatientName", Patient.ID.Equals(0)?" ":Patient.Name),
                     new ReportParameter("Gender", cusGender),
-                    new ReportParameter("Birthday",Patient.ID.Equals(0)?string.Empty:
+                    new ReportParameter("Birthday",Patient.ID.Equals(0)?"  /  /  ":
                         DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                     new ReportParameter("AdjustDate", adjustDate),
-                    new ReportParameter("Hospital", Treatment.Institution.Name),
-                    new ReportParameter("Doctor", doctor), //病歷號
-                    new ReportParameter("MedicalNumber", Treatment.TempMedicalNumber),
+                    new ReportParameter("Hospital", string.IsNullOrEmpty(Treatment.Institution.Name)?" ":Treatment.Institution.Name),
+                    new ReportParameter("Doctor", " "), //病歷號
+                    new ReportParameter("MedicalNumber", string.IsNullOrEmpty(Treatment.TempMedicalNumber)?" ":Treatment.TempMedicalNumber),
                     new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
                     new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
                     new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
@@ -638,7 +646,11 @@ namespace His_Pos.NewClass.Prescription
             }
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer,true);
+            MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
+            }));
+            
         }
         public void PrintDepositSheet()
         {
@@ -663,7 +675,10 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer,false);
+            MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
+            }));
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {

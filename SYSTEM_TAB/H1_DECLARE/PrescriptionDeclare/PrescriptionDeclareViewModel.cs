@@ -254,7 +254,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
                 customerSelectionWindow = new CusSelectWindow();
             else
-                customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+            {
+                if (CurrentPrescription.Patient.Count() == 0)
+                {
+                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                    {
+                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?","查無資料");
+                        if ((bool) confirm.DialogResult)
+                            CurrentPrescription.Patient.Check();
+                        else
+                            return;
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證",MessageType.WARNING);
+                    }
+                }
+                else
+                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+            }
         }
         private void SearchCusByNameAction()
         {
@@ -262,7 +280,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
                 customerSelectionWindow = new CusSelectWindow();
             else
-                customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+            {
+                if (CurrentPrescription.Patient.Count() == 0)
+                {
+                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
+                    {
+                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                        if ((bool)confirm.DialogResult)
+                            CurrentPrescription.Patient.Check();
+                        else
+                            return;
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
+                    }
+                }
+                else
+                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+            }
         }
         private void SearchCusByBirthAction()
         {
@@ -270,13 +306,51 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Patient.Birthday is null)
                 customerSelectionWindow = new CusSelectWindow();
             else
-                customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+            {
+                if (CurrentPrescription.Patient.Count() == 0)
+                {
+                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && !string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                    {
+                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                        if ((bool)confirm.DialogResult)
+                            CurrentPrescription.Patient.Check();
+                        else
+                            return;
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
+                    }
+                }
+                else
+                    customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+            }
         }
         private void SearchCustomerByTelAction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel)) return;
             customerSelectionWindow = null;
-            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
+                customerSelectionWindow = new CusSelectWindow();
+            else
+            {
+                if (CurrentPrescription.Patient.Count() == 0)
+                {
+                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && !string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                    {
+                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                        if ((bool)confirm.DialogResult)
+                            CurrentPrescription.Patient.Check();
+                        else
+                            return;
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
+                    }
+                }
+                else
+                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
+            }
         }
         private void ShowInsSelectionWindowAction(string search)
         {
@@ -353,7 +427,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     StartAdjust();
                 }
-                
             }
         }
 
@@ -528,7 +601,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetMainDiseaseCodeByIdAction(string id)
         {
-            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
+            if (string.IsNullOrEmpty(id) || CurrentPrescription.Treatment.MainDisease is null || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && id.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusSubDisease"));
                 return;
@@ -542,7 +615,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSubDiseaseCodeByIdAction(string id)
         {
-            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.SubDisease.FullName) && id.Equals(CurrentPrescription.Treatment.SubDisease.FullName)))
+            if (string.IsNullOrEmpty(id) || CurrentPrescription.Treatment.SubDisease is null ||(!string.IsNullOrEmpty(CurrentPrescription.Treatment.SubDisease.FullName) && id.Equals(CurrentPrescription.Treatment.SubDisease.FullName)))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
                 return;
@@ -561,7 +634,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
                 CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                CurrentPrescription.CountPrescriptionPoint();
                 if (selected == CurrentPrescription.Medicines.Count - 1)
                     CurrentPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusDosage");
@@ -595,7 +667,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DeleteMedicineAction()
         {
             CurrentPrescription.Medicines.RemoveAt(CurrentPrescription.Medicines.IndexOf(SelectedMedicine));
-            CurrentPrescription.CountPrescriptionPoint();
         }
         private void GetCustomPrescription(Prescription p)
         {
@@ -706,8 +777,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void PrescribeFunction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.ID.ToString()))
-                CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+            {
+                var confirm = new ConfirmWindow("未填寫顧客資料，是否以匿名取代?", "查無資料");
+                if ((bool)confirm.DialogResult)
+                    CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
+                else
+                    return;
+            }
+            else if(!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && !string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+            {
+                CurrentPrescription.Patient.Check();
+            }
+            else
+            {
+                MessageWindow.ShowMessage("顧客資料請至少輸入身分證字號與姓名",MessageType.WARNING);
+                return;
+            }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
@@ -756,7 +842,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
                 PrintMedBag(false);
-                ClearPrescription();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -917,11 +1002,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool)receiptResult.DialogResult;
                 }
-                CurrentPrescription.PrintMedBag(singleMode);
-                if (receiptPrint)
-                    CurrentPrescription.PrintReceipt();
-                if (noCard)
-                    CurrentPrescription.PrintDepositSheet();
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    BusyContent = "藥袋列印中...";
+                    CurrentPrescription.PrintMedBag(singleMode);
+                    if (receiptPrint)
+                    {
+                        BusyContent = StringRes.收據列印;
+                        CurrentPrescription.PrintReceipt();
+                    }
+                    if (noCard)
+                    {
+                        BusyContent = StringRes.押金單據列印;
+                        CurrentPrescription.PrintDepositSheet();
+                    }
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    ClearPrescription();
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                };
+                worker.RunWorkerAsync();
             }
             else
             {
@@ -996,7 +1098,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
             MainWindow.ServerConnection.CloseConnection();
             PrintMedBag(true);
-            ClearPrescription();
         }
         #endregion
     }

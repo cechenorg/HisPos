@@ -100,7 +100,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             }
         }
         #endregion
-
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -110,7 +109,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             InitialVariables();
             InitialCommands();
         }
-
         #region Functions
         #region Initial
         private void InitialVariables()
@@ -159,7 +157,5 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         #endregion
         #endregion
-
-
     }
 }

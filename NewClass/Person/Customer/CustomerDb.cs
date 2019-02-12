@@ -99,5 +99,14 @@ namespace His_Pos.NewClass.Person.Customer
             customerTable.Columns.Add("Cus_Note", typeof(String)); 
             return customerTable;
         }
+        public static DataTable GetCustomerCountByCustomer(Customer c)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", c.IDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", c.Name);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", c.Birthday);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", c.Tel);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
+        }
     }
 }
