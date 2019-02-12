@@ -37,5 +37,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public string Manufactory { get; }
         public string SC { get; }
         public string Ingredient { get; }
+
+        public bool IsControl => !(ControlLevel is null);
     }
 }
