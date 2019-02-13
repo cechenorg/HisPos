@@ -46,15 +46,15 @@ namespace His_Pos.NewClass.StoreOrder
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
 
-        internal static void AddNewStoreOrderFromSingde(DataRow row)
+        internal static DataTable AddNewStoreOrderFromSingde(DataRow row)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("sht_no")));
             parameters.Add(new SqlParameter("NOTE", row.Field<string>("sht_memo")));
             parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
-            parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("sht_memo"), row.Field<string>("sht_no"))));
+            parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("drug_list"), row.Field<string>("sht_no"))));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
         }
 
         internal static DataTable GetNotDoneStoreOrders()
@@ -94,6 +94,9 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.Id}', '{storeOrderID}')");
+        }
+        public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
         }
         internal static void StoreOrderToDone(string storeOrderID)
         {
@@ -294,7 +297,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 string dateString = row.Field<string>("VALIDDATE");
                 DateTime? validDate = null;
-                if (dateString != null)
+                if (dateString != null && dateString != string.Empty)
                     validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
 
                 DataRow newRow = storeOrderDetailTable.NewRow();
@@ -322,7 +325,7 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            string[] drugs = productsFromSingde.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            string[] drugs = productsFromSingde.Split(new[] { "\r" }, StringSplitOptions.None);
 
             foreach (string drug in drugs)
             {
