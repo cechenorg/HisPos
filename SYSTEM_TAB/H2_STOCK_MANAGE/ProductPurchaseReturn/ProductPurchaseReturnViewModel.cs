@@ -189,7 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 BusyContent = "取得杏德新訂單...";
                 DataTable dataTable = StoreOrderDB.GetNewSingdeOrders();
                 if (dataTable.Rows.Count > 0)
-                    StoreOrderCollection.AddNewOrdersFromSingde(dataTable);
+                    StoreOrders.AddNewOrdersFromSingde(dataTable);
 
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
