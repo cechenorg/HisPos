@@ -4,10 +4,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -49,36 +51,9 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void AddProductByID(string iD)
         {
-            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
-
-            ReturnProduct returnProduct;
-
-            switch (dataTable.Rows[0].Field<string>(""))
-            {
-                case "O":
-                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
-                    break;
-                case "M":
-                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
-                    break;
-                default:
-                    returnProduct = new ReturnProduct();
-                    break;
-            }
-
-            if (SelectedItem is ReturnProduct)
-            {
-                int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
-
-                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
-
-                OrderProducts.RemoveAt(selectedProductIndex);
-                OrderProducts.Insert(selectedProductIndex, returnProduct);
-            }
-            else
-                OrderProducts.Add(returnProduct);
-
-            RaisePropertyChanged(nameof(ProductCount));
+            Messenger.Default.Register<NotificationMessage<ChooseBatchProducts>>(this, AddBatchProducts);
+            ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow(iD);
+            Messenger.Default.Unregister(this);
         }
 
         protected override bool CheckUnProcessingOrder()
@@ -113,6 +88,55 @@ namespace His_Pos.NewClass.StoreOrder
 
         }
 
+        #endregion
+
+        #region ----- Define Function -----
+        private void AddBatchProducts(NotificationMessage<ChooseBatchProducts> notificationMessage)
+        {
+            if (notificationMessage.Sender is ChooseBatchWindowViewModel)
+            {
+                DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(notificationMessage.Notification);
+
+                int insertIndex = OrderProducts.Count;
+
+                if (SelectedItem is ReturnProduct)
+                {
+                    insertIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
+
+                    OrderProducts.RemoveAt(insertIndex);
+                }
+
+                foreach (var product in notificationMessage.Content)
+                {
+                    if (product.ReturnAmount > 0 || notificationMessage.Content.Count == 1)
+                    {
+                        ReturnProduct returnProduct;
+
+                        switch (dataTable.Rows[0].Field<string>("TYPE"))
+                        {
+                            case "O":
+                                returnProduct = new ReturnOTC(dataTable.Rows[0]);
+                                break;
+                            case "M":
+                                returnProduct = new ReturnMedicine(dataTable.Rows[0]);
+                                break;
+                            default:
+                                returnProduct = new ReturnProduct();
+                                break;
+                        }
+
+                        returnProduct.BatchNumber = product.BatchNumber;
+                        returnProduct.BatchLimit = product.BatchNumberLimit;
+                        returnProduct.ReturnAmount = product.ReturnAmount;
+                        
+                        OrderProducts.Insert(insertIndex, returnProduct);
+                        insertIndex++;
+                    }
+                }
+                
+                RaisePropertyChanged(nameof(ProductCount));
+            }
+        }
         #endregion
     }
 }

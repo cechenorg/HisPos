@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
-    class ProductPurchaseRecord : TabBase
+    class ProductPurchaseRecordViewModel : TabBase
     {
         public override TabBase getTab()
         {
