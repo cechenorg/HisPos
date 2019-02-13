@@ -14,9 +14,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         public static DataTable GetDeclarePrescriptionsByMonthRange(DateTime start,DateTime end)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "start", start);
-            DataBaseFunction.AddSqlParameter(parameterList, "end", end);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", start);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", end);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[DeclarePrescriptionsByMonthRange]", parameterList);
         }
-    }
+    } 
 }

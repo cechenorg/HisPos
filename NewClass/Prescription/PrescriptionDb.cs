@@ -323,9 +323,9 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable GetPrescriptionByID(int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ID", id);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[]", parameterList);
-        }
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionByPreId]", parameterList);
+        } 
 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
