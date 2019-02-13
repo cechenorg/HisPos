@@ -396,7 +396,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructsBySearchString(medicineID).Count;
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {

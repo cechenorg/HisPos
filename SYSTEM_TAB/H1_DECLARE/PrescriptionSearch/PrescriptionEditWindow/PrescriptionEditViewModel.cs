@@ -317,7 +317,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructsBySearchString(medicineID).Count;
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {

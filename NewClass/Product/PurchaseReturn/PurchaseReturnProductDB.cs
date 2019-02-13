@@ -27,6 +27,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductByProductID]", parameters);
         }
 
+        internal static DataTable GetChooseBatchProductsByID(string iD)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", iD));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ChooseBatchProductsByID]", parameters);
+        }
+
         internal static DataTable GetSingdeProductsByStoreOrderID(string orederID)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
@@ -34,7 +42,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         internal static DataTable GetReturnProductByProductID(string iD)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", iD));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductByProductID]", parameters);
         }
     }
 }

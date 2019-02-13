@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -20,18 +20,45 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand ViewHistoryPriceCommand { get; set; }
+        public RelayCommand DataChangedCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
-        public ProductManageMedicine Medicine { get; set; }
+        private bool isDataChanged;
+        private string newInventory = "";
+        private ProductManageMedicine medicine;
+
+        public bool IsDataChanged
+        {
+            get { return isDataChanged; }
+            set
+            {
+                Set(() => IsDataChanged, ref isDataChanged, value);
+                CancelChangeCommand.RaiseCanExecuteChanged();
+                ConfirmChangeCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public string NewInventory
+        {
+            get { return newInventory; }
+            set
+            {
+                Set(() => NewInventory, ref newInventory, value);
+                StockTakingCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public ProductManageMedicine Medicine
+        {
+            get { return medicine; }
+            set
+            {
+                Set(() => Medicine, ref medicine, value);
+            }
+        }
         public ProductManageMedicine BackUpMedicine { get; set; }
         public ProductManageMedicineDetail MedicineDetail { get; set; }
         #endregion
         
-        public MedicineControlViewModel()
-        {
-        }
-
         public MedicineControlViewModel(string id)
         {
             RegisterCommand();
@@ -41,15 +68,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Actions -----
         private void ConfirmChangeAction()
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認修改資料?", "");
 
+            if(!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            Medicine.Save();
+            MainWindow.ServerConnection.CloseConnection();
+
+            BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
+            IsDataChanged = false;
         }
         private void CancelChangeAction()
         {
-
+            Medicine = BackUpMedicine.Clone() as ProductManageMedicine;
+            IsDataChanged = false;
         }
         private void SyncDataAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            //ProductDetailDB.GetProductManageMedicineDataByID(id);
+            MainWindow.ServerConnection.CloseConnection();
 
+            InitMedicineData(Medicine.ID);
         }
         private void StockTakingAction()
         {
@@ -59,16 +100,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
 
         }
+        private void DataChangedAction()
+        {
+            IsDataChanged = true;
+        }
         #endregion
 
         #region ----- Define Functions -----
         private void RegisterCommand()
         {
-            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction);
-            CancelChangeCommand = new RelayCommand(CancelChangeAction);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsMedicineDataChanged);
+            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsMedicineDataChanged);
             SyncDataCommand = new RelayCommand(SyncDataAction);
-            StockTakingCommand = new RelayCommand(StockTakingAction);
+            StockTakingCommand = new RelayCommand(StockTakingAction, IsNewInventoryHasValue);
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
+            DataChangedCommand = new RelayCommand(DataChangedAction);
         }
         private void InitMedicineData(string id)
         {
@@ -86,6 +132,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             MedicineDetail = new ProductManageMedicineDetail(manageMedicineDataTable.Rows[0]);
 
             BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
+        }
+        private bool IsMedicineDataChanged()
+        {
+            return IsDataChanged;
+        }
+        private bool IsNewInventoryHasValue()
+        {
+            return !NewInventory.Equals(string.Empty);
         }
         #endregion
     }
