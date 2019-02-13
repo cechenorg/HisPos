@@ -10,9 +10,11 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -66,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public DeclareFilePreview SelectedFile
         {
             get => selectedFile;
-            private set
+            set
             {
                 Set(() => SelectedFile, ref selectedFile, value);
             }
@@ -107,6 +109,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public RelayCommand GetPreviewPrescriptions { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
+        public RelayCommand SetDecFilePreViewSummary { get; set; }
+        public RelayCommand CreateDeclareFileCommand { get; set; }
         #endregion
         public DeclareFileManageViewModel()
         {
@@ -117,7 +121,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #region Initial
         private void InitialVariables()
         {
-            DecEnd = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            DecFilePreViews = new DeclareFilePreviews();
+            DecEnd = DateTime.Today;
             DecStart = new DateTime(((DateTime)DecEnd).Year, ((DateTime)DecEnd).Month, 1).AddMonths(-3);
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             AdjustCases = ViewModelMainWindow.AdjustCases;
@@ -129,6 +134,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
+            SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
+            CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
         }
 
         private void GetPreviewPrescriptionsActions()
@@ -168,12 +175,43 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected);
             prescriptionEdit.ShowDialog();
         }
+        private void SetDecFilePreViewSummaryAction()
+        {
+            var currentPosition = DecFilePreViewCollectionView.CurrentPosition;
+            DecFilePreViews[DecFilePreViewCollectionView.CurrentPosition].SetSummary();
+            DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
+            DecFilePreViewCollectionView = DecFilePreViewSource.View;
+            DecFilePreViewCollectionView.MoveCurrentToPosition(currentPosition);
+        }
+        private void CreateDeclareFileAction()
+        {
+            if(SelectedFile is null) return;
+            var decFile = new DeclareFile(SelectedFile);
+        }
         #endregion
         private void GetPrescriptions()
         {
             var prescriptions = new DeclarePrescriptions();
             prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
+            foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
+            {
+                foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
+                {
+                    var decFile = new DeclareFilePreview();
+                    decFile.DeclarePrescriptions.AddPrescriptions(pres);
+                    decFile.SetSummary();
+                    DecFilePreViews.Add(decFile);
+                }
+            }
+            DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
+            DecFilePreViewCollectionView = DecFilePreViewSource.View;
+            if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
+            {
+                DecFilePreViewCollectionView.MoveCurrentToFirst();
+                SelectedFile = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
+            }
         }
+
         #endregion
     }
 }

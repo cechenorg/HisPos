@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 
@@ -16,6 +18,36 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "tdata")]
     public class Tdata
     {
+        public Tdata(DeclareFilePreview.DeclareFilePreview selectedFile)
+        {
+            T1 = "30";
+            T2 = selectedFile.PharmacyID;
+            T3 = selectedFile.DeclareYear.ToString().PadLeft(3, '0') +
+                 selectedFile.DeclareMonth.ToString().PadLeft(2, '0');
+            T4 = "2";
+            T5 = "1";
+            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today,false);
+            var normalPres = selectedFile.DeclarePrescriptions.Where(p =>
+                p.AdjustCase.Id.Equals("1") || p.AdjustCase.Id.Equals("3") || p.AdjustCase.Id.Equals("4")
+                || p.AdjustCase.Id.Equals("5") || p.AdjustCase.Id.Equals("D")).ToList();
+            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.AdjustCase.Id.Equals("2")).ToList();
+            var normalCount = normalPres.Count;
+            var chronicCount = chronicPres.Count;
+            var normalApplyPoints = normalPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
+            var chronicApplyPoints = chronicPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
+            T7 = normalCount.ToString().PadLeft(6,'0');
+            T8 = normalApplyPoints.ToString().PadLeft(10, '0');
+            T9 = chronicCount.ToString().PadLeft(6, '0');
+            T10 = chronicApplyPoints.ToString().PadLeft(10, '0');
+            T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
+            T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
+            var declareDate = selectedFile.DeclarePrescriptions[0].AdjustDate;
+            var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
+            var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
+            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
+            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay, false);
+        }
+
         [XmlElement(ElementName = "t1")]
         public string T1 { get; set; }
         [XmlElement(ElementName = "t2")]
@@ -47,10 +79,34 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     }
 
     [XmlRoot(ElementName = "pharmacy")]
-    public class Pharmacy
+    public class DeclareFile
     {
+        public DeclareFile()
+        {
+        }
+        public DeclareFile(DeclareFilePreview.DeclareFilePreview selectedFile)
+        {
+            Tdata = new Tdata(selectedFile);
+            List<Ddata> tempList = new List<Ddata>();
+            foreach (var p in selectedFile.DeclarePrescriptions)
+            {
+                tempList.Add(p.FileContent);
+            }
+
+            foreach (var g in tempList.GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
+            {
+                var serial = 1;
+                foreach (var ddata in g)
+                {
+                    ddata.Dhead.D2 = serial.ToString().PadLeft(6,'0');
+                    Ddata.Add(ddata);
+                    serial++;
+                }
+            }
+        }
+
         [XmlElement(ElementName = "tdata")]
-        public Class.Declare.Tdata Tdata { get; set; }
+        public Tdata Tdata { get; set; }
         [XmlElement(ElementName = "ddata")]
         public List<Ddata> Ddata { get; set; }
     }

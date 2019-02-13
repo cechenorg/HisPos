@@ -191,7 +191,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             if(SelectedPrescription is null) return;
             SelectedPrescription.GetCompletePrescriptionData(true);
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
-            Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection")); 
+            Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
         #endregion
         #region Functions
