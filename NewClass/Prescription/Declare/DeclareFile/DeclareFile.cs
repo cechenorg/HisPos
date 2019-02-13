@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
-using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 
