@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow
 {
@@ -29,7 +30,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
             if (chooseBatchWindowViewModel.ChooseBatchProductCollection.Count == 1)
                 Close();
             else
+            {
+                Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+                {
+                    if (notificationMessage.Notification == "CloseWindow" && notificationMessage.Sender is ChooseBatchWindowViewModel)
+                        Close();
+                });
                 ShowDialog();
+            }
+        }
+
+        private void ChooseBatchWindow_OnClosed(object sender, EventArgs e)
+        {
+            Messenger.Default.Unregister(this);
         }
     }
 }

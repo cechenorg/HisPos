@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow"
         mc:Ignorable="d"
-        Title="退貨批號選擇" Height="350" Width="450" WindowStartupLocation="CenterScreen">
+        Title="退貨批號選擇" Height="350" Width="450" WindowStartupLocation="CenterScreen" Closed="ChooseBatchWindow_OnClosed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

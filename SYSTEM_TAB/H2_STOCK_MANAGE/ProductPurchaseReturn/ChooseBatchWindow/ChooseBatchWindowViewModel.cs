@@ -35,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
         private void ConfirmReturnAmountAction()
         {
             Messenger.Default.Send(new NotificationMessage<ChooseBatchProducts>(this, ChooseBatchProductCollection, productID));
+            Messenger.Default.Send(new NotificationMessage(this, "CloseWindow"));
         }
         #endregion
 
