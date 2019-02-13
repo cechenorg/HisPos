@@ -110,6 +110,12 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     if (product.ReturnAmount > 0 || notificationMessage.Content.Count == 1)
                     {
+                        if (OrderProducts.SingleOrDefault(p => p.BatchNumber.Equals(product.BatchNumber)) != null)
+                        {
+                            MessageWindow.ShowMessage($"商品 {notificationMessage.Notification} (批號 {product.BatchNumber}) 已在退貨單中!", MessageType.WARNING);
+                            continue;
+                        }
+
                         ReturnProduct returnProduct;
 
                         switch (dataTable.Rows[0].Field<string>("TYPE"))
