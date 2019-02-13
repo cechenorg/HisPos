@@ -145,6 +145,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected void ToScrapStatus()
         {
+            OrderStatus = OrderStatusEnum.SCRAP;
             StoreOrderDB.RemoveStoreOrderByID(ID);
         }
         private void ToDoneStatus()

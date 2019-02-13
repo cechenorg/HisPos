@@ -27,6 +27,10 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
+        public StoreOrders(List<StoreOrder> list) : base(list)
+        {
+        }
+
         public static StoreOrders GetOrdersNotDone()
         {
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());

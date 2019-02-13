@@ -52,6 +52,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("sht_no")));
             parameters.Add(new SqlParameter("NOTE", row.Field<string>("sht_memo")));
             parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
+            parameters.Add(new SqlParameter("STOORD_TYPE", row.Field<string>("drug_list").Contains("-") ? "R" : "P"));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("drug_list"), row.Field<string>("sht_no"))));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
@@ -304,11 +305,11 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", row.Field<string>("PRO_ID"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", row.Field<float>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", double.Parse(row["AMOUNT"].ToString()));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", row.Field<float>("AMOUNT"));
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", row.Field<float>("PRICE") / row.Field<float>("AMOUNT"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", Math.Abs(double.Parse(row["AMOUNT"].ToString())));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", row.Field<float>("PRICE") / Math.Abs(double.Parse(row["AMOUNT"].ToString())));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", row.Field<float>("PRICE"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", validDate);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", row.Field<string>("BATCHNUM"));
@@ -325,15 +326,16 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            string[] drugs = productsFromSingde.Split(new[] { "\r" }, StringSplitOptions.None);
+            string[] drugs = productsFromSingde.Replace("\n", "").Split(new[] { "\r" }, StringSplitOptions.None);
 
             foreach (string drug in drugs)
             {
+                if(drug.Equals(string.Empty)) continue;
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", drug.Substring(0, 12).Trim());
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Double.Parse(drug.Substring(12, 10).Trim()));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(Double.Parse(drug.Substring(12, 10).Trim())));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);

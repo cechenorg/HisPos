@@ -48,7 +48,7 @@ namespace His_Pos.NewClass.Product
             get
             {
                 if(!string.IsNullOrEmpty(EnglishName))
-                    return EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
+                    return (EnglishName.Contains(" ")? EnglishName.Substring(0, EnglishName.IndexOf(" ")) : EnglishName) + ChineseName;
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
