@@ -122,6 +122,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             AdjustCases = ViewModelMainWindow.AdjustCases;
             Institutions = ViewModelMainWindow.Institutions;
+            GetPrescriptions();
         }
         private void InitialCommands()
         {
@@ -132,11 +133,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetPreviewPrescriptionsActions()
         {
-            var prescriptions = new DeclarePrescriptions();
-            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
-            
+            GetPrescriptions();
         }
-
         #endregion
         #region CommandActions
         private void ShowInsSelectionWindowAction(string search)
@@ -171,6 +169,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             prescriptionEdit.ShowDialog();
         }
         #endregion
+        private void GetPrescriptions()
+        {
+            var prescriptions = new DeclarePrescriptions();
+            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
+        }
         #endregion
     }
 }
