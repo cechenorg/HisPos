@@ -27,20 +27,15 @@ namespace His_Pos.NewClass.Product
         internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum)
         {
             DataTable dataTable;
-
             switch (addProductEnum)
             {
-                case AddProductEnum.ProductPurchase:
-                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString);
-                    break;
                 case AddProductEnum.ProductReturn:
                     dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString);
                     break;
                 default:
-                    dataTable = new DataTable();
+                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString);
                     break;
             }
-
             return dataTable.Rows[0].Field<int>("COUNT");
         }
     }

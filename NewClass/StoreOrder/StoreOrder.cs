@@ -189,7 +189,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public void UpdateOrderDataFromSingde(DataRow dataRow)
         {
-            int orderFlag = dataRow.Field<sbyte>("FLAG");
+            long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
 
             if (orderFlag == 2)
