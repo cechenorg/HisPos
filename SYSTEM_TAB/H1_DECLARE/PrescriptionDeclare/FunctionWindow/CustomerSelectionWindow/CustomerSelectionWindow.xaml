@@ -16,7 +16,7 @@
         Closing="CustomerSelectionWindow_OnClosing">
     <Window.Resources>
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
-        <service:DateConverter x:Key="BirthDayConverter"/>
+        <service:NullableDateConverter x:Key="BirthDayConverter"/>
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Height="475">
