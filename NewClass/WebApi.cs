@@ -1,13 +1,7 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.Class.Declare;
 using His_Pos.Service;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 

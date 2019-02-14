@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using His_Pos.Class;
 using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage

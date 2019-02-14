@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
-using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.FunctionWindow;

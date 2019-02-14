@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
-using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
 {

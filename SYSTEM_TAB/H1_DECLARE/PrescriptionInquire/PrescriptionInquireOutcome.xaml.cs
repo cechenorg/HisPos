@@ -10,13 +10,10 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.DiseaseCode;
-using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
-using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
@@ -30,9 +27,6 @@ using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
-using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
-using Division = His_Pos.Class.Division.Division;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {

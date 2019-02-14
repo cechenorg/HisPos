@@ -5,11 +5,8 @@ using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
 using His_Pos.Service;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage

@@ -1,11 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.NewClass; 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.Xml;
 using System.IO;

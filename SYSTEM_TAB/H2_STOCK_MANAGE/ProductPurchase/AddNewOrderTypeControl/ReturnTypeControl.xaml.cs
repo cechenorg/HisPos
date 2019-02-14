@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
-using His_Pos.Class.StoreOrder;
 using His_Pos.FunctionWindow;
 using His_Pos.Struct.StoreOrder;
 

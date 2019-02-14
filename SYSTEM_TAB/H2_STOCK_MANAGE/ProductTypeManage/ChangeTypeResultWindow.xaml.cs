@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Windows;
 using His_Pos.Class;
-using His_Pos.Class.Product;
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage

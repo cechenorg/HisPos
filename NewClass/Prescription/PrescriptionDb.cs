@@ -12,7 +12,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine;
-using System.Xml.Linq;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;

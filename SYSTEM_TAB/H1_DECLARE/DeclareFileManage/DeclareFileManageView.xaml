@@ -19,7 +19,7 @@
     <UserControl.DataContext>
         <local:DeclareFileManageViewModel/>
     </UserControl.DataContext>
-    <Viewbox Name="ExportViewBox" Stretch="Fill">
+    <Viewbox Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="839"/>

@@ -1,16 +1,9 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
     public class CustomerManageViewModel : TabBase

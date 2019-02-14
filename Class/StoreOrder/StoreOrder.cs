@@ -5,9 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading; 
 using His_Pos.Struct.Manufactory;
-using His_Pos.NewClass.Person;
 using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder

@@ -3,7 +3,6 @@ using System.Windows;
 using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Product;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {

@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Manufactory;
-using His_Pos.Interface;
+﻿using His_Pos.Interface;
 using System;
 using System.Collections.ObjectModel;
 using System.Data;

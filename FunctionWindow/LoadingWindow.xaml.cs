@@ -15,34 +15,19 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Manufactory;
-using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.Class.StoreOrder;
-using His_Pos.HisApi;
 using His_Pos.Interface;
-using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using His_Pos.NewClass.Prescription.Treatment.Copayment;
-using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
-using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
-using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.Service;
 using His_Pos.Struct.Product;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
 using Microsoft.Reporting.WinForms;
 using StockTakingView = His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingView;
 
@@ -505,40 +490,6 @@ namespace His_Pos.FunctionWindow
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
                     if (medBagManageView.MedBags.Items.Count > 0)
                         medBagManageView.MedBags.SelectedIndex = 0;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-        public void GetDeclareFileData(ExportView exportView)
-        {
-            exportView.ExportViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("申報資料處理中...");
-                exportView.DeclareFiles = null;/// DeclareFileDb.GetDeclareFilesData();
-                var tmpDeclareMedicine = "";// MedicineDb.GetDeclareFileMedicineData();
-                exportView.HospitalCollection = ViewModelMainWindow.Institutions;
-                exportView.DivisionCollection = ViewModelMainWindow.Divisions;
-                exportView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
-                exportView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
-                exportView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
-                exportView.CopaymentCollection = ViewModelMainWindow.Copayments;
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    exportView.DeclareMedicinesData = null;//tmpDeclareMedicine;
-                    exportView.HisPerson.ItemsSource = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
-                    exportView.ReleasePalace.ItemsSource = ViewModelMainWindow.Institutions;
-                    exportView.AdjustCaseCombo.ItemsSource = ViewModelMainWindow.AdjustCases;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    exportView.ExportViewBox.IsEnabled = true;
-                    if (exportView.DeclareFileList.Items.Count > 0)
-                        exportView.DeclareFileList.SelectedIndex = 0;
                     Close();
                 }));
             };
