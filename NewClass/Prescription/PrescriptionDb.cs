@@ -322,7 +322,7 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable GetReservePrescriptionByID(int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Id", id);
+            DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByPreId]", parameterList);
         }
 
