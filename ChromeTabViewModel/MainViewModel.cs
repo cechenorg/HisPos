@@ -378,12 +378,6 @@ namespace His_Pos.ChromeTabViewModel
                             break;
 
                         case nameof(FeatureItem.進退貨紀錄):
-                            if (ProductPurchaseRecordView.Instance is null) break;
-
-                            if (ProductPurchaseRecordView.DataChanged)
-                                ProductPurchaseRecordView.Instance.UpdateUi();
-
-                            ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
 
                         case nameof(FeatureItem.新增盤點):

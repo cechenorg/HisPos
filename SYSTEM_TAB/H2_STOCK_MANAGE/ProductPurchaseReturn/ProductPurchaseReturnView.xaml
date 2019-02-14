@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
         <i:EventTrigger EventName="Loaded">

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl"
              xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
-             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>

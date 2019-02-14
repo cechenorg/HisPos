@@ -8,8 +8,8 @@
              xmlns:tradeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
              xmlns:orderRecordDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseRecordOrderDetail" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <orderRecordDetailControl:PurchaseRecordDetailControl/>
@@ -42,65 +42,30 @@
             <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="839">
+    <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1250"/>
+                <ColumnDefinition Width="1240"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
                 <Label Content="訂單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="TextBoxId" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <controls:AutoCompleteBox x:Name="Manufactory" Width="130" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
-                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="10,0,10,0"
-                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" 
-                                             >
-                    <controls:AutoCompleteBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Label x:Name="ManId" Width="80" Content="{Binding Id}"/>
-                                <Label x:Name="ManName" Width="200" Content="{Binding Name}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </controls:AutoCompleteBox.ItemTemplate>
-                </controls:AutoCompleteBox>
+                
                 <Label Content="採購人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <controls:AutoCompleteBox Name="OrdEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
-                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <controls:AutoCompleteBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Width="50" Content="{Binding Id}"/>
-                                <Label Width="100" Content="{Binding Name}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </controls:AutoCompleteBox.ItemTemplate>
-                </controls:AutoCompleteBox>
+                
                 <Label Content="收貨人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <controls:AutoCompleteBox Name="ReceiveEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
-                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <controls:AutoCompleteBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Width="50" Content="{Binding Id}"/>
-                                <Label Width="100" Content="{Binding Name}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </controls:AutoCompleteBox.ItemTemplate>
-                </controls:AutoCompleteBox>
+                
                 <Label Content="處理單日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <DatePicker Width="100" Height="30" Name="datestart" SelectedDateFormat="Short"/>
+
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                <DatePicker Width="100" Height="30" Name="dateend" SelectedDateFormat="Short"/>
             </StackPanel>
-            <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Click="Search_Click" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -113,11 +78,11 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
-                    <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
-                    <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked" />
+                    <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                    <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                    <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
                 </StackPanel>
-                <DataGrid Name="StoOrderOverview" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" SelectionChanged="StoOrderOverview_OnSelectionChanged"
+                <DataGrid Name="StoOrderOverview" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="260">

@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl"
              xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
-             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">

@@ -321,9 +321,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
         
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selectitem = OtcStoOrder.SelectedItem;
-            ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
-            MainWindow.Instance.AddNewTab("處理單紀錄");
+            //var selectitem = OtcStoOrder.SelectedItem;
+            //ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
+            //MainWindow.Instance.AddNewTab("處理單紀錄");
         }
 
         private void OTCNotes_TextChanged(object sender, TextChangedEventArgs e)

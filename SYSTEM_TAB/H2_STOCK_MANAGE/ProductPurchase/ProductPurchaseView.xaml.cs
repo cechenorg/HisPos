@@ -385,8 +385,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             MessageWindow.ShowMessage("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS);
             
 
-            InventoryManagementView.DataChanged = true;
-            ProductPurchaseRecordView.DataChanged = true;
+            //InventoryManagementView.DataChanged = true;
+            //ProductPurchaseRecordView.DataChanged = true;
             H3_STOCKTAKING.StockTaking.StockTakingView.DataChanged = true;
         }
 
