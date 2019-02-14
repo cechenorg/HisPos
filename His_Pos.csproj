@@ -338,6 +338,9 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreview.cs" />
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
