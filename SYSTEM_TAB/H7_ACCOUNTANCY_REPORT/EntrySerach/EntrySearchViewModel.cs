@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
-    public   class EntrySearchViewModel : TabBase
+    public class EntrySearchViewModel : TabBase
     {
         #region Var
         public override TabBase getTab()
