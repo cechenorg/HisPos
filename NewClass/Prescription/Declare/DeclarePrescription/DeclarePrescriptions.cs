@@ -23,5 +23,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Add(new DeclarePrescription(r));
             }
         }
+        public void AddPrescriptions(List<DeclarePrescription> pres)
+        {
+            foreach (var p in pres)
+            {
+                Add(p);
+            }
+        }
     }
 }

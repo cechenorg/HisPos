@@ -435,7 +435,7 @@
     <Compile Include="Class\DeclareTradeDb.cs" />
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\Declare\DeclareFile.cs" />
+    <Compile Include="Class\Declare\oDeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />

@@ -38,9 +38,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
     public partial class ExportView :UserControl, INotifyPropertyChanged
     {
         public static ExportView Instance;
-        private ObservableCollection<DeclareFile> _declareFiles;
+        private ObservableCollection<oDeclareFile> _declareFiles;
 
-        public ObservableCollection<DeclareFile> DeclareFiles
+        public ObservableCollection<oDeclareFile> DeclareFiles
         {
             get => _declareFiles;
             set
@@ -100,8 +100,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
         }
 
-        private DeclareFile _selectedFile;
-        public DeclareFile SelectedFile
+        private oDeclareFile _selectedFile;
+        public oDeclareFile SelectedFile
         {
             get => _selectedFile;
             set
@@ -193,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
         public ExportView()
         {
             InitializeComponent();
-            SelectedFile = new DeclareFile();
+            SelectedFile = new oDeclareFile();
             DataContext = this;
             Instance = this;
             InitializeDeclareFiles();
@@ -216,7 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
 
         private void DeclareFileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedFile = (DeclareFile)(sender as DataGrid)?.SelectedItem;
+            SelectedFile = (oDeclareFile)(sender as DataGrid)?.SelectedItem;
 
             if (SelectedFile?.FileContent == null) return;
             foreach (var ddata in SelectedFile.FileContent.Ddata)
