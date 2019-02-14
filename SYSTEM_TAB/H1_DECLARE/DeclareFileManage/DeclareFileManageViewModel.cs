@@ -194,6 +194,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             var prescriptions = new DeclarePrescriptions();
             prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
+            DecFilePreViews.Clear();
             foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
             {
                 foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
