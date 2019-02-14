@@ -269,7 +269,7 @@
                             <DataGridTemplateColumn Width="50" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDot" Width="18" Height="18" Padding="0" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Content="{StaticResource DeleteDot}" Command="{Binding DataContext.DeleteMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        <Button x:Name="DeleteDot" Width="18" Height="18" Padding="0" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Content="{StaticResource DeleteDot}" Command="{Binding DataContext.DeleteMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                            Visibility="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Background="Transparent" BorderBrush="Transparent"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -280,7 +280,7 @@
                                         <TextBox Name="MedicineID"  Width="130" Height="30" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red" TextInput="MedicineID_OnTextInput"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="14" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
                                             <TextBox.InputBindings>
-                                                <KeyBinding Command="{Binding DataContext.AddMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                <KeyBinding Command="{Binding DataContext.AddMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                                         CommandParameter="{Binding Text, ElementName=MedicineID}" Key="Enter" />
                                             </TextBox.InputBindings>
                                         </TextBox>
