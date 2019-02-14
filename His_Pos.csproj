@@ -405,6 +405,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />

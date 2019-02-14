@@ -16,6 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
         {
             return this;
         }
+        public StockValue SelectStockValue { get; set; }
         private StockValues dailyStockValueCollection = new StockValues();
         public StockValues DailyStockValueCollection
         {
@@ -44,14 +45,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
         #region Command
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ExportCsvCommand { get; set; }
+        public RelayCommand ShowEntryDetailCommand { set; get; }
         #endregion
         public EntrySearchViewModel() {
             Search();
             SearchCommand = new RelayCommand(Search);
             ExportCsvCommand = new RelayCommand(ExportCsv);
+            ShowEntryDetailCommand = new RelayCommand(ShowEntryDetailAction);
         }
         #region Function 
-         
+        private void ShowEntryDetailAction() {
+           EntryDetailWindow entryDetailWindow = new EntryDetailWindow(SelectStockValue.Date); 
+        }
         private void ExportCsv() { 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Filter = "csv|*.csv ";
