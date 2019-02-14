@@ -26,6 +26,7 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
+
         }
 
         private Customer patient;

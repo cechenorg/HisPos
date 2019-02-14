@@ -346,7 +346,7 @@ namespace His_Pos.NewClass.Prescription
         }
         
         #endregion
-        public void AddCooperativePrescriptionMedicines(bool addMedicine) {
+        public void AdjustMedicinesType(bool addMedicine) {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
@@ -384,33 +384,7 @@ namespace His_Pos.NewClass.Prescription
             if(addMedicine)
                 Medicines.Add(new Medicine());
         }
-        public void ConvertNHIandOTCPrescriptionMedicines()
-        {
-            Medicine temp = new Medicine();
-            for (int medCount = 0; medCount < Medicines.Count; medCount++)
-            {
-                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
-                if (table.Rows.Count > 0)
-                {
-                    switch (table.Rows[0].Field<int>("DataType"))
-                    {
-                        case 0:
-                            temp = new MedicineOTC(table.Rows[0]);
-                            break;
-                        case 1:
-                            temp = new MedicineNHI(table.Rows[0]);
-                            break;
-                    }
-                }
-                temp.Dosage = Medicines[medCount].Dosage;
-                temp.UsageName = Medicines[medCount].UsageName;
-                temp.PositionName = Medicines[medCount].PositionName;
-                temp.Days = Medicines[medCount].Days;
-                temp.PaySelf = Medicines[medCount].PaySelf;
-                temp.Amount = Medicines[medCount].Amount; 
-                Medicines[medCount] = temp; 
-            }
-        }
+
         public int UpdatePrescriptionCount()//計算處方張數
         {
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
@@ -886,7 +860,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
-            AddCooperativePrescriptionMedicines(addMedicine);
+            AdjustMedicinesType(addMedicine);
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
             MainWindow.ServerConnection.CloseConnection();

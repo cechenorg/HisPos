@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -100,6 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             InitialVariables();
             InitialCommands();
+
         }
         #region Functions
         #region Initial
@@ -126,6 +128,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             GetPrescriptions();
         }
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<Institution>(this, nameof(DeclareFileManageViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"))
+                    GetPrescriptions();
+            });
+        }
+        private void GetSelectedInstitution(Institution receiveSelectedInstitution)
+        {
+            SelectedFile.SelectedInstitution = receiveSelectedInstitution;
+        }
         #endregion
         #region CommandActions
         private void ShowInsSelectionWindowAction(string search)
@@ -144,7 +159,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                     SelectedFile.SelectedInstitution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.DeclareFileManage);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -156,9 +171,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             Prescription selected =
                 new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedFile.SelectedPrescription.ID).Rows[0],
                     PrescriptionSource.Normal);
-            selected.GetCompletePrescriptionData(true, false);
             MainWindow.ServerConnection.CloseConnection();
-            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected);
+            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
         }
         private void SetDecFilePreViewSummaryAction()

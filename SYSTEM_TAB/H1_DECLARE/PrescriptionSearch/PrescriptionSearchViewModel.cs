@@ -176,13 +176,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<Prescription>(this, "PrescriptionEdited", GetEditPrescription);
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel)+"InstSelected", GetSelectedInstitution);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel)+"PrescriptionEdited"))
+                    SearchAction();
+            });
         }
 
-        private void GetEditPrescription(Prescription obj)
+        private void GetEditPrescription(NotificationMessage msg)
         {
-
+            SearchAction();
         }
 
         #endregion
@@ -241,7 +245,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SelectedInstitution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionSearch);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -258,8 +262,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             EditedPrescription = SelectedPrescription;
             PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit;
             prescriptionEdit = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID()) : 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID());
+                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
+                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
         }
         #endregion
@@ -268,8 +272,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
-            PrescriptionCollectionVS.Filter += FilterByPatient;
-            if (PrescriptionCollectionView.IsEmpty) return;
             PrescriptionCollectionView.MoveCurrentToFirst();
             SelectedPrescription = (PrescriptionSearchPreview)PrescriptionCollectionView.CurrentItem;
         }

@@ -40,6 +40,7 @@ using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 using His_Pos.NewClass;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -374,7 +375,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Treatment.Institution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InsSelectWindow(search);
+                    var institutionSelectionWindow = new InsSelectWindow(search,ViewModelEnum.PrescriptionDeclare);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -560,7 +561,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
-            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
             Messenger.Default.Register<Prescription>(this, "CustomPrescriptionSelected", GetCustomPrescription);

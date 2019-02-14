@@ -7,6 +7,9 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -51,9 +54,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
+        private ViewModelEnum viewModel { get; set; }
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
+
         private Institution selectedInstitution;
         public Institution SelectedInstitution
         {
@@ -89,7 +94,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         }
         private void ExecuteInstitutionSelected()
         {
-            Messenger.Default.Send(SelectedInstitution, "SelectedInstitution");
+            switch (viewModel)
+            {
+                case ViewModelEnum.PrescriptionDeclare:
+                    Messenger.Default.Send(SelectedInstitution,nameof(PrescriptionDeclareViewModel) + "InsSelected");
+                    break;
+                case ViewModelEnum.PrescriptionSearch:
+                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionSearchViewModel) + "InsSelected");
+                    break;
+                case ViewModelEnum.PrescriptionEdit:
+                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionEditViewModel) + "InsSelected");
+                    break;
+                case ViewModelEnum.DeclareFileManage:
+                    Messenger.Default.Send(SelectedInstitution, nameof(DeclareFileManageViewModel) + "InsSelected");
+                    break;
+            }
             Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));
         }
         private void FilterBySearchText(object sender, FilterEventArgs e)
@@ -103,8 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 e.Accepted = false;
             }
         }
-        public InstitutionSelectionViewModel(string searchText)
+        public InstitutionSelectionViewModel(string searchText,ViewModelEnum vm)
         {
+            viewModel = vm;
             Institutions = ViewModelMainWindow.Institutions;
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             InstitutionSelected = new RelayCommand(ExecuteInstitutionSelected);

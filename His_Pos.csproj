@@ -474,6 +474,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\ViewModelEnum.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>

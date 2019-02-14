@@ -8,6 +8,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -17,7 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionEditWindow : Window
     {
-        public PrescriptionEditWindow(Prescription selected)
+        public PrescriptionEditWindow(Prescription selected, ViewModelEnum vm)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -25,7 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            DataContext = new PrescriptionEditViewModel(selected);
+            DataContext = new PrescriptionEditViewModel(selected,vm);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
 
