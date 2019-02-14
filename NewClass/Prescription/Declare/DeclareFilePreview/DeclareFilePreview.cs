@@ -190,13 +190,13 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                 document.Root?.RemoveAttributes();
                 result = document;
             }
-            //var declareFileId = DeclareFileDb.InsertDeclareFile(result, this).Rows[0].Field<int>("DecFile_ID");
+            var declareFileId = DeclareFileDb.InsertDeclareFile(result, this).Rows[0].Field<int>("DecFile_ID");
             var presIDList = new List<int>();
             foreach (var p in DeclarePrescriptions)
             {
                 presIDList.Add(p.ID);
             }
-            //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId,presIDList);
+            DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, presIDList);
             //匯出xml檔案
             Function.ExportXml(result, "匯出申報XML檔案");
         }
