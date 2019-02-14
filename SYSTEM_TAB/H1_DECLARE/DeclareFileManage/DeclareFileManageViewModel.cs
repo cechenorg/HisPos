@@ -88,16 +88,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DecEnd, ref decEnd, value);
             }
         }
-
-        private DeclarePrescription selectedPrescription;
-        public DeclarePrescription SelectedPrescription
-        {
-            get => selectedPrescription;
-            set
-            {
-                Set(() => SelectedPrescription, ref selectedPrescription, value);
-            }
-        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -161,11 +151,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void ShowPrescriptionEditWindowAction()
         {
-            if (SelectedPrescription is null) return;
+            if (SelectedFile.SelectedPrescription is null) return;
+            MainWindow.ServerConnection.OpenConnection();
             Prescription selected =
-                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPrescription.ID).Rows[0],
+                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedFile.SelectedPrescription.ID).Rows[0],
                     PrescriptionSource.Normal);
-            selected.GetCompletePrescriptionData(true);
+            selected.GetCompletePrescriptionData(true, false);
+            MainWindow.ServerConnection.CloseConnection();
             PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected);
             prescriptionEdit.ShowDialog();
         }

@@ -94,13 +94,10 @@ namespace His_Pos.NewClass.Product.Medicine
             get => dosage;
             set
             {
-                if (dosage != value)
-                {
-                    Set(() => Dosage, ref dosage, value);
-                    if(ID is null) return;
-                    if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
-                        CalculateAmount();
-                }
+                Set(() => Dosage, ref dosage, value);
+                if (ID is null) return;
+                if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                    CalculateAmount();
             }
         }
         private string _usageName;

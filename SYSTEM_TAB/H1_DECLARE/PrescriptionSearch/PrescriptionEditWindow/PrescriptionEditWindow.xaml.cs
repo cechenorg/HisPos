@@ -28,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataContext = new PrescriptionEditViewModel(selected);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
+
         private void FocusDosage(int currentIndex)
         {
             FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);

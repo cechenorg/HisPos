@@ -35,6 +35,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_DeclareTime", declareTime);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDeclareFilExist]", parameterList);
         }
+
         public static DataTable UpdateDeclareStatus(int declareFileID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

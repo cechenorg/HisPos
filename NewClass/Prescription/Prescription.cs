@@ -402,6 +402,7 @@ namespace His_Pos.NewClass.Prescription
                             break;
                     }
                 }
+                temp.Dosage = Medicines[medCount].Dosage;
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionName = Medicines[medCount].PositionName;
                 temp.Days = Medicines[medCount].Days;
@@ -879,14 +880,15 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void GetCompletePrescriptionData(bool addMedicine)
+        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead)
         {
             MainWindow.ServerConnection.OpenConnection();
             Patient = Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
             AddCooperativePrescriptionMedicines(addMedicine);
-            UpdateCooperativePrescriptionIsRead();
+            if(updateIsRead)
+                UpdateCooperativePrescriptionIsRead();
             MainWindow.ServerConnection.CloseConnection();
         }
     }
