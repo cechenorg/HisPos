@@ -60,7 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public void UpdateUi()
         {
             DataChanged = false;
-            CurrentDataGrid = PStoreOrderDetail;
+            //CurrentDataGrid = PStoreOrderDetail;
             ///storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
             StoOrderOverview.ItemsSource = storeOrderCollection;
             StoOrderOverview.SelectedIndex = 0;
@@ -154,36 +154,36 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         #region ----- Change Order -----
         private void StoOrderOverview_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dataGrid = sender as DataGrid;
+            //DataGrid dataGrid = sender as DataGrid;
 
-            if(dataGrid is null || dataGrid.SelectedItem is null) return;
+            //if(dataGrid is null || dataGrid.SelectedItem is null) return;
 
-            StoreOrder storeOrder = (StoreOrder) dataGrid.SelectedItem;
+            //StoreOrder storeOrder = (StoreOrder) dataGrid.SelectedItem;
 
-            CurrentDataGrid = null;
+            //CurrentDataGrid = null;
 
-            switch (storeOrder.Category.CategoryName)
-            {
-                case "進貨":
-                    ///storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
-                    CurrentDataGrid = PStoreOrderDetail;
+            //switch (storeOrder.Category.CategoryName)
+            //{
+            //    case "進貨":
+            //        ///storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+            //        CurrentDataGrid = PStoreOrderDetail;
 
-                    DetailGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
-                    DetailGrid.RowDefinitions[4].Height = new GridLength(0);
-                    break;
-                case "退貨":
-                    ///storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
-                    CurrentDataGrid = RStoreOrderDetail;
+            //        DetailGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+            //        DetailGrid.RowDefinitions[4].Height = new GridLength(0);
+            //        break;
+            //    case "退貨":
+            //        ///storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+            //        CurrentDataGrid = RStoreOrderDetail;
 
-                    DetailGrid.RowDefinitions[3].Height = new GridLength(0);
-                    DetailGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
-                    break;
-            }
+            //        DetailGrid.RowDefinitions[3].Height = new GridLength(0);
+            //        DetailGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
+            //        break;
+            //}
 
-            CurrentDataGrid.ItemsSource = storeOrder.Products;
-            storeOrder.CalculateTotalPrice();
+            //CurrentDataGrid.ItemsSource = storeOrder.Products;
+            //storeOrder.CalculateTotalPrice();
 
-            StoreOrderData = storeOrder;
+            //StoreOrderData = storeOrder;
         }
         #endregion
         

@@ -652,6 +652,12 @@
       <DependentUpon>ProductManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml.cs">
+      <DependentUpon>PurchaseRecordDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\ReturnRecordDetailControl.xaml.cs">
+      <DependentUpon>ReturnRecordDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindow.xaml.cs">
       <DependentUpon>AddNewOrderWindow.xaml</DependentUpon>
     </Compile>
@@ -1133,6 +1139,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\ReturnRecordDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1607,7 +1621,6 @@
     <Folder Include="Class\Position\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
-    <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderDetailControl\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
   <ItemGroup>
