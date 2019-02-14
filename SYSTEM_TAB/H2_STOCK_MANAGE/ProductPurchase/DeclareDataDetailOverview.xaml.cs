@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using His_Pos.Class.Declare;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {

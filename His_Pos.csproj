@@ -823,13 +823,6 @@
     <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml.cs">
-      <DependentUpon>DeclareDdataOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml.cs">
-      <DependentUpon>ExportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\Export.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -1336,14 +1329,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

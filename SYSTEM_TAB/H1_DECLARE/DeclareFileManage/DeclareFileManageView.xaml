@@ -19,7 +19,7 @@
     <UserControl.DataContext>
         <local:DeclareFileManageViewModel/>
     </UserControl.DataContext>
-    <Viewbox Name="ExportViewBox" Stretch="Fill">
+    <Viewbox Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="839"/>
@@ -57,7 +57,7 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Button Margin="10" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue"/>
+                    <Button Margin="10" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}"/>
                 </StackPanel>
                 <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DecFilePreViewCollectionView,UpdateSourceTrigger=PropertyChanged}"
                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}" SelectedItem="{Binding SelectedFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

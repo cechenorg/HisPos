@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using His_Pos.Class;
 using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
 

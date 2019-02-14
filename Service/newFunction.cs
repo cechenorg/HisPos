@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -11,16 +10,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.Class.Product;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Product.Medicine.MedBag;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using Microsoft.International.Formatters;
-using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 

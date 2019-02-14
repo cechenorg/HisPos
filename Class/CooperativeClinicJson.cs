@@ -1,13 +1,5 @@
-﻿
-using His_Pos.Class.Declare;
-using His_Pos.Class.Product;
-using His_Pos.NewClass.CooperativeInstitution;
-using System;
+﻿using His_Pos.NewClass.CooperativeInstitution;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace His_Pos.Class
 {

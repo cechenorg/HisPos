@@ -1,8 +1,5 @@
-﻿using System.ComponentModel;
-using System.Data;
-using System.Runtime.CompilerServices;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
 {

@@ -22,7 +22,6 @@ using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;

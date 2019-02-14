@@ -2,8 +2,6 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine.CooperativeAdjustMedicine;
 using System;
-using System.Collections.ObjectModel;
-using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport
 {

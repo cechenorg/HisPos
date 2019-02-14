@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
 using GalaSoft.MvvmLight;
@@ -13,7 +7,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
 using His_Pos.NewClass;
-using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Service;
 

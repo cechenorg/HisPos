@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using His_Pos.Class.Person;
 using System.Data;
-using System.Linq;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.Service;
 
 namespace His_Pos.Class.Pharmacy
 {

@@ -4,8 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class.Product;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 

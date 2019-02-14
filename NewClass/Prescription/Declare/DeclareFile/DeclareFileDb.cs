@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.Database;
@@ -37,6 +34,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_PharmacyID", pharmacyID);
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_DeclareTime", declareTime);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDeclareFilExist]", parameterList);
+        }
+        public static DataTable UpdateDeclareStatus(int declareFileID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_ID", declareFileID);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareStatus]", parameterList);
         }
     }
 }

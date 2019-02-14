@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Product;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
 
 namespace His_Pos.Class.ProductType
