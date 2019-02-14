@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Prescription.Search
             Division = ViewModelMainWindow.GetDivision(r.Field<string>("DivisionID"));
             AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
-            TreatDate = r.Field<DateTime>("TreatmentDate");
+            TreatDate = r.Field<DateTime?>("TreatmentDate");
         }
 
         private Customer patient;
@@ -73,8 +73,8 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => AdjustDate, ref adjustDate, value);
             }
         }
-        private DateTime treatDate;
-        public DateTime TreatDate
+        private DateTime? treatDate;
+        public DateTime? TreatDate
         {
             get => treatDate;
             set

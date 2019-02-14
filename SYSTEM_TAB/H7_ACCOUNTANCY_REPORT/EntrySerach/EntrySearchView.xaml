@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d"  
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.DataContext>
@@ -78,7 +79,7 @@
             <Label Content="調劑耗用" Grid.Row="1" Grid.Column="3" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="盤點差異" Grid.Row="1" Grid.Column="4" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="期末現值" Grid.Row="1" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalDailyStock.InitStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <generalCustomControl:DecimalControl Decimal="{Binding TotalDailyStock.InitStockValue,UpdateSourceTrigger=PropertyChanged}"  Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="20" Foreground="Black" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center"/> 
             <Label Content="{Binding TotalDailyStock.PurchaseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalDailyStock.ReturnValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalDailyStock.MedUseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
