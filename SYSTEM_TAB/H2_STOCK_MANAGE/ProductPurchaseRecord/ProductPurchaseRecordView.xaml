@@ -8,7 +8,7 @@
              xmlns:tradeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
              xmlns:orderRecordDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl"
-             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseRecordOrderDetail" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
@@ -41,6 +41,12 @@
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
+        <DataTemplate x:Key="NotScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
+            <Label Content="{Binding OrderManufactory.Name}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
+            <Label Content="處理單已取消" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
@@ -54,7 +60,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
                 <Label Content="訂單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="TextBoxId" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <TextBox Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 
                 <Label Content="採購人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -65,7 +71,7 @@
 
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
             </StackPanel>
-            <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding SearchOrderCommand}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -78,12 +84,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-                    <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-                    <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
+                    <RadioButton Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                    <RadioButton Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                    <RadioButton Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
                 </StackPanel>
-                <DataGrid Name="StoOrderOverview" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                <DataGrid Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="260">
                             <DataGridTemplateColumn.CellStyle>
@@ -106,7 +112,7 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                            <Label Content="{Binding ID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                            <Label Content="{Binding ID}" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
                                             <ContentControl>
                                                 <ContentControl.Style>
                                                     <Style TargetType="{x:Type ContentControl}">
@@ -121,11 +127,21 @@
                                             </ContentControl>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                            <Label Content="{Binding OrderManufactory.Name}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
-                                            <Label Content="{Binding ProductCount, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
+                                            <ContentControl>
+                                                <ContentControl.Style>
+                                                    <Style TargetType="{x:Type ContentControl}">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource NotScrapOrder}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding CurrentStoreOrder.OrderStatus}" Value="SCRAP">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource ScrapOrder}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
+                                            <Label Content="{Binding ProductCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
                                             <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <Label Content="處理單已取消" Grid.Row="1" Margin="5,0,0,0" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center" Visibility="{Binding IsDeleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
