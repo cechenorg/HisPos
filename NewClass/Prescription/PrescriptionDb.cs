@@ -319,7 +319,13 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionByPreId]", parameterList);
-        } 
+        }
+        public static DataTable GetReservePrescriptionByID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Id", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByPreId]", parameterList);
+        }
 
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
