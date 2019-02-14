@@ -21,9 +21,23 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         public static void UpdateDeclareFileID(int fileID,List<int> preIDList)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "", fileID);
-            DataBaseFunction.AddSqlParameter(parameterList, "", preIDList);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "DeclareId", fileID);
+            DataBaseFunction.AddSqlParameter(parameterList, "GeneralStringTable", SetIDTable(preIDList));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileID]", parameterList);
+        } 
+        private static DataTable IDTable() {
+            DataTable idTable = new DataTable();
+            idTable.Columns.Add("ID", typeof(string));
+            return idTable;
+        }
+        public static DataTable SetIDTable(List<int> preIDList) {
+            DataTable table = IDTable();
+            foreach (int id in preIDList) {
+                DataRow newRow = table.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                table.Rows.Add(newRow);
+            } 
+            return table;
         }
     } 
 }
