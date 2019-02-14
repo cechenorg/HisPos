@@ -96,12 +96,12 @@ namespace His_Pos.Service
             return date;
         }
         
-        public string GetDateFormat(string date) {
+        public static string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public string ExportXml(XDocument xml, string FileTypeName) {
+        public static string ExportXml(XDocument xml, string FileTypeName) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());

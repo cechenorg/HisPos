@@ -30,7 +30,7 @@ namespace His_Pos.Service
         public static string SerializeObject<T>(this T value)
         {
             if (value == null)
-                return string.Empty;
+                return String.Empty;
             try
             {
                 var xmlserializer = new XmlSerializer(value.GetType());
@@ -40,7 +40,7 @@ namespace His_Pos.Service
                     xmlserializer.Serialize(writer, value);
                     var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
                     document.Descendants()
-                        .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
+                        .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
                         .Remove();
                     document.Root?.RemoveAttributes();
                     return document.ToString();
@@ -63,7 +63,7 @@ namespace His_Pos.Service
                     xmlserializer.Serialize(writer, value);
                     var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
                     document.Descendants()
-                        .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
+                        .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
                         .Remove();
                     document.Root?.RemoveAttributes();
                     return document;
@@ -78,7 +78,7 @@ namespace His_Pos.Service
         public static string SerializeDailyUploadObject<T>(this T value)
         {
             if (value == null)
-                return string.Empty;
+                return String.Empty;
             try
             {
                 var xmlserializer = new XmlSerializer(value.GetType());
@@ -95,6 +95,16 @@ namespace His_Pos.Service
             {
                 throw new Exception("Serialize exception", ex);
             }
+        }
+
+        public static XmlDocument ToXmlDocument(XDocument xDocument)
+        {
+            var xmlDocument = new XmlDocument();
+            using (var xmlReader = xDocument.CreateReader())
+            {
+                xmlDocument.Load(xmlReader);
+            }
+            return xmlDocument;
         }
     }
 }

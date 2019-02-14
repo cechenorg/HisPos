@@ -327,6 +327,7 @@
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />

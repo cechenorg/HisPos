@@ -16,6 +16,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "tdata")]
     public class Tdata
     {
+        public Tdata() { }
         public Tdata(DeclareFilePreview.DeclareFilePreview selectedFile)
         {
             T1 = "30";
@@ -86,7 +87,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             Tdata = new Tdata(selectedFile);
             List<Ddata> tempList = new List<Ddata>();
-            foreach (var p in selectedFile.DeclarePrescriptions)
+            Ddata = new List<Ddata>();
+            foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))
             {
                 tempList.Add(p.FileContent);
             }

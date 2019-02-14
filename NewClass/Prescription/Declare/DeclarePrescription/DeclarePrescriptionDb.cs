@@ -18,5 +18,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", end);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[DeclarePrescriptionsByMonthRange]", parameterList);
         }
+        public static void UpdateDeclareFileID(int fileID,List<int> preIDList)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "", fileID);
+            DataBaseFunction.AddSqlParameter(parameterList, "", preIDList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[]", parameterList);
+        }
     } 
 }

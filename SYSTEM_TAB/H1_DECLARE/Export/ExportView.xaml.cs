@@ -324,8 +324,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
             tdata.T14 = (int.Parse(SelectedFile.DeclareYear)-1911) + SelectedFile.DeclareMonth  + lastAdjustDate;
             declaredPharmacy.Tdata = tdata;
-
-            var f = new Function();
+            
             XDocument result;
             var xmlSerializer = new XmlSerializer(declaredPharmacy.GetType());
             using (var textWriter = new StringWriter())
@@ -339,7 +338,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
                 result = document;
             }
             //匯出xml檔案
-            f.ExportXml(result, "匯出申報XML檔案");
+            Function.ExportXml(result, "匯出申報XML檔案");
         }
 
         private List<Ddata> SortDdata()

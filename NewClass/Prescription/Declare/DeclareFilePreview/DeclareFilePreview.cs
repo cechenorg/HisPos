@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows.Data;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.RDLC;
+using His_Pos.Service;
 using AdjustCase = His_Pos.NewClass.Prescription.Treatment.AdjustCase.AdjustCase;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 
@@ -166,6 +174,36 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
             }
             else
                 e.Accepted = false;
+        }
+
+        public void CreateDeclareFile(DeclareFile.DeclareFile doc)
+        {
+            XDocument result;
+            var xmlSerializer = new XmlSerializer(doc.GetType());
+            using (var textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, doc);
+                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
+                var root = XElement.Parse(document.ToString());
+                root.Element("ddata")?.Element("decId")?.Remove();
+                document = XDocument.Load(root.CreateReader());
+                document.Root?.RemoveAttributes();
+                result = document;
+            }
+            //var declareFileId = DeclareFileDb.InsertDeclareFile(result, this).Rows[0].Field<int>("DecFile_ID");
+            var presIDList = new List<int>();
+            foreach (var p in DeclarePrescriptions)
+            {
+                presIDList.Add(p.ID);
+            }
+            //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId,presIDList);
+            //匯出xml檔案
+            Function.ExportXml(result, "匯出申報XML檔案");
+        }
+
+        public bool CheckFileExist()
+        {
+            return DeclareFileDb.CheckFileExist(PharmacyID,new DateTime(DeclareYear,DeclareMonth,1)).Rows[0].Field<bool>("");
         }
     }
 }

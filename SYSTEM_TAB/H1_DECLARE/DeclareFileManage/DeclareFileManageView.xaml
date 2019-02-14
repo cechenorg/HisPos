@@ -270,7 +270,7 @@
                     <Label Content="{Binding NotGetCardCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                     <Label Content="總件數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0"/>
                     <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <Button Width="100" Margin="340,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.ShowPrescriptionEditWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                    <Button Width="100" Margin="340,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
