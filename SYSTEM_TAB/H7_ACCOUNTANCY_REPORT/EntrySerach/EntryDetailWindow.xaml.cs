@@ -1,21 +1,23 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using His_Pos.Class.Entry;
+using His_Pos.NewClass.StockValue.StockEntry;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach {
     /// <summary>
     /// EntryDetailWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class EntryDetailWindow : Window , INotifyPropertyChanged {
-         
+    public partial class EntryDetailWindow : Window, INotifyPropertyChanged {
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private ObservableCollection<Entry> entryDetailCollection;
-        public ObservableCollection<Entry> EntryDetailCollection
+        private StockEntrys entryDetailCollection = new StockEntrys();
+        public StockEntrys EntryDetailCollection
         {
             get => entryDetailCollection;
             set
@@ -25,19 +27,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach {
             }
         }
 
-        public EntryDetailWindow(string date) {
+        public EntryDetailWindow(DateTime date) {
             InitializeComponent();
- 
-
-                DataContext = this;
-                ///EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
-            
+            DataContext = this;
+            EntryDetailCollection.GetDataByDate(date);
+            if (EntryDetailCollection.Count > 0)
+                ShowDialog();
+            Close();
         }
 
         private void CheckBoxPurchase_Checked(object sender, RoutedEventArgs e) {
-            if (EntryDetailCollection is null) return;
+            if (EntryDetailCollection is null || EntryDetailCollection.Count == 0) return;
             EntryDetail.Items.Filter = ((o) => {
-                string name = ((Entry)o).EntryName;
+                string name = ((StockEntry)o).EntryName;
                 switch (name)
                 {
                     case "進貨":
