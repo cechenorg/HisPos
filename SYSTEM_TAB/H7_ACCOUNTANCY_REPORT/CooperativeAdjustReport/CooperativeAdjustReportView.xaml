@@ -51,8 +51,8 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Button Name="SearchButton" Tag="ByUser" Width="120" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0" />
-            <Button Width="150" Tag="ThisMonth" Content="當月查詢" Margin="685,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Button Name="SearchButton" Tag="ByUser" Width="120" Command="{Binding SearchCommand}" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0" />
+            <Button Width="150" Tag="ThisMonth" Content="當月查詢"  Command="{Binding CurrentMonthSearchCommand}" Margin="685,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
         <Label Content="調劑耗用" Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
         <DataGrid Grid.Row="2" Grid.Column="0" Background="White" Margin="10" ItemsSource="{Binding CooperativeAdjustMedCollection,UpdateSourceTrigger=PropertyChanged}"

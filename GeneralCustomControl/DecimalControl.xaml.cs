@@ -20,6 +20,16 @@ namespace His_Pos.GeneralCustomControl
                 typeof(DecimalControl),
                 new PropertyMetadata(0.0));
 
+        public string IntegerPart { get { return ((int)Decimal).ToString(); } }
+        public string FloatPart
+        {
+            get
+            {
+                string doubleString = Decimal.ToString("0.00");
+                return doubleString.Substring(doubleString.IndexOf(".") + 1, 2);
+            }
+        }
+
         public DecimalControl()
         {
             InitializeComponent();
