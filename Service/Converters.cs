@@ -166,16 +166,22 @@ namespace His_Pos.Service
             int year, month, date;
             switch (dateStr.Length)
             {
+                case 5:
+                    year = int.Parse(dateStr.Substring(0, 1)) + 1911;
+                    month = int.Parse(dateStr.Substring(1, 2));
+                    date = int.Parse(dateStr.Substring(3, 2));
+                    result = new DateTime(year, month, date);
+                    break;
                 case 6:
-                    year = int.Parse(value.ToString().Substring(0, 2)) + 1911;
-                    month = int.Parse(value.ToString().Substring(2, 2));
-                    date = int.Parse(value.ToString().Substring(4, 2));
+                    year = int.Parse(dateStr.Substring(0, 2)) + 1911;
+                    month = int.Parse(dateStr.Substring(2, 2));
+                    date = int.Parse(dateStr.Substring(4, 2));
                     result = new DateTime(year, month, date);
                     break;
                 case 7:
-                    year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
-                    month = int.Parse(value.ToString().Substring(3, 2));
-                    date = int.Parse(value.ToString().Substring(5, 2));
+                    year = int.Parse(dateStr.Substring(0, 3)) + 1911;
+                    month = int.Parse(dateStr.Substring(3, 2));
+                    date = int.Parse(dateStr.Substring(5, 2));
                     result = new DateTime(year, month, date);
                     break;
             }
@@ -297,25 +303,41 @@ namespace His_Pos.Service
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-
-            if (value.ToString().Length == 9)
+            var valueStr = value.ToString().Replace("/", "").Replace("-", "");
+            bool validDate = false;
+            int year = 0, month = 0, date = 0;
+            string checkStr = string.Empty;
+            DateTime result;
+            switch (valueStr.Length)
             {
-
-
-                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
-                var month = int.Parse(value.ToString().Substring(4, 2));
-                var date = int.Parse(value.ToString().Substring(7, 2));
+                case 5:
+                    year = int.Parse(valueStr.Substring(0, 1))+1911;
+                    month = int.Parse(valueStr.Substring(1, 2));
+                    date = int.Parse(valueStr.Substring(3, 2));
+                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
+                    break;
+                case 6:
+                    year = int.Parse(valueStr.Substring(0, 2)) + 1911;
+                    month = int.Parse(valueStr.Substring(2, 2));
+                    date = int.Parse(valueStr.Substring(4, 2));
+                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
+                    break;
+                case 7:
+                    year = int.Parse(valueStr.Substring(0, 3)) + 1911;
+                    month = int.Parse(valueStr.Substring(3, 2));
+                    date = int.Parse(valueStr.Substring(5, 2));
+                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
+                    break;
+            }
+            validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
+            if (validDate)
+            {
                 var dateStr = year + "/" + month + "/" + date;
-                // Validates weather Non numeric values are entered as the Age
                 if (!DateTime.TryParse(dateStr, out _))
-                {
                     return new ValidationResult(false, InvalidInput);
-                }
             }
-            else if(value.ToString().Contains(" ") || value.ToString().Length != 9)
-            {
+            else
                 return new ValidationResult(false, InvalidInput);
-            }
             return new ValidationResult(true, null);
         }
     }
