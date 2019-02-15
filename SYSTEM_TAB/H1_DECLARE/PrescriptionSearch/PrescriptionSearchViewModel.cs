@@ -155,6 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand<string> CheckInsEmpty { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
+        public RelayCommand Clear { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
         {
@@ -184,6 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
+            Clear = new RelayCommand(ClearAction);
         }
 
         private void RegisterMessengers()
@@ -276,6 +278,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
                 new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
+        }
+        private void ClearAction()
+        {
+            SelectedInstitution = null;
+            StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            EndDate = DateTime.Today;
+            SelectedPharmacist = null;
+            SelectedAdjustCase = null;
+            Patient = string.Empty;
+            Birth = null;
         }
         #endregion
         #region Functions

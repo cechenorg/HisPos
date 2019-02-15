@@ -182,7 +182,7 @@ namespace His_Pos.ChromeTabViewModel
                 IsBusy = false;
             };
 
-            IsBusy = true;
+            IsBusy = false;
             worker.RunWorkerAsync();
         }
 

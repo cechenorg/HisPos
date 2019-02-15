@@ -147,8 +147,6 @@ namespace His_Pos
             timer.Start();
         }
 
-       
-
         private void Shortcut_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(sender is null) return;
