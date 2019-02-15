@@ -35,7 +35,7 @@
                     </StackPanel.Background>
                     <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
                     <xctk:MaskedTextBox Width="60" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="DecStart" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">
@@ -47,7 +47,7 @@
                     </xctk:MaskedTextBox>
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent18}"/>
                     <xctk:MaskedTextBox Width="60" Height="35" HorizontalContentAlignment="Center"  FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="DecEnd" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">

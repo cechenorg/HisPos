@@ -132,7 +132,7 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox  Width="150" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" TextChanged="Text_TextChanged" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" TextChanged="Text_TextChanged" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="InquiredPrescription.Prescription.Treatment.TreatmentDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -146,7 +146,7 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="1" Margin="10">
                 <Label Content="調劑日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox  Width="150" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" TextChanged="Text_TextChanged" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" TextChanged="Text_TextChanged" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="InquiredPrescription.Prescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">

@@ -82,6 +82,9 @@
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="Birth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                                <Binding.ValidationRules>
+                                    <service:DateValidationRule/>
+                                </Binding.ValidationRules>
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>

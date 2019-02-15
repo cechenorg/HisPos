@@ -138,7 +138,7 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                             <Label  Content="生日" FontFamily="Segoe UI Semibold" FontSize="20"/>
                             <xctk:MaskedTextBox Width="150" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                  Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
+                                  Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text >
                                     <Binding Path="Employee.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -167,7 +167,7 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="8">
                             <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <xctk:MaskedTextBox Width="130" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="Employee.StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">

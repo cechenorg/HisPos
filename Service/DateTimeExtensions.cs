@@ -213,5 +213,23 @@ namespace His_Pos.Service
             var dateSplit = date.Split('/');
             return dateSplit[0] + "年" + dateSplit[1] + "月" + dateSplit[2] + "日";
         }
+        public static bool ValidateDateTime(string datetime, string format)
+        {
+            if (datetime == null || datetime.Length == 0)
+            {
+                return false;
+            }
+            try
+            {
+                System.Globalization.DateTimeFormatInfo dtfi = new System.Globalization.DateTimeFormatInfo();
+                dtfi.FullDateTimePattern = format;
+                DateTime dt = DateTime.ParseExact(datetime, "F", dtfi);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -161,11 +161,24 @@ namespace His_Pos.Service
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime? result = null;
-            if (value == null || value.ToString().Contains(" ") || value.ToString().Length != 9) return result;
-            var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
-            var month = int.Parse(value.ToString().Substring(4, 2));
-            var date = int.Parse(value.ToString().Substring(7, 2));
-            result = new DateTime(year, month, date);
+            if (value == null ) return result;
+            var dateStr = value.ToString().Replace("/", "").Replace("-", "");
+            int year, month, date;
+            switch (dateStr.Length)
+            {
+                case 6:
+                    year = int.Parse(value.ToString().Substring(0, 2)) + 1911;
+                    month = int.Parse(value.ToString().Substring(2, 2));
+                    date = int.Parse(value.ToString().Substring(4, 2));
+                    result = new DateTime(year, month, date);
+                    break;
+                case 7:
+                    year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+                    month = int.Parse(value.ToString().Substring(3, 2));
+                    date = int.Parse(value.ToString().Substring(5, 2));
+                    result = new DateTime(year, month, date);
+                    break;
+            }
             return result;
         }
     }

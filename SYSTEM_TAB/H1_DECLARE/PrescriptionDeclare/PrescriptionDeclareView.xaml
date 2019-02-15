@@ -69,7 +69,7 @@
                     </TextBox>
                     <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                     <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus">
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus">
                         <xctk:MaskedTextBox.InputBindings>
                             <KeyBinding Command="{Binding SearchCustomerByBirthday}" Key="Enter" />
                         </xctk:MaskedTextBox.InputBindings>
@@ -144,7 +144,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
                         <xctk:MaskedTextBox x:Name="TreatDate" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         PreviewKeyDown="TreatDate_PreviewKeyDown">
                             <Binding Path="CurrentPrescription.Treatment.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -157,7 +157,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}"/>
                         <xctk:MaskedTextBox x:Name="AdjustDate" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
-                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
+                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
                                             PreviewKeyDown="AdjustDate_PreviewKeyDown">
                             <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">

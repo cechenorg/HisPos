@@ -490,7 +490,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <xctk:MaskedTextBox x:Name="ValidDate" Width="120" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"
                                                 GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="ValidDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
