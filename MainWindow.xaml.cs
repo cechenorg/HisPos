@@ -41,17 +41,25 @@ namespace His_Pos
         
         public MainWindow(Employee user)
         {
-            InitializeComponent();
-            FeatureFactory();
-            WindowState = WindowState.Maximized;
-            ViewModelMainWindow.CurrentUser = user;
-            if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
-                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
-            Instance = this;
-            InitializeMenu();
-            InitialUserBlock();
-            StratClock();
-            AddNewTab("每日作業");
+            try
+            {
+                InitializeComponent();
+                FeatureFactory();
+                WindowState = WindowState.Maximized;
+                ViewModelMainWindow.CurrentUser = user;
+                if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
+                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
+                Instance = this;
+                InitializeMenu();
+                InitialUserBlock();
+                StratClock();
+                AddNewTab("每日作業");
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("MainWindow:" + e.Message,MessageType.ERROR);
+                throw;
+            }
         }
         
         private void InitialUserBlock()

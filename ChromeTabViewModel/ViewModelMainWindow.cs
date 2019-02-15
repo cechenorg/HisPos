@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -9,6 +10,8 @@ using System.Text;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -123,23 +126,31 @@ namespace His_Pos.ChromeTabViewModel
         private IList<Stream> m_streams;
         public ViewModelMainWindow()
         {
-            SelectedTab = ItemCollection.FirstOrDefault();
-            ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
-            MainWindow.ServerConnection.OpenConnection();
-            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
-            MainWindow.ServerConnection.CloseConnection();
-            CanMoveTabs = true;
-            ShowAddButton = false;
-            //This sort description is what keeps the source collection sorted, based on tab number. 
-            //You can also use the sort description to manually sort the tabs, based on your own criterias.
-
-            view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            try
             {
-                if (notificationMessage.Notification == "MainWindowClosing")
-                    WindowCloseAction();
-            });
+                SelectedTab = ItemCollection.FirstOrDefault();
+                ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+                CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+                MainWindow.ServerConnection.CloseConnection();
+                CanMoveTabs = true;
+                ShowAddButton = false;
+                //This sort description is what keeps the source collection sorted, based on tab number. 
+                //You can also use the sort description to manually sort the tabs, based on your own criterias.
+
+                view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
+                Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+                {
+                    if (notificationMessage.Notification == "MainWindowClosing")
+                        WindowCloseAction();
+                });
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("ViewModelMainWindow:"+e.Message, MessageType.ERROR);
+                throw;
+            }
         }
 
         private RelayCommand initialData;
