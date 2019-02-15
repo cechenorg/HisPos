@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -21,9 +22,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     {
         public Prescriptions CooperativePrescriptions { get; set; }
         public Prescriptions ReservedPrescriptions { get; set; }
-        public Prescriptions UngetCardPrescriptions { get; set; }
+        public Prescriptions RegisteredPrescriptions { get; set; }
         public Prescription SelectedPrescription { get; set; }
-        public RelayCommand MakeUpClick { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
         public Cus Patient { get; set; }
         public IcCard Card { get; set; }
@@ -50,14 +50,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             }
         }
 
-        private Visibility ungetCardVisible;
+        private Visibility registeredVisible;
 
-        public Visibility UngetCardVisible
+        public Visibility RegisteredVisible
         {
-            get => ungetCardVisible;
+            get => registeredVisible;
             set
             {
-                Set(() => UngetCardVisible, ref ungetCardVisible, value);
+                Set(() => RegisteredVisible, ref registeredVisible, value);
             }
         }
         private bool isBusy;
@@ -88,7 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             }
         }
 
-        public CustomPrescriptionViewModel(Cus cus, IcCard card,bool isGetMakeUpPrescription)
+        public CustomPrescriptionViewModel(Cus cus, IcCard card)
         {
             Patient = cus;
             Card = card;
@@ -99,71 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void InitialCommand()
         {
-            MakeUpClick = new RelayCommand(MakeUpClickAction);
             PrescriptionSelected = new RelayCommand(CustomPrescriptionSelected);
-        }
-
-        private void ConfirmClickAction()
-        {
-            if (SelectedPrescription is null)
-                MessageWindow.ShowMessage("尚未選擇處方", MessageType.ERROR);
-            else
-                CustomPrescriptionSelected();
-                
-        }
-
-        private void CancleClickAction()
-        {
-            Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
-        }
-
-        private void MakeUpClickAction()
-        {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                foreach (var p in UngetCardPrescriptions)
-                {
-                    p.Patient = Patient;
-                    p.Card = Card;
-                    if (CreatePrescriptionSign(p))
-                        HisApiFunction.CreatDailyUploadData(p,true);
-                }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-        }
-
-        private bool CreatePrescriptionSign(Prescription prescription)
-        {
-            BusyContent = StringRes.寫卡;
-            prescription.PrescriptionSign = HisApiFunction.WritePrescriptionData(prescription);
-            BusyContent = StringRes.產生每日上傳資料;
-            if (prescription.PrescriptionSign.Count != prescription.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
-            {
-                bool? isDone = null;
-                ErrorUploadWindowViewModel.IcErrorCode errorCode;
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
-                    var e = new ErrorUploadWindow(prescription.Card.IsGetMedicalNumber); //詢問異常上傳
-                    e.ShowDialog();
-                    while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
-                    {
-                        e = new ErrorUploadWindow(prescription.Card.IsGetMedicalNumber);
-                        e.ShowDialog();
-                    }
-                    errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-                    if (isDone is null)
-                        HisApiFunction.CreatErrorDailyUploadData(prescription, true,errorCode);
-                    isDone = true;
-                });
-                return false;
-            }
-            return true;
         }
 
         private void InitializePrescription()
@@ -174,17 +110,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(Patient.IDNumber);
             ReservedPrescriptions = new Prescriptions();
             ReservedPrescriptions.GetReservePrescriptionByCusId(Patient.ID);
-            ReservedPrescriptions.GetRegisterPrescriptionByCusId(Patient.ID);
-            UngetCardPrescriptions = new Prescriptions();
-            UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(Patient.ID);
+            RegisteredPrescriptions = new Prescriptions();
+            RegisteredPrescriptions.GetRegisterPrescriptionByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (CooperativePrescriptions.Count == 0)
                 CooperativeVisible = Visibility.Collapsed;
             if(ReservedPrescriptions.Count == 0)
                 ReservedVisible = Visibility.Collapsed;
-            if (UngetCardPrescriptions.Count == 0)
-                UngetCardVisible = Visibility.Collapsed;
-            if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || UngetCardPrescriptions.Count > 0)
+            if (RegisteredPrescriptions.Count == 0)
+                ReservedVisible = Visibility.Collapsed;
+            if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || RegisteredPrescriptions.Count > 0)
                 ShowDialog = true;
             else
                 ShowDialog = false;
@@ -192,6 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void RegisterMessenger()
         {
+            Messenger.Default.Register<Prescription>(this, "ReservedSelected", GetReservePrescription);
             Messenger.Default.Register<Prescription>(this,"ReservedSelected", GetReservePrescription);
             Messenger.Default.Register<Prescription>(this, "CooperativeSelected", GetCooperativePrescription);
         }
@@ -199,6 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private void GetReservePrescription(Prescription p)
         {
             isSelectCooperative = false;
+            p.Treatment.AdjustDate = DateTime.Today;
             SelectedPrescription = p;
         }
 
@@ -210,7 +147,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void CustomPrescriptionSelected()
         {
-            SelectedPrescription.GetCompletePrescriptionData(true);
+            if(SelectedPrescription is null) return;
+            SelectedPrescription.GetCompletePrescriptionData(true,true);
             Messenger.Default.Send(SelectedPrescription,"CustomPrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
         }

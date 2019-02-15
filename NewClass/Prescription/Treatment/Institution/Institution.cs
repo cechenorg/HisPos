@@ -1,9 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {

@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>36</ApplicationRevision>
+    <ApplicationRevision>45</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -298,6 +298,9 @@
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
+    <Compile Include="NewClass\CashFlow\CashFlow.cs" />
+    <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
+    <Compile Include="NewClass\CashFlow\CashFlows.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
     <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
@@ -327,6 +330,7 @@
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
@@ -337,6 +341,11 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
+    <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreview.cs" />
+    <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
@@ -399,6 +408,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
@@ -432,7 +444,7 @@
     <Compile Include="Class\DeclareTradeDb.cs" />
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\Declare\DeclareFile.cs" />
+    <Compile Include="Class\Declare\oDeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
@@ -468,6 +480,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\ViewModelEnum.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>
@@ -823,13 +836,6 @@
     <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml.cs">
-      <DependentUpon>DeclareDdataOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml.cs">
-      <DependentUpon>ExportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\Export.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -1344,14 +1350,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

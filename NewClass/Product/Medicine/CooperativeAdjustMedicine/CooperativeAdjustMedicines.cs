@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Data;
+
+namespace His_Pos.NewClass.Product.Medicine.CooperativeAdjustMedicine {
+    public class CooperativeAdjustMedicines : ObservableCollection<CooperativeAdjustMedicine> {
+        public CooperativeAdjustMedicines() {
+             
+        }
+        public void GetDataByDate(DateTime sDate,DateTime eDate) {
+            var table = CooperativeAdjustMedicineDb.GetDataByDate(sDate,eDate);
+            foreach (DataRow r in table.Rows) {
+                Add(new CooperativeAdjustMedicine(r));
+            }
+        }
+    }
+}

@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Prescription {
                 Set(() => IsSendOrder, ref isSendOrder, value);
             }
         }
-        public bool IsDeposit { get; set; } = false; //是否押金
+        public bool IsDeposit { get; set; } //是否押金
         public bool IsCooperativeVIP { get; set; }
         public void Init()
         {

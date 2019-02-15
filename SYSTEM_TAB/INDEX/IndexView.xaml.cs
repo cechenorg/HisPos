@@ -7,10 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
-using His_Pos.Class.Product;
-using His_Pos.Class.StoreOrder;
 using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 
 namespace His_Pos.SYSTEM_TAB.INDEX

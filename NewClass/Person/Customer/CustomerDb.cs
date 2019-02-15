@@ -1,5 +1,4 @@
 ﻿using His_Pos.Database;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
 using System.Collections.Generic;

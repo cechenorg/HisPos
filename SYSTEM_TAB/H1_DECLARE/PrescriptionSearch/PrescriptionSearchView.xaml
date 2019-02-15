@@ -70,7 +70,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
                     <Label Content="病患篩選" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Text="{Binding Patient,Mode=TwoWay}" Margin="10,0,10,0" Width="130"  FontSize="16" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center"/>
+                    <TextBox Text="{Binding Patient,Mode=TwoWay}" Margin="10,0,10,0" Width="130"  FontSize="16" Height="35" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center"/>
                     <Button Content="慢箋預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="1010,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
@@ -109,7 +109,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="220" Header="醫療院所" IsReadOnly="True" Binding="{Binding Treatment.Institution.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="220" Header="醫療院所" IsReadOnly="True" Binding="{Binding Institution.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -117,7 +117,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Treatment.Division.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Division.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -125,7 +125,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="90" Header="申報點數" IsReadOnly="True" Binding="{Binding PrescriptionPoint.ApplyPoint,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="90" Header="調劑藥師" IsReadOnly="True" Binding="{Binding Pharmacist.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -133,7 +133,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="90" Header="調劑藥師" IsReadOnly="True" Binding="{Binding Treatment.Pharmacist.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="150" Header="調劑日期" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -141,7 +141,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="調劑日期" IsReadOnly="True" Binding="{Binding Treatment.AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="150" Header="就醫日期" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -164,12 +164,10 @@
                     <Label Width="80" Content="{Binding MedServicePrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="80" Content="{Binding CopaymenTPrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="調劑耗用" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding MedUseePrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="80" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Rectangle Width="65"/>
-                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="0,0,0,0" />
+                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="150,0,0,0" />
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

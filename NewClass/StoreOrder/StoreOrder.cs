@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.NewClass.Manufactory;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.PurchaseReturn;
-using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.NewClass.StoreOrder
 {

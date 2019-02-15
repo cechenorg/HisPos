@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.Database;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.IcData.Upload
 {
@@ -34,7 +35,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         public static void InsertDailyUploadFile(XDocument xml)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Content", new SqlXml(new XmlTextReader(PrescriptionDb.ToXmlDocument(xml).InnerXml, XmlNodeType.Document, null)));
+            DataBaseFunction.AddSqlParameter(parameterList, "Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(xml).InnerXml, XmlNodeType.Document, null)));
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertUploadDataHisotry]", parameterList);
         }
     }

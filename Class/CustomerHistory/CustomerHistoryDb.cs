@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using His_Pos.Properties;
-using His_Pos.Service;
+﻿using System.Data;
 
 namespace His_Pos.Class.CustomerHistory
 {

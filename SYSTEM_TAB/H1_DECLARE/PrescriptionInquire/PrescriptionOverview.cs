@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.NewClass.Prescription.Treatment.Division;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {

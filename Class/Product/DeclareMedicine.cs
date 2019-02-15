@@ -6,7 +6,6 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.Class.Product
 {

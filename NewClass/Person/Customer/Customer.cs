@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
-using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
 {
@@ -47,10 +42,22 @@ namespace His_Pos.NewClass.Person.Customer
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             return customer;
         }
-        public Customer Check() {
+        public void Check() {
             DataTable table = CustomerDb.CheckCustomer(this);
-            Customer newcustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            return newcustomer;
+            Customer newCustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            ID = newCustomer.ID;
+            Name = newCustomer.Name;
+            Birthday = newCustomer.Birthday;
+            IDNumber = newCustomer.IDNumber;
+            Tel = newCustomer.Tel;
+            ContactNote = newCustomer.ContactNote;
+            CellPhone = newCustomer.CellPhone;
+            Line = newCustomer.Line;
+            Note = newCustomer.Note;
+            Address = newCustomer.Address;
+            Email = newCustomer.Email;
+            Gender = newCustomer.Gender;
+            LastEdit = newCustomer.LastEdit;
         }
         public void UpdateEditTime() {
             CustomerDb.UpdateEditTime(ID);

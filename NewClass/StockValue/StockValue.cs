@@ -1,10 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.StockValue {
     public class StockValue : ObservableObject {
@@ -13,12 +9,12 @@ namespace His_Pos.NewClass.StockValue {
         }
         public StockValue(DataRow r) {
             Date =  r.Field<DateTime>("DaiSto_Date");
-            InitStockValue = r.Field<double>("DaiSto_InitialValue");
-            PurchaseValue = r.Field<double>("DaiSto_PurchaseValue");
-            ReturnValue = r.Field<double>("DaiSto_ReturnValue");
-            StockCheckValue = r.Field<double>("DaiSto_StockCheckValue");
-            MedUseValue = r.Field<double>("DaiSto_MedUseValue");
-            FinalStockValue = r.Field<double>("DaiSto_FinalValue"); 
+            InitStockValue = Math.Round(r.Field<double>("DaiSto_InitialValue"),2);
+            PurchaseValue = Math.Round(r.Field<double>("DaiSto_PurchaseValue"), 2);   
+            ReturnValue = Math.Round(r.Field<double>("DaiSto_ReturnValue"),2);
+            StockCheckValue = Math.Round(r.Field<double>("DaiSto_StockCheckValue"),2);
+            MedUseValue = Math.Round(r.Field<double>("DaiSto_MedUseValue"),2);
+            FinalStockValue = Math.Round(r.Field<double>("DaiSto_FinalValue"),2); 
         }
         public DateTime Date { get; set; }
         public double InitStockValue { get; set; }

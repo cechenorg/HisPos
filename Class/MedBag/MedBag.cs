@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using His_Pos.Class.MedBagLocation;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 

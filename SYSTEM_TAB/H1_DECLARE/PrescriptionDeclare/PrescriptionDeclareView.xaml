@@ -588,7 +588,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
                             <CheckBox Width="133" Height="35" Background="RoyalBlue"  Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"
-                                      IsEnabled="{Binding CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsChecked="{Binding CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                      IsEnabled="{Binding CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsChecked="{Binding CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Command="{Binding SendOrderCommand}"/>
                             <Button Width="175" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}" Margin="20,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Product;

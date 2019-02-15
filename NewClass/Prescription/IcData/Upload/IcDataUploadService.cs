@@ -6,9 +6,7 @@ using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.HisApi;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 namespace His_Pos.NewClass.Prescription.IcData.Upload

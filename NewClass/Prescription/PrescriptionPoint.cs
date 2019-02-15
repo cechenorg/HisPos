@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
-using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 
 namespace His_Pos.NewClass.Prescription {
     public class PrescriptionPoint:ObservableObject

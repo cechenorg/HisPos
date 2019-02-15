@@ -1,10 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product
 {
@@ -18,7 +12,11 @@ namespace His_Pos.NewClass.Product
             MedName = m.ChineseName;
             Stock = m.Inventory;
             TreatAmount = m.Amount;
-            SendAmount = Stock <= 0 ? TreatAmount : TreatAmount - Stock;
+            if (Stock <= 0 || Stock > TreatAmount)
+                SendAmount = TreatAmount;
+            else if (Stock > 0 && Stock < TreatAmount)
+                SendAmount = TreatAmount - Stock;
+             
         }
         public string MedId { get; set; }
         public string MedName { get; set; }
