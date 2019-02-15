@@ -197,9 +197,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 case 7:
                     birth = new DateTime(int.Parse(Searching.Substring(0,3))+1911, int.Parse(Searching.Substring(3, 2)), int.Parse(Searching.Substring(5, 2)));
+                    if (c.Birthday is null)
+                        return false;
                     return DateTime.Compare(birth, (DateTime)c.Birthday) == 0;
                 case 6:
                     birth = new DateTime(int.Parse(Searching.Substring(0, 2)) + 1911, int.Parse(Searching.Substring(2, 2)), int.Parse(Searching.Substring(4, 2)));
+                    if (c.Birthday is null)
+                        return false;
                     return DateTime.Compare(birth, (DateTime)c.Birthday) == 0;
                 default:
                     return false;
