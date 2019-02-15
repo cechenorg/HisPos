@@ -110,6 +110,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(Patient.IDNumber);
             ReservedPrescriptions = new Prescriptions();
             ReservedPrescriptions.GetReservePrescriptionByCusId(Patient.ID);
+            RegisteredPrescriptions = new Prescriptions();
             RegisteredPrescriptions.GetRegisterPrescriptionByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (CooperativePrescriptions.Count == 0)
