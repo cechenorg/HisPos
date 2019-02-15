@@ -13,10 +13,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomPrescriptionWindow : Window
     {
         private CustomPrescriptionViewModel customPrescriptionViewModel { get; set; }
-        public CustomPrescriptionWindow(Cus cus,IcCard card, bool isGetMakeUpPrescription)
+        public CustomPrescriptionWindow(Cus cus,IcCard card)
         {
             InitializeComponent();
-            customPrescriptionViewModel = new CustomPrescriptionViewModel(cus, card, isGetMakeUpPrescription);
+            customPrescriptionViewModel = new CustomPrescriptionViewModel(cus, card);
             DataContext = customPrescriptionViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
@@ -24,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 {
                     case "CloseCustomPrescription":
                         Close();
+                        Messenger.Default.Unregister(this);
                         break;
                 }
             });

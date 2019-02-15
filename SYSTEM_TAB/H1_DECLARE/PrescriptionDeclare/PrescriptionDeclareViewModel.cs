@@ -666,7 +666,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
             //customerSelectionWindow.Close();
-            CheckCustomPrescriptions(false);
+            CheckCustomPrescriptions();
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
@@ -894,10 +894,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountPrescriptionPoint();
         }
-        private void CheckCustomPrescriptions(bool isGetMakeUpPrescription)
+        private void CheckCustomPrescriptions()
         {
             CusPreSelectWindow customPrescriptionWindow = null;
-            customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card, isGetMakeUpPrescription);
+            customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
 
         private void ReadCard(bool showCusWindow)
@@ -918,7 +918,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CheckCustomPrescriptions(true);
+                        CheckCustomPrescriptions();
                         CurrentPrescription.Treatment.GetLastMedicalNumber();
                     }
                     else
