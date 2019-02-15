@@ -74,7 +74,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal static void AddNewPrescriptionOrdersFromSingde(DataTable dataTable)
         {
-            throw new NotImplementedException();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DataTable table = StoreOrderDB.AddNewPrescriptionOrderFromSingde(row);
+
+                if (table != null && table.Rows.Count > 0)
+                    StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("batch_sht"));
+            }
         }
     }
 }

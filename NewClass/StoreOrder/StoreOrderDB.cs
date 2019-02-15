@@ -66,6 +66,18 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
         }
 
+        internal static DataTable AddNewPrescriptionOrderFromSingde(DataRow row)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("batch_sht")));
+            parameters.Add(new SqlParameter("NOTE", row.Field<string>("inv_msg")));
+            parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
+            parameters.Add(new SqlParameter("STOORD_TYPE", "P"));
+            parameters.Add(new SqlParameter("DETAILS", StoreOrderDetailTable()));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
+        }
+
         internal static DataTable GetNotDoneStoreOrders()
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
