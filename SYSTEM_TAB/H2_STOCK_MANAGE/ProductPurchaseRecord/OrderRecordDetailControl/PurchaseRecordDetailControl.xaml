@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:service="clr-namespace:His_Pos.Service"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d" >
+    <UserControl.Resources>
+        <service:DateTimeConverter x:Key="DateTimeConverter"/>
+    </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -159,6 +163,8 @@
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding ProductCount, FallbackValue=0}" HorizontalContentAlignment="Center" Width="50" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="完成時間:" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="400,0,0,0"/>
+            <Label Content="{Binding DoneDateTime, Converter={StaticResource DateTimeConverter}}" HorizontalContentAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
     </Grid>
 </UserControl>

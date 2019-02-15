@@ -48,6 +48,7 @@ namespace His_Pos.NewClass.StoreOrder
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string ReceiveEmployeeName { get; set; }
+        public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
         public double TotalPrice { get; set; }
         #endregion
@@ -88,6 +89,7 @@ namespace His_Pos.NewClass.StoreOrder
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
             TotalPrice = (double)row.Field<decimal>("Total");
+            DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
         }
