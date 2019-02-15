@@ -37,9 +37,16 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
-        internal static DataTable GetDoneStoreOrders()
+        internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("START_DATE", searchStartDate));
+            parameters.Add(new SqlParameter("END_DATE", searchEndDate));
+            parameters.Add(new SqlParameter("ORDER_ID", searchOrderID));
+            parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
+            parameters.Add(new SqlParameter("PRODUCT", searchProductID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }
 
         internal static void UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID)

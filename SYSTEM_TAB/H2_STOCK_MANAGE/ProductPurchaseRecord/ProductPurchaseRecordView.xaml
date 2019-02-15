@@ -10,6 +10,8 @@
              xmlns:orderRecordDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:service="clr-namespace:His_Pos.Service"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
@@ -18,6 +20,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter"/>
         <DataTemplate x:Key="PurchaseRecordOrderDetail" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <orderRecordDetailControl:PurchaseRecordDetailControl/>
         </DataTemplate>
@@ -66,17 +69,37 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
-                <Label Content="訂單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <xctk:MaskedTextBox Width="100" Height="30" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="SearchStartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Label Content="~" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+                <xctk:MaskedTextBox Width="100" Height="30" Margin="0,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="0" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="SearchEndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Label Content="單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                
-                <Label Content="採購人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                
-                <Label Content="收貨人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                
-                <Label Content="處理單日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchProductID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
 
-                <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
             </StackPanel>
             <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding SearchOrderCommand}"/>
         </Grid>
@@ -87,7 +110,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="0"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
