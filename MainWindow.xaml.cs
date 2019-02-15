@@ -53,7 +53,7 @@ namespace His_Pos
                 InitializeMenu();
                 InitialUserBlock();
                 StratClock();
-                AddNewTab("每日作業");
+                //AddNewTab("每日作業");
             }
             catch (Exception e)
             {
