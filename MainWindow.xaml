@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:His_Pos"
     xmlns:adminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
-    xmlns:prescriptionDec2="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2"
     xmlns:prescriptionSearch="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
     xmlns:inventoryManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement"
     xmlns:productPurchase="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase"
@@ -66,7 +65,7 @@
         <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <productPurchaseReturn:ProductPurchaseReturnView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecord}">
+        <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecordViewModel}">
             <productPurchaseRecord:ProductPurchaseRecordView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTaking:StockTaking}">

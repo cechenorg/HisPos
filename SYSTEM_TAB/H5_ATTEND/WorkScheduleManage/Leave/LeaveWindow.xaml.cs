@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using His_Pos.Class;
-using His_Pos.Class.Leave;
 using His_Pos.Class.WorkSchedule;
 using His_Pos.FunctionWindow;
 

@@ -8,7 +8,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
     /// </summary>
     public partial class InstitutionSelectionWindow : Window
     {
-        public InstitutionSelectionWindow(string searchText)
+        public InstitutionSelectionWindow(string searchText,ViewModelEnum vm)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -16,7 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 if (notificationMessage.Notification.Equals("CloseInstitutionSelection"))
                     Close();
             });
-            this.DataContext = new InstitutionSelectionViewModel(searchText);
+            this.DataContext = new InstitutionSelectionViewModel(searchText, vm);
             SearchStringTextBox.Focus();
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }

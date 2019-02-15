@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -54,11 +50,14 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
-        internal void AddNewOrdersFromSingde(DataTable dataTable)
+        internal static void AddNewOrdersFromSingde(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                StoreOrderDB.AddNewStoreOrderFromSingde(row);
+                DataTable table = StoreOrderDB.AddNewStoreOrderFromSingde(row);
+
+                if(table != null && table.Rows.Count > 0)
+                    StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("sht_no"));
             }
         }
     }

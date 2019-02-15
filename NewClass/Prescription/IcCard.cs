@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;

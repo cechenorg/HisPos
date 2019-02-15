@@ -9,17 +9,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.IcData.Upload;
-using His_Pos.Properties;
 using NChinese.Phonetic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -96,12 +93,12 @@ namespace His_Pos.Service
             return date;
         }
         
-        public string GetDateFormat(string date) {
+        public static string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public string ExportXml(XDocument xml, string FileTypeName) {
+        public static string ExportXml(XDocument xml, string FileTypeName) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());

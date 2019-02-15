@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -11,16 +10,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.Class.Product;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Product.Medicine.MedBag;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using Microsoft.International.Formatters;
-using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
@@ -350,26 +340,6 @@ namespace His_Pos.Service
         public static string ConvertToAsiaMoneyFormat(int cost)
         {
             return EastAsiaNumericFormatter.FormatWithCulture("L", cost, null, new CultureInfo("zh-TW")) + "元整";
-        }
-
-        public static bool CheckCopaymentFreeProject(string copaymentId)
-        {
-            #region 代碼對照
-            /*
-             * 007:山地離島地區之就醫（88.7增訂）、山地原住民暨離島地區接受醫療院所戒菸治療服務免除戒菸藥品部分負擔
-             * 009:本署其他規定免部分負擔者，如產檢時，同一主治醫師併同開給一般處方，百歲人瑞免部分負擔，921震災，行政協助性病或藥癮病患全面篩檢愛滋計畫、行政協助孕婦全面篩檢愛滋計畫等
-             * I21:藥費小於100免收
-             * I22:符合本保險藥費免部分負擔範圍規定者，包括慢性病連續處方箋案件、牙醫案件、門診論病例計酬案件
-             */
-            #endregion 代碼對照
-
-            var freeList = new List<string>() { "007", "009", "I21", "I22" };
-            foreach (var id in freeList)
-            {
-                if (copaymentId.Equals(id))
-                    return true;
-            }
-            return false;
         }
 
         public static NewClass.Prescription.Treatment.Division.Division CheckHospitalNameContainsDivision(string name)

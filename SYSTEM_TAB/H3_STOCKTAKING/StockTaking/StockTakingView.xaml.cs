@@ -16,7 +16,6 @@ using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using Microsoft.Reporting.WinForms;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
@@ -42,7 +38,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
         public object Clone()
         {
-            return new ProductManageMedicine();
+            return MemberwiseClone() as ProductManageMedicine;
+        }
+
+        public void Save()
+        {
+            ProductDetailDB.UpdateMedicineDetailData(this);
         }
     }
 }

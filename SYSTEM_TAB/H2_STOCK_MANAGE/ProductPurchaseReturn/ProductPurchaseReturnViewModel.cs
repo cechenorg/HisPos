@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -133,20 +130,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
+
+            AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
+
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructsBySearchString(searchString).Count;
+            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
                 productPurchaseReturnAddProductWindow.ShowDialog();
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString);
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
                 Messenger.Default.Unregister(this);
             }
             else
@@ -158,8 +158,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void AddProductAction()
         {
+            AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
+
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("");
+            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum);
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
         }
@@ -184,7 +186,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 BusyContent = "取得杏德新訂單...";
                 DataTable dataTable = StoreOrderDB.GetNewSingdeOrders();
                 if (dataTable.Rows.Count > 0)
-                    StoreOrderCollection.AddNewOrdersFromSingde(dataTable);
+                    StoreOrders.AddNewOrdersFromSingde(dataTable);
 
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();

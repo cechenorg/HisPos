@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using DataGrid = System.Windows.Controls.DataGrid;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {

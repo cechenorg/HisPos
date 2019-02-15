@@ -5,11 +5,8 @@ using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
 using His_Pos.Service;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
@@ -99,6 +96,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => Genders, ref genders, value);
             }
         }
+        private bool isIdNumEnable = false;
+        public bool IsIdNumEnable {
+            get { return isIdNumEnable; }
+            set { Set(()=> IsIdNumEnable,ref isIdNumEnable,value); }
+        }
         #endregion
 
         public EmployeeManageViewModel() {
@@ -117,6 +119,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee);
         }
         public void NewEmployeeAction() {
+            IsIdNumEnable = true;
             Employee newEmployee = new Employee();
             newEmployee.Name = "新人";
             newEmployee.Gender = "男";
@@ -142,6 +145,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public void SelectionChangedAction()
         {
             if (Employee is null) return;
+            IsIdNumEnable = false;
             Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.ID == Employee.ID));
             InitDataChanged();
         }
@@ -150,6 +154,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             DataChanged();
         }
         public void SubmitAction() {
+            IsIdNumEnable = false;
             for (int i = 0; i < EmployeeCollection.Count; i++)
             {
                 if (EmployeeCollection[i].ID == Employee.ID)

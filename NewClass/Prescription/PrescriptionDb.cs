@@ -12,7 +12,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine;
-using System.Xml.Linq;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -107,14 +106,7 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionId]");
         }
         
-        public static XmlDocument ToXmlDocument(XDocument xDocument) {
-            var xmlDocument = new XmlDocument();
-            using (var xmlReader = xDocument.CreateReader())
-            {
-                xmlDocument.Load(xmlReader);
-            }
-            return xmlDocument;
-        }
+        
         public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -306,10 +298,10 @@ namespace His_Pos.NewClass.Prescription
                  
                 i++;
             }
-            MySQLConnection conn = new MySQLConnection();
-            conn.OpenConnection();
-            conn.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
-            conn.CloseConnection();
+            
+            MainWindow.SingdeConnection.OpenConnection();
+            MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
+            MainWindow.SingdeConnection.CloseConnection(); 
         }
         public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus,int id)
         {
@@ -318,13 +310,20 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "IsSendToServer", prescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddSqlParameter(parameterList, "IsGetCard", prescriptionStatus.IsGetCard);
             DataBaseFunction.AddSqlParameter(parameterList, "IsDeclare", prescriptionStatus.IsDeclare);
+            DataBaseFunction.AddSqlParameter(parameterList, "IsDeposit", prescriptionStatus.IsDeposit);
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStatus]", parameterList);
         }
         public static DataTable GetPrescriptionByID(int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ID", id);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionByPreId]", parameterList);
+        }
+        public static DataTable GetReservePrescriptionByID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByPreId]", parameterList);
         }
 
         #region WepApi
@@ -422,13 +421,15 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            if (string.IsNullOrEmpty(ToXmlDocument(p.DeclareContent).InnerXml))
+            if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
                 newRow["PreMas_DeclareContent"] = DBNull.Value;
             else
-                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
+                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
+            
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable; 
         }
@@ -493,7 +494,8 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_DeclareContent", typeof(SqlXml));
             masterTable.Columns.Add("PreMas_IsSendToServer", typeof(bool));
             masterTable.Columns.Add("PreMas_IsGetCard", typeof(bool));
-            masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool)); 
+            masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
+            masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool)); 
             return masterTable;
     }
         public static DataTable PrescriptionDetailTable() {
@@ -548,10 +550,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServiceID", p.MedicalServiceID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            if (string.IsNullOrEmpty(ToXmlDocument(p.DeclareContent).InnerXml))
+            if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
                 newRow["ResMas_DeclareContent"] = DBNull.Value;
             else
-                newRow["ResMas_DeclareContent"] = new SqlXml(new XmlTextReader(ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
+                newRow["ResMas_DeclareContent"] = new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
             DataBaseFunction.AddColumnValue(newRow, "ResMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_IsRegister", p.PrescriptionStatus.IsRegister);
             reserveMasterTable.Rows.Add(newRow);
@@ -625,6 +627,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", false);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", true);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", true);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", false); 
                 prescriptionMasterTable.Rows.Add(newRow);
                 preId++;
             } 
@@ -714,6 +717,5 @@ namespace His_Pos.NewClass.Prescription
             return detailTable;
         }
         #endregion
-        
     }
 }

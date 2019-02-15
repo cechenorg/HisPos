@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 

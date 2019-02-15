@@ -7,15 +7,15 @@ using JetBrains.Annotations;
 
 namespace His_Pos.Class.Declare
 {
-    public class DeclareFile:INotifyPropertyChanged
+    public class oDeclareFile:INotifyPropertyChanged
     {
-        public DeclareFile()
+        public oDeclareFile()
         {
             ErrorPrescriptionList = new ErrorPrescriptions();
             PrescriptionDdatas = new ObservableCollection<DeclareFileDdata>();
         }
 
-        public DeclareFile(DataRow row)
+        public oDeclareFile(DataRow row)
         {
             PrescriptionDdatas = new ObservableCollection<DeclareFileDdata>();
             if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))

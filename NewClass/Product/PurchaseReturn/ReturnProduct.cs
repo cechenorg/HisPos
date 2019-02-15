@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
@@ -29,6 +25,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double RealAmount { get; set; }
         public double Price { get; set; }
         public double SubTotal { get; set; }
+        public DateTime? ValidDate { get; set; }
         #endregion
 
         public ReturnProduct() : base() {}
@@ -39,13 +36,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             UnitName = row.Field<string>("StoOrdDet_UnitName");
             UnitAmount = row.Field<double>("StoOrdDet_UnitAmount");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
-            Note = row.Field<string>("Inv_Inventory");
+            Note = row.Field<string>("StoOrdDet_Note");
             BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
             BatchLimit = row.Field<double>("StoOrdDet_FreeAmount");
             ReturnAmount = row.Field<double>("StoOrdDet_OrderAmount");
             RealAmount = row.Field<double>("StoOrdDet_RealAmount");
-            Price = row.Field<double>("StoOrdDet_Price");
-            SubTotal = row.Field<double>("StoOrdDet_SubTotal");
+            Price = (double)row.Field<decimal>("StoOrdDet_Price");
+            SubTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
+            ValidDate = row.Field<DateTime?>("StoOrdDet_ValidDate");
         }
 
         public void CopyOldProductData(ReturnProduct returnProduct)
@@ -61,6 +59,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             RealAmount = returnProduct.RealAmount;
             Price = returnProduct.Price;
             SubTotal = returnProduct.SubTotal;
+            ValidDate = returnProduct.ValidDate;
         }
     }
 }

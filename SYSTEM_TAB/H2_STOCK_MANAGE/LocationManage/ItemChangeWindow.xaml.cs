@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
-using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage

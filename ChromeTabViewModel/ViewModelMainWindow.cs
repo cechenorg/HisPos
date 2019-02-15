@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,15 +6,9 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass;
-using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -27,9 +20,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
-using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel

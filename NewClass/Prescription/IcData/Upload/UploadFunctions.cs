@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Data;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using His_Pos.RDLC;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.IcData.Upload

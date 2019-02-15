@@ -1,8 +1,8 @@
 ﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
-    internal class Export : TabBase
+    class ProductPurchaseRecordViewModel : TabBase
     {
         public override TabBase getTab()
         {

@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using His_Pos.Class;
-using His_Pos.Class.Authority;
 using His_Pos.Class.Leave;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;

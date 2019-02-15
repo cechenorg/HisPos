@@ -327,6 +327,7 @@
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
@@ -337,6 +338,11 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
+    <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreview.cs" />
+    <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
@@ -388,6 +394,8 @@
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ChooseBatchProduct.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ChooseBatchProducts.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProduct.cs" />
@@ -397,6 +405,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
+    <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
@@ -430,7 +441,7 @@
     <Compile Include="Class\DeclareTradeDb.cs" />
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\Declare\DeclareFile.cs" />
+    <Compile Include="Class\Declare\oDeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
@@ -466,6 +477,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\ViewModelEnum.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>
@@ -660,6 +672,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindow.xaml.cs">
+      <DependentUpon>ChooseBatchWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml.cs">
       <DependentUpon>NoDataDetailControl.xaml</DependentUpon>
     </Compile>
@@ -811,13 +827,6 @@
     <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml.cs">
-      <DependentUpon>DeclareDdataOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml.cs">
-      <DependentUpon>ExportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\Export.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -908,7 +917,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="Service\MoreLinq\MoreEnumerable.DistinctBy.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
@@ -1139,6 +1148,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1320,14 +1333,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1597,6 +1602,7 @@
     <Folder Include="Class\Position\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderDetailControl\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
   <ItemGroup>

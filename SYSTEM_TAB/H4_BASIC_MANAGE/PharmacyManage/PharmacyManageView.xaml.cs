@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using His_Pos.Class.Manufactory;
 using His_Pos.Class.Pharmacy;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage

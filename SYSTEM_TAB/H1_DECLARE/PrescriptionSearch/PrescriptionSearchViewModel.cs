@@ -14,11 +14,11 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
+using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using MaterialDesignThemes.Wpf;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -37,8 +37,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public MedicalPersonnels MedicalPersonnels { get; set; }
         public Institutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
-        private Prescriptions searchPrescriptions;
-        public Prescriptions SearchPrescriptions
+        private PrescriptionSearchPreviews searchPrescriptions;
+        public PrescriptionSearchPreviews SearchPrescriptions
         {
             get => searchPrescriptions;
             set
@@ -119,8 +119,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedInstitution, ref selectedInstitution, value);
             }
         }
-        private Prescription selectedPrescription;
-        public Prescription SelectedPrescription
+        private PrescriptionSearchPreview selectedPrescription;
+        public PrescriptionSearchPreview SelectedPrescription
         {
             get => selectedPrescription;
             set
@@ -128,8 +128,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
-        private Prescription editedPrescription;
-        public Prescription EditedPrescription
+        private PrescriptionSearchPreview editedPrescription;
+        public PrescriptionSearchPreview EditedPrescription
         {
             get => editedPrescription;
             set
@@ -158,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region InitialFunctions
         private void InitialVariables()
         {
-            SearchPrescriptions = new Prescriptions();
+            SearchPrescriptions = new PrescriptionSearchPreviews();
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
@@ -176,13 +176,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<Prescription>(this, "PrescriptionEdited", GetEditPrescription);
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel)+"InstSelected", GetSelectedInstitution);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel)+"PrescriptionEdited"))
+                    SearchAction();
+            });
         }
 
-        private void GetEditPrescription(Prescription obj)
+        private void GetEditPrescription(NotificationMessage msg)
         {
-
+            SearchAction();
         }
 
         #endregion
@@ -241,7 +245,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SelectedInstitution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionSearch);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -256,7 +260,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if(SelectedPrescription is null) return;
             EditedPrescription = SelectedPrescription;
-            PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription);
+            PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit;
+            prescriptionEdit = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
+                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
+                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
         }
         #endregion
@@ -265,10 +272,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
-            PrescriptionCollectionVS.Filter += FilterByPatient;
-            if (PrescriptionCollectionView.IsEmpty) return;
             PrescriptionCollectionView.MoveCurrentToFirst();
-            SelectedPrescription = (Prescription)PrescriptionCollectionView.CurrentItem;
+            SelectedPrescription = (PrescriptionSearchPreview)PrescriptionCollectionView.CurrentItem;
         }
         private void UpdateFilter()
         {

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Xml;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class.Declare;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Division

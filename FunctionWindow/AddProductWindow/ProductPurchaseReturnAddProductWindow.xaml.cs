@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
@@ -20,7 +8,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class ProductPurchaseReturnAddProductWindow : Window
     {
-        public ProductPurchaseReturnAddProductWindow(string searchString)
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum)
         {
             InitializeComponent();
 
@@ -31,9 +19,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
 
             if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(AddProductEnum.ProductPurchase);
+                DataContext = new AddProductViewModel(addProductEnum);
             else
-                DataContext = new AddProductViewModel(searchString, AddProductEnum.ProductPurchase);
+                DataContext = new AddProductViewModel(searchString, addProductEnum);
 
             SearchStringTextBox.Focus();
 

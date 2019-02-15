@@ -1,12 +1,7 @@
-﻿using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.ImportDeclareXml;
-using System;
+﻿using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Person.Customer
 {

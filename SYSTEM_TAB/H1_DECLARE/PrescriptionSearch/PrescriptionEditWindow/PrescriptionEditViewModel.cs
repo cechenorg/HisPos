@@ -21,8 +21,8 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
@@ -108,6 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
         }
+        private ViewModelEnum viewModel { get; set; }
         #region Commands
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -133,10 +134,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
         #endregion
-        public PrescriptionEditViewModel(Prescription selected)
+        public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
         {
+            viewModel = vm;
             MainWindow.ServerConnection.OpenConnection();
-            selected.ConvertNHIandOTCPrescriptionMedicines();
+            selected.AdjustMedicinesType(true);
             MainWindow.ServerConnection.CloseConnection();
             OriginalPrescription = selected;
             Init((Prescription)selected.Clone());
@@ -201,8 +203,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, "SelectedInstitution", GetSelectedInstitution);
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
         }
         #endregion
@@ -243,7 +245,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MessageWindow.ShowMessage(Resources.ShortSearchString + "4", MessageType.WARNING);
                 return;
             }
-            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.Institution.FullName) && search.Equals(EditedPrescription.Treatment.Institution.FullName))
+            if (EditedPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(EditedPrescription.Treatment.Institution.FullName) && search.Equals(EditedPrescription.Treatment.Institution.FullName))
             {
                 Messenger.Default.Send(new NotificationMessage("FocusDivision"));
                 return;
@@ -258,7 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.Treatment.Institution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionEdit);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -317,11 +319,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructsBySearchString(medicineID).Count;
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID,AddProductEnum.PrescriptionEdit);
+                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
@@ -348,7 +350,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 }
                 EditedPrescription.Update();
-                Messenger.Default.Send(EditedPrescription,"PrescriptionEdited");
+                EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
+                switch (viewModel)
+                {
+                    case ViewModelEnum.PrescriptionSearch:
+                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel)+ "PrescriptionEdited"));
+                        break;
+                    case ViewModelEnum.DeclareFileManage:
+                        Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
+                        break;
+                }
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
@@ -371,7 +382,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region MessangerReceive
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            if(receiveSelectedInstitution.Id.Equals(EditedPrescription.Treatment.Institution.Id)) return;
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
             CheckEdit();
         }
