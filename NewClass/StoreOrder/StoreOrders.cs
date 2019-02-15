@@ -73,5 +73,10 @@ namespace His_Pos.NewClass.StoreOrder
                     StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("sht_no"));
             }
         }
+
+        internal static void AddNewPrescriptionOrdersFromSingde(DataTable dataTable)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

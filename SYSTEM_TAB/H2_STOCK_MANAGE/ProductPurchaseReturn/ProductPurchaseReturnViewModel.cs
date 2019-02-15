@@ -191,6 +191,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 if (dataTable.Rows.Count > 0)
                     StoreOrders.AddNewOrdersFromSingde(dataTable);
 
+                dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
+                if (dataTable.Rows.Count > 0)
+                    StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
+
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
 
