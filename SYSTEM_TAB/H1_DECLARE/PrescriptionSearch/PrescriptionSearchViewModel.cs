@@ -92,6 +92,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 UpdateFilter();
             }
         }
+        private DateTime? birth;
+        public DateTime? Birth
+        {
+            get => birth;
+            set
+            {
+                Set(() => Birth, ref birth, value);
+                UpdateFilter();
+            }
+        }
         private MedicalPersonnel selectedSelectedPharmacist;
         public MedicalPersonnel SelectedPharmacist
         {
@@ -142,6 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand<string> CheckInsEmpty { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         #endregion
@@ -172,23 +183,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
+            CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
         }
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel)+"InstSelected", GetSelectedInstitution);
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel)+"PrescriptionEdited"))
                     SearchAction();
             });
         }
-
-        private void GetEditPrescription(NotificationMessage msg)
-        {
-            SearchAction();
-        }
-
         #endregion
         #region CommandActions
         private void SearchAction()
@@ -256,6 +262,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ImportDeclareFile();
             MainWindow.ServerConnection.CloseConnection();
         }
+        private void CheckInsEmptyAction(string search)
+        {
+            if (string.IsNullOrEmpty(search))
+                SelectedInstitution = null;
+        }
         private void ShowPrescriptionEditWindowAction()
         {
             if(SelectedPrescription is null) return;
@@ -278,10 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void UpdateFilter()
         {
             if (PrescriptionCollectionVS is null) return;
-            if (string.IsNullOrEmpty(patient))
-                PrescriptionCollectionVS.Filter -= FilterByPatient;
-            else
-                PrescriptionCollectionVS.Filter += FilterByPatient;
+            PrescriptionCollectionVS.Filter += FilterByPatient;
         }
         private void GetSelectedInstitution(Institution ins)
         {
@@ -329,20 +337,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region Filters
         private void FilterByPatient(object sender, FilterEventArgs e)
         {
-            if (!(e.Item is Prescription src))
+            if (!(e.Item is PrescriptionSearchPreview src))
                 e.Accepted = false;
-            else if (string.IsNullOrEmpty(Patient))
+            else if (string.IsNullOrEmpty(Patient) && Birth is null)
                 e.Accepted = true;
-            else
+            else if(!string.IsNullOrEmpty(Patient) && Birth is null)
             {
-                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient))
-                {
+                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient.ToUpper()))
                     e.Accepted = true;
+                else
+                    e.Accepted = false;
+            }
+            else if (string.IsNullOrEmpty(Patient) && Birth != null)
+            {
+                if (src.Patient.Birthday != null && DateTime.Compare((DateTime)src.Patient.Birthday,(DateTime)Birth) == 0)
+                    e.Accepted = true;
+                else
+                    e.Accepted = false;
+            }
+            else if (!string.IsNullOrEmpty(Patient) && Birth != null)
+            {
+                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient.ToUpper()))
+                {
+                    if (src.Patient.Birthday != null && DateTime.Compare((DateTime)src.Patient.Birthday, (DateTime)Birth) == 0)
+                        e.Accepted = true;
+                    else
+                        e.Accepted = false;
                 }
                 else
-                {
                     e.Accepted = false;
-                }
             }
         }
         #endregion
