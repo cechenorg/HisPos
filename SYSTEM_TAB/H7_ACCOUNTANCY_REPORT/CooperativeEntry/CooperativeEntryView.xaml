@@ -6,8 +6,12 @@
              xmlns:hisPos="clr-namespace:His_Pos"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.DataContext>
+        <local:CooperativeEntry/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <service:DateConverter x:Key="DateConverter" />
     </UserControl.Resources>
@@ -43,7 +47,7 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Rectangle Width="840"/>
-            <Button Name="ButtonSearch" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" Click="ButtonSearch_Click"/>
+            <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <Grid Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
@@ -97,7 +101,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="140" Header="日期" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True" Binding="{Binding Date}">
+                <DataGridTextColumn Width="140" Header="日期" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource DateConverter}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
