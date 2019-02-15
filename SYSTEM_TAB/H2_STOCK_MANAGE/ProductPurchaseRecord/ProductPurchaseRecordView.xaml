@@ -8,8 +8,15 @@
              xmlns:tradeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
              xmlns:orderRecordDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d">
+    <i:Interaction.Triggers >
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding SearchOrderCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseRecordOrderDetail" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <orderRecordDetailControl:PurchaseRecordDetailControl/>
@@ -45,7 +52,7 @@
             <Label Content="{Binding OrderManufactory.Name}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
-            <Label Content="處理單已取消" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>
+            <Label Content="處理單已作廢" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
@@ -127,12 +134,12 @@
                                             </ContentControl>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                            <ContentControl>
+                                            <ContentControl Content="{Binding}">
                                                 <ContentControl.Style>
                                                     <Style TargetType="{x:Type ContentControl}">
                                                         <Setter Property="ContentTemplate" Value="{StaticResource NotScrapOrder}" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding CurrentStoreOrder.OrderStatus}" Value="SCRAP">
+                                                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SCRAP">
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource ScrapOrder}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>

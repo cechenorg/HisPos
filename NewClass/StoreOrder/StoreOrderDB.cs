@@ -37,6 +37,11 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
+        internal static DataTable GetDoneStoreOrders()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]");
+        }
+
         internal static void UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -106,6 +111,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToDone]", parameters);
+        }
+
+        internal static void StoreOrderToScrap(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
         }
 
         #region TableSet

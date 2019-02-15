@@ -36,6 +36,11 @@ namespace His_Pos.NewClass.StoreOrder
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
         }
 
+        public static StoreOrders GetOrdersDone()
+        {
+            return new StoreOrders(StoreOrderDB.GetDoneStoreOrders());
+        }
+
         public void ReloadCollection()
         {
             var tempOrder =  this.SingleOrDefault(s => s.OrderStatus == OrderStatusEnum.DONE);

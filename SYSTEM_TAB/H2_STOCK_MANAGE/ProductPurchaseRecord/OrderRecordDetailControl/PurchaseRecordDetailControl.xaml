@@ -7,7 +7,7 @@
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d" >
-    <Grid Margin="0,10,10,10" DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
+    <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="50"/>
@@ -26,7 +26,7 @@
             <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+            <Label Content="{Binding ReceiveEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="病患" Foreground="Black" Margin="400,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding PatientName, Converter={StaticResource EqualityToVisibilityConverter}}"/>
             <Label Content="{Binding PatientName}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
         </StackPanel>

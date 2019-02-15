@@ -41,10 +41,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         }
         #endregion
 
+        public ProductPurchaseRecordViewModel()
+        {
+            RegisterCommands();
+        }
+
         #region ----- Define Actions -----
+        public void SearchOrderAction()
+        {
+            StoreOrderCollection = StoreOrders.GetOrdersDone();
+        }
+        public void FilterOrderAction()
+        {
+
+        }
         #endregion
 
         #region ----- Define Functions -----
+        public void RegisterCommands()
+        {
+            SearchOrderCommand = new RelayCommand(SearchOrderAction);
+            FilterOrderCommand = new RelayCommand(FilterOrderAction);
+        }
         #endregion
     }
 }

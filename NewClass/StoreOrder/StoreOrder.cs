@@ -47,6 +47,7 @@ namespace His_Pos.NewClass.StoreOrder
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
+        public string ReceiveEmployeeName { get; set; }
         public string Note { get; set; }
         public double TotalPrice { get; set; }
         #endregion
@@ -83,7 +84,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             ID = row.Field<string>("StoOrd_ID");
             OrderWarehouse = new WareHouse.WareHouse(row);
-            OrderEmployeeName = row.Field<string>("Emp_Name");
+            OrderEmployeeName = row.Field<string>("OrderEmp_Name");
+            ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
             TotalPrice = (double)row.Field<decimal>("Total");
 
@@ -146,7 +148,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected void ToScrapStatus()
         {
             OrderStatus = OrderStatusEnum.SCRAP;
-            StoreOrderDB.RemoveStoreOrderByID(ID);
+            StoreOrderDB.StoreOrderToScrap(ID);
         }
         private void ToDoneStatus()
         {
