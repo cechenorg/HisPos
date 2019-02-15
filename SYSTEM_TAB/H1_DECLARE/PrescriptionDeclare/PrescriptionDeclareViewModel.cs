@@ -256,23 +256,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 customerSelectionWindow = new CusSelectWindow();
             else
             {
-                if (CurrentPrescription.Patient.Count() == 0)
+                if(CurrentPrescription.Patient.IDNumber.Length != 10)
+                    MessageWindow.ShowMessage("身分證/居留證號長度須為10", MessageType.WARNING);
+                else
                 {
-                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                    if (CurrentPrescription.Patient.Count() == 0)
                     {
-                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?","查無資料");
-                        if ((bool) confirm.DialogResult)
-                            CurrentPrescription.Patient.Check();
+                        if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                        {
+                            ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                            if ((bool)confirm.DialogResult)
+                                CurrentPrescription.Patient.Check();
+                            else
+                                return;
+                        }
                         else
-                            return;
+                        {
+                            MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
+                        }
                     }
                     else
-                    {
-                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證",MessageType.WARNING);
-                    }
+                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
                 }
-                else
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
             }
         }
         private void SearchCusByNameAction()
