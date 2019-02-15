@@ -323,7 +323,7 @@ namespace His_Pos.NewClass.Prescription
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByPreId]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByResId]", parameterList);
         }
 
         #region WepApi
