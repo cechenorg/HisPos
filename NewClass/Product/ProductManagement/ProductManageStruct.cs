@@ -34,9 +34,9 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             get
             {
-                if (EnglishName.Contains(" "))
-                    return EnglishName.Substring(0, EnglishName.IndexOf(" ")) + ChineseName;
-                return EnglishName + ChineseName;
+                if (!string.IsNullOrEmpty(EnglishName))
+                    return (EnglishName.Contains(" ") ? EnglishName.Substring(0, EnglishName.IndexOf(" ")) : EnglishName) + ChineseName;
+                return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
         public double Inventory { get; set; }
