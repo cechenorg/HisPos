@@ -68,13 +68,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get => declareStatus;
             set
             {
-                if (declareStatus != value)
-                {
-                    Set(() => DeclareStatus, ref declareStatus, value);
-                    CanSendOrder = declareStatus != PrescriptionDeclareStatus.Adjust;
-                    if (!CanSendOrder)
-                        CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
-                }
+                Set(() => DeclareStatus, ref declareStatus, value);
+                if(CurrentPrescription is null) return;
+                if ((DateTime)CurrentPrescription.Treatment.AdjustDate!=null && CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") 
+                    && DateTime.Compare((DateTime)CurrentPrescription.Treatment.AdjustDate, DateTime.Today) >= 0)
+                    CanSendOrder = true;
+                if (!CanSendOrder)
+                    CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
             }
         }
         private Prescription currentPrescription;
@@ -177,6 +177,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CanAdjust, ref canAdjust, value);
             }
         }
+
         private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.Id);
         #endregion
         #region Commands
@@ -205,6 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ResetCardReader { get; set; }
         public RelayCommand NoCardAdjust { get; set; }
         public RelayCommand MedicineNoBuckleClick { get; set; }
+        public RelayCommand SendOrderCommand { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -256,23 +258,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 customerSelectionWindow = new CusSelectWindow();
             else
             {
-                if (CurrentPrescription.Patient.Count() == 0)
+                if(CurrentPrescription.Patient.IDNumber.Length != 10)
+                    MessageWindow.ShowMessage("身分證/居留證號長度須為10", MessageType.WARNING);
+                else
                 {
                     if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
                     {
-                        ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?","查無資料");
-                        if ((bool) confirm.DialogResult)
-                            CurrentPrescription.Patient.Check();
+                        if (CurrentPrescription.Patient.Count() == 0)
+                        {
+                            ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                            if ((bool)confirm.DialogResult)
+                                CurrentPrescription.Patient.Check();
+                            else
+                                return;
+                        }
                         else
-                            return;
+                        {
+                            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+                        }
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證",MessageType.WARNING);
+                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
                     }
                 }
-                else
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
             }
         }
         private void SearchCusByNameAction()
@@ -551,6 +560,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
             NoCardAdjust = new RelayCommand(NoCardAdjustAction);
             MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
+            SendOrderCommand = new RelayCommand(CheckDeclareStatus);
         }
 
         private void InitialPrescription()
@@ -706,8 +716,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     if (DateTime.Today.Date == ((DateTime) adjust).Date)
                     {
-                        if ((CurrentPrescription.Treatment.ChronicSeq != null && (int)CurrentPrescription.Treatment.ChronicSeq > 0) ||
-                            CurrentPrescription.Treatment.AdjustCase.Id.Equals("2"))
+                        if ((CurrentPrescription.Treatment.ChronicSeq != null && CurrentPrescription.Treatment.ChronicSeq > 0) &&
+                            CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
                             DeclareStatus = PrescriptionDeclareStatus.Register;
                         else
                         {
