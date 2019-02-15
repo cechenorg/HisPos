@@ -422,12 +422,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                if(string.IsNullOrEmpty(CurrentPrescription.Card.PatientBasicData.IDNumber))
-                    ReadCard(false);
-                else
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
                 {
-                    GetMedicalNumber();
-                }
+                    CurrentPrescription.Patient.Save();
+                    PrintMedBag(false);
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    if (string.IsNullOrEmpty(CurrentPrescription.Card.PatientBasicData.IDNumber))
+                        ReadCard(false);
+                    else
+                    {
+                        GetMedicalNumber();
+                    }
+                };
+                worker.RunWorkerAsync();
             }
         }
 
@@ -440,6 +450,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
+                CurrentPrescription.Patient.Save();
                 MainWindow.ServerConnection.OpenConnection();
                 switch (CurrentPrescription.Source)
                 {
@@ -845,7 +856,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
-                PrintMedBag(false);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1004,23 +1014,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrintMedBag(bool noCard)
         {
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
-            if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
+            bool? printmedBag = null;
+            Application.Current.Dispatcher.Invoke(delegate
             {
-                var printBySingleMode = new MedBagSelectionWindow();
-                var singleMode = (bool)printBySingleMode.ShowDialog();
+                var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+                printmedBag = medBagPrint.DialogResult;
+            });
+            if (printmedBag != null && (bool)printmedBag)
+            {
+                bool? printSingle = null;
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    var printBySingleMode = new MedBagSelectionWindow();
+                    printSingle = (bool)printBySingleMode.ShowDialog();
+                });
                 var receiptPrint = false;
                 if (CurrentPrescription.PrescriptionPoint.CopaymentPoint + CurrentPrescription.PrescriptionPoint.AmountSelfPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
-                    if (receiptResult.DialogResult != null)
-                        receiptPrint = (bool)receiptResult.DialogResult;
+                    bool? printReceipt = null;
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+                        printReceipt = receiptResult.DialogResult;
+                    });
+                    if (printReceipt != null)
+                        receiptPrint = (bool)printReceipt;
                 }
                 var worker = new BackgroundWorker();
                 worker.DoWork += (o, ea) =>
                 {
                     BusyContent = "藥袋列印中...";
-                    CurrentPrescription.PrintMedBag(singleMode);
+                    CurrentPrescription.PrintMedBag((bool)printSingle);
                     if (receiptPrint)
                     {
                         BusyContent = StringRes.收據列印;
@@ -1034,14 +1058,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                    });
                     ClearPrescription();
                 };
                 worker.RunWorkerAsync();
             }
             else
             {
-                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                });
                 ClearPrescription();
             }
         }

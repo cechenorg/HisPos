@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -33,10 +35,33 @@ namespace His_Pos.NewClass.Prescription
         {
             var strLength = 72;
             var icData = new byte[72];
-            if (HisApiBase.OpenCom())
+            bool? openCom = null;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                openCom = HisApiBase.OpenCom();
+            };
+            worker.RunWorkerAsync();
+            int i = 0;
+            while (openCom is null)
+            {
+                if(i == 5)
+                    break;
+                Thread.Sleep(300);
+                i++;
+            }
+
+            if (openCom is null)
+            {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage("讀卡機逾時", MessageType.WARNING);
+                });
+                return false;
+            }
+            if ((bool)openCom)
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                Thread.Sleep(800);
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {

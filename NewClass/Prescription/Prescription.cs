@@ -726,7 +726,7 @@ namespace His_Pos.NewClass.Prescription
                 var cus = new Customer(Card);
                 Patient = cus;
                 MainWindow.ServerConnection.OpenConnection();
-                Patient = Patient.Check();
+                Patient.Check();
                 MainWindow.ServerConnection.CloseConnection();
             }
             return success;
@@ -857,7 +857,7 @@ namespace His_Pos.NewClass.Prescription
         public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead)
         {
             MainWindow.ServerConnection.OpenConnection();
-            Patient = Patient.Check();
+            Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
             AdjustMedicinesType(addMedicine);

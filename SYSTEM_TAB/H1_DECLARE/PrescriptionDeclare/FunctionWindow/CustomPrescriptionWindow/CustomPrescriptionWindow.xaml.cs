@@ -28,8 +28,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
             });
             if (customPrescriptionViewModel.ShowDialog)
+            {
                 ShowDialog();
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+                Messenger.Default.Unregister(this);
+            }
         }
 
         private void Reserved_SelectionChanged(object sender, SelectionChangedEventArgs e)
