@@ -204,7 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, "SelectedProduct", GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
         }
         #endregion
@@ -323,7 +323,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
-                MedicineWindow = new MedSelectWindow(medicineID,AddProductEnum.PrescriptionEdit);
+                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
