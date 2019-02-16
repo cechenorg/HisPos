@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Prescription.Search
                 table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
             else
             {
-
+                table = PrescriptionDb.GetSearchReservesSummary(presID);
             }
             foreach (DataColumn c in table.Rows[0].Table.Columns)
             {

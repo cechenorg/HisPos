@@ -290,7 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
             MainWindow.ServerConnection.CloseConnection();
             UpdateCollectionView();
-            SetPrescriptionsSummary();
+            SetPrescriptionsSummary(false);
         }
 
         private void SetPrescriptionsSummary(bool reserve)
@@ -312,7 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             //查詢預約慢箋
             SearchPrescriptions.GetReservePrescription(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
             UpdateCollectionView();
-            SetPrescriptionsSummary();
+            SetPrescriptionsSummary(true);
         }
         private void GetInstitutionAction(string search)
         {

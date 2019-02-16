@@ -379,30 +379,6 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetMedicinesData(PrescriptionInquireView prescriptionInquireView)
-        {
-            prescriptionInquireView.InquireViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("載入基本資料中...");
-                prescriptionInquireView.DeclareMedicinesData = new ObservableCollection<Product>();///MedicineDb.GetDeclareMedicine();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    prescriptionInquireView.HospitalCollection = ViewModelMainWindow.Institutions;
-                    prescriptionInquireView.DivisionCollection = ViewModelMainWindow.Divisions;
-                    prescriptionInquireView.CopaymentCollection = ViewModelMainWindow.Copayments;
-                    prescriptionInquireView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
-                    prescriptionInquireView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
-                    prescriptionInquireView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                prescriptionInquireView.InquireViewBox.IsEnabled = true;
-                Dispatcher.BeginInvoke(new Action(Close));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
         public void GetMedBagData(MedBagManageView medBagManageView)
         {
             medBagManageView.MedBagManageViewBox.IsEnabled = false;
