@@ -127,7 +127,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<Prescription>(this, "ReservedSelected", GetReservePrescription);
             Messenger.Default.Register<Prescription>(this,"ReservedSelected", GetReservePrescription);
             Messenger.Default.Register<Prescription>(this, "CooperativeSelected", GetCooperativePrescription);
         }
@@ -135,7 +134,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private void GetReservePrescription(Prescription p)
         {
             isSelectCooperative = false;
-            p.Treatment.AdjustDate = DateTime.Today;
             SelectedPrescription = p;
         }
 

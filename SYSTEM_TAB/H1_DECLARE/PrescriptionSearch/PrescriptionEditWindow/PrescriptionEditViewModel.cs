@@ -430,14 +430,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CheckEditStatus()
         {
-            if (CheckEdit())
-            {
-                IsEdit = Visibility.Visible;
-            }
-            else
-            {
-                IsEdit = Visibility.Hidden;
-            }
+            IsEdit = CheckEdit() ? Visibility.Visible : Visibility.Hidden;
         }
         #endregion
     }

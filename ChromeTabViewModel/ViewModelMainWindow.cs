@@ -126,31 +126,23 @@ namespace His_Pos.ChromeTabViewModel
         private IList<Stream> m_streams;
         public ViewModelMainWindow()
         {
-            try
-            {
-                SelectedTab = ItemCollection.FirstOrDefault();
-                ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
-                MainWindow.ServerConnection.OpenConnection();
-                CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-                CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
-                MainWindow.ServerConnection.CloseConnection();
-                CanMoveTabs = true;
-                ShowAddButton = false;
-                //This sort description is what keeps the source collection sorted, based on tab number. 
-                //You can also use the sort description to manually sort the tabs, based on your own criterias.
+            SelectedTab = ItemCollection.FirstOrDefault();
+            ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+            MainWindow.ServerConnection.CloseConnection();
+            CanMoveTabs = true;
+            ShowAddButton = false;
+            //This sort description is what keeps the source collection sorted, based on tab number. 
+            //You can also use the sort description to manually sort the tabs, based on your own criterias.
 
-                view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
-                Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-                {
-                    if (notificationMessage.Notification == "MainWindowClosing")
-                        WindowCloseAction();
-                });
-            }
-            catch (Exception e)
+            view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
-                MessageWindow.ShowMessage("ViewModelMainWindow:"+e.Message, MessageType.ERROR);
-                throw;
-            }
+                if (notificationMessage.Notification == "MainWindowClosing")
+                    WindowCloseAction();
+            });
         }
 
         private RelayCommand initialData;
@@ -192,8 +184,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 IsBusy = false;
             };
-
-            IsBusy = false;
+            IsBusy = true;
             worker.RunWorkerAsync();
         }
 

@@ -40,6 +40,7 @@ using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 using His_Pos.NewClass;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 
 // ReSharper disable InconsistentNaming
@@ -391,7 +392,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ShowCommonInsSelectionWindowAction()
         {
-            
+            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
+            commonInsSelectionWindow.ShowDialog();
         }
         private void PharmacistChangedAction()
         {
@@ -695,6 +697,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetCustomPrescription(Prescription p)
         {
+            p.Treatment.AdjustDate = DateTime.Today;
             CurrentPrescription = p;
             CurrentPrescription.CountPrescriptionPoint();
         }

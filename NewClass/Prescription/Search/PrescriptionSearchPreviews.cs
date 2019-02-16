@@ -30,7 +30,7 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public List<int> GetSummary()
+        public List<int> GetSummary(bool reserve)
         {
             var presID = new List<int>();
             var summary = new List<int>();
@@ -38,7 +38,13 @@ namespace His_Pos.NewClass.Prescription.Search
             {
                 presID.Add(p.ID);
             }
-            var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+            DataTable table = new DataTable();
+            if(reserve)
+                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+            else
+            {
+
+            }
             foreach (DataColumn c in table.Rows[0].Table.Columns)
             {
                 summary.Add(table.Rows[0].Field<int>(c.ColumnName));

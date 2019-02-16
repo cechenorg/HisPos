@@ -186,7 +186,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Viewbox Stretch="Fill">
-        <!--<xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">-->
+        <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
             <Grid x:Name="MainGrid" Background="#FF333337">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -314,6 +314,6 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
-        <!--</xctk:BusyIndicator>-->
+        </xctk:BusyIndicator>
     </Viewbox>
 </Window>

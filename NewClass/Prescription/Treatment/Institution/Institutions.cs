@@ -20,15 +20,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             }
         }
 
-        public static Institutions GetCommon()//取得常用院所
+        public void GetCommon()//取得常用院所
         {
-            var institutions = new Institutions(false);
             var table = InstitutionDb.GetCommonInstitution();
             foreach (DataRow row in table.Rows)
             {
-                institutions.Add(new Institution(row));
+                Add(new Institution(row));
             }
-            return institutions;
         }
     }
 }

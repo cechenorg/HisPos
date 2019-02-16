@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             SearchedInstitution = new Institution();
-            CommonInstitutions = Institutions.GetCommon();
+            CommonInstitutions.GetCommon();
             DataContext = this;
         }
 

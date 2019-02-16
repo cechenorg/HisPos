@@ -22,7 +22,6 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Struct.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
@@ -65,73 +64,7 @@ namespace His_Pos.FunctionWindow
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
-        {
-            backgroundWorker.WorkerReportsProgress = true;
-
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("檢查申報檔是否存在...");
-                DeclareDb declareDb = new DeclareDb();
-                XmlDocument doc = new XmlDocument
-                {
-                    PreserveWhitespace = true
-                };
-                doc.Load(filename);
-                int maxDecMasId = 0;///declareDb.GetMaxDecMasId();
-                string decId = "";///declareDb.CheckXmlFileExist(doc);
-                if (decId != string.Empty)
-                {
-                    ChangeLoadingMessage("申報檔匯入...");
-                    ObservableCollection<DeclareData> declareDataCollection = new ObservableCollection<DeclareData>();
-                    XmlNodeList tweets = doc.GetElementsByTagName("ddata");
-                    double totalDecCount = tweets.Count;
-                    double currentDecCount = 1;
-                    foreach (XmlNode node in tweets)
-                    {
-                        XmlDocument xDoc = new XmlDocument();
-                        xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
-                        DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0])
-                        {
-                            DecMasId = maxDecMasId.ToString()
-                        };
-                        maxDecMasId++;
-                        declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
-                        declareDataCollection.Add(declareData);
-                        backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
-                        currentDecCount++;
-                    }
-                    ChangeLoadingMessage("匯入資料庫...");
-                    /// declareDb.ImportDeclareData(declareDataCollection, decId);
-                    ChangeLoadingMessage("預約慢箋中..."); 
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        MessageWindow.ShowMessage("申報檔匯入成功!", MessageType.SUCCESS);
-                    }));
-                }
-                else {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        MessageWindow.ShowMessage("申報檔已存在!", MessageType.ERROR);
-                    }));
-                }
-               
-               
-            };
-            backgroundWorker.ProgressChanged += (s, e) =>
-            {
-                ChangeLoadingMessage("申報檔匯入... " + (e.ProgressPercentage.ToString() == "100" ? "99" : e.ProgressPercentage.ToString()) + "%");
-            };
-
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
         public void GetNecessaryData(Employee userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
@@ -446,30 +379,7 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetMedicinesData(PrescriptionInquireView prescriptionInquireView)
-        {
-            prescriptionInquireView.InquireViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("載入基本資料中...");
-                prescriptionInquireView.DeclareMedicinesData = new ObservableCollection<Product>();///MedicineDb.GetDeclareMedicine();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    prescriptionInquireView.HospitalCollection = ViewModelMainWindow.Institutions;
-                    prescriptionInquireView.DivisionCollection = ViewModelMainWindow.Divisions;
-                    prescriptionInquireView.CopaymentCollection = ViewModelMainWindow.Copayments;
-                    prescriptionInquireView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
-                    prescriptionInquireView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
-                    prescriptionInquireView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                prescriptionInquireView.InquireViewBox.IsEnabled = true;
-                Dispatcher.BeginInvoke(new Action(Close));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
         public void GetMedBagData(MedBagManageView medBagManageView)
         {
             medBagManageView.MedBagManageViewBox.IsEnabled = false;
@@ -618,51 +528,6 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void PrintMedbagFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire, bool printReceipt) {
-            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("藥袋列印中...");
-                Export(rptViewer.LocalReport, 22, 24);
-                ReportPrint(Properties.Settings.Default.MedBagPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-        
-        public void PrintReceiptFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire) {
-            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("收據列印中...");
-                Export(rptViewer.LocalReport, 25.4, 9.3);
-                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
 
         private static void CreatePdf(ReportViewer viewer,string fileName,double width,double height)
         {
@@ -772,30 +637,5 @@ namespace His_Pos.FunctionWindow
                 MessageWindow.ShowMessage("printDoc_PrintPage()", MessageType.ERROR);
             }
         }
-
-        public void LoginIcData(PrescriptionInquireOutcome prescriptionInquireOutcome)
-        {
-            prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("卡片資料寫入中...");
-                prescriptionInquireOutcome.LogInIcData();
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
-       
     }
 }
