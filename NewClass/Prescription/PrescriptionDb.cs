@@ -325,7 +325,11 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByResId]", parameterList);
         }
-
+        public static DataTable GetSearchPrescriptionsSummary(List<int> presId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsSummary]", parameterList);
+        }
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;

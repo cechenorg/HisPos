@@ -178,22 +178,22 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Orientation="Horizontal"   Grid.Row="3" Margin="10,0">
-                    <Label Content="處方單總數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding TotalAmount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="處方總數" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="慢箋張數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding ChronicAmount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="總點數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="80" Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="申報藥費" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding MedDeclarePrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="藥服費*0.9" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding MedServicePrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="藥品點" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="80" Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="藥服點" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="80" Content="{Binding MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding CopaymenTPrice,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="80" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="80" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Rectangle Width="65"/>
-                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="150,0,0,0" />
+                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="220,0,0,0" />
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

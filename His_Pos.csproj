@@ -627,9 +627,6 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
-      <DependentUpon>StockAdjustmentWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
@@ -916,15 +913,6 @@
     <Compile Include="FunctionWindow\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
-      <DependentUpon>PrescriptionInquireOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml.cs">
-      <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="Service\MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
@@ -1098,10 +1086,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1439,14 +1423,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\MessageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

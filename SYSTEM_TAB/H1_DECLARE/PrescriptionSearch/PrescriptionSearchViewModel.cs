@@ -147,6 +147,69 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+        private int totalCount;
+        public int TotalCount
+        {
+            get => totalCount;
+            set
+            {
+                Set(() => TotalCount, ref totalCount, value);
+            }
+        }
+        private int chronicCount;
+        public int ChronicCount
+        {
+            get => chronicCount;
+            set
+            {
+                Set(() => ChronicCount, ref chronicCount, value);
+            }
+        }
+        private int totalPoint;
+        public int TotalPoint
+        {
+            get => totalPoint;
+            set
+            {
+                Set(() => TotalPoint, ref totalPoint, value);
+            }
+        }
+        private int medicinePoint;
+        public int MedicinePoint
+        {
+            get => medicinePoint;
+            set
+            {
+                Set(() => MedicinePoint, ref medicinePoint, value);
+            }
+        }
+        private int medicalServicePoint;
+        public int MedicalServicePoint
+        {
+            get => medicalServicePoint;
+            set
+            {
+                Set(() => MedicalServicePoint, ref medicalServicePoint, value);
+            }
+        }
+        private int copaymentPoint;
+        public int CopaymentPoint
+        {
+            get => copaymentPoint;
+            set
+            {
+                Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
+        private int profit;
+        public int Profit
+        {
+            get => profit;
+            set
+            {
+                Set(() => Profit, ref profit, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
@@ -227,6 +290,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
             MainWindow.ServerConnection.CloseConnection();
             UpdateCollectionView();
+            SetPrescriptionsSummary();
+        }
+
+        private void SetPrescriptionsSummary()
+        {
+            List<int> summary = SearchPrescriptions.GetSummary();
+            TotalCount = summary[0];
+            ChronicCount = summary[1];
+            TotalPoint = summary[2];
+            MedicinePoint = summary[3];
+            MedicalServicePoint = summary[4];
+            CopaymentPoint = summary[5];
+            Profit = summary[6];
         }
 
         private void ReserveSearchAction()
@@ -235,6 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             //查詢預約慢箋
             SearchPrescriptions.GetReservePrescription(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
             UpdateCollectionView();
+            SetPrescriptionsSummary();
         }
         private void GetInstitutionAction(string search)
         {
