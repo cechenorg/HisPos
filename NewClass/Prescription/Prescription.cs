@@ -764,7 +764,7 @@ namespace His_Pos.NewClass.Prescription
 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originMedicines) {
-                if ((bool)orm.IsBuckle){
+                if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
                     medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1;
@@ -773,7 +773,7 @@ namespace His_Pos.NewClass.Prescription
                
             }
             foreach (var nem in Medicines) {
-                if ((bool)nem.IsBuckle)
+                if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
                 {
                     if (originMedicines.Count(m => m.ID == nem.ID) == 0)
                     {
@@ -788,9 +788,9 @@ namespace His_Pos.NewClass.Prescription
             foreach (var com in compareMeds) {
 
                 if (com.Amount > 0)
-                    PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
+                    PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
                 else if (com.Amount < 0)
-                    PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()); 
+                    PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()); 
             }
              
         }
