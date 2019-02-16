@@ -36,10 +36,12 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public OrderTypeEnum OrderType { get; set; }
         public string ID { get; set; }
+        public string ReceiveID { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string ReceiveEmployeeName { get; set; }
+        public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
         public double TotalPrice { get; set; }
@@ -76,11 +78,13 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             ID = row.Field<string>("StoOrd_ID");
+            ReceiveID = row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
             TotalPrice = (double)row.Field<decimal>("Total");
+            CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
@@ -188,6 +192,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
+            string PrescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
             if (orderFlag == 2)
             {
@@ -200,6 +205,8 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else if (isShipment)
             {
+                ReceiveID = PrescriptionReceiveID;
+
                 UpdateOrderProductsFromSingde();
                 ToSingdeProcessingStatus();
             }

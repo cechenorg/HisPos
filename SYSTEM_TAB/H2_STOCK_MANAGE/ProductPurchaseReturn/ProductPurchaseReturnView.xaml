@@ -45,6 +45,12 @@
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
+        <DataTemplate x:Key="UnProcessingID" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Label Content="{Binding ID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ProcessingID" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Label Content="{Binding ReceiveID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
@@ -128,7 +134,21 @@
                                             </ContentControl.Style>
                                         </ContentControl>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
-                                            <Label Content="{Binding ID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                            <ContentControl Content="{Binding}">
+                                                <ContentControl.Style>
+                                                    <Style TargetType="{x:Type ContentControl}">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
                                             <ContentControl>
                                                 <ContentControl.Style>
                                                     <Style TargetType="{x:Type ContentControl}">

@@ -195,12 +195,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
 
-                List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.ID).ToList();
+                List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.CreateDateTime).ToList();
                 string dateTime = DateTime.Now.ToShortDateString();
 
                 if (storeOrders.Count > 0)
-                    dateTime = storeOrders[0].ID.Substring(1, 8);
-                
+                    dateTime = storeOrders[0].CreateDateTime.ToShortDateString();
+
                 BusyContent = "取得杏德訂單最新狀態...";
                 dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
                 if (dataTable.Rows.Count > 0)

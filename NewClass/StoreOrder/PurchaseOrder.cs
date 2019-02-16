@@ -106,7 +106,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override void UpdateOrderProductsFromSingde()
         {
-            PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID);
+            PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID);
         }
 
         protected override bool CheckUnProcessingOrder()
