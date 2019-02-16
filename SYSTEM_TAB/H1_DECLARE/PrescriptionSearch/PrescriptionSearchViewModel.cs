@@ -295,14 +295,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SetPrescriptionsSummary()
         {
-            List<int> summary = SearchPrescriptions.GetSummary();
-            TotalCount = summary[0];
-            ChronicCount = summary[1];
-            TotalPoint = summary[2];
-            MedicinePoint = summary[3];
-            MedicalServicePoint = summary[4];
-            CopaymentPoint = summary[5];
-            Profit = summary[6];
+            List<double> summary = SearchPrescriptions.GetSummary();
+            TotalCount = 0;
+            ChronicCount = 0;
+            TotalPoint = 0;// summary[0];
+            MedicinePoint = 0;// summary[1];
+            MedicalServicePoint = 0;//summary[2];
+            CopaymentPoint = 0;// summary[3];
+            Profit = 0;//summary[4];
         }
 
         private void ReserveSearchAction()

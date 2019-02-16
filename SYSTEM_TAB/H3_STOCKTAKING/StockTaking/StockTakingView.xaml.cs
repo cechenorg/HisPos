@@ -409,7 +409,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var loadingWindow = new LoadingWindow();
             loadingWindow.Show();
-            loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
+           // loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
             NextStatus();
         }
 

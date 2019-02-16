@@ -22,7 +22,6 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Struct.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
@@ -65,7 +64,7 @@ namespace His_Pos.FunctionWindow
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
+        public void ImportXmlFile(string prescriptionInquireView,string filename)
         {
             backgroundWorker.WorkerReportsProgress = true;
 
@@ -446,30 +445,7 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetMedicinesData(PrescriptionInquireView prescriptionInquireView)
-        {
-            prescriptionInquireView.InquireViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("載入基本資料中...");
-                prescriptionInquireView.DeclareMedicinesData = new ObservableCollection<Product>();///MedicineDb.GetDeclareMedicine();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    prescriptionInquireView.HospitalCollection = ViewModelMainWindow.Institutions;
-                    prescriptionInquireView.DivisionCollection = ViewModelMainWindow.Divisions;
-                    prescriptionInquireView.CopaymentCollection = ViewModelMainWindow.Copayments;
-                    prescriptionInquireView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
-                    prescriptionInquireView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
-                    prescriptionInquireView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                prescriptionInquireView.InquireViewBox.IsEnabled = true;
-                Dispatcher.BeginInvoke(new Action(Close));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+         
         public void GetMedBagData(MedBagManageView medBagManageView)
         {
             medBagManageView.MedBagManageViewBox.IsEnabled = false;
@@ -594,75 +570,7 @@ namespace His_Pos.FunctionWindow
         }
 
         
-        public void PrintInventoryCheckSheet(ReportViewer rptViewer,StockTakingView stockTakingView)
-        {
-            stockTakingView.StockTakingViewBox.IsEnabled = false;
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\藥健康\\報表\\盤點單\\" + DateTime.Today.ToShortDateString().Replace("/","") +".pdf";
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("產生盤點單...");
-                CreatePdf(rptViewer, path,21,29.7);
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    stockTakingView.StockTakingViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-        public void PrintMedbagFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire, bool printReceipt) {
-            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("藥袋列印中...");
-                Export(rptViewer.LocalReport, 22, 24);
-                ReportPrint(Properties.Settings.Default.MedBagPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-        
-        public void PrintReceiptFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire) {
-            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("收據列印中...");
-                Export(rptViewer.LocalReport, 25.4, 9.3);
-                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+      
 
         private static void CreatePdf(ReportViewer viewer,string fileName,double width,double height)
         {
@@ -773,28 +681,7 @@ namespace His_Pos.FunctionWindow
             }
         }
 
-        public void LoginIcData(PrescriptionInquireOutcome prescriptionInquireOutcome)
-        {
-            prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = false;
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("卡片資料寫入中...");
-                prescriptionInquireOutcome.LogInIcData();
-                Dispatcher.Invoke((Action)(() =>
-                {
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = true;
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+       
 
        
     }
