@@ -78,8 +78,8 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 DataTable table = StoreOrderDB.AddNewPrescriptionOrderFromSingde(row);
 
-                if (table != null && table.Rows.Count > 0)
-                    StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("batch_sht"));
+                 if (table != null && table.Rows.Count > 0)
+                    StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("rx_order"));
             }
         }
     }

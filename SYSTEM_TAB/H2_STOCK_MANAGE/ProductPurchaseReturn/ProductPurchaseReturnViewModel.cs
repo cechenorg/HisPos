@@ -196,10 +196,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
 
                 List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING).OrderBy(s => s.CreateDateTime).ToList();
-                string dateTime = DateTime.Now.ToShortDateString();
+                string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                 if (storeOrders.Count > 0)
-                    dateTime = storeOrders[0].CreateDateTime.ToShortDateString();
+                    dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
 
                 BusyContent = "取得杏德訂單最新狀態...";
                 dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);

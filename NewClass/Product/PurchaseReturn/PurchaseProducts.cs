@@ -29,7 +29,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         internal static void UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID)
         {
-            DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(receiveID);
+            DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
 
             StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID, receiveID);
         }

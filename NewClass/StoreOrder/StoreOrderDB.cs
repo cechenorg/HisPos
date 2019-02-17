@@ -225,14 +225,14 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 string[] drugs = productsFromSingde.Replace("\n", "").Split(new[] { "\r" }, StringSplitOptions.None);
 
-                for (int x = 3; x < drugs.Length - 1; x++)
+                for (int x = 3; x < drugs.Length; x++)
                 {
                     if (drugs[x].Equals(string.Empty)) continue;
                     DataRow newRow = storeOrderDetailTable.NewRow();
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", drugs[x].Substring(0, 12).Trim());
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(Double.Parse(drugs[x].Substring(56, 10).Trim())));
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", (drugs[x].Length > 60) ? Math.Abs(Double.Parse(drugs[x].Substring(55, 10).Trim())) : Math.Abs(Double.Parse(drugs[x].Substring(39, 8).Trim())));
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
@@ -339,6 +339,8 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal static DataTable AddNewPrescriptionOrderFromSingde(DataRow row)
         {
+            string testID = row.Field<string>("rx_order");
+
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("rx_order")));
             parameters.Add(new SqlParameter("NOTE", row.Field<string>("inv_msg")));
