@@ -30,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             });
             if (customPrescriptionViewModel.ShowDialog)
             {
+                Messenger.Default.Send(new NotificationMessage("CustomPresChecked"));
                 ShowDialog();
                 Messenger.Default.Unregister(this);
             }

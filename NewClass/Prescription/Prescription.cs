@@ -322,6 +322,10 @@ namespace His_Pos.NewClass.Prescription
                         Medicines[selectedMedicinesIndex] = new MedicineNHI(r);
                         Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.Id);
                         break;
+                    case 2:
+                        Medicines[selectedMedicinesIndex] = new MedicineSpecialMaterial(r);
+                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.Id);
+                        break;
                 }
             }
 
@@ -359,6 +363,9 @@ namespace His_Pos.NewClass.Prescription
                             break;
                         case 1:
                             temp = new MedicineNHI(table.Rows[0]); 
+                            break;
+                        case 2:
+                            temp = new MedicineSpecialMaterial(table.Rows[0]);
                             break;
                     }
                 }

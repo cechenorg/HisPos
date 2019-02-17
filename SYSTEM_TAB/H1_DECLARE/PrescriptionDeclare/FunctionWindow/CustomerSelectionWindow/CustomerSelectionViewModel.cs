@@ -211,15 +211,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         }
         private bool FilterByName(Customer c)
         {
+            if (!string.IsNullOrEmpty(c.Name))
+                return c.Name.Contains(Searching);
             return c.Name.Contains(Searching);
         }
         private bool FilterByIDNumber(Customer c)
         {
-            return c.IDNumber.Contains(Searching);
+            if (!string.IsNullOrEmpty(c.IDNumber))
+                return c.IDNumber.Contains(Searching);
+            return false;
         }
         private bool FilterByTel(Customer c)
         {
-            return c.Tel.Contains(Searching);
+            if(!string.IsNullOrEmpty(c.Tel))
+                return c.Tel.Contains(Searching);
+            return false;
         }
         #endregion
     }

@@ -278,6 +278,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = false;
                 IsBuckle = true;
             }
+            else if (m is MedicineSpecialMaterial && !m.PaySelf)
+            {
+                P1 = "3";
+                P2 = m.ID;
+                P7 = $"{m.Amount:00000.0}";
+                P8 = $"{m.NHIPrice:0000000.00}";
+                P9 = $"{Math.Round(m.NHIPrice * m.Amount * 1.05, 0, MidpointRounding.AwayFromZero):0000000}";
+                P6 = "105";
+                P10 = serial;
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P13 = P12;
+                PaySelf = false;
+                IsBuckle = true;
+            }
             else
             {
                 P1 = "0";

@@ -179,6 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private bool customPresChecked { get; set; }
         private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.Id);
         #endregion
         #region Commands
@@ -250,10 +251,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetPatientDataAction()
         {
+            customPresChecked = false;
             ReadCard(true);
         }
         private void SearchCusByIDNumAction()
         {
+            customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
                 customerSelectionWindow = new CusSelectWindow();
@@ -263,30 +266,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MessageWindow.ShowMessage("身分證/居留證號長度須為10", MessageType.WARNING);
                 else
                 {
-                    if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                    if (CurrentPrescription.Patient.Count() == 0)
                     {
-                        if (CurrentPrescription.Patient.Count() == 0)
+                        if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
                         {
-                            ConfirmWindow confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
+                            var confirm = new ConfirmWindow("查無顧客資料,是否新增?", "查無資料");
                             if ((bool)confirm.DialogResult)
                                 CurrentPrescription.Patient.Check();
-                            else
-                                return;
                         }
                         else
                         {
-                            customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+                            MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
                         }
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("查無資料，若要新增請至少填寫姓名與身分證", MessageType.WARNING);
+                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
                     }
                 }
             }
         }
         private void SearchCusByNameAction()
         {
+            customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
                 customerSelectionWindow = new CusSelectWindow();
@@ -313,6 +315,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void SearchCusByBirthAction()
         {
+            customPresChecked = false;
             customerSelectionWindow = null;
             if (CurrentPrescription.Patient.Birthday is null)
                 customerSelectionWindow = new CusSelectWindow();
@@ -339,6 +342,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void SearchCustomerByTelAction()
         {
+            customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
                 customerSelectionWindow = new CusSelectWindow();
@@ -498,7 +502,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void MedicineNoBuckleAction()
         {
-        
             SelectedMedicine.IsBuckle = !SelectedMedicine.IsBuckle; 
         }
 
@@ -588,6 +591,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
             Messenger.Default.Register<Prescription>(this, "CustomPrescriptionSelected", GetCustomPrescription);
+            Messenger.Default.Register<NotificationMessage>("CustomPresChecked",(notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CustomPresChecked"))
+                    customPresChecked = true;
+            });
         }
         #endregion
         #region EventAction
@@ -677,7 +685,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if((receiveSelectedCustomer != null && CurrentPrescription.Patient != null) && receiveSelectedCustomer.ID == CurrentPrescription.Patient.ID)
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
-            //customerSelectionWindow.Close();
             CheckCustomPrescriptions();
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
@@ -910,6 +917,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckCustomPrescriptions()
         {
             CusPreSelectWindow customPrescriptionWindow = null;
+            if(customPresChecked) return;
             customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
 
