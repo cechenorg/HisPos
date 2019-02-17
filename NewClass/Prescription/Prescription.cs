@@ -217,7 +217,7 @@ namespace His_Pos.NewClass.Prescription
         {
             var details = new List<Pdata>();
             var serialNumber = 1;
-            foreach (var med in Medicines.Where(m => m is MedicineNHI && !m.PaySelf))
+            foreach (var med in Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {
                 details.Add(new Pdata(med, serialNumber.ToString()));
                 serialNumber++;
@@ -294,7 +294,7 @@ namespace His_Pos.NewClass.Prescription
 
         private int CountOralLiquidAgent()
         {
-            return Medicines.Count(m=>m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Properties.Resources.口服液劑));
+            return Medicines.Count(m=>m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(StringRes.口服液劑));
         }
 
         private int CountDayPayAmount(int cusAge, int medFormCount)
@@ -450,7 +450,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public string CheckMedicines()
         {
-            var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC).ToList();
             foreach (var med in medList)
             {
                 if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
@@ -474,7 +474,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CountPrescriptionPoint()
         {
-            PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
+            PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
             if (Treatment.AdjustCase.Id.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
                 (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
             {

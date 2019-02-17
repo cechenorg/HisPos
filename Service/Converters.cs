@@ -406,7 +406,7 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is MedicineNHI || value is MedicineOTC)
+            if (value is MedicineNHI || value is MedicineOTC || value is MedicineSpecialMaterial)
             {
                 return true;
             }

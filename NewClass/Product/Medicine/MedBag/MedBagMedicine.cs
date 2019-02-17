@@ -9,70 +9,6 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
 {
     public class MedBagMedicine
     {
-        public MedBagMedicine(DeclareMedicine m,bool isSingle)
-        {
-            Id = m.Id;
-            if (isSingle)
-            {
-                Name = Strings.StrConv(m.EngName, VbStrConv.Narrow);
-                ChiName = Strings.StrConv(m.ChiName, VbStrConv.Narrow);
-                Ingredient = Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
-                SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
-                Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
-                MedicineDays = m.Days + "天";
-                var usagePrint = GetPositionPrintName(m.Position) + GetUsagePrintName(m.Usage) + "用量:" + m.Dosage + "(  )"; ;
-                Usage = usagePrint;
-                Form = m.MedicalCategory.Form;
-                Total = m.Amount.ToString();
-                Note = m.Note;
-            }
-            else
-            {
-                Name = Strings.StrConv(m.Name, VbStrConv.Narrow);
-                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
-                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
-                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
-                MedicineDays = "共" + m.Days + "天";
-                Dosage = m.Dosage.ToString(CultureInfo.InvariantCulture);
-                Total = m.Days + "天" + m.Amount;
-                if (m.Id.EndsWith("00") || m.Id.EndsWith("G0"))
-                    Total += "顆";
-                else
-                {
-                    Total += "個";
-                }
-                var usagePrint = GetPositionPrintName(m.Position) + GetUsagePrintName(m.Usage).Trim() + "每次";
-                Usage = usagePrint;
-            }
-        }
-
-        public MedBagMedicine(PrescriptionOTC o, bool isSingle)
-        {
-            Id = o.Id;
-            Name = Strings.StrConv(o.Name, VbStrConv.Narrow);
-            ChiName = string.Empty;
-            Usage = "【請參閱包裝使用說明】"; 
-            if (isSingle)
-            {
-                Ingredient = string.Empty;
-                SideEffect = string.Empty;
-                Indication = string.Empty;
-                MedicineDays = string.Empty;
-                Form = string.Empty;
-            }
-            else
-            {
-                Ingredient = "成分:";
-                SideEffect = "副作用:";
-                Indication = "適應症:";
-                MedicineDays = "共" + o.Days + "天";
-                Total = o.Days + "天" + o.Amount + "個";
-            }
-            Ingredient = string.Empty;
-            SideEffect = string.Empty;
-            Indication = string.Empty;
-            Dosage = string.Empty;
-        }
         public MedBagMedicine(MedicineNHI m, bool isSingle,int? medNo = null)
         {
             Id = m.ID;
@@ -178,6 +114,37 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 Form = string.Empty;
                 Total = m.Amount.ToString();
                 Note = string.Empty;
+            }
+        }
+        public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle, int? medNo = null)
+        {
+            Id = m.ID;
+            if (isSingle)
+            {
+                Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
+                ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
+                Ingredient = string.Empty;
+                SideEffect = string.Empty;
+                Indication = string.Empty;
+                MedicineDays = m.Days + "天";
+                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
+                Usage = usagePrint;
+                Form = string.Empty;
+                Total = m.Amount.ToString();
+                Note = string.Empty;
+            }
+            else
+            {
+                MedNo = ((int)medNo).ToString();
+                Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
+                Ingredient = "成分:" + string.Empty;
+                SideEffect = "副作用:" + string.Empty;
+                Indication = "適應症:" + string.Empty;
+                MedicineDays = "共" + m.Days + "天";
+                Dosage = (Convert.ToDouble(m.Dosage)).ToString(CultureInfo.InvariantCulture);
+                Total = m.Days + "天" + m.Amount;
+                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
+                Usage = usagePrint;
             }
         }
         public string MedNo { get; set; }

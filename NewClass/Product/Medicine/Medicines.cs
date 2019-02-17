@@ -11,8 +11,9 @@ namespace His_Pos.NewClass.Product.Medicine
 
         public int CountMedicinePoint()
         {
-            var medicinePoint = this.Where(m => m is MedicineNHI med && !med.PaySelf)
-                .Sum(med => med.NHIPrice * med.Amount);
+            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf)
+                .Sum(m => m.NHIPrice * m.Amount) + this.Where(m => m is MedicineSpecialMaterial && !m.PaySelf)
+                                    .Sum(m => m.NHIPrice * m.Amount * 1.05);
             return (int)Math.Round(medicinePoint, 0, MidpointRounding.AwayFromZero);
         }
 
@@ -53,12 +54,17 @@ namespace His_Pos.NewClass.Product.Medicine
         }
         public string CreateMedicalData(string dateTime)
         {
-            var medList = this.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             var result = string.Empty;
             foreach (var med in medList)
             {
                 result += dateTime;
-                result += "1";
+                if(med is MedicineNHI)
+                    result += "1";
+                else
+                {
+                    result += "4";
+                }
                 result += med.ID.PadLeft(12, ' ');
                 result += med.PositionName.PadLeft(6, ' ');
                 result += med.UsageName.PadLeft(18, ' ');

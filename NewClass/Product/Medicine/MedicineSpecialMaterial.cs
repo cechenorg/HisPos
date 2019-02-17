@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Data;
+using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
-    public class MedicineSpecialMaterial : Medicine
+    public class MedicineSpecialMaterial : Medicine, IDeletable
     {
         public MedicineSpecialMaterial() { }
 
@@ -29,5 +30,14 @@ namespace His_Pos.NewClass.Product.Medicine
         public string LicenseID { get; set; }//許可證字號
         public string SelfPayItemName { get; set; }//自付差額品名
         public string LinkID { get; set; }//整組組件特材關聯代碼表
+        private string source;
+        public string Source
+        {
+            get => source;
+            set
+            {
+                Set(() => Source, ref source, value);
+            }
+        }
     }
 }

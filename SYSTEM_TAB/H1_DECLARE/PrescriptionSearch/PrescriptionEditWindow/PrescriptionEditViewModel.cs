@@ -49,10 +49,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             get => selectedMedicine;
             set
             {
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
                     ((IDeletableProduct)SelectedMedicine).IsSelected = false;
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
                     ((IDeletableProduct)SelectedMedicine).IsSelected = true;
             }
         }
@@ -406,7 +406,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.Medicines.Count <= SelectedMedicinesIndex) return;
             var m = EditedPrescription.Medicines[SelectedMedicinesIndex];
             if (m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) ||
-                m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source))
+                m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source) ||
+                m is MedicineSpecialMaterial special && !string.IsNullOrEmpty(special.Source))
             {
                 EditedPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
                 EditedPrescription.CountPrescriptionPoint();
@@ -420,7 +421,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region Functions
         private void SetMedicinesPaySelf()
         {
-            var medList = EditedPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            var medList = EditedPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial).ToList();
             if (medList.Count > 0)
             {
                 foreach (var m in medList)

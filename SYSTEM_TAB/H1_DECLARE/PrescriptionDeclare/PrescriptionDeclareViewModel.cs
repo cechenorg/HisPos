@@ -136,10 +136,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get => selectedMedicine;
             set
             {
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
                     ((IDeletableProduct) SelectedMedicine).IsSelected = false;
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC)
+                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
                     ((IDeletableProduct)SelectedMedicine).IsSelected = true;
             }
         }
@@ -622,7 +622,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetMedicinesPaySelf()
         {
-            var medList = CurrentPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC).ToList();
+            var medList = CurrentPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial).ToList();
             if (medList.Count > 0)
             {
                 foreach (var m in medList)

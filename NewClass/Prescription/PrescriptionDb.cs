@@ -233,7 +233,7 @@ namespace His_Pos.NewClass.Prescription
             double medCost = 0;
             foreach (Medicine declareMedicine in p.Medicines)
             {
-                if (declareMedicine is MedicineNHI)
+                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                     medCost += declareMedicine.TotalPrice;
             }
             Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
@@ -252,7 +252,7 @@ namespace His_Pos.NewClass.Prescription
             int i = 1;
             foreach (Medicine declareMedicine in p.Medicines)
             {
-                if (declareMedicine is MedicineNHI)
+                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
                     Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
                     Dtl_data.Append(declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
@@ -293,7 +293,7 @@ namespace His_Pos.NewClass.Prescription
                 //    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
                 //}
                 // 
-                if (i < p.Medicines.Count(med => med is MedicineNHI))
+                if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
                     Dtl_data.AppendLine();
                  
                 i++;

@@ -19,6 +19,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                         case MedicineOTC otc:
                             Add(new MedBagMedicine(otc, false, i));
                             break;
+                        case MedicineSpecialMaterial specialMaterial:
+                            Add(new MedBagMedicine(specialMaterial, false, i));
+                            break;
                     }
                     i++;
                 }
@@ -34,6 +37,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                             break;
                         case MedicineOTC otc:
                             Add(new MedBagMedicine(otc, true));
+                            break;
+                        case MedicineSpecialMaterial specialMaterial:
+                            Add(new MedBagMedicine(specialMaterial, true));
                             break;
                     }
                 }

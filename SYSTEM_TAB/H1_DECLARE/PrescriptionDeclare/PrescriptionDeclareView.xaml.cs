@@ -89,6 +89,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         Messenger.Default.Send(new NotificationMessage("DeleteMedicine"));
                     break;
                 }
+                case MedicineSpecialMaterial special:
+                {
+                    if (!string.IsNullOrEmpty(special.Source))
+                        Messenger.Default.Send(new NotificationMessage("DeleteMedicine"));
+                    break;
+                }
             }
         }
 
