@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
@@ -54,7 +55,7 @@ namespace His_Pos.NewClass.Prescription
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                openCom = HisApiBase.OpenCom();
+                openCom = HisApiFunction.OpenCom();
             };
             worker.RunWorkerAsync();
             int i = 0;
@@ -77,7 +78,7 @@ namespace His_Pos.NewClass.Prescription
             if ((bool)openCom)
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                var res = ViewModelMainWindow.CurrentPharmacy.NewReader ? HisApiBaseNew.hisGetBasicData(icData, ref strLength) : HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
                     byte[] BasicDataArr = new byte[72];
@@ -90,7 +91,7 @@ namespace His_Pos.NewClass.Prescription
                     Gender = PatientBasicData.Gender;
                     IDNumber = PatientBasicData.IDNumber;
                     CardReleaseDate = PatientBasicData.CardReleaseDate;
-                    HisApiBase.CloseCom();
+                    HisApiFunction.CloseCom();
                     return true;
                 }
                 else
@@ -101,7 +102,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
                     });
                 }
-                HisApiBase.CloseCom();
+                HisApiFunction.CloseCom();
             }
             return false;
         }
@@ -112,9 +113,11 @@ namespace His_Pos.NewClass.Prescription
             byte[] cTreatAfterCheck = { makeUp };//補卡註記
             int iBufferLen = 296;
             byte[] pBuffer = new byte[296];
-            if (HisApiBase.OpenCom())
+            if (HisApiFunction.OpenCom())
             {
-                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                var res = ViewModelMainWindow.CurrentPharmacy.NewReader?
+                    HisApiBaseNew.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen) : 
+                    HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
                 if (res == 0)
                 {
                     MedicalNumberData = new SeqNumber(pBuffer);
@@ -128,7 +131,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
                     });
                 }
-                HisApiBase.CloseCom();
+                HisApiFunction.CloseCom();
             }
         }
 
@@ -139,14 +142,16 @@ namespace His_Pos.NewClass.Prescription
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if (HisApiBase.OpenCom())
+                if (HisApiFunction.OpenCom())
                 {
-                    var res = HisApiBase.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen);
+                    var res = ViewModelMainWindow.CurrentPharmacy.NewReader ? 
+                        HisApiBaseNew.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen) : 
+                        HisApiBase.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen);
                     if (res == 0)
                     {
                         TreatRecords = new TreatRecords(pBuffer);
                     }
-                    HisApiBase.CloseCom();
+                    HisApiFunction.CloseCom();
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -160,9 +165,11 @@ namespace His_Pos.NewClass.Prescription
         {
             byte[] pBuffer = new byte[9];
             var strLength = 9;
-            if (HisApiBase.OpenCom())
+            if (HisApiFunction.OpenCom())
             {
-                var res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
+                var res = ViewModelMainWindow.CurrentPharmacy.NewReader ?
+                    HisApiBaseNew.hisGetRegisterBasic2(pBuffer, ref strLength):
+                    HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
                 if (res == 0)
                 {
                     ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
@@ -176,7 +183,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("取得就醫可用次數異常 " + res + ":" + registerBasicErr, MessageType.WARNING);
                     });
                 }
-                HisApiBase.CloseCom();
+                HisApiFunction.CloseCom();
             }
         }
 
@@ -184,9 +191,11 @@ namespace His_Pos.NewClass.Prescription
         {
             int res = -1;
             if (AvailableTimes != 0) return;
-            if (HisApiBase.OpenCom())
+            if (HisApiFunction.OpenCom())
             {
-                res = HisApiBase.csUpdateHCContents();
+                res = ViewModelMainWindow.CurrentPharmacy.NewReader ?
+                    HisApiBaseNew.csUpdateHCContents():
+                    HisApiBase.csUpdateHCContents();
                 if (res != 0)
                 {
                     var registerBasicErr = MainWindow.GetEnumDescription((ErrorCode)res);
@@ -195,7 +204,7 @@ namespace His_Pos.NewClass.Prescription
                         MessageWindow.ShowMessage("更新卡片異常 " + res + ":" + registerBasicErr, MessageType.WARNING);
                     });
                 }
-                HisApiBase.CloseCom();
+                HisApiFunction.CloseCom();
             }
         }
     }

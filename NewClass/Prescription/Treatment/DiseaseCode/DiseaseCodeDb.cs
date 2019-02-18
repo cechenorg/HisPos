@@ -10,9 +10,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode {
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[DiseaseCodeByCodeId]", parameterList);
             return table;  
         }
-        public static DataTable GetDataByCodes()
+        public static DataTable GetDiseaseCodes()
         {
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[DiseaseCodeByCodeId]");
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[OffLineDiseaseCode]");
+            return table;
+        }
+        public static DataTable GetICD9DiseaseCodes()
+        {
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[OffLineDiseaseCodeMapping]");
             return table;
         }
     }

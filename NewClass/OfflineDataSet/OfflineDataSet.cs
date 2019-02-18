@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -19,6 +21,7 @@ using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using ZeroFormatter;
 using DiseaseCode = His_Pos.NewClass.Prescription.Treatment.DiseaseCode.DiseaseCode;
+using DiseaseCodeDb = His_Pos.NewClass.Prescription.Treatment.DiseaseCode.DiseaseCodeDb;
 using PaymentCategory = His_Pos.NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory;
 
 namespace His_Pos.NewClass.OfflineDataSet
@@ -50,7 +53,10 @@ namespace His_Pos.NewClass.OfflineDataSet
         public virtual IList<Position> Positions { get; set; }
         [Index(11)]
         public virtual IList<Product> Products { get; set; }
-
+        [Index(12)]
+        public virtual int ReaderCom { get; set; }
+        [Index(13)]
+        public virtual bool IsNewReader { get; set; }
         public OfflineDataSet()
         {
 
@@ -65,8 +71,18 @@ namespace His_Pos.NewClass.OfflineDataSet
             MedicalPersonnels = new List<MedicalPersonnel>();
             MedicalPersonnels = medicalPersonnels.ToList();
             DiseaseCodes = new List<DiseaseCode>();
-            //var diseaseCodes = DiseaseCodeDb.
-            //DiseaseCodes = diseaseCodes.ToList();
+            var diseaseTable = DiseaseCodeDb.GetDiseaseCodes();
+            foreach (DataRow r in diseaseTable.Rows)
+            {
+                DiseaseCodes.Add(new DiseaseCode(r,true));
+            }
+            var diseaseICD9Table = DiseaseCodeDb.GetICD9DiseaseCodes();
+            foreach (DataRow r in diseaseICD9Table.Rows)
+            {
+                var disease = new DiseaseCode(r, true);
+                disease.ICD9_ID = r.Field<string>("DisCodeMap_ICD9_ID");
+                DiseaseCodes.Add(disease);
+            }
             AdjustCases = new List<AdjustCase>();
             AdjustCases = adjustCases.ToList();
             PrescriptionCases = new List<PrescriptionCase>();
@@ -87,6 +103,8 @@ namespace His_Pos.NewClass.OfflineDataSet
             {
                 Products.Add(new Product(p));
             }
+            ReaderCom = ViewModelMainWindow.CurrentPharmacy.ReaderCom;
+            IsNewReader = ViewModelMainWindow.CurrentPharmacy.NewReader;
         }
     }
 }

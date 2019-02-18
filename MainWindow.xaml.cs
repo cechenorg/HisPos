@@ -213,7 +213,7 @@ namespace His_Pos
 
         private void VerifySam(object sender, DoWorkEventArgs e)
         {
-            HisApiBase.VerifySamDc();
+            HisApiFunction.VerifySamDc();
         }
 
         private void DuringVerify(object sender, ProgressChangedEventArgs e)

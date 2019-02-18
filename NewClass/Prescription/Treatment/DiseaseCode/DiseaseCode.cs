@@ -15,10 +15,19 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             Name = string.Empty;
             FullName = string.Empty;
         }
-        public DiseaseCode(DataRow r) {
-            ID = r.Field<string>("DisCode_ID");
-            Name = r.Field<string>("DisCode_ChiName");
-            FullName = r.Field<string>("DisCode_FullName");
+        public DiseaseCode(DataRow r,bool offLine) {
+            if (!offLine)
+            {
+                ID = r.Field<string>("DisCode_ID");
+                Name = r.Field<string>("DisCode_ChiName");
+                FullName = r.Field<string>("DisCode_FullName");
+            }
+            else
+            {
+                ID = r.Field<string>("DisCode_ID");
+                Name = r.Field<string>("DisCode_ChiName");
+                FullName = Name;
+            }
         }
         [Index(0)]
         public virtual string ID { get; set; }
@@ -34,6 +43,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
                 Set(() => FullName, ref fullName, value);
             }
         }
+        [Index(3)]
+        public virtual string ICD9_ID { get; set; }
 
         public void GetDataByCodeId(string id) {
             if (!string.IsNullOrEmpty(id))
@@ -41,7 +52,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
                 DataTable table = DiseaseCodeDb.GetDataByCodeId(id);
                 if (table.Rows.Count > 0)
                 {
-                    var diseaseCode = new DiseaseCode(table.Rows[0]);
+                    var diseaseCode = new DiseaseCode(table.Rows[0],false);
                     ID = diseaseCode.ID;
                     Name = diseaseCode.Name;
                     FullName = ID + " " + Name;

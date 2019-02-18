@@ -252,9 +252,14 @@ namespace His_Pos.Service
                 var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                if (HisApiBase.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
-                    HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
-                HisApiBase.CloseCom();
+                if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
+                {
+                    if (ViewModelMainWindow.CurrentPharmacy.NewReader)
+                        HisApiBaseNew.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                    else
+                        HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                }
+                HisApiFunction.CloseCom();
             }
             catch (Exception ex)
             {

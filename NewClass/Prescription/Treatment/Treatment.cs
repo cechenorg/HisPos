@@ -472,14 +472,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public void GetLastMedicalNumber()
         {
-            if (HisApiBase.OpenCom())
+            if (HisApiFunction.OpenCom())
             {
                 int iBufferLen = 7;
                 byte[] pBuffer = new byte[7];
-                var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                var res = VM.CurrentPharmacy.NewReader ?
+                    HisApiBaseNew.hisGetLastSeqNum(pBuffer, ref iBufferLen):
+                    HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
                 if (res == 0)
                     TempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
-                HisApiBase.CloseCom();
+                HisApiFunction.CloseCom();
             }
         }
 

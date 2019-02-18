@@ -144,9 +144,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
         private void VerifyHpcPin_Click(object sender, RoutedEventArgs e)
         {
-            HisApiBase.VerifyHpcPin();
+            HisApiFunction.VerifyHpcPin();
         }
-
-        
     }
 }
