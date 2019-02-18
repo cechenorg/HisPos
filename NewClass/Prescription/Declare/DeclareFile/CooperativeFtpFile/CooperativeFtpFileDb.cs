@@ -10,7 +10,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 namespace His_Pos.NewClass.Prescription.Declare.DeclareFile.CooperativeFtpFile {
    public class CooperativeFtpFileDb {
         public XmlDocument GetData(DateTime dateTime) {
-            string id = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.Id);
+            string id = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
             string filepath = "MDA" + dateTime.AddYears(-1911).ToString("yyyMM"); //"MDA10710";
             string filename = filepath + ".ZIP";
             string path = @"C:\Program Files\HISPOS\CooperativeFtpFile\" + filepath;
