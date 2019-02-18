@@ -14,6 +14,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using ZeroFormatter;
@@ -47,6 +48,8 @@ namespace His_Pos.NewClass.OfflineDataSet
         public virtual IList<Usage> Usages { get; set; }
         [Index(10)]
         public virtual IList<Position> Positions { get; set; }
+        //[Index(11)]
+        //public virtual IList<ProductStruct> ProductStructs { get; set; }
 
         public OfflineDataSet()
         {
