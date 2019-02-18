@@ -42,7 +42,8 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void SaveOrder()
         {
-            StoreOrderDB.SaveReturnOrder(this);
+            ReturnOrder returnOrder = this.Clone() as ReturnOrder;
+            StoreOrderDB.SaveReturnOrder(returnOrder);
         }
 
         public override void AddProductByID(string iD)
@@ -50,6 +51,8 @@ namespace His_Pos.NewClass.StoreOrder
             Messenger.Default.Register<NotificationMessage<ChooseBatchProducts>>(this, AddBatchProducts);
             ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow(iD);
             Messenger.Default.Unregister(this);
+
+            RaisePropertyChanged(nameof(ProductCount));
         }
 
         protected override bool CheckUnProcessingOrder()
@@ -60,7 +63,18 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            return false;
+            foreach (var product in OrderProducts)
+            {
+                if (product.ReturnAmount == 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+
+            return (bool)confirmWindow.DialogResult;
         }
 
         protected override bool CheckNormalProcessingOrder()
@@ -70,20 +84,17 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            throw new NotImplementedException();
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+
+            return (bool)confirmWindow.DialogResult;
         }
 
         public override void DeleteSelectedProduct()
         {
             OrderProducts.Remove((ReturnProduct)SelectedItem);
+
+            RaisePropertyChanged(nameof(ProductCount));
         }
-
-        protected override void UpdateOrderProductsFromSingde()
-        {
-            //DataTable dataTable = StoreOrderDB.GetOrderProductsFromSingde(ID);
-
-        }
-
         #endregion
 
         #region ----- Define Function -----

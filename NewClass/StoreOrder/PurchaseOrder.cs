@@ -104,11 +104,6 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
-        protected override void UpdateOrderProductsFromSingde()
-        {
-            PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID);
-        }
-
         protected override bool CheckUnProcessingOrder()
         {
             if (OrderProducts.Count == 0)
