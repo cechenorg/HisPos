@@ -43,7 +43,7 @@
             <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
-            <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/GreenDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="UnProcessingID" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <Label Content="{Binding ID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
@@ -60,15 +60,15 @@
             </Grid.ColumnDefinitions>
             <Grid Margin="10,10,0,10" Grid.Column="0" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition Height="0"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
                     <RadioButton Content="全部" Tag="3" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
                     <RadioButton Content="等待處理" Tag="4" GroupName="OrderType" Margin="58,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Image Source="/Images/BlueRingDot.png" Width="15"/>
+                    <Image Source="/Images/GreenDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
                     <RadioButton Content="採購單" Tag="0" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>

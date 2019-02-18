@@ -152,7 +152,16 @@ namespace His_Pos.NewClass.StoreOrder
         {
             SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
-            StoreOrderDB.StoreOrderToDone(ID);
+
+            switch (OrderType)
+            {
+                case OrderTypeEnum.PURCHASE:
+                    StoreOrderDB.PurchaseStoreOrderToDone(ID);
+                    break;
+                case OrderTypeEnum.RETURN:
+                    StoreOrderDB.ReturnStoreOrderToDone(ID);
+                    break;
+            }
 
             MessageWindow.ShowMessage("已完成"+ (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
@@ -211,7 +220,12 @@ namespace His_Pos.NewClass.StoreOrder
                     ToSingdeProcessingStatus();
                 else
                 {
-                    MessageWindow.ShowMessage($"單號 {ID} 無法取得商品資訊 請聯絡杏德總倉", MessageType.ERROR);
+                    System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
+                    });
+
+                    ToScrapStatus();
                 }
             }
         }
