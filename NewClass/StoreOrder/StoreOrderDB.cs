@@ -430,9 +430,7 @@ namespace His_Pos.NewClass.StoreOrder
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
                     orderMedicines += product.ID.PadRight(12, ' ');
-
                     orderMedicines += product.OrderAmount.ToString().PadLeft(10, ' ');
-
                     orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }
@@ -441,12 +439,23 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
                 {
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    string validDate = "";
+
+                    if (product.ValidDate != null)
+                    {
+                        DateTime date = (DateTime)product.ValidDate;
+
+                        int year = date.Year - 1911;
+
+                        validDate = year + date.ToString("MMdd");
+                    }
 
                     //12 10 6 20 7
-                    //orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
-
-                    //orderMedicines += product.Note;
+                    orderMedicines += product.ID.PadRight(12, ' ');
+                    orderMedicines += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+                    orderMedicines += (product.Note.Length > 6)? product.Note.Substring(0, 6) : product.Note.PadLeft(6, ' ');
+                    orderMedicines += product.BatchNumber.PadLeft(20, ' ');
+                    orderMedicines += validDate.PadLeft(7, ' ');
                     orderMedicines += "\r\n";
                 }
             }

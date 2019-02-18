@@ -182,9 +182,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Singde Function /////
         private bool SendOrderToSingde()
         {
-            MainWindow.SingdeConnection.OpenConnection();
             DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
-            MainWindow.SingdeConnection.CloseConnection();
 
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
