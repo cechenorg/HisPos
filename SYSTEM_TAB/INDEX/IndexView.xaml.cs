@@ -171,6 +171,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
 
         private void TransferToStoord_Click(object sender, RoutedEventArgs e) {
+            return;
             if (ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList().Count != 0)
                 ;/// StoreOrderDb.AddDailyOrder(StoreOrderCategory.PURCHASE, ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList());
             if (ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList().Count != 0)

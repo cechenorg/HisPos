@@ -440,6 +440,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
             
             prescriptionMasterTable.Rows.Add(newRow);
             return prescriptionMasterTable; 
@@ -506,7 +507,8 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_IsSendToServer", typeof(bool));
             masterTable.Columns.Add("PreMas_IsGetCard", typeof(bool));
             masterTable.Columns.Add("PreMas_IsDeclare", typeof(bool));
-            masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool)); 
+            masterTable.Columns.Add("PreMas_IsDeposit", typeof(bool));
+            masterTable.Columns.Add("PreMas_IsAdjust", typeof(bool));  
             return masterTable;
     }
         public static DataTable PrescriptionDetailTable() {
@@ -571,7 +573,7 @@ namespace His_Pos.NewClass.Prescription
             return reserveMasterTable;
         }
         public static DataTable SetReserveionDetail(Prescription p, List<Pdata> prescriptionDetails) { //一般藥費
-            int medCount = 1;
+            
             DataTable reserveDetailTable = ReserveDetailTable();
 
             foreach (var pdata in prescriptionDetails)
@@ -638,7 +640,9 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", false);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", true);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", true);
-                DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", false); 
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", false);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", false);
+                
                 prescriptionMasterTable.Rows.Add(newRow);
                 preId++;
             } 
@@ -708,7 +712,7 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("ResMas_IsSendToServer", typeof(bool));
             masterTable.Columns.Add("ResMas_IsRegister", typeof(bool));
             return masterTable; 
-        }
+    }
         public static DataTable ReserveDetailTable() {
             DataTable detailTable = new DataTable();
             detailTable.Columns.Add("ResDet_ReserveID", typeof(int));

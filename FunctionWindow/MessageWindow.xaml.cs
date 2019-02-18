@@ -45,7 +45,7 @@ namespace His_Pos.FunctionWindow
         {
             if(e.Key == Key.Enter)
             {
-
+                e.Handled = true;
                 Close();
             }
         }

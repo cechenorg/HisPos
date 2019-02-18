@@ -774,10 +774,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private void NormalAdjust(bool noCard)
-        {
+        { 
             if (CurrentPrescription.Id == 0)
                 CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
-            else
+            else 
                 CurrentPrescription.Update();
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
@@ -819,8 +819,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }  
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
-            CurrentPrescription.PredictResere();
+            if (CurrentPrescription.Id == 0) {
+                CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
+                CurrentPrescription.PredictResere();
+            } 
+            else
+                CurrentPrescription.Update();
+           
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false) 
                 PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
             //紀錄訂單and送單
@@ -1034,6 +1039,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.PrescriptionStatus.IsDeposit = false;
+            CurrentPrescription.PrescriptionStatus.IsAdjust = true;
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
@@ -1195,6 +1201,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionPoint.CountDeposit();
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.PrescriptionStatus.IsDeposit = true;
+            CurrentPrescription.PrescriptionStatus.IsAdjust = true;
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
