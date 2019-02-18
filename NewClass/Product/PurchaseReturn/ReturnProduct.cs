@@ -20,7 +20,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; set; }
         public string Note { get; set; }
         public string BatchNumber { get; set; }
-        public double BatchLimit { get; set; }
         public double ReturnAmount { get; set; }
         public double RealAmount { get; set; }
         public double Price { get; set; }
@@ -38,7 +37,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             Note = row.Field<string>("StoOrdDet_Note");
             BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
-            BatchLimit = row.Field<double>("StoOrdDet_FreeAmount");
             ReturnAmount = row.Field<double>("StoOrdDet_OrderAmount");
             RealAmount = row.Field<double>("StoOrdDet_RealAmount");
             Price = (double)row.Field<decimal>("StoOrdDet_Price");
@@ -54,7 +52,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SafeAmount = returnProduct.SafeAmount;
             Note = returnProduct.Note;
             BatchNumber = returnProduct.BatchNumber;
-            BatchLimit = returnProduct.BatchLimit;
             ReturnAmount = returnProduct.ReturnAmount;
             RealAmount = returnProduct.RealAmount;
             Price = returnProduct.Price;
