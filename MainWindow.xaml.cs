@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Xml;
 using ChromeTabs;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -20,10 +22,12 @@ using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using StringRes = His_Pos.Properties.Resources;
+
 
 namespace His_Pos
 {
@@ -51,6 +55,7 @@ namespace His_Pos
             InitializeMenu();
             InitialUserBlock();
             StratClock();
+            
             AddNewTab("每日作業");
         }
         

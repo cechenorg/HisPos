@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Xml;
@@ -8,7 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.Service;
+using His_Pos.Service; 
 
 namespace His_Pos.FunctionWindow
 {
@@ -29,7 +30,7 @@ namespace His_Pos.FunctionWindow
         #endregion
 
         public LoginWindowViewModel()
-        {
+        { 
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
 
