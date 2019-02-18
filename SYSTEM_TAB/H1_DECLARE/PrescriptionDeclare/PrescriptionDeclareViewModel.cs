@@ -1107,19 +1107,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
-                    
+                    IsBusy = false;
+                    if (noCard)
+                    {
+                        Application.Current.Dispatcher.Invoke(delegate
+                        {
+                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                        });
+                        ClearPrescription();
+                    }
                 };
+                IsBusy = true;
                 worker.RunWorkerAsync();
             }
             else
             {
                 if (noCard)
                 {
-                    Application.Current.Dispatcher.Invoke(delegate
+                    var worker = new BackgroundWorker();
+                    worker.DoWork += (o, ea) =>
                     {
-                        MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                    });
-                    ClearPrescription();
+                        BusyContent = StringRes.押金單據列印;
+                        CurrentPrescription.PrintDepositSheet();
+                    };
+                    worker.RunWorkerCompleted += (o, ea) =>
+                    {
+                        IsBusy = false;
+                        Application.Current.Dispatcher.Invoke(delegate
+                        {
+                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                        });
+                        ClearPrescription();
+                    };
+                    IsBusy = true;
+                    worker.RunWorkerAsync();
                 }
             }
         }
