@@ -158,7 +158,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                     {
                         if (SelectedAdjustCase is null || src.AdjustCase.Id.Equals(SelectedAdjustCase.Id))
                         {
-                            if (SelectedInstitution is null || src.Institution.Id.Equals(SelectedInstitution.Id))
+                            if (SelectedInstitution is null || src.Institution.ID.Equals(SelectedInstitution.ID))
                                 e.Accepted = true;
                             else
                                 e.Accepted = false;

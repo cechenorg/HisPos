@@ -80,7 +80,7 @@ namespace His_Pos.Class
             {
                 Hospital.Doctor = new MedicalPersonnel();
                 Hospital.Doctor.IcNumber = !string.IsNullOrEmpty(d.Dhead.D24) ? d.Dhead.D24 : string.Empty;
-                Hospital.Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.Id.Equals(d.Dhead.D13))
+                Hospital.Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.ID.Equals(d.Dhead.D13))
                     ?.DeepCloneViaJson();
             }
             SpecialCode = new SpecialTreat();
@@ -88,7 +88,7 @@ namespace His_Pos.Class
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D8) ? d.Dhead.D8 : string.Empty;
             SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D9) ? d.Dhead.D9 : string.Empty;
-            TreatmentCase = ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals(d.Dhead.D22))?.DeepCloneViaJson();
+            TreatmentCase = ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals(d.Dhead.D22))?.DeepCloneViaJson();
         }
 
         private Hospital _hospital;

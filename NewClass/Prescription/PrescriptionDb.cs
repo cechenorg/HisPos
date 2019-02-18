@@ -113,7 +113,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
@@ -123,7 +123,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
         }
@@ -188,7 +188,7 @@ namespace His_Pos.NewClass.Prescription
          
         public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
-            string Rx_id = ViewModelMainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
+            string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             string Rx_order = Convert.ToDateTime(p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
             string Pt_name = p.Patient.Name; // 藥袋名稱(病患姓名)
             string Upload_data = DateTime.Now.ToString(" yyyy - MM - dd hh:mm:ss "); //更新時間( 2014 - 01 - 24 21:13:03 )
@@ -211,8 +211,8 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(p.Patient.Tel == null ? empty.PadRight(20, ' ') : p.Patient.Tel.PadRight(20, ' ')); //電話
             Dtl_data.AppendLine();
             //第二行   
-            Dtl_data.Append(p.Treatment.Institution.Id.PadRight(10, ' ')); //院所代號
-            Dtl_data.Append(p.Treatment.Institution.Id.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
+            Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //院所代號
+            Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
             Dtl_data.Append(empty.PadRight(20, ' ')); //空
             Dtl_data.Append(ViewModelMainWindow.CurrentUser.ID.ToString().PadRight(10, ' ')); //藥師代號
             Dtl_data.Append(ViewModelMainWindow.CurrentUser.Name.PadRight(20 - NewFunction.HowManyChinese(ViewModelMainWindow.CurrentUser.Name), ' ')); //藥師姓名 
@@ -220,8 +220,8 @@ namespace His_Pos.NewClass.Prescription
             //第三行
             Dtl_data.Append(((DateTime)p.Treatment.TreatDate).AddYears(-1911).ToString("yyyMMdd")); //處方日(就診日期)
             Dtl_data.Append(((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")); //調劑日期
-            Dtl_data.Append(p.Treatment.PrescriptionCase.Id.PadRight(2, ' ')); //案件
-            Dtl_data.Append(p.Treatment.Division.Id.PadRight(2, ' ')); //科別
+            Dtl_data.Append(p.Treatment.PrescriptionCase.ID.PadRight(2, ' ')); //案件
+            Dtl_data.Append(p.Treatment.Division.ID.PadRight(2, ' ')); //科別
             Dtl_data.Append(p.Treatment.MainDisease.ID.PadRight(10, ' ')); //主診斷
             Dtl_data.Append(string.IsNullOrEmpty(p.Treatment.SubDisease.ID) ? empty.PadRight(10, ' ') : p.Treatment.SubDisease.ID.PadRight(10, ' ')); //次診斷
             Dtl_data.Append(p.Treatment.OriginalMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
@@ -405,24 +405,24 @@ namespace His_Pos.NewClass.Prescription
             newRow["PreMas_ImportFileID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
             newRow["PreMas_SerialNumber"] = DBNull.Value;
-            newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.Id;
+            newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.ID;
             newRow["PreMas_MakeUpMarkID"] =  DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", p.Treatment.PaymentCategory?.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", p.Treatment.PaymentCategory?.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", p.Treatment.MedicalNumber);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MainDiseaseID", p.Treatment.MainDisease?.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_SecondDiseaseID", p.Treatment.SubDisease?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DivisionID", p.Treatment.Division?.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_DivisionID", p.Treatment.Division?.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TreatmentDate", p.Treatment.TreatDate);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Treatment.Copayment?.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Treatment.Institution.Id);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", p.Treatment.PrescriptionCase?.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Treatment.Institution.ID);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", p.Treatment.PrescriptionCase?.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustDate", p.Treatment.AdjustDate);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DoctorIDNumber", p.Treatment.Institution.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_DoctorIDNumber", p.Treatment.Institution.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_PharmacistIDNumber", p.Treatment.Pharmacist.IdNumber);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_SpecialTreatID", p.Treatment.SpecialTreat?.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_SpecialTreatID", p.Treatment.SpecialTreat?.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicineDays", p.MedicineDays);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_SpecialMaterialPoint", p.PrescriptionPoint.SpecialMaterialPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TreatmentPoint", p.PrescriptionPoint.TreatmentPoint);
@@ -536,22 +536,22 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
             newRow["ResMas_SerialNumber"] = DBNull.Value;
             newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalNumber", p.Treatment.MedicalNumber); 
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_DivisionID", p.Treatment.Division.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_DivisionID", p.Treatment.Division.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_TreatmentDate", p.Treatment.TreatDate);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_CopaymentID", p.Treatment.Copayment.Id);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_InstitutionID", p.Treatment.Institution.Id);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PrescriptionCaseID", p.Treatment.PrescriptionCase.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_InstitutionID", p.Treatment.Institution.ID);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_PrescriptionCaseID", p.Treatment.PrescriptionCase.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustDate", p.Treatment.AdjustDate);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_DoctorIDNumber", p.Treatment.Institution.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_DoctorIDNumber", p.Treatment.Institution.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_PharmacistIDNumber", p.Treatment.Pharmacist.IdNumber);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_SpecialTreatID", p.Treatment.SpecialTreat?.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_SpecialTreatID", p.Treatment.SpecialTreat?.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicineDays", p.MedicineDays);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_SpecialMaterialPoint", p.PrescriptionPoint.SpecialMaterialPoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_TreatmentPoint", p.PrescriptionPoint.TreatmentPoint);
@@ -607,7 +607,7 @@ namespace His_Pos.NewClass.Prescription
                 newRow["PreMas_ImportFileID"] = fileId;
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", d.D1);
                 newRow["PreMas_SerialNumber"] = d.D2;
-                newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.Id;
+                newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.ID;
                 newRow["PreMas_MakeUpMarkID"] = DBNull.Value;
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", d.D5);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", d.D7);

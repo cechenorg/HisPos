@@ -138,20 +138,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D2 = string.Empty;
             D3 = p.Patient.IDNumber;
             D4 = string.Empty;
-            D5 = t.PaymentCategory?.Id;
+            D5 = t.PaymentCategory?.ID;
             D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
             D7 = t.MedicalNumber;
             D8 = t.MainDisease.ID;
             D9 = t.SubDisease?.ID;
-            D13 = t.Division?.Id;
+            D13 = t.Division?.ID;
             D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate, false);
             D15 = t.Copayment.Id;
             D16 = $"{point.ApplyPoint:00000000}";
             D17 = $"{point.CopaymentPoint:0000}";
             D18 = $"{point.TotalPoint:00000000}";
             D20 = p.Patient.Name;
-            D21 = t.Institution.Id;
-            D22 = t.PrescriptionCase?.Id;
+            D21 = t.Institution.ID;
+            D22 = t.PrescriptionCase?.ID;
             D23 = DateTimeExtensions.NullableDateToTWCalender(t.AdjustDate, false);
             if (!t.CheckIsQuitSmoking() && !t.CheckIsHomeCare())
             {
@@ -215,7 +215,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             var t = p.Treatment;
             var point = p.PrescriptionPoint;
-            D26 = t.SpecialTreat?.Id;
+            D26 = t.SpecialTreat?.ID;
             D30 = p.MedicineDays.ToString();
             D31 = $"{point.SpecialMaterialPoint:0000000}";
             D32 = "00000000";

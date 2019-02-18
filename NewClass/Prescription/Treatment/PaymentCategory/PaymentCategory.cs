@@ -1,31 +1,36 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
 {
+    [ZeroFormattable]
     public class PaymentCategory : ObservableObject
     {
         public PaymentCategory() {
-            Id = string.Empty;
+            ID = string.Empty;
             Name = string.Empty;
             FullName = string.Empty;
         }
 
         public PaymentCategory(DataRow r)
         {
-            Id = r.Field<string>("PayCat_ID");
+            ID = r.Field<string>("PayCat_ID");
             Name = r.Field<string>("PayCat_Name");
             FullName = r.Field<string>("PayCat_FullName");
         }
-        public string Id { get; }
-        public string Name { get; }
+        [Index(0)]
+        public virtual string ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
         private string fullName;
-        public string FullName
+        [Index(2)]
+        public virtual string FullName
         {
             get => fullName;
             set
             {
-                Set(() => Id, ref fullName, value);
+                Set(() => FullName, ref fullName, value);
             }
         }
     }

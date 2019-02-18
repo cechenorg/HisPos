@@ -10,27 +10,42 @@ using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.IcData;
 using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.Service;
+using ZeroFormatter;
 using Application = System.Windows.Application;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription
 {
+    [ZeroFormattable]
     public class IcCard : ObservableObject
     {
         public IcCard() { }
-        public string CardNumber { get; set; }//卡片號碼
-        public string Name { get; set; }
-        public DateTime Birthday { get; set; }
-        public string Gender { get; set; }
-        public string IDNumber { get; set; }//身分證字號
-        public DateTime CardReleaseDate { get; set; }//發卡日期
-        public DateTime ValidityPeriod { get; set; }//卡片有效期限
-        public int? AvailableTimes { get; set; }//就醫可用次數
-        public DateTime? NewBornBirthday { get; }//卡片有效期限
-        public BasicData PatientBasicData { get; set; }
-        public SeqNumber MedicalNumberData { get; set; }
-        public TreatRecords TreatRecords { get; set; }
-        public bool IsGetMedicalNumber { get; set; }
+        [Index(0)]
+        public virtual string CardNumber { get; set; }//卡片號碼
+        [Index(1)]
+        public virtual string Name { get; set; }
+        [Index(2)]
+        public virtual DateTime Birthday { get; set; }
+        [Index(3)]
+        public virtual string Gender { get; set; }
+        [Index(4)]
+        public virtual string IDNumber { get; set; }//身分證字號
+        [Index(5)]
+        public virtual DateTime CardReleaseDate { get; set; }//發卡日期
+        [Index(6)]
+        public virtual DateTime ValidityPeriod { get; set; }//卡片有效期限
+        [Index(7)]
+        public virtual int? AvailableTimes { get; set; }//就醫可用次數
+        [Index(8)]
+        public virtual DateTime? NewBornBirthday { get; set; }//卡片有效期限
+        [IgnoreFormat]
+        public virtual BasicData PatientBasicData { get; set; }
+        [IgnoreFormat]
+        public virtual SeqNumber MedicalNumberData { get; set; }
+        [IgnoreFormat]
+        public virtual TreatRecords TreatRecords { get; set; }
+        [IgnoreFormat]
+        public virtual bool IsGetMedicalNumber { get; set; }
         public bool GetBasicData()
         {
             var strLength = 72;

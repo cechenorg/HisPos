@@ -123,7 +123,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             MainWindow.ServerConnection.OpenConnection();
             myPharmacy.SetPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-            WebApi.UpdatePharmacyMedicalNum(myPharmacy.Id);
+            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             ClearDataChangedStatus();
         }
 

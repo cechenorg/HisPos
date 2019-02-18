@@ -3,15 +3,17 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.MedicalPerson;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution {
+    [ZeroFormattable]
     public class Pharmacy : ObservableObject
     {
         public Pharmacy() {
         }
 
         public Pharmacy(DataRow r) {
-            Id = r.Field<string>("CurPha_ID");
+            ID = r.Field<string>("CurPha_ID");
             Name = r.Field<string>("CurPha_Name");
             Address = r.Field<string>("CurPha_Address");
             Tel = r.Field<string>("CurPha_Telephone");
@@ -20,17 +22,26 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             NewReader = r.Field<bool>("CurPha_ReaderIsNew");
         }
         private string id;
-        public string Id {
+        [Index(0)]
+        public virtual string ID {
             get { return id; }
-            set { Set(() => Id,ref id,value); }
+            set { Set(() => ID,ref id,value); }
         }
-        public string Name { get; set; } 
-        public string Address { get; set; }
-        public string Tel { get; set; }
-        public int ReaderCom { get; set; }
-        public string VpnIp { get; set; }
-        public bool NewReader { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
+        [Index(2)]
+        public virtual string Address { get; set; }
+        [Index(3)]
+        public virtual string Tel { get; set; }
+        [Index(4)]
+        public virtual int ReaderCom { get; set; }
+        [Index(5)]
+        public virtual string VpnIp { get; set; }
+        [Index(6)]
+        public virtual bool NewReader { get; set; }
+        [IgnoreFormat]
         public MedicalPersonnel MedicalPersonnel { get; set; }
+        [IgnoreFormat]
         public MedicalPersonnels MedicalPersonnels { get; set; }
 
         #region Function

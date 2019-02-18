@@ -138,7 +138,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                 BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false);
                 TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
                 MedicalNumber = e.ID;
-                PharmacyId = ViewModelMainWindow.CurrentPharmacy.Id;
+                PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
             }
             if (makeUp)
                 MakeUpMark = "2";

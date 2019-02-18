@@ -350,16 +350,16 @@ namespace His_Pos.Service
             {
                 var r = new Regex(d.Name);
                 if (!r.IsMatch(name)) continue;
-                divisionId = d.Id;
+                divisionId = d.ID;
                 divisionMatch++;
             }
             if (divisionMatch == 0 && name.Contains("牙醫"))
             {
-                return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
+                return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.ID.Equals("40"));
             }
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
                 return new NewClass.Prescription.Treatment.Division.Division();
-            return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
+            return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.ID.Equals(divisionId));
         }
         public static void ExceptionLog(string log) {
             string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";

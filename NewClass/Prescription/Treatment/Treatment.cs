@@ -301,7 +301,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             if (CheckIsHomeCare() || CheckIsQuitSmoking())
             {
-                Institution = new Ins { Id = "N", Name = string.Empty };
+                Institution = new Ins { ID = "N", Name = string.Empty };
                 return string.Empty;
             }
             return Institution is null ? StringRes.InstitutionError : string.Empty;
@@ -314,7 +314,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckPrescriptionCase()
         {
-            if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.Id))
+            if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.ID))
                 return StringRes.PrescriptionCaseError;
             return string.Empty;
         }
@@ -380,7 +380,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckDivision()
         {
-            if (Division is null || string.IsNullOrEmpty(Division.Id))
+            if (Division is null || string.IsNullOrEmpty(Division.ID))
             {
                 if (CheckIsHomeCare() || CheckIsQuitSmoking())
                     return string.Empty;
@@ -488,9 +488,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Institution =
                 new Ins
                 {
-                    Id = VM.CurrentPharmacy.Id,
+                    ID = VM.CurrentPharmacy.ID,
                     Name = VM.CurrentPharmacy.Name,
-                    FullName = VM.CurrentPharmacy.Id + VM.CurrentPharmacy.Name
+                    FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
                 };
             PrescriptionCase = null;
             TempMedicalNumber = string.Empty;
@@ -513,16 +513,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.ChronicSeq = ChronicSeq;
             t.ChronicTotal = chronicTotal;
             t.Copayment = VM.GetCopayment(Copayment?.Id);
-            t.Division = VM.GetDivision(Division?.Id);
+            t.Division = VM.GetDivision(Division?.ID);
             t.Institution = Institution.DeepCloneViaJson();
             t.MainDisease = MainDisease?.DeepCloneViaJson();
             t.SubDisease = SubDisease?.DeepCloneViaJson();
             t.MedicalNumber = MedicalNumber;
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
-            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.Id);
-            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.Id);
+            t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID);
+            t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID);
             t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
-            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.Id);
+            t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;
             return t;

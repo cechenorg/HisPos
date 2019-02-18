@@ -16,8 +16,8 @@ namespace His_Pos.NewClass.CooperativeClinicJson {
             }
             if (newCollection.Count > 0)
             { 
-                sHospId = WebApi.GetCooperativeClinicId(ViewModelMainWindow.CurrentPharmacy.Id);
-                sRxId = ViewModelMainWindow.CurrentPharmacy.Id;
+                sHospId = WebApi.GetCooperativeClinicId(ViewModelMainWindow.CurrentPharmacy.ID);
+                sRxId = ViewModelMainWindow.CurrentPharmacy.ID;
 
                 foreach (CooperativeClinicJsonClass c in newCollection)
                 {

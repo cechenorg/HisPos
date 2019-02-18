@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Copayment
 {
+    [ZeroFormattable]
     public class Copayment : ObservableObject
     {
         public Copayment() {
@@ -16,10 +18,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
             Name = r.Field<string>("Cop_Name");
             FullName = r.Field<string>("Cop_FullName");
         }
-        public string Id { get; }
-        public string Name { get; }
+        [Index(0)]
+        public virtual string Id { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
         private string fullName;
-        public string FullName
+        [Index(2)]
+        public virtual string FullName
         {
             get => fullName;
             set

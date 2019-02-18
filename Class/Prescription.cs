@@ -304,7 +304,7 @@ namespace His_Pos.Class
 
         private void CheckDivision()
         {
-            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Division.Id)) return;
+            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Division.ID)) return;
             if (CheckHomeCareAndSmokingCessation()) return;
             AddError("0", "未選擇就醫科別");
         }
@@ -315,7 +315,7 @@ namespace His_Pos.Class
 
         private void CheckTreatmentCase()
         {
-            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.TreatmentCase.Id)) return;
+            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.TreatmentCase.ID)) return;
             if (!CheckHomeCareAndSmokingCessation())
                 AddError("0", "請選擇處方案件");
         }
@@ -339,7 +339,7 @@ namespace His_Pos.Class
         private void CheckPaymentCategory()
         {
             if (Treatment.PaymentCategory is null) return;
-            if (!string.IsNullOrEmpty(Treatment.PaymentCategory.Id)) return;
+            if (!string.IsNullOrEmpty(Treatment.PaymentCategory.ID)) return;
 
             if (!Treatment.AdjustCase.Id.Equals("D") || !Treatment.AdjustCase.Id.Equals("2"))
                 AddError("0", "未選擇給付類別");

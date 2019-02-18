@@ -69,7 +69,7 @@ namespace His_Pos.Class
         public Treatment(DeclareFileDdata d)
         {
             MedicalInfo = new MedicalInfo(d);
-            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p=>p.Id.Equals(d.Dhead.D5))?.DeepCloneViaJson();
+            PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p=>p.ID.Equals(d.Dhead.D5))?.DeepCloneViaJson();
             Copayment = ViewModelMainWindow.Copayments.SingleOrDefault(c=>c.Id.Equals(d.Dhead.D15))?.DeepCloneViaJson();
             AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals(d.Dhead.D1))?.DeepCloneViaJson();
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;

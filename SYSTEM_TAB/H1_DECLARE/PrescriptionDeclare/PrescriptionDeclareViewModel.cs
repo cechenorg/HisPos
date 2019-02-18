@@ -180,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
 
         private bool customPresChecked { get; set; }
-        private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.Id);
+        private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -237,7 +237,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.GetCooperativePrescriptions;
-                cooperativePrescriptions.GetCooperativePrescriptions(VM.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
+                cooperativePrescriptions.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -380,7 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             CurrentPrescription.Treatment.Institution = null;
-            var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:
@@ -1009,7 +1009,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (CurrentPrescription.Treatment.Institution.Id != CooperativeInstitutionID)
+                    if (CurrentPrescription.Treatment.Institution.ID != CooperativeInstitutionID)
                         NormalAdjust(false);
                     else
                     {
@@ -1144,7 +1144,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (CurrentPrescription.Treatment.Institution.Id != CooperativeInstitutionID)
+                    if (CurrentPrescription.Treatment.Institution.ID != CooperativeInstitutionID)
                         NormalAdjust(true);
                     else
                     {

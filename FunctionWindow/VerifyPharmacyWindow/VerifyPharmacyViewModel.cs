@@ -97,7 +97,7 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             Properties.Settings.Default.Save();
 
             Pharmacy p = new Pharmacy();
-            p.Id = MedicalNum;
+            p.ID = MedicalNum;
             p.Name = PharmacyName;
             p.Tel = PharmacyTel;
             p.Address = PharmacyTel;

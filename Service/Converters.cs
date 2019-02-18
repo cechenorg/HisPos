@@ -264,7 +264,7 @@ namespace His_Pos.Service
             string divisionName = "";
             foreach (var d in ViewModelMainWindow.Divisions)
             {
-                if (d.Id.Equals(value))
+                if (d.ID.Equals(value))
                     divisionName = d.Name;
             }
             return divisionName;
@@ -283,7 +283,7 @@ namespace His_Pos.Service
             string institutionName = "";
             foreach (var d in ViewModelMainWindow.Institutions)
             {
-                if (d.Id.Equals(value))
+                if (d.ID.Equals(value))
                     institutionName = d.Name;
             }
             return institutionName;

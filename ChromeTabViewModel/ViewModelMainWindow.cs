@@ -190,7 +190,7 @@ namespace His_Pos.ChromeTabViewModel
 
         public static Institution GetInstitution(string id)
         {
-            var result = Institutions.SingleOrDefault(i => i.Id.Equals(id));
+            var result = Institutions.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
         public static AdjustCase GetAdjustCase(string id)
@@ -199,16 +199,16 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Division GetDivision(string id)
         {
-            var result = Divisions.SingleOrDefault(i => i.Id.Equals(id));
+            var result = Divisions.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
         public static PaymentCategory GetPaymentCategory(string id)
         {
-            return PaymentCategories.SingleOrDefault(p => p.Id.Equals(id));
+            return PaymentCategories.SingleOrDefault(p => p.ID.Equals(id));
         }
         public static PrescriptionCase GetPrescriptionCases(string id)
         {
-            var result = PrescriptionCases.SingleOrDefault(i => i.Id.Equals(id));
+            var result = PrescriptionCases.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
         public static Copayment GetCopayment(string id)
@@ -248,7 +248,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static SpecialTreat GetSpecialTreat(string id)
         {
-            var result = SpecialTreats.SingleOrDefault(i => i.Id.Equals(id));
+            var result = SpecialTreats.SingleOrDefault(i => i.ID.Equals(id));
             return result ?? new SpecialTreat();
         }
         public void StartPrintMedBag(ReportViewer r)

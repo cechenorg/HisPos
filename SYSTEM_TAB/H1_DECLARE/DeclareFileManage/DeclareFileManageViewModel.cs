@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 MessageWindow.ShowMessage(Resources.ShortSearchString + "4", MessageType.WARNING);
                 return;
             }
-            var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:

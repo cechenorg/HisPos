@@ -128,7 +128,7 @@ namespace His_Pos.Class.Declare
             D33DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
             Prescription.Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.Single(a=>a.Id.Equals("3"));//將調劑案件轉換為日劑藥費
             Prescription.Treatment.MedicalInfo.TreatmentCase =
-                ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals("01")).DeepCloneViaJson();
+                ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals("01")).DeepCloneViaJson();
             switch (dayPay)
             {
                 case 22:
@@ -155,9 +155,9 @@ namespace His_Pos.Class.Declare
             var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);//病患年齡
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dayPay = CountDayPayAmount(cusAge, medFormCount);//計算日劑藥費金額
-            if (Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals("01"))
+            if (Prescription.Treatment.MedicalInfo.TreatmentCase.ID.Equals("01"))
                 Prescription.Treatment.MedicalInfo.TreatmentCase =
-                    ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals("09"));
+                    ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals("09"));
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
             var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
             const int daysLimit = 3; //日劑藥費天數限制
@@ -295,7 +295,7 @@ namespace His_Pos.Class.Declare
                 {
                     if (!t.AdjustCase.Id.Equals("2"))
                     {
-                        DeclareXml.Dhead.D5 = t.PaymentCategory.Id;
+                        DeclareXml.Dhead.D5 = t.PaymentCategory.ID;
                         DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
                     }
                     else
@@ -312,9 +312,9 @@ namespace His_Pos.Class.Declare
                             DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
                         }
                     }
-                    DeclareXml.Dhead.D13 = CheckXmlEmptyValue(m.Hospital.Division.Id);
+                    DeclareXml.Dhead.D13 = CheckXmlEmptyValue(m.Hospital.Division.ID);
                     DeclareXml.Dhead.D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false);
-                    DeclareXml.Dhead.D22 = m.TreatmentCase.Id;
+                    DeclareXml.Dhead.D22 = m.TreatmentCase.ID;
                     DeclareXml.Dhead.D24 = m.Hospital.Id;
                 }
 
@@ -325,9 +325,9 @@ namespace His_Pos.Class.Declare
                         DeclareXml.Dhead.D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id);
                 }
 
-                if (!string.IsNullOrEmpty(t.MedicalInfo.SpecialCode.Id))
+                if (!string.IsNullOrEmpty(t.MedicalInfo.SpecialCode.ID))
                 {
-                    DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.Id;
+                    DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.ID;
                 }
 
                 if (t.Copayment.Id.Equals("903"))

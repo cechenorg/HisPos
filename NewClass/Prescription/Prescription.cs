@@ -165,7 +165,7 @@ namespace His_Pos.NewClass.Prescription
                 case "I22"://免收
                     return true;
             }
-            switch (Treatment.PrescriptionCase.Id)
+            switch (Treatment.PrescriptionCase.ID)
             {
                 case "007"://山地離島就醫/戒菸免收
                 case "11"://牙醫一般
@@ -668,7 +668,7 @@ namespace His_Pos.NewClass.Prescription
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
-                            VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.Id + ")"),
+                            VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                         new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
@@ -707,7 +707,7 @@ namespace His_Pos.NewClass.Prescription
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",
-                    VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.Id + ")"),
+                    VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
                 new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                 new ReportParameter("MedicalPerson", Treatment.Pharmacist.Name),
@@ -826,7 +826,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void CheckPrescriptionVariable()
         {
-            if(Treatment.AdjustCase.Id != "0" && (!string.IsNullOrEmpty(Treatment.Institution.Id) && Treatment.Institution.Id.Equals(VM.CurrentPharmacy.Id)))
+            if(Treatment.AdjustCase.Id != "0" && (!string.IsNullOrEmpty(Treatment.Institution.ID) && Treatment.Institution.ID.Equals(VM.CurrentPharmacy.ID)))
                 Treatment.Institution = new Institution();
 
             if (Treatment.ChronicSeq is null && Treatment.AdjustCase.Id.Equals("2"))

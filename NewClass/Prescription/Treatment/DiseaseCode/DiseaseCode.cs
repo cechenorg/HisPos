@@ -2,10 +2,12 @@
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using ZeroFormatter;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
 {
+    [ZeroFormattable]
     public class DiseaseCode : ObservableObject
     {
         public DiseaseCode() {
@@ -18,10 +20,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             Name = r.Field<string>("DisCode_ChiName");
             FullName = r.Field<string>("DisCode_FullName");
         }
-        public string ID { get; set; }
-        public string Name { get; set; }
+        [Index(0)]
+        public virtual string ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
         private string fullName;
-        public string FullName
+        [Index(2)]
+        public virtual string FullName
         {
             get => fullName;
             set

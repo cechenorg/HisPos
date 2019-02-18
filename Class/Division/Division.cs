@@ -26,8 +26,8 @@ namespace His_Pos.Class.Division
         {
             if (!string.IsNullOrEmpty(divisionId))
             {
-                var tmpDivision = ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId)).DeepCloneViaJson();
-                Id = tmpDivision.Id;
+                var tmpDivision = ViewModelMainWindow.Divisions.SingleOrDefault(d => d.ID.Equals(divisionId)).DeepCloneViaJson();
+                Id = tmpDivision.ID;
                 Name = tmpDivision.Name;
                 FullName = tmpDivision.FullName;
             }

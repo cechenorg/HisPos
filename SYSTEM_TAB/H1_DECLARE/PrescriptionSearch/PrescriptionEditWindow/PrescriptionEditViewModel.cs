@@ -163,15 +163,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
             if (EditedPrescription.Treatment.Division != null)
-                EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.Id);
+                EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.ID);
             EditedPrescription.Treatment.Pharmacist =
                 VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(EditedPrescription.Treatment.Pharmacist.IdNumber));
             EditedPrescription.Treatment.AdjustCase = VM.GetAdjustCase(EditedPrescription.Treatment.AdjustCase.Id);
             EditedPrescription.Treatment.Copayment = VM.GetCopayment(EditedPrescription.Treatment.Copayment?.Id);
             if (EditedPrescription.Treatment.PrescriptionCase != null)
-                EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.Id);
+                EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.ID);
             if (EditedPrescription.Treatment.SpecialTreat != null)
-                EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.Id);
+                EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
         }
 
         private void InitialItemsSources()
@@ -253,7 +253,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return;
             }
             EditedPrescription.Treatment.Institution = null;
-            var result = Institutions.Where(i => i.Id.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:
@@ -377,7 +377,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void TextBoxTextChangedAction()
         {
-            if (!EditedPrescription.Treatment.Division.Id.Equals(OriginalPrescription.Treatment.Division.Id))
+            if (!EditedPrescription.Treatment.Division.ID.Equals(OriginalPrescription.Treatment.Division.ID))
                 IsEdit = Visibility.Visible;
         }
         #endregion

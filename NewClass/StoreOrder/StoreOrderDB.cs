@@ -98,14 +98,14 @@ namespace His_Pos.NewClass.StoreOrder
         }
         internal static DataTable GetSingdeOrderNewStatus(string dateTime)
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.Id}', '{dateTime}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
         }
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.Id}', '{storeOrderID}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.ID}', '{storeOrderID}')");
         }
         public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
-            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
         internal static void StoreOrderToDone(string storeOrderID)
         {
@@ -125,7 +125,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         internal static DataTable GetNewSingdePrescriptionOrders()
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewPrescriptionOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.Id}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewPrescriptionOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
 
         internal static void StoreOrderToWaiting(string storeOrderID)
@@ -166,12 +166,12 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.Id}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
         }
 
         internal static DataTable GetNewSingdeOrders()
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.Id}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
         #region TableSet
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p) {

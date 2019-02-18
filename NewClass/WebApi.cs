@@ -15,7 +15,7 @@ namespace His_Pos.NewClass
             string json = JsonConvert.SerializeObject(cooperativeClinicJson);
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
-                    {"pharmacyMedicalNum",ViewModelMainWindow.CurrentPharmacy.Id },
+                    {"pharmacyMedicalNum",ViewModelMainWindow.CurrentPharmacy.ID },
                      {"json",json }
                 };
             if (json.Equals(@"{""sHospId"":null,""sRxId"":null,""sMedList"":[]}"))

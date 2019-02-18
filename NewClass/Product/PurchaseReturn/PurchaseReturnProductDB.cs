@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         internal static DataTable GetSingdeProductsByStoreOrderID(string orederID)
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.Id}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
 
         internal static DataTable GetReturnProductByProductID(string iD)
