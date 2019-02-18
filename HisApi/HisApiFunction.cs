@@ -57,7 +57,7 @@ namespace His_Pos.HisApi
             Rec rec = new Rec(p, isMakeUp, e);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
             MainWindow.ServerConnection.CloseConnection();
             Console.WriteLine(uploadData);
         }

@@ -465,7 +465,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                             GetMedicalNumber();
                         }
                     }
-                    StartAdjust();
+                    else
+                    {
+                        StartAdjust();
+                    }
                 };
                 worker.RunWorkerAsync();
             }
@@ -642,7 +645,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(false);
         }
 
         private void SetMedicinesPaySelf()
@@ -715,7 +718,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
         }
@@ -731,7 +734,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             p.Treatment.AdjustDate = DateTime.Today;
             CurrentPrescription = p;
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         #endregion
         #region GeneralFunctions
@@ -881,19 +884,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     else
                     {
                         if (isDeposit != null && (bool)isDeposit)
-                        {
                             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-                        }
                         else
-                        {
                             HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false ,error);
-                        }
                     }
                 }
                 else
-                {
                     CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-                }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -942,7 +939,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CountMedicinePoint()
         {
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountMedicineDays();
+            CurrentPrescription.CheckIfSimpleFormDeclare();
+            CurrentPrescription.CountPrescriptionPoint(false);
         }
         private void CheckCustomPrescriptions()
         {

@@ -185,7 +185,7 @@ namespace His_Pos.NewClass.Prescription
         public int InsertPrescription()
         {
             if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+                CountMedicineDays();
             if (!Treatment.AdjustCase.ID.Equals("0"))
                 CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
@@ -201,7 +201,7 @@ namespace His_Pos.NewClass.Prescription
       
         public void UpdateReserve() {
             if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+                CountMedicineDays();//計算最大給藥日份
 
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
@@ -227,7 +227,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+                CountMedicineDays();//計算最大給藥日份
                 if (Treatment.AdjustCase.ID.Equals("1") || Treatment.AdjustCase.ID.Equals("3"))
                 {
                     int dailyPrice = CheckIfSimpleFormDeclare();
@@ -280,7 +280,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private int CheckIfSimpleFormDeclare()
+        public int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
             if (MedicineDays > 3 && !Treatment.AdjustCase.ID.Equals("1"))
@@ -478,7 +478,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
-        public void CountPrescriptionPoint()
+        public void CountPrescriptionPoint(bool countPoint)
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
             if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
@@ -503,27 +503,35 @@ namespace His_Pos.NewClass.Prescription
                         Treatment.Copayment = VM.GetCopayment("I20");
                 }
             }
-            if(Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
-                PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
-            else
+            if (countPoint)
             {
-                PrescriptionPoint.CopaymentPoint = 0;
+                if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
+                    PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+                else
+                {
+                    PrescriptionPoint.CopaymentPoint = 0;
+                }
+                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+                PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
+                PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+                if (Patient.Birthday != null)
+                {
+                    CheckMedicalServiceData();//確認藥事服務資料
+                    var details = SetPrescriptionDetail();//產生藥品資料
+                    PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                }
+                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             }
-            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
-            PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
-            PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf && m.Days != null) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf && m.Days != null).Max(m => m.Days);//計算最大給藥日份
-            if (Patient.Birthday != null)
-            {
-                CheckMedicalServiceData();//確認藥事服務資料
-                var details = SetPrescriptionDetail();//產生藥品資料
-                PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            }
-            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
         }
+
+        public void CountMedicineDays()
+        {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf && m.Days != null) > 0)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+        }
+
         private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
         {
             var medDeclare = details.Where(p => !p.P1.Equals("0")).ToList();
@@ -747,9 +755,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void Update()
         {
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
-
+            CountMedicineDays();
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
