@@ -48,15 +48,15 @@ namespace His_Pos.NewClass.OfflineDataSet
         public virtual IList<Usage> Usages { get; set; }
         [Index(10)]
         public virtual IList<Position> Positions { get; set; }
-        //[Index(11)]
-        //public virtual IList<ProductStruct> ProductStructs { get; set; }
+        [Index(11)]
+        public virtual IList<Product> Products { get; set; }
 
         public OfflineDataSet()
         {
 
         }
 
-        public OfflineDataSet(Institutions institutions,Divisions divisions,MedicalPersonnels medicalPersonnels,List<DiseaseCode> diseaseCodes,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats)
+        public OfflineDataSet(Institutions institutions,Divisions divisions,MedicalPersonnels medicalPersonnels,List<DiseaseCode> diseaseCodes,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats,Usages usages,Positions positions)
         {
             Institutions = new List<Institution>();
             Institutions = institutions.ToList();
@@ -76,6 +76,16 @@ namespace His_Pos.NewClass.OfflineDataSet
             PaymentCategories = paymentCategories.ToList();
             SpecialTreats = new List<SpecialTreat>();
             SpecialTreats = specialTreats.ToList();
+            Usages = new List<Usage>();
+            Usages = usages.ToList();
+            Positions = new List<Position>();
+            Positions = positions.ToList();
+            Products = new List<Product>();
+            var productStructs = new ProductStructs(ProductDB.GetProductStructsBySearchString(""));
+            foreach (var p in productStructs)
+            {
+                Products.Add(new Product(p));
+            }
         }
     }
 }

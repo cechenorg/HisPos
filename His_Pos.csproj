@@ -319,6 +319,7 @@
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
     <Compile Include="NewClass\OfflineDataSet\OfflineDataSet.cs" />
+    <Compile Include="NewClass\OfflineDataSet\Product.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
