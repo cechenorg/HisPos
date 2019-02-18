@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Copayment
@@ -8,6 +9,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
         public Copayments()
         {
             Init();
+        }
+
+        public Copayments(IList<Copayment> list)
+        {
+            foreach (var c in list)
+                Add(c);
         }
 
         private void Init()

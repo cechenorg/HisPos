@@ -8,9 +8,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
     public class Institution : ObservableObject
     {
         public Institution(){
-            ID = string.Empty;
-            Name = string.Empty;
-            FullName = string.Empty;
+            
         }
          
         public Institution(DataRow r)
@@ -22,10 +20,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             IsCooperative = r.Field<bool>("Ins_IsCooperate");
         }
         [Index(0)]
-        public virtual string ID { get; set; }
+        public virtual string ID { get; set; } = string.Empty;
         [Index(1)]
-        public virtual string Name { get; set; }
-        private string fullName;
+        public virtual string Name { get; set; } = string.Empty;
+        private string fullName = string.Empty;
         [Index(2)]
         public virtual string FullName
         {

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.SYSTEM_TAB.OfflineOperation;
 
 namespace His_Pos.FunctionWindow
 {
@@ -29,6 +30,10 @@ namespace His_Pos.FunctionWindow
             if (e.Key == Key.Enter)
                 Password.Focus();
         }
-        
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            new OfflineOperationWindow();
+        }
     }
 }

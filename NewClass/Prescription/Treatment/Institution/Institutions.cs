@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
@@ -10,7 +11,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             if(isInit)
                 Init();
         }
-
+        public Institutions(IList<Institution> insList)
+        {
+            foreach (var i in insList)
+                Add(i);
+        }
         private void Init()
         {
             var table = InstitutionDb.GetData();

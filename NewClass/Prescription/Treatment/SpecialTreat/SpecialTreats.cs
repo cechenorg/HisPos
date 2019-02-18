@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
@@ -8,6 +9,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
         public SpecialTreats()
         {
             Init();
+        }
+
+        public SpecialTreats(IList<SpecialTreat> list)
+        {
+            foreach (var s in list)
+                Add(s);
         }
 
         private void Init()

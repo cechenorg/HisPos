@@ -8,9 +8,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
     public class Division : ObservableObject
     {
         public Division() {
-            ID = string.Empty;
-            Name = string.Empty;
-            FullName = string.Empty;
         }
 
         public Division(DataRow r)
@@ -20,10 +17,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             FullName = r.Field<string>("Div_FullName");
         }
         [Index(0)]
-        public virtual string ID { get; set; }
+        public virtual string ID { get; set; } = string.Empty;
         [Index(1)]
-        public virtual string Name { get; set; }
-        private string fullName;
+        public virtual string Name { get; set; } = string.Empty;
+        private string fullName = string.Empty;
         [Index(2)]
         public virtual string FullName
         {

@@ -8,9 +8,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
     public class SpecialTreat : ObservableObject
     {
         public SpecialTreat() {
-            ID = string.Empty;
-            Name = string.Empty;
-            FullName = string.Empty;
         }
         public SpecialTreat(DataRow r)
         {
@@ -19,10 +16,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
             FullName = r.Field<string>("SpeTre_FullName");
         }
         [Index(0)]
-        public virtual string ID { get; set; }
+        public virtual string ID { get; set; } = string.Empty;
         [Index(1)]
-        public virtual string Name { get; set; }
-        private string fullName;
+        public virtual string Name { get; set; } = string.Empty;
+        private string fullName = string.Empty;
         [Index(2)]
         public virtual string FullName
         {

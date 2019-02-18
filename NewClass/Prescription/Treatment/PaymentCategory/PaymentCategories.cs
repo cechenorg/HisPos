@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
@@ -8,6 +9,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
         public PaymentCategories()
         {
             Init();
+        }
+
+        public PaymentCategories(IList<PaymentCategory> list)
+        {
+            foreach (var p in list)
+                Add(p);
         }
 
         private void Init()

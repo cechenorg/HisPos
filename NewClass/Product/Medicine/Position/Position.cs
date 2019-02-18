@@ -9,8 +9,6 @@ namespace His_Pos.NewClass.Product.Medicine.Position
     { 
         public Position()
         {
-            ID = string.Empty;
-            Name = string.Empty;
         }
 
         public Position(DataRow r)
@@ -20,10 +18,10 @@ namespace His_Pos.NewClass.Product.Medicine.Position
             FullName = r.Field<string>("Pos_FullName");
         }
         [Index(0)]
-        public virtual string ID { get; set; }
+        public virtual string ID { get; set; } = string.Empty;
         [Index(1)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = string.Empty;
         [Index(2)]
-        public virtual string FullName { get; set; }
+        public virtual string FullName { get; set; } = string.Empty;
     }
 }
