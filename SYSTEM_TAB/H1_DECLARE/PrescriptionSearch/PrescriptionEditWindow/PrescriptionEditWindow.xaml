@@ -75,7 +75,7 @@
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal">
                             <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
-                            <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="Id" InputScope="AlphanumericHalfWidth"
+                            <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding EditedPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Division_PreviewKeyDown">
                                 <i:Interaction.Triggers>

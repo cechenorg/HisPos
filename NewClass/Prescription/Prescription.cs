@@ -227,7 +227,8 @@ namespace His_Pos.NewClass.Prescription
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
-                if (MedicineDays <= 3)
+                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+                if (Treatment.AdjustCase.ID.Equals("1") || Treatment.AdjustCase.ID.Equals("3"))
                 {
                     int dailyPrice = CheckIfSimpleFormDeclare();
                     if (dailyPrice > 0)
@@ -282,7 +283,12 @@ namespace His_Pos.NewClass.Prescription
         private int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
-            if (MedicineDays > 3 || !Treatment.AdjustCase.ID.Equals("1")) return 0;
+            if (MedicineDays > 3 && !Treatment.AdjustCase.ID.Equals("1"))
+            {
+                if (Treatment.AdjustCase.ID.Equals("3"))
+                    Treatment.AdjustCase = VM.GetAdjustCase("1");
+                return 0;
+            }
             double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額

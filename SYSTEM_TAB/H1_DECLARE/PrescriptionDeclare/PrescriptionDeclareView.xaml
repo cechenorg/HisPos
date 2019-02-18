@@ -90,8 +90,9 @@
                     <Button Content="{StaticResource PrescriptionHistory}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Hidden"/>
                     <Label Content="處方張數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Rectangle Width="92"/>
-                    <Button Content="重置" Background="IndianRed" Command="{Binding ResetCardReader}" FontFamily="Segoe UI Semibold" FontSize="16" Height="32" Padding="5" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Rectangle Width="14"/>
+                    <Button Content="重置" Background="Gray" Command="{Binding ResetCardReader}" FontFamily="Segoe UI Semibold" FontSize="16" Height="32" Padding="5" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Button Content="異常代碼" Background="IndianRed" Command="{Binding ErrorCodeSelect}" FontFamily="Segoe UI Semibold" FontSize="16" Height="32" Padding="5" BorderThickness="0" Margin="10,0,0,0"/>
                     <Button Content="合作診所處方" Background="DarkCyan" BorderThickness="0" Margin="10,0,0,0" Command="{Binding ShowCooperativeSelectionWindow}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
                 </StackPanel>
@@ -120,7 +121,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="2" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
-                        <ComboBox x:Name="DivisionCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="Id" InputScope="AlphanumericHalfWidth" 
+                        <ComboBox x:Name="DivisionCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Division_PreviewKeyDown"/>
                     </StackPanel>

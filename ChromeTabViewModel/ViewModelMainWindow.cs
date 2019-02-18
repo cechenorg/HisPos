@@ -182,10 +182,10 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.GetPositions;
                 Positions = new Positions();
                 MainWindow.ServerConnection.CloseConnection();
-                OfflineDataSet offlineData = new OfflineDataSet(Institutions,Divisions,CurrentPharmacy.MedicalPersonnels,new List<DiseaseCode>(),AdjustCases,PrescriptionCases,Copayments,PaymentCategories,SpecialTreats);
-                var bytes = ZeroFormatterSerializer.Serialize(offlineData);
-                var mc2 = ZeroFormatterSerializer.Deserialize<OfflineDataSet>(bytes);
-                Console.WriteLine(mc2.AdjustCases[0].FullName);
+                //OfflineDataSet offlineData = new OfflineDataSet(Institutions,Divisions,CurrentPharmacy.MedicalPersonnels,new List<DiseaseCode>(),AdjustCases,PrescriptionCases,Copayments,PaymentCategories,SpecialTreats);
+                //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
+                //var mc2 = ZeroFormatterSerializer.Deserialize<OfflineDataSet>(bytes);
+                //Console.WriteLine(mc2.AdjustCases[0].FullName);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

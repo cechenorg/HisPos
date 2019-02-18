@@ -178,9 +178,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CanAdjust, ref canAdjust, value);
             }
         }
-
+        private bool isReadCard;
+        public bool IsReadCard
+        {
+            get => isReadCard;
+            set
+            {
+                Set(() => IsReadCard, ref isReadCard, value);
+            }
+        }
         private bool customPresChecked { get; set; }
         private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
+        private ErrorUploadWindowViewModel.IcErrorCode ErrorCode { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -209,6 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand NoCardAdjust { get; set; }
         public RelayCommand MedicineNoBuckleClick { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
+        public RelayCommand ErrorCodeSelect { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -252,6 +262,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetPatientDataAction()
         {
             customPresChecked = false;
+            IsReadCard = true;
             ReadCard(true);
         }
         private void SearchCusByIDNumAction()
@@ -430,7 +441,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AdjustButtonClickAction()
         {
-            var error = CurrentPrescription.CheckPrescriptionRule(false);
+            var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);
             if (!string.IsNullOrEmpty(error))
             {
                 MessageWindow.ShowMessage(error,MessageType.ERROR);
@@ -445,12 +456,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
-                    if (string.IsNullOrEmpty(CurrentPrescription.Card.PatientBasicData.IDNumber))
-                        ReadCard(false);
-                    else
+                    if (ErrorCode is null)
                     {
-                        GetMedicalNumber();
+                        if (!IsReadCard)
+                            ReadCard(false);
+                        else
+                        {
+                            GetMedicalNumber();
+                        }
                     }
+                    StartAdjust();
                 };
                 worker.RunWorkerAsync();
             }
@@ -458,7 +473,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterButtonClickAction()
         {
-            var error = CurrentPrescription.CheckPrescriptionRule(false);
+            var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
                 MessageWindow.ShowMessage(error, MessageType.ERROR);
@@ -519,13 +534,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 StartNoCardAdjust();
             }
         }
-
+        private void ErrorCodeSelectAction()
+        {
+            var e = new ErrorUploadWindow(false); //詢問異常上傳
+            e.ShowDialog();
+            var errCode = ((ErrorUploadWindowViewModel) e.DataContext).SelectedIcErrorCode;
+            if (errCode != null)
+                ErrorCode = errCode;
+        }
         #endregion
         #region InitialFunctions
         private void InitializeVariables()
         {
             NotPrescribe = true;
-            CanAdjust = false;
+            CanAdjust = true;
+            IsReadCard = false;
+            ErrorCode = null;
             InitialPrescription();
         }
         private void InitialItemsSources()
@@ -566,6 +590,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             NoCardAdjust = new RelayCommand(NoCardAdjustAction);
             MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
+            ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
         }
 
         private void InitialPrescription()
@@ -843,7 +868,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if (CurrentPrescription.PrescriptionStatus.IsGetCard)
+                if (CurrentPrescription.PrescriptionStatus.IsGetCard || error != null)
                 {
                     if (CurrentPrescription.Card.IsGetMedicalNumber)
                     {
@@ -855,7 +880,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     else
                     {
-                        if ((bool)isDeposit)
+                        if (isDeposit != null && (bool)isDeposit)
                         {
                             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
                         }
@@ -876,6 +901,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                });
+                ClearPrescription();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -991,8 +1021,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void StartAdjust()
         {
-            ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
-            if (!CurrentPrescription.Card.IsGetMedicalNumber && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null)
+            if (!CurrentPrescription.Card.IsGetMedicalNumber && CurrentPrescription.PrescriptionPoint.Deposit == 0 && isDeposit is null && ErrorCode is null)
             {
                 var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
                 e.ShowDialog();
@@ -1002,7 +1031,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     isDeposit = true;
                     return;
                 }
-                errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+                ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
             }
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.PrescriptionStatus.IsDeposit = false;
@@ -1030,7 +1059,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
-            CreateDailyUploadData(errorCode);
+            CreateDailyUploadData(ErrorCode);
         }
 
         private void PrintMedBag(bool noCard)
@@ -1079,11 +1108,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                    });
-                    ClearPrescription();
+                    
                 };
                 worker.RunWorkerAsync();
             }
