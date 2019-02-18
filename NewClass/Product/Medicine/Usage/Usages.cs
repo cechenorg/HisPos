@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Product.Medicine.Usage
@@ -9,6 +10,12 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
         {
             Init();
         }
+        public Usages(IList<Usage> list)
+        {
+            foreach (var u in list)
+                Add(u);
+        }
+
         private void Init()
         {
             var table = UsageDb.GetData();

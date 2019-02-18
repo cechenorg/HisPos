@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
@@ -8,6 +9,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         public AdjustCases()
         {
             Init();
+        }
+
+        public AdjustCases(IList<AdjustCase> list)
+        {
+            foreach (var a in list)
+                Add(a);
         }
 
         private void Init()

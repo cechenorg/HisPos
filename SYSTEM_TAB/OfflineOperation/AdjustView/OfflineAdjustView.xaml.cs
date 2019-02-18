@@ -10,19 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.OfflineOperation
+namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 {
     /// <summary>
-    /// OfflineOperationWindow.xaml 的互動邏輯
+    /// OfflineAdjustView.xaml 的互動邏輯
     /// </summary>
-    public partial class OfflineOperationWindow : Window
+    public partial class OfflineAdjustView : UserControl
     {
-        public OfflineOperationWindow()
+        public OfflineAdjustView()
         {
             InitializeComponent();
-            Show();
         }
     }
 }
