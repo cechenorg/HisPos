@@ -56,7 +56,7 @@ namespace His_Pos.NewClass.OfflineDataSet
 
         }
 
-        public OfflineDataSet(Institutions institutions,Divisions divisions,MedicalPersonnels medicalPersonnels,List<DiseaseCode> diseaseCodes,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats,Usages usages,Positions positions)
+        public OfflineDataSet(Institutions institutions,Divisions divisions,MedicalPersonnels medicalPersonnels,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats,Usages usages,Positions positions)
         {
             Institutions = new List<Institution>();
             Institutions = institutions.ToList();
@@ -65,7 +65,8 @@ namespace His_Pos.NewClass.OfflineDataSet
             MedicalPersonnels = new List<MedicalPersonnel>();
             MedicalPersonnels = medicalPersonnels.ToList();
             DiseaseCodes = new List<DiseaseCode>();
-            DiseaseCodes = diseaseCodes.ToList();
+            //var diseaseCodes = DiseaseCodeDb.
+            //DiseaseCodes = diseaseCodes.ToList();
             AdjustCases = new List<AdjustCase>();
             AdjustCases = adjustCases.ToList();
             PrescriptionCases = new List<PrescriptionCase>();

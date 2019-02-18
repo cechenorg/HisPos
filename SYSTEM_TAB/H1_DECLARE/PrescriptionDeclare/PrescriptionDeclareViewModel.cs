@@ -1113,11 +1113,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(delegate
+                if (noCard)
                 {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                });
-                ClearPrescription();
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                    });
+                    ClearPrescription();
+                }
             }
         }
         private void ResetCardReaderAction()

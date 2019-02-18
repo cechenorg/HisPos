@@ -181,10 +181,10 @@ namespace His_Pos.ChromeTabViewModel
                 Usages = new Usages();
                 BusyContent = StringRes.GetPositions;
                 Positions = new Positions();
-                OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, new List<DiseaseCode>(), AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats,Usages,Positions);
+                OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats,Usages,Positions);
                 var bytes = ZeroFormatterSerializer.Serialize(offlineData);
-                var mc2 = ZeroFormatterSerializer.Deserialize<OfflineDataSet>(bytes);
-                Console.WriteLine(mc2.AdjustCases[0].FullName);
+                File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());
+                var mc2 = ZeroFormatterSerializer.Deserialize<OfflineDataSet>(File.ReadAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde"));
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
