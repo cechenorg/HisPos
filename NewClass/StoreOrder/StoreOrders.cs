@@ -51,7 +51,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             foreach (var storeOrder in Items)
             {
-                if (storeOrder.OrderStatus == OrderStatusEnum.WAITING)
+                if (storeOrder.OrderStatus == OrderStatusEnum.WAITING || storeOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
                 {
                     DataRow[] dataRows = dataTable.Select("ORDER_ID = '" + storeOrder.ID + "'");
 

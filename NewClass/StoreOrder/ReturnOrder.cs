@@ -5,7 +5,6 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.PurchaseReturn;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -48,9 +47,40 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void AddProductByID(string iD)
         {
-            Messenger.Default.Register<NotificationMessage<ChooseBatchProducts>>(this, AddBatchProducts);
-            ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow(iD);
-            Messenger.Default.Unregister(this);
+            if (OrderProducts.Count(p => p.ID == iD) > 0)
+            {
+                MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
+                return;
+            }
+
+            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
+            
+            ReturnProduct returnProduct;
+
+            switch (dataTable.Rows[0].Field<string>("TYPE"))
+            {
+                case "O":
+                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
+                    break;
+                case "M":
+                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
+                    break;
+                default:
+                    returnProduct = new ReturnProduct();
+                    break;
+            }
+
+            if (SelectedItem is PurchaseProduct)
+            {
+                int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
+
+                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
+
+                OrderProducts.RemoveAt(selectedProductIndex);
+                OrderProducts.Insert(selectedProductIndex, returnProduct);
+            }
+            else
+                OrderProducts.Add(returnProduct);
 
             RaisePropertyChanged(nameof(ProductCount));
         }
@@ -98,58 +128,6 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #region ----- Define Function -----
-        private void AddBatchProducts(NotificationMessage<ChooseBatchProducts> notificationMessage)
-        {
-            if (notificationMessage.Sender is ChooseBatchWindowViewModel)
-            {
-                DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(notificationMessage.Notification);
-
-                int insertIndex = OrderProducts.Count;
-
-                if (SelectedItem is ReturnProduct)
-                {
-                    insertIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
-
-                    OrderProducts.RemoveAt(insertIndex);
-                }
-
-                foreach (var product in notificationMessage.Content)
-                {
-                    if (product.ReturnAmount > 0 || notificationMessage.Content.Count == 1)
-                    {
-                        if (OrderProducts.SingleOrDefault(p => p.BatchNumber.Equals(product.BatchNumber)) != null)
-                        {
-                            MessageWindow.ShowMessage($"商品 {notificationMessage.Notification} (批號 {product.BatchNumber}) 已在退貨單中!", MessageType.WARNING);
-                            continue;
-                        }
-
-                        ReturnProduct returnProduct;
-
-                        switch (dataTable.Rows[0].Field<string>("TYPE"))
-                        {
-                            case "O":
-                                returnProduct = new ReturnOTC(dataTable.Rows[0]);
-                                break;
-                            case "M":
-                                returnProduct = new ReturnMedicine(dataTable.Rows[0]);
-                                break;
-                            default:
-                                returnProduct = new ReturnProduct();
-                                break;
-                        }
-
-                        returnProduct.BatchNumber = product.BatchNumber;
-                        returnProduct.BatchLimit = product.BatchNumberLimit;
-                        returnProduct.ReturnAmount = product.ReturnAmount;
-                        
-                        OrderProducts.Insert(insertIndex, returnProduct);
-                        insertIndex++;
-                    }
-                }
-                
-                RaisePropertyChanged(nameof(ProductCount));
-            }
-        }
         #endregion
     }
 }

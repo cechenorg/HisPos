@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Data;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductManageMedicine : Product, ICloneable
     {
-        private ProductManageMedicine() { }
+        #region ----- Define Variables -----
+        public bool Status { get; set; }
+        public bool IsCommon { get; set; }
+        public string Note { get; set; }
+        public string Indication { get; set; }
+        public string Warnings { get; set; }
+        public string SideEffect { get; set; }
+        public string BarCode { get; set; }
+        public double StockValue { get; set; }
+        public double Inventory { get; set; }
+        public int? SafeAmount { get; set; }
+        public int? BasicAmount { get; set; }
+        public int MinOrderAmount { get; set; }
+        #endregion
+
+        public ProductManageMedicine() { }
 
         public ProductManageMedicine(DataRow row) : base(row)
         {
@@ -22,28 +38,16 @@ namespace His_Pos.NewClass.Product.ProductManagement
             BasicAmount = row.Field<int?>("Inv_BasicAmount");
             MinOrderAmount = row.Field<int>("Pro_MinOrder");
         }
-        
-        public bool Status { get; set; }
-        public bool IsCommon { get; set; }
-        public string Note { get; set; }
-        public string Indication { get; set; }
-        public string Warnings { get; set; }
-        public string SideEffect { get; set; }
-        public string BarCode { get; set; }
-        public double StockValue { get; set; }
-        public double Inventory { get; set; }
-        public int? SafeAmount { get; set; }
-        public int? BasicAmount { get; set; }
-        public int MinOrderAmount { get; set; }
 
+        #region ----- Define Functions -----
         public object Clone()
         {
-            return MemberwiseClone() as ProductManageMedicine;
+            return this.DeepCloneViaJson() as ProductManageMedicine;
         }
-
         public void Save()
         {
             ProductDetailDB.UpdateMedicineDetailData(this);
         }
+        #endregion
     }
 }

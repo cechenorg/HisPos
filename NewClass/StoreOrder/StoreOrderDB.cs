@@ -133,6 +133,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+
         private static DataTable SetPurchaseOrderDetail(PurchaseOrder p)
         {
             int detailId = 1;
@@ -178,7 +179,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.BatchLimit);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
                 storeOrderDetailTable.Rows.Add(newRow);
                 detailId++;
@@ -392,13 +393,22 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-        internal static void StoreOrderToDone(string storeOrderID)
+        internal static void PurchaseStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToDone]", parameters);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
+        }
+
+        internal static void ReturnStoreOrderToDone(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
         }
 
         internal static void StoreOrderToScrap(string storeOrderID)
@@ -439,23 +449,9 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
                 {
-                    string validDate = "";
-
-                    if (product.ValidDate != null)
-                    {
-                        DateTime date = (DateTime)product.ValidDate;
-
-                        int year = date.Year - 1911;
-
-                        validDate = year + date.ToString("MMdd");
-                    }
-
-                    //12 10 6 20 7
                     orderMedicines += product.ID.PadRight(12, ' ');
                     orderMedicines += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
-                    orderMedicines += (product.Note.Length > 6)? product.Note.Substring(0, 6) : product.Note.PadLeft(6, ' ');
-                    orderMedicines += product.BatchNumber.PadLeft(20, ' ');
-                    orderMedicines += validDate.PadLeft(7, ' ');
+                    orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }
             }
