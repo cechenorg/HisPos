@@ -161,6 +161,9 @@
     <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2018.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.2018.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
@@ -337,6 +340,8 @@
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
@@ -429,6 +434,7 @@
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
+    <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="Service\ObjectCompareFunctions.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">

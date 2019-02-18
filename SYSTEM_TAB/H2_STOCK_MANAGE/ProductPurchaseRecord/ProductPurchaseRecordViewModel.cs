@@ -93,7 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 return false;
             }
 
-            if (((DateTime)SearchStartDate).AddMonths(1) > SearchEndDate)
+            if (((DateTime)SearchStartDate).AddMonths(1) < SearchEndDate)
             {
                 MessageWindow.ShowMessage("日期區間不可大於一個月!", MessageType.ERROR);
                 return false;

@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
@@ -366,6 +367,39 @@ namespace His_Pos.Service
             StreamWriter str = new StreamWriter(logpath, true);
             str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
             str.Close();
+        }
+        public static void Uncompress(string zipFileName, string targetPath) {
+            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFileName)))
+            { 
+                DirectoryInfo di = new DirectoryInfo(targetPath); 
+                ZipEntry theEntry; 
+                // 逐一取出壓縮檔內的檔案(解壓縮)
+                while ((theEntry = s.GetNextEntry()) != null)
+                {
+                    int size = 2048;
+                    byte[] data = new byte[2048];
+                    using (FileStream fs = new FileStream(di.FullName + "\\" + GetBasename(theEntry.Name), FileMode.Create))
+                    {
+                        while (true)
+                        {
+                            size = s.Read(data, 0, data.Length);
+
+                            if (size > 0)
+                                fs.Write(data, 0, size);
+                            else
+                                break;
+                        } 
+                    }
+                }
+            }
+        }
+
+        // 取得檔名(去除路徑)
+        public static string GetBasename(string fullName) {
+            string result;
+            int lastBackSlash = fullName.LastIndexOf("\\");
+            result = fullName.Substring(lastBackSlash + 1); 
+        return result;
         }
     }
 }

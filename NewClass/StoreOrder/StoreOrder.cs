@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
+using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -36,10 +37,12 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public OrderTypeEnum OrderType { get; set; }
         public string ID { get; set; }
+        public string ReceiveID { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string ReceiveEmployeeName { get; set; }
+        public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
         public double TotalPrice { get; set; }
@@ -76,11 +79,13 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             ID = row.Field<string>("StoOrd_ID");
+            ReceiveID = row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
             TotalPrice = (double)row.Field<decimal>("Total");
+            CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
@@ -93,7 +98,6 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
-        protected abstract void UpdateOrderProductsFromSingde();
         #endregion
 
         #region ///// Status Function /////
@@ -178,9 +182,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Singde Function /////
         private bool SendOrderToSingde()
         {
-            MainWindow.SingdeConnection.OpenConnection();
             DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
-            MainWindow.SingdeConnection.CloseConnection();
 
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
@@ -188,6 +190,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
+            string PrescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
             if (orderFlag == 2)
             {
@@ -200,9 +203,26 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else if (isShipment)
             {
-                UpdateOrderProductsFromSingde();
-                ToSingdeProcessingStatus();
+                ReceiveID = PrescriptionReceiveID;
+
+                bool isSuccess = UpdateOrderProductsFromSingde();
+
+                if (isSuccess)
+                    ToSingdeProcessingStatus();
+                else
+                {
+                    MessageWindow.ShowMessage($"單號 {ID} 無法取得商品資訊 請聯絡杏德總倉", MessageType.ERROR);
+                }
             }
+        }
+        private bool UpdateOrderProductsFromSingde()
+        {
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID);
+
+            if (isSuccess)
+                GetOrderProducts();
+
+            return isSuccess;
         }
         #endregion
 
