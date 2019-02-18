@@ -57,7 +57,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="健保代碼" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="健保代碼" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="藥品名稱" Width="300" Binding="{Binding Name}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="庫存" Width="50" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Inventory}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="健保價" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding OnTheWayAmount}" IsReadOnly="True"/>

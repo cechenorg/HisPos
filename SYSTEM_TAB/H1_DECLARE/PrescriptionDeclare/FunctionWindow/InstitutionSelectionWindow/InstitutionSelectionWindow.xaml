@@ -57,7 +57,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="院所代碼" Width="120" MaxWidth="120" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="院所代碼" Width="120" MaxWidth="120" Binding="{Binding ID}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="院所名稱" Width="570" MaxWidth="570" Binding="{Binding Name}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>

@@ -54,7 +54,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="200" Header="醫事機構代碼" Binding="{Binding Id,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semibold" FontSize="18" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn Width="200" Header="醫事機構代碼" Binding="{Binding ID,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semibold" FontSize="18" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
