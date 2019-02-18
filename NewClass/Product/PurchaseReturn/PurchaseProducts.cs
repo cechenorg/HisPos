@@ -27,11 +27,18 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
         }
 
-        internal static void UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID)
+        internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID)
         {
             DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
 
-            StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID, receiveID);
+            if (dataTable.Rows.Count == 0) return false;
+
+            dataTable = StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID, receiveID);
+
+            if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                return false;
+
+            return true;
         }
     }
 }

@@ -95,12 +95,6 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
-
-        protected override void UpdateOrderProductsFromSingde()
-        {
-            
-        }
-
         #endregion
 
         #region ----- Define Function -----

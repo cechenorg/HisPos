@@ -200,7 +200,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", row.Field<string>("PRO_ID"));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", double.Parse(row["AMOUNT"].ToString()));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(double.Parse(row["AMOUNT"].ToString())));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", Math.Abs(double.Parse(row["AMOUNT"].ToString())));
@@ -315,14 +315,14 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }
 
-        internal static void UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID)
+        internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
 
         internal static DataTable AddNewStoreOrderFromSingde(DataRow row)

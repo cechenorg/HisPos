@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
+using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -97,7 +98,6 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
-        protected abstract void UpdateOrderProductsFromSingde();
         #endregion
 
         #region ///// Status Function /////
@@ -205,9 +205,24 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 ReceiveID = PrescriptionReceiveID;
 
-                UpdateOrderProductsFromSingde();
-                ToSingdeProcessingStatus();
+                bool isSuccess = UpdateOrderProductsFromSingde();
+
+                if (isSuccess)
+                    ToSingdeProcessingStatus();
+                else
+                {
+                    MessageWindow.ShowMessage($"單號 {ID} 無法取得商品資訊 請聯絡杏德總倉", MessageType.ERROR);
+                }
             }
+        }
+        private bool UpdateOrderProductsFromSingde()
+        {
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID);
+
+            if (isSuccess)
+                GetOrderProducts();
+
+            return isSuccess;
         }
         #endregion
 
