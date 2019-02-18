@@ -425,8 +425,8 @@
                 <Label Content="庫存現值" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Bottom"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="1">
-                <Label Content="{Binding Medicine.Inventory}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="65,0,0,0" HorizontalContentAlignment="Center"/>
-                <Label Content="{Binding Medicine.StockValue}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="75,0,0,0" HorizontalContentAlignment="Center"/>
+                <Label Content="{Binding Medicine.Inventory, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="65,0,0,0" HorizontalContentAlignment="Center"/>
+                <Label Content="{Binding Medicine.StockValue, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="75,0,0,0" HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="2">
                 <Label Content="快速盤點" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="150,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>

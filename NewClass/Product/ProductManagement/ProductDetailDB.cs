@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using His_Pos.Database;
@@ -44,6 +45,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_NOTE", productManageMedicine.Note);
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
+        }
+
+        internal static void StockTakingProductManageMedicineByID(string productID, string newInventory)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ProID", productID));
+            parameters.Add(new SqlParameter("Inventory", newInventory));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ProductStockCheck]", parameters);
         }
     }
 }

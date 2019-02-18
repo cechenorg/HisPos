@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -94,7 +95,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void StockTakingAction()
         {
+            if(!IsNewInventoryValid()) return;
 
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
+
+            if(!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory);
+            MainWindow.ServerConnection.CloseConnection();
+
+            InitMedicineData(Medicine.ID);
+
+            NewInventory = "";
         }
         private void ViewHistoryPriceAction()
         {
@@ -140,6 +153,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private bool IsNewInventoryHasValue()
         {
             return !NewInventory.Equals(string.Empty);
+        }
+        private bool IsNewInventoryValid()
+        {
+            double newCheckedInventory = 0;
+            bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
+
+            if (!isDouble)
+            {
+                MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                return false;
+            }
+
+            if (newCheckedInventory < 0)
+            {
+                MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }
