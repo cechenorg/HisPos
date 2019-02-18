@@ -1,27 +1,31 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
+    [ZeroFormattable]
     public class MedicalPersonnel : ObservableObject
     {
         public MedicalPersonnel(){}
 
         public MedicalPersonnel(Employee.Employee e)
         {
-            Id = e.ID;
+            ID = e.ID;
             Name = e.Name;
             IdNumber = e.IDNumber;
         }
         public MedicalPersonnel(DataRow r)
         {
-            Id = r.Field<int>("Emp_ID");
+            ID = r.Field<int>("Emp_ID");
             Name = r.Field<string>("Emp_Name"); 
             IdNumber = r.Field<string>("Emp_IDNumber");
         }
-        
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string IdNumber { get; set; }
+        [Index(0)]
+        public virtual int ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
+        [Index(2)]
+        public virtual string IdNumber { get; set; }
     }
 }

@@ -27,9 +27,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T5 = "1";
             T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today,false);
             var normalPres = selectedFile.DeclarePrescriptions.Where(p =>
-                p.AdjustCase.Id.Equals("1") || p.AdjustCase.Id.Equals("3") || p.AdjustCase.Id.Equals("4")
-                || p.AdjustCase.Id.Equals("5") || p.AdjustCase.Id.Equals("D")).ToList();
-            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.AdjustCase.Id.Equals("2")).ToList();
+                p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
+                || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D")).ToList();
+            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.AdjustCase.ID.Equals("2")).ToList();
             var normalCount = normalPres.Count;
             var chronicCount = chronicPres.Count;
             var normalApplyPoints = normalPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
@@ -134,7 +134,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             var t = p.Treatment;
             var point = p.PrescriptionPoint;
-            D1 = t.AdjustCase.Id;
+            D1 = t.AdjustCase.ID;
             D2 = string.Empty;
             D3 = p.Patient.IDNumber;
             D4 = string.Empty;

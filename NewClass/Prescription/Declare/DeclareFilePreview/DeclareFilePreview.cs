@@ -133,9 +133,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
             DeclareMonth = DeclarePrescriptions[0].AdjustDate.Month;
             PharmacyID = DeclarePrescriptions[0].PharmacyID;
             NormalCount = DeclarePrescriptions.Count(p =>
-                (p.AdjustCase.Id.Equals("1") || p.AdjustCase.Id.Equals("5") || p.AdjustCase.Id.Equals("D")) && p.IsDeclare);
-            SimpleFormCount = DeclarePrescriptions.Count(p=>p.AdjustCase.Id.Equals("3") && p.IsDeclare);
-            ChronicCount = DeclarePrescriptions.Count(p => p.AdjustCase.Id.Equals("2") && p.IsDeclare);
+                (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D")) && p.IsDeclare);
+            SimpleFormCount = DeclarePrescriptions.Count(p=>p.AdjustCase.ID.Equals("3") && p.IsDeclare);
+            ChronicCount = DeclarePrescriptions.Count(p => p.AdjustCase.ID.Equals("2") && p.IsDeclare);
             TotalPoint = DeclarePrescriptions.Where(p=>p.IsDeclare).Sum(p => p.TotalPoint);
             DeclareCount = DeclarePrescriptions.Count(p => p.IsDeclare);
             NotDeclareCount = DeclarePrescriptions.Count(p => !p.IsDeclare);
@@ -156,7 +156,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                 {
                     if (SelectedPharmacist is null || src.Pharmacist.IdNumber.Equals(SelectedPharmacist.IdNumber))
                     {
-                        if (SelectedAdjustCase is null || src.AdjustCase.Id.Equals(SelectedAdjustCase.Id))
+                        if (SelectedAdjustCase is null || src.AdjustCase.ID.Equals(SelectedAdjustCase.ID))
                         {
                             if (SelectedInstitution is null || src.Institution.ID.Equals(SelectedInstitution.ID))
                                 e.Accepted = true;

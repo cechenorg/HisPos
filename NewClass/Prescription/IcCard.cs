@@ -38,13 +38,13 @@ namespace His_Pos.NewClass.Prescription
         public virtual int? AvailableTimes { get; set; }//就醫可用次數
         [Index(8)]
         public virtual DateTime? NewBornBirthday { get; set; }//卡片有效期限
-        [IgnoreFormat]
+        [Index(9)]
         public virtual BasicData PatientBasicData { get; set; }
-        [IgnoreFormat]
+        [Index(10)]
         public virtual SeqNumber MedicalNumberData { get; set; }
         [IgnoreFormat]
         public virtual TreatRecords TreatRecords { get; set; }
-        [IgnoreFormat]
+        [Index(11)]
         public virtual bool IsGetMedicalNumber { get; set; }
         public bool GetBasicData()
         {

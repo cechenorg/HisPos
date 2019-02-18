@@ -308,7 +308,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckAdjustCase()
         {
-            if (string.IsNullOrEmpty(AdjustCase.Id))
+            if (string.IsNullOrEmpty(AdjustCase.ID))
                 return StringRes.AdjustCaseError;
             return string.Empty;
         }
@@ -402,7 +402,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             if (PaymentCategory is null)
             {
-                if (CheckIsHomeCare() || ChronicSeq != null || AdjustCase.Id.Equals("2"))
+                if (CheckIsHomeCare() || ChronicSeq != null || AdjustCase.ID.Equals("2"))
                     return string.Empty;
                 return StringRes.PaymentCategoryError;
             }
@@ -410,13 +410,13 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public bool CheckIsQuitSmoking()
         {
-            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
-            return AdjustCase.Id.Equals("5");
+            if (string.IsNullOrEmpty(AdjustCase.ID)) return false;
+            return AdjustCase.ID.Equals("5");
         }
         public bool CheckIsHomeCare()
         {
-            if (string.IsNullOrEmpty(AdjustCase.Id)) return false;
-            return AdjustCase.Id.Equals("D");
+            if (string.IsNullOrEmpty(AdjustCase.ID)) return false;
+            return AdjustCase.ID.Equals("D");
         }
         private string CheckDiseaseCode()
         {
@@ -430,8 +430,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckChronicTimes()
         {
-            if (string.IsNullOrEmpty(AdjustCase.Id)) return string.Empty;
-            if (!AdjustCase.Id.Equals("2")) return string.Empty;
+            if (string.IsNullOrEmpty(AdjustCase.ID)) return string.Empty;
+            if (!AdjustCase.ID.Equals("2")) return string.Empty;
             if (ChronicSeq is null && ChronicTotal is null)
                 return StringRes.ChronicTimesError; 
             if (ChronicSeq is null)
@@ -508,7 +508,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         public object Clone()
         {
             Treatment t = new Treatment();
-            t.AdjustCase = VM.GetAdjustCase(AdjustCase.Id);
+            t.AdjustCase = VM.GetAdjustCase(AdjustCase.ID);
             t.AdjustDate = AdjustDate;
             t.ChronicSeq = ChronicSeq;
             t.ChronicTotal = chronicTotal;

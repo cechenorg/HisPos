@@ -123,7 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage
 
         private void TextFreName_TextChanged(object sender, TextChangedEventArgs e) {
             DataGridMedFrequency.Items.Filter = ((o) => {
-                if ( ((Usage)o).Name.Contains(TextFreName.Text) || ((Usage)o).QuickName.Contains(TextFreName.Text) || ((Usage)o).Id.ToString().Contains(TextFreName.Text) || ((Usage)o).PrintName.Contains(TextFreName.Text))
+                if ( ((Usage)o).Name.Contains(TextFreName.Text) || ((Usage)o).QuickName.Contains(TextFreName.Text) || ((Usage)o).ID.ToString().Contains(TextFreName.Text) || ((Usage)o).PrintName.Contains(TextFreName.Text))
                     return true;
                 else
                     return false;

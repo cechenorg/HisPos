@@ -9,19 +9,17 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
     {
         public AdjustCase()
         {
-            Id = string.Empty;
-            Name = string.Empty;
-            FullName = string.Empty;
+
         }
 
         public AdjustCase(DataRow r)
         {
-            Id = r.Field<string>("Adj_ID");
+            ID = r.Field<string>("Adj_ID");
             Name = r.Field<string>("Adj_Name");
             FullName = r.Field<string>("Adj_FullName");
         }
         [Index(0)]
-        public virtual string Id { get; set; }
+        public virtual string ID { get; set; }
         [Index(1)]
         public virtual string Name { get; set; }
         private string fullName;

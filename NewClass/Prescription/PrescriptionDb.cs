@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
@@ -122,7 +122,7 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
@@ -403,7 +403,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareFileID", p.DeclareFileID);
             newRow["PreMas_ImportFileID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
             newRow["PreMas_SerialNumber"] = DBNull.Value;
             newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.ID;
             newRow["PreMas_MakeUpMarkID"] =  DBNull.Value;
@@ -533,7 +533,7 @@ namespace His_Pos.NewClass.Prescription
             newRow["ResMas_ID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "ResMas_CustomerID", p.Patient.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_DeclareFileID", p.DeclareFileID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.Id);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
             newRow["ResMas_SerialNumber"] = DBNull.Value;
             newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
             DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.ID);

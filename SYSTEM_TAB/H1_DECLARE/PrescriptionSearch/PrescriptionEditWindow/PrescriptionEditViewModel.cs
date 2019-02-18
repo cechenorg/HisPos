@@ -166,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.ID);
             EditedPrescription.Treatment.Pharmacist =
                 VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(EditedPrescription.Treatment.Pharmacist.IdNumber));
-            EditedPrescription.Treatment.AdjustCase = VM.GetAdjustCase(EditedPrescription.Treatment.AdjustCase.Id);
+            EditedPrescription.Treatment.AdjustCase = VM.GetAdjustCase(EditedPrescription.Treatment.AdjustCase.ID);
             EditedPrescription.Treatment.Copayment = VM.GetCopayment(EditedPrescription.Treatment.Copayment?.Id);
             if (EditedPrescription.Treatment.PrescriptionCase != null)
                 EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.ID);
@@ -299,7 +299,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void AdjustCaseSelectionChangedAction()
         {
             if (EditedPrescription.Treatment.AdjustCase != null &&
-                EditedPrescription.Treatment.AdjustCase.Id.Equals("0"))
+                EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
             {
                 EditedPrescription.Treatment.Clear();
                 SetMedicinesPaySelf();

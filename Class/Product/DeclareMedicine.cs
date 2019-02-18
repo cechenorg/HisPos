@@ -107,7 +107,7 @@ namespace His_Pos.Class.Product
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
                     if (!string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString()))
                     {
-                        UsageName = ViewModelMainWindow.Usages.SingleOrDefault(usg => usg.Id.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
+                        UsageName = ViewModelMainWindow.Usages.SingleOrDefault(usg => usg.ID.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
                     }
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();

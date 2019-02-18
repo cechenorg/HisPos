@@ -58,7 +58,7 @@ namespace His_Pos.Class
         {
             MedicalInfo = new MedicalInfo(xml);
             PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory();
-            AdjustCase = ViewModelMainWindow.AdjustCases.Single(a=>a.Id.Equals("1"));
+            AdjustCase = ViewModelMainWindow.AdjustCases.Single(a=>a.ID.Equals("1"));
             string treatDate = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value == "" ? xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case").Attributes["date"].Value : xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value;
             TreatmentDate = Convert.ToDateTime(treatDate.Substring(0, 3) + "-" + treatDate.Substring(3, 2) + "-" + treatDate.Substring(5, 2)).AddYears(1911);
             TreatChineseDate = treatDate.Substring(0, 3) + "/" + treatDate.Substring(3, 2) + "/" + treatDate.Substring(5, 2);
@@ -71,7 +71,7 @@ namespace His_Pos.Class
             MedicalInfo = new MedicalInfo(d);
             PaymentCategory = ViewModelMainWindow.PaymentCategories.SingleOrDefault(p=>p.ID.Equals(d.Dhead.D5))?.DeepCloneViaJson();
             Copayment = ViewModelMainWindow.Copayments.SingleOrDefault(c=>c.Id.Equals(d.Dhead.D15))?.DeepCloneViaJson();
-            AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals(d.Dhead.D1))?.DeepCloneViaJson();
+            AdjustCase = ViewModelMainWindow.AdjustCases.SingleOrDefault(a=>a.ID.Equals(d.Dhead.D1))?.DeepCloneViaJson();
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;
             var year = int.Parse(d.Dhead.D14.Substring(0, 3)) + 1911;
             var month = int.Parse(d.Dhead.D14.Substring(3, 2));

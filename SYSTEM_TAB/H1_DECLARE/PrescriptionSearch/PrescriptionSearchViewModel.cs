@@ -298,7 +298,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             List<int> summary = new List<int>();
             summary = SearchPrescriptions.GetSummary(reserve);
             TotalCount = SearchPrescriptions.Count;
-            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.Id.Equals("2"));
+            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
             TotalPoint = summary[0];
             MedicinePoint = summary[1];
             MedicalServicePoint = summary[2];

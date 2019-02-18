@@ -3,22 +3,25 @@ using System.Data;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
 using His_Pos.Service;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Product.Medicine.Usage
 {
+    [ZeroFormattable]
     public class Usage:ObservableObject,ICloneable
     {
         public Usage(){}
 
         public Usage(DataRow r)
         {
-            Id = r.Field<int>("Usa_ID");
+            ID = r.Field<int>("Usa_ID");
             Name = r.Field<string>("Usa_Name");
             QuickName = r.Field<string>("Usa_QuickName");
             PrintName = r.Field<string>("Usa_PrintName");
             if (!string.IsNullOrEmpty(r.Field<string>("Usa_Regex")))
             {
-                Reg = new Regex(r.Field<string>("Usa_Regex"));
+                RegStr = r.Field<string>("Usa_Regex");
+                Reg = new Regex(RegStr);
             }
             Days = r.Field<byte?>("Usa_Days")??0;
             Times = r.Field<byte?>("Usa_Times") ??0;
@@ -31,16 +34,26 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
             PrintIcons[4] = r.Field<bool>("UsaPri_BeforeMeal");
             PrintIcons[5] = r.Field<bool>("UsaPri_AfterMeal");
         }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string PrintName { get; set; }//列印名稱
-        public string QuickName { get; set; } //快速輸入用代號
-        public Regex Reg { get; set; }//Regular Expression規則
-        public int Days { get; set; }
-        public int Times { get; set; }
-        public bool PreDefault { get; set; }
-        
-        public bool[] PrintIcons { get; set; } = new bool[6];
+        [Index(0)]
+        public virtual int ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
+        [Index(2)]
+        public virtual string PrintName { get; set; }//列印名稱
+        [Index(3)]
+        public virtual string QuickName { get; set; } //快速輸入用代號
+        [Index(4)]
+        public virtual string RegStr { get; set; } //快速輸入用代號
+        [IgnoreFormat]
+        public virtual Regex Reg { get; set; }//Regular Expression規則
+        [Index(5)]
+        public virtual int Days { get; set; }
+        [Index(6)]
+        public virtual int Times { get; set; }
+        [Index(7)]
+        public virtual bool PreDefault { get; set; }
+        [Index(8)]
+        public virtual bool[] PrintIcons { get; set; } = new bool[6];
 
         public object Clone()
         {

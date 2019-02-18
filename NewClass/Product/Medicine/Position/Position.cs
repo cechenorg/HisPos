@@ -1,24 +1,29 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Product.Medicine.Position
 {
+    [ZeroFormattable]
     public class Position : ObservableObject
     { 
         public Position()
         {
-            Id = string.Empty;
+            ID = string.Empty;
             Name = string.Empty;
         }
 
         public Position(DataRow r)
         {
-            Id = r.Field<string>("Pos_ID");
+            ID = r.Field<string>("Pos_ID");
             Name = r.Field<string>("Pos_Name");
             FullName = r.Field<string>("Pos_FullName");
         }
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string FullName { get; set; }
+        [Index(0)]
+        public virtual string ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
+        [Index(2)]
+        public virtual string FullName { get; set; }
     }
 }

@@ -242,11 +242,11 @@ namespace His_Pos.Class
             {
                 AddError("0", "就醫序號未填寫");
             }
-            else if (Treatment.AdjustCase.Id.Equals("D"))
+            else if (Treatment.AdjustCase.ID.Equals("D"))
             {
                 Customer.IcCard.MedicalNumber = "N";
             }
-            else if (Treatment.AdjustCase.Id.Equals("2"))
+            else if (Treatment.AdjustCase.ID.Equals("2"))
             {
                 if (int.Parse(ChronicSequence) > 1)
                 {
@@ -270,8 +270,8 @@ namespace His_Pos.Class
         {
             if (Treatment.AdjustCase is null)
                 return false;
-            if (!string.IsNullOrEmpty(Treatment.AdjustCase.Id))
-                return Treatment.AdjustCase.Id.StartsWith("D") || Treatment.AdjustCase.Id.StartsWith("5");
+            if (!string.IsNullOrEmpty(Treatment.AdjustCase.ID))
+                return Treatment.AdjustCase.ID.StartsWith("D") || Treatment.AdjustCase.ID.StartsWith("5");
            
             AddError("0", "未選擇調劑案件");
             return false;
@@ -328,7 +328,7 @@ namespace His_Pos.Class
         {
             if (!string.IsNullOrEmpty(Treatment.MedicalInfo.MainDiseaseCode.Id)) return;
 
-            if (!Treatment.AdjustCase.Id.Equals("D"))
+            if (!Treatment.AdjustCase.ID.Equals("D"))
                 AddError("0", "未填寫主要診斷代碼");
         }
 
@@ -341,7 +341,7 @@ namespace His_Pos.Class
             if (Treatment.PaymentCategory is null) return;
             if (!string.IsNullOrEmpty(Treatment.PaymentCategory.ID)) return;
 
-            if (!Treatment.AdjustCase.Id.Equals("D") || !Treatment.AdjustCase.Id.Equals("2"))
+            if (!Treatment.AdjustCase.ID.Equals("D") || !Treatment.AdjustCase.ID.Equals("2"))
                 AddError("0", "未選擇給付類別");
         }
 
@@ -372,7 +372,7 @@ namespace His_Pos.Class
 
         private void CheckChronicTimes()
         {
-            if (!Treatment.AdjustCase.Id.Equals("2")) return;
+            if (!Treatment.AdjustCase.ID.Equals("2")) return;
             if (string.IsNullOrEmpty(ChronicSequence) || string.IsNullOrEmpty(ChronicTotal))
             {
                 AddError("0", "未填寫領藥次數(可調劑次數 - 領藥次數)");

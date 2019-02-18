@@ -157,7 +157,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool CheckFreeCopayment()
         {
-            if (Treatment.AdjustCase.Id.Equals("2") || Treatment.AdjustCase.Id.Equals("4") || Treatment.AdjustCase.Id.Equals("0"))
+            if (Treatment.AdjustCase.ID.Equals("2") || Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
                 return true;
             switch (Treatment.Copayment.Id)
             {
@@ -186,14 +186,14 @@ namespace His_Pos.NewClass.Prescription
         {
             if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
-            if (!Treatment.AdjustCase.Id.Equals("0"))
+            if (!Treatment.AdjustCase.ID.Equals("0"))
                 CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
             PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
                                            PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
             PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            if(!Treatment.AdjustCase.Id.Equals("0"))
+            if(!Treatment.AdjustCase.ID.Equals("0"))
                 CreateDeclareFileContent(details);//產生申報資料
             Treatment.Institution.UpdateUsedTime();
             return PrescriptionDb.InsertPrescription(this, details);
@@ -223,7 +223,7 @@ namespace His_Pos.NewClass.Prescription
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            if (!Treatment.AdjustCase.Id.Equals("0"))
+            if (!Treatment.AdjustCase.ID.Equals("0"))
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
@@ -282,7 +282,7 @@ namespace His_Pos.NewClass.Prescription
         private int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
-            if (MedicineDays > 3 || !Treatment.AdjustCase.Id.Equals("1")) return 0;
+            if (MedicineDays > 3 || !Treatment.AdjustCase.ID.Equals("1")) return 0;
             double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
@@ -316,15 +316,15 @@ namespace His_Pos.NewClass.Prescription
                 {
                     case 0:
                         Medicines[selectedMedicinesIndex] = new MedicineOTC(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.Id);
+                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 1:
                         Medicines[selectedMedicinesIndex] = new MedicineNHI(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.Id);
+                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 2:
                         Medicines[selectedMedicinesIndex] = new MedicineSpecialMaterial(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.Id);
+                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                 }
             }
@@ -475,7 +475,7 @@ namespace His_Pos.NewClass.Prescription
         public void CountPrescriptionPoint()
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
-            if (Treatment.AdjustCase.Id.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
+            if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
                 (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
             {
                 Treatment.Copayment = VM.GetCopayment("I22");
@@ -575,7 +575,7 @@ namespace His_Pos.NewClass.Prescription
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var cusGender = Patient.CheckGender();
-            if (Treatment.AdjustCase.Id.Equals("0"))
+            if (Treatment.AdjustCase.ID.Equals("0"))
             {
                 var birth = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true);
                 var parameters = new List<ReportParameter>
@@ -826,10 +826,10 @@ namespace His_Pos.NewClass.Prescription
 
         public void CheckPrescriptionVariable()
         {
-            if(Treatment.AdjustCase.Id != "0" && (!string.IsNullOrEmpty(Treatment.Institution.ID) && Treatment.Institution.ID.Equals(VM.CurrentPharmacy.ID)))
+            if(Treatment.AdjustCase.ID != "0" && (!string.IsNullOrEmpty(Treatment.Institution.ID) && Treatment.Institution.ID.Equals(VM.CurrentPharmacy.ID)))
                 Treatment.Institution = new Institution();
 
-            if (Treatment.ChronicSeq is null && Treatment.AdjustCase.Id.Equals("2"))
+            if (Treatment.ChronicSeq is null && Treatment.AdjustCase.ID.Equals("2"))
             {
                 Treatment.AdjustCase = VM.GetAdjustCase("1");
             }
@@ -840,7 +840,7 @@ namespace His_Pos.NewClass.Prescription
             }
             
 
-            switch (Treatment.AdjustCase.Id)
+            switch (Treatment.AdjustCase.ID)
             {
                 case "1":
                 case "3":

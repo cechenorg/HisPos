@@ -163,7 +163,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         private string GetPositionPrintName(string mPosition)
         {
             var positionName = ViewModelMainWindow.Positions
-                .SingleOrDefault(p => p.Id.Replace(" ", "").Equals(mPosition.ToUpper().Replace(" ", "")))?.Name;
+                .SingleOrDefault(p => p.ID.Replace(" ", "").Equals(mPosition.ToUpper().Replace(" ", "")))?.Name;
             if (string.IsNullOrEmpty(positionName))
                 return string.Empty;
             return "【"+positionName.Replace("  ", string.Empty) + "】";

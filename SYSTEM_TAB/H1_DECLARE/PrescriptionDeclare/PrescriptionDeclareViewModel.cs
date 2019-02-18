@@ -71,7 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 Set(() => DeclareStatus, ref declareStatus, value);
                 if(CurrentPrescription is null) return;
-                if ((DateTime)CurrentPrescription.Treatment.AdjustDate!=null && CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") 
+                if ((DateTime)CurrentPrescription.Treatment.AdjustDate!=null && CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") 
                     && DateTime.Compare((DateTime)CurrentPrescription.Treatment.AdjustDate, DateTime.Today) >= 0)
                     CanSendOrder = true;
                 if (!CanSendOrder)
@@ -602,7 +602,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustCaseSelectionChangedAction()
         {
             if (CurrentPrescription.Treatment.AdjustCase != null &&
-                CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+                CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
             {
                 NotPrescribe = false;
                 CurrentPrescription.Treatment.Clear();
@@ -712,8 +712,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region GeneralFunctions
         private void CheckDeclareStatus()
         {
-            if(string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id)) return;
-            if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("0"))
+            if(string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.ID)) return;
+            if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.ID) && CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 DeclareStatus = PrescriptionDeclareStatus.Prescribe;
             else
             {
@@ -727,7 +727,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if (DateTime.Today.Date == ((DateTime) adjust).Date)
                     {
                         if ((CurrentPrescription.Treatment.ChronicSeq != null && CurrentPrescription.Treatment.ChronicSeq > 0) &&
-                            CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
+                            CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
                             DeclareStatus = PrescriptionDeclareStatus.Register;
                         else
                         {

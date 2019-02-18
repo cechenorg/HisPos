@@ -315,6 +315,7 @@
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
+    <Compile Include="NewClass\OfflineDataSet\OfflineDataSet.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
@@ -999,6 +1000,9 @@
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
+    <Compile Include="SYSTEM_TAB\OfflineOperation\OffLineOperationWindow.xaml.cs">
+      <DependentUpon>OffLineOperationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\DatabaseControl.xaml.cs">
       <DependentUpon>DatabaseControl.xaml</DependentUpon>
     </Compile>
@@ -1478,6 +1482,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\ConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\OfflineOperation\OffLineOperationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

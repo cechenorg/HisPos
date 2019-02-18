@@ -12,10 +12,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.OfflineDataSet;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
@@ -24,6 +26,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using Microsoft.Reporting.WinForms;
+using ZeroFormatter;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
@@ -179,6 +182,10 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.GetPositions;
                 Positions = new Positions();
                 MainWindow.ServerConnection.CloseConnection();
+                OfflineDataSet offlineData = new OfflineDataSet(Institutions,Divisions,CurrentPharmacy.MedicalPersonnels,new List<DiseaseCode>(),AdjustCases,PrescriptionCases,Copayments,PaymentCategories,SpecialTreats);
+                var bytes = ZeroFormatterSerializer.Serialize(offlineData);
+                var mc2 = ZeroFormatterSerializer.Deserialize<OfflineDataSet>(bytes);
+                Console.WriteLine(mc2.AdjustCases[0].FullName);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -195,7 +202,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static AdjustCase GetAdjustCase(string id)
         {
-            return AdjustCases.SingleOrDefault(a => a.Id.Equals(id));
+            return AdjustCases.SingleOrDefault(a => a.ID.Equals(id));
         }
         public static Division GetDivision(string id)
         {

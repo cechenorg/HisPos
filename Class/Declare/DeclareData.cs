@@ -43,7 +43,7 @@ namespace His_Pos.Class.Declare
             D32DiagnosisPoint = 0;
             D33DrugsPoint = Convert.ToInt32(Math.Ceiling(Prescription.MedicinePoint));
             SetDeclareDetail();
-            if (prescription.Treatment.AdjustCase.Id.Equals("0")) return;
+            if (prescription.Treatment.AdjustCase.ID.Equals("0")) return;
             D17CopaymentPoint = prescription.CopaymentPoint;
             SetMedicalServiceCode();//設定藥事服務費項目代碼
             CountDeclareDeatailPoint();
@@ -126,7 +126,7 @@ namespace His_Pos.Class.Declare
         private void CheckDayPay(int dayPay)
         {
             D33DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
-            Prescription.Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.Single(a=>a.Id.Equals("3"));//將調劑案件轉換為日劑藥費
+            Prescription.Treatment.AdjustCase = ViewModelMainWindow.AdjustCases.Single(a=>a.ID.Equals("3"));//將調劑案件轉換為日劑藥費
             Prescription.Treatment.MedicalInfo.TreatmentCase =
                 ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals("01")).DeepCloneViaJson();
             switch (dayPay)
@@ -158,7 +158,7 @@ namespace His_Pos.Class.Declare
             if (Prescription.Treatment.MedicalInfo.TreatmentCase.ID.Equals("01"))
                 Prescription.Treatment.MedicalInfo.TreatmentCase =
                     ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals("09"));
-            var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
+            var adjustCaseId = Prescription.Treatment.AdjustCase.ID;
             var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
             const int daysLimit = 3; //日劑藥費天數限制
             const int normalDaysLimit = 7; //西醫一般案件天數限制
@@ -249,7 +249,7 @@ namespace His_Pos.Class.Declare
             {
                 Dhead = new Dhead
                 {
-                    D1 = Prescription.Treatment.AdjustCase.Id,
+                    D1 = Prescription.Treatment.AdjustCase.ID,
                     D3 = c.IcNumber,
                     D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday, false),
                     D15 = t.Copayment.Id,
@@ -276,11 +276,11 @@ namespace His_Pos.Class.Declare
                 DeclareXml.Dhead.D4 = D4DeclareMakeUp;
             }
 
-            if (!string.IsNullOrEmpty(t.AdjustCase.Id))
+            if (!string.IsNullOrEmpty(t.AdjustCase.ID))
             {
-                if (t.AdjustCase.Id.Equals("D") || t.AdjustCase.Id.Equals("5"))
+                if (t.AdjustCase.ID.Equals("D") || t.AdjustCase.ID.Equals("5"))
                 {
-                    switch (t.AdjustCase.Id)
+                    switch (t.AdjustCase.ID)
                     {
                         case "D"://藥事居家照護
                             DeclareXml.Dhead.D7 = "N";
@@ -293,7 +293,7 @@ namespace His_Pos.Class.Declare
                 }
                 else
                 {
-                    if (!t.AdjustCase.Id.Equals("2"))
+                    if (!t.AdjustCase.ID.Equals("2"))
                     {
                         DeclareXml.Dhead.D5 = t.PaymentCategory.ID;
                         DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
