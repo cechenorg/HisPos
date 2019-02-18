@@ -118,7 +118,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if(ReservedPrescriptions.Count == 0)
                 ReservedVisible = Visibility.Collapsed;
             if (RegisteredPrescriptions.Count == 0)
-                ReservedVisible = Visibility.Collapsed;
+                RegisteredVisible = Visibility.Collapsed;
             if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || RegisteredPrescriptions.Count > 0)
                 ShowDialog = true;
             else
