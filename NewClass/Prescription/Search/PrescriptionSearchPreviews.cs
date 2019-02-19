@@ -40,8 +40,8 @@ namespace His_Pos.NewClass.Prescription.Search
             }
             DataTable table = new DataTable();
             if(reserve)
-                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
-            else
+                table = PrescriptionDb.GetSearchReservesSummary(presID);
+            else 
             {
                 table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
             }
