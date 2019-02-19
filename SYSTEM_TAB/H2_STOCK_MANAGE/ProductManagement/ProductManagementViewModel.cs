@@ -44,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public ProductManagementViewModel()
         {
             RegisterCommand();
+            SearchAction();
         }
 
         #region ----- Define Actions -----
