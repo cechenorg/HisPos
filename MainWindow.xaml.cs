@@ -66,26 +66,26 @@ namespace His_Pos
 
         private void FeatureFactory()
         {
-            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
-                            new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.MedFrequencyManage, Properties.Resources.MedBagManage , Properties.Resources.DeclareFileExport }));
+            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.MedFrequencyManage, StringRes.MedBagManage , StringRes.DeclareFileExport }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", Properties.Resources.StockManage,
-                            new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord, Properties.Resources.ProductTypeManage, Properties.Resources.LocationManage }));
+            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
+                            new[] { StringRes.StockSearch, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.StockTaking,
-                            new string[] { Properties.Resources.NewStockTaking, Properties.Resources.StockTakingRecord }));
+            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", StringRes.StockTaking,
+                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Management.png", Properties.Resources.DataManagement,
-                            new string[] { Properties.Resources.ManufactoryManage, Properties.Resources.PharmacyManage,
-                                           Properties.Resources.EmployeeManage, Properties.Resources.AuthenticationManage, Properties.Resources.CustomerManage}));
+            HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
+                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage,
+                                           StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
 
-            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
-                            new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
+            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
+                            new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.ReportSystem,
-              new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport,Properties.Resources.CooperativeAdjustReport,Properties.Resources.CooperativeEntry,Properties.Resources.ControlMedicineDeclare }));
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.AdminManage,
-              new string[] { Properties.Resources.AdminFunction }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
+              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
+              new[] { StringRes.AdminFunction }));
         }
         
         private void InitializeMenu()

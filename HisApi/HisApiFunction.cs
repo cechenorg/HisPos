@@ -169,7 +169,6 @@ namespace His_Pos.HisApi
             if (!OpenCom())
             {
                 SetStatus(false, 2);
-                MainWindow.Instance.SetSamDcStatus(Resources.認證失敗);
             }
             try
             {
@@ -183,13 +182,14 @@ namespace His_Pos.HisApi
             {
                 status = true;
                 MainWindow.Instance.SetSamDcStatus(Resources.認證成功);
+                SetStatus(status, 2);
             }
             else
             {
                 status = false;
                 MainWindow.Instance.SetSamDcStatus(Resources.未認證);
+                SetStatus(status, 2);
             }
-            SetStatus(status, 2);
             CloseCom();
         }
 
