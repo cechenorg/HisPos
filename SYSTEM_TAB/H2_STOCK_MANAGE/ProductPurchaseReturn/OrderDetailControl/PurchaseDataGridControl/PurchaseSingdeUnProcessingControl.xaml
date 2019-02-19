@@ -67,7 +67,7 @@
                 <DataGridTemplateColumn MinWidth="120" Header="商品代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown">
+                            <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="130" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
                                 <TextBox.InputBindings>
                                     <KeyBinding Command="{Binding Path=DataContext.AddProductByInputCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Key="Enter" CommandParameter="{Binding ElementName=ProductIDTextbox}"/>
                                 </TextBox.InputBindings>

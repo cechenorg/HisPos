@@ -439,8 +439,16 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    if (product.ID.Length > 12)
+                        orderMedicines += product.ID.Substring(0,12);
+                    else
+                        orderMedicines += product.ID.PadRight(12, ' ');
+
                     orderMedicines += product.OrderAmount.ToString().PadLeft(10, ' ');
+
+                    if (product.ID.Length > 12)
+                        orderMedicines += product.ID.Substring(13);
+
                     orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }
@@ -449,8 +457,16 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
                 {
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    if (product.ID.Length > 12)
+                        orderMedicines += product.ID.Substring(0, 12);
+                    else
+                        orderMedicines += product.ID.PadRight(12, ' ');
+
                     orderMedicines += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+
+                    if (product.ID.Length > 12)
+                        orderMedicines += product.ID.Substring(13);
+
                     orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }

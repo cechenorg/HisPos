@@ -12,7 +12,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public ReturnMedicine(DataRow row) : base(row)
         {
-            IsCommon = row.Field<bool>("Pro_IsCommon");
             IsControl = row.Field<byte?>("Med_Control");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
         }
