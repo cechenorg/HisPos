@@ -28,7 +28,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
             Status = row.Field<bool>("Pro_IsEnable");
             StockValue = row.Field<double>("STOCK_VALUE");
             Note = row.Field<string>("Pro_Note");
-            IsCommon = row.Field<bool>("Pro_IsCommon");
             Indication = row.Field<string>("Med_Indication");
             SideEffect = row.Field<string>("Med_SideEffect");
             BarCode = row.Field<string>("Pro_BarCode");
