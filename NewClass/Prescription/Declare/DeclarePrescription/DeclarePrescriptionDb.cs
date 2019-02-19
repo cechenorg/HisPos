@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "DeclareId", fileID);
-            DataBaseFunction.AddSqlParameter(parameterList, "GeneralStringTable", SetIDTable(preIDList));
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(preIDList));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileID]", parameterList);
         } 
         private static DataTable IDTable() {
