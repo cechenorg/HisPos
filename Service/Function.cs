@@ -254,10 +254,7 @@ namespace His_Pos.Service
                 var iBufferLength = 50;
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
-                    if (ViewModelMainWindow.CurrentPharmacy.NewReader)
-                        HisApiBaseNew.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
-                    else
-                        HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                    HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                 }
                 HisApiFunction.CloseCom();
             }

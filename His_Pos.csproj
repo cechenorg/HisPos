@@ -307,7 +307,6 @@
     <Compile Include="FunctionWindow\VerifyPharmacyWindow\VerifyPharmacyWindow.xaml.cs">
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HisApi\HisApiBaseNew.cs" />
     <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\CashFlow\CashFlow.cs" />
     <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />

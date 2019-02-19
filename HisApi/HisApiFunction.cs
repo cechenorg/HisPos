@@ -32,9 +32,7 @@ namespace His_Pos.HisApi
             byte[] pBuffer = new byte[iBufferLength];
             if (OpenCom())
             {
-                var res = ViewModelMainWindow.CurrentPharmacy.NewReader? 
-                    HisApiBaseNew.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength) : 
-                    HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
+                var res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
                 if (res == 0)
                 {
                     var startIndex = 0;
@@ -72,9 +70,7 @@ namespace His_Pos.HisApi
         public static bool OpenCom()
         {
             SetCardReaderStatus(Resources.開啟讀卡機);
-            var res = ViewModelMainWindow.CurrentPharmacy.NewReader ?
-                HisApiBaseNew.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom): 
-                HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
+            var res = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
             SetStatus(res == 0, 1);
             MainWindow.Instance.SetCardReaderStatus(res == 0 ? Resources.連接成功 : Resources.連接失敗);
             return res == 0;
@@ -82,9 +78,7 @@ namespace His_Pos.HisApi
 
         public static void CloseCom()
         {
-            if (ViewModelMainWindow.CurrentPharmacy.NewReader ? 
-                HisApiBaseNew.csCloseCom() == 0 : 
-                HisApiBase.csCloseCom() == 0)
+            if (HisApiBase.csCloseCom() == 0)
                 SetStatus(false, 1);
         }
 
@@ -112,9 +106,7 @@ namespace His_Pos.HisApi
             MainWindow.Instance.SetCardReaderStatus(status);
             try
             {
-                res = ViewModelMainWindow.CurrentPharmacy.NewReader ? 
-                    HisApiBaseNew.hisGetCardStatus(type):
-                    HisApiBase.hisGetCardStatus(type);
+                res = HisApiBase.hisGetCardStatus(type);
             }
             catch (Exception e)
             {
@@ -181,9 +173,7 @@ namespace His_Pos.HisApi
             }
             try
             {
-                res = ViewModelMainWindow.CurrentPharmacy.NewReader ? 
-                    HisApiBaseNew.csVerifySAMDC(): 
-                    HisApiBase.csVerifySAMDC();
+                res = HisApiBase.csVerifySAMDC();
             }
             catch (Exception e)
             {
@@ -215,10 +205,7 @@ namespace His_Pos.HisApi
             Application.Current.Dispatcher.Invoke(delegate { isPassed = OpenCom(); });
             if (!isPassed)
                 return;
-            if (ViewModelMainWindow.CurrentPharmacy.NewReader)
-                HisApiBaseNew.csSoftwareReset(3);
-            else
-                HisApiBase.csSoftwareReset(3);
+            HisApiBase.csSoftwareReset(3);
             CloseCom();
             VerifySamDc();
         }
@@ -278,7 +265,7 @@ namespace His_Pos.HisApi
                 return;
             try
             {
-                res = ViewModelMainWindow.CurrentPharmacy.NewReader?HisApiBaseNew.hpcVerifyHPCPIN(): HisApiBase.hpcVerifyHPCPIN();
+                res = HisApiBase.hpcVerifyHPCPIN();
             }
             catch (Exception e)
             {

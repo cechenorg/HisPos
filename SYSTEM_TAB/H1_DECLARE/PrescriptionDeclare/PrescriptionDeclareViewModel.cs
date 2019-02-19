@@ -1163,10 +1163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 worker.DoWork += (o, ea) =>
                 {
                     BusyContent = StringRes.重置讀卡機;
-                    if (VM.CurrentPharmacy.NewReader)
-                        HisApiBaseNew.csSoftwareReset(3);
-                    else
-                        HisApiBase.csSoftwareReset(3);
+                    HisApiBase.csSoftwareReset(3);
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
@@ -1180,10 +1177,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var worker = new BackgroundWorker();
                 worker.DoWork += (o, ea) =>
                 {
-                    if (VM.CurrentPharmacy.NewReader)
-                        HisApiBaseNew.csSoftwareReset(3);
-                    else
-                        HisApiBase.csSoftwareReset(3);
+                    HisApiBase.csSoftwareReset(3);
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {

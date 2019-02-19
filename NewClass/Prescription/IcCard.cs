@@ -78,7 +78,7 @@ namespace His_Pos.NewClass.Prescription
             if ((bool)openCom)
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                var res = ViewModelMainWindow.CurrentPharmacy.NewReader ? HisApiBaseNew.hisGetBasicData(icData, ref strLength) : HisApiBase.hisGetBasicData(icData, ref strLength);
+                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
                     byte[] BasicDataArr = new byte[72];
@@ -115,9 +115,7 @@ namespace His_Pos.NewClass.Prescription
             byte[] pBuffer = new byte[296];
             if (HisApiFunction.OpenCom())
             {
-                var res = ViewModelMainWindow.CurrentPharmacy.NewReader?
-                    HisApiBaseNew.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen) : 
-                    HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
                 if (res == 0)
                 {
                     MedicalNumberData = new SeqNumber(pBuffer);
@@ -144,9 +142,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (HisApiFunction.OpenCom())
                 {
-                    var res = ViewModelMainWindow.CurrentPharmacy.NewReader ? 
-                        HisApiBaseNew.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen) : 
-                        HisApiBase.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen);
+                    var res = HisApiBase.hisGetTreatmentNoNeedHPC(pBuffer, ref iBufferLen);
                     if (res == 0)
                     {
                         TreatRecords = new TreatRecords(pBuffer);
@@ -167,9 +163,7 @@ namespace His_Pos.NewClass.Prescription
             var strLength = 9;
             if (HisApiFunction.OpenCom())
             {
-                var res = ViewModelMainWindow.CurrentPharmacy.NewReader ?
-                    HisApiBaseNew.hisGetRegisterBasic2(pBuffer, ref strLength):
-                    HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
+                var res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
                 if (res == 0)
                 {
                     ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
@@ -193,9 +187,7 @@ namespace His_Pos.NewClass.Prescription
             if (AvailableTimes != 0) return;
             if (HisApiFunction.OpenCom())
             {
-                res = ViewModelMainWindow.CurrentPharmacy.NewReader ?
-                    HisApiBaseNew.csUpdateHCContents():
-                    HisApiBase.csUpdateHCContents();
+                res = HisApiBase.csUpdateHCContents();
                 if (res != 0)
                 {
                     var registerBasicErr = MainWindow.GetEnumDescription((ErrorCode)res);
