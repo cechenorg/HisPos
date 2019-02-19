@@ -59,18 +59,29 @@ namespace His_Pos.NewClass.Product.Medicine
             foreach (var med in medList)
             {
                 result += dateTime;
-                if(med is MedicineNHI)
+                if (med is MedicineNHI)
+                {
                     result += "1";
+                    result += med.ID.PadLeft(12, ' ');
+                    result += med.PositionName.PadLeft(6, ' ');
+                    result += med.UsageName.PadLeft(18, ' ');
+                    result += med.Days.ToString().PadLeft(2, ' ');
+                    result += med.Amount.ToString().PadLeft(7, ' ');
+                    result += "01";
+                }
                 else
                 {
                     result += "4";
+                    result += med.ID.PadLeft(12, ' ');
+                    result += string.Empty.PadLeft(6, ' ');
+                    result += string.Empty.PadLeft(18, ' ');
+                    if(med.Days != null)
+                        result += med.Days.ToString().PadLeft(2, ' ');
+                    else
+                        result += string.Empty.PadLeft(2, ' ');
+                    result += med.Amount.ToString().PadLeft(7, ' ');
+                    result += "03";
                 }
-                result += med.ID.PadLeft(12, ' ');
-                result += med.PositionName.PadLeft(6, ' ');
-                result += med.UsageName.PadLeft(18, ' ');
-                result += med.Days.ToString().PadLeft(2, ' ');
-                result += med.Amount.ToString().PadLeft(7, ' ');
-                result += "01";
             }
             return result;
         }

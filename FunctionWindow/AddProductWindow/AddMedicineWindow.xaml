@@ -19,6 +19,7 @@
         <Style TargetType="{x:Type TextBlock}" x:Key="TextHorizontalLeftCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
         </Style>
         <DataTemplate x:Key="EditingDataGrid" DataType="{x:Type local:AddProductViewModel}">
             <Label Content="輸入搜尋字串中..." Width="745" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
