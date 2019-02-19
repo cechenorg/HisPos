@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_PharmacyID", pharmacyID);
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_DeclareTime", declareTime);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDeclareFilExist]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDeclareFileExist]", parameterList);
         }
 
         public static DataTable UpdateDeclareStatus(int declareFileID)
