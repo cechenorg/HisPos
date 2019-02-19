@@ -326,6 +326,7 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBase.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBases.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescribeHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
@@ -1542,6 +1543,7 @@
     <Resource Include="Images\cross.png" />
     <Resource Include="Images\common.ico" />
     <Resource Include="Images\vip.png" />
+    <Resource Include="Images\stockRemain.png" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -20,7 +20,6 @@ namespace His_Pos.NewClass.Product.Medicine
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double>("Inv_Inventory");
             Vendor = r.Field<string>("Med_Manufactory");
-            Common = r.Field<bool>("Med_IsCommon");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
             Usage = new Usage.Usage();
@@ -262,7 +261,12 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 Set(() => IsBuckle, ref isBuckle, value);
             }
-        } 
+        }
+
+        public bool NotBuckle
+        {
+            get => !IsBuckle;
+        }
 
         private void CheckIsPriceReadOnly()
         {
@@ -283,18 +287,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (vendor != value)
                 {
                     Set(() => Vendor, ref vendor, value);
-                }
-            }
-        }
-        private bool common;//是否為常備藥品
-        public bool Common
-        {
-            get => common;
-            set
-            {
-                if (common != value)
-                {
-                    Set(() => Common, ref common, value);
                 }
             }
         }

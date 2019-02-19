@@ -437,7 +437,7 @@
                         <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="MedicineBuckleDataTemplate">
-                                    <Image Source="{Binding BuckleIcon, UpdateSourceTrigger=PropertyChanged}" Width="16"/>
+                                    <Image Source="/Images/stockRemain.png" Width="16" Visibility="{Binding NotBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

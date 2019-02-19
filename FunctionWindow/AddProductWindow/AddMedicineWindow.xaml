@@ -10,17 +10,21 @@
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         mc:Ignorable="d"
-        Title="藥品新增" Height="400" Width="710" WindowStartupLocation="CenterScreen">
+        Title="藥品新增" Height="400" Width="760" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextHorizontalLeftCellStyle">
+            <Setter Property="HorizontalAlignment"  Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
         <DataTemplate x:Key="EditingDataGrid" DataType="{x:Type local:AddProductViewModel}">
-            <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label Content="輸入搜尋字串中..." Width="745" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:AddProductViewModel}">
-            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled"
+            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="745" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" CanUserResizeColumns="False" CanUserResizeRows="False"
                       SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
@@ -64,7 +68,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="藥品代號" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="藥品代號" Width="190" Binding="{Binding ID}" IsReadOnly="True" ElementStyle="{StaticResource TextHorizontalLeftCellStyle}"/>
                     <DataGridTemplateColumn MaxWidth="300" Width="300" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

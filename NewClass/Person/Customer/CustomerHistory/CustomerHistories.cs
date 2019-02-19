@@ -23,7 +23,7 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
                         Add(new PrescriptionHistory(r));
                         break;
                     case HistoryType.Prescribe:
-                        Add(new PrescribeHistory());
+                        Add(new PrescribeHistory(r));
                         break;
                 }
             }
