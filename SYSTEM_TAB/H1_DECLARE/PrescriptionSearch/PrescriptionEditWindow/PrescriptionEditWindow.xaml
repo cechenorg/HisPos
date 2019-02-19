@@ -24,7 +24,7 @@
         <service:DoubleConverter x:Key="DoubleConverter"/>
     </Window.Resources>
     <Viewbox Stretch="Fill">
-        <xctk:BusyIndicator>
+        <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <Grid Width="1365" Height="660">
                     <Grid.RowDefinitions>
@@ -43,9 +43,9 @@
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False"/>
                         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10"/>
                         <Label Width="130" Height="30" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
-                        <StackPanel Orientation="Horizontal" Margin="320,0,0,0" Visibility="{Binding IsNoCard,UpdateSourceTrigger=PropertyChanged}">
-                            <Label Width="65" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red"/>
-                            <Button Content="補卡" Height="35" Command="{Binding PrintMedBag}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="315,0,0,0" Width="160">
+                            <Label Width="65" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                            <Button Content="補卡" Height="35" Command="{Binding MakeUpClick}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                         </StackPanel>
                         <Button Content="列印藥袋" Height="35" Command="{Binding PrintMedBag}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     </StackPanel>

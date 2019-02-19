@@ -110,6 +110,11 @@ namespace His_Pos.NewClass.Prescription {
         {
             Deposit = MedicalServicePoint + MedicinePoint - CopaymentPoint;
         }
+
+        public void GetDeposit(int id)
+        {
+            Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
+        }
     }
     
 }
