@@ -1617,7 +1617,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Class\Position\" />
-    <Folder Include="Images\General\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
@@ -1648,29 +1647,21 @@
     <Resource Include="Images\close.png" />
     <Resource Include="Images\closeHover.png" />
     <Resource Include="Images\Done.png" />
-    <Resource Include="Images\EmergentPhone.png" />
     <Resource Include="Images\Error.png" />
     <Resource Include="Images\Female.png" />
     <Resource Include="Images\File_50px.png" />
     <Resource Include="Images\Home.png" />
-    <Resource Include="Images\icons8_Error_48px.png" />
-    <Resource Include="Images\ID_Card.png" />
-    <Resource Include="Images\Increase_50px.png" />
+    <Resource Include="Images\IDcard.png" />
     <Resource Include="Images\loading.gif" />
-    <Resource Include="Images\login-02.png" />
     <Resource Include="Images\login.png" />
     <Resource Include="Images\Male.png" />
-    <Resource Include="Images\PaymentSwitchIcon.png" />
     <Resource Include="Images\Phone.png" />
     <Resource Include="Images\PrescriptionIcon.png" />
     <Resource Include="Images\Refresh Barcode_50px.png" />
-    <Resource Include="Images\Spreadsheet_50px.png" />
     <Resource Include="Images\SubmitProgress.png" />
     <Resource Include="Images\Truck_50px.png" />
     <Resource Include="Images\Settings.png" />
-    <Resource Include="Images\SystemBackgroundWhite2.jpg" />
-    <Resource Include="Images\onlyoneeeeeee.jpg" />
-    <Resource Include="Images\onlytwoooo.jpg" />
+    <Resource Include="Images\tabViewBackground.jpg" />
     <Resource Include="Images\showDetail.png" />
     <Resource Include="Images\balance.png" />
     <Resource Include="Images\down.png" />
@@ -1727,7 +1718,6 @@
     <Resource Include="Images\MyPharmacy.png" />
     <Resource Include="Images\Printer.png" />
     <Resource Include="LOGO_HISPOS.ico" />
-    <Resource Include="Images\icons8-delete-32.png" />
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
     <Resource Include="Images\CloseRecord.png" />

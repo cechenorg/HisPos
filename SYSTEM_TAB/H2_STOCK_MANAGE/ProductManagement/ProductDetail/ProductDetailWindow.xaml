@@ -27,7 +27,7 @@
         <Grid Height="930" Width="1600">
             <DockPanel>
                 <DockPanel.Background>
-                    <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
+                    <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
                 </DockPanel.Background>
                 <chromeTabs:ChromeTabControl MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"

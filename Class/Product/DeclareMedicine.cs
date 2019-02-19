@@ -357,15 +357,6 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("BuckleIcon");
             }
         }
-        public string BuckleIcon {
-
-            get {
-                if (IsBuckle)
-                    return ""; 
-                else
-                    return "../../Images/icons8-delete-32.png";
-            }
-        }
 
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name=value; }
