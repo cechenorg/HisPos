@@ -126,9 +126,13 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 Ingredient = string.Empty;
                 SideEffect = string.Empty;
                 Indication = string.Empty;
-                MedicineDays = m.Days + "天";
-                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
-                Usage = usagePrint;
+                if(m.Days is null)
+                    MedicineDays = m.Days + "天";
+                else
+                {
+                    MedicineDays = string.Empty;
+                }
+                Usage = string.Empty;
                 Form = string.Empty;
                 Total = m.Amount.ToString();
                 Note = string.Empty;
@@ -140,11 +144,20 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 Ingredient = "成分:" + string.Empty;
                 SideEffect = "副作用:" + string.Empty;
                 Indication = "適應症:" + string.Empty;
-                MedicineDays = "共" + m.Days + "天";
-                Dosage = (Convert.ToDouble(m.Dosage)).ToString(CultureInfo.InvariantCulture);
-                Total = m.Days + "天" + m.Amount;
-                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
-                Usage = usagePrint;
+                if (m.Days is null)
+                    MedicineDays = string.Empty;
+                else
+                {
+                    MedicineDays = "共" + m.Days + "天";
+                }
+                Dosage = string.Empty;
+                if (m.Days is null)
+                    Total = m.Amount.ToString();
+                else
+                {
+                    Total = m.Days + "天" + m.Amount;
+                }
+                Usage = string.Empty;
             }
         }
         public string MedNo { get; set; }
