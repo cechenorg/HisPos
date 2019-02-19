@@ -40,10 +40,10 @@ namespace His_Pos.NewClass.Prescription.Search
             }
             DataTable table = new DataTable();
             if(reserve)
-                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+                table = PrescriptionDb.GetSearchReservesSummary(presID);
             else
             {
-                table = PrescriptionDb.GetSearchReservesSummary(presID);
+                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
             }
             foreach (DataColumn c in table.Rows[0].Table.Columns)
             {

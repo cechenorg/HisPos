@@ -20,6 +20,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
+using Application = System.Windows.Application;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
@@ -210,6 +211,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => Profit, ref profit, value);
             }
         }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            private set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
@@ -284,13 +303,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
                 return;
             }
+            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
-            //依條件查詢對應處方
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetSearchPrescriptions(StartDate,EndDate,SelectedAdjustCase,SelectedInstitution,SelectedPharmacist);
-            MainWindow.ServerConnection.CloseConnection();
-            UpdateCollectionView();
-            SetPrescriptionsSummary(false);
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.處方查詢;
+                //依條件查詢對應處方
+                previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                SearchPrescriptions = previews;
+                SetPrescriptionsSummary(false);
+                UpdateCollectionView();
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void SetPrescriptionsSummary(bool reserve)
@@ -321,6 +353,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 MessageWindow.ShowMessage(StringRes.ShortSearchString + "4", MessageType.WARNING);
                 return;
             }
+            if (SelectedInstitution != null && !string.IsNullOrEmpty(SelectedInstitution.FullName) && search.Equals(SelectedInstitution.FullName))
+            {
+                Messenger.Default.Send(new NotificationMessage("FocusPreSearchPharmacistCombo"));
+                return;
+            }
             SelectedInstitution = null;
             var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
             switch (result.Count)
@@ -331,7 +368,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SelectedInstitution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionSearch);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -366,6 +403,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SelectedAdjustCase = null;
             Patient = string.Empty;
             Birth = null;
+            SearchPrescriptions.Clear();
+            UpdateCollectionView();
+            TotalCount = 0;
+            ChronicCount = 0;
+            TotalPoint = 0;
+            MedicinePoint = 0;
+            MedicalServicePoint = 0;
+            CopaymentPoint = 0;
+            Profit = 0;
         }
         #endregion
         #region Functions

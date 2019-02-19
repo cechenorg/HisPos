@@ -30,7 +30,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,10,0">
                     <Label Content="調劑日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
                     <xctk:MaskedTextBox Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="MaskedTextBox_PreviewKeyDown">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -41,8 +41,8 @@
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
                     <Label Content="~" VerticalContentAlignment="Center" Margin="0,10,0,10"/>
-                    <xctk:MaskedTextBox Width="100" Height="35" Margin="5,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                    <xctk:MaskedTextBox Name="EndDate" Width="100" Height="35" Margin="5,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_PreviewKeyDown">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -65,20 +65,20 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                     <Label Content="藥師" Style="{StaticResource BoldLabelContent18}" Margin="10"/>
-                    <ComboBox Margin="0,0,10,0" Width="100" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <ComboBox Name="PreSearchPharmacistCombo" Margin="0,0,10,0" Width="100" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
+                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" PreviewKeyDown="PreSearchPharmacistCombo_PreviewKeyDown"/>
                     <Label Content="案件" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <ComboBox Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                    <ComboBox Name="PreSearchAdjustCaseCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="22,0,0,0"/>
+                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PreSearchAdjustCaseCombo_PreviewKeyDown"/>
+                    <Button Name="SearchButton" Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="22,0,0,0"/>
                     <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
                     <Label Content="病患篩選" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Text="{Binding Patient,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130"  FontSize="16" Height="35" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center"/>
+                    <TextBox Text="{Binding Patient,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130"  FontSize="16" Height="35" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown"/>
                     <Label Content="病患生日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <xctk:MaskedTextBox Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                    <xctk:MaskedTextBox Name="PatientBirth" Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="Birth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"

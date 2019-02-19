@@ -491,4 +491,7 @@
   <data name="ControlMedicineDeclare" xml:space="preserve">
     <value>管制藥品簿冊申報</value>
   </data>
+  <data name="處方查詢" xml:space="preserve">
+    <value>處方資料查詢中...</value>
+  </data>
 </root>

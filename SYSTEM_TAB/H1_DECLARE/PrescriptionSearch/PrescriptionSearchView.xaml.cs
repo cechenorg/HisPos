@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -10,6 +12,57 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public PrescriptionSearchView()
         {
             InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>("FocusPreSearchPharmacistCombo", FocusPharmacistCombo);
+        }
+
+        private void MaskedTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                EndDate.Focus();
+                EndDate.SelectAll();
+            }
+        }
+
+        private void EndDate_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ReleaseHospital.Focus();
+                ReleaseHospital.SelectAll();
+                e.Handled = true;
+            }
+        }
+        private void FocusPharmacistCombo(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("FocusPreSearchPharmacistCombo"))
+            {
+                PreSearchPharmacistCombo.Focus();
+            }
+        }
+
+        private void PreSearchPharmacistCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PreSearchAdjustCaseCombo.Focus();
+            }
+        }
+
+        private void PreSearchAdjustCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchButton.Focus();
+            }
+        }
+
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PatientBirth.Focus();
+            }
         }
     }
 }
