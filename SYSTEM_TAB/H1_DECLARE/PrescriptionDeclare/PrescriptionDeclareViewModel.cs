@@ -841,7 +841,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-            CurrentPrescription.UpdateReserve();
+            CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
+            CurrentPrescription.AdjustPredictResere();
         }
         private void PrescribeFunction()
         {
