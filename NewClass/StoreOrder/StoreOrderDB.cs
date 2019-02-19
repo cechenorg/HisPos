@@ -94,7 +94,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_ManufactoryID", "0");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "W");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
