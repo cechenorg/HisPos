@@ -232,7 +232,7 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(p.Treatment.Division.ID.PadRight(2, ' ')); //科別
             Dtl_data.Append(p.Treatment.MainDisease.ID.PadRight(10, ' ')); //主診斷
             Dtl_data.Append(string.IsNullOrEmpty(p.Treatment.SubDisease.ID) ? empty.PadRight(10, ' ') : p.Treatment.SubDisease.ID.PadRight(10, ' ')); //次診斷
-            Dtl_data.Append(p.Treatment.OriginalMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
+            Dtl_data.Append(p.Treatment.TempMedicalNumber == null ? empty.PadRight(4, ' ') : p.Treatment.TempMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
             Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
             Dtl_data.Append(p.Treatment.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
             Dtl_data.Append(p.Treatment.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
@@ -262,12 +262,20 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
-                    Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-                    Dtl_data.Append(declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
-                    Dtl_data.Append(declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
-                    Dtl_data.Append(declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
+                    if (declareMedicine.ID.Length > 12)
+                        Dtl_data.Append(declareMedicine.ID.Substring(0,12).PadRight(12, ' ')); //健保碼
+                    else
+                        Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
+
+                    Dtl_data.Append(declareMedicine.Dosage == null ? empty.PadRight(8, ' ') : declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
+                    Dtl_data.Append(declareMedicine.Usage.Name == null ? empty.PadRight(16, ' ') : declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
+                    Dtl_data.Append(declareMedicine.Days == null ? empty.PadRight(3, ' ') : declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
                     Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                    Dtl_data.Append(declareMedicine.Position.Name.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                    if (declareMedicine.ID.Length > 12)
+                        Dtl_data.Append(declareMedicine.ID.Split('-')[1].PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                    else
+                        Dtl_data.Append(declareMedicine.Position.Name.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+
                     if (!declareMedicine.PaySelf)
                         Dtl_data.Append(" ");
                     else
