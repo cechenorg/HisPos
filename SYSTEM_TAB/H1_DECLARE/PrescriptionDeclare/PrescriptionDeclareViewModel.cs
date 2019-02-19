@@ -782,9 +782,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("自費");
             if(noCard)
-                CurrentPrescription.ProcessSelfPayCashFlow("押金");
+                CurrentPrescription.ProcessDepositCashFlow("押金");
         }
         private void CooperativeAdjust(bool noCard)
         {
@@ -1038,6 +1038,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
             }
+            if (ErrorCode != null && !CurrentPrescription.PrescriptionStatus.IsGetCard)
+                CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.PrescriptionStatus.IsDeposit = false;
             CurrentPrescription.PrescriptionStatus.IsAdjust = true;

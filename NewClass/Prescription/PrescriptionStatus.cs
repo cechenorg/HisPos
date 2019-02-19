@@ -18,7 +18,15 @@ namespace His_Pos.NewClass.Prescription {
                     break;
             } 
         }
-        public bool IsGetCard { get; set; } //是否讀卡
+        private bool isGetCard;//是否讀卡
+        public bool IsGetCard
+        {
+            get => isGetCard;
+            set
+            {
+                Set(() => IsGetCard, ref isGetCard, value);
+            }
+        } 
         public bool IsDeclare { get; set; } //是否申報
         public bool IsRead { get; set; }//是否已讀
         public bool IsSendToSingde { get; set; }//是否傳送過藥健康
