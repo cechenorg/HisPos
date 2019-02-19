@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
-        mc:Ignorable="d" Height="410" Width="725" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        mc:Ignorable="d" Height="410" Width="750" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -18,7 +18,7 @@
             <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:AddProductViewModel}">
-            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
+            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="730" HorizontalAlignment="Left"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}"
                       SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
@@ -62,7 +62,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="商品編號" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="商品編號" Width="155" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
                     <DataGridTemplateColumn Width="300" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -81,7 +81,7 @@
             </DataGrid>
         </DataTemplate>
     </Window.Resources>
-    <Grid Width="710" Margin="10,0,10,0">
+    <Grid Width="735" Margin="10,0,10,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="270"/>
