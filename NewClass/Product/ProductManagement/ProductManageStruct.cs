@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
-            IsCommon = row.Field<bool>("Med_IsCommon");
+            IsCommon = row.Field<bool>("Pro_IsCommon");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
             StockValue = row.Field<double>("STOCK_VALUE");

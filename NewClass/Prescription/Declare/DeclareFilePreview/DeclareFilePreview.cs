@@ -203,7 +203,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
 
         public bool CheckFileExist()
         {
-            return DeclareFileDb.CheckFileExist(PharmacyID,new DateTime(DeclareYear,DeclareMonth,1)).Rows[0].Field<bool>("");
+            return DeclareFileDb.CheckFileExist(PharmacyID,new DateTime(DeclareYear,DeclareMonth,1)).Rows[0].Field<int>("FileCount") > 0;
         }
     }
 }

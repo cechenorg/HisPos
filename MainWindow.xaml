@@ -230,20 +230,20 @@
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
-            <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Bottom" Background="#FF333337" Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <Label x:Name="UserName" Margin="10,10,0,0" FontFamily="Arial" FontSize="18" FontWeight="Bold" Foreground="White" />
+                <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Bottom" Background="#FF333337" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label x:Name="UserName" Margin="10,10,0,0" FontFamily="Arial" FontSize="18" FontWeight="Bold" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="20" Margin="10,5,0,10" Source="Images/Settings.png" MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"/>
+                        <TextBlock x:Name="SystemTime" Margin="10,5,10,10" VerticalAlignment="Center" FontSize="15" Foreground="DarkGray" TextWrapping="Wrap" />
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Image Height="20" Margin="10,5,0,10" Source="Images/Settings.png" MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"/>
-                    <TextBlock x:Name="SystemTime" Margin="10,5,10,10" VerticalAlignment="Center" FontSize="15" Foreground="DarkGray" TextWrapping="Wrap" />
-                </StackPanel>
-            </StackPanel>
-            <DockPanel Grid.Column="1" Grid.Row ="0">
-                <DockPanel.Background>
-                    <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg" />
-                </DockPanel.Background>
-                <chromeTabs:ChromeTabControl x:Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="120"
+                <DockPanel Grid.Column="1" Grid.Row ="0">
+                    <DockPanel.Background>
+                        <ImageBrush ImageSource="Images/tabViewBackground.jpg" />
+                    </DockPanel.Background>
+                    <chromeTabs:ChromeTabControl x:Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="120"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White" PinTabCommand="{Binding PinTabCommand}"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
                              CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900"  

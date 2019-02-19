@@ -25,6 +25,7 @@ namespace His_Pos.FunctionWindow
                         break;
                 }
             });
+            YesButton.Focus();
             ShowDialog();
         }
 

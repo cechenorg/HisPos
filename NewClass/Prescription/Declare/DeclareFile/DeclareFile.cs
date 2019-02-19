@@ -90,6 +90,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Ddata = new List<Ddata>();
             foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))
             {
+                foreach (var pdata in p.FileContent.Dbody.Pdata)
+                {
+                    if (pdata.P1.Equals("3"))
+                        pdata.P2 = pdata.P2.Substring(0, 12);
+                }
                 tempList.Add(p.FileContent);
             }
 

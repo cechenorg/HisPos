@@ -53,7 +53,7 @@
                     <RowDefinition Height="300"/>
                 </Grid.RowDefinitions>
                 <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
-                    <Image Width="30" Height="30" Source="/Images/ID_Card.png" Margin="10,0,10,0"/>
+                    <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
                     <TextBox Width="150" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
@@ -437,7 +437,7 @@
                         <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="MedicineBuckleDataTemplate">
-                                    <Image Source="{Binding BuckleIcon, UpdateSourceTrigger=PropertyChanged}" Width="16"/>
+                                    <Image Source="/Images/stockRemain.png" Width="16" Visibility="{Binding NotBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

@@ -8,17 +8,8 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
     public class CustomerHistoryBase:ObservableObject
     {
         public CustomerHistoryBase() { }
-        public CustomerHistoryBase(DataRow r)
+        public CustomerHistoryBase(DataRow r, HistoryType t)
         {
-            switch (int.Parse(r[""].ToString()))
-            {
-                case 0:
-                    Type = HistoryType.Prescription;
-                    break;
-                case 1:
-                    Type = HistoryType.Prescribe;
-                    break;
-            }
             Date = (DateTime) r[""];
             Title = r[""].ToString();
             SubTitle = r[""].ToString();
