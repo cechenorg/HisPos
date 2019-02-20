@@ -142,7 +142,7 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                            <Label Content="{Binding ID}" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                            <Label Content="{Binding ReceiveID}" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
                                             <ContentControl>
                                                 <ContentControl.Style>
                                                     <Style TargetType="{x:Type ContentControl}">

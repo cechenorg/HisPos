@@ -197,9 +197,39 @@ namespace His_Pos.NewClass.StoreOrder
                 if (dateString != null && dateString != string.Empty)
                     validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
 
+                string realProductID = row.Field<string>("PRO_ID");
+
+                switch (realProductID)
+                {
+                    case "NAN02A1000Z4":
+                        realProductID = "NAN02A1000ZZ-4";
+                        break;
+                    case "NAN02A1000Z5":
+                        realProductID = "NAN02A1000ZZ-5";
+                        break;
+                    case "NAN020632GNR":
+                        realProductID = "NAN02A1000ZZ-N6";
+                        break;
+                    case "NAN02A1000Z8":
+                        realProductID = "NAN02A1000ZZ-8";
+                        break;
+                    case "NAN020050NNR":
+                        realProductID = "NAN02A1000ZZ-N8";
+                        break;
+                    case "NCS03A1000.3":
+                        realProductID = "NCS03A1000ZZ-0.3";
+                        break;
+                    case "NCS03A1000.5":
+                        realProductID = "NCS03A1000ZZ-0.5";
+                        break;
+                    case "NCS03A1001.0":
+                        realProductID = "NCS03A1000ZZ-1.0";
+                        break;
+                }
+
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", row.Field<string>("PRO_ID"));
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(double.Parse(row["AMOUNT"].ToString())));
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");

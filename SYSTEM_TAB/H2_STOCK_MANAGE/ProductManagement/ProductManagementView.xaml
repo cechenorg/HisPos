@@ -8,9 +8,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:ProductManagementViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="MedicineIcon" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
             <Image Source="/Images/BlueDot.png" Width="15"/>
@@ -89,7 +86,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                <DataGridTextColumn MinWidth="170" MaxWidth="170" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -97,7 +94,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="400" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn MaxWidth="740" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
