@@ -479,6 +479,9 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-        
+        internal static void DailyProductsPurchase() {
+        }
+
+
     }
 }

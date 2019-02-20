@@ -402,6 +402,9 @@
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDataDb.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
+    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchase.cs" />
+    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchaseDb.cs" />
+    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchases.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />

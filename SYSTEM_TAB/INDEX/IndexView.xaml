@@ -3,7 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.DataContext>
+        <local:Index/>
+    </UserControl.DataContext>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -21,10 +26,10 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,10,0,0">
                     <Label Content="今日需通知領藥" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-                    <CheckBox Name="UnPhone" BorderBrush="DimGray" Content="未聯絡" IsChecked="{Binding IsUnPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                    <CheckBox Name="GetMed" BorderBrush="DimGray" Content="確定領藥" IsChecked="{Binding IsGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                    <CheckBox Name="NoGetMed" BorderBrush="DimGray" Content="確定不領" IsChecked="{Binding IsNoGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                    <CheckBox Name="NoGetPhone" BorderBrush="DimGray" Content="電話未接" IsChecked="{Binding IsNoGetPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                    <CheckBox Name="UnPhone" BorderBrush="DimGray" Content="未聯絡" IsChecked="{Binding IsUnPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue"   />
+                    <CheckBox Name="GetMed" BorderBrush="DimGray" Content="確定領藥" IsChecked="{Binding IsGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue"  />
+                    <CheckBox Name="NoGetMed" BorderBrush="DimGray" Content="確定不領" IsChecked="{Binding IsNoGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" />
+                    <CheckBox Name="NoGetPhone" BorderBrush="DimGray" Content="電話未接" IsChecked="{Binding IsNoGetPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Background="RoyalBlue" />
                 </StackPanel>
                 <DataGrid Name="ChironicPhoneCall" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="1" ItemsSource="{Binding DailtChronicPhoneCallCollection,UpdateSourceTrigger=PropertyChanged}">
@@ -87,7 +92,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="DosageDataTemplate">
                                     <ComboBox Name="ComboPhoneStatus" Width="100" Text="{Binding Status, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
-                                       HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectionChanged="ComboBox_SelectionChanged">
+                                       HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
                                         <ComboBoxItem >未聯絡</ComboBoxItem>
                                         <ComboBoxItem >確定領藥</ComboBoxItem>
                                         <ComboBoxItem >確定不領</ComboBoxItem>
@@ -101,7 +106,7 @@
             </Grid>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="670"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" Margin="10">
@@ -111,10 +116,18 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Label Content="每日進退貨" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        <Button Width="150" Content="轉進退貨單" Click="TransferToStoord_Click" Margin="250,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue"/>
+                        <Image Source="/Images/reload.png" Width="25" Margin="290,0,0,0"  >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DailyPurchaseReloadCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <Button Width="150" Content="轉進退貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue"/>
+                        
                     </StackPanel>
-                    <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False"
-                              ItemsSource="{Binding ProductListCollection,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Grid.Row="1" HorizontalScrollBarVisibility="Hidden">
+                    <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" SelectedItem="{Binding ProductDailyPurchase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding ProductDailyPurchaseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Grid.Row="1" HorizontalScrollBarVisibility="Hidden">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -147,7 +160,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="藥品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proId}">
+                            <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="藥品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ProId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -155,7 +168,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="150" MaxWidth="150" Header="藥品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding proName}">
+                            <DataGridTextColumn MinWidth="150" MaxWidth="150" Header="藥品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding ProName}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Left" />
@@ -163,7 +176,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="庫存量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Stock}">
+                            <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="庫存量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding StockValue}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -171,7 +184,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="需求量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DemandAmount}">
+                            <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="載途量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OntheWayValue}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -179,7 +192,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="訂購量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PurchaseAmount}">
+                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="需求量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NecessaryValue}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -187,7 +200,15 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="退貨量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ReturnAmount}">
+                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="訂購量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PurchaseValue}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="退貨量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ReturnValue}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
