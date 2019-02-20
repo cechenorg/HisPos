@@ -553,6 +553,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CanAdjust = true;
             IsReadCard = false;
             ErrorCode = null;
+            CanSendOrder = false;
             InitialPrescription();
         }
         private void InitialItemsSources()
