@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             var icDataUpload = "<?xml version=\"1.0\" encoding=\"big5\" ?><RECS>";
             foreach (DataRow row in dailyUploadTable.Rows)
             {
-                icDataUpload += row["UplData_Content"].ToString().Replace("<A18 />", "<A18></A18>");
+                icDataUpload += row["UplData_Content"].ToString().Replace("<A18/>", "<A18></A18>");
             }
             icDataUpload += "</RECS>";
             var f = new Function();
