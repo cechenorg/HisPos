@@ -47,6 +47,11 @@ namespace His_Pos.NewClass.Product.ProductManagement
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
 
+        internal static DataTable GetTotalStockValue()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]");
+        }
+
         internal static void StockTakingProductManageMedicineByID(string productID, string newInventory)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

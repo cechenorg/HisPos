@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System.Data;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -54,9 +55,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             MainWindow.ServerConnection.OpenConnection();
             SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID, SearchName, SearchIsEnable, SearchIsInventoryZero);
+            DataTable dataTable = ProductDetailDB.GetTotalStockValue();
             MainWindow.ServerConnection.CloseConnection();
 
-            if(SearchProductCollection.Count == 0)
+            TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
+
+            if (SearchProductCollection.Count == 0)
                 MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
         }
         #endregion
