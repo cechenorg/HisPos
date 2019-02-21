@@ -646,7 +646,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            CurrentPrescription.CountPrescriptionPoint(false);
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
 
         private void SetMedicinesPaySelf()
@@ -920,9 +920,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             BusyContent = StringRes.寫卡;
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
             BusyContent = StringRes.產生每日上傳資料;
-            if (CurrentPrescription.PrescriptionSign.Count !=
-                CurrentPrescription.Medicines.Count(m =>
-                    (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
+            if (!CurrentPrescription.WriteCardSuccess)
             {
                 bool? isDone = null;
                 ErrorUploadWindowViewModel.IcErrorCode errorCode;
@@ -948,7 +946,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountMedicineDays();
             CurrentPrescription.CheckIfSimpleFormDeclare();
-            CurrentPrescription.CountPrescriptionPoint(false);
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         private void CheckCustomPrescriptions()
         {

@@ -19,6 +19,7 @@ namespace His_Pos.HisApi
     {
         public static List<string> WritePrescriptionData(Prescription p)
         {
+            p.WriteCardSuccess = false;
             var signList = new List<string>();
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             var iWriteCount = medList.Count;
@@ -35,6 +36,7 @@ namespace His_Pos.HisApi
                 var res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
                 if (res == 0)
                 {
+                    p.WriteCardSuccess = true;
                     var startIndex = 0;
                     for (int i = 0; i < iWriteCount; i++)
                     {
