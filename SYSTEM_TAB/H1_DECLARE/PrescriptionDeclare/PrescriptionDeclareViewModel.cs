@@ -556,15 +556,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CheckPrescriptionCase()
         {
+            if(CurrentPrescription.Treatment.Division is null) return;
             if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.Division.ID))
-            if (CurrentPrescription.Treatment.Division.Name.Equals("牙科"))
-            {
-                CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases("19");
-            }
-            else
-            {
-                CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
-            }
+                CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(CurrentPrescription.Treatment.Division.Name.Equals("牙科") ? "19" : "09");
         }
         #endregion
         #region InitialFunctions
@@ -1078,10 +1072,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                             return;
                         var isVip = new ConfirmWindow("是否免收部分負擔?", "是否免收部分負擔");
                         CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
+                        CurrentPrescription.Medicines.SetBuckle(false);
                         CooperativeAdjust(false);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
+                    CurrentPrescription.Medicines.SetBuckle(false);
                     CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
@@ -1223,10 +1219,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
+                        CurrentPrescription.Medicines.SetBuckle(false);
                         CooperativeAdjust(true);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
+                    CurrentPrescription.Medicines.SetBuckle(false);
                     CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:

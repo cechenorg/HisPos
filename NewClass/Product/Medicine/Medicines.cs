@@ -85,5 +85,14 @@ namespace His_Pos.NewClass.Product.Medicine
             }
             return result;
         }
+
+        public void SetBuckle(bool b)
+        {
+            foreach (var m in Items)
+            {
+                if (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial)
+                    m.IsBuckle = b;
+            }
+        }
     }
 }
