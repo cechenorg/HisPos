@@ -800,7 +800,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.InsertCooperAdjust();
             if(CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
-                CurrentPrescription.ProcessVipCopaymentCashFlow("合作部分負擔");
+                CurrentPrescription.ProcessVipCopaymentCashFlow("合作VIP部分負擔");
             else
                 CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
             CurrentPrescription.ProcessSelfPayCashFlow("合作自費");
