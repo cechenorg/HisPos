@@ -80,6 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
         
         private void Search() {
             StockValue.UpdateDailyStockValue();
+            DailyStockValueCollection.Clear();
             DailyStockValueCollection.GetDataByDate(StartDate, EndDate);
             CaculateTotalStock();
         }
