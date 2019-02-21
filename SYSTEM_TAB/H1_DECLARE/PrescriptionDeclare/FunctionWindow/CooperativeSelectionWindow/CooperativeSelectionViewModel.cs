@@ -167,7 +167,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrintAction()
         {
             if(SelectedPrescription is null) return;
-            SelectedPrescription.GetCompletePrescriptionData(false,true, true);
+            SelectedPrescription.GetCompletePrescriptionData(false,true);
             SelectedPrescription.CountPrescriptionPoint(true);
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
             if ((bool)medBagPrint.DialogResult)
@@ -189,7 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrescriptionSelectedAction()
         {
             if(SelectedPrescription is null) return;
-            SelectedPrescription.GetCompletePrescriptionData(true,true, true);
+            SelectedPrescription.GetCompletePrescriptionData(true,true);
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
