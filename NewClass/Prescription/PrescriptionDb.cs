@@ -57,7 +57,7 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
         }
          
-        public static void ProcessInventory(string productID,double amount,string type,string source,string sourcdId)
+        public static DataTable ProcessInventory(string productID,double amount,string type,string source,string sourcdId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
@@ -65,7 +65,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
             DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[ProductBuckle]", parameterList); 
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductBuckle]", parameterList); 
         }
 
         public static DataTable GetDeposit(int id)
@@ -75,7 +75,7 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[DepositByPreId]", parameterList);
         }
 
-        public static void ReturnInventory(string productID, double amount, string type, string source, string sourcdId)
+        public static DataTable ReturnInventory(string productID, double amount, string type, string source, string sourcdId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
@@ -83,7 +83,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
             DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[ReturnInventory]", parameterList);
+           return MainWindow.ServerConnection.ExecuteProc("[Set].[ReturnInventory]", parameterList);
         }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {
@@ -103,7 +103,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockEntry]", parameterList);
         }
-
+       
         public static DataTable GetPrescriptionCountByID(string pharmacistIdnum)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

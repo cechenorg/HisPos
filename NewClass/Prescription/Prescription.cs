@@ -409,24 +409,19 @@ namespace His_Pos.NewClass.Prescription
             return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
         }
 
-        public void ProcessInventory(string type,string source,string sourceId)//扣庫
-        { 
+        public decimal ProcessInventory(string type,string source,string sourceId)//扣庫
+        {
+            decimal buckleValue = 0;
             foreach (var m in Medicines)
             { 
                 if(!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle)
-                PrescriptionDb.ProcessInventory(m.ID, m.Amount, type, source, sourceId);
+                    buckleValue += PrescriptionDb.ProcessInventory(m.ID, m.Amount, type, source, sourceId).Rows[0].Field<decimal>("BuckleTotalValue");
             }
-        }
-
-        public void ProcessEntry(string entryName, string source, int sourceId)//計算庫存現值
-        { 
-            double total = 0;//總金額
-            foreach (var m in Medicines)
-            { 
-                if((bool)m.IsBuckle)
-                    total += m.TotalPrice;
-            }
-            PrescriptionDb.ProcessEntry(entryName, source, sourceId , total * -1);
+            return buckleValue;
+        } 
+        public void ProcessMedicineUseEntry(decimal bucklevalue)//計算調劑耗用
+        {
+            PrescriptionDb.ProcessCashFlow("調劑耗用", "PreMasId", Id, (double)bucklevalue);
         }
         public void ProcessVipCopaymentCashFlow(string name)//計算VIP部分金流
        {
@@ -769,21 +764,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.UpdatePrescription(this, details); 
         }
         public void AdjustMedicines(Medicines originMedicines)
-        {
-            double oritotal = 0;
-            double newtotal = 0;
-            foreach (var m in originMedicines)
-            {
-                if((bool)m.IsBuckle)
-                oritotal += m.TotalPrice;
-            }
-            foreach (var m in Medicines)
-            {
-                if ((bool)m.IsBuckle)
-                    newtotal += m.TotalPrice;
-            } 
-            PrescriptionDb.ProcessEntry("調劑耗用調整", "PreMasId", Id, (newtotal - oritotal) * -1);
-
+        { 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originMedicines) {
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
@@ -807,14 +788,15 @@ namespace His_Pos.NewClass.Prescription
                    
                 }
             }
+            decimal entryvalue = 0;
             foreach (var com in compareMeds) {
 
                 if (com.Amount > 0)
-                    PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString());
+                    entryvalue += PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue"); 
                 else if (com.Amount < 0)
-                    PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()); 
+                    entryvalue += PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("BuckleTotalValue"); 
             }
-             
+            PrescriptionDb.ProcessCashFlow("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
         }
 
         public object Clone()

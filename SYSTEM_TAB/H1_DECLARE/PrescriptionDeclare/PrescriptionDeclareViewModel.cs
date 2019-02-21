@@ -802,8 +802,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             else 
                 CurrentPrescription.Update();
-            CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
-            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            var bucklevalue = CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
+            CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessSelfPayCashFlow("自費");
             if(noCard)
@@ -825,9 +825,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ChronicAdjust(bool noCard)
         {
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
-            CurrentPrescription.AdjustPredictResere(); 
-            CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
-            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            CurrentPrescription.AdjustPredictResere();
+            var bucklevalue =  CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
+            CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessSelfPayCashFlow("自費");
             if (noCard)
@@ -888,8 +888,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
-            CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
-            CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
+            var bucklevalue = CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
+            CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
             CurrentPrescription.ProcessSelfPayCashFlow("自費");
             CurrentPrescription.ProcessDepositCashFlow("押金");
