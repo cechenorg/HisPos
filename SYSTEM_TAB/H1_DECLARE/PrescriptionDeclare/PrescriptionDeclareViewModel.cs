@@ -1116,23 +1116,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         BusyContent = StringRes.收據列印;
                         CurrentPrescription.PrintReceipt();
                     }
-                    if (noCard)
-                    {
-                        BusyContent = StringRes.押金單據列印;
-                        CurrentPrescription.PrintDepositSheet();
-                    }
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
                     IsBusy = false;
                     if (noCard)
-                    {
-                        Application.Current.Dispatcher.Invoke(delegate
-                        {
-                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                        });
-                        ClearPrescription();
-                    }
+                        PrintDepositSheet();
                 };
                 IsBusy = true;
                 worker.RunWorkerAsync();
@@ -1140,26 +1129,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
             {
                 if (noCard)
-                {
-                    var worker = new BackgroundWorker();
-                    worker.DoWork += (o, ea) =>
-                    {
-                        BusyContent = StringRes.押金單據列印;
-                        CurrentPrescription.PrintDepositSheet();
-                    };
-                    worker.RunWorkerCompleted += (o, ea) =>
-                    {
-                        IsBusy = false;
-                        Application.Current.Dispatcher.Invoke(delegate
-                        {
-                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                        });
-                        ClearPrescription();
-                    };
-                    IsBusy = true;
-                    worker.RunWorkerAsync();
-                }
+                    PrintDepositSheet();
             }
+        }
+        private void PrintDepositSheet()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.押金單據列印;
+                CurrentPrescription.PrintDepositSheet();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                });
+                ClearPrescription();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         private void ResetCardReaderAction()
         {
