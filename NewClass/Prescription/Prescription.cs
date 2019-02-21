@@ -120,7 +120,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
-        public bool WriteCardSuccess { get; set; }
+        public int WriteCardSuccess { get; set; }
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         public void InitialCurrentPrescription()
         {
@@ -879,10 +879,11 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead)
+        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead,bool checkCustomer)
         {
             MainWindow.ServerConnection.OpenConnection();
-            Patient.Check();
+            if(checkCustomer)
+                Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
             AdjustMedicinesType(addMedicine);

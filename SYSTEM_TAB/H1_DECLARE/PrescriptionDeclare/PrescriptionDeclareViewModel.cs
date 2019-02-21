@@ -920,12 +920,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             BusyContent = StringRes.寫卡;
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
             BusyContent = StringRes.產生每日上傳資料;
-            if (!CurrentPrescription.WriteCardSuccess)
+            if (CurrentPrescription.WriteCardSuccess != 0)
             {
                 bool? isDone = null;
                 ErrorUploadWindowViewModel.IcErrorCode errorCode;
                 Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
+                    var description = MainWindow.GetEnumDescription((ErrorCode)CurrentPrescription.WriteCardSuccess);
+                    MessageWindow.ShowMessage("寫卡異常 " + CurrentPrescription.WriteCardSuccess + ":" + description, MessageType.WARNING);
                     var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
                     e.ShowDialog();
                     while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
