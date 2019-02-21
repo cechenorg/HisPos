@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 {
@@ -25,6 +27,15 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             foreach (var p in pres)
             {
                 Add(p);
+            }
+        }
+
+        public void SerializeFileContent()
+        {
+            foreach (var p in Items)
+            {
+                p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);
+                p.FileContent = XmlService.Deserialize<Ddata>(p.FileContentStr);
             }
         }
     }

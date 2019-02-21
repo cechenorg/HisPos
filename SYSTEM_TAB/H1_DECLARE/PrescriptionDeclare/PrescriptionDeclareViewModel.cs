@@ -803,9 +803,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.ProcessVipCopaymentCashFlow("合作部分負擔");
             else
                 CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("合作自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("合作自費");
             if (noCard)
-                CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
+                CurrentPrescription.ProcessDepositCashFlow("合作押金");
             CurrentPrescription.UpdateCooperativePrescriptionStatus();
         }
         private void ChronicAdjust(bool noCard)
@@ -815,9 +815,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("自費");
             if (noCard)
-                CurrentPrescription.ProcessSelfPayCashFlow("押金");
+                CurrentPrescription.ProcessDepositCashFlow("押金");
         }
         private void NormalRegister() {
             MedSendWindow medicinesSendSingdeWindow = null;
@@ -877,8 +877,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("自費");
-            CurrentPrescription.ProcessSelfPayCashFlow("押金");
+            CurrentPrescription.ProcessSelfPayCashFlow("自費");
+            CurrentPrescription.ProcessDepositCashFlow("押金");
         }
       
         private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)

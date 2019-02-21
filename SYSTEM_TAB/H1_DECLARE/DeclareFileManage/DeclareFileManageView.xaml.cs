@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 {
@@ -10,6 +12,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public DeclareFileManageView()
         {
             InitializeComponent();
+        }
+
+        private void DeclareFileManageView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "GetPrescriptions"));
         }
     }
 }
