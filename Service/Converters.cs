@@ -127,7 +127,7 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (string.IsNullOrEmpty(value.ToString()))
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
                 ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true) + " " + value.ConvertTo<DateTime>().ToLongTimeString()
