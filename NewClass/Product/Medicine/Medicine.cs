@@ -189,11 +189,8 @@ namespace His_Pos.NewClass.Product.Medicine
             get => price;
             set
             {
-                if (price != value)
-                {
-                    Set(() => Price, ref price, value);
-                    CountTotalPrice();
-                }
+                Set(() => Price, ref price, value);
+                CountTotalPrice();
             }
         }
         private double nhiPrice;//健保價
@@ -214,11 +211,7 @@ namespace His_Pos.NewClass.Product.Medicine
             get => totalPrice;
             set
             {
-                if (totalPrice != value)
-                {
-                    Set(() => TotalPrice, ref totalPrice, value);
-                    CheckPrice();
-                }
+                Set(() => TotalPrice, ref totalPrice, value);
             }
         }
 

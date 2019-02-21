@@ -219,6 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand MedicineNoBuckleClick { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand ErrorCodeSelect { get; set; }
+        public RelayCommand DivisionSelectionChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -553,6 +554,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (errCode != null)
                 ErrorCode = errCode;
         }
+        private void CheckPrescriptionCase()
+        {
+            if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.Division.ID))
+            if (CurrentPrescription.Treatment.Division.Name.Equals("牙科"))
+            {
+                CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases("19");
+            }
+            else
+            {
+                CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
+            }
+        }
         #endregion
         #region InitialFunctions
         private void InitializeVariables()
@@ -603,6 +616,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
+            DivisionSelectionChanged = new RelayCommand(CheckPrescriptionCase);
         }
 
         private void InitialPrescription()
@@ -654,7 +668,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            CurrentPrescription.CountPrescriptionPoint(false);
+            CurrentPrescription.CountPrescriptionPoint();
         }
 
         private void SetMedicinesPaySelf()
@@ -727,7 +741,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
             CurrentPrescription = receiveSelectedPrescription;
-            CurrentPrescription.CountPrescriptionPoint(true);
+            CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
         }
@@ -743,7 +757,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             p.Treatment.AdjustDate = DateTime.Today;
             CurrentPrescription = p;
-            CurrentPrescription.CountPrescriptionPoint(true);
+            CurrentPrescription.CountPrescriptionPoint();
         }
         #endregion
         #region GeneralFunctions
@@ -955,7 +969,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountMedicineDays();
             CurrentPrescription.CheckIfSimpleFormDeclare();
-            CurrentPrescription.CountPrescriptionPoint(false);
+            CurrentPrescription.CountPrescriptionPoint();
         }
         private void CheckCustomPrescriptions()
         {

@@ -484,7 +484,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
-        public void CountPrescriptionPoint(bool countPoint)
+        public void CountPrescriptionPoint()
         {
             PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
             if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
@@ -509,27 +509,24 @@ namespace His_Pos.NewClass.Prescription
                         Treatment.Copayment = VM.GetCopayment("I20");
                 }
             }
-            if (countPoint)
+            if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
+                PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+            else
             {
-                if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
-                    PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
-                else
-                {
-                    PrescriptionPoint.CopaymentPoint = 0;
-                }
-                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
-                PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
-                PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
-                if (Patient.Birthday != null)
-                {
-                    CheckMedicalServiceData();//確認藥事服務資料
-                    var details = SetPrescriptionDetail();//產生藥品資料
-                    PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-                }
-                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+                PrescriptionPoint.CopaymentPoint = 0;
             }
+            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+            PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
+            PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+            if (Patient.Birthday != null)
+            {
+                CheckMedicalServiceData();//確認藥事服務資料
+                var details = SetPrescriptionDetail();//產生藥品資料
+                PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            }
+            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
         }
 
         public void CountMedicineDays()
@@ -891,6 +888,32 @@ namespace His_Pos.NewClass.Prescription
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
             MainWindow.ServerConnection.CloseConnection();
+        }
+
+        public int CountCopaymentPointFuck()
+        {
+            var point = PrescriptionPoint.MedicinePoint;
+            if (point <= 100)
+                return 0;
+            if (point > 100 && point <= 200)
+                return 20;
+            if (point >= 201 && point <= 300)
+                return 40;
+            if (point >= 301 && point <= 400)
+                return 60;
+            if (point >= 401 && point <= 500)
+                return 80;
+            if (point >= 501 && point <= 600)
+                return 100;
+            if (point >= 601 && point <= 700)
+                return 120;
+            if (point >= 701 && point <= 800)
+                return 140;
+            if (point >= 801 && point <= 900)
+                return 160;
+            if (point >= 901 && point <= 1000)
+                return 180;
+            return 200;
         }
     }
 }

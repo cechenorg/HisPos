@@ -230,7 +230,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustCase;
             set
             {
-                Set(() => AdjustCase, ref adjustCase, value);
+                if (value != adjustCase)
+                    Set(() => AdjustCase, ref adjustCase, value);
             }
         }
 
@@ -240,7 +241,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => prescriptionCase;
             set
             {
-                Set(() => PrescriptionCase, ref prescriptionCase, value);
+                if (value != prescriptionCase)
+                    Set(() => PrescriptionCase, ref prescriptionCase, value);
             }
         }
 
@@ -250,7 +252,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => copayment;
             set
             {
-                Set(() => Copayment, ref copayment, value);
+                if(value != copayment)
+                    Set(() => Copayment, ref copayment, value);
             }
         }
 
@@ -260,7 +263,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => paymentCategory;
             set
             {
-                Set(() => PaymentCategory, ref paymentCategory, value);
+                if (value != paymentCategory)
+                    Set(() => PaymentCategory, ref paymentCategory, value);
             }
         }
 
