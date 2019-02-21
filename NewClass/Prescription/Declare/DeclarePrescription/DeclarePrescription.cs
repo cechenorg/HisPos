@@ -25,18 +25,31 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             Patient = new Customer();
             ID = r.Field<int>("PreMas_ID");
             IsDeclare = r.Field<bool>("PreMas_IsDeclare");
-            Patient = Patient.GetCustomerByCusId(r.Field<int>("PreMas_CustomerID"));
-            Institution = ViewModelMainWindow.GetInstitution(r.Field<string>("PreMas_InstitutionID"));
-            Division = ViewModelMainWindow.GetDivision(r.Field<string>("PreMas_DivisionID"));
+            Patient.ID = r.Field<int>("PreMas_CustomerID");
+            Patient.Name = r.Field<string>("Cus_Name");
+            Institution = new Institution();
+            Institution.ID = r.Field<string>("PreMas_InstitutionID");
+            Institution.Name = r.Field<string>("Ins_Name");
+            Institution.FullName = Institution.ID + " " + Institution.Name;
+            Division = new Division();
+            Division.ID = r.Field<string>("PreMas_DivisionID");
+            Division.Name = r.Field<string>("Div_Name");
+            Division.FullName = Division.ID + " " + Division.Name;
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate");
-            Pharmacist = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(r.Field<string>("PreMas_PharmacistIDNumber")));
+            Pharmacist = new MedicalPersonnel();
+            Pharmacist.ID = r.Field<int>("Emp_ID");
+            Pharmacist.IdNumber = r.Field<string>("PreMas_PharmacistIDNumber");
+            Pharmacist.Name = r.Field<string>("Emp_Name");
             MedicinePoint = r.Field<int>("PreMas_MedicinePoint");
             MedicalServicePoint = r.Field<int>("PreMas_MedicalServicePoint");
             TotalPoint = r.Field<int>("PreMas_TotalPoint");
             PharmacyID = r.Field<string>("PreMas_PharmacyID");
-            AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("PreMas_AdjustCaseID"));
+            AdjustCase = new AdjustCase();
+            AdjustCase.ID = r.Field<string>("PreMas_AdjustCaseID");
+            AdjustCase.Name = r.Field<string>("Adj_Name");
+            AdjustCase.FullName = AdjustCase.ID + " " + AdjustCase.Name;
             IsGetCard = r.Field<bool>("PreMas_IsGetCard");
-            FileContent = XmlService.Deserialize<Ddata>(r.Field<string>("PreMas_DeclareContent"));
+            FileContentStr = r.Field<string>("PreMas_DeclareContent");
         }
         public int ID { get; }
         private bool isDeclare;
@@ -149,5 +162,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             }
         }
         public Ddata FileContent { get; set; }
+        public string FileContentStr { get; set; }
     }
 }

@@ -123,7 +123,7 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Image>
-                        <Button Width="150" Content="轉進退貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue"/>
+                        <Button Width="150" Content="轉進退貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue" Visibility="Collapsed"/>
                         
                     </StackPanel>
                     <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" SelectedItem="{Binding ProductDailyPurchase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

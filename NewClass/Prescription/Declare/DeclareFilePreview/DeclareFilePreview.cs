@@ -142,7 +142,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
             NotGetCardCount = DeclarePrescriptions.Count(p => !p.IsGetCard);
             TotalCount = DeclarePrescriptions.Count;
             var firstDay = new DateTime(DeclareYear, DeclareMonth, 1);
-            var lastDay = DeclareMonth == DateTime.Today.Month ? DateTime.Today : new DateTime(DeclareYear, DeclareMonth + 1, 1).AddDays(-1);
+            var lastDay = DeclareMonth == DateTime.Today.Month ? DateTime.Today : new DateTime(DeclareYear, DeclareMonth < 12 ? DeclareMonth + 1 : 1, 1).AddDays(-1);
             StartDate = firstDay.Day;
             EndDate = lastDay.Day;
         }

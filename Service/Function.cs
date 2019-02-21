@@ -245,9 +245,16 @@ namespace His_Pos.Service
             try
             {
                 var filePath = ExportXml(dailyUpload, "dailyUpload");
-                var fileName = filePath + ".zip";
+                var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
+                if (fileInfo.Length < 68000)
+                {
+                    StreamWriter str = new StreamWriter(fileName, true);
+                    str.Write(string.Empty.PadRight((68000- (int)fileInfo.Length),' '));
+                    str.Close();
+                }
+                fileInfo = new FileInfo(fileName);//每日上傳檔案
                 var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
                 var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];

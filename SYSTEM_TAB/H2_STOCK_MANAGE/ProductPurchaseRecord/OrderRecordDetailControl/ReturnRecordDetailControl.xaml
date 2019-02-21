@@ -9,7 +9,7 @@
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseRecord}"
              mc:Ignorable="d" >
     <UserControl.Resources>
-        <service:NullableDateConverter x:Key="DateTimeConverter"/>
+        <service:DateTimeConverter x:Key="DateTimeConverter"/>
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>

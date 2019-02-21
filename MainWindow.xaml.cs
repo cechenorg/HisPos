@@ -178,10 +178,10 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MainWindow.ServerConnection.OpenConnection();
+            ServerConnection.OpenConnection();
             WebApi.SendToCooperClinic();
             CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
-            MainWindow.ServerConnection.CloseConnection();
+            ServerConnection.CloseConnection();
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
