@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -7,10 +10,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Database;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -21,6 +30,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using Microsoft.Reporting.WinForms;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
@@ -140,8 +150,8 @@ namespace His_Pos.ChromeTabViewModel
                 if (notificationMessage.Notification == "MainWindowClosing")
                     WindowCloseAction();
             });
+            
         }
-
         private RelayCommand initialData;
         public RelayCommand InitialData
         {
@@ -183,6 +193,24 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                //var prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate("5932013534", DateTime.Today, DateTime.Today);
+                //Console.WriteLine("處方張數:" + prescriptions.Count);
+                //Console.WriteLine("自費:" + prescriptions.Sum(p => p.Medicines.Where(m => m.PaySelf).Sum(m => m.TotalPrice)));
+                //int copayment = 0;
+                //foreach (var p in prescriptions)
+                //{
+                //    Console.WriteLine("--------------------------------");
+                //    Console.WriteLine(p.Patient.Name + ":");
+                //    p.CountPrescriptionPoint(true);
+                //    p.PrescriptionPoint.CopaymentPoint = p.CountCopaymentPointFuck();
+                //    Console.WriteLine("藥品點數:" + p.PrescriptionPoint.MedicinePoint);
+                //    Console.WriteLine("部分負擔:" + p.PrescriptionPoint.CopaymentPoint);
+                //    if (!p.Remark.Equals("Y"))
+                //        copayment += p.PrescriptionPoint.CopaymentPoint;
+                //}
+                //Console.WriteLine("--------------------------------");
+                //Console.WriteLine("部分負擔總和:" + copayment);
+                //Console.WriteLine("有收部分:" + prescriptions.Count(p => p.PrescriptionPoint.MedicinePoint > 100 && !p.Remark.EndsWith("Y")));
             };
             IsBusy = true;
             worker.RunWorkerAsync();

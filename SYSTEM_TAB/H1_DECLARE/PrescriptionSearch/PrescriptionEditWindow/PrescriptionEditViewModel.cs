@@ -335,7 +335,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void CopaymentSelectionChangedAction()
         {
-            EditedPrescription.CountPrescriptionPoint(false);
+            EditedPrescription.CountPrescriptionPoint();
         }
         private void AddMedicineAction(string medicineID)
         {
@@ -377,7 +377,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CountMedicinePoint()
         {
-            EditedPrescription.CountPrescriptionPoint(false);
+            EditedPrescription.CountPrescriptionPoint();
         }
         private void EditCompleteAction()
         {
@@ -446,7 +446,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var selected = EditedPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= EditedPrescription.Medicines.Count) return;
                 EditedPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                EditedPrescription.CountPrescriptionPoint(false);
+                EditedPrescription.CountPrescriptionPoint();
                 if (selected == EditedPrescription.Medicines.Count - 1)
                     EditedPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusDosage");
@@ -462,7 +462,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 m is MedicineSpecialMaterial special && !string.IsNullOrEmpty(special.Source))
             {
                 EditedPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
-                EditedPrescription.CountPrescriptionPoint(false);
+                EditedPrescription.CountPrescriptionPoint();
                 if (EditedPrescription.Medicines.Count == 0)
                 {
                     EditedPrescription.Medicines.Add(new Medicine());

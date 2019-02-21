@@ -161,14 +161,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void SelectionChangedAction()
         {
             if (SelectedPrescription is null) return;
-            CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.IDNumber);
+            // CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.IDNumber);
+            CustomerHistories = new CooperativeViewHistories();
             CustomerHistories.Insert(0,new CooperativeViewHistory(SelectedPrescription));
+            SelectedHistory = CustomerHistories[0];
         }
         private void PrintAction()
         {
             if(SelectedPrescription is null) return;
             SelectedPrescription.GetCompletePrescriptionData(false,true);
-            SelectedPrescription.CountPrescriptionPoint(true);
+            SelectedPrescription.CountPrescriptionPoint();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
             if ((bool)medBagPrint.DialogResult)
             {
