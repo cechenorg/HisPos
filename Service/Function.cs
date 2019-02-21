@@ -256,7 +256,7 @@ namespace His_Pos.Service
                 }
                 fileInfo = new FileInfo(fileName);//每日上傳檔案
                 var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-                var count = ConvertData.StringToBytes("1", 1);
+                var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
