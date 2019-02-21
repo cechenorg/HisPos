@@ -120,6 +120,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
+        public bool WriteCardSuccess { get; set; }
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         public void InitialCurrentPrescription()
         {
@@ -292,7 +293,12 @@ namespace His_Pos.NewClass.Prescription
             double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
-            if (dailyPrice*MedicineDays < medicinePoint) return 0;
+            if (dailyPrice * MedicineDays < medicinePoint)
+            {
+                if (Treatment.AdjustCase.ID.Equals("3"))
+                    Treatment.AdjustCase = VM.GetAdjustCase("1");
+                return 0;
+            }
             Treatment.AdjustCase = VM.GetAdjustCase("3");
             PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
             return dailyPrice;
