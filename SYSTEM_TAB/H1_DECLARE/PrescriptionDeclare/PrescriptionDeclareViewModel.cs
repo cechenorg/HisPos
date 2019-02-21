@@ -646,7 +646,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            CurrentPrescription.CountPrescriptionPoint(true);
+            CurrentPrescription.CountPrescriptionPoint(false);
         }
 
         private void SetMedicinesPaySelf()
@@ -946,7 +946,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountMedicineDays();
             CurrentPrescription.CheckIfSimpleFormDeclare();
-            CurrentPrescription.CountPrescriptionPoint(true);
+            CurrentPrescription.CountPrescriptionPoint(false);
         }
         private void CheckCustomPrescriptions()
         {
