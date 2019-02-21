@@ -497,13 +497,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 switch (CurrentPrescription.Source)
                 {
                     case PrescriptionSource.Normal:
-                        NormalRegister();
+                        if (!NormalRegister())
+                            return;  
                         break;
                     case PrescriptionSource.Cooperative:
                         MessageWindow.ShowMessage(StringRes.登錄合作診所處方, MessageType.ERROR);
                         return; 
                     case PrescriptionSource.ChronicReserve:
-                        ChronicRegister();
+                        if (!ChronicRegister())
+                            return;
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
@@ -827,12 +829,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (noCard)
                 CurrentPrescription.ProcessDepositCashFlow("押金");
         }
-        private void NormalRegister() {
+        private bool NormalRegister() {
             MedSendWindow medicinesSendSingdeWindow = null;
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder) {
                 medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
-                    return;
+                    return false;
                 }  
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
@@ -846,20 +848,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false) 
                 PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
             //紀錄訂單and送單
+            return true;
         }
         
-        private void ChronicRegister() {
+        private bool ChronicRegister() {
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder)
             {
                 MedSendWindow medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                 { 
-                    return;
+                    return false;
                 }
             }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.AdjustPredictResere();
+            return true;
         }
         private void PrescribeFunction()
         {

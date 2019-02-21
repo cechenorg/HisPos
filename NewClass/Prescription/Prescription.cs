@@ -421,7 +421,7 @@ namespace His_Pos.NewClass.Prescription
         } 
         public void ProcessMedicineUseEntry(decimal bucklevalue)//計算調劑耗用
         {
-            PrescriptionDb.ProcessCashFlow("調劑耗用", "PreMasId", Id, (double)bucklevalue);
+            PrescriptionDb.ProcessEntry("調劑耗用", "PreMasId", Id, (double)bucklevalue);
         }
         public void ProcessVipCopaymentCashFlow(string name)//計算VIP部分金流
        {
@@ -796,7 +796,7 @@ namespace His_Pos.NewClass.Prescription
                 else if (com.Amount < 0)
                     entryvalue += PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("BuckleTotalValue"); 
             }
-            PrescriptionDb.ProcessCashFlow("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
+            PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
         }
 
         public object Clone()
