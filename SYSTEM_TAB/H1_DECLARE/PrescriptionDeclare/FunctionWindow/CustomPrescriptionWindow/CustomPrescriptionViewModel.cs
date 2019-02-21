@@ -146,7 +146,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private void CustomPrescriptionSelected()
         {
             if(SelectedPrescription is null) return;
-            SelectedPrescription.GetCompletePrescriptionData(true,true,false);
+            if(!string.IsNullOrEmpty(Card.CardNumber))
+                SelectedPrescription.Card = Card;
+            SelectedPrescription.GetCompletePrescriptionData(true,true);
             Messenger.Default.Send(SelectedPrescription,"CustomPrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
         }

@@ -227,27 +227,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region CommandActions
         private void PrintMedBagAction()
         {
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
-            if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
+            try
             {
-                var printBySingleMode = new MedBagSelectionWindow();
-                var singleMode = false;
-                if (printBySingleMode.DialogResult != null)
-                    singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
-                var receiptPrint = false;
-                if (EditedPrescription.PrescriptionPoint.AmountsPay > 0)
+                var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+                if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
-                    if (receiptResult.DialogResult != null)
-                        receiptPrint = (bool)receiptResult.DialogResult;
+                    var printBySingleMode = new MedBagSelectionWindow();
+                    var singleMode = false;
+                    if (printBySingleMode.DialogResult != null)
+                        singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
+                    var receiptPrint = false;
+                    if (EditedPrescription.PrescriptionPoint.AmountsPay > 0)
+                    {
+                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+                        if (receiptResult.DialogResult != null)
+                            receiptPrint = (bool)receiptResult.DialogResult;
+                    }
+                    EditedPrescription.PrintMedBag(singleMode);
+                    if (receiptPrint)
+                        EditedPrescription.PrintReceipt();
                 }
-                EditedPrescription.PrintMedBag(singleMode);
-                if(receiptPrint)
-                    EditedPrescription.PrintReceipt();
+                else
+                {
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                }
             }
-            else
+            catch (Exception e)
             {
-                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                Console.WriteLine(e);
+                throw;
             }
         }
         private void ShowCommonInsSelectionWindowAction()
