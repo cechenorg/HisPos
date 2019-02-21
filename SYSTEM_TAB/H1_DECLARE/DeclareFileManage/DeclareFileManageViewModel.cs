@@ -18,6 +18,7 @@ using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
+using StringRes = His_Pos.Properties.Resources;
 
 // ReSharper disable InconsistentNaming
 
@@ -89,6 +90,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DecEnd, ref decEnd, value);
             }
         }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            private set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -101,7 +120,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             InitialVariables();
             InitialCommands();
-
+            RegisterMessengers();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.取得歷史處方;
+                GetPrescriptions();
+            };
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #region Functions
         #region Initial
@@ -113,7 +141,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             AdjustCases = ViewModelMainWindow.AdjustCases;
             Institutions = ViewModelMainWindow.Institutions;
-            GetPrescriptions();
         }
         private void InitialCommands()
         {
@@ -186,14 +213,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void CreateDeclareFileAction()
         {
             if(SelectedFile is null) return;
-            var decFile = new DeclareFile(SelectedFile);
-            if (SelectedFile.CheckFileExist())
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在");
-                if (!(bool)confirm.DialogResult)
-                    return;
-            }
-            SelectedFile.CreateDeclareFile(decFile);
+                BusyContent = StringRes.產生申報資料;
+                SelectedFile.DeclarePrescriptions.SerializeFileContent();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                var decFile = new DeclareFile(SelectedFile);
+                if (SelectedFile.CheckFileExist())
+                {
+                    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在");
+                    if (!(bool)confirm.DialogResult)
+                        return;
+                }
+                SelectedFile.CreateDeclareFile(decFile);
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
         private void GetPrescriptions()

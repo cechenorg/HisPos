@@ -139,6 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand ComboBoxSelectionChanged { get; set; }
         public RelayCommand TextBoxTextChanged { get; set; }
         public RelayCommand MakeUpClick { get; set; }
+        public RelayCommand PrintDepositSheet { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -215,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ComboBoxSelectionChanged = new RelayCommand(SelectionChangedAction);
             TextBoxTextChanged = new RelayCommand(TextBoxTextChangedAction);
             MakeUpClick = new RelayCommand(MakeUpClickAction);
+            PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
         }
 
         private void RegisterMessengers()
@@ -415,6 +417,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (!EditedPrescription.Treatment.Division.ID.Equals(OriginalPrescription.Treatment.Division.ID))
                 IsEdit = Visibility.Visible;
+        }
+        private void PrintDepositSheetAction()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.押金單據列印;
+                EditedPrescription.PrescriptionPoint.CountDeposit();
+                //EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
+                EditedPrescription.PrintDepositSheet();
+            };
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
         #region MessangerReceive

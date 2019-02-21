@@ -11,9 +11,7 @@
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d"  
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.DataContext>
-        <local:EntrySearchViewModel/>
-    </UserControl.DataContext>
+    
     <UserControl.Resources>
         <service:DateConverter x:Key="DateConverter" />
     </UserControl.Resources>

@@ -167,12 +167,12 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", remark);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperAdjust]", parameterList);
         }
-        public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas,string fileId) {
+        public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles,string fileId) {
             Customers cs = new Customers();
             cs = cs.SetCustomersByPrescriptions(ddatas);
             int preId = PrescriptionDb.GetPrescriptionId().Rows[0].Field<int>("MaxPreId");
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas,preId,cs, fileId));
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles,preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
         }
@@ -614,8 +614,9 @@ namespace His_Pos.NewClass.Prescription
             } 
             return reserveDetailTable;
         }
-        public static DataTable SetImportDeclareXmlMaster(List<ImportDeclareXml.ImportDeclareXml.Ddata> Ddatas,int preId,Customers cs, string fileId) {
+        public static DataTable SetImportDeclareXmlMaster(List<ImportDeclareXml.ImportDeclareXml.Ddata> Ddatas, List<string> declareFiles,int preId,Customers cs, string fileId) {
             DataTable prescriptionMasterTable = PrescriptionMasterTable();
+            int filecount = 0;
             foreach(var d in Ddatas)
             {
                 DataRow newRow = prescriptionMasterTable.NewRow();
@@ -652,7 +653,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", d.D37);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", d.D38);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", d.D43);
-                newRow["PreMas_DeclareContent"] = DBNull.Value;
+                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(declareFiles[filecount], XmlNodeType.Document, null)); 
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", false);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", true);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", true);
@@ -661,6 +662,7 @@ namespace His_Pos.NewClass.Prescription
                 
                 prescriptionMasterTable.Rows.Add(newRow);
                 preId++;
+                filecount++;
             } 
             return prescriptionMasterTable;
         }

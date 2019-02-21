@@ -263,7 +263,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             customPresChecked = false;
             IsReadCard = true;
-            ReadCard(true);
+            try
+            {
+                ReadCard(true);
+            }
+            catch (Exception e)
+            {
+                NewFunction.ExceptionLog(e.Message);
+                MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員",MessageType.WARNING);
+            }
         }
         private void SearchCusByIDNumAction()
         {
@@ -795,9 +803,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.ProcessVipCopaymentCashFlow("合作部分負擔");
             else
                 CurrentPrescription.ProcessCopaymentCashFlow("合作部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("合作自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("合作自費");
             if (noCard)
-                CurrentPrescription.ProcessSelfPayCashFlow("合作押金");
+                CurrentPrescription.ProcessDepositCashFlow("合作押金");
             CurrentPrescription.UpdateCooperativePrescriptionStatus();
         }
         private void ChronicAdjust(bool noCard)
@@ -807,9 +815,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("自費");
+            CurrentPrescription.ProcessSelfPayCashFlow("自費");
             if (noCard)
-                CurrentPrescription.ProcessSelfPayCashFlow("押金");
+                CurrentPrescription.ProcessDepositCashFlow("押金");
         }
         private void NormalRegister() {
             MedSendWindow medicinesSendSingdeWindow = null;
@@ -869,8 +877,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());
             CurrentPrescription.ProcessEntry("調劑耗用", "PreMasId", CurrentPrescription.Id);
             CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessDepositCashFlow("自費");
-            CurrentPrescription.ProcessSelfPayCashFlow("押金");
+            CurrentPrescription.ProcessSelfPayCashFlow("自費");
+            CurrentPrescription.ProcessDepositCashFlow("押金");
         }
       
         private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
@@ -1108,23 +1116,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         BusyContent = StringRes.收據列印;
                         CurrentPrescription.PrintReceipt();
                     }
-                    if (noCard)
-                    {
-                        BusyContent = StringRes.押金單據列印;
-                        CurrentPrescription.PrintDepositSheet();
-                    }
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
                     IsBusy = false;
                     if (noCard)
-                    {
-                        Application.Current.Dispatcher.Invoke(delegate
-                        {
-                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                        });
-                        ClearPrescription();
-                    }
+                        PrintDepositSheet();
                 };
                 IsBusy = true;
                 worker.RunWorkerAsync();
@@ -1132,26 +1129,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
             {
                 if (noCard)
-                {
-                    var worker = new BackgroundWorker();
-                    worker.DoWork += (o, ea) =>
-                    {
-                        BusyContent = StringRes.押金單據列印;
-                        CurrentPrescription.PrintDepositSheet();
-                    };
-                    worker.RunWorkerCompleted += (o, ea) =>
-                    {
-                        IsBusy = false;
-                        Application.Current.Dispatcher.Invoke(delegate
-                        {
-                            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                        });
-                        ClearPrescription();
-                    };
-                    IsBusy = true;
-                    worker.RunWorkerAsync();
-                }
+                    PrintDepositSheet();
             }
+        }
+        private void PrintDepositSheet()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.押金單據列印;
+                CurrentPrescription.PrintDepositSheet();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                });
+                ClearPrescription();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         private void ResetCardReaderAction()
         {

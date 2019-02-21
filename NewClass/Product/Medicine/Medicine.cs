@@ -19,9 +19,11 @@ namespace His_Pos.NewClass.Product.Medicine
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double>("Inv_Inventory");
+            CostPrice = (double)r.Field<decimal>("Pro_LastPrice");
             Vendor = r.Field<string>("Med_Manufactory");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
+
             Usage = new Usage.Usage();
             Position = new Position.Position(); 
         }
@@ -236,6 +238,18 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (inventory != value)
                 {
                     Set(() => Inventory, ref inventory, value);
+                }
+            }
+        }
+        private double costPrice;//成本
+        public double CostPrice
+        {
+            get => costPrice;
+            set
+            {
+                if (costPrice != value)
+                {
+                    Set(() => CostPrice, ref costPrice, value);
                 }
             }
         }

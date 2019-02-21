@@ -42,6 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach {
                 string name = ((StockEntry)o).EntryName;
                 switch (name)
                 {
+                    case "負庫進貨調整":
                     case "進貨":
                         if ((bool)CheckBoxPurchase.IsChecked)
                             return true;

@@ -494,4 +494,10 @@
   <data name="處方查詢" xml:space="preserve">
     <value>處方資料查詢中...</value>
   </data>
+  <data name="取得歷史處方" xml:space="preserve">
+    <value>取得歷史處方資料...</value>
+  </data>
+  <data name="產生申報資料" xml:space="preserve">
+    <value>申報檔資料產生中...</value>
+  </data>
 </root>
