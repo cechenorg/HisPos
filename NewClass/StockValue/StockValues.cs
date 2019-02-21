@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.StockValue {
-    public class StockValues : Collection<StockValue> {
+    public class StockValues : ObservableCollection<StockValue> {
         public StockValues() {
         }
         public void GetDataByDate(DateTime startDate,DateTime endDate) {

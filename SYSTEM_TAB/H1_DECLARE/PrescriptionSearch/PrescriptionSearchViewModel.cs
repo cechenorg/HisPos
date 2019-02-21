@@ -455,16 +455,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     MessageWindow.ShowMessage("此申報檔已經匯入~!", MessageType.ERROR);
                     return;
                 }
-
+                List<string> declareFiles = new List<string>();
                 XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
                 XmlDocument data = new XmlDocument();
                 foreach (XmlNode node in ddatas)
                 {
                     data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
+                    declareFiles.Add(data.InnerXml);
                     ddatasCollection.Add(d); 
                 }
-                PrescriptionDb.ImportDeclareXml(ddatasCollection, fileId);
+                PrescriptionDb.ImportDeclareXml(ddatasCollection, declareFiles, fileId);
                 MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
             }
 
