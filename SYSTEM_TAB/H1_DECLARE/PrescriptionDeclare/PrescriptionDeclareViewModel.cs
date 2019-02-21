@@ -263,7 +263,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             customPresChecked = false;
             IsReadCard = true;
-            ReadCard(true);
+            try
+            {
+                ReadCard(true);
+            }
+            catch (Exception e)
+            {
+                NewFunction.ExceptionLog(e.Message);
+                MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員",MessageType.WARNING);
+            }
         }
         private void SearchCusByIDNumAction()
         {
