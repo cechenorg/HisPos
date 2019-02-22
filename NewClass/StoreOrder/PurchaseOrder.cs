@@ -41,6 +41,7 @@ namespace His_Pos.NewClass.StoreOrder
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
+            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
         }
 
         public override void SaveOrder()

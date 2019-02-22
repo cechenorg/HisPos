@@ -112,6 +112,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0"/>
                     <RowDefinition/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <RadioButton Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
@@ -178,6 +179,12 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="共" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <Label Content="{Binding StoreOrderCollection.Count, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Margin="0,0,0,0" FontSize="18" Width="40" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Content="張    總計$" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <Label Content="{Binding TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
             <ContentControl Grid.Column="1" Margin="0,0,10,10">
                 <ContentControl.Style>

@@ -25,6 +25,12 @@
         <DataTemplate x:Key="PurchaseSingdeProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseSingdeProcessingControl/>
         </DataTemplate>
+        <DataTemplate x:Key="UnProcessingID" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <Label Content="{Binding ID}" Width="360" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ProcessingID" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <Label Content="{Binding ReceiveID}" Width="360" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
@@ -34,7 +40,21 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="{Binding ID}" Width="360" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
             <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding Path=OrderManufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="{Binding Path=OrderManufactory.Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
