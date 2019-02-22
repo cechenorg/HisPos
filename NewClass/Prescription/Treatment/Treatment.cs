@@ -252,7 +252,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => copayment;
             set
             {
-                if(value != copayment)
+                if (value != copayment)
                     Set(() => Copayment, ref copayment, value);
             }
         }
