@@ -19,6 +19,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
 
+        internal static DataTable GetInventoryRecordsByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", "0"));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductInventoryRecordByID]", parameters);
+        }
+
         internal static DataTable GetProductManageMedicineDataByID(string id)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

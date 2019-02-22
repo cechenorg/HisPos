@@ -6,6 +6,7 @@
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:service="clr-namespace:His_Pos.Service"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
@@ -14,6 +15,19 @@
         <DataTemplate x:Key="DataChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
         </DataTemplate>
+        <DataTemplate x:Key="PruchaseReturnIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="PrescriptionIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="StockTakingIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/GreenDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ErrorIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/DeleteDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <service:DateTimeConverter x:Key="DateTimeConverter"/>
     </UserControl.Resources>
     <Grid Width="1580" Height="880" Margin="10">
         <Grid.RowDefinitions>
@@ -422,14 +436,17 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="0">
-                <Image Source="/Images/stock.png" Width="35" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
+                <Image Source="/Images/stock.png" Width="35" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
                 <Label Content="庫存總量" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Bottom"/>
-                <Image Source="/Images/money.png" Width="35" VerticalAlignment="Bottom" Margin="70,0,0,0"/>
+                <Image Source="/Images/money.png" Width="35" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
                 <Label Content="庫存現值" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Bottom"/>
+                <Image Source="/Images/Price.png" Width="35" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
+                <Label Content="上次進價" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Bottom"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="1">
-                <Label Content="{Binding Medicine.Inventory, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="65,0,0,0" HorizontalContentAlignment="Center"/>
-                <Label Content="{Binding Medicine.StockValue, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="75,0,0,0" HorizontalContentAlignment="Center"/>
+                <TextBlock Text="{Binding Medicine.Inventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="20,0,0,0" TextAlignment="Center"/>
+                <TextBlock Text="{Binding Medicine.StockValue, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="28,0,0,0" TextAlignment="Center"/>
+                <TextBlock Text="{Binding Medicine.StockValue, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="30,0,0,0" TextAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="2">
                 <Label Content="快速盤點" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="150,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -444,7 +461,7 @@
                 <CheckBox Content="盤點" Name="StockTakingCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
                 <Image Source="/Images/GreenDot.png" Width="20" Margin="5,0,0,0"/>
             </StackPanel>
-            <DataGrid Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews}"
+            <DataGrid Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollection, UpdateSourceTrigger=PropertyChanged}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                 <DataGrid.Resources>
@@ -482,11 +499,28 @@
                     <DataGridTemplateColumn IsReadOnly="True" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding TypeIcon}" Width="20"/>
+                                <ContentControl Content="{Binding}">
+                                    <ContentControl.Style>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource ErrorIcon}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="PurchaseReturn">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource PruchaseReturnIcon}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="StockTaking">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource StockTakingIcon}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="Prescription">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionIcon}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="時間" Width="220" Binding="{Binding Time}" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True">
+                    <DataGridTextColumn Header="時間" Width="220" Binding="{Binding Time, Converter={StaticResource DateTimeConverter}}" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -499,7 +533,6 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="{Binding Amount}"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
