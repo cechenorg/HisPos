@@ -92,7 +92,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         {
             IcMessage = new IcData(p,e,makeUp);
             MedicalMessageList = new List<MedicalData>();
-            var treatDateTime = DateTimeEx.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var treatDateTime = IcMessage.TreatmentDateTime;
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             for (var i = 0; i < medList.Count; i++)
             {
@@ -114,19 +114,26 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         public IcData(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
         {
             var seq = p.Card.MedicalNumberData;
-            if (HisApi.HisApiFunction.OpenCom())
+            if (!string.IsNullOrEmpty(p.Card.TreatDateTime))
             {
-                var iBufferLength = 13;
-                byte[] pBuffer = new byte[iBufferLength];
-                var res = HisApi.HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
-                TreatmentDateTime = res == 0 ? 
-                    ConvertData.ByToString(pBuffer, 0, 13) : 
-                    DateTimeEx.ToStringWithSecond(DateTime.Now);
-                HisApi.HisApiFunction.CloseCom();
+                TreatmentDateTime = p.Card.TreatDateTime;
             }
             else
             {
-                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                if (HisApi.HisApiFunction.OpenCom())
+                {
+                    var iBufferLength = 13;
+                    byte[] pBuffer = new byte[iBufferLength];
+                    var res = HisApi.HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
+                    TreatmentDateTime = res == 0 ?
+                        ConvertData.ByToString(pBuffer, 0, 13) :
+                        DateTimeEx.ToStringWithSecond(DateTime.Now);
+                    HisApi.HisApiFunction.CloseCom();
+                }
+                else
+                {
+                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                }
             }
             if (e is null)
             {
@@ -157,25 +164,6 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             if (makeUp)
                 ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Treatment.AdjustDate, false);
         }
-        public IcData(SeqNumber seq,Class.Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
-        {
-            SamCode = seq.SamId;
-            CardNo = currentPrescription.Customer.IcCard.CardNo;
-            IDNumber = currentPrescription.Customer.IcCard.IcNumber;
-            BirthDay = DateTimeEx.ConvertToTaiwanCalender(customerData.Birthday,false);
-            TreatmentDateTime = DateTimeEx.ConvertToTaiwanCalenderWithTime(seq.TreatDateTime);
-            MedicalNumber = string.Empty;
-            PharmacyId = seq.InstitutionId;
-            MedicalPersonIcNumber = currentPrescription.Pharmacy.MedicalPersonnel.IcNumber;
-            SecuritySignature = seq.SecuritySignature;
-            MainDiagnosisCode = currentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
-            if (!string.IsNullOrEmpty(currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
-                SecondDiagnosisCode = currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            MedicalFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
-                             currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
-            CopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
-        }
-
         
         //1,3 V  2,4 ~
         [XmlElement(ElementName = "A11")]

@@ -47,6 +47,8 @@ namespace His_Pos.NewClass.Prescription
         public virtual TreatRecords TreatRecords { get; set; }
         [Index(11)]
         public virtual bool IsGetMedicalNumber { get; set; }
+        [Index(12)]
+        public virtual string TreatDateTime { get; set; } = string.Empty;
         public bool GetBasicData()
         {
             var strLength = 72;
@@ -120,6 +122,7 @@ namespace His_Pos.NewClass.Prescription
                 {
                     MedicalNumberData = new SeqNumber(pBuffer);
                     IsGetMedicalNumber = true;
+                    TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
                 }
                 else
                 {

@@ -10,6 +10,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -41,12 +42,13 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
             //Recs recs = Deserialize<Recs>(xdoc);
             //foreach (var r in recs.Rec)
             //{
-            //    r.MainMessage.IcMessage.TreatmentDateTime =
-            //        r.MainMessage.MedicalMessageList[0].MedicalOrderTreatDateTime;
+            //    foreach (var m in r.MainMessage.MedicalMessageList)
+            //    {
+            //        if (!m.MedicalOrderTreatDateTime.Equals(r.MainMessage.IcMessage.TreatmentDateTime))
+            //            m.MedicalOrderTreatDateTime = r.MainMessage.IcMessage.TreatmentDateTime;
+            //    }
             //    if(string.IsNullOrEmpty(r.MainMessage.IcMessage.MedicalNumber))
             //        r.MainMessage.IcMessage.MedicalNumber = "1";
-            //    if (string.IsNullOrEmpty(r.MainMessage.IcMessage.TreatmentDateTime))
-            //        Console.WriteLine(r.MainMessage.IcMessage.CardNo);
             //}
             //xdoc = recs.SerializeObjectToXDocument();
             //filePath = Function.ExportXml(xdoc, "dailyUpload");

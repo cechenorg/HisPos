@@ -272,12 +272,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel)+"PrescriptionEdited"))
-                    SearchAction();
-            });
         }
         #endregion
         #region CommandActions
@@ -368,8 +362,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SelectedInstitution = result[0];
                     break;
                 default:
+                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
                     var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
                     institutionSelectionWindow.ShowDialog();
+                    Messenger.Default.Unregister(this);
                     break;
             }
         }
@@ -387,12 +383,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ShowPrescriptionEditWindowAction()
         {
             if(SelectedPrescription is null) return;
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+                    SearchAction();
+            });
             EditedPrescription = SelectedPrescription;
             PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit;
             prescriptionEdit = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
                 new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
                 new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
+            Messenger.Default.Unregister(this);
         }
         private void ClearAction()
         {
