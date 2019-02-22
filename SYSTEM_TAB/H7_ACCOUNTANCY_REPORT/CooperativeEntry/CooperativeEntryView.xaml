@@ -22,7 +22,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
-            <Label Content="開始日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
+            <Label Content="選擇日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
             <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                 <xctk:MaskedTextBox.Text>
@@ -34,19 +34,7 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Label Content="結束日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
-            <xctk:MaskedTextBox Name="end" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
-                <xctk:MaskedTextBox.Text>
-                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
-                        <Binding.ValidationRules>
-                            <service:DateValidationRule/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </xctk:MaskedTextBox.Text>
-            </xctk:MaskedTextBox>
-            <Rectangle Width="840"/>
+             <Rectangle Width="1050"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <Grid Grid.Row="1" Margin="10">
@@ -101,7 +89,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="140" Header="日期" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource DateConverter}}">
+                <DataGridTextColumn Width="100" Header="日期" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource DateConverter}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -109,7 +97,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CopaymentValue}">
+                <DataGridTextColumn Width="100" Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CopaymentValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -117,7 +105,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="180" Header="合作診所部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" CellStyle="{StaticResource DataGridSpecialCellStyle}" Binding="{Binding ClinicCopaymentValue}">
+                <DataGridTextColumn Width="160" Header="合作診所部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" CellStyle="{StaticResource DataGridSpecialCellStyle}" Binding="{Binding ClinicCopaymentValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -125,7 +113,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="自費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PaySelfValue}">
+                <DataGridTextColumn Width="50" Header="自費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PaySelfValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -141,7 +129,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="藥服費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedServiceValue}">
+                <DataGridTextColumn Width="200" Header="骨科毛利(合作藥服費)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ClinicProfitValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -149,7 +137,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="合作診所藥服費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ClinicMedServiceValue}">
+                <DataGridTextColumn Width="150" Header="排除骨科總點數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PrescriptionwithoutCooperativeValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -157,7 +145,23 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositValue}">
+                <DataGridTextColumn Width="150" Header="自費調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PayselfMedUseValue}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="200" Header="慢箋與一般箋調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicineUseValue}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="70" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositValue}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

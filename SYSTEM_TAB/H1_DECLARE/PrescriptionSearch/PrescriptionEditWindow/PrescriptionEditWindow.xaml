@@ -271,7 +271,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button x:Name="DeleteDot" Width="18" Height="18" Padding="0" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Content="{StaticResource DeleteDot}" Command="{Binding DataContext.DeleteMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                           Visibility="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Background="Transparent" BorderBrush="Transparent"/>
+                                                Visibility="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Background="Transparent" BorderBrush="Transparent"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

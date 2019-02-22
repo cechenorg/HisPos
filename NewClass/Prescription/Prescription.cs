@@ -897,5 +897,10 @@ namespace His_Pos.NewClass.Prescription
                 return 180;
             return 200;
         }
+
+        public void AdjustCooperativeMedicines(Medicines originMedicines)
+        {
+            
+        }
     }
 }

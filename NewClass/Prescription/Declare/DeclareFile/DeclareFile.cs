@@ -281,7 +281,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
                 P13 = P12;
                 PaySelf = false;
-                IsBuckle = true;
+                IsBuckle = m.IsBuckle;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -295,7 +295,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
                 P13 = P12;
                 PaySelf = false;
-                IsBuckle = true;
+                IsBuckle = m.IsBuckle;
             }
             else
             {
@@ -314,7 +314,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P12 = string.Empty;
                 P13 = P12;
                 PaySelf = m.PaySelf;
-                IsBuckle = true;
+                IsBuckle = m.IsBuckle;
             }
         }
 
