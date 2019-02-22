@@ -509,7 +509,12 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-        internal static void DailyProductsPurchase() {
+        internal static void DailyProductsPurchase()
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderByDailyCondition]", parameters);
         }
 
 
