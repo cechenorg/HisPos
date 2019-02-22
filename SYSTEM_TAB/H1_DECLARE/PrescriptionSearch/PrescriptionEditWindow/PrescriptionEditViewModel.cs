@@ -338,7 +338,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void CopaymentSelectionChangedAction()
         {
-            EditedPrescription.CountPrescriptionPoint();
+            if (!EditedPrescription.CheckFreeCopayment())
+            {
+                if (EditedPrescription.PrescriptionPoint.MedicinePoint <= 100)
+                    EditedPrescription.Treatment.Copayment = VM.GetCopayment("I21");
+                else
+                {
+                    EditedPrescription.Treatment.Copayment = VM.GetCopayment("I20");
+                }
+            }
         }
         private void AddMedicineAction(string medicineID)
         {

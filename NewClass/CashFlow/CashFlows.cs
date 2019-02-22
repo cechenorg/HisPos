@@ -47,6 +47,7 @@ namespace His_Pos.NewClass.CashFlow {
                     case "一般箋調劑耗用":
                         cashFlow.NormalMedicineUseValue = r.Field<decimal>("CashFlow_Value");
                         break;
+                    case "合作押金":
                     case "押金":
                         cashFlow.DepositValue = r.Field<decimal>("CashFlow_Value");
                         break; 
