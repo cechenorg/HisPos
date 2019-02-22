@@ -409,7 +409,7 @@ namespace His_Pos.NewClass.Prescription
                 prescriptions.Add(new Prescription(XmlService.Deserialize<CooperativePrescription>(xmlDocument.InnerXml)));
             }
             return prescriptions;
-        } 
+        }
         #endregion
         #region TableSet
         public static DataTable SetPrescriptionMaster(Prescription p) { 
