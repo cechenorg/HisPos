@@ -13,31 +13,26 @@ namespace His_Pos.NewClass.CashFlow {
             ClinicCopaymentValue = 0;
             PaySelfValue = 0;
             ClinicPaySelfValue = 0;
-            ClinicProfitValue = 0;
-            PrescriptionwithoutCooperativeValue = 0;
+            ClinicProfitValue = 0; 
             PayselfMedUseValue = 0;
-            MedicineUseValue = 0;
+            NormalTotalPointValue = 0;
+            ChronicTotalPointValue = 0;
+            ChronicmedicineUseValue = 0;
+            NormalMedicineUseValue = 0;
             DepositValue = 0;
         }
-        public CashFlow(DataRow r) {
-            Date = r.Field<DateTime>("CashFlow_Time");
-            CopaymentValue = Math.Round(r.Field<decimal>("CopaymentValue"), 2);
-            ClinicCopaymentValue = Math.Round(r.Field<decimal>("ClinicCopaymentValue"), 2);
-            PaySelfValue = Math.Round(r.Field<decimal>("PaySelfValue"), 2);
-            ClinicPaySelfValue = Math.Round(r.Field<decimal>("ClinicPaySelfValue"), 2); 
-            DepositValue = Math.Round(r.Field<decimal>("DepositValue"), 2);
-        }
+        
         public DateTime Date { get; set; }
-        private decimal copaymentValue;
-        public decimal CopaymentValue {
+        private int copaymentValue;
+        public int CopaymentValue {
             get => copaymentValue;
             set
             {
                 Set(() => CopaymentValue, ref copaymentValue, value);
             }
         }
-        private decimal clinicCopaymentValue;
-        public decimal ClinicCopaymentValue
+        private int clinicCopaymentValue;
+        public int ClinicCopaymentValue
         {
             get => clinicCopaymentValue;
             set
@@ -45,8 +40,8 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => ClinicCopaymentValue, ref clinicCopaymentValue, value);
             }
         }
-        private decimal paySelfValue;
-        public decimal PaySelfValue
+        private int paySelfValue;
+        public int PaySelfValue
         {
             get => paySelfValue;
             set
@@ -54,8 +49,8 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => PaySelfValue, ref paySelfValue, value);
             }
         }
-        private decimal clinicPaySelfValue;
-        public decimal ClinicPaySelfValue
+        private int clinicPaySelfValue;
+        public int ClinicPaySelfValue
         {
             get => clinicPaySelfValue;
             set
@@ -72,22 +67,40 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => ClinicProfitValue, ref clinicProfitValue, value);
             }
         }
-        private decimal prescriptionwithoutCooperativeValue;
-        public decimal PrescriptionwithoutCooperativeValue //排除骨科總點數(慢箋 + 其他)
+        private decimal normalTotalPointValue;
+        public decimal NormalTotalPointValue //一般箋總點數
         {
-            get => prescriptionwithoutCooperativeValue;
+            get => normalTotalPointValue;
             set
             {
-                Set(() => PrescriptionwithoutCooperativeValue, ref prescriptionwithoutCooperativeValue, value);
+                Set(() => NormalTotalPointValue, ref normalTotalPointValue, value);
             }
         }
-        private decimal medicineUseValue;
-        public decimal MedicineUseValue //慢箋與一般箋調劑耗用
+        private decimal chronicTotalPointValue;
+        public decimal ChronicTotalPointValue //慢箋總點數
         {
-            get => medicineUseValue;
+            get => chronicTotalPointValue;
             set
             {
-                Set(() => MedicineUseValue, ref medicineUseValue, value);
+                Set(() => ChronicTotalPointValue, ref chronicTotalPointValue, value);
+            }
+        } 
+        private decimal normalmedicineUseValue;
+        public decimal NormalMedicineUseValue //一般箋調劑耗用
+        {
+            get => normalmedicineUseValue;
+            set
+            {
+                Set(() => NormalMedicineUseValue, ref normalmedicineUseValue, value);
+            }
+        }
+        private decimal chronicmedicineUseValue;
+        public decimal ChronicmedicineUseValue //慢箋調劑耗用
+        {
+            get => chronicmedicineUseValue;
+            set
+            {
+                Set(() => ChronicmedicineUseValue, ref chronicmedicineUseValue, value);
             }
         }
         private decimal payselfMedUseValue;

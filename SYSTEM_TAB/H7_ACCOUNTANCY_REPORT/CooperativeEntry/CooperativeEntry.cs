@@ -59,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         #region Action
         private void SearchAction() {
             CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate);
-
+            TotalCopaymentEntry = CooperativeClinicEntryCollection[0];
             TotalCopaymentEntry.ClinicCopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicCopaymentValue); 
             TotalCopaymentEntry.ClinicPaySelfValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicPaySelfValue);
             TotalCopaymentEntry.CopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.CopaymentValue);

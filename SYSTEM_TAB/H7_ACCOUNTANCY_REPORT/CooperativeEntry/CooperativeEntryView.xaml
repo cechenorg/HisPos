@@ -18,8 +18,17 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="180"/>
-            <RowDefinition />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
             <Label Content="選擇日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
@@ -37,139 +46,52 @@
              <Rectangle Width="1050"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
-        <Grid Grid.Row="1" Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10">
-                <Label Name="LabelstartDate"  FontFamily="Segoe UI Semibold" FontSize="30"/>
-                <Label Content="~" FontFamily="Segoe UI Semibold" FontSize="30"/>
-                <Label Name="LabelendDate"  FontFamily="Segoe UI Semibold" FontSize="30"/>
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Background="DarkSeaGreen"/>
-            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Background="GhostWhite"/> 
-            <Label Content="部分負擔" Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="合作診所部分負擔" Grid.Row="1" Grid.Column="1" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="自費" Grid.Row="1" Grid.Column="2" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="合作診所自費" Grid.Row="1" Grid.Column="3" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="藥服費" Grid.Row="1" Grid.Column="4" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="合作診所藥服費" Grid.Row="1" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="押金" Grid.Row="1" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.CopaymentValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.ClinicCopaymentValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.PaySelfValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.ClinicPaySelfValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.MedServiceValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.ClinicMedServiceValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="{Binding TotalCopaymentEntry.DepositValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <DataGrid  Grid.Row="2" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10">
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Style.Triggers>
-                        <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                        </Trigger>
-                    </Style.Triggers>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="40"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="日期" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource DateConverter}}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CopaymentValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="160" Header="合作診所部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" CellStyle="{StaticResource DataGridSpecialCellStyle}" Binding="{Binding ClinicCopaymentValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="50" Header="自費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PaySelfValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="合作診所自費" FontFamily="Segoe UI Semi" IsReadOnly="True" CellStyle="{StaticResource DataGridSpecialCellStyle}" Binding="{Binding ClinicPaySelfValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="200" Header="骨科毛利(合作藥服費)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ClinicProfitValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="排除骨科總點數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PrescriptionwithoutCooperativeValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="自費調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PayselfMedUseValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="200" Header="慢箋與一般箋調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicineUseValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="70" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <StackPanel Orientation="Horizontal"  Grid.Row="1" >
+            <Label Content="部分負擔"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.CopaymentValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="2" >
+            <Label Content="合作部分負擔"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ClinicCopaymentValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="3" >
+            <Label Content="自費"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.PaySelfValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="4" >
+            <Label Content="合作自費"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ClinicPaySelfValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="5" >
+            <Label Content="骨科毛利"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ClinicProfitValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="6" >
+            <Label Content="自費調劑耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.PayselfMedUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="7" >
+            <Label Content="一般箋總點數"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.NormalTotalPointValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="8" >
+            <Label Content="慢箋總點數"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ChronicTotalPointValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="9" >
+            <Label Content="慢箋調劑耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ChronicmedicineUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="10" >
+            <Label Content="一般箋調劑耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.NormalMedicineUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="11" >
+            <Label Content="押金"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.DepositValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+
+
     </Grid>
 </UserControl>
