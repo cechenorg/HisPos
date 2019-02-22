@@ -446,7 +446,7 @@
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="1">
                 <TextBlock Text="{Binding Medicine.Inventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="20,0,0,0" TextAlignment="Center"/>
                 <TextBlock Text="{Binding Medicine.StockValue, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="28,0,0,0" TextAlignment="Center"/>
-                <TextBlock Text="{Binding Medicine.StockValue, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="30,0,0,0" TextAlignment="Center"/>
+                <TextBlock Text="{Binding Medicine.LastPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" Margin="30,0,0,0" TextAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="2">
                 <Label Content="快速盤點" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="150,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>

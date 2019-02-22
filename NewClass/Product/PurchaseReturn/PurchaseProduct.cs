@@ -8,6 +8,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
+        private double orderAmount;
+        private double subTotal;
+        private double price;
 
         public bool IsSelected
         {
@@ -21,11 +24,27 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int BasicAmount { get; }
         public double OnTheWayAmount { get; }
         public double LastPrice { get; }
-        public double OrderAmount { get; set; }
+        public double OrderAmount
+        {
+            get { return orderAmount; }
+            set
+            {
+                Set(() => OrderAmount, ref orderAmount, value);
+                CalculatePrice();
+            }
+        }
         public double RealAmount { get; set; }
         public double FreeAmount { get; set; }
-        public double Price { get; set; }
-        public double SubTotal { get; set; }
+        public double Price
+        {
+            get { return price; }
+            set { Set(() => Price, ref price, value); }
+        }
+        public double SubTotal
+        {
+            get { return subTotal; }
+            set { Set(() => SubTotal, ref subTotal, value); }
+        }
         public string Invoice { get; set; }
         public DateTime? ValidDate { get; set; }
         public string BatchNumber { get; set; }
@@ -61,6 +80,16 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
+        }
+
+        private void CalculatePrice()
+        {
+            if (OrderAmount >= SingdePackageAmount)
+                Price = SingdePackagePrice;
+            else
+                Price = SingdePrice;
+
+            SubTotal = Price * OrderAmount;
         }
 
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
