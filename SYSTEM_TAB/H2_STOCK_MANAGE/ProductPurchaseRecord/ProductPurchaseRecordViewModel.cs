@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -31,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
+        private double totalPrice;
         
         public StoreOrders StoreOrderCollection
         {
@@ -48,6 +50,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
+
+        public double TotalPrice
+        {
+            get { return totalPrice; }
+            set { Set(() => TotalPrice, ref totalPrice, value); }
+        }
         #endregion
 
         public ProductPurchaseRecordViewModel()
@@ -63,7 +71,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID);
 
             if (StoreOrderCollection.Count > 0)
+            {
                 CurrentStoreOrder = StoreOrderCollection[0];
+                TotalPrice = StoreOrderCollection.Sum(s => s.TotalPrice);
+            }
             else
                 MessageWindow.ShowMessage("無符合條件項目", MessageType.ERROR);
         }
