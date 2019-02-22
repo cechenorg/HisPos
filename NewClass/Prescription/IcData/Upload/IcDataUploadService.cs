@@ -31,14 +31,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         {
             HeaderMessage = new Header();
             HeaderMessage.DataFormat = "1";
-            if (e is null)
-            {
-                HeaderMessage.DataType = isMakeUp ? "3" : "1";
-            }
-            else
-            {
-                HeaderMessage.DataType = isMakeUp ? "4" : "2";
-            }
+            HeaderMessage.DataFormat = e is null ? "1" : "2";
 
             HeaderMessage.UploadVersion = "1.0";
             MainMessage = new MainMessage(p,e, isMakeUp);
@@ -66,7 +59,10 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         public Header()
         {
         }
-
+        
+        //V
+        [XmlElement(ElementName = "A00")]
+        public string DataType { get; set; } = "1";//資料型態
         /*
          * V : 必填欄位 ~ : 不填欄位 * : 選填欄位
          * 資料格式 :
@@ -75,10 +71,6 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
          * 3:補正上傳 (正常資料)
          * 4:補正上傳 (異常資料))
          */
-        //V
-        [XmlElement(ElementName = "A00")]
-        public string DataType { get; set; } = "1";//資料型態
-
         //V
         [XmlElement(ElementName = "A01")]
         public string DataFormat { get; set; }//資料格式
@@ -122,6 +114,20 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         public IcData(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
         {
             var seq = p.Card.MedicalNumberData;
+            if (HisApi.HisApiFunction.OpenCom())
+            {
+                var iBufferLength = 13;
+                byte[] pBuffer = new byte[iBufferLength];
+                var res = HisApi.HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
+                TreatmentDateTime = res == 0 ? 
+                    ConvertData.ByToString(pBuffer, 0, 13) : 
+                    DateTimeEx.ToStringWithSecond(DateTime.Now);
+                HisApi.HisApiFunction.CloseCom();
+            }
+            else
+            {
+                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+            }
             if (e is null)
             {
                 CardNo = p.Card.CardNumber;
@@ -136,7 +142,6 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             {
                 IDNumber = p.Patient.IDNumber;
                 BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false);
-                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
                 MedicalNumber = e.ID;
                 PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
             }
