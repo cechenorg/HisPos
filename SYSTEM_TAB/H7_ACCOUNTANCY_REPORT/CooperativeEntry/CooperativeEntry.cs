@@ -31,7 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
                 Set(() => TotalCopaymentEntry, ref totalCopaymentEntry, value);
             }
         }
-        private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
+        private DateTime startDate = DateTime.Now;
         public DateTime StartDate
         {
             get => startDate;
@@ -58,14 +58,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         }
         #region Action
         private void SearchAction() {
-            CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate,EndDate);
+            CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate);
 
-            TotalCopaymentEntry.ClinicCopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicCopaymentValue);
-            TotalCopaymentEntry.ClinicMedServiceValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicMedServiceValue);
+            TotalCopaymentEntry.ClinicCopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicCopaymentValue); 
             TotalCopaymentEntry.ClinicPaySelfValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicPaySelfValue);
             TotalCopaymentEntry.CopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.CopaymentValue);
-            TotalCopaymentEntry.DepositValue = CooperativeClinicEntryCollection.Sum(c => c.DepositValue);
-            TotalCopaymentEntry.MedServiceValue = CooperativeClinicEntryCollection.Sum(c => c.MedServiceValue);
+            TotalCopaymentEntry.DepositValue = CooperativeClinicEntryCollection.Sum(c => c.DepositValue); 
             TotalCopaymentEntry.PaySelfValue = CooperativeClinicEntryCollection.Sum(c => c.PaySelfValue);
         }
         #endregion

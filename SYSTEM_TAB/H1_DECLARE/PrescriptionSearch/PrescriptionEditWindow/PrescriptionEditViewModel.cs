@@ -12,6 +12,7 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -123,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
         }
+        private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
         private ViewModelEnum viewModel { get; set; }
         #region Commands
         public RelayCommand PrintMedBag { get; set; }
@@ -140,6 +142,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand TextBoxTextChanged { get; set; }
         public RelayCommand MakeUpClick { get; set; }
         public RelayCommand PrintDepositSheet { get; set; }
+        public RelayCommand DeleteMedicine { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -217,13 +220,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             TextBoxTextChanged = new RelayCommand(TextBoxTextChangedAction);
             MakeUpClick = new RelayCommand(MakeUpClickAction);
             PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
+            DeleteMedicine = new RelayCommand(DeleteMedicineAction);
         }
 
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-            Messenger.Default.Register<NotificationMessage>("DeleteMedicine", DeleteMedicine);
         }
         #endregion
         #region CommandActions
@@ -390,7 +393,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 }
                 EditedPrescription.Update();
-                EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
+                if (EditedPrescription.Treatment.Institution.ID.Equals(CooperativeInstitutionID))
+                {
+                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
+                }
+                else
+                    EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
                 switch (viewModel)
                 {
                     case ViewModelEnum.PrescriptionSearch:
@@ -453,21 +461,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private void DeleteMedicine(NotificationMessage obj)
+        private void DeleteMedicineAction()
         {
-            if (EditedPrescription.Medicines.Count <= SelectedMedicinesIndex) return;
-            var m = EditedPrescription.Medicines[SelectedMedicinesIndex];
-            if (m is MedicineNHI med && !string.IsNullOrEmpty(med.Source) ||
-                m is MedicineOTC otc && !string.IsNullOrEmpty(otc.Source) ||
-                m is MedicineSpecialMaterial special && !string.IsNullOrEmpty(special.Source))
-            {
-                EditedPrescription.Medicines.RemoveAt(SelectedMedicinesIndex);
-                EditedPrescription.CountPrescriptionPoint();
-                if (EditedPrescription.Medicines.Count == 0)
-                {
-                    EditedPrescription.Medicines.Add(new Medicine());
-                }
-            }
+            if(SelectedMedicine is null ) return;
+            EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
         }
         #endregion
         #region Functions
