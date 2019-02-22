@@ -110,6 +110,12 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacistIdnum);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList); 
         }
+        public static DataTable GetPaySelfByID(int preId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "preId", preId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[GetPaySelfByID]", parameterList);
+        }
         public static DataTable GetPrescriptionId( ) { 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionId]");
         }

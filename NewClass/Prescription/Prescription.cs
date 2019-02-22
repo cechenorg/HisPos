@@ -901,7 +901,8 @@ namespace His_Pos.NewClass.Prescription
         public void AdjustCooperativeMedicines(int amountpayself)
         { 
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
-            PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, amountpayself - PrescriptionPoint.AmountSelfPay  );
+            int oldpayself = PrescriptionDb.GetPaySelfByID(Id).Rows[0].Field<int>("CashFlow_Value");
+            PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, oldpayself - PrescriptionPoint.AmountSelfPay  );
         }
     }
 }
