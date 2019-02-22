@@ -218,15 +218,6 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (isSuccess)
                     ToSingdeProcessingStatus();
-                else
-                {
-                    System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
-                    });
-
-                    ToScrapStatus();
-                }
             }
         }
         private bool UpdateOrderProductsFromSingde()
