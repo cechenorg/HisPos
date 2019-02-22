@@ -28,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private bool isDataChanged;
         private string newInventory = "";
         private ProductManageMedicine medicine;
+        private ProductInventoryRecords inventoryRecordCollection;
 
         public bool IsDataChanged
         {
@@ -58,8 +59,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         public ProductManageMedicine BackUpMedicine { get; set; }
         public ProductManageMedicineDetail MedicineDetail { get; set; }
+        public ProductInventoryRecords InventoryRecordCollection
+        {
+            get { return inventoryRecordCollection; }
+            set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
+        }
         #endregion
-        
+
         public MedicineControlViewModel(string id)
         {
             RegisterCommand();
@@ -133,6 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             MainWindow.ServerConnection.OpenConnection();
             DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(id);
+            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(id);
             MainWindow.ServerConnection.CloseConnection();
 
             if (manageMedicineDataTable.Rows.Count == 0)

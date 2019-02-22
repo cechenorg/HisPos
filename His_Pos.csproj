@@ -407,6 +407,9 @@
     <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchases.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecord.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecords.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecordType.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicineDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
@@ -1547,6 +1550,7 @@
     <Resource Include="Images\common.ico" />
     <Resource Include="Images\vip.png" />
     <Resource Include="Images\stockRemain.png" />
+    <Resource Include="Images\Price.png" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
