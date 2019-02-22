@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int? SafeAmount { get; set; }
         public int? BasicAmount { get; set; }
         public int MinOrderAmount { get; set; }
+        public double LastPrice { get; set; }
         #endregion
 
         public ProductManageMedicine() { }
@@ -36,6 +37,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SafeAmount = row.Field<int?>("Inv_SafeAmount");
             BasicAmount = row.Field<int?>("Inv_BasicAmount");
             MinOrderAmount = row.Field<int>("Pro_MinOrder");
+            LastPrice = (double)row.Field<decimal>("Pro_LastPrice");
         }
 
         #region ----- Define Functions -----

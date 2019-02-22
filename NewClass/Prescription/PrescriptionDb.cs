@@ -164,7 +164,7 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionId", prescription.Id);
             DataBaseFunction.AddSqlParameter(parameterList, "Meds", SetPrescriptionDetail(prescription, prescriptionDetails));
-            DataBaseFunction.AddSqlParameter(parameterList, "Remark", remark);
+            DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(remark) ? null : remark);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperAdjust]", parameterList);
         }
         public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles,string fileId) {
