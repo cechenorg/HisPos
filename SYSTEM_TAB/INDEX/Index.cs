@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.Class.StoreOrder;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductDaliyPurchase;
 using His_Pos.NewClass.StoreOrder;
 
@@ -29,8 +31,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             DailyPurchaseReloadCommand = new RelayCommand(DailyPurchaseReloadAction);
         }
         #region Action
-        private void DailyPurchaseAction() {
+        private void DailyPurchaseAction()
+        {
             StoreOrderDB.DailyProductsPurchase();
+            MessageWindow.ShowMessage("已產生採購單, 確認數量後請自行傳送至杏德", MessageType.SUCCESS);
         }
         private void DailyPurchaseReloadAction() {
             ProductDailyPurchaseCollection.Clear();
