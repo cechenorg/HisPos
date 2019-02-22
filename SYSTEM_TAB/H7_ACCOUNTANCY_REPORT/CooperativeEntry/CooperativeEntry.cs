@@ -31,7 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
                 Set(() => TotalCopaymentEntry, ref totalCopaymentEntry, value);
             }
         }
-        private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
+        private DateTime startDate = DateTime.Now;
         public DateTime StartDate
         {
             get => startDate;

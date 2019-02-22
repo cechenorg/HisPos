@@ -824,7 +824,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ProcessSelfPayCashFlow("合作自費");
             if (noCard)
                 CurrentPrescription.ProcessDepositCashFlow("合作押金");
-           // CurrentPrescription.UpdateCooperativePrescriptionStatus();
+            CurrentPrescription.UpdateCooperativePrescriptionStatus();
         }
         private void ChronicAdjust(bool noCard)
         {

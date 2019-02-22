@@ -394,7 +394,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 EditedPrescription.Update();
                 if (EditedPrescription.Treatment.Institution.ID.Equals(CooperativeInstitutionID))
-                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.Medicines);
+                {
+                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
+                }
                 else
                     EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
                 switch (viewModel)
