@@ -659,7 +659,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", d.D37);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", d.D38);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", d.D43);
-                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(declareFiles[filecount], XmlNodeType.Document, null)); 
+                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader("<ddata>" + declareFiles[filecount] + "</ddata>", XmlNodeType.Document, null)); 
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", false);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", true);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", true);

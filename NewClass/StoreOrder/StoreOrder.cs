@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
         private Product.Product selectedItem;
         private OrderStatusEnum orderStatus;
+        private double totalPrice;
 
         protected int initProductCount = 0;
 
@@ -45,7 +46,11 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
-        public double TotalPrice { get; set; }
+        public double TotalPrice
+        {
+            get { return totalPrice; }
+            set { Set(() => TotalPrice, ref totalPrice, value); }
+        }
         #endregion
 
         public StoreOrder(DataRow row)
@@ -98,6 +103,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SaveOrder();
         public abstract void AddProductByID(string iD);
         public abstract void DeleteSelectedProduct();
+        public abstract void CalculateTotalPrice();
         #endregion
 
         #region ///// Status Function /////
