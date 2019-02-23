@@ -18,10 +18,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             XDocument result = XDocument.Parse(icDataUpload);
             //匯出xml檔案
             f.DailyUpload(result, dailyUploadTable.Rows.Count.ToString());
-            MainWindow.ServerConnection.OpenConnection();
-            IcDataUploadDb.InsertDailyUploadFile(result);
-            MainWindow.ServerConnection.CloseConnection();
-            IcDataUploadDb.UpdateDailyUploadData();
+            
         }
 
         public static DataTable CheckUpload()

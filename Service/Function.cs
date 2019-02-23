@@ -256,7 +256,13 @@ namespace His_Pos.Service
                 {
                     var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                     if (res == 0)
+                    {
                         MessageWindow.ShowMessage("上傳成功", MessageType.SUCCESS);
+                        MainWindow.ServerConnection.OpenConnection();
+                        IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
+                        MainWindow.ServerConnection.CloseConnection();
+                        IcDataUploadDb.UpdateDailyUploadData();
+                    }
                 }
                 HisApiFunction.CloseCom();
             }
