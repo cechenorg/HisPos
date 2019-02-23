@@ -902,7 +902,7 @@ namespace His_Pos.NewClass.Prescription
         { 
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
             int oldpayself = PrescriptionDb.GetPaySelfByID(Id).Rows[0].Field<int>("CashFlow_Value");
-            PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, oldpayself - PrescriptionPoint.AmountSelfPay  );
+            PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - oldpayself);
         }
     }
 }
