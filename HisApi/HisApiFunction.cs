@@ -49,12 +49,12 @@ namespace His_Pos.HisApi
             return signList;
         }
         //正常上傳
-        public static void CreatDailyUploadData(Prescription p,bool isMakeUp)
+        public static void CreatDailyUploadData(Prescription p, bool isMakeUp)
         {
             Rec rec = new Rec(p, isMakeUp);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            IcDataUploadDb.InsertDailyUploadData(p.Id,uploadData,p.Card.MedicalNumberData.TreatDateTime);
+            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
             MainWindow.ServerConnection.CloseConnection();
         }
 

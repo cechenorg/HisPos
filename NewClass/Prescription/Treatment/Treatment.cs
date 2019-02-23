@@ -371,6 +371,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckCopayment()
         {
+            if (Copayment is null) return StringRes.CopaymentError;
             if (CheckIsHomeCare())
             {
                 Copayment = VM.GetCopayment("009");

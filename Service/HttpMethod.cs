@@ -124,6 +124,7 @@ namespace His_Pos.Service
             HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
             request.Method = "POST";    // 方法
             request.KeepAlive = true; //是否保持連線
+            request.Timeout = 100000;
             request.ContentType = "application/x-www-form-urlencoded";
 
             byte[] bs = Encoding.ASCII.GetBytes(paramString);

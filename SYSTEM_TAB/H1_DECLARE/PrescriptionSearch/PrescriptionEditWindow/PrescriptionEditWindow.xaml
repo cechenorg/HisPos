@@ -99,8 +99,8 @@
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal">
                             <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
-                            <Label x:Name="MedicalNumber" Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Content="{Binding EditedPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray"/>
+                            <TextBox x:Name="MedicalNumber" Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Text="{Binding EditedPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                             <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>

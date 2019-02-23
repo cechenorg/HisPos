@@ -87,6 +87,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
             var divEdited = !EditedPrescription.Treatment.Division.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Division);
             var pharmacyEdited = !EditedPrescription.Treatment.Pharmacist.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Pharmacist);
+            var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
             var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate,(DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
             var adjustDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.AdjustDate, (DateTime)OriginalPrescription.Treatment.AdjustDate) != 0;
             var mainDiseaseEdited = !EditedPrescription.Treatment.MainDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.MainDisease);
@@ -98,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var speTreEdited = !EditedPrescription.Treatment.SpecialTreat.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SpecialTreat);
             var medEdited = !EditedPrescription.Medicines.PublicInstancePropertiesEqual(OriginalPrescription.Medicines);
             return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited  || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
-                   || payEdited || speTreEdited || medEdited;
+                   || payEdited || speTreEdited || medEdited || medicalNumberEdited;
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
@@ -338,7 +339,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void CopaymentSelectionChangedAction()
         {
-            EditedPrescription.CountPrescriptionPoint();
+            if (!EditedPrescription.CheckFreeCopayment())
+            {
+                if (EditedPrescription.PrescriptionPoint.MedicinePoint <= 100)
+                    EditedPrescription.Treatment.Copayment = VM.GetCopayment("I21");
+                else
+                {
+                    EditedPrescription.Treatment.Copayment = VM.GetCopayment("I20");
+                }
+            }
+            CheckEditStatus();
         }
         private void AddMedicineAction(string medicineID)
         {
@@ -386,7 +396,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (CheckEdit())
             {
-                var error = EditedPrescription.CheckPrescriptionRule(false);
+                var error = EditedPrescription.CheckPrescriptionRule(true);
                 if (!string.IsNullOrEmpty(error))
                 {
                     MessageWindow.ShowMessage(error, MessageType.ERROR);
