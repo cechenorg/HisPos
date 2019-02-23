@@ -461,10 +461,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
                 XmlDocument data = new XmlDocument();
                 foreach (XmlNode node in ddatas)
-                {
+                { 
                     data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
-                    declareFiles.Add(data.InnerXml);
+                    declareFiles.Add(node.InnerXml);
                     ddatasCollection.Add(d); 
                 }
                 PrescriptionDb.ImportDeclareXml(ddatasCollection, declareFiles, fileId);
