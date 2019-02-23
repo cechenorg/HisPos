@@ -20,6 +20,7 @@ using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
@@ -175,10 +176,18 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ServerConnection.OpenConnection();
-            WebApi.SendToCooperClinic();
-            CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
-            ServerConnection.CloseConnection();
+
+            try
+            {
+                ServerConnection.OpenConnection();
+                WebApi.SendToCooperClinic();
+                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+                ServerConnection.CloseConnection();
+            }
+            catch (Exception ex) {
+                MessageWindow.ShowMessage(ex.Message,MessageType.ERROR);
+                NewFunction.ExceptionLog(ex.Message);
+            }
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
