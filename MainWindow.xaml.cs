@@ -176,7 +176,6 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
             try
             {
                 ServerConnection.OpenConnection();
@@ -185,7 +184,7 @@ namespace His_Pos
                 ServerConnection.CloseConnection();
             }
             catch (Exception ex) {
-                MessageWindow.ShowMessage(ex.Message,MessageType.ERROR);
+                MessageWindow.ShowMessage("合作診所扣庫資料回傳失敗 請聯絡工程師",MessageType.ERROR);
                 NewFunction.ExceptionLog(ex.Message);
             }
             var uploadTable = UploadFunctions.CheckUpload();

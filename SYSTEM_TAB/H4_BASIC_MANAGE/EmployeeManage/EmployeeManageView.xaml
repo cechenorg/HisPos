@@ -96,8 +96,20 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                         <Label Content="{Binding Employee.ID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名"  VerticalAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
-                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱"  VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名"  VerticalAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱"  VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
                     </StackPanel>
                     <Button Content="更改密碼" Grid.Row="0" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
                     <!--<StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="478,10,376.698,10" Width="150">
