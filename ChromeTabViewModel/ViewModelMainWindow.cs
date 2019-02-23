@@ -349,7 +349,13 @@ namespace His_Pos.ChromeTabViewModel
             printDoc.PrinterSettings.PrinterName = printer;
             printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
             m_currentPageIndex = 0;
-            printDoc.Print();
+            try
+            {
+                printDoc.Print();
+            }
+            catch (Exception ex) {
+                FunctionWindow.MessageWindow.ShowMessage(ex.Message,Class.MessageType.ERROR);
+            }
             //if (m_streams == null || m_streams.Count == 0)
             //{
             //    return;
