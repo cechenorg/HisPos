@@ -516,6 +516,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void PrescribeButtonClickAction()
         {
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+            {
+                var confirm = new ConfirmWindow("未填寫顧客資料，是否以匿名取代?", "查無資料");
+                if ((bool)confirm.DialogResult)
+                    CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
+                else
+                    return;
+            }
+            else if (!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && !string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+            {
+                CurrentPrescription.Patient.Check();
+            }
+            else
+            {
+                MessageWindow.ShowMessage("顧客資料請至少輸入身分證字號與姓名", MessageType.WARNING);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
             PrescribeFunction();
             MainWindow.ServerConnection.CloseConnection();
@@ -875,23 +892,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void PrescribeFunction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-            {
-                var confirm = new ConfirmWindow("未填寫顧客資料，是否以匿名取代?", "查無資料");
-                if ((bool)confirm.DialogResult)
-                    CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
-                else
-                    return;
-            }
-            else if(!string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && !string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-            {
-                CurrentPrescription.Patient.Check();
-            }
-            else
-            {
-                MessageWindow.ShowMessage("顧客資料請至少輸入身分證字號與姓名",MessageType.WARNING);
-                return;
-            }
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             var bucklevalue = CurrentPrescription.ProcessInventory("自費調劑", "PreMasID", CurrentPrescription.Id.ToString());

@@ -208,7 +208,6 @@ namespace His_Pos.Service
                 }
                 return string.Empty;
             }
-       
         }
         public class Holiday{
           public  DateTime date { get; set; }

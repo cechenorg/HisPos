@@ -289,5 +289,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var focusIndex = GetCurrentRowIndex(sender);
             ((PrescriptionDeclareViewModel)DataContext).priviousSelectedIndex = focusIndex;
         }
+
+        private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+        }
+
+        private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            e.Handled = true;
+            textBox.Focus();
+        }
     }
 }
