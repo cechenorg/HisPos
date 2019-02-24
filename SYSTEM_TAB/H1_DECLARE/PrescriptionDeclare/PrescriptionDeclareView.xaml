@@ -366,21 +366,21 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="40" Header="途徑" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" CaretBrush="Red"
+                                             CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
+                                             Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Amount, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="途徑" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" CaretBrush="Red"
-                                         CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
-                                         Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

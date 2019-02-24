@@ -127,7 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
         private ViewModelEnum viewModel { get; set; }
         #region Commands
-        public RelayCommand PrintMedBag { get; set; }
+        public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> GetMainDiseaseCodeById { get; set; }
         public RelayCommand<string> GetSubDiseaseCodeById { get; set; }
@@ -205,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void InitialCommandActions()
         {
-            PrintMedBag = new RelayCommand(PrintMedBagAction);
+            PrintMedBagCmd = new RelayCommand(PrintMedBagAction);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetMainDiseaseCodeById = new RelayCommand<string>(GetMainDiseaseCodeByIdAction);
@@ -232,36 +232,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region CommandActions
         private void PrintMedBagAction()
         {
-            try
+            var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
+            var printMedBag = printConfirmResult[0];
+            var printSingle = printConfirmResult[1];
+            var printReceipt = printConfirmResult[2];
+            if (printMedBag is null || printReceipt is null)
+                return;
+            if ((bool)printMedBag && printSingle is null)
+                return;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
-                if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
-                {
-                    var printBySingleMode = new MedBagSelectionWindow();
-                    var singleMode = false;
-                    if (printBySingleMode.DialogResult != null)
-                        singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
-                    var receiptPrint = false;
-                    if (EditedPrescription.PrescriptionPoint.AmountsPay > 0)
-                    {
-                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
-                        if (receiptResult.DialogResult != null)
-                            receiptPrint = (bool)receiptResult.DialogResult;
-                    }
-                    EditedPrescription.PrintMedBag(singleMode);
-                    if (receiptPrint)
-                        EditedPrescription.PrintReceipt();
-                }
-                else
-                {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+                if ((bool)printMedBag)
+                    PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
+            };
+            worker.RunWorkerAsync();
         }
         private void ShowCommonInsSelectionWindowAction()
         {
@@ -576,6 +561,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return false;
             }
             return true;
+        }
+        private void PrintMedBag(bool noCard, bool printMedBag, bool printSingle, bool printReceipt)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                if (printMedBag)
+                {
+                    BusyContent = "藥袋列印中...";
+                    EditedPrescription.PrintMedBag(printSingle);
+                    if (printReceipt)
+                    {
+                        BusyContent = StringRes.收據列印;
+                        EditedPrescription.PrintReceipt();
+                    }
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
     }

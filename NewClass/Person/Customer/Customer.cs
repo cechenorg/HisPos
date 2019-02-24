@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Windows;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
-using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
+using IcCard = His_Pos.NewClass.Prescription.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
@@ -45,6 +48,14 @@ namespace His_Pos.NewClass.Person.Customer
         public void Check() {
             DataTable table = CustomerDb.CheckCustomer(this);
             Customer newCustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            if (newCustomer is null)
+            {
+                Application.Current.Dispatcher.Invoke((Action)(() =>
+                {
+                    MessageWindow.ShowMessage("取得顧客資料發生異常，請重試。", MessageType.WARNING);
+                }));
+                return;
+            }
             ID = newCustomer.ID;
             Name = newCustomer.Name;
             Birthday = newCustomer.Birthday;

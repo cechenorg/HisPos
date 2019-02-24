@@ -25,12 +25,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
-            Messenger.Default.Register<int>(this,"FocusDosage", FocusDosage);
+            Messenger.Default.Register<int>(this,"FocusUsage", FocusUsage);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
-        private void FocusDosage(int currentIndex)
+        private void FocusUsage(int currentIndex)
         {
-            FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);
+            FocusDataGridCell("Usage", PrescriptionMedicines, currentIndex);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)

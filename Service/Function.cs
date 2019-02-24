@@ -262,6 +262,10 @@ namespace His_Pos.Service
                         MainWindow.ServerConnection.CloseConnection();
                         IcDataUploadDb.UpdateDailyUploadData();
                     }
+                    else
+                    {
+                        MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
+                    }
                 }
                 HisApiFunction.CloseCom();
             }
