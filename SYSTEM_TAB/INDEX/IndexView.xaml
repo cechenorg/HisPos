@@ -116,14 +116,15 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Label Content="每日進退貨" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        <Image Source="/Images/reload.png" Width="25" Margin="290,0,0,0"  >
+                        <Image Source="/Images/reload.png" Width="25" Margin="130,0,0,0"  >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction Command="{Binding DailyPurchaseReloadCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Image>
-                        <Button Width="150" Content="轉進退貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue" Command="{Binding DailyPurchaseCommand}"/>
+                        <Button Width="150" Content="轉進貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="RoyalBlue" Command="{Binding DailyPurchaseCommand}"/>
+                        <Button Width="150" Content="轉退貨單" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="16" BorderThickness="0" Height="30" Background="IndianRed" Command="{Binding DailyReturnCommand}"/>
                         
                     </StackPanel>
                     <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" SelectedItem="{Binding ProductDailyPurchase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
