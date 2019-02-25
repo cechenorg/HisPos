@@ -23,11 +23,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #endregion
         #region Command
         public RelayCommand DailyPurchaseCommand { get; set; }
+        public RelayCommand DailyReturnCommand { get; set; }
         public RelayCommand DailyPurchaseReloadCommand { get; set; }
         #endregion
         public Index() {
             ProductDailyPurchaseCollection.GetDailyPurchaseData();
             DailyPurchaseCommand = new RelayCommand(DailyPurchaseAction);
+            DailyReturnCommand = new RelayCommand(DailyReturnAction);
             DailyPurchaseReloadCommand = new RelayCommand(DailyPurchaseReloadAction);
         }
         #region Action
@@ -35,6 +37,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         {
             StoreOrderDB.DailyProductsPurchase();
             MessageWindow.ShowMessage("已產生採購單, 確認數量後請自行傳送至杏德", MessageType.SUCCESS);
+        }
+        private void DailyReturnAction()
+        {
+            StoreOrderDB.DailyProductsReturn();
+            MessageWindow.ShowMessage("已產生退貨單, 確認數量後請自行傳送至杏德", MessageType.SUCCESS);
         }
         private void DailyPurchaseReloadAction() {
             ProductDailyPurchaseCollection.Clear();

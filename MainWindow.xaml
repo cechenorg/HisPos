@@ -80,7 +80,7 @@
         <DataTemplate DataType="{x:Type locationManage:LocationManage}">
             <locationManage:LocationManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManage}">
+        <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <manufactoryManage:ManufactoryManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type pharmacyManage:PharmacyManage}">

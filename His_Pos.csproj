@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>33</ApplicationRevision>
+    <ApplicationRevision>35</ApplicationRevision>
     <ApplicationVersion>2.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -923,7 +923,7 @@
     <Compile Include="FunctionWindow\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml.cs">
       <DependentUpon>ManufactoryManageView.xaml</DependentUpon>
     </Compile>

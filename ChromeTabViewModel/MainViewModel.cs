@@ -297,7 +297,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //基本資料管理
                 case nameof(FeatureItem.供應商管理):
-                    newTab = new ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new ManufactoryManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 case nameof(FeatureItem.藥局管理):

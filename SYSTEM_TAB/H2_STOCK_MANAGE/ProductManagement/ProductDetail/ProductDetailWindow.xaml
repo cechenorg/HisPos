@@ -10,7 +10,7 @@
         xmlns:otcControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelProductDetailWindow}"
-        Title="ProductDetail" Height="{Binding WindowHeight}" 
+        Title="商品詳細資料" Height="{Binding WindowHeight}" 
         Width="{Binding  WindowWidth}"
         Left="{Binding StartLeft}" 
         Top="{Binding StartTop}"
