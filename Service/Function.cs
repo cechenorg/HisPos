@@ -208,7 +208,6 @@ namespace His_Pos.Service
                 }
                 return string.Empty;
             }
-       
         }
         public class Holiday{
           public  DateTime date { get; set; }
@@ -262,6 +261,10 @@ namespace His_Pos.Service
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
                         MainWindow.ServerConnection.CloseConnection();
                         IcDataUploadDb.UpdateDailyUploadData();
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
                     }
                 }
                 HisApiFunction.CloseCom();

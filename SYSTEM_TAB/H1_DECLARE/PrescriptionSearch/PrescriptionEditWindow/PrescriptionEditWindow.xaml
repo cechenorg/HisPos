@@ -11,7 +11,7 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         mc:Ignorable="d" FontFamily="Segoe UI Semibold"
-        Title="處方瀏覽" Height="660" Width="1365">
+        Title="處方瀏覽" Height="660" Width="1365" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
@@ -43,12 +43,12 @@
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False"/>
                         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10"/>
                         <Label Width="130" Height="30" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
-                        <StackPanel Orientation="Horizontal" Margin="205,0,0,0" Width="270">
+                        <StackPanel Orientation="Horizontal" Margin="205,0,0,0" Width="160">
                             <Label Width="65" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                             <Button Content="補卡" Height="35" Command="{Binding MakeUpClick}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                            <Button Content="列印押金單" Height="35" Command="{Binding PrintDepositSheet}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <Button Content="列印藥袋" Height="35" Command="{Binding PrintMedBag}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
+                        <Button Content="列印押金單" Height="35" Command="{Binding PrintDepositSheet}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
+                        <Button Content="列印藥袋" Height="35" Command="{Binding PrintMedBagCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     </StackPanel>
                     <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
@@ -302,7 +302,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
-                                                 FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red"
+                                                 FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                                  Text="{Binding Dosage, Converter={StaticResource DoubleConverter}, Delay=400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -311,7 +311,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="Usage" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth"
-                                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="14" FontWeight="Bold" CaretBrush="Red" IsReadOnlyCaretVisible="False"
+                                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="14" FontWeight="Bold" CaretBrush="Red" IsReadOnlyCaretVisible="False" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                     </DataTemplate>
@@ -321,7 +321,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" CaretBrush="Red"
-                                         CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
+                                         CharacterCasing="Upper" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding PositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -329,7 +329,7 @@
                             <DataGridTemplateColumn MinWidth="40" Header="天數" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                        <TextBox x:Name="MedicineDays" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
+                                        <TextBox x:Name="MedicineDays" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -338,7 +338,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Amount, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -368,7 +368,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="MedicinePrice" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Price, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -377,7 +377,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding TotalPrice, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="TextChanged">
@@ -399,7 +399,7 @@
                             <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineBuckleDataTemplate">
-                                        <Image Source="{Binding BuckleIcon, UpdateSourceTrigger=PropertyChanged}" Width="16"/>
+                                        <Image Source="/Images/stockRemain.png" Width="16" Visibility="{Binding NotBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

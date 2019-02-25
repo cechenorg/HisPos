@@ -62,7 +62,16 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
             {
                 var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                 if (res == 0)
+                {
                     MessageWindow.ShowMessage("上傳成功", MessageType.SUCCESS);
+                    MainWindow.ServerConnection.OpenConnection();
+                    MainWindow.ServerConnection.CloseConnection();
+                    IcDataUploadDb.UpdateDailyUploadData();
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
+                }
             }
             HisApiFunction.CloseCom();
         }

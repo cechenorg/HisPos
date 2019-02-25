@@ -630,9 +630,6 @@
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
     <Compile Include="Service\Converters.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml.cs">
-      <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
       <DependentUpon>MedBagManageView.xaml</DependentUpon>
@@ -1059,10 +1056,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1539,6 +1532,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Images\closeButton.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -10,6 +10,9 @@
         <StackPanel Orientation="Vertical" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" Height="35" Background="CornflowerBlue">
                 <Label Width="200" Foreground="GhostWhite" FontSize="16" Content="請選擇藥袋列印模式" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                <Button Name="Back" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Margin="120,0,0,0" Padding="0" Click="Back_Click">
+                    <Image Source="/Images/closeButton.png" Height="20" Width="20" Margin="0"/>
+                </Button>
             </StackPanel>
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="180" >
                 <Button Name="MultiMode" Width="170" Height="55" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Margin="10,20,10,10" Click="MultiMode_Click" KeyDown="MultiMode_KeyDown">

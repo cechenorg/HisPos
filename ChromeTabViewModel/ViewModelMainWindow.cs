@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -10,16 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Database;
-using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -30,7 +23,6 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using Microsoft.Reporting.WinForms;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
@@ -193,6 +185,9 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                MainWindow.ServerConnection.OpenConnection();
+                HisApiFunction.CheckDailyUpload();
+                MainWindow.ServerConnection.CloseConnection();
                 //var prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate("5932013534", DateTime.Today, DateTime.Today);
                 //Console.WriteLine("處方張數:" + prescriptions.Count);
                 //Console.WriteLine("自費:" + prescriptions.Sum(p => p.Medicines.Where(m => m.PaySelf).Sum(m => m.TotalPrice)));

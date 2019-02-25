@@ -25,12 +25,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
-            Messenger.Default.Register<int>(this,"FocusDosage", FocusDosage);
+            Messenger.Default.Register<int>(this,"FocusUsage", FocusUsage);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
-        private void FocusDosage(int currentIndex)
+        private void FocusUsage(int currentIndex)
         {
-            FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);
+            FocusDataGridCell("Usage", PrescriptionMedicines, currentIndex);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
@@ -288,6 +288,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var focusIndex = GetCurrentRowIndex(sender);
             ((PrescriptionDeclareViewModel)DataContext).priviousSelectedIndex = focusIndex;
+        }
+
+        private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+        }
+
+        private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            e.Handled = true;
+            textBox.Focus();
         }
     }
 }
