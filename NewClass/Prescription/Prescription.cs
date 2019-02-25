@@ -747,6 +747,7 @@ namespace His_Pos.NewClass.Prescription
                 MainWindow.ServerConnection.OpenConnection();
                 Patient.Check();
                 MainWindow.ServerConnection.CloseConnection();
+                PrescriptionStatus.IsGetCard = true;
             }
             return success;
         }

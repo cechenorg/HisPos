@@ -6,7 +6,10 @@ using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using DataGrid = System.Windows.Controls.DataGrid;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
@@ -307,6 +310,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
             e.Handled = true;
             textBox.Focus();
+        }
+
+        private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!((Medicine) row.Item is MedicineNHI) && !((Medicine) row.Item is MedicineOTC) &&
+                !((Medicine) row.Item is MedicineSpecialMaterial)) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<Medicine>(this, (Medicine)row.Item, nameof(PrescriptionDeclareView)));
         }
     }
 }

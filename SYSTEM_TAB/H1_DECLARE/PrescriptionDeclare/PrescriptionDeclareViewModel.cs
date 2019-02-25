@@ -529,6 +529,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             return !IsCardReading;
         }
+        private bool CheckIsNoCard()
+        {
+            return !CurrentPrescription.PrescriptionStatus.IsGetCard;
+        }
 
         private void RegisterButtonClickAction()
         {
@@ -672,7 +676,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
-            NoCardAdjust = new RelayCommand(NoCardAdjustAction);
+            NoCardAdjust = new RelayCommand(NoCardAdjustAction, CheckIsNoCard);
             MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
