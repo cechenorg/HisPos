@@ -236,7 +236,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> CheckInsEmpty { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
-        public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand Clear { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
@@ -265,13 +264,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
-            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
             Clear = new RelayCommand(ClearAction);
         }
 
         private void RegisterMessengers()
         {
+            Messenger.Default.Register<NotificationMessage>(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow", ShowPrescriptionEditWindowAction);
         }
         #endregion
         #region CommandActions
@@ -380,9 +379,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if (string.IsNullOrEmpty(search))
                 SelectedInstitution = null;
         }
-        private void ShowPrescriptionEditWindowAction()
+        private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
         {
-            if(SelectedPrescription is null) return;
+            if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))

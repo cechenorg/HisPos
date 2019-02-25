@@ -42,6 +42,7 @@ namespace His_Pos.NewClass.Prescription {
             }
         }
         public bool IsDeposit { get; set; } //是否押金
+        public bool? IsCreateSign { get; set; }
         public bool IsCooperativeVIP { get; set; }
         public void Init()
         {
@@ -53,6 +54,7 @@ namespace His_Pos.NewClass.Prescription {
             IsRegister = false;
             IsDeclare = true;
             IsCooperativeVIP = false;
+            IsCreateSign = null;
         }
 
         public void UpdateStatus(int id)
