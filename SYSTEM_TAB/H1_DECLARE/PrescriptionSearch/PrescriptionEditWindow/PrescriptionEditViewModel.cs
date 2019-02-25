@@ -147,10 +147,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => NotPrescribe, ref notPrescribe, value);
             }
         }
-        public double WindowWidth => SystemParameters.WorkArea.Width;
-        public double WindowHeight => SystemParameters.WorkArea.Height;
-        public double StartTop => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
-        public double StartLeft => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
+        public double WindowWidth
+        {
+            get => SystemParameters.WorkArea.Width * 0.85;
+            set {}
+        }
+        public double WindowHeight
+        {
+            get => (SystemParameters.WorkArea.Width * 0.85) * 0.48;
+            set {}
+        }
+        public double StartTop
+        {
+            get => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
+            set { }
+        }
+        public double StartLeft
+        {
+            get => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
+            set { }
+        }
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
