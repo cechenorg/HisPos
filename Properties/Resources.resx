@@ -399,8 +399,8 @@
   <data name="檢查健保卡" xml:space="preserve">
     <value>健保IC卡檢查中...</value>
   </data>
-  <data name="檢查安全模組" xml:space="preserve">
-    <value>安全模組檢查中...</value>
+  <data name="認證安全模組" xml:space="preserve">
+    <value>安全模組認證中...</value>
   </data>
   <data name="檢查醫事人員卡" xml:space="preserve">
     <value>醫事人員卡檢查中...</value>

@@ -176,7 +176,6 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
             try
             {
                 ServerConnection.OpenConnection();
@@ -185,17 +184,10 @@ namespace His_Pos
                 ServerConnection.CloseConnection();
             }
             catch (Exception ex) {
-                MessageWindow.ShowMessage(ex.Message,MessageType.ERROR);
+                MessageWindow.ShowMessage("合作診所扣庫資料回傳失敗 請聯絡工程師",MessageType.ERROR);
                 NewFunction.ExceptionLog(ex.Message);
             }
-            var uploadTable = UploadFunctions.CheckUpload();
-            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
-            {
-                var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳", "每日上傳確認");
-                var upload = (bool)dailyUploadConfirm.DialogResult;
-                if (upload)
-                    UploadFunctions.StartDailyUpload(uploadTable);
-            }
+            HisApiFunction.CheckDailyUpload();
             Environment.Exit(0);
         }
 
@@ -209,27 +201,11 @@ namespace His_Pos
         {
             var bw = new BackgroundWorker
             {
-                WorkerSupportsCancellation = true, WorkerReportsProgress = true
+                WorkerSupportsCancellation = true,
+                WorkerReportsProgress = true
             };
-            bw.DoWork += VerifySam;
-            bw.ProgressChanged += DuringVerify;
-            bw.RunWorkerCompleted += AfterVerify;
+            bw.DoWork += (o, ea) => { HisApiFunction.VerifySamDc(); };
             bw.RunWorkerAsync();
-        }
-
-        private void VerifySam(object sender, DoWorkEventArgs e)
-        {
-            HisApiFunction.VerifySamDc();
-        }
-
-        private void DuringVerify(object sender, ProgressChangedEventArgs e)
-        {
-            SetSamDcStatus(StringRes.檢查安全模組);
-        }
-
-        private void AfterVerify(object sender, RunWorkerCompletedEventArgs e)
-        {
-            SetSamDcStatus(ViewModelMainWindow.IsVerifySamDc ? StringRes.認證成功 : StringRes.認證失敗);
         }
 
         public static string GetEnumDescription(Enum value)
@@ -238,15 +214,6 @@ namespace His_Pos
             if (fi == null) return string.Empty;
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute),false);
             return attributes.Length > 0 ? attributes[0].Description : value.ToString();
-        }
-
-        private void SetCardReaderStatus(int res)
-        {
-            void MethodDelegate()
-            {
-                ((ViewModelMainWindow) DataContext).CardReaderStatus = "讀卡機狀態 : " + GetEnumDescription((ErrorCode) res);
-            }
-            Dispatcher.BeginInvoke((Action) MethodDelegate);
         }
 
         public void SetCardReaderStatus(string status)

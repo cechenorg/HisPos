@@ -30,7 +30,6 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using MaterialDesignThemes.Wpf;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
@@ -84,12 +83,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private bool CheckEdit()
         {
             var preEdited = !EditedPrescription.PublicInstancePropertiesEqual(OriginalPrescription);
+            var pharmacyEdited = !EditedPrescription.Treatment.Pharmacist.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Pharmacist);
+            var adjustDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.AdjustDate, (DateTime)OriginalPrescription.Treatment.AdjustDate) != 0;
+            var medEdited = false;
+            if (OriginalPrescription.Medicines.Count != EditedPrescription.Medicines.Count)
+                medEdited = true;
+            else
+            {
+                for (var i = 0; i < EditedPrescription.Medicines.Count; i++)
+                {
+                    medEdited = OriginalPrescription.Medicines[i].PublicInstancePropertiesEqual(EditedPrescription.Medicines[i]);
+                    if(medEdited)
+                        break;
+                }
+            }
+            if (!NotPrescribe) return preEdited || pharmacyEdited || adjustDateEdited || medEdited;
+            var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
+            var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate, (DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
             var divEdited = !EditedPrescription.Treatment.Division.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Division);
-            var pharmacyEdited = !EditedPrescription.Treatment.Pharmacist.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Pharmacist);
-            var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
-            var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate,(DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
-            var adjustDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.AdjustDate, (DateTime)OriginalPrescription.Treatment.AdjustDate) != 0;
             var mainDiseaseEdited = !EditedPrescription.Treatment.MainDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.MainDisease);
             var subDiseaseEdited = !EditedPrescription.Treatment.SubDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SubDisease);
             var adjCaseEdited = !EditedPrescription.Treatment.AdjustCase.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.AdjustCase);
@@ -97,8 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var copEdited = !EditedPrescription.Treatment.Copayment.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Copayment);
             var payEdited = !EditedPrescription.Treatment.PaymentCategory.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PaymentCategory);
             var speTreEdited = !EditedPrescription.Treatment.SpecialTreat.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SpecialTreat);
-            var medEdited = !EditedPrescription.Medicines.PublicInstancePropertiesEqual(OriginalPrescription.Medicines);
-            return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited  || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
+            return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
                    || payEdited || speTreEdited || medEdited || medicalNumberEdited;
         }
 
@@ -127,8 +138,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
         private ViewModelEnum viewModel { get; set; }
+        private bool notPrescribe;
+        public bool NotPrescribe
+        {
+            get => notPrescribe;
+            set
+            {
+                Set(() => NotPrescribe, ref notPrescribe, value);
+            }
+        }
         #region Commands
-        public RelayCommand PrintMedBag { get; set; }
+        public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> GetMainDiseaseCodeById { get; set; }
         public RelayCommand<string> GetSubDiseaseCodeById { get; set; }
@@ -139,8 +159,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand MedicinePriceChanged { get; set; }
         public RelayCommand RedoEdit { get; set; }
         public RelayCommand EditComplete { get; set; }
-        public RelayCommand ComboBoxSelectionChanged { get; set; }
-        public RelayCommand TextBoxTextChanged { get; set; }
+        public RelayCommand CheckDataChanged { get; set; }
         public RelayCommand MakeUpClick { get; set; }
         public RelayCommand PrintDepositSheet { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
@@ -158,13 +177,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
         {
             viewModel = vm;
-            MainWindow.ServerConnection.OpenConnection();
-            selected.AdjustMedicinesType(true);
-            MainWindow.ServerConnection.CloseConnection();
+            NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
             Init((Prescription)selected.Clone());
         }
-
         #region InitialFunctions
         private void Init(Prescription selected)
         {
@@ -181,6 +197,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             selected.Patient = selected.Patient.GetCustomerByCusId(selected.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
+            MainWindow.ServerConnection.OpenConnection();
+            EditedPrescription.AdjustMedicinesType(true);
+            MainWindow.ServerConnection.CloseConnection();
             if (EditedPrescription.Treatment.Division != null)
                 EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.ID);
             EditedPrescription.Treatment.Pharmacist =
@@ -206,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void InitialCommandActions()
         {
-            PrintMedBag = new RelayCommand(PrintMedBagAction);
+            PrintMedBagCmd = new RelayCommand(PrintMedBagAction);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetMainDiseaseCodeById = new RelayCommand<string>(GetMainDiseaseCodeByIdAction);
@@ -217,8 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             RedoEdit = new RelayCommand(RedoEditAction);
             EditComplete = new RelayCommand(EditCompleteAction);
-            ComboBoxSelectionChanged = new RelayCommand(SelectionChangedAction);
-            TextBoxTextChanged = new RelayCommand(TextBoxTextChangedAction);
+            CheckDataChanged = new RelayCommand(CheckEditStatus);
             MakeUpClick = new RelayCommand(MakeUpClickAction);
             PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
@@ -233,36 +251,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region CommandActions
         private void PrintMedBagAction()
         {
-            try
+            var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
+            var printMedBag = printConfirmResult[0];
+            var printSingle = printConfirmResult[1];
+            var printReceipt = printConfirmResult[2];
+            if (printMedBag is null || printReceipt is null)
+                return;
+            if ((bool)printMedBag && printSingle is null)
+                return;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
-                if (medBagPrint.DialogResult != null && (bool)medBagPrint.DialogResult)
-                {
-                    var printBySingleMode = new MedBagSelectionWindow();
-                    var singleMode = false;
-                    if (printBySingleMode.DialogResult != null)
-                        singleMode = printBySingleMode.DialogResult != null && (bool)printBySingleMode.DialogResult;
-                    var receiptPrint = false;
-                    if (EditedPrescription.PrescriptionPoint.AmountsPay > 0)
-                    {
-                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
-                        if (receiptResult.DialogResult != null)
-                            receiptPrint = (bool)receiptResult.DialogResult;
-                    }
-                    EditedPrescription.PrintMedBag(singleMode);
-                    if (receiptPrint)
-                        EditedPrescription.PrintReceipt();
-                }
-                else
-                {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+                if ((bool)printMedBag)
+                    PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
+            };
+            worker.RunWorkerAsync();
         }
         private void ShowCommonInsSelectionWindowAction()
         {
@@ -309,6 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 EditedPrescription.Treatment.MainDisease = result;
             }
+            CheckEditStatus();
         }
 
         private void GetSubDiseaseCodeByIdAction(string id)
@@ -324,6 +328,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 EditedPrescription.Treatment.SubDisease = result;
             }
+            CheckEditStatus();
         }
         private void AdjustCaseSelectionChangedAction()
         {
@@ -382,9 +387,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 ReadCard();
             };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-            };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
@@ -402,6 +404,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     MessageWindow.ShowMessage(error, MessageType.ERROR);
                     return;
                 }
+                EditedPrescription.CountPrescriptionPoint();
                 EditedPrescription.Update();
                 if (EditedPrescription.Treatment.Institution.ID.Equals(CooperativeInstitutionID))
                 {
@@ -425,17 +428,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             InitPrescription((Prescription)OriginalPrescription.Clone());
+            IsEdit = Visibility.Hidden;
         }
 
-        private void SelectionChangedAction()
-        {
-            CheckEditStatus();
-        }
-        private void TextBoxTextChangedAction()
-        {
-            if (!EditedPrescription.Treatment.Division.ID.Equals(OriginalPrescription.Treatment.Division.ID))
-                IsEdit = Visibility.Visible;
-        }
         private void PrintDepositSheetAction()
         {
             var worker = new BackgroundWorker();
@@ -455,7 +450,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
-            CheckEdit();
+            CheckEditStatus();
         }
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
@@ -533,7 +528,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 PrescriptionDb.ProcessCashFlow("退還押金", "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
                 EditedPrescription.PrescriptionStatus.UpdateStatus(EditedPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
-                
+                CheckEditStatus();
                 Application.Current.Dispatcher.Invoke(delegate {
                     MessageWindow.ShowMessage("補卡作業成功", MessageType.SUCCESS);
                 });
@@ -577,6 +572,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return false;
             }
             return true;
+        }
+        private void PrintMedBag(bool noCard, bool printMedBag, bool printSingle, bool printReceipt)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                if (printMedBag)
+                {
+                    BusyContent = "藥袋列印中...";
+                    EditedPrescription.PrintMedBag(printSingle);
+                    if (printReceipt)
+                    {
+                        BusyContent = StringRes.收據列印;
+                        EditedPrescription.PrintReceipt();
+                    }
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
     }

@@ -959,15 +959,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 安全模組檢查中... 的當地語系化字串。
-        /// </summary>
-        internal static string 檢查安全模組 {
-            get {
-                return ResourceManager.GetString("檢查安全模組", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 就醫次數檢查中... 的當地語系化字串。
         /// </summary>
         internal static string 檢查就醫次數 {
@@ -1037,6 +1028,15 @@ namespace His_Pos.Properties {
         internal static string 認證失敗 {
             get {
                 return ResourceManager.GetString("認證失敗", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 安全模組認證中... 的當地語系化字串。
+        /// </summary>
+        internal static string 認證安全模組 {
+            get {
+                return ResourceManager.GetString("認證安全模組", resourceCulture);
             }
         }
         

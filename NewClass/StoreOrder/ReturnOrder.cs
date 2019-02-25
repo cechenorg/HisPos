@@ -34,6 +34,10 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         #region ----- Override Function -----
+        public override void CalculateTotalPrice()
+        {
+            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+        }
         public override void GetOrderProducts()
         {
             OrderProducts = ReturnProducts.GetProductsByStoreOrderID(ID);

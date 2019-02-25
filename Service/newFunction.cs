@@ -10,10 +10,14 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using PrintDialog = System.Windows.Controls.PrintDialog;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.Service
 {
@@ -400,6 +404,51 @@ namespace His_Pos.Service
             int lastBackSlash = fullName.LastIndexOf("\\");
             result = fullName.Substring(lastBackSlash + 1); 
         return result;
+        }
+
+        public static List<bool?> CheckPrint(Prescription p)
+        {
+            var result = new List<bool?>();
+            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+            var printMedBag = medBagPrint.DialogResult;
+            bool? printSingle = null;
+            bool? receiptPrint = null;
+            if (printMedBag != null)
+            {
+                if ((bool)printMedBag)
+                {
+                    var printBySingleMode = new MedBagSelectionWindow();
+                    printBySingleMode.ShowDialog();
+                    printSingle = printBySingleMode.result;
+                    if (printSingle is null)
+                    {
+                        result.Add(printMedBag);
+                        result.Add(printSingle);
+                        result.Add(receiptPrint);
+                        return result;
+                    }
+                    if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
+                    {
+                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+                        receiptPrint = receiptResult.DialogResult;
+                    }
+                    else
+                    {
+                        receiptPrint = false;
+                    }
+                }
+                else
+                {
+                    result.Add(printMedBag);
+                    result.Add(printSingle);
+                    result.Add(false);
+                    return result;
+                }
+            }
+            result.Add(printMedBag);
+            result.Add(printSingle);
+            result.Add(receiptPrint);
+            return result;
         }
     }
 }

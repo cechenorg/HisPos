@@ -31,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
+        public RelayCommand CalculateTotalPriceCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -77,6 +78,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+        private void CalculateTotalPriceAction()
+        {
+            CurrentStoreOrder.CalculateTotalPrice();
+        }
         private void AddOrderAction()
         {
             AddNewOrderWindow.AddNewOrderWindow addNewOrderWindow = new AddNewOrderWindow.AddNewOrderWindow();
@@ -235,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductByInputCommand = new RelayCommand<TextBox>(AddProductByInputAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
+            CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
         }
         
         #region ///// Messenger Functions /////

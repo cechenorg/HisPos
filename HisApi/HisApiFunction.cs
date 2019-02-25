@@ -84,132 +84,41 @@ namespace His_Pos.HisApi
                 SetStatus(false, 1);
         }
 
-        public static void CheckCardStatus(int type)
+        public static bool VerifySamDc()
         {
-            int res = 4000;
-            SetCardReaderStatus(Resources.讀卡機異常);
-            OpenCom();
-            string status;
-            switch (type)
-            {
-                case 1:
-                    status = Resources.檢查安全模組;
-                    break;
-                case 2:
-                    status = Resources.檢查健保卡;
-                    break;
-                case 3:
-                    status = Resources.檢查醫事人員卡;
-                    break;
-                default:
-                    status = Resources.檢查中;
-                    break;
-            }
-            MainWindow.Instance.SetCardReaderStatus(status);
-            try
-            {
-                res = HisApiBase.hisGetCardStatus(type);
-            }
-            catch (Exception e)
-            {
-                ShowMessage(Resources.控制軟體異常);
-            }
-            switch (type)
-            {
-                case 1:
-                    switch (res)
-                    {
-                        case 4000:
-                            MainWindow.Instance.SetSamDcStatus(Resources.讀卡機逾時);
-                            SetStatus(false, 2);
-                            break;
-                        case 1:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.未認證);
-                            SetStatus(false, 2);
-                            break;
-                        case 2:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.認證成功);
-                            SetStatus(true, 2);
-                            break;
-                        default:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.所置入非安全模組);
-                            SetStatus(false, 2);
-                            break;
-                    }
-                    break;
-                case 2:
-                    SetStatus(res == 2, 4);
-                    MainWindow.Instance.SetCardReaderStatus(Resources.讀取失敗);
-                    break;
-                case 3:
-                    switch (res)
-                    {
-                        case 2:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.認證成功未驗);
-                            ViewModelMainWindow.IsHpcValid = true;
-                            break;
-                        case 3:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.認證成功已驗);
-                            ViewModelMainWindow.IsHpcValid = true;
-                            break;
-                        default:
-                            MainWindow.Instance.SetHpcCardStatus(Resources.未認證);
-                            ViewModelMainWindow.IsHpcValid = true;
-                            break;
-                    }
-                    break;
-            }
-            CloseCom();
-        }
-
-        public static void VerifySamDc()
-        {
-            SetCardReaderStatus(Resources.讀卡機異常);
             bool status;
-            int res = 0;
             MainWindow.Instance.SetSamDcStatus(Resources.健保局連線中);
-            if (!OpenCom())
-            {
-                SetStatus(false, 2);
-            }
             try
             {
-                res = HisApiBase.csVerifySAMDC();
+                if (OpenCom())
+                {
+                    MainWindow.Instance.SetSamDcStatus(Resources.認證安全模組);
+                    int res = HisApiBase.csVerifySAMDC();
+                    CloseCom();
+                    if (res == 0)
+                    {
+                        status = true;
+                        MainWindow.Instance.SetSamDcStatus(Resources.認證成功);
+                        SetStatus(status, 2);
+                        return true;
+                    }
+                    else
+                    {
+                        status = false;
+                        var description = Resources.認證失敗 + ":" + MainWindow.GetEnumDescription((ErrorCode)res);
+                        MainWindow.Instance.SetSamDcStatus(description);
+                        SetStatus(status, 2);
+                        return false;
+                    }
+                }
+                SetStatus(false, 2);
+                return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ShowMessage(Resources.控制軟體異常);
+                return false;
             }
-            if (res == 0)
-            {
-                status = true;
-                MainWindow.Instance.SetSamDcStatus(Resources.認證成功);
-                SetStatus(status, 2);
-            }
-            else
-            {
-                status = false;
-                MainWindow.Instance.SetSamDcStatus(Resources.未認證);
-                SetStatus(status, 2);
-            }
-            CloseCom();
-        }
-
-        public static void ResetCardReader()
-        {
-            Application.Current.Dispatcher.Invoke(delegate {
-                ViewModelMainWindow.HisApiException = false;
-            });
-            SetStatus(false, 1);
-            SetStatus(false, 2);
-            SetStatus(false, 3);
-            bool isPassed = false;
-            Application.Current.Dispatcher.Invoke(delegate { isPassed = OpenCom(); });
-            if (!isPassed)
-                return;
-            HisApiBase.csSoftwareReset(3);
-            CloseCom();
-            VerifySamDc();
         }
 
         public static void SetStatus(bool status, int type)
@@ -310,6 +219,18 @@ namespace His_Pos.HisApi
                 ViewModelMainWindow.HisApiException = true;
                 MessageWindow.ShowMessage(message, MessageType.ERROR);
             });
+        }
+
+        public static void CheckDailyUpload()
+        {
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            {
+                var dailyUploadConfirm = new ConfirmWindow("尚有" + uploadTable.Rows.Count + "筆健保資料未上傳，是否執行上傳作業", "每日上傳確認");
+                bool upload = (bool)dailyUploadConfirm.DialogResult;
+                if (upload)
+                    UploadFunctions.StartDailyUpload(uploadTable);
+            }
         }
     }
 }

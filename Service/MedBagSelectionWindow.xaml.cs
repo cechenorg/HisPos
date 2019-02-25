@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace His_Pos.Service
@@ -8,6 +9,7 @@ namespace His_Pos.Service
     /// </summary>
     public partial class MedBagSelectionWindow : Window
     {
+        public bool? result { get; set; }
         public MedBagSelectionWindow()
         {
             InitializeComponent();
@@ -16,13 +18,13 @@ namespace His_Pos.Service
 
         private void MultiMode_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            result = false;
             Close();
         }
 
         private void SingleMode_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            result = true;
             Close();
         }
 
@@ -34,7 +36,7 @@ namespace His_Pos.Service
             }
             else if(e.Key == Key.Enter)
             {
-                DialogResult = false;
+                result = false;
                 Close();
             }
         }
@@ -47,7 +49,16 @@ namespace His_Pos.Service
             }
             else if (e.Key == Key.Enter)
             {
-                DialogResult = true;
+                result = true;
+                Close();
+            }
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                result = null;
                 Close();
             }
         }

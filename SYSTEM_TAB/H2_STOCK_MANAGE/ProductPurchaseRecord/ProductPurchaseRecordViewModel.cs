@@ -76,7 +76,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 TotalPrice = StoreOrderCollection.Sum(s => s.TotalPrice);
             }
             else
+            {
+                TotalPrice = 0;
                 MessageWindow.ShowMessage("無符合條件項目", MessageType.ERROR);
+            }
         }
         private void FilterOrderAction()
         {
