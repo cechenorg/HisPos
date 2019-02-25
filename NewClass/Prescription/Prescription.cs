@@ -820,6 +820,10 @@ namespace His_Pos.NewClass.Prescription
             p.SourceId = SourceId;
             p.OrderNumber = OrderNumber;
             p.Id = Id;
+            if(!string.IsNullOrEmpty(Remark))
+                p.Remark = Remark;
+            if (!string.IsNullOrEmpty(OrderNumber))
+                p.OrderNumber = OrderNumber;
             return p;
         }
 
