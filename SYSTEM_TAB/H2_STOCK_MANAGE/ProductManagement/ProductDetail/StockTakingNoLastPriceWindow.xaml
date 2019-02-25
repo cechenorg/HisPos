@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail"
         mc:Ignorable="d"
-        Title="StockTakingNoLastPriceWindow" Height="450" Width="800">
+        Title="StockTakingNoLastPriceWindow" Height="100" Width="550">
+    <Window.DataContext>
+        <local:StockTakingNoLastPriceWindow/>
+    </Window.DataContext>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="商品無進貨紀錄 請輸入商品單價以計算庫存現值" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="120" Margin="5" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <Button Content="確認" Grid.Row="1" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="150" BorderThickness="0" Click="Confirm_OnClick"/>
     </Grid>
 </Window>

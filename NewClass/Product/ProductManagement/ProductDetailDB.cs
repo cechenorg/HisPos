@@ -69,5 +69,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[ProductStockCheck]", parameters);
         }
+
+        internal static void UpdateProductLastPrice(string productID, double price)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", productID));
+            parameters.Add(new SqlParameter("LAST_PRICE", price));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductLastPrice]", parameters);
+        }
     }
 }

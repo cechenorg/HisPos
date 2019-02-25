@@ -103,8 +103,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             if(!IsNewInventoryValid()) return;
 
-            
+            if (Medicine.LastPrice == 0.0)
+            {
+                StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
+                stockTakingNoLastPriceWindow.ShowDialog();
 
+                if (stockTakingNoLastPriceWindow.ConfirmClicked)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+                else
+                    return;
+            }
+            
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
 
             if(!(bool)confirmWindow.DialogResult) return;
