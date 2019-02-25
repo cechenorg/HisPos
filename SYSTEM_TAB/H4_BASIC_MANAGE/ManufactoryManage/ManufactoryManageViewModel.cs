@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
-    class ManufactoryManage : TabBase
+    class ManufactoryManageViewModel : TabBase
     {
         public override TabBase getTab()
         {
