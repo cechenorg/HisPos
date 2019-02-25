@@ -818,6 +818,7 @@ namespace His_Pos.NewClass.Prescription
             p.DeclareFileID = DeclareFileID;
             p.MedicineDays = MedicineDays;
             p.SourceId = SourceId;
+            p.Source = Source;
             p.OrderNumber = OrderNumber;
             p.Id = Id;
             if(!string.IsNullOrEmpty(Remark))
