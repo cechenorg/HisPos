@@ -147,7 +147,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => NotPrescribe, ref notPrescribe, value);
             }
         }
-        public double WindowWidth => SystemParameters.WorkArea.Width * 0.8;
+        public double WindowWidth => SystemParameters.WorkArea.Width * 0.9;
         public double WindowHeight => SystemParameters.WorkArea.Height * 0.8;
         public double StartTop => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
         public double StartLeft => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
