@@ -11,11 +11,9 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         mc:Ignorable="d" FontFamily="Segoe UI Semibold"
-        Height="{Binding WindowHeight}" 
-        Width="{Binding  WindowWidth}"
-        Left="{Binding StartLeft}" 
-        Top="{Binding StartTop}"
-        Title="處方瀏覽" WindowStartupLocation="CenterScreen">
+        Height="655"
+        Width="1365" 
+        Title="處方瀏覽" WindowStartupLocation="CenterScreen"> 
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
