@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
@@ -61,9 +62,15 @@ namespace His_Pos.ChromeTabViewModel
         private void RegisterMessenger()
         {
             Messenger.Default.Register<NotificationMessage<ProductManageStruct>>(this, GetSelectedProductDetail);
+            Messenger.Default.Register<NotificationMessage<Medicine>>(this, GetSelectedProductDetail);
             Messenger.Default.Register<NotificationMessage>(this, ClearTabs);
         }
         private void GetSelectedProductDetail(NotificationMessage<ProductManageStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductManagementView))
+                AddTabCommandAction(notificationMessage.Content);
+        }
+        private void GetSelectedProductDetail(NotificationMessage<Medicine> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductManagementView))
                 AddTabCommandAction(notificationMessage.Content);
