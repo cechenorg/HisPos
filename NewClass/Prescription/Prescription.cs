@@ -158,6 +158,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool CheckFreeCopayment()
         {
+            if (Treatment.Copayment is null) return false;
             if (Treatment.AdjustCase.ID.Equals("2") || Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
                 return true;
             switch (Treatment.Copayment.Id)
