@@ -40,6 +40,24 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
                 Set(() => StartDate, ref startDate, value);
             }
         }
+        private decimal paySelfProfit;
+        public decimal PaySelfProfit
+        {
+            get => paySelfProfit;
+            set
+            {
+                Set(() => PaySelfProfit, ref paySelfProfit, value);
+            }
+        }
+        private decimal prescriptionProfit;
+        public decimal PrescriptionProfit
+        {
+            get => prescriptionProfit;
+            set
+            {
+                Set(() => PrescriptionProfit, ref prescriptionProfit, value);
+            }
+        }
         private DateTime endDate = DateTime.Now;
         public DateTime EndDate
         {
@@ -60,11 +78,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         private void SearchAction() {
             CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate);
             TotalCopaymentEntry = CooperativeClinicEntryCollection[0];
-            TotalCopaymentEntry.ClinicCopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicCopaymentValue); 
-            TotalCopaymentEntry.ClinicPaySelfValue = CooperativeClinicEntryCollection.Sum(c => c.ClinicPaySelfValue);
-            TotalCopaymentEntry.CopaymentValue = CooperativeClinicEntryCollection.Sum(c => c.CopaymentValue);
-            TotalCopaymentEntry.DepositValue = CooperativeClinicEntryCollection.Sum(c => c.DepositValue); 
-            TotalCopaymentEntry.PaySelfValue = CooperativeClinicEntryCollection.Sum(c => c.PaySelfValue);
+            PaySelfProfit = TotalCopaymentEntry.PaySelfValue + TotalCopaymentEntry.PayselfMedUseValue;
+            PrescriptionProfit = TotalCopaymentEntry.NormalTotalPointValue + TotalCopaymentEntry.ChronicTotalPointValue + 
+                                 TotalCopaymentEntry.NormalMedicineUseValue + TotalCopaymentEntry.ChronicmedicineUseValue;
         }
         #endregion
     }

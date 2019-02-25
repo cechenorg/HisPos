@@ -16,6 +16,10 @@
         <service:DateConverter x:Key="DateConverter" />
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="50"/>
@@ -30,7 +34,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10">
             <Label Content="選擇日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
             <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
@@ -50,17 +54,33 @@
             <Label Content="部分負擔"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.CopaymentValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="1" >
+            <Label Content="調劑總量"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.TotalAdjustAmount}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal"  Grid.Row="2" >
             <Label Content="合作部分負擔"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.ClinicCopaymentValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="1" >
+            <Label Content="合作診所收入"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ClinicProfitValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"  Grid.Row="3" >
             <Label Content="自費"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.PaySelfValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="1" >
+            <Label Content="自費毛利"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding PaySelfProfit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal"  Grid.Row="4" >
             <Label Content="合作自費"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.ClinicPaySelfValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="4" Grid.Column="1" >
+            <Label Content="慢箋 + 其他 毛利"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding PrescriptionProfit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"  Grid.Row="5" >
             <Label Content="骨科毛利"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>

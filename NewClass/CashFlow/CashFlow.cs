@@ -121,8 +121,15 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => DepositValue, ref depositValue, value);
             }
         }
-
-       
+        private int totalAdjustAmount;
+        public int TotalAdjustAmount //調劑總量
+        {
+            get => totalAdjustAmount;
+            set
+            {
+                Set(() => TotalAdjustAmount, ref totalAdjustAmount, value);
+            }
+        }
     }
 }
 
