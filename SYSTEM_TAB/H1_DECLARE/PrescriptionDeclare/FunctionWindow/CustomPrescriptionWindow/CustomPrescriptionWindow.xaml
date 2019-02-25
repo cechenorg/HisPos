@@ -13,7 +13,7 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Viewbox>
-        <xctk:BusyIndicator>
+        <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -25,11 +25,6 @@
                     <Label Content="合作診所處方" Style="{StaticResource BoldLabelContent18}" />
                     <DataGrid Name="Cooperative" Margin="0,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CooperativePrescriptions,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Cooperative_SelectionChanged" >
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -64,6 +59,7 @@
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="16" />
                                 <Setter Property="Height" Value="40" />
+                                <EventSetter Event="MouseDoubleClick" Handler="PrescriptionSelected"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -103,11 +99,6 @@
                     <Label Content="慢箋預約處方" Style="{StaticResource BoldLabelContent18}"/>
                     <DataGrid Name="Reserved"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding ReservedPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Reserved_SelectionChanged" >
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -142,6 +133,7 @@
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="16" />
                                 <Setter Property="Height" Value="40" />
+                                <EventSetter Event="MouseDoubleClick" Handler="PrescriptionSelected"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -204,12 +196,7 @@
                 <StackPanel Grid.Row="2" Orientation="Vertical" Margin="10,0,10,10" Visibility="{Binding RegisteredVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="已登錄處方" Style="{StaticResource BoldLabelContent18}"/>
                     <DataGrid Name="Registered"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
-                      GridLinesVisibility="Horizontal" ItemsSource="{Binding RegisteredPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Reserved_SelectionChanged" >
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding RegisteredPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Registered_SelectionChanged" >
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -244,6 +231,7 @@
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="16" />
                                 <Setter Property="Height" Value="40" />
+                                <EventSetter Event="MouseDoubleClick" Handler="PrescriptionSelected"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -303,10 +291,10 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-                <!--<StackPanel Grid.Row="2" Orientation="Vertical" Visibility="{Binding UngetCardVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                <StackPanel Grid.Row="3" Orientation="Vertical" Visibility="{Binding UngetCardVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel Orientation="Horizontal" Height="35" Margin="10,0,10,0">
-                        <Label Content="已登錄處方" Style="{StaticResource BoldLabelContent18}" />
-                        <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="650,0,0,0" VerticalAlignment="Center" Command="{Binding GetPatinetData}"/>
+                        <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
+                        <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="790,0,0,0" VerticalAlignment="Center" Command="{Binding MakeUpCard}"/>
                     </StackPanel>
                     <DataGrid Margin="10" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" >
@@ -386,7 +374,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>-->
+                </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
     </Viewbox>

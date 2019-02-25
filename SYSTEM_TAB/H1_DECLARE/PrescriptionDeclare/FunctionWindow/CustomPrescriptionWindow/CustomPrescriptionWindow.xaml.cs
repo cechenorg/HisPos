@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
@@ -41,9 +42,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (sender is DataGrid d && d.SelectedIndex >= 0)
             {
                 Cooperative.SelectedIndex = -1;
-                Messenger.Default.Send((Prescription)d.SelectedItem,"ReservedSelected");
+                Registered.SelectedIndex = -1;
+                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
             }
-                
         }
 
         private void Cooperative_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -51,7 +52,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (sender is DataGrid d && d.SelectedIndex >= 0)
             {
                 Reserved.SelectedIndex = -1;
-                Messenger.Default.Send((Prescription)d.SelectedItem, "CooperativeSelected");
+                Registered.SelectedIndex = -1;
+                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
+            }
+        }
+        private void Registered_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is DataGrid d && d.SelectedIndex >= 0)
+            {
+                Cooperative.SelectedIndex = -1;
+                Reserved.SelectedIndex = -1;
+                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
             }
         }
 
@@ -59,6 +70,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             e.Cancel = true;
             this.Visibility = Visibility.Collapsed;
+        }
+
+        private void PrescriptionSelected(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            Messenger.Default.Send(new NotificationMessage("PrescriptionSelected"));
         }
     }
 }

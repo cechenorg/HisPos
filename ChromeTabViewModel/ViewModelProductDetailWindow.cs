@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
@@ -73,7 +74,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void GetSelectedProductDetail(NotificationMessage<Medicine> notificationMessage)
         {
-            if (notificationMessage.Notification == nameof(PrescriptionDeclareView))
+            if (notificationMessage.Notification == nameof(PrescriptionDeclareView) || notificationMessage.Notification == nameof(PrescriptionEditWindow))
                 AddTabCommandAction(notificationMessage.Content);
         }
         private void ClearTabs(NotificationMessage notificationMessage)

@@ -499,7 +499,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     CurrentPrescription.Patient.Save();
                     if((bool)printMedBag)
-                        PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
+                        PrintMedBag(false, (bool)printMedBag, printSingle, (bool)printReceipt);
                 };
                 worker.RunWorkerCompleted += (o, ea) =>
                 {
@@ -531,7 +531,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private bool CheckIsNoCard()
         {
-            return !CurrentPrescription.PrescriptionStatus.IsGetCard;
+            return !CurrentPrescription.PrescriptionStatus.IsGetCard && !IsAdjusting;
         }
 
         private void RegisterButtonClickAction()
@@ -606,10 +606,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var noCard = new ConfirmWindow("確認欠卡調劑", "欠卡確認");
             if (!(bool)noCard.DialogResult) return;
+            IsAdjusting = true;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
                 MessageWindow.ShowMessage(error, MessageType.ERROR);
+                IsAdjusting = false;
             }
             else
             {
@@ -672,7 +674,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction,CheckIsAdjusting);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
-            ClearButtonClick = new RelayCommand(ClearPrescription);
+            ClearButtonClick = new RelayCommand(ClearPrescription, CheckIsAdjusting);
             ChronicSequenceTextChanged = new RelayCommand(CheckPrescriptionVariable);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ResetCardReader = new RelayCommand(ResetCardReaderAction);
@@ -1153,7 +1155,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CreateDailyUploadData(ErrorCode);
         }
 
-        private void PrintMedBag(bool noCard,bool printMedBag,bool printSingle, bool printReceipt)
+        private void PrintMedBag(bool noCard,bool printMedBag,bool? printSingle, bool printReceipt)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -1161,7 +1163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (printMedBag)
                 {
                     BusyContent = "藥袋列印中...";
-                    CurrentPrescription.PrintMedBag(printSingle);
+                    CurrentPrescription.PrintMedBag((bool)printSingle);
                     if (printReceipt)
                     {
                         BusyContent = StringRes.收據列印;
@@ -1174,29 +1176,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                if (noCard)
+                {
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                    });
+                    ClearPrescription();
+                }
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
         private void PrintDepositSheet()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.押金單據列印;
-                CurrentPrescription.PrintDepositSheet();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                });
-                ClearPrescription();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            BusyContent = StringRes.押金單據列印;
+            CurrentPrescription.PrintDepositSheet();
         }
         private void ResetCardReaderAction()
         {
@@ -1243,12 +1238,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
             var printReceipt = printConfirmResult[2];
-            if (printMedBag is null || printSingle is null)
+            if (printMedBag is null || printReceipt is null)
             {
                 IsAdjusting = false;
                 return;
             }
-            if (printReceipt is null)
+            if ((bool)printMedBag && printSingle is null)
             {
                 IsAdjusting = false;
                 return;
@@ -1258,6 +1253,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.PrescriptionStatus.IsDeposit = true;
             CurrentPrescription.PrescriptionStatus.IsAdjust = true;
+            PrintMedBag(true, (bool)printMedBag, printSingle, (bool)printReceipt);
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
@@ -1283,7 +1279,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
             MainWindow.ServerConnection.CloseConnection();
-            PrintMedBag(true, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
         }
         #endregion
     }

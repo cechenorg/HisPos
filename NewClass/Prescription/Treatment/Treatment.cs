@@ -343,7 +343,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             return string.Empty;
         }
-        private string CheckMedicalNumber(bool noCard)
+        public string CheckMedicalNumber(bool noCard)
         {
             if(noCard)
                 return string.Empty;

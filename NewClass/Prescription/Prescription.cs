@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Prescription
             Patient.Name = r.Field<string>("CustomerName");  
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
-            Medicines = new Medicines(); 
+            Medicines = new Medicines();
             PrescriptionPoint = new PrescriptionPoint(r);
             if(r.Field<int?>("DeclareFileID") != null)
                 DeclareFileID = r.Field<int>("DeclareFileID");
@@ -859,7 +859,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead)
+        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
             if(!string.IsNullOrEmpty(Card.PatientBasicData.CardNumber))
@@ -870,6 +870,8 @@ namespace His_Pos.NewClass.Prescription
             AdjustMedicinesType(addMedicine);
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
+            if(getDeposit)
+                PrescriptionPoint.GetDeposit(Id);
             MainWindow.ServerConnection.CloseConnection();
         }
 
