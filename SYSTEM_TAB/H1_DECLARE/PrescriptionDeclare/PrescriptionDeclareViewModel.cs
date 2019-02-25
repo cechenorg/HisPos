@@ -998,7 +998,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CountMedicinePoint()
         {
             CurrentPrescription.CountMedicineDays();
-            CurrentPrescription.CheckIfSimpleFormDeclare();
+            if(!CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
+               CurrentPrescription.CheckIfSimpleFormDeclare();
             CurrentPrescription.CountPrescriptionPoint();
         }
         private void CheckCustomPrescriptions()

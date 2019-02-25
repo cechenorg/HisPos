@@ -390,7 +390,8 @@ namespace His_Pos.NewClass.Prescription
                         ChineseName = Medicines[medCount].ChineseName,
                         EnglishName = Medicines[medCount].EnglishName
                     };
-                    MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
+                    if(!string.IsNullOrEmpty(temp.ID) || !string.IsNullOrEmpty(temp.ChineseName))
+                        MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionName = Medicines[medCount].PositionName;
@@ -401,7 +402,7 @@ namespace His_Pos.NewClass.Prescription
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 Medicines[medCount] = temp; 
             }
-            if(addMedicine)
+            if (addMedicine)
                 Medicines.Add(new Medicine());
         }
 
@@ -482,47 +483,50 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CountPrescriptionPoint()
         {
-            PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
-            if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
-                (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
+            if (!Treatment.AdjustCase.ID.Equals("0"))
             {
-                Treatment.Copayment = VM.GetCopayment("I22");
-            }
-            if (!CheckFreeCopayment())
-            {
-                if (PrescriptionPoint.MedicinePoint <= 100)
-                    Treatment.Copayment = VM.GetCopayment("I21");
+                PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
+                if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
+                    (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
+                {
+                    Treatment.Copayment = VM.GetCopayment("I22");
+                }
+                if (!CheckFreeCopayment())
+                {
+                    if (PrescriptionPoint.MedicinePoint <= 100)
+                        Treatment.Copayment = VM.GetCopayment("I21");
+                    else
+                    {
+                        Treatment.Copayment = VM.GetCopayment("I20");
+                    }
+                }
                 else
                 {
-                    Treatment.Copayment = VM.GetCopayment("I20");
+                    if (Treatment.Copayment != null)
+                    {
+                        if (Treatment.Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
+                            Treatment.Copayment = VM.GetCopayment("I20");
+                    }
                 }
-            }
-            else
-            {
-                if (Treatment.Copayment != null)
+                if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
+                    PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+                else
                 {
-                    if (Treatment.Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
-                        Treatment.Copayment = VM.GetCopayment("I20");
+                    PrescriptionPoint.CopaymentPoint = 0;
                 }
-            }
-            if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
-                PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
-            else
-            {
-                PrescriptionPoint.CopaymentPoint = 0;
+                if (Patient.Birthday != null)
+                {
+                    CheckMedicalServiceData();//確認藥事服務資料
+                    var details = SetPrescriptionDetail();//產生藥品資料
+                    PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                }
+                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             }
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
-            if (Patient.Birthday != null)
-            {
-                CheckMedicalServiceData();//確認藥事服務資料
-                var details = SetPrescriptionDetail();//產生藥品資料
-                PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            }
-            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
         }
 
         public void CountMedicineDays()

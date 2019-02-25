@@ -250,7 +250,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetMainDiseaseCodeById = new RelayCommand<string>(GetMainDiseaseCodeByIdAction);
             GetSubDiseaseCodeById = new RelayCommand<string>(GetSubDiseaseCodeByIdAction);
-            AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
+            AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction,CheckIsNotPrescribe);
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
@@ -615,6 +615,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+        private bool CheckIsNotPrescribe()
+        {
+            return NotPrescribe;
         }
         #endregion
     }
