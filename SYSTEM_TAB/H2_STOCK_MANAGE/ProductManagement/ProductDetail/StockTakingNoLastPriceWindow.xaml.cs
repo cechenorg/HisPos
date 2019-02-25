@@ -39,6 +39,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
             ConfirmClicked = true;
             Close();
         }
+        private void Textbox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+        }
+        private void Textbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            e.Handled = true;
+            textBox.Focus();
+        }
         private bool IsLastPriceValid()
         {
             if (Price == 0)
