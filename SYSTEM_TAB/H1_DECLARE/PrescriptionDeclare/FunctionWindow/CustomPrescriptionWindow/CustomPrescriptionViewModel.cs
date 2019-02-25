@@ -6,6 +6,7 @@ using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
@@ -160,7 +161,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (!msg.Notification.Equals("PrescriptionSelected")) return;
             if (SelectedPrescription is null) return;
             Messenger.Default.Unregister(this);
-            Prescription selected = (Prescription)SelectedPrescription.Clone();
+            if (CooperativePrescriptions.Contains(SelectedPrescription))
+                isSelectCooperative = true;
+            Prescription selected;
+            if (isSelectCooperative)
+                selected = (Prescription)SelectedPrescription.Clone();
+            else
+            {
+                selected = SelectedPrescription;
+            }
             if (!string.IsNullOrEmpty(Card.CardNumber))
                 selected.Card = Card;
             selected.GetCompletePrescriptionData(true, isSelectCooperative,false);

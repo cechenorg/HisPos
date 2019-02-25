@@ -931,9 +931,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         
         private bool ChronicRegister() {
+            MedSendWindow medicinesSendSingdeWindow = null;
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder)
             {
-                MedSendWindow medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
+                medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                 { 
                     return false;
@@ -942,6 +943,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionStatus.IsDeclare = false;
             CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
             CurrentPrescription.AdjustPredictResere();
+            if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false)
+                PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
+            //紀錄訂單and送單
             return true;
         }
         private void PrescribeFunction()
