@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
             <Label Content="商品代碼" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
+            <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <TextBox Text="{Binding SearchName, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <CheckBox Content="顯示無庫存" IsChecked="{Binding SearchIsInventoryZero, Mode=TwoWay}" Background="RoyalBlue" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>

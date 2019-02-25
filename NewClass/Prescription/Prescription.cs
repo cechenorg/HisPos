@@ -805,7 +805,7 @@ namespace His_Pos.NewClass.Prescription
             p.Treatment = (Treatment.Treatment)Treatment.Clone();
             foreach (var m in Medicines)
             {
-                p.Medicines.Add(m);
+                p.Medicines.Add(m.DeepCloneViaJson());
             }
             p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();
             p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
@@ -870,32 +870,6 @@ namespace His_Pos.NewClass.Prescription
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
             MainWindow.ServerConnection.CloseConnection();
-        }
-
-        public int CountCopaymentPointFuck()
-        {
-            var point = PrescriptionPoint.MedicinePoint;
-            if (point <= 100)
-                return 0;
-            if (point > 100 && point <= 200)
-                return 20;
-            if (point >= 201 && point <= 300)
-                return 40;
-            if (point >= 301 && point <= 400)
-                return 60;
-            if (point >= 401 && point <= 500)
-                return 80;
-            if (point >= 501 && point <= 600)
-                return 100;
-            if (point >= 601 && point <= 700)
-                return 120;
-            if (point >= 701 && point <= 800)
-                return 140;
-            if (point >= 801 && point <= 900)
-                return 160;
-            if (point >= 901 && point <= 1000)
-                return 180;
-            return 200;
         }
 
         public void AdjustCooperativeMedicines(int amountpayself)

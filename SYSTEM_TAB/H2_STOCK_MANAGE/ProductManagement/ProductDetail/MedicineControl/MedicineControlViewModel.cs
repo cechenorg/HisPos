@@ -103,6 +103,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             if(!IsNewInventoryValid()) return;
 
+            
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
 
             if(!(bool)confirmWindow.DialogResult) return;

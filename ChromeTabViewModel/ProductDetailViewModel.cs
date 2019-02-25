@@ -6,6 +6,8 @@ using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
@@ -16,7 +18,7 @@ namespace His_Pos.ChromeTabViewModel
     public class ProductDetailViewModel : ViewModelBase
     {
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
-        public RelayCommand<ProductManageStruct> AddTabCommand { get; set; }
+        public RelayCommand<object> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -52,7 +54,7 @@ namespace His_Pos.ChromeTabViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            this.AddTabCommand = new RelayCommand<ProductManageStruct>(AddTabCommandAction);
+            this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -119,31 +121,51 @@ namespace His_Pos.ChromeTabViewModel
                 
         }
         
-        public void AddTabCommandAction(ProductManageStruct newProduct)
+        public void AddTabCommandAction(object newProduct)
         {
             TabBase newTab;
-            
-            foreach (TabBase tab in ItemCollection)
+
+            if (newProduct is Medicine)
             {
-                if (tab.TabName == newProduct.ID)
+                Medicine tempMedicine = newProduct as Medicine;
+
+                foreach (TabBase tab in ItemCollection)
                 {
-                    this.SelectedTab = tab;
-                    return;
+                    if (tab.TabName == tempMedicine.ID)
+                    {
+                        this.SelectedTab = tab;
+                        return;
+                    }
+                }
+                
+                newTab = new MedicineControlViewModel(tempMedicine.ID) { TabName = tempMedicine.ID, Icon = "/Images/BlueDot.png" };
+            }
+            else
+            {
+                ProductManageStruct tempProduct = (ProductManageStruct)newProduct;
+
+                foreach (TabBase tab in ItemCollection)
+                {
+                    if (tab.TabName == tempProduct.ID)
+                    {
+                        this.SelectedTab = tab;
+                        return;
+                    }
+                }
+
+                switch (tempProduct.ProductType)
+                {
+                    case ProductTypeEnum.OTC:
+                        newTab = new OtcDetailView() { TabName = tempProduct.ID, Icon = "/Images/OrangeDot.png" };
+                        break;
+                    case ProductTypeEnum.Medicine:
+                        newTab = new MedicineControlViewModel(tempProduct.ID) { TabName = tempProduct.ID, Icon = "/Images/BlueDot.png" };
+                        break;
+                    default:
+                        return;
                 }
             }
-
-            switch (newProduct.ProductType)
-            {
-                case ProductTypeEnum.OTC:
-                    newTab = new OtcDetailView() { TabName = newProduct.ID, Icon = "/Images/OrangeDot.png" };
-                    break;
-                case ProductTypeEnum.Medicine:
-                    newTab = new MedicineControlViewModel(newProduct.ID) { TabName = newProduct.ID, Icon = "/Images/BlueDot.png" };
-                    break;
-                default:
-                    return;
-            }
-
+            
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }
