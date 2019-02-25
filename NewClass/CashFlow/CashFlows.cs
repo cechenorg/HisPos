@@ -50,6 +50,9 @@ namespace His_Pos.NewClass.CashFlow {
                     case "合作押金":
                     case "押金":
                         cashFlow.DepositValue = r.Field<decimal>("CashFlow_Value");
+                        break;
+                    case "調劑總量":
+                        cashFlow.TotalAdjustAmount = (int)r.Field<decimal>("CashFlow_Value");
                         break; 
                 }
             }
