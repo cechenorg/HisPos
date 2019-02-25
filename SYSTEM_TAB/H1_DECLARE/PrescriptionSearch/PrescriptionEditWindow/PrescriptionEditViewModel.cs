@@ -148,7 +148,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
         public double WindowWidth => SystemParameters.WorkArea.Width * 0.8;
-        public double WindowHeight => WindowWidth * 0.48;
+        public double WindowHeight => SystemParameters.WorkArea.Height * 0.8;
         public double StartTop => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
         public double StartLeft => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
         #region Commands

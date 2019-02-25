@@ -807,7 +807,29 @@ namespace His_Pos.NewClass.Prescription
             p.Treatment = (Treatment.Treatment)Treatment.Clone();
             foreach (var m in Medicines)
             {
-                p.Medicines.Add(m.DeepCloneViaJson());
+                Medicine med = new Medicine();
+                med.Amount = m.Amount;
+                med.ControlLevel = m.ControlLevel;
+                med.CostPrice = m.CostPrice;
+                med.Days = m.Days;
+                med.Dosage = m.Dosage;
+                med.Enable = m.Enable;
+                med.Frozen = m.Frozen;
+                med.Inventory = med.Inventory;
+                med.IsBuckle = med.IsBuckle;
+                med.IsPriceReadOnly = m.IsPriceReadOnly;
+                med.IsSelected = m.IsSelected;
+                med.NHIPrice = m.NHIPrice;
+                med.PaySelf = m.PaySelf;
+                med.PositionName = m.PositionName;
+                med.UsageName = m.UsageName;
+                med.TotalPrice = m.TotalPrice;
+                med.Vendor = m.Vendor;
+                med.ID = m.ID;
+                med.EnglishName = m.EnglishName;
+                med.ChineseName = m.ChineseName;
+                med.Common = m.Common;
+                p.Medicines.Add(med);
             }
             p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();
             p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
