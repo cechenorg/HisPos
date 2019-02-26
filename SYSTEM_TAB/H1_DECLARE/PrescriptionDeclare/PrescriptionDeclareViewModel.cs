@@ -514,6 +514,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     else
                     {
+
                         StartAdjust();
                     }
                 };
@@ -963,78 +964,44 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
       
         private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (CurrentPrescription.PrescriptionStatus.IsGetCard || error != null)
             {
-                if (CurrentPrescription.PrescriptionStatus.IsGetCard || error != null)
+                if (CurrentPrescription.Card.IsGetMedicalNumber)
                 {
-                    if (CurrentPrescription.Card.IsGetMedicalNumber)
-                    {
-                        if (CreatePrescriptionSign())
-                        {
-                            Reset(false);
-                            HisAPI.CreatDailyUploadData(CurrentPrescription, false);
-                        }
-                    }
-                    else
-                    {
-                        if (isDeposit != null && (bool)isDeposit)
-                            CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-                        else
-                            HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false ,error);
-                    }
+                    CreatePrescriptionSign();
                 }
                 else
-                    CurrentPrescription.PrescriptionStatus.IsDeclare = false;
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                MainWindow.ServerConnection.OpenConnection();
-                CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
-                MainWindow.ServerConnection.CloseConnection();
-                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                });
-                ClearPrescription();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+                    CurrentPrescription.PrescriptionStatus.IsCreateSign = false;
+                }
+            }
+            else
+                CurrentPrescription.PrescriptionStatus.IsDeclare = false;
         }
 
-        private bool CreatePrescriptionSign()
+        private void CreatePrescriptionSign()
         {
             BusyContent = StringRes.寫卡;
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
             BusyContent = StringRes.產生每日上傳資料;
             if (CurrentPrescription.WriteCardSuccess != 0)
             {
-                bool? isDone = null;
-                ErrorUploadWindowViewModel.IcErrorCode errorCode;
                 Application.Current.Dispatcher.Invoke(delegate {
                     var description = MainWindow.GetEnumDescription((ErrorCode)CurrentPrescription.WriteCardSuccess);
                     MessageWindow.ShowMessage("寫卡異常 " + CurrentPrescription.WriteCardSuccess + ":" + description, MessageType.WARNING);
-                    var e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
-                    e.ShowDialog();
-                    while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
-                    {
-                        e = new ErrorUploadWindow(CurrentPrescription.Card.IsGetMedicalNumber);
-                        e.ShowDialog();
-                    }
-                    errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-                    if(isDone is null)
-                        HisAPI.CreatErrorDailyUploadData(CurrentPrescription, true,errorCode);
-                    isDone = true;
                 });
-                return false;
+                CurrentPrescription.PrescriptionStatus.IsCreateSign = null;
             }
-            return true;
+            else
+            {
+                CurrentPrescription.PrescriptionStatus.IsCreateSign = true;
+            }
         }
         private void CountMedicinePoint()
         {
             CurrentPrescription.CountMedicineDays();
-            CurrentPrescription.CheckIfSimpleFormDeclare();
+            if(!CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
+               CurrentPrescription.CheckIfSimpleFormDeclare();
             CurrentPrescription.CountPrescriptionPoint();
         }
         private void CheckCustomPrescriptions()
@@ -1122,43 +1089,89 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
                 {
                     MessageWindow.ShowMessage(StringRes.重新過卡或押金, MessageType.WARNING);
-                    isDeposit = true;
+                    IsAdjusting = false;
+                    IsCardReading = false;
                     return;
                 }
                 ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
             }
             if (ErrorCode != null && !CurrentPrescription.PrescriptionStatus.IsGetCard)
                 CurrentPrescription.PrescriptionStatus.IsGetCard = true;
-            MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.PrescriptionStatus.IsDeposit = false;
-            CurrentPrescription.PrescriptionStatus.IsAdjust = true;
-            switch (CurrentPrescription.Source)
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                case PrescriptionSource.Normal:
-                    if (CurrentPrescription.Treatment.Institution.ID != CooperativeInstitutionID)
-                        NormalAdjust(false);
-                    else
+                CreateDailyUploadData(ErrorCode);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if (CurrentPrescription.PrescriptionStatus.IsCreateSign != null)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+                if (CurrentPrescription.PrescriptionStatus.IsCreateSign is null)
+                {
+                    ConfirmWindow confirm = new ConfirmWindow("\"是\":重新讀取卡片或選擇異常代碼。\"否\":不過卡異常結案預設不申報。", "寫卡異常");
+                    if ((bool) confirm.DialogResult)
                     {
-                        var e = new CooperativeRemarkInsertWindow();
-                        CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                        if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
-                            return;
-                        var isVip = new ConfirmWindow("是否免收部分負擔?", "是否免收部分負擔");
-                        CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
+                        IsAdjusting = false;
+                        IsCardReading = false;
+                        return;
+                    }
+                    CurrentPrescription.PrescriptionStatus.IsDeclare = false;
+                }
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentPrescription.PrescriptionStatus.IsDeposit = false;
+                CurrentPrescription.PrescriptionStatus.IsAdjust = true;
+                switch (CurrentPrescription.Source)
+                {
+                    case PrescriptionSource.Normal:
+                        if (CurrentPrescription.Treatment.Institution.ID != CooperativeInstitutionID)
+                            NormalAdjust(false);
+                        else
+                        {
+                            var e = new CooperativeRemarkInsertWindow();
+                            CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                            if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
+                                return;
+                            var isVip = new ConfirmWindow("是否免收部分負擔?", "是否免收部分負擔");
+                            CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
+                            CurrentPrescription.Medicines.SetBuckle(false);
+                            CooperativeAdjust(false);
+                        }
+                        break;
+                    case PrescriptionSource.Cooperative:
                         CurrentPrescription.Medicines.SetBuckle(false);
                         CooperativeAdjust(false);
+                        break;
+                    case PrescriptionSource.ChronicReserve:
+                        ChronicAdjust(false);
+                        break;
+                }
+                if (CurrentPrescription.Card.IsGetMedicalNumber)
+                {
+                    if (CurrentPrescription.PrescriptionStatus.IsCreateSign != null && (bool)CurrentPrescription.PrescriptionStatus.IsCreateSign)
+                    {
+                        Reset(false);
+                        HisAPI.CreatDailyUploadData(CurrentPrescription, false);
                     }
-                    break;
-                case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckle(false);
-                    CooperativeAdjust(false);
-                    break;
-                case PrescriptionSource.ChronicReserve:
-                    ChronicAdjust(false);
-                    break;
-            }
-            MainWindow.ServerConnection.CloseConnection();
-            CreateDailyUploadData(ErrorCode);
+                }
+                else if(CurrentPrescription.PrescriptionStatus.IsCreateSign != null && !(bool)CurrentPrescription.PrescriptionStatus.IsCreateSign)
+                {
+                    CurrentPrescription.PrescriptionStatus.IsCreateSign = false;
+                    if (isDeposit != null && (bool)isDeposit)
+                        CurrentPrescription.PrescriptionStatus.IsDeclare = false;
+                    else
+                        HisAPI.CreatErrorDailyUploadData(CurrentPrescription, false, ErrorCode);
+                }
+                MainWindow.ServerConnection.CloseConnection();
+                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                ClearPrescription();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void PrintMedBag(bool noCard,bool printMedBag,bool? printSingle, bool printReceipt)

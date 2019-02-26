@@ -93,11 +93,6 @@
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding ShowPrescriptionEditWindow}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -106,6 +101,7 @@
                                 </Trigger>
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowSelectedPrescriptionEditWindow"/>
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>

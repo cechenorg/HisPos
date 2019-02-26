@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Prescription.Search;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -63,6 +64,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 PatientBirth.Focus();
             }
+        }
+
+        private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!(row.Item is PrescriptionSearchPreview)) return;
+            Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchView)+"ShowPrescriptionEditWindow"));
         }
     }
 }

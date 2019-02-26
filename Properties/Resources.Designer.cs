@@ -1140,7 +1140,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 尚未選擇異常代碼，請輸入押金金額或重新過卡後再次按下調劑按鈕 的當地語系化字串。
+        ///   查詢類似 尚未選擇異常代碼，請以欠卡調劑或重新過卡後再次按下調劑按鈕 的當地語系化字串。
         /// </summary>
         internal static string 重新過卡或押金 {
             get {
