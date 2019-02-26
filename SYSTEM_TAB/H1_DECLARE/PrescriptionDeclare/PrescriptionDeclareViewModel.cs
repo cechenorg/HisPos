@@ -544,25 +544,49 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                CurrentPrescription.Patient.Save();
-                MainWindow.ServerConnection.OpenConnection();
-                switch (CurrentPrescription.Source)
+                var printConfirmResult = NewFunction.CheckPrint(CurrentPrescription);
+                var printMedBag = printConfirmResult[0];
+                var printSingle = printConfirmResult[1];
+                var printReceipt = printConfirmResult[2];
+                if (printMedBag is null || printReceipt is null)
                 {
-                    case PrescriptionSource.Normal:
-                        if (!NormalRegister())
-                            return;  
-                        break;
-                    case PrescriptionSource.Cooperative:
-                        MessageWindow.ShowMessage(StringRes.登錄合作診所處方, MessageType.ERROR);
-                        return; 
-                    case PrescriptionSource.ChronicReserve:
-                        if (!ChronicRegister())
-                            return;
-                        break;
+                    IsAdjusting = false;
+                    return;
                 }
-                MainWindow.ServerConnection.CloseConnection();
-                MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
-                ClearPrescription();
+                if ((bool)printMedBag && printSingle is null)
+                {
+                    IsAdjusting = false;
+                    return;
+                }
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, ea) =>
+                {
+                    CurrentPrescription.Patient.Save();
+                    if ((bool)printMedBag)
+                        PrintMedBag(false, (bool)printMedBag, printSingle, (bool)printReceipt);
+                };
+                worker.RunWorkerCompleted += (o, ea) =>
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    switch (CurrentPrescription.Source)
+                    {
+                        case PrescriptionSource.Normal:
+                            if (!NormalRegister())
+                                return;
+                            break;
+                        case PrescriptionSource.Cooperative:
+                            MessageWindow.ShowMessage(StringRes.登錄合作診所處方, MessageType.ERROR);
+                            return;
+                        case PrescriptionSource.ChronicReserve:
+                            if (!ChronicRegister())
+                                return;
+                            break;
+                    }
+                    MainWindow.ServerConnection.CloseConnection();
+                    MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+                    ClearPrescription();
+                };
+                worker.RunWorkerAsync();
             }
 
         }
@@ -1113,14 +1137,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
                 if (CurrentPrescription.PrescriptionStatus.IsCreateSign is null)
                 {
-                    ConfirmWindow confirm = new ConfirmWindow("\"是\":重新讀取卡片或選擇異常代碼。\"否\":不過卡異常結案預設不申報。", "寫卡異常");
-                    if ((bool) confirm.DialogResult)
-                    {
-                        IsAdjusting = false;
-                        IsCardReading = false;
-                        return;
-                    }
-                    CurrentPrescription.PrescriptionStatus.IsDeclare = false;
+                    MessageWindow.ShowMessage("寫卡異常，請重新讀取卡片或選擇異常代碼。",MessageType.ERROR);
+                    IsAdjusting = false;
+                    IsCardReading = false;
+                    return;
                 }
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentPrescription.PrescriptionStatus.IsDeposit = false;

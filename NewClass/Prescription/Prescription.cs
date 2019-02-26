@@ -392,7 +392,7 @@ namespace His_Pos.NewClass.Prescription
                 temp.Days = Medicines[medCount].Days;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
-                if(string.IsNullOrEmpty(temp.ID))
+                if(!string.IsNullOrEmpty(temp.ID))
                     Medicines[medCount] = temp; 
             }
             if (addMedicine)
