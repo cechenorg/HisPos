@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Windows.Documents;
-using His_Pos.Class;
+using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.Service
 {
     public static class UsagesFunction
     {
-        public static int CheckUsage(int days, Usage usage = null)
+        public static int CheckUsage(int days, Usage usage)
         {
             var reg_QWxyz = new Regex(@"QW\d+");
             var reg_QWxyzAM = new Regex(@"QW\d+AM");

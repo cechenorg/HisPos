@@ -1,0 +1,33 @@
+﻿<Window x:Class="His_Pos.Service.MedBagSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.Service"
+        mc:Ignorable="d"
+        Width="350" Height="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+    <Grid Name="MainGrid">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" Height="35" Background="CornflowerBlue">
+                <Label Width="200" Foreground="GhostWhite" FontSize="16" Content="請選擇藥袋列印模式" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                <Button Name="Back" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Margin="120,0,0,0" Padding="0" Click="Back_Click">
+                    <Image Source="/Images/closeButton.png" Height="20" Width="20" Margin="0"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="180" >
+                <Button Name="MultiMode" Width="170" Height="55" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Margin="10,20,10,10" Click="MultiMode_Click" KeyDown="MultiMode_KeyDown">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/medicine.png" Height="35"/>
+                        <Label Width="100" Height="40" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center">多藥一袋</Label>
+                    </StackPanel>
+                </Button>
+                <Button Name="SingleMode" Width="170" Height="55" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Margin="10,20,10,10" Click="SingleMode_Click" KeyDown="SingleMode_KeyDown">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/capsule.png" Height="35"/>
+                        <Label Width="100" Height="40" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center">一藥一袋</Label>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

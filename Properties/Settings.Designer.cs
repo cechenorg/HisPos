@@ -12,7 +12,7 @@ namespace His_Pos.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,8 +25,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.0.77,59086;Persist Security Info=True;User ID=singde;Password" +
-            "=city1234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SQL_local {
             get {
                 return ((string)(this["SQL_local"]));
@@ -38,8 +37,7 @@ namespace His_Pos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=59.124.201.229,59087;Persist Security Info=True;User ID=singde;Passwo" +
-            "rd=city1234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SQL_global {
             get {
                 return ((string)(this["SQL_global"]));
@@ -82,6 +80,40 @@ namespace His_Pos.Properties {
             }
             set {
                 this["ReportPrinter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=pharm;Password=qwaszx1" +
+            "01819;SslMode=none")]
+        public string SingdeServer {
+            get {
+                return ((string)(this["SingdeServer"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SystemSerialNumber {
+            get {
+                return ((string)(this["SystemSerialNumber"]));
+            }
+            set {
+                this["SystemSerialNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DeclareXmlPath {
+            get {
+                return ((string)(this["DeclareXmlPath"]));
+            }
+            set {
+                this["DeclareXmlPath"] = value;
             }
         }
     }

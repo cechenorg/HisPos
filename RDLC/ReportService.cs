@@ -6,11 +6,11 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
@@ -62,9 +62,9 @@ namespace His_Pos.RDLC
             foreach (var m in locations)
                 if (m.Name != "MedicineList")
                 {
-                    var locationDictionary = CreateDictionary(p,MainWindow.CurrentPharmacy, medicineIndex);
-                    var valuePair = locationDictionary.SingleOrDefault(x => x.Key.Equals(m.Name));
-                    medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m,valuePair.Value));
+                   /// var locationDictionary = CreateDictionary(p,ViewModelMainWindow.CurrentPharmacy, medicineIndex);
+                   /// var valuePair = locationDictionary.SingleOrDefault(x => x.Key.Equals(m.Name));
+                  ///  medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m,valuePair.Value));
                 }
         }
         private static Textbox CreatTextBoxField(MedBagLocation m, string fieldContent)
@@ -166,7 +166,7 @@ namespace His_Pos.RDLC
                     {"PharmacyId", currentPharmacy.Id},
                     {"PharmacyAddr", currentPharmacy.Address},
                     {"PharmacyTel", currentPharmacy.Tel},
-                    {"MedicalPerson", MainWindow.CurrentUser.Name},
+                    {"MedicalPerson", ViewModelMainWindow.CurrentUser.Name},
                     {"PatientName", p.Customer.Name},
                     {"PatientId", p.Customer.IcNumber},
                     {"PatientTel", p.Customer.ContactInfo.Tel},

@@ -1,38 +1,31 @@
-﻿
-using His_Pos.Class.Declare;
-using His_Pos.Class.Product;
-using System;
+﻿using His_Pos.NewClass.CooperativeInstitution;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace His_Pos.Class
 {
     public class CooperativeClinicJson
     {
-        public CooperativeClinicJson(List<CooperativeClinic> cooperativeClinics) { 
+        public CooperativeClinicJson(CooperativePrescriptions cooperativeClinics) { 
              
-            sHospId = cooperativeClinics[0].Prescription.Treatment.MedicalInfo.Hospital.Id;
-            sRxId = MainWindow.CurrentPharmacy.Id; 
-           
-            foreach (CooperativeClinic declareData in cooperativeClinics) {
-                msMedList msMedList = new msMedList();
-                msMedList.sMedDate = declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyyMMdd");
-                msMedList.sShtId = declareData.Remark.Substring(0,16);
-                foreach (var declareDetail in declareData.Prescription.Medicines)
-                {
-                    if (declareDetail is DeclareMedicine)
-                    {
-                        msList msList = new msList();
-                        msList.sOrder = ((DeclareMedicine)declareDetail).Id;
-                        msList.sTqty = Convert.ToInt32(((DeclareMedicine)declareDetail).Amount).ToString();
-                        msMedList.sList.Add(msList);
-                    }
-                }
-                sMedList.Add(msMedList);
-            }
+          // sHospId = cooperativeClinics[0].Prescription.Treatment.MedicalInfo.Hospital.Id;
+          // sRxId = ViewModelMainWindow.CurrentPharmacy.Id; 
+          //
+          // foreach (CooperativePrescription declareData in cooperativeClinics) {
+          //     msMedList msMedList = new msMedList();
+          //     msMedList.sMedDate = declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyyMMdd");
+          //     msMedList.sShtId = declareData.Remark.Substring(0,16);
+          //     foreach (var declareDetail in declareData.Prescription.Medicines)
+          //     {
+          //         if (declareDetail is DeclareMedicine)
+          //         {
+          //             msList msList = new msList();
+          //             msList.sOrder = ((DeclareMedicine)declareDetail).Id;
+          //             msList.sTqty = Convert.ToInt32(((DeclareMedicine)declareDetail).Amount).ToString();
+          //             msMedList.sList.Add(msList);
+          //         }
+          //     }
+          //     sMedList.Add(msMedList);
+          // }
            
         } 
         public class msList{

@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Product;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
 
 namespace His_Pos.Class.ProductType
@@ -21,7 +20,7 @@ namespace His_Pos.Class.ProductType
 
         protected ProductType(string parent, string name, string engName)
         {
-            Id = ProductDb.AddNewType(parent, name, engName);
+            Id = "";/// ProductDb.AddNewType(parent, name, engName);
             Parent = parent;
             Name = name;
             EngName = engName;

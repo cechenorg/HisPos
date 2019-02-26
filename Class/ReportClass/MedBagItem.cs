@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class.Product;
+﻿using System.Collections.Generic;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 
 namespace His_Pos.Class.ReportClass
 {

@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using His_Pos.Class.Person;
 using System.Data;
-using System.Linq;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.Service;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -42,8 +40,8 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
-            MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
-                p.IcNumber.Equals(d.Dhead.D25)).DeepCloneViaJson();
+          ///  MedicalPersonnel = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p =>
+          ///      p.IdNumber.Equals(d.Dhead.D25));
         }
 
         private MedicalPersonnel _medicalPersonnel;
@@ -53,7 +51,7 @@ namespace His_Pos.Class.Pharmacy
             get => _medicalPersonnel;
             set
             {
-                _medicalPersonnel = value.DeepCloneViaJson();
+                _medicalPersonnel = value;
                 NotifyPropertyChanged(nameof(MedicalPersonnel));
             }
         }

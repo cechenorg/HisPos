@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Linq;
 using System.Xml;
-using His_Pos.Class.Declare;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Division
@@ -26,8 +26,8 @@ namespace His_Pos.Class.Division
         {
             if (!string.IsNullOrEmpty(divisionId))
             {
-                var tmpDivision = MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId)).DeepCloneViaJson();
-                Id = tmpDivision.Id;
+                var tmpDivision = ViewModelMainWindow.Divisions.SingleOrDefault(d => d.ID.Equals(divisionId)).DeepCloneViaJson();
+                Id = tmpDivision.ID;
                 Name = tmpDivision.Name;
                 FullName = tmpDivision.FullName;
             }

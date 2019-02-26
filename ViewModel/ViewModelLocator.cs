@@ -9,11 +9,12 @@
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 
   You can also use Blend to do all this with the tool's support.
+  See http://www.galasoft.ch/mvvm
 */
 
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 
 namespace His_Pos.ViewModel
 {
@@ -29,20 +30,29 @@ namespace His_Pos.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            
-                // Create run time view services and models
-                SimpleIoc.Default.Register<IViewModelMainWindow, ViewModelMainWindow>();
 
+            ////if (ViewModelBase.IsInDesignModeStatic)
+            ////{
+            ////    // Create design time view services and models
+            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
+            ////}
+            ////else
+            ////{
+            ////    // Create run time view services and models
+            ////    SimpleIoc.Default.Register<IDataService, DataService>();
+            ////}
+
+            SimpleIoc.Default.Register<MainViewModel>();
         }
-     
-        public IViewModelMainWindow ViewModelMainWindow
+
+        public MainViewModel Main
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IViewModelMainWindow>();
+                return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-
+        
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

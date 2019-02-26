@@ -1,4 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.HisApi
 {
@@ -169,6 +175,12 @@ namespace His_Pos.HisApi
         // 3.1 資料上傳
         [DllImport("csHis.dll")]
         public static extern int csUploadData(byte[] pUploadFileName, byte[] fFileSize, byte[] pNumber, byte[] pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csUploadDataPrec(byte[]pUploadFileName,byte[]pFileSize,byte[]pNumber,byte[]pPrecNumber,byte[]pBuffer, ref int iBufferLen);
+        // 3.2 資料上傳 增加「處方筆數」參數 
+        [DllImport("csHis.dll")]
+        public static extern int csDownloadData(byte[] pSAMID,byte[] pHospID,byte[] pNumber,byte[] pSendDate,byte[] pRecvDate,byte[] pServerRandom, byte[] pDownloadFileName);
         // 4.1 取得醫事人員卡狀態
         [DllImport("csHis.dll")]
         public static extern int hpcGetHPCStatus(int Req, ref int Status);
@@ -199,5 +211,7 @@ namespace His_Pos.HisApi
         [DllImport("csHis.dll")]
         //5.2 進行疾病診斷碼解押碼
         public static extern int hisGetICD10DeC(byte[] pIN, byte[] pOUT);
+
+        
     }
 }

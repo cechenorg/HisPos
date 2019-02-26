@@ -1,124 +1,236 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.NewClass.Product.Medicine;
+using His_Pos.Properties;
+using His_Pos.Service;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
+// ReSharper disable All
 
 namespace His_Pos.HisApi
 {
     public class HisApiFunction
     {
-        public string VerifySamdc() {   //安全模組認證
-            string msg = string.Empty;
-            int comConnection =  HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-            if(comConnection == -1) msg = "開啟Com失敗";
-            if (comConnection == 0) {
-                int samdcStatus = HisApiBase.csVerifySAMDC();
-                switch (samdcStatus)
+        public static List<string> WritePrescriptionData(Prescription p)
+        {
+            p.WriteCardSuccess = -1;
+            var signList = new List<string>();
+            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
+            var iWriteCount = medList.Count;
+            var iBufferLength = 40 * iWriteCount;
+            var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
+            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime+"\0",14);
+            byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", 11);
+            byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", 8);
+            byte[] pDataWrite = ConvertData.StringToBytes(pDataWriteStr, 3660);
+            byte[] pBuffer = new byte[iBufferLength];
+            if (OpenCom())
+            {
+                var res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
+                p.WriteCardSuccess = res;
+                if (res == 0)
                 {
-                    case 0:
-                        msg = "Success";
+                    var startIndex = 0;
+                    for (int i = 0; i < iWriteCount; i++)
+                    {
+                        signList.Add(ConvertData.ByToString(pBuffer, startIndex,40));
+                        startIndex += 40;
+                    }
+                }
+                CloseCom();
+            }
+            return signList;
+        }
+        //正常上傳
+        public static void CreatDailyUploadData(Prescription p, bool isMakeUp)
+        {
+            Rec rec = new Rec(p, isMakeUp);
+            var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
+            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        //異常上傳
+        public static void CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
+        {
+            Rec rec = new Rec(p, isMakeUp, e);
+            var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
+            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
+            MainWindow.ServerConnection.CloseConnection();
+            Console.WriteLine(uploadData);
+        }
+
+        public static bool OpenCom()
+        {
+            SetCardReaderStatus(Resources.開啟讀卡機);
+            var res = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
+            SetStatus(res == 0, 1);
+            MainWindow.Instance.SetCardReaderStatus(res == 0 ? Resources.連接成功 : Resources.連接失敗);
+            return res == 0;
+        }
+
+        public static void CloseCom()
+        {
+            if (HisApiBase.csCloseCom() == 0)
+                SetStatus(false, 1);
+        }
+
+        public static bool VerifySamDc()
+        {
+            bool status;
+            MainWindow.Instance.SetSamDcStatus(Resources.健保局連線中);
+            try
+            {
+                if (OpenCom())
+                {
+                    MainWindow.Instance.SetSamDcStatus(Resources.認證安全模組);
+                    int res = HisApiBase.csVerifySAMDC();
+                    CloseCom();
+                    if (res == 0)
+                    {
+                        status = true;
+                        MainWindow.Instance.SetSamDcStatus(Resources.認證成功);
+                        SetStatus(status, 2);
+                        return true;
+                    }
+                    else
+                    {
+                        status = false;
+                        var description = Resources.認證失敗 + ":" + MainWindow.GetEnumDescription((ErrorCode)res);
+                        MainWindow.Instance.SetSamDcStatus(description);
+                        SetStatus(status, 2);
+                        return false;
+                    }
+                }
+                SetStatus(false, 2);
+                return false;
+            }
+            catch (Exception)
+            {
+                ShowMessage(Resources.控制軟體異常);
+                return false;
+            }
+        }
+
+        public static void SetStatus(bool status, int type)
+        {
+            void Status()
+            {
+                switch (type)
+                {
+                    case 1:
+                        ViewModelMainWindow.IsConnectionOpened = status;
                         break;
-                    case 4012:
-                        msg = "未置入安全模組卡";
+                    case 2:
+                        ViewModelMainWindow.IsVerifySamDc = status;
                         break;
-                    case 4032:
-                        msg = "所插入非安全模組卡";
+                    case 3:
+                        ViewModelMainWindow.IsHpcValid = status;
                         break;
-                    case 4051:
-                        msg = "安全模組與IDC認證失敗";
-                        break;
-                    case 4052:
-                        msg = "Bnhihost.ini 檔案無法開啟";
-                        break;
-                    case 4053:
-                        msg = "Bnhihost.ini 檔案內容有誤";
-                        break;
-                    case 4061:
-                        msg = "網路連線失敗";
-                        break;
-                    case 6005:
-                        msg = "安全模組卡的外部認證失敗";
-                        break;
-                    case 6006:
-                        msg = "IDC的外部認證失敗";
-                        break;
-                    case 6007:
-                        msg = "安全模組卡的內部認證失敗";
-                        break;
-                    case 6008:
-                        msg = "寫入讀卡機日期時間失敗";
+                    case 4:
+                        status = ViewModelMainWindow.IsIcCardValid;
                         break;
                 }
             }
-            HisApiBase.csCloseCom();
-            return msg;
-        }//VerifySAMDC()
+            MainWindow.Instance.Dispatcher.BeginInvoke((Action)Status);
+        }
 
-
-        public string VerifyHpcpin() {    //檢查醫事人員PIN值
-            string msg = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-            if (comConnection == -1) msg = "開啟Com失敗";
-            if (comConnection == 0) {
-                int hpcStatus = HisApiBase.hpcVerifyHPCPIN();
-                switch (hpcStatus)
+        public static bool GetStatus(int type)
+        {
+            bool status = false;
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                switch (type)
                 {
-                    case 0:
-                        msg = "Success";
+                    case 1:
+                        status = ViewModelMainWindow.IsConnectionOpened;
                         break;
-                    case 4000:
-                        msg = "讀卡機timeout";
+                    case 2:
+                        status = ViewModelMainWindow.IsVerifySamDc;
                         break;
-                    case 4014:
-                        msg = "未置入醫事人員卡";
+                    case 3:
+                        status = ViewModelMainWindow.IsHpcValid;
                         break;
-                    case 4029:
-                        msg = "IC卡權限不足";
-                        break;
-                    case 4034:
-                        msg = "所置入非醫事人員卡";
-                        break;
-                    case 4050:
-                        msg = "安全模組尚未與IDC認證";
+                    case 4:
+                        status = ViewModelMainWindow.IsIcCardValid;
                         break;
                 }
-            }
-            HisApiBase.csCloseCom();
-            return msg;
-        } //VerifyHPCPIN()
-
-
-
-        public string GetBasicData() {
-            string data = string.Empty;
-            int comConnection = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-            HisApiBase.csCloseCom();
-            return data;
-        }//GetBasicData()
-        private string ByteSubStr(string strInput, int startIndex, int byteLength)
-        {
-            var lEncoding = Encoding.GetEncoding("big5", new EncoderExceptionFallback(), new DecoderReplacementFallback(""));
-            var lByte = lEncoding.GetBytes(strInput);
-            if (byteLength <= 0)
-                return "";
-            if (startIndex + 1 > lByte.Length)
-                return "";
-            if (startIndex + byteLength > lByte.Length)
-                byteLength = lByte.Length - startIndex;
-            return lEncoding.GetString(lByte, startIndex, byteLength);
+            });
+            return status;
         }
 
-        public string GetIcData(StringBuilder data, int startIndex, int length)
+        public static void VerifyHpcPin()
         {
-            return ByteSubStr(data.ToString(), startIndex, length);
-        }
-
-        public void ErrorDetect(int _res)
-        {
-            var _message = new StringBuilder(100);
-            var errorDescription = new Function();
-            _message.Clear();
-            if (_res == 0)
+            int res = 0;
+            MainWindow.Instance.SetCardReaderStatus(Resources.驗證醫事人員卡);
+            if (!OpenCom())
                 return;
-            var errorCodrDescription = errorDescription.GetEnumDescription("ErrorCode", _res.ToString());
-            _message.Append(errorCodrDescription);
+            try
+            {
+                res = HisApiBase.hpcVerifyHPCPIN();
+            }
+            catch (Exception e)
+            {
+                ShowMessage(Resources.控制軟體異常);
+            }
+
+            if (res == 0)
+            {
+                MainWindow.Instance.SetHpcCardStatus(Resources.認證成功);
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    ViewModelMainWindow.IsHpcValid = true;
+                });
+            }
+            else
+            {
+                MainWindow.Instance.SetHpcCardStatus(Resources.認證失敗);
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    ViewModelMainWindow.IsHpcValid = false;
+                });
+            }
+            CloseCom();
+        }
+
+        private static void SetCardReaderStatus(string message)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                if (ViewModelMainWindow.HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus(message);
+                }
+            });
+        }
+
+        private static void ShowMessage(string message)
+        {
+            Application.Current.Dispatcher.Invoke(delegate {
+                ViewModelMainWindow.HisApiException = true;
+                MessageWindow.ShowMessage(message, MessageType.ERROR);
+            });
+        }
+
+        public static void CheckDailyUpload()
+        {
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            {
+                var dailyUploadConfirm = new ConfirmWindow("尚有" + uploadTable.Rows.Count + "筆健保資料未上傳，是否執行上傳作業", "每日上傳確認");
+                bool upload = (bool)dailyUploadConfirm.DialogResult;
+                if (upload)
+                    UploadFunctions.StartDailyUpload(uploadTable);
+            }
         }
     }
 }

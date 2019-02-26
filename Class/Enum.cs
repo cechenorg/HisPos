@@ -37,8 +37,8 @@ namespace His_Pos.Class
         處方查詢 = 1,
         匯出申報檔 = 2,
         商品查詢 = 3,
-        處理單管理 = 4,
-        處理單紀錄 = 5,
+        進退貨管理 = 4,
+        進退貨紀錄 = 5,
         新增盤點 = 6,
         庫存盤點紀錄 = 7,
         商品類別管理 = 8,
@@ -57,7 +57,9 @@ namespace His_Pos.Class
         庫存現值查詢 = 21,
         進退貨報表查詢 = 22,
         合作診所藥品耗用 = 23,
-        部分負擔自費報表 = 24
+        部分負擔自費報表 = 24,
+        系統函式 = 25,
+        管制藥品簿冊申報 = 26
     }
 
     public enum StoreOrderProductType
@@ -604,5 +606,12 @@ namespace His_Pos.Class
         SqlServer = 0,
         NySql = 1
     }
-  
+
+    public enum HistoryType
+    {
+        Prescription = 0,
+        Prescribe = 1,
+        ALL = 2
+    }
+
 }

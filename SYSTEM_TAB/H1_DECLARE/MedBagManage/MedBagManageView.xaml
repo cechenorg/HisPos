@@ -1,0 +1,631 @@
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage.MedBagManageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
+    d:DesignHeight="839"
+    d:DesignWidth="1365"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label" x:Key="LocLabel">
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox" x:Key="LocCheckBox">
+            <Setter Property="Width" Value="130" />
+            <Setter Property="Margin" Value="20,10,0,0" />
+            <Setter Property="FontFamily" Value="Segoe UI Semi"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="{StaticResource MaterialDesignBodyLight}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <!--  MoveThumb Template  -->
+        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RdlLocationMoveThumb}">
+            <Rectangle Fill="Transparent" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
+            <Rectangle Fill="DodgerBlue" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="RangeLineThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
+            <Rectangle Fill="Red" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
+            <Ellipse Fill="DarkBlue" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="RangeCornerThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
+            <Ellipse Fill="Red" />
+        </ControlTemplate>
+
+        <!--  ResizeDecorator Template  -->
+        <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
+            <Grid>
+                <local:RdlLocationResizeThumb
+                    Height="2"
+                    Margin="0,-2,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNS"
+                    Template="{StaticResource LineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="2"
+                    Margin="-2,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Cursor="SizeWE"
+                    Template="{StaticResource LineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="2"
+                    Margin="0,0,-2,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Cursor="SizeWE"
+                    Template="{StaticResource LineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Height="2"
+                    Margin="0,0,0,-2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNS"
+                    Template="{StaticResource LineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="6"
+                    Height="6"
+                    Margin="-4,-4,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNWSE"
+                    Template="{StaticResource CornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="6"
+                    Height="6"
+                    Margin="0,-4,-4,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNESW"
+                    Template="{StaticResource CornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="6"
+                    Height="6"
+                    Margin="-4,0,0,-4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNESW"
+                    Template="{StaticResource CornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="6"
+                    Height="6"
+                    Margin="0,0,-4,-4"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNWSE"
+                    Template="{StaticResource CornerThumbTemplate}" />
+            </Grid>
+        </ControlTemplate>
+
+        <!--  ResizeDecorator Template  -->
+        <ControlTemplate x:Key="RangeResizeDecoratorTemplate" TargetType="{x:Type Control}">
+            <Grid>
+                <local:RdlLocationResizeThumb
+                    Height="3"
+                    Margin="0,-2,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNS"
+                    Template="{StaticResource RangeLineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="3"
+                    Margin="-2,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Cursor="SizeWE"
+                    Template="{StaticResource RangeLineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="3"
+                    Margin="0,0,-2,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Cursor="SizeWE"
+                    Template="{StaticResource RangeLineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Height="3"
+                    Margin="0,0,0,-2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNS"
+                    Template="{StaticResource RangeLineThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="8"
+                    Height="8"
+                    Margin="-4,-4,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNWSE"
+                    Template="{StaticResource RangeCornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="8"
+                    Height="8"
+                    Margin="0,-4,-4,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Cursor="SizeNESW"
+                    Template="{StaticResource RangeCornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="8"
+                    Height="8"
+                    Margin="-4,0,0,-4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNESW"
+                    Template="{StaticResource RangeCornerThumbTemplate}" />
+                <local:RdlLocationResizeThumb
+                    Width="8"
+                    Height="8"
+                    Margin="0,0,-4,-4"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Cursor="SizeNWSE"
+                    Template="{StaticResource RangeCornerThumbTemplate}" />
+            </Grid>
+        </ControlTemplate>
+
+        <!--  Designer Item Template  -->
+        <ControlTemplate x:Key="MedBagDesignerItemTemplate" TargetType="ContentControl">
+            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                <local:RdlLocationMoveThumb
+                    x:Name="MoveThumb"
+                    Cursor="SizeAll"
+                    Template="{StaticResource MoveThumbTemplate}" />
+                <Control Template="{StaticResource ResizeDecoratorTemplate}" />
+                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
+            </Grid>
+        </ControlTemplate>
+        <ControlTemplate x:Key="MedBagRangeItemTemplate" TargetType="ContentControl">
+            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                <local:RdlLocationMoveThumb
+                    x:Name="MoveThumb"
+                    Cursor="SizeAll"
+                    Template="{StaticResource MoveThumbTemplate}" />
+                <Control Template="{StaticResource RangeResizeDecoratorTemplate}" />
+                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
+            </Grid>
+        </ControlTemplate>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Viewbox Name="MedBagManageViewBox" Stretch="Fill">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="689" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="935" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Background="{StaticResource GridHalfTransBackground}">
+                <Button
+                Name="ImageSelector"
+                Width="130"
+                Height="34"
+                Margin="20,20,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="ImageSelector_Click"
+                Content="選擇藥袋圖檔"
+                FontSize="16"
+                Foreground="White" />
+                <StackPanel x:Name="ModeStack" Orientation="Horizontal" Margin="0,20,0,0">
+                    <RadioButton 
+                    Name="SingleMode"
+                    Content="一藥一袋"
+                    Margin="20,0,0,0"
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Tag ="0"
+                    Checked="ModeRadioChecked"
+                    />
+                    <RadioButton 
+                    Name="MultiMode"
+                    Content="多藥一袋" 
+                    Margin="20,0,0,0"
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    
+                    Tag ="1" Checked="ModeRadioChecked"
+                    />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Orientation="Vertical">
+                <DataGrid
+                Name="MedBags"
+                AutoGenerateColumns="False"
+                Height="850"
+                Background="{StaticResource GridHalfTransBackground}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="None"
+                ItemsSource="{Binding MedBagCollectionView}" SelectedCellsChanged="MedBags_SelectedCellsChanged">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="true" />
+                            <Setter Property="Width" Value="100" />
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15" />
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Height" Value="70" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="230">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Height="70">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30" />
+                                            <ColumnDefinition Width="210" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                        Name="Default"
+                                        Width="18"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Source="/Images/Success.png"
+                                        Visibility="{Binding Default,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}"/>
+                                        <TextBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Width="105"
+                                        HorizontalAlignment="Left"
+                                        FontFamily="Segoe UI Semibold"
+                                        FontSize="17.5"
+                                        Foreground="Black"
+                                        BorderThickness="0"
+                                        materialDesign:HintAssist.Hint="輸入藥袋名稱"
+                                        materialDesign:HintAssist.HintOpacity="0.5"
+                                        Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <WrapPanel Grid.Row="1" Grid.Column="1" Height="40" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                            <Label
+                                            Content="尺寸:"
+                                            FontFamily="Segoe UI Semi"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="12"
+                                            Foreground="Black" />
+                                            <TextBox
+                                            Width="35"
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="12"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Bottom"
+                                            BorderThickness="0"
+                                            Text="{Binding BagWidth,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
+                                            <Label
+                                            Content=" x "
+                                            FontFamily="Segoe UI Semibold"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="12"
+                                            Foreground="Black" />
+                                            <TextBox
+                                            Width="35"
+                                            FontSize="12"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Bottom"
+                                            BorderThickness="0"
+                                            Text="{Binding BagHeight,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
+                                            <Label
+                                            Content="(公分)"
+                                            FontFamily="Segoe UI Semi"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="14"
+                                            Foreground="Black" />
+                                        </WrapPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <Grid
+            Name="ImgWrap"
+            MaxWidth="935"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            HorizontalAlignment="Center">
+                <Image
+                Name="MedBagImg"
+                MaxWidth="935"
+                MaxHeight="850"
+                HorizontalAlignment="Left"
+                Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Stretch="Uniform" />
+                <Canvas
+                Name="MedBagCanvas"
+                MaxHeight="850"
+                HorizontalAlignment="Left">
+                    <local:RdlLocationControl
+                    x:Name="MedRangeLocationControl"
+                    Width="100"
+                    Height="100" />
+                </Canvas>
+            </Grid>
+            <ScrollViewer
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Width="200">
+                <StackPanel Name="CheckBoxStack"  Width="160" Orientation="Vertical">
+                    <CheckBox
+                    Content="設為預設藥袋"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black"
+                    Margin = "0,15,0,15"
+                    IsChecked="{Binding SelectedMedBag.Default,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                    <Label
+                    Content="藥局"
+                    Style="{StaticResource LocLabel}"/>
+                    <CheckBox
+                    Name="Pharmacy"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="藥局名稱" />
+                    <CheckBox
+                    Name="PharmacyId"
+                    Content="機構代碼"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="PharmacyAddr"
+                    Content="地址"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="PharmacyTel"
+                    Content="電話"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="MedicalPerson"
+                    Content="調劑藥師"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <Label
+                    Content="病患"
+                    Style="{StaticResource LocLabel}"/>
+                    <CheckBox
+                    Name="PatientName"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="姓名" />
+                <CheckBox
+                    Name="PatientId"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="身分證字號" />
+                <CheckBox
+                    Name="PatientTel"
+                    Content="聯絡電話"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="PatientGender"
+                    Content="性別"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="PatientBirthday"
+                    Content="生日"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="MedRecNum"
+                    Content="病歷號"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="AdjustDate"
+                    Content="調劑日期"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="TreatmentDate"
+                    Content="就醫日期"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="MedicalNumber"
+                    Content="就醫序號"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="NextDrugDate"
+                    Content="下次領藥日"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="VisitBackDate"
+                    Content="參考回診日"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="ChronicSequence"
+                    Content="領藥次數"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <Label
+                    Content="醫療院所"
+                    Style="{StaticResource LocLabel}"/>
+                <CheckBox
+                    Name="ReleaseHospital"
+                    Content="醫療院所名稱"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Division"
+                    Content="科別"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="DoctorId"
+                    Content="診治醫師"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <Label
+                    Content="藥品"
+                    Style="{StaticResource LocLabel}"/>
+                    <CheckBox
+                    Name="MedicineList"
+                    Content="多藥一袋藥品"
+                    Style="{StaticResource LocCheckBox}"
+                    Visibility="Collapsed"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="MedicineId"
+                    Content="藥品健保碼"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="EngName"
+                    Content="英文名稱" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="ChnName"
+                    Content="中文名稱"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Ingredient"
+                    Content="成分"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Form"
+                    Content="劑型外觀"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Usage"
+                    Content="用法"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Dosage"
+                    Content="用量"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Total"
+                    Content="領藥總量"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Days"
+                    Content="給藥天數"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Indication"
+                    Content="適應症" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="SideEffect"
+                    Content="副作用" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                    <CheckBox
+                    Name="Notes"
+                    Content="注意事項"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                </StackPanel>
+            </ScrollViewer>
+            <DockPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Background="{StaticResource GridHalfTransBackground}">
+                <Button
+                Name="AddMedBag"
+                Width="70"
+                Margin="15,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Content="新增" Click="NewMedBagButtonClick" />
+                <Button
+                Name="DeleteMedBag"
+                Width="70"
+                Margin="15,0,15,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Content="刪除" Click="NewMedBagButtonClick" />
+            </DockPanel>
+            <StackPanel
+            Grid.Row="2"
+            Grid.Column="2"
+            Orientation="Horizontal">
+                <Button
+                Width="70"
+                Margin="20,0,20,0"
+                VerticalAlignment="Center"
+                Content="清空" Click="CleanButtonClick"/>
+                <Button
+                Width="70"
+                VerticalAlignment="Center"
+                Content="儲存" Click="MedBagSaveButtonClick" />
+            </StackPanel>
+        </Grid>
+    </Viewbox>
+</UserControl>

@@ -5,37 +5,28 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Authority;
-using His_Pos.Class.Copayment;
-using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
-using His_Pos.Class.Pharmacy;
-using His_Pos.Class.Position;
-using His_Pos.Class.Product;
-using His_Pos.Class.SpecialCode;
-using His_Pos.Class.TreatmentCase;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.Database;
+using His_Pos.FunctionWindow;
+using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
-using His_Pos.Resource;
+using His_Pos.NewClass;
+using His_Pos.NewClass.CooperativeClinicJson;
+using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.Service;
-using His_Pos.SystemSettings;
-using His_Pos.ViewModel;
-using MaterialDesignThemes.Wpf;
+using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
-using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
- 
+using StringRes = His_Pos.Properties.Resources;
+
+
 namespace His_Pos
 {
     /// <summary>
@@ -43,79 +34,56 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
-        public static string CardReaderStatus;
-        public static int Res { get; set; } = -1;
-        public static Pharmacy CurrentPharmacy;
-        public static bool ItemSourcesSet { get; set; }
-        public static ObservableCollection<Hospital> Hospitals { get; set; }
-        public static ObservableCollection<Division> Divisions { get; set; }
-        private static ObservableCollection<AdjustCase> _adjustCases;
-        public static ObservableCollection<AdjustCase> AdjustCases
+        public static SQLServerConnection ServerConnection = new SQLServerConnection();
+        public static MySQLConnection SingdeConnection = new MySQLConnection();
+
+        public static List<Feature> HisFeatures = new List<Feature>();
+        public static MainWindow Instance;
+
+        
+        public MainWindow(Employee user)
         {
-            get => _adjustCases;
-            set
-            {
-                if (ItemSourcesSet)
-                    return;
-                _adjustCases = value;
-            }
-        }
-        public static bool IsConnectionOpened { get; set; } = false;
-        public static bool IsHpcValid { get; set; } = false;
-        public static bool IsVerifySamDc { get; set; } = false;
-        public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
-        public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
-        public static ObservableCollection<Copayment> Copayments { get; set; }
-        public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
-        public static ObservableCollection<Usage> Usages { get; set; }
-        public static ObservableCollection<Position> Positions { get; set; }
-        public MainWindow(User userLogin)
-        {
-            Res = -1;
-            FeatureFactory();
             InitializeComponent();
+            FeatureFactory();
             WindowState = WindowState.Maximized;
-            CurrentUser = userLogin;
+            ViewModelMainWindow.CurrentUser = user;
+            if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
             StratClock();
-            _openWindows = new List<DockingWindow>();
-            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            
             AddNewTab("每日作業");
-            WindowState = WindowState.Minimized;
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.VerifyCardReaderStatus(Instance);
-            loadingWindow.ShowDialog();
-            WindowState = WindowState.Maximized;
         }
         
         private void InitialUserBlock()
         {
-            UserName.Content = CurrentUser.Name;
+            UserName.Content = ViewModelMainWindow.CurrentUser.Name;
         }
 
         private void FeatureFactory()
         {
-            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
-                            new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.MedFrequencyManage, Properties.Resources.MedBagManage , Properties.Resources.DeclareFileExport }));
+            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.MedFrequencyManage, StringRes.MedBagManage , StringRes.DeclareFileExport }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", Properties.Resources.StockManage,
-                            new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord, Properties.Resources.ProductTypeManage, Properties.Resources.LocationManage }));
+            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
+                            new[] { StringRes.StockSearch, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.StockTaking,
-                            new string[] { Properties.Resources.NewStockTaking, Properties.Resources.StockTakingRecord }));
+            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", StringRes.StockTaking,
+                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Management.png", Properties.Resources.DataManagement,
-                            new string[] { Properties.Resources.ManufactoryManage, Properties.Resources.PharmacyManage,
-                                           Properties.Resources.EmployeeManage, Properties.Resources.AuthenticationManage, Properties.Resources.CustomerManage}));
+            HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
+                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage,
+                                           StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
 
-            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
-                            new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
+            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
+                            new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.ReportSystem,
-              new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport,Properties.Resources.CooperativeAdjustReport,Properties.Resources.CooperativeEntry }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
+              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
+              new[] { StringRes.AdminFunction }));
         }
         
         private void InitializeMenu()
@@ -136,8 +104,9 @@ namespace His_Pos
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
-
-            Collection<string> tabAuth = AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            MainWindow.ServerConnection.OpenConnection();
+            Collection<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
+            MainWindow.ServerConnection.CloseConnection();
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -181,13 +150,6 @@ namespace His_Pos
             timer.Start();
         }
 
-        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (Tabs.SelectedItem is null) return;
-
-            //((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
-        }
-
         private void Shortcut_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(sender is null) return;
@@ -214,15 +176,19 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var d = new DeclareDb();
-            var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
-            var upload = (bool)dailyUploadConfirm.ShowDialog();
-            if(upload)
-                d.StartDailyUpload();
-            ProductDb.UpdateDailyStockValue();
-            DeclareDb declareDb = new DeclareDb();
-            declareDb.SendUnSendCooperClinicDeclare();
-            Application.Current.Shutdown();
+            try
+            {
+                ServerConnection.OpenConnection();
+                WebApi.SendToCooperClinic();
+                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+                ServerConnection.CloseConnection();
+            }
+            catch (Exception ex) {
+                MessageWindow.ShowMessage("合作診所扣庫資料回傳失敗 請聯絡工程師",MessageType.ERROR);
+                NewFunction.ExceptionLog(ex.Message);
+            }
+            HisApiFunction.CheckDailyUpload();
+            Environment.Exit(0);
         }
 
         private void Settings_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -233,94 +199,13 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var t1 = new Thread(VerifySam);
-            //t1.Start();
-        }
-
-        public void VerifySam()
-        {
-            var thread = new Thread(() =>
+            var bw = new BackgroundWorker
             {
-                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                if (Res == 0)
-                {
-                    IsConnectionOpened = true;
-                    Res = HisApiBase.hisGetCardStatus(1);
-                    if (Res != 2)
-                    {
-                        HisApiBase.csCloseCom();
-                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                        Res = HisApiBase.csVerifySAMDC();
-                        if (Res == 0)
-                        {
-                            IsVerifySamDc = true;
-                            HisApiBase.csCloseCom();
-                            //var status = 0;
-                            //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
-                            //if (status == 1 && Res == 0)
-                            //{
-                            //    Res = HisApiBase.hpcVerifyHPCPIN();
-                            //    if (Res == 0)
-                            //        IsHpcValid = true;
-                            //}
-                        }
-                    }
-                    else
-                    {
-                        HisApiBase.csCloseCom();
-                        IsVerifySamDc = true;
-                    }
-                }
-                else
-                {
-                    Res = HisApiBase.csSoftwareReset(0);
-                    Res = HisApiBase.csCloseCom();
-                    if (Res == 0)
-                    {
-                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                        if (Res == 0)
-                        {
-                            IsConnectionOpened = true;
-                            Res = HisApiBase.hisGetCardStatus(1);
-                            if (Res != 2)
-                            {
-                                HisApiBase.csCloseCom();
-                                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                                Res = HisApiBase.csVerifySAMDC();
-                                if (Res == 0)
-                                {
-                                    IsVerifySamDc = true;
-                                    HisApiBase.csCloseCom();
-                                    //var status = 0;
-                                    //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
-                                    //if (status == 1 && Res == 0)
-                                    //{
-                                    //    Res = HisApiBase.hpcVerifyHPCPIN();
-                                    //    if (Res == 0)
-                                    //        IsHpcValid = true;
-                                    //}
-                                }
-                            }
-                            else
-                            {
-                                HisApiBase.csCloseCom();
-                                IsVerifySamDc = true;
-                            }
-                        }
-                    }
-                }
-            });
-            thread.Start();
-            if (thread.Join(60000))
-            {
-                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
-            }
-            else
-            {
-                thread.Abort();
-                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
-                CardReaderStatus = "讀卡機逾時";
-            }
+                WorkerSupportsCancellation = true,
+                WorkerReportsProgress = true
+            };
+            bw.DoWork += (o, ea) => { HisApiFunction.VerifySamDc(); };
+            bw.RunWorkerAsync();
         }
 
         public static string GetEnumDescription(Enum value)
@@ -329,6 +214,33 @@ namespace His_Pos
             if (fi == null) return string.Empty;
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute),false);
             return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+        }
+
+        public void SetCardReaderStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).CardReaderStatus = "讀卡機狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
+        }
+
+        public void SetHpcCardStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).HpcCardStatus = "醫事卡認證狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
+        }
+
+        public void SetSamDcStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).SamDcStatus = "安全模組狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
         }
     }
 }

@@ -5,8 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using His_Pos.Class.MedBagLocation;
-using His_Pos.H1_DECLARE.MedBagManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBag
@@ -26,7 +25,7 @@ namespace His_Pos.Class.MedBag
             BagWidth = double.Parse(dataRow["MEDBAG_SIZEX"].ToString());
             BagHeight = double.Parse(dataRow["MEDBAG_SIZEY"].ToString());
             MedBagImage = ToImage((byte[])dataRow["MEDBAG_IMAGE"]);
-            MedLocations = MedBagLocationDb.ObservableGetLocationData(Id);
+            MedLocations = null;/// MedBagLocationDb.ObservableGetLocationData(Id);
             Mode = dataRow["MEDBAG_MODE"].ToString() == "False" ? MedBagMode.SINGLE : MedBagMode.MULTI;
             Default = dataRow["MEDBAG_DEFAULT"].ToString() == "1";
         }

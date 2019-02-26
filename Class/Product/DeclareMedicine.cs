@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
+using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Product
@@ -29,6 +29,9 @@ namespace His_Pos.Class.Product
             source = string.Empty;
             SideEffect = string.Empty;
             Indication = string.Empty;
+            IsControl = false;
+            IsCommon = false;
+            IsFrozen = false;
         }
         public DeclareMedicine(XmlNode xml)
         {
@@ -45,7 +48,7 @@ namespace His_Pos.Class.Product
             MedicalCategory.Dosage = double.Parse(xml.Attributes["daily_dose"].Value);
             Dosage = Convert.ToDouble(xml.Attributes["divided_dose"].Value);
             Days = xml.Attributes["days"].Value;
-            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false;  
+            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false; 
             Cost = 0;
             TotalPrice = PaySelf ? Convert.ToDouble(xml.Attributes["price"].Value) : 0;
             Price = TotalPrice / Amount;
@@ -102,10 +105,10 @@ namespace His_Pos.Class.Product
                 else
                 {
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
-                    if(MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()) is null)
-                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Name == dataRow["HISFEQ_ID"].ToString()).Name;
-                    else
-                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()).Name ;
+                    if (!string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString()))
+                    {
+                        UsageName = ViewModelMainWindow.Usages.SingleOrDefault(usg => usg.ID.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
+                    }
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
@@ -117,27 +120,68 @@ namespace His_Pos.Class.Product
                 HcNote = dataRow["HISMED_HCNOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_HCNOTE"].ToString();
                 if(type.Equals("Get"))
                 IsBuckle = Convert.ToBoolean(dataRow["IS_BUCKLE"].ToString());
+                Indication = dataRow["HISMED_INDICATION"].ToString();
+                SideEffect = dataRow["HISMED_SIDEFFECT"].ToString();
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
-            IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
+            IsFrozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
+            IsCommon = dataRow["HISMED_COMMON"].ToString().Equals("True");
             HcPrice = double.TryParse(dataRow["HISMED_PRICE"].ToString(), out var hcPrice) ? hcPrice : 0.0000;
-           
         }
+        private bool _isControl;
 
-        public bool IsControl => !string.IsNullOrEmpty(ControlLevel);
+        public bool IsControl
+        {
+            get => _isControl;
+            set
+            {
+                _isControl = value;
+                NotifyPropertyChanged(nameof(IsControl));
+            }
+        }
+        private bool _isCommon;
 
+        public bool IsCommon
+        {
+            get => _isCommon;
+            set
+            {
+                _isCommon = value;
+                NotifyPropertyChanged(nameof(IsCommon));
+            }
+        }
         private string _controlLevel;
         public string ControlLevel
         {
             get => _controlLevel;
             set
             {
-                _controlLevel = value.Equals("0") ? string.Empty : value;
+                if (!string.IsNullOrEmpty(value) && value.Equals("0") || string.IsNullOrEmpty(value))
+                {
+                    _controlLevel = string.Empty;
+                    IsControl = false;
+                }
+                else
+                {
+                    _controlLevel = value;
+                    IsControl = true;
+                }
                 NotifyPropertyChanged(nameof(ControlLevel));
             }
         }
 
-        public bool IsFrozMed { get; set; }
+        private bool _isFrozen;
+
+        public bool IsFrozen
+        {
+            get => _isFrozen;
+            set
+            {
+                _isFrozen = value;
+                NotifyPropertyChanged(nameof(IsFrozen));
+            }
+        }
+
         private bool payself;
 
         public bool PaySelf
@@ -176,8 +220,8 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
-                if(PrescriptionDec2View.Instance != null)
-                    PrescriptionDec2View.Instance.CountMedicinesCost();
+                //if(PrescriptionDec2View.Instance != null)
+                //    PrescriptionDec2View.Instance.CountMedicinesCost();
                 NotifyPropertyChanged(nameof(TotalPrice));
             }
         }
@@ -207,9 +251,13 @@ namespace His_Pos.Class.Product
                 if (value != null)
                 {
                     _usageName = value;
-                    Usage = MainWindow.Usages.SingleOrDefault(u => u.Name.Replace(" ", "").Equals(_usageName.ToString().Replace(" ", "")));
-                    if ((Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
-                        CalculateAmount();
+                    Usage = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", ""))).DeepCloneViaJson();
+                    if (Usage != null)
+                    {
+                        Usage.Name = _usageName;
+                        if ((Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                            CalculateAmount();
+                    }
                     NotifyPropertyChanged(nameof(UsageName));
                 }
             }
@@ -309,15 +357,6 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("BuckleIcon");
             }
         }
-        public string BuckleIcon {
-
-            get {
-                if (IsBuckle)
-                    return ""; 
-                else
-                    return "../../Images/icons8-delete-32.png";
-            }
-        }
 
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name=value; }
@@ -343,15 +382,7 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
-            var tmpUsage = new Usage();
-            var find = false;
-            foreach (var u in MainWindow.Usages)
-            {
-                if (!UsageName.Equals(u.Name)) continue;
-                tmpUsage = u;
-                find = true;
-            }
-            Amount = find ? Dosage * UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : Dosage * UsagesFunction.CheckUsage(int.Parse(_days));
+            Amount = Dosage * UsagesFunction.CheckUsage(int.Parse(_days), ViewModelMainWindow.GetUsage(UsageName));
         }
 
         public object Clone()
@@ -362,7 +393,7 @@ namespace His_Pos.Class.Product
                 Name = Name,
                 ChiName = ChiName,
                 EngName = EngName,
-                IsFrozMed = IsFrozMed,
+                IsFrozen = IsFrozen,
                 PaySelf = PaySelf,
                 HcPrice = HcPrice,
                 Ingredient = Ingredient,
@@ -381,7 +412,11 @@ namespace His_Pos.Class.Product
                 Position = Position,
                 Source = Source,
                 IsBuckle = IsBuckle,
-                ControlLevel = ControlLevel
+                ControlLevel = ControlLevel,
+                Indication = Indication,
+                SideEffect = SideEffect,
+                IsControl = IsControl,
+                IsCommon = IsCommon
             };
             return declareMedicine;
         }

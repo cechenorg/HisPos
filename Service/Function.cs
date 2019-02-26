@@ -12,17 +12,16 @@ using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
-using His_Pos.Properties;
-using His_Pos.Service;
+using His_Pos.NewClass.Prescription.IcData.Upload;
+using NChinese.Phonetic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NChinese.Phonetic;
-using His_Pos.Class.Person;
 
-namespace His_Pos
+namespace His_Pos.Service
 {
 
     public class Function 
@@ -31,7 +30,7 @@ namespace His_Pos
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
-        public string ChangeNameToEnglish(string txtInput)
+        public static string ChangeNameToEnglish(string txtInput)
         {
             string resultOutput = string.Empty;
             // 取得一串中文字的注音字根
@@ -47,7 +46,7 @@ namespace His_Pos
         //用途:取得Enum Description value
         //輸入:Enum值
         //輸出:Description值
-        public string GetEnumDescription(string type, string value)
+        public static string GetEnumDescription(string type, string value)
         {
             var reply = string.Empty;
             if (type == "ErrorCode")
@@ -94,18 +93,18 @@ namespace His_Pos
             return date;
         }
         
-        public string GetDateFormat(string date) {
+        public static string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public string ExportXml(XDocument xml, string FileTypeName) {
+        public static string ExportXml(XDocument xml, string FileTypeName) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\藥健康\\"+FileTypeName;
+            path += "\\Declare\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\";
@@ -187,8 +186,9 @@ namespace His_Pos
          */
         public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
         {
-            var conn = new DbConnection(Settings.Default.SQL_local);
-            return conn.ExecuteProc(procName, param);
+            return null;
+           ///var conn = new DatabaseConnection(Settings.Default.SQL_local);
+           ///return conn.ExecuteProc(procName, param);
         }
         public string HttpGetJson(string url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -208,7 +208,6 @@ namespace His_Pos
                 }
                 return string.Empty;
             }
-       
         }
         public class Holiday{
           public  DateTime date { get; set; }
@@ -227,12 +226,12 @@ namespace His_Pos
                 foreach (Holiday day in holidayCollection) {
                     if (day.name == "軍人節") continue;
                     if (day.isHoliday == "是")
-                        FunctionDb.UpdateLastYearlyHoliday(day);
+                        ;/// FunctionDb.UpdateLastYearlyHoliday(day);
                 }
             }
         }
 
-        public string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
+        public static string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
         {
             var tmpByteArr = new byte[length];
             Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
@@ -240,29 +239,40 @@ namespace His_Pos
             return result;
         }
 
-        public void DailyUpload(XDocument dailyUpload)
+        public void DailyUpload(XDocument dailyUpload,string recCount)
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "每日上傳");
+                var filePath = ExportXml(dailyUpload, "dailyUpload");
                 var fileName = filePath + ".xml";
-                var cs = new ConvertData();
-                var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+                var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
-                var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-                var element = dailyUpload.Root.Element("REC");
-                var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+                var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+                var count = ConvertData.StringToBytes(recCount, recCount.Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
+                {
+                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                    if (res == 0)
+                    {
+                        MessageWindow.ShowMessage("上傳成功", MessageType.SUCCESS);
+                        MainWindow.ServerConnection.OpenConnection();
+                        IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
+                        MainWindow.ServerConnection.CloseConnection();
+                        IcDataUploadDb.UpdateDailyUploadData();
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
+                    }
+                }
+                HisApiFunction.CloseCom();
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("DailyUpload()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
+                MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
             }
         }
-      
     }
 }

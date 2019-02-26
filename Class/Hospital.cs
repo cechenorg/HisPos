@@ -1,9 +1,10 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Xml;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
-using His_Pos.Service;
 
 namespace His_Pos.Class
 {
@@ -14,7 +15,8 @@ namespace His_Pos.Class
             Id = "";
             Name = "";
             Doctor = new MedicalPersonnel();
-            Division = new Division.Division();
+            Division = new NewClass.Prescription.Treatment.Division.Division();
+            Common = false;
         }
 
         public Hospital(DataRow dataRow,DataSource source)
@@ -22,14 +24,20 @@ namespace His_Pos.Class
             Id = dataRow["INS_ID"].ToString();
             Name = dataRow["INS_NAME"].ToString();
             FullName = dataRow["INS_FULLNAME"].ToString();
+            if (dataRow.Table.Columns.Contains("INS_IS_COMMON"))
+                Common = Convert.ToBoolean(dataRow["INS_IS_COMMON"]);
+            else
+            {
+                Common = ViewModelMainWindow.Institutions.SingleOrDefault(h => h.ID.Equals(Id)).Common;
+            }
             switch (source) {
                 case DataSource.InitHospitalData:
                     Doctor = new MedicalPersonnel();
-                    Division = new Division.Division();
+                    Division = new NewClass.Prescription.Treatment.Division.Division();
                     break;
                 case DataSource.GetHospitalData:
                     Doctor = new MedicalPersonnel(dataRow,true);
-                    Division = new Division.Division(dataRow);
+                    Division = ViewModelMainWindow.Divisions.SingleOrDefault(d=>d.ID.Equals(dataRow["HISDIV_ID"]));
                     break;
             }
         }
@@ -37,16 +45,16 @@ namespace His_Pos.Class
             Doctor = new MedicalPersonnel();
             Id = xml.SelectSingleNode("d21") == null ? null : xml.SelectSingleNode("d21").InnerText;
             Doctor.IcNumber = xml.SelectSingleNode("d24") == null ? null : xml.SelectSingleNode("d24").InnerText;
-            Division = new Division.Division(xml);
+            ///Division = new NewClass.Prescription.Treatment.Division.Division(xml);
         }
         public Hospital(XmlDocument xml)
         {
             Doctor = new MedicalPersonnel();
             Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["doctor_id"].Value;
-            Name = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).Name;
-            FullName = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).FullName;
+            Name = ViewModelMainWindow.Institutions.SingleOrDefault(hos => hos.ID == Id).Name;
+            FullName = ViewModelMainWindow.Institutions.SingleOrDefault(hos => hos.ID == Id).FullName;
             Doctor.IcNumber = Id;
-            Division = MainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
+            Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.ID == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
         }
         public Hospital(DeclareFileDdata d)
         {
@@ -66,15 +74,27 @@ namespace His_Pos.Class
             }
         }
 
-        private Division.Division _division;
+        private NewClass.Prescription.Treatment.Division.Division _division;
 
-        public Division.Division Division
+        public NewClass.Prescription.Treatment.Division.Division Division
         {
             get => _division;
             set
             {
                 _division = value;
                 NotifyPropertyChanged(nameof(Division));
+            }
+        }
+
+        private bool _common;
+
+        public bool Common
+        {
+            get => _common;
+            set
+            {
+                _common = value;
+                NotifyPropertyChanged(nameof(Common));
             }
         }
     }

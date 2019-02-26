@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.Struct.IcData;
+using His_Pos.NewClass.Prescription.IcData;
 
 namespace His_Pos.Class
 {
@@ -39,7 +39,7 @@ namespace His_Pos.Class
             MedicalNumber = xml.SelectSingleNode("d7") == null ? null : xml.SelectSingleNode("d7").InnerText;
         }
 
-        public IcCard(string icNumber, IcMarks icMarks, string cardReleaseDate, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination)
+        public IcCard(string icNumber, IcMarks icMarks, DateTime cardReleaseDate, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination)
         {
             IcNumber = icNumber;
             IcMarks = icMarks;
@@ -54,7 +54,7 @@ namespace His_Pos.Class
         public IcCard(BasicData basicData)
         {
             CardNo = basicData.CardNumber;
-            IcNumber = basicData.IcNumber;
+            IcNumber = basicData.IDNumber;
             IcMarks = new IcMarks {LogOutMark = basicData.CardLogoutMark};
             CardReleaseDate = basicData.CardReleaseDate;
         }
@@ -67,12 +67,12 @@ namespace His_Pos.Class
             set
             {
                 _icNumber = value;
-                NotifyPropertyChanged("IcNumber");
+                NotifyPropertyChanged("IdNumber");
             }
         }//身分證字號
         public string CardNo { get; set; }
         public IcMarks IcMarks { get; set; } = new IcMarks();//卡片註銷註記.保險對象身分註記.新生兒出生日期.新生兒胞胎註記
-        public string CardReleaseDate { get; set; }//發卡日期
+        public DateTime CardReleaseDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限
         public int AvailableTimes { get; set; }//就醫可用次數
         public IcCardPay IcCardPay { get; set; } //門診醫療費用 住院醫療費用

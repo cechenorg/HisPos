@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
 using His_Pos.Interface;
 using His_Pos.Struct.Product;

@@ -1,25 +1,28 @@
-﻿using His_Pos.Class.Person;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
-using His_Pos.Interface;
 using His_Pos.Struct.Manufactory;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
+        public StoreOrder(StoreOrderCategory category, NewClass.Person.Employee.Employee ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
         {
             Type = OrderType.UNPROCESSING;
-            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+            Application.Current.Dispatcher.Invoke((Action) (() =>
+            {
+                TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+            }));
 
             Category = new Category(category);
 
-            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id, Category.CategoryName.Substring(0,1));
+            Id = "";/// StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id, Category.CategoryName.Substring(0,1));
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
@@ -32,6 +35,8 @@ namespace His_Pos.Class.StoreOrder
             Products = (products is null)? new ObservableCollection<AbstractClass.Product>() : products;
 
             Note = note;
+
+            IsValid = true;
         }
 
         public StoreOrder(DataRow row)
@@ -62,6 +67,8 @@ namespace His_Pos.Class.StoreOrder
             DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
 
             Note = row["STOORD_NOTE"].ToString();
+
+            IsValid = Boolean.Parse(row["STOORD_STATUS"].ToString());
         }
 
         private StoreOrder()
@@ -86,6 +93,9 @@ namespace His_Pos.Class.StoreOrder
 
         public bool IsDataChanged { get; set; } = false;
 
+        public bool IsDeleted => !IsValid;
+        public bool IsValid { get; set; }
+
         public BitmapImage typeIcon;
 
         public BitmapImage TypeIcon
@@ -108,13 +118,22 @@ namespace His_Pos.Class.StoreOrder
                 switch (type)
                 {
                     case OrderType.UNPROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action) (() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+                        }));
                         break;
                     case OrderType.PROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueDot.png", UriKind.Relative));
+                        }));
                         break;
                     case OrderType.WAITING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueRingDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueRingDot.png", UriKind.Relative));
+                        }));
                         break;
                 }
             }

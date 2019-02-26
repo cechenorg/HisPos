@@ -4,8 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
@@ -16,25 +19,25 @@ namespace His_Pos.Class
         public MedicalInfo()
         {
             Hospital = new Hospital();
-            SpecialCode = new SpecialCode.SpecialCode();
+            SpecialCode = new SpecialTreat();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
-            TreatmentCase = new TreatmentCase.TreatmentCase();
+            TreatmentCase = new PrescriptionCase();
         }
 
         public MedicalInfo(DataRow row)
         {
             Hospital = new Hospital(row,DataSource.GetHospitalData);
-            SpecialCode = new SpecialCode.SpecialCode();
+            SpecialCode = new SpecialTreat();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
-            TreatmentCase = new TreatmentCase.TreatmentCase(row);
+            TreatmentCase = new PrescriptionCase(row);
             MainDiseaseCode =  new DiseaseCode.DiseaseCode { Id = row["HISINT_ID1"].ToString() };
             SecondDiseaseCode = new DiseaseCode.DiseaseCode { Id = row["HISINT_ID2"].ToString() };
-            SpecialCode = new SpecialCode.SpecialCode { Id = row["HISSPE_ID1"].ToString() };
+            SpecialCode = new SpecialTreat(row);
         }
 
-        public MedicalInfo(Hospital hospital, SpecialCode.SpecialCode specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
+        public MedicalInfo(Hospital hospital, SpecialTreat specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, PrescriptionCase treatmentCase)
         {
             Hospital = hospital;
             SpecialCode = specialCode;
@@ -52,40 +55,40 @@ namespace His_Pos.Class
         }
         public MedicalInfo(XmlNode xml) {
             Hospital = new Hospital(xml);
-            SpecialCode = new SpecialCode.SpecialCode(xml);
+            SpecialCode = new SpecialTreat();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = xml.SelectSingleNode("d8") == null ? null : xml.SelectSingleNode("d8").InnerText;
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
-            TreatmentCase = new TreatmentCase.TreatmentCase(xml);
+            TreatmentCase = new PrescriptionCase();
         }
         public MedicalInfo(XmlDocument xml)
         {
             Hospital = new Hospital(xml);
-            SpecialCode = new SpecialCode.SpecialCode(xml);
+            SpecialCode = new SpecialTreat();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/study/diseases/item")[0].Attributes["code"].Value;
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
-            TreatmentCase = new TreatmentCase.TreatmentCase(xml);
+            TreatmentCase = new PrescriptionCase();
         }
 
         public MedicalInfo(DeclareFileDdata d)
         {
-            Hospital = MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(d.Dhead.D21))?.DeepCloneViaJson();
+            ///Hospital = MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(d.Dhead.D21))?.DeepCloneViaJson();
             if (Hospital != null)
             {
                 Hospital.Doctor = new MedicalPersonnel();
                 Hospital.Doctor.IcNumber = !string.IsNullOrEmpty(d.Dhead.D24) ? d.Dhead.D24 : string.Empty;
-                Hospital.Division = MainWindow.Divisions.SingleOrDefault(div => div.Id.Equals(d.Dhead.D13))
+                Hospital.Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.ID.Equals(d.Dhead.D13))
                     ?.DeepCloneViaJson();
             }
-            SpecialCode = new SpecialCode.SpecialCode(d);
+            SpecialCode = new SpecialTreat();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D8) ? d.Dhead.D8 : string.Empty;
             SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D9) ? d.Dhead.D9 : string.Empty;
-            TreatmentCase = MainWindow.TreatmentCase.SingleOrDefault(t => t.Id.Equals(d.Dhead.D22))?.DeepCloneViaJson();
+            TreatmentCase = ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.ID.Equals(d.Dhead.D22))?.DeepCloneViaJson();
         }
 
         private Hospital _hospital;
@@ -95,19 +98,19 @@ namespace His_Pos.Class
             get => _hospital;
             set
             {
-                _hospital = value.DeepCloneViaJson();
+                _hospital = value;
                 OnPropertyChanged(nameof(Hospital));
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
 
-        private SpecialCode.SpecialCode _specialCode;
+        private SpecialTreat _specialCode;
 
-        public SpecialCode.SpecialCode SpecialCode
+        public SpecialTreat SpecialCode
         {
             get => _specialCode;
             set
             {
-                _specialCode = value.DeepCloneViaJson();
+                _specialCode = value;
                 OnPropertyChanged(nameof(SpecialCode));
             }
         } //d26 原處方服務機構之特定治療項目代號
@@ -119,7 +122,7 @@ namespace His_Pos.Class
             get => _mainDiseaseCode;
             set
             {
-                _mainDiseaseCode = value.DeepCloneViaJson();
+                _mainDiseaseCode = value;
                 OnPropertyChanged(nameof(MainDiseaseCode));
             }
         } //d8 國際疾病分類碼
@@ -131,14 +134,14 @@ namespace His_Pos.Class
             get => _secondDiseaseCode;
             set
             {
-                _secondDiseaseCode = value.DeepCloneViaJson();
+                _secondDiseaseCode = value;
                 OnPropertyChanged(nameof(SecondDiseaseCode));
             }
         } //d9 國際疾病分類碼
 
-        private TreatmentCase.TreatmentCase _treatmentCase;
+        private PrescriptionCase _treatmentCase;
 
-        public TreatmentCase.TreatmentCase TreatmentCase
+        public PrescriptionCase TreatmentCase
         {
             get => _treatmentCase;
             set
