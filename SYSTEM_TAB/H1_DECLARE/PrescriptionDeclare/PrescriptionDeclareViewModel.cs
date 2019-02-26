@@ -794,6 +794,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
                 CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
+                CurrentPrescription.CountPrescriptionPoint();
                 if (selected == CurrentPrescription.Medicines.Count - 1)
                     CurrentPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusUsage");
@@ -827,6 +828,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DeleteMedicineAction()
         {
             CurrentPrescription.Medicines.RemoveAt(CurrentPrescription.Medicines.IndexOf(SelectedMedicine));
+            CurrentPrescription.CountPrescriptionPoint();
         }
         private void GetCustomPrescription(Prescription p)
         {

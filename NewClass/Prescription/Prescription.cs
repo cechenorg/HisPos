@@ -390,7 +390,8 @@ namespace His_Pos.NewClass.Prescription
                         ChineseName = Medicines[medCount].ChineseName,
                         EnglishName = Medicines[medCount].EnglishName
                     };
-                    MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
+                    if (!string.IsNullOrEmpty(temp.ID))
+                        MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionName = Medicines[medCount].PositionName;
@@ -399,7 +400,8 @@ namespace His_Pos.NewClass.Prescription
                 temp.Days = Medicines[medCount].Days;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
-                Medicines[medCount] = temp; 
+                if(string.IsNullOrEmpty(temp.ID))
+                    Medicines[medCount] = temp; 
             }
             if(addMedicine)
                 Medicines.Add(new Medicine());
