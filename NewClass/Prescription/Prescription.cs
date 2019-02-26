@@ -252,33 +252,25 @@ namespace His_Pos.NewClass.Prescription
        
         private void CheckMedicalServiceData()
         {
-            if (Treatment.ChronicSeq is null || string.IsNullOrEmpty(Treatment.ChronicSeq.ToString()))
-            {
-                MedicalServiceID = "05202B";//一般處方給付(7天以內)
-                PrescriptionPoint.MedicalServicePoint = 48;
-            }
-            else
-            {
-                SetChronicMedicalServiceCode();
-            }
-        }
-
-        private void SetChronicMedicalServiceCode()
-        {
             if (MedicineDays >= 28)
             {
                 MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
                 PrescriptionPoint.MedicalServicePoint = 69;
             }
-            else if (MedicineDays < 14)
+            else if (MedicineDays > 7 && MedicineDays < 14)
             {
                 MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
                 PrescriptionPoint.MedicalServicePoint = 48;
             }
-            else
+            else if (MedicineDays >= 14 && MedicineDays < 28)
             {
                 MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
                 PrescriptionPoint.MedicalServicePoint = 59;
+            }
+            else
+            {
+                MedicalServiceID = "05202B";//一般處方給付(7天以內)
+                PrescriptionPoint.MedicalServicePoint = 48;
             }
         }
 
