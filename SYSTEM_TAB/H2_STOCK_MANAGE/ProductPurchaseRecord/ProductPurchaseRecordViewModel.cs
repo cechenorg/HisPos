@@ -73,7 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             if (StoreOrderCollection.Count > 0)
             {
                 CurrentStoreOrder = StoreOrderCollection[0];
-                TotalPrice = StoreOrderCollection.Sum(s => s.TotalPrice);
+                TotalPrice = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).Sum(s => s.TotalPrice);
             }
             else
             {
