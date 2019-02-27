@@ -15,7 +15,8 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
         private PurchaseProducts orderProducts;
 
-        public string PatientName { get; set; }
+        public string PatientData { get; set; }
+        public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -34,7 +35,7 @@ namespace His_Pos.NewClass.StoreOrder
         public PurchaseOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.PURCHASE;
-            PatientName = row.Field<string>("Cus_Name");
+            PatientData = row.Field<string>("Cus_Name");
         }
 
         #region ----- Override Function -----
