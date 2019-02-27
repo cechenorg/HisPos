@@ -14,6 +14,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             InitializeComponent();
         }
 
+        #region ----- Define Functions -----
         private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -22,7 +23,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
 
             textBox.SelectAll();
         }
-
         private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -32,5 +32,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             e.Handled = true;
             textBox.Focus();
         }
+        #endregion
     }
 }

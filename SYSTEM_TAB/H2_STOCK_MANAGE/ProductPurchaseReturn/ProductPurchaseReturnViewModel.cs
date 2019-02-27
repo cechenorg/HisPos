@@ -230,7 +230,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             backgroundWorker.RunWorkerAsync();
         }
-
         private void RegisterCommand()
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
