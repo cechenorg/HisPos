@@ -730,7 +730,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
-                new ReportParameter("MedicinePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
+                new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
                 new ReportParameter("Division", Treatment.Division.Name)
             };
         }
