@@ -50,8 +50,9 @@
                         <Label Width="65" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                         <Button Content="補卡" Height="35" Command="{Binding MakeUpClick}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" Visibility="{Binding EditedPrescription.PrescriptionStatus.IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                     </StackPanel>
-                    <Rectangle Width="467" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                    <Rectangle Width="432" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                     <Button Content="列印押金單" Height="35" Command="{Binding PrintDepositSheet}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Content="列印收據" Height="35" Command="{Binding PrintReceiptCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     <Button Content="列印藥袋" Height="35" Command="{Binding PrintMedBagCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">

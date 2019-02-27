@@ -183,6 +183,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand MakeUpClick { get; set; }
         public RelayCommand PrintDepositSheet { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
+        public RelayCommand PrintReceiptCmd { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -263,6 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MakeUpClick = new RelayCommand(MakeUpClickAction);
             PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
+            PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
         }
 
         private void RegisterMessengers()
@@ -466,6 +468,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             };
             worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+        private void PrintReceiptAction()
+        {
+            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+            var printReceipt = receiptResult.DialogResult;
+            if (!(bool)printReceipt)
+                return;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.收據列印;
+                EditedPrescription.PrintReceipt();
+            };
+            IsBusy = true;
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             worker.RunWorkerAsync();
         }
         #endregion
