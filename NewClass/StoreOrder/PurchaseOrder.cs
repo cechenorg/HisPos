@@ -93,8 +93,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 purchaseProduct.CopyOldProductData((PurchaseProduct)SelectedItem);
 
-                OrderProducts.RemoveAt(selectedProductIndex);
-                OrderProducts.Insert(selectedProductIndex, purchaseProduct);
+                OrderProducts[selectedProductIndex] = purchaseProduct;
             }
             else
                 OrderProducts.Add(purchaseProduct);

@@ -48,5 +48,9 @@ namespace His_Pos.Database
 
             return table;
         }
+        public ConnectionState ConnectionStatus()
+        {
+            return connection.State;
+        }
     }
 }

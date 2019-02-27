@@ -1,6 +1,12 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product;
+using His_Pos.Service;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
 {
@@ -32,6 +38,78 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             e.Handled = true;
             textBox.Focus();
         }
+        private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                if (ProductDataGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
+                {
+                    int oldCount = ProductDataGrid.Items.Count;
+
+                    (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+
+                    textBox.Text = "";
+
+                    if (ProductDataGrid.Items.Count != oldCount)
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[6]);
+                }
+                else if (ProductDataGrid.CurrentCell.Item is Product)
+                {
+                    if (!(ProductDataGrid.CurrentCell.Item as Product).ID.Equals(textBox.Text))
+                        (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+
+                    List<TextBox> textBoxs = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox", ref textBoxs);
+
+                    int index = textBoxs.IndexOf(sender as TextBox);
+
+                    if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
+                        textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
+
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[6]);
+                }
+
+                ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
+
+                var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                if (firstChild is TextBox)
+                    firstChild.Focus();
+            }
+
+        }
+        private void OrderAmountTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
+
+                ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[1]);
+
+                ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
+
+                var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                if (firstChild is TextBox)
+                    firstChild.Focus();
+            }
+        }
         #endregion
+
+        
     }
 }
