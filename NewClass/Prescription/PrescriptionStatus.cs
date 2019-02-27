@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.Prescription {
                     IsDeclare = r.Field<bool>("IsDeclare");
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
                     IsDeposit = r.Field<bool>("IsDeposit");
+                    IsAdjust = r.Field<bool>("IsAdjust");
                     break;
                 case PrescriptionSource.ChronicReserve:
                     IsSendToSingde = r.Field<bool>("IsSendToServer");

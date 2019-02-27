@@ -382,7 +382,8 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
-            Amount = Amount> 0 ? Amount : Dosage * UsagesFunction.CheckUsage(int.Parse(_days), ViewModelMainWindow.GetUsage(UsageName));
+            Amount = Dosage * UsagesFunction.CheckUsage(int.Parse(_days), ViewModelMainWindow.GetUsage(UsageName))  > 0 ? 
+                Dosage * UsagesFunction.CheckUsage(int.Parse(_days), ViewModelMainWindow.GetUsage(UsageName))  : Amount;
         }
 
         public object Clone()

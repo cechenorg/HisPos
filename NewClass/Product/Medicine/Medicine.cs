@@ -336,7 +336,7 @@ namespace His_Pos.NewClass.Product.Medicine
         private void CalculateAmount()
         {
             if(Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
-            Amount = Amount > 0 ? Amount :(double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
+            Amount = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage) == 0 ? Amount : (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
         }
 
         public void CheckPaySelf(string adjustCaseId)

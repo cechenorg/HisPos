@@ -230,6 +230,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.ID);
             if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
+            EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
+            EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
+            
         }
 
         private void InitialItemsSources()
