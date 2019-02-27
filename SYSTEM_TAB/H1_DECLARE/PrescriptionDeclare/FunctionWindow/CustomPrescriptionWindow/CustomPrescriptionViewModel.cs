@@ -104,6 +104,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public RelayCommand MakeUpCard { get; set; }
         public CustomPrescriptionViewModel(Cus cus, IcCard card)
         {
+            Patient = new Cus();
             Patient = cus;
             Card = card;
             InitializePrescription();
@@ -160,7 +161,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             if (!msg.Notification.Equals("PrescriptionSelected")) return;
             if (SelectedPrescription is null) return;
-            Messenger.Default.Unregister(this);
+            Messenger.Default.Unregister<NotificationMessage>("PrescriptionSelected", CustomPrescriptionSelected);
             Prescription selected = new Prescription();
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -176,10 +177,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
                 if (!string.IsNullOrEmpty(Card.CardNumber))
                     selected.Card = Card;
-                selected.GetCompletePrescriptionData(true, isSelectCooperative, false);
+                selected.Patient = Patient;
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
+                selected.GetCompletePrescriptionData(true, isSelectCooperative, false);
                 IsBusy = false;
                 Messenger.Default.Send(selected, "CustomPrescriptionSelected");
                 Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));

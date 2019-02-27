@@ -887,9 +887,9 @@ namespace His_Pos.NewClass.Prescription
         public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
-            if(!string.IsNullOrEmpty(Card.PatientBasicData.CardNumber))
-                Patient = new Customer(Card);
-            Patient.Check();
+            //if(!string.IsNullOrEmpty(Card.PatientBasicData.CardNumber))
+            //    Patient = new Customer(Card);
+            //Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
             AdjustMedicinesType(addMedicine);

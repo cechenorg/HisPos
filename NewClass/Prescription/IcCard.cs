@@ -53,31 +53,8 @@ namespace His_Pos.NewClass.Prescription
         {
             var strLength = 72;
             var icData = new byte[72];
-            bool? openCom = null;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                openCom = HisApiFunction.OpenCom();
-            };
-            worker.RunWorkerAsync();
-            int i = 0;
-            while (openCom is null)
-            {
-                if(i == 5)
-                    break;
-                Thread.Sleep(300);
-                i++;
-            }
-
-            if (openCom is null)
-            {
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    MessageWindow.ShowMessage("讀卡機逾時", MessageType.WARNING);
-                });
-                return false;
-            }
-            if ((bool)openCom)
+            Thread.Sleep(1500);
+            if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
