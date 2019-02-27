@@ -105,6 +105,7 @@ namespace His_Pos.NewClass.Prescription {
         private void CountChange()
         {
             Change = ActualReceive - AmountsPay;
+
         }
         public void CountDeposit()
         {
