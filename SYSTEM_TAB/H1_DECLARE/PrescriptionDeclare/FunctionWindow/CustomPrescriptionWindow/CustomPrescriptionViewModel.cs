@@ -161,20 +161,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (!msg.Notification.Equals("PrescriptionSelected")) return;
             if (SelectedPrescription is null) return;
             Messenger.Default.Unregister(this);
-            if (CooperativePrescriptions.Contains(SelectedPrescription))
-                isSelectCooperative = true;
-            Prescription selected;
-            if (isSelectCooperative)
-                selected = (Prescription)SelectedPrescription.Clone();
-            else
+            Prescription selected = new Prescription();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                selected = SelectedPrescription;
-            }
-            if (!string.IsNullOrEmpty(Card.CardNumber))
-                selected.Card = Card;
-            selected.GetCompletePrescriptionData(true, isSelectCooperative,false);
-            Messenger.Default.Send(selected, "CustomPrescriptionSelected");
-            Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+                BusyContent = "取得處方資料...";
+                if (CooperativePrescriptions.Contains(SelectedPrescription))
+                    isSelectCooperative = true;
+                if (isSelectCooperative)
+                    selected = (Prescription)SelectedPrescription.Clone();
+                else
+                {
+                    selected = SelectedPrescription;
+                }
+                if (!string.IsNullOrEmpty(Card.CardNumber))
+                    selected.Card = Card;
+                selected.GetCompletePrescriptionData(true, isSelectCooperative, false);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                Messenger.Default.Send(selected, "CustomPrescriptionSelected");
+                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void MakeUpCardAction()
