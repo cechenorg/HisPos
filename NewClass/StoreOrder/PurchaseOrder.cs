@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             if (OrderProducts.Count == 0)
             {
-                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
+                MessageWindow.ShowMessage("進貨單中不可以沒有商品!", MessageType.ERROR);
                 return false;
             }
 
