@@ -22,6 +22,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
+using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -242,13 +243,33 @@ namespace His_Pos.ChromeTabViewModel
         public static Usage GetUsage(string name)
         {
             if (string.IsNullOrEmpty(name)) return new Usage();
-            if (Usages.Count(u => u.Reg is null && u.Name.Equals(name)) != 0)
+            var usage = name.Replace("AC", "").Replace("PC", "");
+            var result = new Usage();
+            if (Usages.Count(u => u.Reg is null && u.Name.Equals(usage)) != 0)
             {
-                return Usages.Where(u => u.Reg is null).SingleOrDefault(u => u.Name.Equals(name));
+                result = Usages.Where(u => u.Reg is null).SingleOrDefault(u => u.Name.Equals(usage)).DeepCloneViaJson();
+                if (name.Contains("AC") || name.Contains("PC"))
+                {
+                    result.Name = name;
+                    if (name.Contains("AC"))
+                        result.PrintName += "(飯前)";
+                    else if(name.Contains("PC"))
+                        result.PrintName += "(飯後)";
+                }
+                return result;
             }
-            if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(name)) != 0)
+            if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(usage)) != 0)
             {
-                return Usages.Where(u => u.Reg != null).SingleOrDefault(u => u.Reg.IsMatch(name));
+                result = Usages.Where(u => u.Reg != null).SingleOrDefault(u => u.Reg.IsMatch(usage)).DeepCloneViaJson();
+                if (name.Contains("AC") || name.Contains("PC"))
+                {
+                    result.Name = name;
+                    if (name.Contains("AC"))
+                        result.PrintName += "(飯前)";
+                    else if (name.Contains("PC"))
+                        result.PrintName += "(飯後)";
+                }
+                return result;
             }
             return new Usage();
         }

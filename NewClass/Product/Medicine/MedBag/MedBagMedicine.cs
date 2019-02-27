@@ -184,6 +184,8 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
 
         private string GetUsagePrintName(Usage.Usage usage)
         {
+            usage = ViewModelMainWindow.GetUsage(usage.Name);
+            if (usage.PrintName is null) return string.Empty;
             if (!usage.PrintName.Contains("(0)")) return usage.PrintName;
             if (ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name)) != null)
             {
