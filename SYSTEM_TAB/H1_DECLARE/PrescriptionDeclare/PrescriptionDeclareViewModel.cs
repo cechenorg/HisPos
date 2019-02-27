@@ -273,6 +273,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
                 var cooperativeSelectionWindow = new CooPreSelectWindow();
                 Messenger.Default.Send(cooperativePrescriptions, "CooperativePrescriptions");
                 cooperativeSelectionWindow.ShowDialog();
@@ -729,7 +730,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
@@ -841,6 +841,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
+            Messenger.Default.Unregister<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             CurrentPrescription = receiveSelectedPrescription;
             CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
@@ -1032,6 +1033,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CusPreSelectWindow customPrescriptionWindow = null;
             if(customPresChecked) return;
+            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
 
