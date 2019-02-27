@@ -345,8 +345,27 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         public string CheckMedicalNumber(bool noCard)
         {
-            if(noCard)
+            if (noCard)
+            {
+                if (!string.IsNullOrEmpty(TempMedicalNumber))
+                {
+                    if (ChronicSeq is null)
+                        MedicalNumber = TempMedicalNumber;
+                    else
+                    {
+                        if (ChronicSeq > 1)
+                        {
+                            MedicalNumber = "IC0" + ChronicSeq;
+                            OriginalMedicalNumber = TempMedicalNumber;
+                        }
+                        else
+                        {
+                            MedicalNumber = TempMedicalNumber;
+                        }
+                    }
+                }
                 return string.Empty;
+            }
             if (string.IsNullOrEmpty(TempMedicalNumber))
             {
                 if (!CheckIsHomeCare()) return StringRes.MedicalNumberError;
