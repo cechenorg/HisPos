@@ -51,8 +51,7 @@
                                     </Grid.RowDefinitions>
                                     <Label Content="{Binding Name}" FontSize="25" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="5,0,0,0"/>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                                        <Label Content="{Binding ManufactoryPrincipalsCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="位聯絡人" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="{Binding Telephone}" FontSize="18" FontFamily="Segoe UI Semi"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -181,7 +180,6 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                     <TextBox Text="{Binding Name}" FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="負責人姓名" Margin="20,0,0,0" BorderThickness="0"/>
-                    <TextBox Text="{Binding ResponsibleDepartment}" FontSize="25" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="負責對象" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                     <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
