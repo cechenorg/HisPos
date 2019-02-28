@@ -13,10 +13,11 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <Button Name="ButtonPredictChronic" Content="申報檔慢箋" Click="ButtonPredictChronic_Click"/>
         <Button Name="DayliUpload" Grid.Column="1" Width="150" Content="每日上傳" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="0,0,10,0" Click="DayliUpload_Click" />
+        <Button Name="changeCus" Grid.Column="2" Width="150" Content="修正客戶" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="0,0,10,0" Click="ChangeCus_Click" />
     </Grid>
 </UserControl>
