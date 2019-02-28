@@ -56,15 +56,15 @@
                 </ContentControl.Style>
             </ContentControl>
             <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding Path=OrderManufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding Path=OrderManufactory.NickName}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="{Binding Path=OrderManufactory.Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <TextBlock Text="進貨" Foreground="Green" FontFamily="Segoe UI Semibold" FontSize="22" VerticalAlignment="Center" Margin="25,0,0,0"/>
             <Label Content="採購人" Foreground="Black" Margin="20,0,0,0" Style="{StaticResource BoldLabelContent18}"/>
             <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
-            <Label Content="病患" Foreground="Black" Margin="600,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding PatientName, Converter={StaticResource EqualityToVisibilityConverter}}"/>
-            <Label Content="{Binding PatientName}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+            <Label Content="慢籤" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Label Content="{Binding PatientData}" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
