@@ -32,8 +32,8 @@
             <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Label Content="{Binding ReceiveEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
-            <Label Content="病患" Foreground="Black" Margin="400,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding PatientName, Converter={StaticResource EqualityToVisibilityConverter}}"/>
-            <Label Content="{Binding PatientName}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+            <Label Content="慢籤" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelContent18}" Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Label Content="{Binding PatientData}" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
