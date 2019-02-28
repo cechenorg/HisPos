@@ -13,6 +13,7 @@ using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.Service;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
 using IcCard = His_Pos.NewClass.Prescription.IcCard;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -28,7 +29,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public Prescriptions RegisteredPrescriptions { get; set; }
         public Prescriptions UngetCardPrescriptions { get; set; }
         public Prescription SelectedPrescription { get; set; }
-        public Cus Patient { get; set; }
         public IcCard Card { get; set; }
         private bool isSelectCooperative { get; set; }
         private Visibility cooperativeVisible;
@@ -104,9 +104,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public RelayCommand MakeUpCard { get; set; }
         public CustomPrescriptionViewModel(Cus cus, IcCard card)
         {
-            Patient = new Cus();
-            Patient = cus;
-            Card = card;
+            Card = new IcCard();
+            Card = card.DeepCloneViaJson();
+            SelectedPrescription = new Prescription();
+            SelectedPrescription.Patient = cus.DeepCloneViaJson();
             InitializePrescription();
             MakeUpCard = new RelayCommand(MakeUpCardAction);
             RegisterMessenger();
@@ -114,16 +115,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void InitializePrescription()
         {
-            SelectedPrescription = null;
             CooperativePrescriptions = new Prescriptions();
             MainWindow.ServerConnection.OpenConnection();
-            CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(Patient.IDNumber);
+            CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(SelectedPrescription.Patient.IDNumber);
             ReservedPrescriptions = new Prescriptions();
-            ReservedPrescriptions.GetReservePrescriptionByCusId(Patient.ID);
+            ReservedPrescriptions.GetReservePrescriptionByCusId(SelectedPrescription.Patient.ID);
             RegisteredPrescriptions = new Prescriptions();
-            RegisteredPrescriptions.GetRegisterPrescriptionByCusId(Patient.ID);
+            RegisteredPrescriptions.GetRegisterPrescriptionByCusId(SelectedPrescription.Patient.ID);
             UngetCardPrescriptions = new Prescriptions();
-            UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(Patient.ID);
+            UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(SelectedPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (CooperativePrescriptions.Count == 0)
                 CooperativeVisible = Visibility.Collapsed;
@@ -177,7 +177,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
                 if (!string.IsNullOrEmpty(Card.CardNumber))
                     selected.Card = Card;
-                selected.Patient = Patient;
+                selected.Patient = SelectedPrescription.Patient;
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

@@ -302,7 +302,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
-                customerSelectionWindow = new CusSelectWindow();
+            {
+                SearchCustomer();
+            }
             else
             {
                 if(CurrentPrescription.Patient.IDNumber.Length != 10)
@@ -324,6 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     else
                     {
+                        Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
                         customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
                     }
                 }
@@ -334,7 +337,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                customerSelectionWindow = new CusSelectWindow();
+            {
+                SearchCustomer();
+            }
             else
             {
                 if (CurrentPrescription.Patient.Count() == 0)
@@ -353,7 +358,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                 }
                 else
+                {
+                    Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
                     customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+                }
             }
         }
         private void SearchCusByBirthAction()
@@ -361,7 +369,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             customPresChecked = false;
             customerSelectionWindow = null;
             if (CurrentPrescription.Patient.Birthday is null)
-                customerSelectionWindow = new CusSelectWindow();
+            {
+                SearchCustomer();
+            }
             else
             {
                 if (CurrentPrescription.Patient.Count() == 0)
@@ -380,7 +390,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                 }
                 else
+                {
+                    Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
                     customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+                }
             }
         }
         private void SearchCustomerByTelAction()
@@ -388,7 +401,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             customPresChecked = false;
             customerSelectionWindow = null;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
-                customerSelectionWindow = new CusSelectWindow();
+            {
+                SearchCustomer();
+            }
             else
             {
                 if (CurrentPrescription.Patient.Count() == 0)
@@ -407,7 +422,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                 }
                 else
+                {
+                    Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
                     customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
+                }
             }
         }
         private void ShowInsSelectionWindowAction(string search)
@@ -742,7 +760,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
@@ -850,6 +867,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if((receiveSelectedCustomer != null && CurrentPrescription.Patient != null) && receiveSelectedCustomer.ID == CurrentPrescription.Patient.ID)
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
+            Messenger.Default.Unregister<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
             CheckCustomPrescriptions();
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
@@ -1075,7 +1093,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     else
                     {
                         CusSelectWindow customerSelectionWindow = null;
-                        customerSelectionWindow = new CusSelectWindow();
+                        SearchCustomer();
                     }
                 }
                 else
@@ -1333,6 +1351,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
             MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void SearchCustomer()
+        {
+            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            customerSelectionWindow = new CusSelectWindow();
         }
         #endregion
     }
