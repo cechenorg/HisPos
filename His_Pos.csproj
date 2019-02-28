@@ -319,6 +319,12 @@
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetails.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipal.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipals.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryTradeRecord.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryTradeRecords.cs" />
     <Compile Include="NewClass\OfflineDataSet\OfflineDataSet.cs" />
     <Compile Include="NewClass\OfflineDataSet\Product.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
@@ -804,6 +810,16 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml.cs">
+      <DependentUpon>AddManufactoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\NormalManufactoryControl.xaml.cs">
+      <DependentUpon>NormalManufactoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\SingdeManufactoryControl.xaml.cs">
+      <DependentUpon>SingdeManufactoryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
@@ -1302,6 +1318,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\NormalManufactoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\SingdeManufactoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1540,6 +1568,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Resource Include="Images\closeButton.png" />
+    <Resource Include="Images\refresh.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

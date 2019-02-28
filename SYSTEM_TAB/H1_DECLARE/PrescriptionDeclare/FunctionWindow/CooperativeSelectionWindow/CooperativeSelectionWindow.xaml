@@ -20,6 +20,7 @@
         <local:CooperativeSelectionViewModel/>
     </Window.DataContext>-->
     <Viewbox Stretch="Fill">
+        <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -64,8 +65,11 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </xctk:MaskedTextBox>
-                <Rectangle Width="470"/>
-                <Button Content="列印藥袋" Background="RoyalBlue" Width="100" BorderThickness="0" FontSize="16" Command="{Binding PrintMedBag}"/>
+                <Rectangle Width="325"/>
+                <Button Name="Back" Width="35" Height="35" Background="Transparent" BorderBrush="Transparent" Margin="120,0,0,0" Padding="0" Command="{Binding Refresh}">
+                    <Image Source="/Images/refresh.png" Height="35" Width="35" Margin="0"/>
+                </Button>
+                <Button Content="列印藥袋" Background="RoyalBlue" Width="100" BorderThickness="0" FontSize="16" Margin="10,0,0,0" Command="{Binding PrintMedBag}"/>
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -262,5 +266,6 @@
                 </Grid>
             </Grid>
         </Grid>
+        </xctk:BusyIndicator>
     </Viewbox>
 </Window>

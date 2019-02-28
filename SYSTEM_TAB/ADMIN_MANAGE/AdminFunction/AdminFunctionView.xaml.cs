@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -8,9 +9,13 @@ using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.Service;
+using Customer = His_Pos.Class.Person.Customer;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -82,6 +87,22 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
             using (var reader = doc.Root.CreateReader())
             {
                 return (T)xmlSerializer.Deserialize(reader);
+            }
+        }
+
+        private void ChangeCus_Click(object sender, RoutedEventArgs e)
+        {
+            var prescriptions = new DeclarePrescriptions();
+            prescriptions.GetSearchPrescriptions(new DateTime(2019,02,28), new DateTime(2019, 02, 28));
+            foreach (var p in prescriptions.Where(pre => pre.Patient.ID == 0))
+            {
+                Ddata d = XmlService.Deserialize<Ddata>(p.FileContentStr);
+                NewClass.Person.Customer.Customer c = new NewClass.Person.Customer.Customer();
+                c.Name = d.Dhead.D20;
+                c.IDNumber = d.Dhead.D3;
+                c.Birthday = DateTimeExtensions.TWDateStringToDateOnly(d.Dhead.D6);
+                c.Check();
+                Console.WriteLine(p.ID +":"+ c.ID);
             }
         }
     }

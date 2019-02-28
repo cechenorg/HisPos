@@ -178,6 +178,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 if (!string.IsNullOrEmpty(Card.CardNumber))
                     selected.Card = Card;
                 selected.Patient = SelectedPrescription.Patient;
+                MainWindow.ServerConnection.OpenConnection();
+                selected.Patient.Check();
+                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

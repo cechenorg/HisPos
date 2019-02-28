@@ -4,11 +4,13 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
 using His_Pos.Service;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow
 {
@@ -130,11 +132,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 CooPreCollectionViewSource.Filter += Filter;
             }
         }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            private set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand SelectionChanged { get; set; }
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
+        public RelayCommand Refresh { get; set; }
         #endregion
         public CooperativeSelectionViewModel()
         {
@@ -151,6 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             SelectionChanged = new RelayCommand(SelectionChangedAction);
             PrintMedBag = new RelayCommand(PrintAction);
             PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
+            Refresh = new RelayCommand(RefreshAction);
         }
         #endregion
         #region CommandActions
@@ -195,6 +217,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             SelectedPrescription.GetCompletePrescriptionData(true, true, false);
             Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
+        }
+
+        private void RefreshAction()
+        {
+            CooperativePrescriptions = new Prescriptions();
+            CooperativePrescriptions.Clear();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.GetCooperativePrescriptions;
+                CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
+                CooPreCollectionView = CooPreCollectionViewSource.View;
+                IsRead = false;
+                IsNotRead = true;
+                StartDate = DateTime.Today;
+                EndDate = DateTime.Today;
+                cooPreCollectionViewSource.Filter += Filter;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
         #region Functions
