@@ -1540,6 +1540,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Resource Include="Images\closeButton.png" />
+    <Resource Include="Images\refresh.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
