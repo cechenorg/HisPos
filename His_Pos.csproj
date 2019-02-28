@@ -815,6 +815,12 @@
       <DependentUpon>AddManufactoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\NormalManufactoryControl.xaml.cs">
+      <DependentUpon>NormalManufactoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\SingdeManufactoryControl.xaml.cs">
+      <DependentUpon>SingdeManufactoryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
@@ -1313,6 +1319,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\NormalManufactoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageControl\SingdeManufactoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
