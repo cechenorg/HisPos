@@ -489,7 +489,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay;
+                EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
                 BusyContent = StringRes.收據列印;
                 EditedPrescription.PrintReceipt();
             };

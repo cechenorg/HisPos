@@ -240,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand ErrorCodeSelect { get; set; }
         public RelayCommand DivisionSelectionChanged { get; set; }
+        public RelayCommand SelfPayTextChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -658,6 +659,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.Division.ID))
                 CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(CurrentPrescription.Treatment.Division.Name.Equals("牙科") ? "19" : "09");
         }
+        private void SelfPayTextChangedAction()
+        {
+            if(NotPrescribe)
+                CurrentPrescription.PrescriptionPoint.AmountsPay =
+                CurrentPrescription.PrescriptionPoint.CopaymentPoint +
+                CurrentPrescription.PrescriptionPoint.AmountSelfPay;
+            else
+            {
+                CurrentPrescription.PrescriptionPoint.AmountsPay = CurrentPrescription.PrescriptionPoint.AmountSelfPay;
+            }
+        }
         #endregion
         #region InitialFunctions
         private void InitializeVariables()
@@ -709,6 +721,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
             DivisionSelectionChanged = new RelayCommand(CheckPrescriptionCase);
+            SelfPayTextChanged = new RelayCommand(SelfPayTextChangedAction);
         }
 
         private void InitialPrescription()

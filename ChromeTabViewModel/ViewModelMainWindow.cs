@@ -248,6 +248,7 @@ namespace His_Pos.ChromeTabViewModel
             if (Usages.Count(u => u.Reg is null && u.Name.Equals(usage)) != 0)
             {
                 result = Usages.Where(u => u.Reg is null).SingleOrDefault(u => u.Name.Equals(usage)).DeepCloneViaJson();
+                result.Name = name;
                 if (name.Contains("AC") || name.Contains("PC"))
                 {
                     result.Name = name;
@@ -261,9 +262,9 @@ namespace His_Pos.ChromeTabViewModel
             if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(usage)) != 0)
             {
                 result = Usages.Where(u => u.Reg != null).SingleOrDefault(u => u.Reg.IsMatch(usage)).DeepCloneViaJson();
+                result.Name = name;
                 if (name.Contains("AC") || name.Contains("PC"))
                 {
-                    result.Name = name;
                     if (name.Contains("AC"))
                         result.PrintName += "(飯前)";
                     else if (name.Contains("PC"))
