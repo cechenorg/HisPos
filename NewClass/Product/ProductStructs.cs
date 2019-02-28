@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product
         }
         internal static ProductStructs GetProductStructsBySearchString(string searchString)
         {
-            DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString);
+            DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString.Trim());
             return new ProductStructs(dataTable);
         }
 
@@ -25,10 +25,10 @@ namespace His_Pos.NewClass.Product
             switch (addProductEnum)
             {
                 case AddProductEnum.ProductReturn:
-                    dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString);
+                    dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim());
                     break;
                 default:
-                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString);
+                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim());
                     break;
             }
             return dataTable.Rows[0].Field<int>("COUNT");
