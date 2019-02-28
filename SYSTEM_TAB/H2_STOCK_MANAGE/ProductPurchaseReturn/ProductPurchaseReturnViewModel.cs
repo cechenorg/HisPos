@@ -27,7 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand<TextBox> AddProductByInputCommand { get; set; }
+        public RelayCommand<string> AddProductByInputCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
@@ -126,10 +126,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             InitVariables();
         }
-        private void AddProductByInputAction(TextBox textBox)
+        private void AddProductByInputAction(string searchString)
         {
-            string searchString = textBox.Text;
-
             if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
 
             if (searchString.Length < 5)
@@ -160,8 +158,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
             }
-
-            textBox.Text = "";
         }
         private void AddProductAction()
         {
@@ -190,30 +186,38 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
 
-                BusyContent = "取得杏德新訂單...";
-                DataTable dataTable = StoreOrderDB.GetNewSingdeOrders();
-                if (dataTable.Rows.Count > 0)
-                    StoreOrders.AddNewOrdersFromSingde(dataTable);
+                DataTable dataTable;
 
-                dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
-                if (dataTable.Rows.Count > 0)
-                    StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
+                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
+                {
+                    BusyContent = "取得杏德新訂單...";
+                    dataTable = StoreOrderDB.GetNewSingdeOrders();
+                    if (dataTable.Rows.Count > 0)
+                        StoreOrders.AddNewOrdersFromSingde(dataTable);
+
+                    dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
+                    if (dataTable.Rows.Count > 0)
+                        StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
+                }
 
                 BusyContent = "取得訂單資料...";
                 StoreOrderCollection = StoreOrders.GetOrdersNotDone();
 
-                List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
-                string dateTime = DateTime.Now.ToString("yyyyMMdd");
-
-                if (storeOrders.Count > 0)
-                    dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
-
-                BusyContent = "取得杏德訂單最新狀態...";
-                dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                if (dataTable.Rows.Count > 0)
+                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
-                    StoreOrderCollection = new StoreOrders(StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                    List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
+                    string dateTime = DateTime.Now.ToString("yyyyMMdd");
+
+                    if (storeOrders.Count > 0)
+                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+
+                    BusyContent = "取得杏德訂單最新狀態...";
+                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                        StoreOrderCollection = new StoreOrders(StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                    }
                 }
                 
                 MainWindow.SingdeConnection.CloseConnection();
@@ -230,14 +234,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             backgroundWorker.RunWorkerAsync();
         }
-
         private void RegisterCommand()
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
-            AddProductByInputCommand = new RelayCommand<TextBox>(AddProductByInputAction);
+            AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
@@ -251,6 +254,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
                 MainWindow.ServerConnection.CloseConnection();
+
+                Messenger.Default.Send(new NotificationMessage<string>(this, notificationMessage.Content.ID, nameof(ProductPurchaseReturnViewModel)));
             }
         }
         #endregion
