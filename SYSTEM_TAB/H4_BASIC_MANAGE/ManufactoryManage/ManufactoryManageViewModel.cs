@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -23,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 
         #region ----- Define Variables -----
         private bool isDataChanged;
+        private ManufactoryManageDetail currentManufactory;
 
         public bool IsDataChanged
         {
@@ -34,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
+        public ManufactoryManageDetail CurrentManufactory { get; set; }
         #endregion
 
         public ManufactoryManageViewModel()

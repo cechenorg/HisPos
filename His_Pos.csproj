@@ -811,6 +811,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml.cs">
+      <DependentUpon>AddManufactoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
@@ -1307,6 +1311,10 @@
     <Page Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
       <SubType>Designer</SubType>

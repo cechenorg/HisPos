@@ -10,6 +10,8 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
     public class ManufactoryManageDetail : Manufactory
     {
         #region ----- Define Variables -----
+        private ManufactoryPrincipal currentPrincipal;
+
         public string Address { get; set; }
         public string Fax { get; set; }
         public string EIN { get; set; }
@@ -18,6 +20,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public string Note { get; set; }
         public ManufactoryPrincipals Principals { get; set; }
         public ManufactoryTradeRecords TradeRecords { get; set; }
+        public ManufactoryPrincipal CurrentPrincipal { get; set; }
         #endregion
 
         public ManufactoryManageDetail(DataRow row) : base(row)
