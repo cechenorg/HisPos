@@ -10,7 +10,7 @@
     <UserControl.DataContext>
         <manufactoryManage:ManufactoryManageViewModel/>
     </UserControl.DataContext>
-    <Grid Width="1365" Height="839">
+    <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>

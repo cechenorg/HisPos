@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.StoreOrder
         public PurchaseOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.PURCHASE;
-            PatientData = row.Field<string>("Cus_Name");
+            PatientData = row.Field<string>("CUS_DATA");
         }
 
         #region ----- Override Function -----
