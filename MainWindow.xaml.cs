@@ -20,6 +20,7 @@ using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.NewClass.StockValue;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
@@ -179,6 +180,7 @@ namespace His_Pos
             try
             {
                 ServerConnection.OpenConnection();
+                StockValue.UpdateDailyStockValue(); //做每日進退帳
                 WebApi.SendToCooperClinic();
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
                 ServerConnection.CloseConnection();

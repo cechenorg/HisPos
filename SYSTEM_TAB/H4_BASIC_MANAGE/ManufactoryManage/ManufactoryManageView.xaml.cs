@@ -32,7 +32,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         public ManufactoryManageView()
         {
             InitializeComponent();
-            DataContext = this;
             //InitManufactory();
         }
 

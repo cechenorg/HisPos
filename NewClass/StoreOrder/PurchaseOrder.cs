@@ -15,7 +15,8 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
         private PurchaseProducts orderProducts;
 
-        public string PatientName { get; set; }
+        public string PatientData { get; set; }
+        public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -34,7 +35,7 @@ namespace His_Pos.NewClass.StoreOrder
         public PurchaseOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.PURCHASE;
-            PatientName = row.Field<string>("Cus_Name");
+            PatientData = row.Field<string>("CUS_DATA");
         }
 
         #region ----- Override Function -----
@@ -93,8 +94,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 purchaseProduct.CopyOldProductData((PurchaseProduct)SelectedItem);
 
-                OrderProducts.RemoveAt(selectedProductIndex);
-                OrderProducts.Insert(selectedProductIndex, purchaseProduct);
+                OrderProducts[selectedProductIndex] = purchaseProduct;
             }
             else
                 OrderProducts.Add(purchaseProduct);
@@ -113,7 +113,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             if (OrderProducts.Count == 0)
             {
-                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
+                MessageWindow.ShowMessage("進貨單中不可以沒有商品!", MessageType.ERROR);
                 return false;
             }
 
