@@ -110,7 +110,7 @@
                         <DataGridTemplateColumn Header="調劑狀態"  Width="100" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="/Images/Success.png" Width="20" Visibility="{Binding IsAdjust,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Image Source="/Images/Declared.png" Width="20" Visibility="{Binding IsAdjust,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
