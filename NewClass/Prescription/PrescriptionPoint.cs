@@ -105,6 +105,7 @@ namespace His_Pos.NewClass.Prescription {
         private void CountChange()
         {
             Change = ActualReceive - AmountsPay;
+
         }
         public void CountDeposit()
         {
@@ -114,6 +115,9 @@ namespace His_Pos.NewClass.Prescription {
         public void GetDeposit(int id)
         {
             Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
+        }
+        public void GetAmountPaySelf(int id) { 
+            AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
         }
     }
     

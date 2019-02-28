@@ -74,7 +74,13 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "preId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[DepositByPreId]", parameterList);
         }
-
+        public static DataTable GetAmountPaySelf(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "preId", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AmountPaySelfByPreId]", parameterList);
+        }
+        
         public static DataTable ReturnInventory(string productID, double amount, string type, string source, string sourcdId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

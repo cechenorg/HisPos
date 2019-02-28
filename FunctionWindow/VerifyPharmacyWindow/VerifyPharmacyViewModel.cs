@@ -100,7 +100,7 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             p.ID = MedicalNum;
             p.Name = PharmacyName;
             p.Tel = PharmacyTel;
-            p.Address = PharmacyTel;
+            p.Address = PharmacyAddress;
             p.InsertPharmacy();
             Messenger.Default.Send(new NotificationMessage("CloseVerifyPharmacyWindow")); 
         }

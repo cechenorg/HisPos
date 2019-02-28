@@ -80,6 +80,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private bool isGetCard;
+        public bool IsGetCard
+        {
+            get => isGetCard;
+            private set
+            {
+                Set(() => IsGetCard, ref isGetCard, value);
+            }
+        }
         private bool CheckEdit()
         {
             var preEdited = !EditedPrescription.PublicInstancePropertiesEqual(OriginalPrescription);
@@ -183,6 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand MakeUpClick { get; set; }
         public RelayCommand PrintDepositSheet { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
+        public RelayCommand PrintReceiptCmd { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -200,6 +210,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
             Init((Prescription)selected.Clone());
+            IsGetCard = !NotPrescribe || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
         #region InitialFunctions
         private void Init(Prescription selected)
@@ -230,6 +241,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.Treatment.PrescriptionCase?.ID);
             if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
+            EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
+            EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
+            
         }
 
         private void InitialItemsSources()
@@ -260,6 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MakeUpClick = new RelayCommand(MakeUpClickAction);
             PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
+            PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
         }
 
         private void RegisterMessengers()
@@ -463,6 +478,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             };
             worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+        private void PrintReceiptAction()
+        {
+            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+            var printReceipt = receiptResult.DialogResult;
+            if (!(bool)printReceipt)
+                return;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
+                BusyContent = StringRes.收據列印;
+                EditedPrescription.PrintReceipt();
+            };
+            IsBusy = true;
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             worker.RunWorkerAsync();
         }
         #endregion

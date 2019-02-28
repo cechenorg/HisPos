@@ -240,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand ErrorCodeSelect { get; set; }
         public RelayCommand DivisionSelectionChanged { get; set; }
+        public RelayCommand SelfPayTextChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -273,6 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
                 var cooperativeSelectionWindow = new CooPreSelectWindow();
                 Messenger.Default.Send(cooperativePrescriptions, "CooperativePrescriptions");
                 cooperativeSelectionWindow.ShowDialog();
@@ -657,6 +659,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!string.IsNullOrEmpty(CurrentPrescription.Treatment.Division.ID))
                 CurrentPrescription.Treatment.PrescriptionCase = VM.GetPrescriptionCases(CurrentPrescription.Treatment.Division.Name.Equals("牙科") ? "19" : "09");
         }
+        private void SelfPayTextChangedAction()
+        {
+            if(NotPrescribe)
+                CurrentPrescription.PrescriptionPoint.AmountsPay =
+                CurrentPrescription.PrescriptionPoint.CopaymentPoint +
+                CurrentPrescription.PrescriptionPoint.AmountSelfPay;
+            else
+            {
+                CurrentPrescription.PrescriptionPoint.AmountsPay = CurrentPrescription.PrescriptionPoint.AmountSelfPay;
+            }
+        }
         #endregion
         #region InitialFunctions
         private void InitializeVariables()
@@ -708,6 +721,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
             DivisionSelectionChanged = new RelayCommand(CheckPrescriptionCase);
+            SelfPayTextChanged = new RelayCommand(SelfPayTextChangedAction);
         }
 
         private void InitialPrescription()
@@ -729,7 +743,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void RegisterMessengers()
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this,GetSelectedProduct);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
@@ -841,6 +854,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetSelectedPrescription(Prescription receiveSelectedPrescription)
         {
+            Messenger.Default.Unregister<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             CurrentPrescription = receiveSelectedPrescription;
             CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
@@ -1032,6 +1046,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CusPreSelectWindow customPrescriptionWindow = null;
             if(customPresChecked) return;
+            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
             customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
         }
 

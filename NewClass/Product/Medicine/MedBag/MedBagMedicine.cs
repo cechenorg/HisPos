@@ -184,27 +184,22 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
 
         private string GetUsagePrintName(Usage.Usage usage)
         {
+            usage = ViewModelMainWindow.GetUsage(usage.Name);
+            if (usage.PrintName is null || string.IsNullOrEmpty(usage.PrintName)) return string.Empty;
             if (!usage.PrintName.Contains("(0)")) return usage.PrintName;
-            if (ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name)) != null)
+            var match = usage.Reg.Match(usage.Name);
+            var print = string.Empty;
+            var tempPrint = usage.PrintName;
+            var currentIndex = 0;
+            for (var i = 1; i < match.Groups.Count; i++)
             {
-                var match = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name))?.Reg.Match(usage.Name);
-                var print = string.Empty;
-                var tempPrint = usage.PrintName;
-                var currentIndex = 0;
-                for (var i = 1; i < match.Groups.Count; i++)
-                {
-                    var rightParenthesisIndex = tempPrint.IndexOf(")");
-                    var replace = "(" + (i - 1) + ")";
-                    print += usage.PrintName.Substring(currentIndex, rightParenthesisIndex + 1).Replace(replace, match.Groups[i].Value);
-                    currentIndex+= rightParenthesisIndex+1;
-                    tempPrint = usage.PrintName.Substring(currentIndex, (usage.PrintName.Length- currentIndex));
-                }
-                return print + tempPrint;
+                var rightParenthesisIndex = tempPrint.IndexOf(")");
+                var replace = "(" + (i - 1) + ")";
+                print += usage.PrintName.Substring(currentIndex, rightParenthesisIndex + 1).Replace(replace, match.Groups[i].Value);
+                currentIndex += rightParenthesisIndex + 1;
+                tempPrint = usage.PrintName.Substring(currentIndex, (usage.PrintName.Length - currentIndex));
             }
-            else
-            {
-                return string.Empty;
-            }
+            return print + tempPrint;
         }
     }
 }

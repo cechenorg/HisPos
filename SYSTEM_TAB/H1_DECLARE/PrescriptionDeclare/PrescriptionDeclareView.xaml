@@ -582,10 +582,16 @@
                         <StackPanel Grid.Row="1" Margin="10,0,10,0" Orientation="Horizontal">
                             <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}"/>
                             <TextBox x:Name="CopaymentText"  Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                             <Label Margin="20,0,0,0" Content="應收 $" Style="{StaticResource BoldLabelContent18}"/>
-                            <TextBox x:Name="CustomPayText" Width="90" Height="35"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <Label x:Name="CustomPayText" Width="90" Height="35"  HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
+                                     Content="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Row="2" Margin="10,0,10,0" Orientation="Horizontal">
                             <Label Content="已付 $" Style="{StaticResource BoldLabelContent18}"/>
@@ -597,7 +603,13 @@
                         <StackPanel Grid.Row="3" Margin="10,0,10,0" Orientation="Horizontal">
                             <Label  Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
                             <TextBox x:Name="SelfCostText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number" CaretBrush="Red"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.5,0.5" />
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.5,0.5">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
                             <CheckBox Width="133" Height="35" Background="RoyalBlue"  Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"

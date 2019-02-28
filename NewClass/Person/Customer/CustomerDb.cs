@@ -51,7 +51,12 @@ namespace His_Pos.NewClass.Person.Customer
         }
         public static DataTable SetCustomer(Customer c) {
             DataTable customerTable = CustomerTable();
-            DataRow newRow = customerTable.NewRow();  
+            DataRow newRow = customerTable.NewRow();
+            if (c != null)
+            {
+                if (!string.IsNullOrEmpty(c.IDNumber))
+                    c.CheckGender();
+            }
             DataBaseFunction.AddColumnValue(newRow, "Cus_ID",c.ID);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Name", c.Name);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Gender", c.Gender);

@@ -671,7 +671,7 @@ namespace His_Pos.NewClass.Prescription
         }
         private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
         {
-            var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
+            var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
@@ -730,7 +730,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
-                new ReportParameter("MedicinePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
+                new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
                 new ReportParameter("Division", Treatment.Division.Name)
             };
         }
@@ -887,9 +887,9 @@ namespace His_Pos.NewClass.Prescription
         public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
-            if(!string.IsNullOrEmpty(Card.PatientBasicData.CardNumber))
-                Patient = new Customer(Card);
-            Patient.Check();
+            //if(!string.IsNullOrEmpty(Card.PatientBasicData.CardNumber))
+            //    Patient = new Customer(Card);
+            //Patient.Check();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
             AdjustMedicinesType(addMedicine);

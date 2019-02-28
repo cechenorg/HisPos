@@ -26,7 +26,8 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
-
+            if(s == PrescriptionSource.Normal)
+            IsAdjust = r.Field<bool>("IsAdjust"); 
         }
 
         private Customer patient;
@@ -90,6 +91,15 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => ID, ref id, value);
+            }
+        }
+        private bool isAdjust;
+        public bool IsAdjust
+        {
+            get => isAdjust;
+            set
+            {
+                Set(() => IsAdjust, ref isAdjust, value);
             }
         }
         public PrescriptionSource Source { get; set; }
