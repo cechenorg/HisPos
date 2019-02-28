@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
-    public class ManufactoryPrincipal
+    public class ManufactoryPrincipal : ICloneable
     {
         #region ----- Define Variables -----
         public string ID { get; set; }
@@ -18,9 +18,37 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public string Email { get; set; }
         public string Note { get; set; }
         #endregion
+
+        public ManufactoryPrincipal()
+        {
+            ID = "";
+            Name = "";
+            Email = "";
+            Fax = "";
+            Line = "";
+            Note = "";
+            Telephone = "";
+        }
         public ManufactoryPrincipal(DataRow row)
         {
 
         }
+
+        #region ----- Define Functions -----
+        public object Clone()
+        {
+            ManufactoryPrincipal newPrincipal = new ManufactoryPrincipal();
+
+            newPrincipal.ID = ID;
+            newPrincipal.Name = Name;
+            newPrincipal.Email = Email;
+            newPrincipal.Fax = Fax;
+            newPrincipal.Line = Line;
+            newPrincipal.Note = Note;
+            newPrincipal.Telephone = Telephone;
+
+            return newPrincipal;
+        }
+        #endregion
     }
 }

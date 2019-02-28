@@ -4,6 +4,7 @@ namespace His_Pos.NewClass.Manufactory
 {
     public class Manufactory
     {
+        protected Manufactory() { }
         public Manufactory(DataRow row)
         {
             ID = row.Field<int>("Man_ID").ToString();
