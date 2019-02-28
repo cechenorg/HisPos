@@ -115,7 +115,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     IsEditing = false;
                     HideDisableProduct = false;
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString.Trim());
+                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
                     MainWindow.ServerConnection.CloseConnection();
                     if (addProEnum == AddProductEnum.PrescriptionDeclare || addProEnum == AddProductEnum.PrescriptionEdit)
                         ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p => p.NHIPrice) };
