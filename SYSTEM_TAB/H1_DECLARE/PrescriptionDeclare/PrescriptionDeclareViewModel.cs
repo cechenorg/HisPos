@@ -931,17 +931,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private void NormalAdjust(bool noCard)
-        { 
-            if (CurrentPrescription.Id == 0)
+        {
+            if (CurrentPrescription.Treatment.ChronicSeq != null && CurrentPrescription.Treatment.ChronicTotal != null) //慢箋調劑
+            {
                 CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
-            else 
-                CurrentPrescription.Update();
-            var bucklevalue = CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
-            CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
-            CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
-            CurrentPrescription.ProcessSelfPayCashFlow("自費");
-            if(noCard)
-                CurrentPrescription.ProcessDepositCashFlow("押金");
+                CurrentPrescription.AdjustPredictResere();
+                var bucklevalue = CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
+                CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
+                CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+                CurrentPrescription.ProcessSelfPayCashFlow("自費");
+                if (noCard)
+                    CurrentPrescription.ProcessDepositCashFlow("押金"); 
+            }
+            else { //一般箋調劑
+                if (CurrentPrescription.Id == 0)
+                    CurrentPrescription.Id = CurrentPrescription.InsertPrescription();
+                else
+                    CurrentPrescription.Update();
+                var bucklevalue = CurrentPrescription.ProcessInventory("處方調劑", "PreMasID", CurrentPrescription.Id.ToString());
+                CurrentPrescription.ProcessMedicineUseEntry(bucklevalue);
+                CurrentPrescription.ProcessCopaymentCashFlow("部分負擔");
+                CurrentPrescription.ProcessSelfPayCashFlow("自費");
+                if (noCard)
+                    CurrentPrescription.ProcessDepositCashFlow("押金"); 
+            } 
         }
         private void CooperativeAdjust(bool noCard)
         {
