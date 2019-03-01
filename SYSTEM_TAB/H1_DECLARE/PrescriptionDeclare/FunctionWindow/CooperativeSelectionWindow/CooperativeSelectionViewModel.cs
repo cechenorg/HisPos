@@ -191,6 +191,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrintAction()
         {
             if(SelectedPrescription is null) return;
+            MainWindow.ServerConnection.OpenConnection();
+            SelectedPrescription.Patient.Check();
+            MainWindow.ServerConnection.CloseConnection();
             SelectedPrescription.GetCompletePrescriptionData(false,true,false);
             SelectedPrescription.CountPrescriptionPoint();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
