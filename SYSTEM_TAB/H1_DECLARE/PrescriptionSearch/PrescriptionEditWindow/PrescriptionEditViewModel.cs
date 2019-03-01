@@ -95,11 +95,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var pharmacyEdited = !EditedPrescription.Treatment.Pharmacist.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Pharmacist);
             var adjustDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.AdjustDate, (DateTime)OriginalPrescription.Treatment.AdjustDate) != 0;
             var medEdited = false;
-            if (OriginalPrescription.Medicines.Count != EditedPrescription.Medicines.Count)
+            if (OriginalPrescription.Medicines.Count != EditedPrescription.Medicines.Count(m=>m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial))
                 medEdited = true;
             else
             {
-                for (var i = 0; i < EditedPrescription.Medicines.Count; i++)
+                for (var i = 0; i < EditedPrescription.Medicines.Count(m => m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial); i++)
                 {
                     medEdited = OriginalPrescription.Medicines[i].PublicInstancePropertiesEqual(EditedPrescription.Medicines[i]);
                     if(medEdited)

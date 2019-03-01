@@ -812,8 +812,8 @@ namespace His_Pos.NewClass.Prescription
                 med.Dosage = m.Dosage;
                 med.Enable = m.Enable;
                 med.Frozen = m.Frozen;
-                med.Inventory = med.Inventory;
-                med.IsBuckle = med.IsBuckle;
+                med.Inventory = m.Inventory;
+                med.IsBuckle = m.IsBuckle;
                 med.IsPriceReadOnly = m.IsPriceReadOnly;
                 med.IsSelected = m.IsSelected;
                 med.NHIPrice = m.NHIPrice;

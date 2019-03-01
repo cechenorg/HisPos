@@ -22,6 +22,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
+using His_Pos.NewClass.StockValue;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using StringRes = His_Pos.Properties.Resources;
@@ -178,6 +179,7 @@ namespace His_Pos.ChromeTabViewModel
                 Usages = new Usages();
                 BusyContent = StringRes.GetPositions;
                 Positions = new Positions();
+                StockValue.UpdateDailyStockValue(); //做每日帳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
                 //File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());

@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15,0,0,0">
             <RadioButton GroupName="ReturnRadio" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
-            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
+            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="NickName" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
                       ItemsSource="{Binding ManufactoryCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding ReturnOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <RadioButton  GroupName="ReturnRadio" Grid.Row="1" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="15,0,0,0"/>
