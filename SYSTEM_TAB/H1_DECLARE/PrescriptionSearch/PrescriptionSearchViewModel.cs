@@ -343,7 +343,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (search.Length < 4)
             {
-                MessageWindow.ShowMessage(StringRes.ShortSearchString + "4", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
                 return;
             }
             if (SelectedInstitution != null && !string.IsNullOrEmpty(SelectedInstitution.FullName) && search.Equals(SelectedInstitution.FullName))

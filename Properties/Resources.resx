@@ -321,7 +321,7 @@
   <data name="InsertPrescriptionSuccess" xml:space="preserve">
     <value>處方登錄成功</value>
   </data>
-  <data name="MedicineNotFound" xml:space="preserve">
+  <data name="查無藥品" xml:space="preserve">
     <value>查無藥品</value>
   </data>
   <data name="PrintConfirm" xml:space="preserve">
@@ -333,34 +333,34 @@
   <data name="PrintReceipt" xml:space="preserve">
     <value>是否列印收據</value>
   </data>
-  <data name="ShortSearchString" xml:space="preserve">
+  <data name="搜尋字串長度不足" xml:space="preserve">
     <value>搜尋字長度不得小於</value>
   </data>
   <data name="GetAdjustCases" xml:space="preserve">
     <value>取得調劑案件...</value>
   </data>
-  <data name="GetCopayments" xml:space="preserve">
+  <data name="取得部分負擔" xml:space="preserve">
     <value>取得部分負擔...</value>
   </data>
-  <data name="GetDivisions" xml:space="preserve">
+  <data name="取得科別" xml:space="preserve">
     <value>取得科別...</value>
   </data>
-  <data name="GetInstitutions" xml:space="preserve">
+  <data name="取得院所" xml:space="preserve">
     <value>取得釋出院所...</value>
   </data>
-  <data name="GetPaymentCategories" xml:space="preserve">
+  <data name="取得給付類別" xml:space="preserve">
     <value>取得給付類別...</value>
   </data>
-  <data name="GetPositions" xml:space="preserve">
+  <data name="取得用藥途徑" xml:space="preserve">
     <value>取得藥品途徑...</value>
   </data>
-  <data name="GetPrescriptionCases" xml:space="preserve">
+  <data name="取得處方案件" xml:space="preserve">
     <value>取得處方案件...</value>
   </data>
-  <data name="GetSpecialTreats" xml:space="preserve">
+  <data name="取得特定治療" xml:space="preserve">
     <value>取得特定治療代碼...</value>
   </data>
-  <data name="GetUsages" xml:space="preserve">
+  <data name="取得用法" xml:space="preserve">
     <value>取得藥品用法...</value>
   </data>
   <data name="MedBagPrinting" xml:space="preserve">
@@ -369,7 +369,7 @@
   <data name="收據列印" xml:space="preserve">
     <value>收據列印中...</value>
   </data>
-  <data name="GetCooperativePrescriptions" xml:space="preserve">
+  <data name="取得合作處方" xml:space="preserve">
     <value>取得合作診所處方...</value>
   </data>
   <data name="SearchDateOutOfRange" xml:space="preserve">
@@ -499,5 +499,44 @@
   </data>
   <data name="產生申報資料" xml:space="preserve">
     <value>申報檔資料產生中...</value>
+  </data>
+  <data name="新增顧客確認" xml:space="preserve">
+    <value>查無顧客資料,是否新增?</value>
+  </data>
+  <data name="查無資料" xml:space="preserve">
+    <value>查無資料</value>
+  </data>
+  <data name="身分證格式錯誤" xml:space="preserve">
+    <value>身分證/居留證號長度須為10</value>
+  </data>
+  <data name="顧客資料不足" xml:space="preserve">
+    <value>查無資料，若要新增顧客請至少填寫姓名與身分證</value>
+  </data>
+  <data name="匿名自費" xml:space="preserve">
+    <value>未填寫顧客資料，是否以匿名取代?</value>
+  </data>
+  <data name="更新每日進退貨" xml:space="preserve">
+    <value>更新每日進退貨資料...</value>
+  </data>
+  <data name="更新病患資料" xml:space="preserve">
+    <value>病患資料更新中...</value>
+  </data>
+  <data name="欠卡確認" xml:space="preserve">
+    <value>確認欠卡調劑?</value>
+  </data>
+  <data name="欠卡調劑" xml:space="preserve">
+    <value>欠卡調劑</value>
+  </data>
+  <data name="調劑張數提醒" xml:space="preserve">
+    <value>此藥師調劑張數已達</value>
+  </data>
+  <data name="免收確認" xml:space="preserve">
+    <value>免收確認</value>
+  </data>
+  <data name="免收部分負擔" xml:space="preserve">
+    <value>是否免收部分負擔?</value>
+  </data>
+  <data name="藥袋列印" xml:space="preserve">
+    <value>藥袋列印中...</value>
   </data>
 </root>

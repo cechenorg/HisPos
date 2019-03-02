@@ -120,6 +120,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             }
             else
             {
+                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
                 if (HisApi.HisApiFunction.OpenCom())
                 {
                     var iBufferLength = 13;

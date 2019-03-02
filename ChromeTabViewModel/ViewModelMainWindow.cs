@@ -11,6 +11,7 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -123,6 +124,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Positions Positions { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
+        public static string CooperativeInstitutionID { get; private set; }
         private int m_currentPageIndex;
         private IList<Stream> m_streams;
         public ViewModelMainWindow()
@@ -132,6 +134,7 @@ namespace His_Pos.ChromeTabViewModel
             MainWindow.ServerConnection.OpenConnection();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+            CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
@@ -161,24 +164,25 @@ namespace His_Pos.ChromeTabViewModel
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
-                BusyContent = StringRes.GetInstitutions;
+                BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
-                BusyContent = StringRes.GetDivisions;
+                BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases();
-                BusyContent = StringRes.GetPaymentCategories;
+                BusyContent = StringRes.取得給付類別;
                 PaymentCategories = new PaymentCategories();
-                BusyContent = StringRes.GetPrescriptionCases;
+                BusyContent = StringRes.取得處方案件;
                 PrescriptionCases = new PrescriptionCases();
-                BusyContent = StringRes.GetCopayments;
+                BusyContent = StringRes.取得部分負擔;
                 Copayments = new Copayments();
-                BusyContent = StringRes.GetSpecialTreats;
+                BusyContent = StringRes.取得特定治療;
                 SpecialTreats = new SpecialTreats();
-                BusyContent = StringRes.GetUsages;
+                BusyContent = StringRes.取得用法;
                 Usages = new Usages();
-                BusyContent = StringRes.GetPositions;
+                BusyContent = StringRes.取得用藥途徑;
                 Positions = new Positions();
+                BusyContent = StringRes.更新每日進退貨;
                 StockValue.UpdateDailyStockValue(); //做每日帳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -191,24 +195,6 @@ namespace His_Pos.ChromeTabViewModel
                 MainWindow.ServerConnection.OpenConnection();
                 HisApiFunction.CheckDailyUpload();
                 MainWindow.ServerConnection.CloseConnection();
-                //var prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate("5932013534", DateTime.Today, DateTime.Today);
-                //Console.WriteLine("處方張數:" + prescriptions.Count);
-                //Console.WriteLine("自費:" + prescriptions.Sum(p => p.Medicines.Where(m => m.PaySelf).Sum(m => m.TotalPrice)));
-                //int copayment = 0;
-                //foreach (var p in prescriptions)
-                //{
-                //    Console.WriteLine("--------------------------------");
-                //    Console.WriteLine(p.Patient.Name + ":");
-                //    p.CountPrescriptionPoint(true);
-                //    p.PrescriptionPoint.CopaymentPoint = p.CountCopaymentPointFuck();
-                //    Console.WriteLine("藥品點數:" + p.PrescriptionPoint.MedicinePoint);
-                //    Console.WriteLine("部分負擔:" + p.PrescriptionPoint.CopaymentPoint);
-                //    if (!p.Remark.Equals("Y"))
-                //        copayment += p.PrescriptionPoint.CopaymentPoint;
-                //}
-                //Console.WriteLine("--------------------------------");
-                //Console.WriteLine("部分負擔總和:" + copayment);
-                //Console.WriteLine("有收部分:" + prescriptions.Count(p => p.PrescriptionPoint.MedicinePoint > 100 && !p.Remark.EndsWith("Y")));
             };
             IsBusy = true;
             worker.RunWorkerAsync();

@@ -12,7 +12,9 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedBag;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -905,6 +907,94 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
             int oldpayself = PrescriptionDb.GetPaySelfByID(Id).Rows[0].Field<int>("CashFlow_Value");
             PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - oldpayself);
+        }
+
+        public void SetAdjustStatus()
+        {
+            if (PrescriptionStatus.IsCooperativePrescribe) //合作診所處方全自費藥
+            {
+                PrescriptionStatus.SetCooperativePrescribeStatus();
+            }
+            else
+            {
+                PrescriptionStatus.SetNormalAdjustStatus();
+            }
+        }
+        //檢查是否為合作診所全自費處方
+        public void CheckIsCooperativePrescribe()
+        {
+            if (Source == PrescriptionSource.Cooperative || Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+            {
+                PrescriptionStatus.IsCooperativePrescribe =
+                    Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && !m.PaySelf) == 0;
+            }
+            else
+                PrescriptionStatus.IsCooperativePrescribe = false;
+        }
+
+        public void NormalAdjust(bool noCard)
+        {
+            if (Id == 0)
+                Id = InsertPrescription();
+            else
+                Update();
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            ProcessMedicineUseEntry(bucklevalue);
+            ProcessCopaymentCashFlow("部分負擔");
+            ProcessSelfPayCashFlow("自費");
+            if (noCard)
+                ProcessDepositCashFlow("押金");
+        }
+
+        public void CooperativeAdjust(bool noCard)
+        {
+            Id = InsertPrescription();
+            InsertCooperAdjust();
+            if (PrescriptionStatus.IsCooperativeVIP)
+                ProcessVipCopaymentCashFlow("合作VIP部分負擔");
+            else
+                ProcessCopaymentCashFlow("合作部分負擔");
+            ProcessSelfPayCashFlow("合作自費");
+            if (noCard)
+                ProcessDepositCashFlow("合作押金");
+            UpdateCooperativePrescriptionStatus();
+        }
+
+        public void ChronicAdjust(bool noCard)
+        {
+            Id = InsertPrescription();
+            AdjustPredictResere();
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            ProcessMedicineUseEntry(bucklevalue);
+            ProcessCopaymentCashFlow("部分負擔");
+            ProcessSelfPayCashFlow("自費");
+            if (noCard)
+                ProcessDepositCashFlow("押金");
+        }
+
+        public void NormalRegister()
+        {
+            if (Id == 0)
+            {
+                Id = InsertPrescription();
+                PredictResere();
+            }
+            else
+                Update();
+        }
+
+        public void ChronicRegister()
+        {
+            Id = InsertPrescription();
+            AdjustPredictResere();
+        }
+
+        public void Prescribe()
+        {
+            Id = InsertPrescription();
+            var bucklevalue = ProcessInventory("自費調劑", "PreMasID", Id.ToString());
+            ProcessMedicineUseEntry(bucklevalue);
+            ProcessDepositCashFlow("押金");
         }
     }
 }

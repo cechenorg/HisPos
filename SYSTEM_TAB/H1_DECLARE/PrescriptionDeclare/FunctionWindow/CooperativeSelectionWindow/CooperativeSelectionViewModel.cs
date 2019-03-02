@@ -229,7 +229,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = StringRes.GetCooperativePrescriptions;
+                BusyContent = StringRes.取得合作處方;
                 CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
             };
             worker.RunWorkerCompleted += (o, ea) =>

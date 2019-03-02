@@ -34,6 +34,7 @@ using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
+using HisAPI = His_Pos.HisApi.HisApiFunction;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -311,7 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (search.Length < 4)
             {
-                MessageWindow.ShowMessage(Resources.ShortSearchString + "4", MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "4", MessageType.WARNING);
                 return;
             }
             if (EditedPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(EditedPrescription.Treatment.Institution.FullName) && search.Equals(EditedPrescription.Treatment.Institution.FullName))
@@ -395,7 +396,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
-                MessageWindow.ShowMessage(StringRes.ShortSearchString + "5", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
@@ -412,7 +413,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             else
             {
-                MessageWindow.ShowMessage(StringRes.MedicineNotFound, MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
             }
         }
         private void MakeUpClickAction()
@@ -565,16 +566,51 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                     BusyContent = StringRes.取得就醫序號;
                     EditedPrescription.Card.GetMedicalNumber(2);
-                    if (CreatePrescriptionSign(isGetCard))
-                        HisApiFunction.CreatDailyUploadData(EditedPrescription, true);
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                EditedPrescription.PrescriptionStatus.IsGetCard = true;
-                EditedPrescription.PrescriptionStatus.IsDeposit = false;
-                EditedPrescription.PrescriptionStatus.IsDeclare = true;
+                ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
+                if (!EditedPrescription.Card.IsGetMedicalNumber)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)(() =>
+                    {
+                        var e = new ErrorUploadWindow(EditedPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
+                        e.ShowDialog();
+                        errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+                    }));
+                    if (errorCode is null)
+                    {
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            MessageWindow.ShowMessage("未選擇異常代碼，請重新過卡或選擇異常代碼", MessageType.WARNING);
+                        }));
+                        return;
+                    }
+                }
+                CreateDailyUploadData(errorCode);
+
+                if (EditedPrescription.PrescriptionStatus.IsCreateSign is null)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)(() =>
+                    {
+                        MessageWindow.ShowMessage("寫卡異常，請重新讀取卡片或選擇異常代碼。", MessageType.ERROR);
+                    }));
+                    return;
+                }
+                EditedPrescription.PrescriptionStatus.SetNormalAdjustStatus();
+                if (EditedPrescription.Card.IsGetMedicalNumber)
+                {
+                    if (EditedPrescription.PrescriptionStatus.IsCreateSign != null && (bool)EditedPrescription.PrescriptionStatus.IsCreateSign)
+                    {
+                        HisAPI.CreatDailyUploadData(EditedPrescription, false);
+                    }
+                }
+                else if (EditedPrescription.PrescriptionStatus.IsCreateSign != null && !(bool)EditedPrescription.PrescriptionStatus.IsCreateSign)
+                {
+                    HisAPI.CreatErrorDailyUploadData(EditedPrescription, false, errorCode);
+                }
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
                 PrescriptionDb.ProcessCashFlow("退還押金", "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
@@ -588,42 +624,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             };
             worker.RunWorkerAsync();
         }
-        private bool CreatePrescriptionSign(bool isGetCard)
+        private void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode error = null)
+        {
+            if (EditedPrescription.PrescriptionStatus.IsGetCard || error != null)
+            {
+                if (EditedPrescription.Card.IsGetMedicalNumber)
+                {
+                    CreatePrescriptionSign();
+                }
+                else
+                {
+                    EditedPrescription.PrescriptionStatus.IsCreateSign = false;
+                }
+            }
+        }
+        private void CreatePrescriptionSign()
         {
             BusyContent = StringRes.寫卡;
-            if(isGetCard)
-                EditedPrescription.PrescriptionSign = HisApiFunction.WritePrescriptionData(EditedPrescription);
+            EditedPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(EditedPrescription);
+            BusyContent = StringRes.產生每日上傳資料;
+            if (EditedPrescription.WriteCardSuccess != 0)
+            {
+                Application.Current.Dispatcher.Invoke(delegate {
+                    var description = MainWindow.GetEnumDescription((ErrorCode)EditedPrescription.WriteCardSuccess);
+                    MessageWindow.ShowMessage("寫卡異常 " + EditedPrescription.WriteCardSuccess + ":" + description, MessageType.WARNING);
+                });
+                EditedPrescription.PrescriptionStatus.IsCreateSign = null;
+            }
             else
             {
-                EditedPrescription.PrescriptionSign = new List<string>();
+                EditedPrescription.PrescriptionStatus.IsCreateSign = true;
             }
-            if (HisApiFunction.OpenCom())
-            {
-                HisApiBase.csSoftwareReset(3);
-                HisApiFunction.CloseCom();
-            }
-            BusyContent = StringRes.產生每日上傳資料;
-            if (EditedPrescription.PrescriptionSign.Count != EditedPrescription.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
-            {
-                bool? isDone = null;
-                ErrorUploadWindowViewModel.IcErrorCode errorCode;
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
-                    var e = new ErrorUploadWindow(EditedPrescription.Card.IsGetMedicalNumber); //詢問異常上傳
-                    e.ShowDialog();
-                    while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
-                    {
-                        e = new ErrorUploadWindow(EditedPrescription.Card.IsGetMedicalNumber);
-                        e.ShowDialog();
-                    }
-                    errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-                    if (isDone is null)
-                        HisApiFunction.CreatErrorDailyUploadData(EditedPrescription, true, errorCode);
-                    isDone = true;
-                });
-                return false;
-            }
-            return true;
         }
         private void PrintMedBag(bool noCard, bool printMedBag, bool printSingle, bool printReceipt)
         {

@@ -174,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             if (search.Length < 4)
             {
-                MessageWindow.ShowMessage(Resources.ShortSearchString + "4", MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "4", MessageType.WARNING);
                 return;
             }
             var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
