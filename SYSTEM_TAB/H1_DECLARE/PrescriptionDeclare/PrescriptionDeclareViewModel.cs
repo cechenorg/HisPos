@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -469,18 +470,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetPatientDataAction()
         {
-            customPresChecked = false;
-            IsReadCard = true;
-            IsCardReading = true;
-            try
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                ReadCard(true);
-            }
-            catch (Exception e)
+                BusyContent = StringRes.讀取健保卡;
+                Thread.Sleep(1000);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
             {
-                NewFunction.ExceptionLog(e.Message);
-                MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
-            }
+                customPresChecked = false;
+                IsReadCard = true;
+                IsCardReading = true;
+                try
+                {
+                    ReadCard(true);
+                }
+                catch (Exception e)
+                {
+                    NewFunction.ExceptionLog(e.Message);
+                    MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
+                }
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            
         }
         private void ShowInsSelectionWindowAction(string search)
         {
@@ -722,7 +735,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ReadCard(bool showCusWindow)
         {
             CanAdjust = false;
-            IsBusy = true;
             BusyContent = StringRes.讀取健保卡;
             var isGetCard = CurrentPrescription.GetCard();
             IsBusy = false;

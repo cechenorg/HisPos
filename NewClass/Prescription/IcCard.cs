@@ -55,7 +55,6 @@ namespace His_Pos.NewClass.Prescription
             var icData = new byte[72];
             if (HisApiFunction.OpenCom())
             {
-                Thread.Sleep(1500);
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)

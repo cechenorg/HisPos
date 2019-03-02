@@ -44,7 +44,7 @@
         <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <xctk:BusyIndicator.ProgressBarStyle>
                 <Style TargetType="ProgressBar">
-                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Visibility" Value="Visible"/>
                 </Style>
             </xctk:BusyIndicator.ProgressBarStyle>
             <Grid Width="1365" Height="839">
