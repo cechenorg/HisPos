@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
+using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -187,8 +188,11 @@ namespace His_Pos.ChromeTabViewModel
                 Usages = new Usages();
                 BusyContent = StringRes.取得用藥途徑;
                 Positions = new Positions();
-                BusyContent = StringRes.更新每日進退貨;
+                BusyContent = "更新庫存現值變化";
                 StockValue.UpdateDailyStockValue(); //做每日帳
+                BusyContent = "回傳合作診所處方";
+                WebApi.SendToCooperClinic(); //骨科上傳
+                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
                 //File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());
