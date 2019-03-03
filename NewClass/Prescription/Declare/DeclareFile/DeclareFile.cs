@@ -316,6 +316,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
             }
+            PaySelfValue = m.PaySelfValue;
+            BuckleAmount = m.BuckleAmount;
         }
 
         public Pdata(PDataType type,string code,int percentage,int amount)
@@ -417,5 +419,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public bool PaySelf { get; set; }
         [XmlIgnore]
         public bool IsBuckle { get; set; }
+        [XmlIgnore]
+        public float? BuckleAmount { get; set; }
+        [XmlIgnore]
+        public double? PaySelfValue { get; set; }
     }
 }

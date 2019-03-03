@@ -492,6 +492,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", pdata.PaySelf);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -555,6 +557,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_MedicineDays", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
             detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
+            detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
+            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float)); 
             return detailTable;
         }
         public static DataTable SetReserveMaster(Prescription p) {
