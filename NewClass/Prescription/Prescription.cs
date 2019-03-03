@@ -412,7 +412,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in Medicines)
             { 
                 if(!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle)
-                    buckleValue += PrescriptionDb.ProcessInventory(m.ID, m.Amount, type, source, sourceId).Rows[0].Field<decimal>("BuckleTotalValue");
+                    buckleValue += PrescriptionDb.ProcessInventory(m.ID, (double)m.BuckleAmount, type, source, sourceId).Rows[0].Field<decimal>("BuckleTotalValue");
             }
             return buckleValue;
         } 
@@ -771,7 +771,7 @@ namespace His_Pos.NewClass.Prescription
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
-                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).Amount - orm.Amount : orm.Amount * -1;
+                    medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
                     compareMeds.Add(medicine);
                 }
                
@@ -783,7 +783,7 @@ namespace His_Pos.NewClass.Prescription
                     {
                         Medicine medicine = new Medicine();
                         medicine.ID = nem.ID;
-                        medicine.Amount = nem.Amount;
+                        medicine.BuckleAmount = nem.BuckleAmount;
                         compareMeds.Add(medicine);
                     }
                    
@@ -792,10 +792,10 @@ namespace His_Pos.NewClass.Prescription
             decimal entryvalue = 0;
             foreach (var com in compareMeds) {
 
-                if (com.Amount > 0)
-                    entryvalue += PrescriptionDb.ReturnInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue"); 
-                else if (com.Amount < 0)
-                    entryvalue += PrescriptionDb.ProcessInventory(com.ID, com.Amount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("BuckleTotalValue"); 
+                if (com.BuckleAmount > 0)
+                    entryvalue += PrescriptionDb.ReturnInventory(com.ID, (double)com.BuckleAmount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue"); 
+                else if (com.BuckleAmount < 0)
+                    entryvalue += PrescriptionDb.ProcessInventory(com.ID, (double)com.BuckleAmount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("BuckleTotalValue"); 
             }
             PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
         }
