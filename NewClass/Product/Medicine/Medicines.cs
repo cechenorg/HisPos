@@ -33,8 +33,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
-                med.BuckleAmount = r.Field<float?>("BuckleAmount");
-                med.PaySelfValue = r.Field<double?>("PaySelfValue");
+                med.BuckleAmount = r.Field<double?>("BuckleAmount");
+                med.Price = (double)r.Field<decimal>("PaySelfValue");
                 Add(med);
             }
         }

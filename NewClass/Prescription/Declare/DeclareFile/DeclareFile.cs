@@ -316,7 +316,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
             }
-            PaySelfValue = m.PaySelfValue;
+            PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
         }
 
@@ -420,7 +420,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         [XmlIgnore]
         public bool IsBuckle { get; set; }
         [XmlIgnore]
-        public float? BuckleAmount { get; set; }
+        public double? BuckleAmount { get; set; }
         [XmlIgnore]
         public double? PaySelfValue { get; set; }
     }

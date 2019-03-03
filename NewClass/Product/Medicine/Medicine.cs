@@ -366,8 +366,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 Set(() => ControlLevel, ref controlLevel, value);
             }
         }
-        private float? buckleAmount;
-        public float? BuckleAmount
+        private double? buckleAmount = 0;
+        public double? BuckleAmount
         {
             get => buckleAmount;
             set
@@ -375,14 +375,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 Set(() => BuckleAmount, ref buckleAmount, value);
             }
         }
-        public double? paySelfValue;
-        public double? PaySelfValue
-        {
-            get => paySelfValue;
-            set
-            {
-                Set(() => PaySelfValue, ref paySelfValue, value);
-            }
-        }
+        
     }
 }
