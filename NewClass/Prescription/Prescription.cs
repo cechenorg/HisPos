@@ -447,7 +447,7 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
-        public void Delete() {
+        public void Delete(bool isCoopertaive) {
             PrescriptionDb.DeletePrescription(Id);
             decimal entryvalue = 0;
             foreach (Medicine m in Medicines) {
@@ -455,6 +455,10 @@ namespace His_Pos.NewClass.Prescription
                     entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "處方調劑", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
             }
             ProcessMedicineUseEntry(entryvalue);
+            if (isCoopertaive) {
+                Medicines.Clear();
+                PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
+            } 
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
