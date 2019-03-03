@@ -72,7 +72,7 @@ namespace His_Pos.HisApi
         public static bool OpenCom()
         {
             SetCardReaderStatus(Resources.開啟讀卡機);
-            var res = HisApiBase.csOpenCom(ViewModelMainWindow.CurrentPharmacy.ReaderCom);
+            var res = HisApiBase.csOpenCom(Convert.ToInt32(Settings.Default.ReaderComPort));
             SetStatus(res == 0, 1);
             MainWindow.Instance.SetCardReaderStatus(res == 0 ? Resources.連接成功 : Resources.連接失敗);
             return res == 0;
