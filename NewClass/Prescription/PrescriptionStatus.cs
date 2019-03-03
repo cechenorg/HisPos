@@ -15,7 +15,6 @@ namespace His_Pos.NewClass.Prescription {
                     break;
                 case PrescriptionSource.ChronicReserve:
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
-                    IsRegister = r.Field<bool>("IsRegister");
                     break;
             } 
         }

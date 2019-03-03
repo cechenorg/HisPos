@@ -771,9 +771,6 @@ namespace His_Pos.NewClass.Prescription
             {
                 var cus = new Customer(Card);
                 Patient = cus;
-                MainWindow.ServerConnection.OpenConnection();
-                Patient.Check();
-                MainWindow.ServerConnection.CloseConnection();
                 PrescriptionStatus.IsGetCard = true;
             }
             return success;

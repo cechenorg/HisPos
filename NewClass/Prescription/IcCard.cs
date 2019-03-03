@@ -56,6 +56,11 @@ namespace His_Pos.NewClass.Prescription
             if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
+                var cardStatus = HisApiBase.hisGetCardStatus(2);
+                if(cardStatus != 2)
+                {
+                    Thread.Sleep(1500);
+                }
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
