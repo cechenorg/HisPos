@@ -140,11 +140,12 @@ namespace His_Pos.ChromeTabViewModel
             ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
             //You can also use the sort description to manually sort the tabs, based on your own criterias.
-
-            Properties.Settings.Default.ReaderComPort = CurrentPharmacy.ReaderCom.ToString();
-            Properties.Settings.Default.Save();
-            SaveSettingFile();
-
+            if (string.IsNullOrEmpty(Properties.Settings.Default.ReaderComPort)) {
+                Properties.Settings.Default.ReaderComPort = CurrentPharmacy.ReaderCom.ToString();
+                Properties.Settings.Default.Save();
+                SaveSettingFile();
+            }
+        
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {

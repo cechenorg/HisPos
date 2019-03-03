@@ -38,8 +38,8 @@ namespace His_Pos.FunctionWindow
             {
                 VerifyPharmacyWindow.VerifyPharmacyWindow verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow();
             }
-            else {
-                ReadSettingFile();
+            else { 
+                    ReadSettingFile(); 
             }
         }
 
@@ -105,7 +105,7 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.MedBagPrinter = MedBagPrinter.Substring(2, MedBagPrinter.Length - 2); 
                 Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(3, ReceiptPrinter.Length - 3);
                 Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(3, ReportPrinter.Length - 3);
-                Properties.Settings.Default.ReaderComPort = Comport.Substring(4, Comport.Length - 4);
+                Properties.Settings.Default.ReaderComPort = string.IsNullOrEmpty(Comport) ? "" : Comport.Substring(4, Comport.Length - 4);
                 Properties.Settings.Default.Save();
             }
         }
