@@ -455,10 +455,24 @@ namespace His_Pos.NewClass.Prescription
                     entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "處方調劑", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
             }
             ProcessMedicineUseEntry(entryvalue);
-            if (isCoopertaive) {
+            PrescriptionPoint.GetAmountPaySelf(Id);
+            PrescriptionPoint.GetDeposit(Id);
+            string copayname = "部分負擔";
+            string payself = "自費";
+            if (isCoopertaive)
+            {
                 Medicines.Clear();
                 PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
+                copayname = "合作" + copayname;
+                payself = "合作" + payself;
             } 
+
+            if(PrescriptionPoint.CopaymentPoint != 0)
+                PrescriptionDb.ProcessCashFlow(copayname, "PreMasId", Id, PrescriptionPoint.CopaymentPoint * -1); 
+            if(PrescriptionPoint.AmountSelfPay != 0)
+                PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
+            if (PrescriptionPoint.Deposit != 0)
+                PrescriptionDb.ProcessCashFlow("押金", "PreMasId", Id, PrescriptionPoint.Deposit * -1);
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
