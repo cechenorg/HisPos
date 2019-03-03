@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -125,6 +126,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             MainWindow.ServerConnection.CloseConnection();
             WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             ClearDataChangedStatus();
+            Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.Save();
+            SavePrinterToFile();
         }
 
         private bool IsVPNValid()
@@ -145,6 +149,27 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         private void VerifyHpcPin_Click(object sender, RoutedEventArgs e)
         {
             HisApiFunction.VerifyHpcPin();
+        }
+        private void SavePrinterToFile()
+        {
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string leftLines = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                leftLines = fileReader.ReadLine();
+            }
+
+            using (TextWriter fileWriter = new StreamWriter(filePath, false))
+            {
+                fileWriter.WriteLine(leftLines);
+
+                fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
+                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
+                fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
+                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
+            }
         }
     }
 }

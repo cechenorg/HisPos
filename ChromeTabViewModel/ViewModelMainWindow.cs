@@ -141,6 +141,10 @@ namespace His_Pos.ChromeTabViewModel
             //This sort description is what keeps the source collection sorted, based on tab number. 
             //You can also use the sort description to manually sort the tabs, based on your own criterias.
 
+            Properties.Settings.Default.ReaderComPort = CurrentPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.Save();
+            SaveSettingFile();
+
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
@@ -439,6 +443,27 @@ namespace His_Pos.ChromeTabViewModel
             //        MessageWindow.ShowMessage("printDoc_PrintPage" + ex.Message, MessageType.ERROR);
             //    });
             //}
+        }
+        private void SaveSettingFile()
+        {
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string leftLines = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                leftLines = fileReader.ReadLine();
+            }
+
+            using (TextWriter fileWriter = new StreamWriter(filePath, false))
+            {
+                fileWriter.WriteLine(leftLines);
+
+                fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
+                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
+                fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
+                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
+            }
         }
     }
 }

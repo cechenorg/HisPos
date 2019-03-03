@@ -172,6 +172,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
                 fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
                 fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
                 fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
+                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
             }
         }
     }

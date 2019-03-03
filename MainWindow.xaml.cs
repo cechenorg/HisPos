@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -50,6 +51,7 @@ namespace His_Pos
             ViewModelMainWindow.CurrentUser = user;
             if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
+
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
@@ -244,5 +246,6 @@ namespace His_Pos
             }
             Dispatcher.BeginInvoke((Action)MethodDelegate);
         }
+      
     }
 }

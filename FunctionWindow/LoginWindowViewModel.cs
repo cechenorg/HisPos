@@ -101,9 +101,11 @@ namespace His_Pos.FunctionWindow
                 string MedBagPrinter = fileReader.ReadLine();
                 string ReceiptPrinter = fileReader.ReadLine();
                 string ReportPrinter = fileReader.ReadLine();
+                string Comport = fileReader.ReadLine();
                 Properties.Settings.Default.MedBagPrinter = MedBagPrinter.Substring(2, MedBagPrinter.Length - 2); 
                 Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(3, ReceiptPrinter.Length - 3);
                 Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(3, ReportPrinter.Length - 3);
+                Properties.Settings.Default.ReaderComPort = Comport.Substring(4, Comport.Length - 4);
                 Properties.Settings.Default.Save();
             }
         }
@@ -138,6 +140,7 @@ namespace His_Pos.FunctionWindow
                     fileWriter.WriteLine("M ");
                     fileWriter.WriteLine("Rc ");
                     fileWriter.WriteLine("Rp ");
+                    fileWriter.WriteLine("Com ");
                 }
 
                 Properties.Settings.Default.SQL_local =
@@ -148,7 +151,7 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.MedBagPrinter = "";
                 Properties.Settings.Default.ReceiptPrinter = "";
                 Properties.Settings.Default.ReportPrinter = "";
-
+                Properties.Settings.Default.ReaderComPort = "";
                 Properties.Settings.Default.Save();
             }
             else
@@ -157,6 +160,7 @@ namespace His_Pos.FunctionWindow
                 {
                     Regex connReg = new Regex(@"[LG] Data Source=([0-9.]*),([0-9]*);Persist Security Info=True;User ID=([a-zA-Z0-9]*);Password=([a-zA-Z0-9]*)");
                     Regex printReg = new Regex(@"[MR][cp]* (.*)");
+                    Regex comport = new Regex(@"[C][o][m]* (.*)");
                     Match match;
 
                     match = connReg.Match(fileReader.ReadLine());
@@ -176,6 +180,9 @@ namespace His_Pos.FunctionWindow
                     match = printReg.Match(fileReader.ReadLine());
                     Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
 
+                    match = comport.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.ReaderComPort = match.Groups[1].Value;
+                    
                     Properties.Settings.Default.Save();
                 }
             }
