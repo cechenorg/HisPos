@@ -848,6 +848,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsBusy = true;
             printWorker.RunWorkerAsync();
         }
+
+
         private void StartCooperativePrescribe()
         {
             if (IsReadCard)
@@ -905,8 +907,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
                     return false;
-                }  
-            }
+                }
+                CurrentPrescription.PrescriptionStatus.IsSendToSingde = true;
+            } 
             CurrentPrescription.PrescriptionStatus.SetRegisterStatus();
             if(CurrentPrescription.Source == PrescriptionSource.Normal)
                 CurrentPrescription.NormalRegister();
