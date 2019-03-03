@@ -447,6 +447,15 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
+        public void Delete() {
+            PrescriptionDb.DeletePrescription(Id);
+            decimal entryvalue = 0;
+            foreach (Medicine m in Medicines) {
+                if(m.IsBuckle)
+                    entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "處方調劑", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
+            }
+            ProcessMedicineUseEntry(entryvalue);
+        }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
         {

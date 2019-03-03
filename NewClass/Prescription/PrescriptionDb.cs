@@ -205,7 +205,12 @@ namespace His_Pos.NewClass.Prescription
         public static void PredictThreeMonthPrescription() {
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
-         
+        public static DataTable DeletePrescription(int preId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preId);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
+        }
         public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
