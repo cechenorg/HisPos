@@ -319,6 +319,7 @@
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\CurrentManufactoryTypeEnum.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetails.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipal.cs" />

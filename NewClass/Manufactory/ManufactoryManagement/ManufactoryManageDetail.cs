@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public void GetManufactoryDetailData()
         {
             Principals = ManufactoryPrincipals.GetManufactoryPrincipals(ID);
-            TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
+            //TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
         }
         public bool DeleteManufactory()
         {

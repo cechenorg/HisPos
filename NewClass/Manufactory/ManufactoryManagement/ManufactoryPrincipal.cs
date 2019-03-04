@@ -10,7 +10,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
     public class ManufactoryPrincipal : ICloneable
     {
         #region ----- Define Variables -----
-        public string ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Telephone { get; set; }
         public string Fax { get; set; }
@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
         public ManufactoryPrincipal()
         {
-            ID = "";
+            ID = -1;
             Name = "";
             Email = "";
             Fax = "";
@@ -31,7 +31,13 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         }
         public ManufactoryPrincipal(DataRow row)
         {
-
+            ID = row.Field<int>("ManPri_ID");
+            Name = row.Field<string>("ManPri_Name");
+            Email = row.Field<string>("ManPri_Email");
+            Fax = row.Field<string>("ManPri_Fax");
+            Line = row.Field<string>("ManPri_LINE");
+            Note = row.Field<string>("ManPri_Note");
+            Telephone = row.Field<string>("ManPri_Telephone");
         }
 
         #region ----- Define Functions -----

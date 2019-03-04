@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using His_Pos.Database;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 
 namespace His_Pos.NewClass.Manufactory
@@ -23,7 +26,19 @@ namespace His_Pos.NewClass.Manufactory
 
         internal static DataTable GetManufactoryPrincipals(string manufactoryID)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ManufactoryPrincipalsByManufactoryID]", parameters);
+        }
+
+        internal static DataTable GetManufactoryManageDetailsBySearchCondition(string searchManufactoryName, string searchPrincipalName)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_NAME", searchManufactoryName));
+            parameters.Add(new SqlParameter("PRINCIPAL_NAME", searchPrincipalName));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ManufactoryManageDetailsBySearchCondition]", parameters);
         }
     }
 }

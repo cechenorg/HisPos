@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using System.Data;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -26,9 +27,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         #endregion
 
         #region ----- Define Variables -----
+
+        #region ///// Search Variables /////
+        public string SearchManufactoryName { get; set; } = "";
+        public string SearchPrincipalName { get; set; } = "";
+        #endregion
+
         private bool isDataChanged;
         private ManufactoryManageDetail currentManufactory;
         private ManufactoryManageDetail currentManufactoryBackUp;
+        private CurrentManufactoryTypeEnum currentManufactoryType = CurrentManufactoryTypeEnum.NONE;
 
         public bool IsDataChanged
         {
@@ -56,9 +64,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 MainWindow.ServerConnection.CloseConnection();
                 currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
                 Set(() => CurrentManufactory, ref currentManufactory, value);
+
+                if(CurrentManufactory is null)
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.NONE;
+                else if (CurrentManufactory.ID == "0")
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.SINGDE;
+                else
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.NORMAL;
             }
         }
         public ManufactoryManageDetails ManufactoryManageCollection { get; set; }
+        public CurrentManufactoryTypeEnum CurrentManufactoryType
+        {
+            get { return currentManufactoryType; }
+            set { Set(() => CurrentManufactoryType, ref currentManufactoryType, value); }
+        }
         #endregion
 
         public ManufactoryManageViewModel()
@@ -69,7 +89,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         #region ----- Define Actions -----
         private void SearchAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            ManufactoryManageCollection = ManufactoryManageDetails.GetManufactoryManageDetailsBySearchCondition(SearchManufactoryName, SearchPrincipalName);
+            MainWindow.ServerConnection.CloseConnection();
 
+            if (ManufactoryManageCollection.Count > 0)
+                CurrentManufactory = ManufactoryManageCollection[0];
+            else
+                MessageWindow.ShowMessage("無符合條件項目", MessageType.ERROR);
         }
         private void AddManufactoryAction()
         {
