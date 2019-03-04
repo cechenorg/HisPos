@@ -33,6 +33,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10">
             <Label Content="選擇日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
@@ -114,7 +115,7 @@
             <Label Content="押金"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.DepositValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal"  Grid.Row="11" >
+        <StackPanel Orientation="Horizontal"  Grid.Row="12" >
             <Label Content="刪單補耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.ReturnDeleteMedUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
