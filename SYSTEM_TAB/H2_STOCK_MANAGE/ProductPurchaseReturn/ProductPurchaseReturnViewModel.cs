@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -32,14 +33,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand CalculateTotalPriceCommand { get; set; }
+        public RelayCommand<string> FilterOrderStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private StoreOrder currentStoreOrder;
-        private StoreOrders storeOrderCollection;
         private bool isBusy;
         private string busyContent;
+        private StoreOrders storeOrderCollection;
+        private ICollectionView storeOrderCollectionView;
+        private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
 
         public bool IsBusy
         {
@@ -51,10 +55,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => busyContent;
             set {Set(() => BusyContent, ref busyContent, value);}
         }
-        public StoreOrders StoreOrderCollection
+        public ICollectionView StoreOrderCollectionView
         {
-            get { return storeOrderCollection; }
-            set { Set(() => StoreOrderCollection, ref storeOrderCollection, value); }
+            get => storeOrderCollectionView;
+            set
+            {
+                Set(() => StoreOrderCollectionView, ref storeOrderCollectionView, value);
+            }
         }
         public StoreOrder CurrentStoreOrder
         {
@@ -91,9 +98,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (viewModel.NewStoreOrder != null)
             {
-                StoreOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
 
-                CurrentStoreOrder = StoreOrderCollection[0];
+                CurrentStoreOrder = storeOrderCollection[0];
             }
         }
         private void DeleteOrderAction()
@@ -106,8 +113,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                StoreOrderCollection.Remove(CurrentStoreOrder);
-                CurrentStoreOrder = StoreOrderCollection.FirstOrDefault();
+                storeOrderCollection.Remove(CurrentStoreOrder);
+                CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
         private void ToNextStatusAction()
@@ -119,7 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                StoreOrderCollection.ReloadCollection();
+                storeOrderCollection.ReloadCollection();
             }
         }
         private void ReloadAction()
@@ -172,6 +179,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.DeleteSelectedProduct();
         }
+        private void FilterOrderStatusAction(string filterCondition)
+        {
+            filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
+            StoreOrderCollectionView.Filter += OrderStatusFilter;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -201,11 +213,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 }
 
                 BusyContent = "取得訂單資料...";
-                StoreOrderCollection = StoreOrders.GetOrdersNotDone();
+                storeOrderCollection = StoreOrders.GetOrdersNotDone();
 
                 if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    List<StoreOrder> storeOrders = StoreOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
@@ -215,8 +227,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
                     if (dataTable.Rows.Count > 0)
                     {
-                        StoreOrderCollection.UpdateSingdeOrderStatus(dataTable);
-                        StoreOrderCollection = new StoreOrders(StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                        storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                        storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                     }
                 }
                 
@@ -226,8 +238,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
-                if (StoreOrderCollection.Count > 0)
-                    CurrentStoreOrder = StoreOrderCollection[0];
+                StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
+                StoreOrderCollectionView.Filter += OrderStatusFilter;
+
+                if (!StoreOrderCollectionView.IsEmpty)
+                {
+                    StoreOrderCollectionView.MoveCurrentToFirst();
+                    CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
+                }
 
                 IsBusy = false;
             };
@@ -244,6 +262,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
+            FilterOrderStatusCommand = new RelayCommand<string>(FilterOrderStatusAction);
         }
         
         #region ///// Messenger Functions /////
@@ -257,6 +276,36 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 Messenger.Default.Send(new NotificationMessage<string>(this, notificationMessage.Content.ID, nameof(ProductPurchaseReturnViewModel)));
             }
+        }
+        #endregion
+
+        #region ///// Filter Functions /////
+        private bool OrderStatusFilter(object order)
+        {
+            StoreOrder tempOrder = order as StoreOrder;
+
+            switch (filterStatus)
+            {
+                case OrderFilterStatusEnum.ALL:
+                    return true;
+                case OrderFilterStatusEnum.UNPROCESSING:
+                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                        return true;
+                    else
+                        return false;
+                case OrderFilterStatusEnum.WAITING:
+                    if (tempOrder.OrderStatus == OrderStatusEnum.WAITING)
+                        return true;
+                    else
+                        return false;
+                case OrderFilterStatusEnum.PROCESSING:
+                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
+                        return true;
+                    else
+                        return false;
+            }
+
+            return false;
         }
         #endregion
 

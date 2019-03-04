@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
@@ -55,6 +56,9 @@ namespace His_Pos.Database
 
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
+            while (connection.State == ConnectionState.Executing)
+                Thread.Sleep(1000);
+
             var table = new DataTable();
             try
             {
