@@ -291,7 +291,7 @@ namespace His_Pos.NewClass.Prescription
                     if (declareMedicine.ID.Length > 12)
                         Dtl_data.Append(declareMedicine.ID.Split('-')[1].PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
                     else
-                        Dtl_data.Append(declareMedicine.Position.Name.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                        Dtl_data.Append(declareMedicine.Position.ID.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
 
                     if (!declareMedicine.PaySelf)
                         Dtl_data.Append(" ");

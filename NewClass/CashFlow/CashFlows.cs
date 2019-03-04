@@ -54,6 +54,9 @@ namespace His_Pos.NewClass.CashFlow {
                         break;
                     case "調劑總量":
                         cashFlow.TotalAdjustAmount = (int)r.Field<decimal>("CashFlow_Value");
+                        break;
+                    case "刪單補耗用":
+                        cashFlow.ReturnDeleteMedUseValue = (int)r.Field<decimal>("CashFlow_Value");
                         break; 
                 }
             }

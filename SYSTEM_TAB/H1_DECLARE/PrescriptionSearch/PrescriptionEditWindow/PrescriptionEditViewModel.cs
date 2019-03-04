@@ -116,11 +116,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var subDiseaseEdited = !EditedPrescription.Treatment.SubDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SubDisease);
             var adjCaseEdited = !EditedPrescription.Treatment.AdjustCase.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.AdjustCase);
             var preCaseEdited = !EditedPrescription.Treatment.PrescriptionCase.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PrescriptionCase);
+            var payCatEdited = !EditedPrescription.Treatment.PaymentCategory.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PaymentCategory);
             var copEdited = !EditedPrescription.Treatment.Copayment.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Copayment);
             var payEdited = !EditedPrescription.Treatment.PaymentCategory.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PaymentCategory);
             var speTreEdited = !EditedPrescription.Treatment.SpecialTreat.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SpecialTreat);
             return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
-                   || payEdited || speTreEdited || medEdited || medicalNumberEdited;
+                   || payEdited || speTreEdited || medEdited || medicalNumberEdited || payCatEdited;
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
@@ -194,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintDepositSheet { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand PrintReceiptCmd { get; set; }
+        public RelayCommand Delete { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -207,7 +209,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #endregion
         public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
         {
-            viewModel = vm;
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
             Init((Prescription)selected.Clone());
@@ -243,8 +244,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
             EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-            EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
-            
+            var totalSelfPay = EditedPrescription.Medicines
+                .Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.PaySelf)
+                .Sum(m => m.TotalPrice);
+            EditedPrescription.PrescriptionPoint.AmountSelfPay = Convert.ToInt32(Math.Ceiling(totalSelfPay));
+            if(EditedPrescription.PrescriptionPoint.AmountSelfPay == 0)
+                EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
         }
 
         private void InitialItemsSources()
@@ -276,6 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrintDepositSheet = new RelayCommand(PrintDepositSheetAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
+            Delete = new RelayCommand(DeleteAction);
         }
 
         private void RegisterMessengers()
@@ -467,6 +473,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             IsEdit = Visibility.Hidden;
         }
 
+        private void DeleteAction()
+        {
+            ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?","刪除確認");
+            var delete = deleteConfirm.DialogResult;
+            if((bool)delete)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                EditedPrescription.Delete();
+                MainWindow.ServerConnection.CloseConnection();
+                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
+            }
+        }
+
         private void PrintDepositSheetAction()
         {
             var worker = new BackgroundWorker();
@@ -483,7 +503,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void PrintReceiptAction()
         {
-            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
             var printReceipt = receiptResult.DialogResult;
             if (!(bool)printReceipt)
                 return;
@@ -683,6 +703,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             return NotPrescribe;
         }
+
         #endregion
     }
 }

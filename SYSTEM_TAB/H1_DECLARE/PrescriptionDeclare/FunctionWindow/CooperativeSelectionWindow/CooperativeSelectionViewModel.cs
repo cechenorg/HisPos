@@ -196,7 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             MainWindow.ServerConnection.CloseConnection();
             SelectedPrescription.GetCompletePrescriptionData(false,true,false);
             SelectedPrescription.CountPrescriptionPoint();
-            var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
+            var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
             if ((bool)medBagPrint.DialogResult)
             {
                 var printBySingleMode = new MedBagSelectionWindow();
@@ -204,7 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 var receiptPrint = false;
                 if (SelectedPrescription.PrescriptionPoint.AmountsPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(Resources.PrintReceipt, Resources.PrintConfirm);
+                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool)receiptResult.DialogResult;
                 }

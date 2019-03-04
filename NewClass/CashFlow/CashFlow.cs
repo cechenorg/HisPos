@@ -130,6 +130,15 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => TotalAdjustAmount, ref totalAdjustAmount, value);
             }
         }
+        private decimal returnDeleteMedUseValue;
+        public decimal ReturnDeleteMedUseValue //刪單補耗用
+        {
+            get => returnDeleteMedUseValue;
+            set
+            {
+                Set(() => ReturnDeleteMedUseValue, ref returnDeleteMedUseValue, value);
+            }
+        }
     }
 }
 

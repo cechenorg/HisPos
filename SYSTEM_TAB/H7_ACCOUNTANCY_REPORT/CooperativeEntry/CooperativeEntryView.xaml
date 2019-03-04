@@ -114,7 +114,10 @@
             <Label Content="押金"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.DepositValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
-
+        <StackPanel Orientation="Horizontal"  Grid.Row="11" >
+            <Label Content="刪單補耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ReturnDeleteMedUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
 
 
     </Grid>

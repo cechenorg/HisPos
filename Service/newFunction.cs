@@ -409,7 +409,7 @@ namespace His_Pos.Service
         public static List<bool?> CheckPrint(Prescription p)
         {
             var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm, true);
             var printMedBag = medBagPrint.DialogResult;
             bool? printSingle = null;
             bool? receiptPrint = null;
@@ -417,7 +417,7 @@ namespace His_Pos.Service
             {
                 if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
+                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
                     receiptPrint = receiptResult.DialogResult;
                 }
                 else

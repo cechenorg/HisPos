@@ -338,7 +338,7 @@ namespace His_Pos.NewClass.Prescription
 
             if (Medicines[selectedMedicinesIndex].ID.EndsWith("00") ||
                 Medicines[selectedMedicinesIndex].ID.EndsWith("G0"))
-                Medicines[selectedMedicinesIndex].PositionName = "PO";
+                Medicines[selectedMedicinesIndex].PositionID = "PO";
             if(selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Dosage != null)
                 Medicines[selectedMedicinesIndex].Dosage = Medicines[selectedMedicinesIndex - 1].Dosage;
             if (selectedMedicinesIndex > 0 && !string.IsNullOrEmpty(Medicines[selectedMedicinesIndex-1].UsageName))
@@ -388,14 +388,20 @@ namespace His_Pos.NewClass.Prescription
                         MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
-                temp.PositionName = Medicines[medCount].PositionName;
+                temp.PositionID = Medicines[medCount].PositionID;
                 temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
-                if(!string.IsNullOrEmpty(temp.ID))
-                    Medicines[medCount] = temp; 
+                temp.BuckleAmount = Medicines[medCount].BuckleAmount;
+                if (Medicines[medCount].PaySelf && Medicines[medCount].TotalPrice > 0)
+                {
+                    temp.Price = Medicines[medCount].Price == 0 ? 
+                        Math.Round(Medicines[medCount].TotalPrice / Medicines[medCount].Amount, 2, MidpointRounding.AwayFromZero) : Medicines[medCount].Price;
+                }
+                if (!string.IsNullOrEmpty(temp.ID))
+                    Medicines[medCount] = temp;
             }
             if (addMedicine)
                 Medicines.Add(new Medicine());
@@ -447,19 +453,19 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
-        public void Delete(bool isCoopertaive) {
+        public void Delete() {
             PrescriptionDb.DeletePrescription(Id);
             decimal entryvalue = 0;
             foreach (Medicine m in Medicines) {
-                if(m.IsBuckle)
-                    entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "處方調劑", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
-            }
-            ProcessMedicineUseEntry(entryvalue);
+                if(m.IsBuckle && m.BuckleAmount > 0)
+                    entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "刪單補耗用", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
+            } 
+            PrescriptionDb.ProcessEntry("刪單補耗用", "PreMasId", Id, (double)entryvalue);
             PrescriptionPoint.GetAmountPaySelf(Id);
             PrescriptionPoint.GetDeposit(Id);
             string copayname = "部分負擔";
             string payself = "自費";
-            if (isCoopertaive)
+            if (Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
             {
                 Medicines.Clear();
                 PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
@@ -488,9 +494,9 @@ namespace His_Pos.NewClass.Prescription
                 {
                     med.Usage = VM.GetUsage(med.UsageName);
                 }
-                if (!string.IsNullOrEmpty(med.PositionName) && med.Position is null)
+                if (!string.IsNullOrEmpty(med.PositionID) && med.Position is null)
                 {
-                    med.Position = VM.GetPosition(med.PositionName);
+                    med.Position = VM.GetPosition(med.PositionID);
                 }
             }
             if (!medList.Any())
@@ -844,7 +850,7 @@ namespace His_Pos.NewClass.Prescription
                 med.IsSelected = m.IsSelected;
                 med.NHIPrice = m.NHIPrice;
                 med.PaySelf = m.PaySelf;
-                med.PositionName = m.PositionName;
+                med.PositionID = m.PositionID;
                 med.UsageName = m.UsageName;
                 med.TotalPrice = m.TotalPrice;
                 med.Vendor = m.Vendor;
@@ -852,6 +858,8 @@ namespace His_Pos.NewClass.Prescription
                 med.EnglishName = m.EnglishName;
                 med.ChineseName = m.ChineseName;
                 med.Common = m.Common;
+                med.Price = m.Price;
+                med.BuckleAmount = m.BuckleAmount;
                 p.Medicines.Add(med);
             }
             p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();

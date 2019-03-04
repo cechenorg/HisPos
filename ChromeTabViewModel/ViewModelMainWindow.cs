@@ -279,14 +279,14 @@ namespace His_Pos.ChromeTabViewModel
             }
             return null;
         }
-        public static Position GetPosition(string name)
+        public static Position GetPosition(string id)
         {
-            if (string.IsNullOrEmpty(name)) return new Position();
-            if (Positions.Count(p => p.Name.Equals(name)) != 0)
+            if (string.IsNullOrEmpty(id)) return new Position();
+            if (Positions.Count(p => p.ID.Equals(id.ToUpper())) != 0)
             {
-                return Positions.SingleOrDefault(p => p.Name.Equals(name));
+                return Positions.SingleOrDefault(p => p.ID.Equals(id.ToUpper()));
             }
-            return new Position { Name = name };
+            return new Position { ID = id.ToUpper(), Name = string.Empty};
         }
         public static SpecialTreat GetSpecialTreat(string id)
         {

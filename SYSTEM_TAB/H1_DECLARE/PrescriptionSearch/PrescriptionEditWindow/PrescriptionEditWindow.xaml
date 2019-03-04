@@ -46,12 +46,13 @@
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False"/>
                     <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10"/>
                     <Label Width="130" Height="30" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
-                    <StackPanel Orientation="Horizontal" Margin="110,0,0,0" Width="160" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" Margin="110,0,0,0" Width="270" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Rectangle Width="158" Visibility="{Binding IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Label Width="65" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red" Visibility="{Binding IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                         <Button Content="補卡" Height="35" Command="{Binding MakeUpClick}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" Visibility="{Binding IsGetCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                        <Button Content="列印押金單" Height="35" Command="{Binding PrintDepositSheet}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     </StackPanel>
-                    <Rectangle Width="375" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <Button Content="列印押金單" Height="35" Command="{Binding PrintDepositSheet}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Rectangle Width="380" Visibility="{Binding NotPrescribe,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
                     <Button Content="列印收據" Height="35" Command="{Binding PrintReceiptCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                     <Button Content="列印藥袋" Height="35" Command="{Binding PrintMedBagCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                 </StackPanel>
@@ -227,7 +228,7 @@
                               SelectedItem="{Binding EditedPrescription.Treatment.PaymentCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding ComboBoxSelectionChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -461,6 +462,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
+                                             FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
+                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter}, Delay=500, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="MedicineBuckleDataTemplate">
@@ -471,22 +481,32 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <Rectangle Width="456" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <Label Content="藥品點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="50" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="自費金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" />
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                    <Label Content="藥服費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="40" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="總點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                    <Label Content="押金" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="50" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Label Content="實收金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                    <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="30,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}" >
+                        <Label Content="藥品點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="40" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="藥服費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="30" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="總點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="自費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60"/>
+                        <Label Content="押金" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Rectangle Width="46"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}">
+                        <Label Content="自費金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Label Content="實收金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <Rectangle Width="670"/>
+                    </StackPanel>
+                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="刪除" Command="{Binding Delete}" Background="Red" BorderBrush="Red" Margin="10,0,0,0"/>
                     <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0"/>
                     <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0"/>
                 </StackPanel>

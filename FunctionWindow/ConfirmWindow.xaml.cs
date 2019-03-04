@@ -8,7 +8,7 @@ namespace His_Pos.FunctionWindow
     /// </summary>
     public partial class ConfirmWindow : Window
     {
-        public ConfirmWindow(string message,string title)
+        public ConfirmWindow(string message,string title,bool? focus = null)
         {
             InitializeComponent();
             DataContext = new ConfirmWindowViewModel(message,title); 
@@ -25,7 +25,13 @@ namespace His_Pos.FunctionWindow
                         break;
                 }
             });
-            YesButton.Focus();
+            if (focus != null)
+            {
+                if((bool) focus)
+                    YesButton.Focus();
+                else
+                    NoButton.Focus();
+            }
             ShowDialog();
         }
 

@@ -230,6 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand MedicinePriceChanged { get; set; }
+        public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustButtonClick { get; set; }
         public RelayCommand RegisterButtonClick { get; set; }
         public RelayCommand PrescribeButtonClick { get; set; }
@@ -304,6 +305,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
+            MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
             SelfPayTextChanged = new RelayCommand(SelfPayTextChangedAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
@@ -313,6 +315,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
         }
+
         private void InitialPrescription()
         {
             CurrentPrescription = new Prescription();
@@ -601,6 +604,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.CheckIfSimpleFormDeclare();
             CurrentPrescription.CountPrescriptionPoint();
         }
+
+        private void SetBuckleAmount()
+        {
+            if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
+            {
+                if (CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                    SelectedMedicine.BuckleAmount = 0;
+                else
+                {
+                    SelectedMedicine.BuckleAmount = SelectedMedicine.Amount;
+                }
+            }
+            
+        }
+
         private void MedicineNoBuckleAction()
         {
             SelectedMedicine.IsBuckle = !SelectedMedicine.IsBuckle;
@@ -614,7 +632,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NoCardAdjustAction()
         {
-            var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑);
+            var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑, true);
             if (!(bool)noCard.DialogResult) return;
             IsAdjusting = true;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
@@ -735,7 +753,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
             else
             {
-                var confirm = new ConfirmWindow(StringRes.新增顧客確認, StringRes.查無資料);
+                var confirm = new ConfirmWindow(StringRes.新增顧客確認, StringRes.查無資料, true);
                 if ((bool)confirm.DialogResult)
                     CurrentPrescription.Patient.Check();
             }

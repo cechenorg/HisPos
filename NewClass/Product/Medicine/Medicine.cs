@@ -23,7 +23,6 @@ namespace His_Pos.NewClass.Product.Medicine
             Vendor = r.Field<string>("Med_Manufactory");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
-
             Usage = new Usage.Usage();
             Position = new Position.Position(); 
         }
@@ -43,7 +42,7 @@ namespace His_Pos.NewClass.Product.Medicine
             ChineseName = m.Desc;
             EnglishName = m.Desc;
             UsageName = m.Freq;
-            PositionName = m.Way;
+            PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
@@ -139,19 +138,19 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private string _positionName;
-        public string PositionName
+        private string positionID;
+        public string PositionID
         {
-            get => _positionName;
+            get => positionID;
             set
             {
                 if (value != null)
                 {
-                    Set(() => PositionName, ref _positionName, value);
-                    Position = ViewModelMainWindow.GetPosition(_positionName);
+                    Set(() => PositionID, ref positionID, value);
+                    Position = ViewModelMainWindow.GetPosition(positionID);
                     if (Position != null)
                     {
-                        Position.Name = _positionName;
+                        Position.ID = positionID;
                     }
                 }
             }
@@ -366,8 +365,8 @@ namespace His_Pos.NewClass.Product.Medicine
                 Set(() => ControlLevel, ref controlLevel, value);
             }
         }
-        private double? buckleAmount = 0;
-        public double? BuckleAmount
+        private double buckleAmount = 0;
+        public double BuckleAmount
         {
             get => buckleAmount;
             set

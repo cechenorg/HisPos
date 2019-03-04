@@ -94,9 +94,9 @@ namespace His_Pos.FunctionWindow
                string PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
                string dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
                 Properties.Settings.Default.SQL_local =
-                string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+                string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
                 Properties.Settings.Default.SQL_global =
-                   string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+                   string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
                 Properties.Settings.Default.SystemSerialNumber = verifynum;
                 string MedBagPrinter = fileReader.ReadLine();
                 string ReceiptPrinter = fileReader.ReadLine();

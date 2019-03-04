@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
 
         private void Init()
         {
+            Add(new PrescriptionCase());
             var table = PrescriptionCaseDb.GetData();
             foreach (DataRow row in table.Rows)
             {
