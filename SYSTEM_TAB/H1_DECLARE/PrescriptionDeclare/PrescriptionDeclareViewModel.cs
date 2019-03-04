@@ -738,6 +738,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
             p.GetCompletePrescriptionData(true,true,false);
             MainWindow.ServerConnection.OpenConnection();
+            p.Card = CurrentPrescription.Card;
             CurrentPrescription.Patient.Check();
             MainWindow.ServerConnection.CloseConnection();
             p.Patient = CurrentPrescription.Patient;
