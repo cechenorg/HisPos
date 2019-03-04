@@ -345,6 +345,8 @@ namespace His_Pos.NewClass.Prescription
                 Medicines[selectedMedicinesIndex].UsageName = Medicines[selectedMedicinesIndex - 1].UsageName;
             if (selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Days != null)
                 Medicines[selectedMedicinesIndex].Days = Medicines[selectedMedicinesIndex - 1].Days;
+            if(Medicines[selectedMedicinesIndex].Amount > 0 && !Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                Medicines[selectedMedicinesIndex].BuckleAmount = Medicines[selectedMedicinesIndex - 1].BuckleAmount;
         }
         public void DeleteReserve() {
             PrescriptionDb.DeleteReserve(SourceId);

@@ -741,7 +741,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.CountPrescriptionPoint();
                 if (selected == CurrentPrescription.Medicines.Count - 1)
                     CurrentPrescription.Medicines.Add(new Medicine());
-                Messenger.Default.Send(selected, "FocusUsage");
+                Messenger.Default.Send(selected, "FocusDosage");
             }
         }
         #endregion
