@@ -447,6 +447,7 @@
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
+    <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />

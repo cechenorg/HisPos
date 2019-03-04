@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
@@ -34,6 +35,9 @@ namespace His_Pos.Database
 
         public DataTable ExecuteProc(string sqlString)
         {
+            while (connection.State == ConnectionState.Executing)
+                Thread.Sleep(1000);
+
             var table = new DataTable();
             try
             {
