@@ -613,7 +613,7 @@
                                         <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </TextBox>
+                            </TextBox> 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
                             <CheckBox Width="133" Height="35" Background="RoyalBlue"  Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"
