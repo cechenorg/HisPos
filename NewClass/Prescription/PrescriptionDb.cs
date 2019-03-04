@@ -211,8 +211,19 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }
-        public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        public static DataTable GetStoreOrderIDByPrescriptionID(int preId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
+        } 
+        public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
+            return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
+        }
+        public static bool UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
+            return sendOrderAction(storId,p, PrescriptionSendData, "UpdateDeclareOrder") == "SUCCESS" ? true : false;
+        }
+        public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData,string sql) {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             string Rx_order = Convert.ToDateTime(p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
             string Pt_name = p.Patient.Name; // 藥袋名稱(病患姓名)
@@ -280,7 +291,7 @@ namespace His_Pos.NewClass.Prescription
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
                     if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Substring(0,12).PadRight(12, ' ')); //健保碼
+                        Dtl_data.Append(declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')); //健保碼
                     else
                         Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
 
@@ -309,33 +320,33 @@ namespace His_Pos.NewClass.Prescription
                         }
                     }
                     Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
-                     
+
                 }
-                //else if( !(declareMedicine is Medicine) )
-                //{
-                //    Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-                //    Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
-                //    Dtl_data.Append(empty.PadRight(16, ' ')); //使用頻率
-                //    Dtl_data.Append(empty.PadRight(3, ' ')); //使用天數
-                //    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                //    Dtl_data.Append(empty.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                //
-                //    Dtl_data.Append(" ");  //自費判斷 Y自費收費 N自費不收費
-                //
-                //    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                //    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
-                //}
-                // 
                 if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
                     Dtl_data.AppendLine();
-                 
                 i++;
             }
-            
-            MainWindow.SingdeConnection.OpenConnection();
-            MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
-            MainWindow.SingdeConnection.CloseConnection(); 
+            string result = "FAIL";
+            DataTable table;
+            switch (sql) {
+                case "AddDeclareOrderToPreDrug":
+                    MainWindow.SingdeConnection.OpenConnection();
+                    table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
+                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        result = "SUCCESS";
+                    MainWindow.SingdeConnection.CloseConnection();
+                    break;
+                case "UpdateDeclareOrder":
+                    MainWindow.SingdeConnection.OpenConnection();
+                    table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrder('{Rx_id}', '{storId}','{Dtl_data}')");
+                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        result = "SUCCESS";
+                    MainWindow.SingdeConnection.CloseConnection();
+                    break;
+            }
+            return result;
         }
+
         public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus,int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

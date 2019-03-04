@@ -621,7 +621,7 @@
                                         <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </TextBox>
+                            </TextBox> 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
                             <ContentControl>
