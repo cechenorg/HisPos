@@ -716,19 +716,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
+            Prescription p = new Prescription();
             MainWindow.ServerConnection.OpenConnection();
             switch (pre.Source)
             {
                 case PrescriptionSource.ChronicReserve:
-                    CurrentPrescription = new Prescription(PrescriptionDb.GetReservePrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.ChronicReserve);
+                    p = new Prescription(PrescriptionDb.GetReservePrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.ChronicReserve);
                     break;
                 case PrescriptionSource.Normal:
-                    CurrentPrescription = new Prescription(PrescriptionDb.GetPrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.Normal);
+                    p = new Prescription(PrescriptionDb.GetPrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.Normal);
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
+            p.Card = CurrentPrescription.Card;
+            p.Patient = CurrentPrescription.Patient;
+            CurrentPrescription.Patient.Check();
+            CurrentPrescription = p;
             CurrentPrescription.GetCompletePrescriptionData(true, false, false);
-            CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
