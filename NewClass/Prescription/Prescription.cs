@@ -409,11 +409,6 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(new Medicine());
         }
 
-        public int UpdatePrescriptionCount()//計算處方張數
-        {
-            return PrescriptionDb.GetPrescriptionCountByID(Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
-        }
-
         public decimal ProcessInventory(string type,string source,string sourceId)//扣庫
         {
             decimal buckleValue = 0;

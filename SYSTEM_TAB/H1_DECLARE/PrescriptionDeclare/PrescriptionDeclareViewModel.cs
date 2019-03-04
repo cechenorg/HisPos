@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -121,8 +122,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (prescriptionCount != value)
                 {
                     Set(() => PrescriptionCount, ref prescriptionCount, value);
-                    if (prescriptionCount >= 80)
-                        MessageWindow.ShowMessage(StringRes.調劑張數提醒+ prescriptionCount + "張",MessageType.WARNING);
                 }
             }
         }
@@ -321,7 +320,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription = new Prescription();
             CurrentPrescription.InitialCurrentPrescription();
             MainWindow.ServerConnection.OpenConnection();
-            PrescriptionCount = CurrentPrescription.UpdatePrescriptionCount();
+            PrescriptionCount = UpdatePrescriptionCount();
             MainWindow.ServerConnection.CloseConnection();
         }
         private void RegisterMessengers()
@@ -522,7 +521,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void PharmacistChangedAction()
         {
-            PrescriptionCount = CurrentPrescription.UpdatePrescriptionCount();
+            PrescriptionCount = UpdatePrescriptionCount();
+            if (PrescriptionCount >= 80)
+                MessageWindow.ShowMessage(StringRes.調劑張數提醒 + prescriptionCount + "張", MessageType.WARNING);
         }
         private void GetMainDiseaseCodeByIdAction(string ID)
         {
@@ -739,9 +740,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             p.GetCompletePrescriptionData(true,true,false);
             MainWindow.ServerConnection.OpenConnection();
             p.Card = CurrentPrescription.Card;
-            CurrentPrescription.Patient.Check();
+            if(string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
+                p.Patient.Check();
+            else
+            {
+                p.Patient = CurrentPrescription.Patient;
+                CurrentPrescription.Patient.Check();
+            }
             MainWindow.ServerConnection.CloseConnection();
-            p.Patient = CurrentPrescription.Patient;
             CurrentPrescription = p;
             CurrentPrescription.CountPrescriptionPoint();
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
@@ -873,7 +879,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ClearPrescription()
         {
-            ResetCardReaderAction();
             InitializeVariables();
             InitialPrescription();
             isDeposit = null;
@@ -1036,6 +1041,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CreatePrescriptionSign()
         {
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                HisApiBase.csSoftwareReset(3);
+            };
+            worker.RunWorkerAsync();
             BusyContent = StringRes.產生每日上傳資料;
             if (CurrentPrescription.WriteCardSuccess != 0)
             {
@@ -1112,19 +1123,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     IsCardReading = false;
                     return;
                 }
-                var resetWorker = new BackgroundWorker();
-                resetWorker.DoWork += (obj, arg) =>
-                {
-                    BusyContent = StringRes.重置讀卡機;
-                    HisApiBase.csSoftwareReset(3);
-                };
-                resetWorker.RunWorkerCompleted += (obj, arg) =>
-                {
-                    IsBusy = false;
-                    InsertAdjustData();
-                };
-                IsBusy = true;
-                resetWorker.RunWorkerAsync();
+                InsertAdjustData();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1266,6 +1265,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
+        }
+        private int UpdatePrescriptionCount()//計算處方張數
+        {
+            return PrescriptionDb.GetPrescriptionCountByID(CurrentPrescription.Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
         }
         #endregion
         #region CommandExecuteChecking
