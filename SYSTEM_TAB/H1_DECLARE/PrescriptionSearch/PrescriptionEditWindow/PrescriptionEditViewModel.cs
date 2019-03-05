@@ -147,7 +147,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
         }
-        private readonly string CooperativeInstitutionID = WebApi.GetCooperativeClinicId(VM.CurrentPharmacy.ID);
         private ViewModelEnum viewModel { get; set; }
         private bool notPrescribe;
         public bool NotPrescribe
@@ -448,7 +447,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 EditedPrescription.CountPrescriptionPoint();
                 EditedPrescription.Update();
-                if (EditedPrescription.Treatment.Institution.ID.Equals(CooperativeInstitutionID))
+                if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 {
                     EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
                 }
