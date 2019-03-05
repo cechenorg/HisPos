@@ -15,10 +15,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomPrescriptionWindow : Window
     {
         private CustomPrescriptionViewModel customPrescriptionViewModel { get; set; }
-        public CustomPrescriptionWindow(Cus cus,IcCard card)
+        public CustomPrescriptionWindow(int cusID,string cusIDNumber, IcCard card)
         {
             InitializeComponent();
-            customPrescriptionViewModel = new CustomPrescriptionViewModel(cus, card);
+            customPrescriptionViewModel = new CustomPrescriptionViewModel(cusID,cusIDNumber, card);
             DataContext = customPrescriptionViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
@@ -34,8 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Messenger.Default.Send(new NotificationMessage("CustomPresChecked"));
                 ShowDialog();
-                Messenger.Default.Unregister(this);
             }
+            Messenger.Default.Unregister(this);
         }
 
         private void Reserved_SelectionChanged(object sender, SelectionChangedEventArgs e)
