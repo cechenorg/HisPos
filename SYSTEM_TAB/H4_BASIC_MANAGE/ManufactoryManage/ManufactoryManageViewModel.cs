@@ -36,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private bool isDataChanged;
         private ManufactoryManageDetail currentManufactory;
         private ManufactoryManageDetail currentManufactoryBackUp;
+        private ManufactoryManageDetails manufactoryManageCollection;
         private CurrentManufactoryTypeEnum currentManufactoryType = CurrentManufactoryTypeEnum.NONE;
 
         public bool IsDataChanged
@@ -55,7 +56,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             {
                 if (IsDataChanged)
                 {
-                    MessageWindow.ShowMessage("資料有異動　請先確認變更再切換供應商!", MessageType.ERROR);
                     return;
                 }
 
@@ -73,7 +73,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.NORMAL;
             }
         }
-        public ManufactoryManageDetails ManufactoryManageCollection { get; set; }
+        public ManufactoryManageDetails ManufactoryManageCollection
+        {
+            get { return manufactoryManageCollection; }
+            set { Set(() => ManufactoryManageCollection, ref manufactoryManageCollection, value); }
+        }
         public CurrentManufactoryTypeEnum CurrentManufactoryType
         {
             get { return currentManufactoryType; }
@@ -84,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         public ManufactoryManageViewModel()
         {
             RegisterCommand();
+            SearchAction();
         }
 
         #region ----- Define Actions -----
@@ -163,6 +168,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void CancelChangeAction()
         {
             CurrentManufactory.ResetData(currentManufactoryBackUp);
+            RaisePropertyChanged(nameof(CurrentManufactory));
 
             IsDataChanged = false;
         }
@@ -172,13 +178,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void RegisterCommand()
         {
             SearchCommand = new RelayCommand(SearchAction);
-            AddManufactoryCommand = new RelayCommand(SearchAction);
-            DeleteManufactoryCommand = new RelayCommand(SearchAction);
-            AddManufactoryPrincipalCommand = new RelayCommand(SearchAction);
-            DeleteManufactoryPrincipalCommand = new RelayCommand(SearchAction);
-            DataChangedCommand = new RelayCommand(SearchAction);
-            ConfirmChangeCommand = new RelayCommand(SearchAction, IsManufactoryDataChanged);
-            CancelChangeCommand = new RelayCommand(SearchAction, IsManufactoryDataChanged);
+            AddManufactoryCommand = new RelayCommand(AddManufactoryAction);
+            DeleteManufactoryCommand = new RelayCommand(DeleteManufactoryAction);
+            AddManufactoryPrincipalCommand = new RelayCommand(AddManufactoryPrincipalAction);
+            DeleteManufactoryPrincipalCommand = new RelayCommand(DeleteManufactoryPrincipalAction);
+            DataChangedCommand = new RelayCommand(DataChangedAction);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsManufactoryDataChanged);
+            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsManufactoryDataChanged);
         }
         private bool IsManufactoryDataChanged()
         {

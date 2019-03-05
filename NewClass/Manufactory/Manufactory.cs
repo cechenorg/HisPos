@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Manufactory
 {
-    public class Manufactory
+    public class Manufactory : ObservableObject
     {
         protected Manufactory() { }
         public Manufactory(DataRow row)
@@ -14,10 +15,31 @@ namespace His_Pos.NewClass.Manufactory
         }
 
         #region ----- Define Variables -----
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string NickName { get; set; }
-        public string Telephone { get; set; }
+        private string id;
+        private string name;
+        private string nickName;
+        private string telephone;
+
+        public string ID
+        {
+            get { return id; }
+            set { Set(() => ID, ref id, value); }
+        }
+        public string Name
+        {
+            get { return name; }
+            set { Set(() => Name, ref name, value); }
+        }
+        public string NickName
+        {
+            get { return nickName; }
+            set { Set(() => NickName, ref nickName, value); }
+        }
+        public string Telephone
+        {
+            get { return telephone; }
+            set { Set(() => Telephone, ref telephone, value); }
+        }
         #endregion
     }
 }

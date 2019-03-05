@@ -21,7 +21,16 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public string Note { get; set; }
         public ManufactoryPrincipals Principals { get; set; }
         public ManufactoryTradeRecords TradeRecords { get; set; }
-        public ManufactoryPrincipal CurrentPrincipal { get; set; }
+        public ManufactoryPrincipal CurrentPrincipal
+        {
+            get { return currentPrincipal; }
+            set
+            {
+                Set(() => CurrentPrincipal, ref currentPrincipal, value);
+                RaisePropertyChanged(nameof(HasPrincipal));
+            }
+        }
+        public bool HasPrincipal => !(CurrentPrincipal is null);
         #endregion
 
         private ManufactoryManageDetail() { }
@@ -41,6 +50,9 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         {
             Principals = ManufactoryPrincipals.GetManufactoryPrincipals(ID);
             //TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
+
+            if (Principals.Count > 0)
+                CurrentPrincipal = Principals[0];
         }
         public bool DeleteManufactory()
         {
