@@ -324,7 +324,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
-            Messenger.Default.Register<Prescription>(this, "CustomPrescriptionSelected", GetCustomPrescription);
             Messenger.Default.Register<NotificationMessage>("CustomPresChecked",(notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CustomPresChecked"))
@@ -758,13 +757,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
         }
-        
-        private void GetCustomPrescription(Prescription p)
-        {
-            p.Treatment.AdjustDate = DateTime.Today;
-            CurrentPrescription = p;
-            CurrentPrescription.CountPrescriptionPoint();
-        }
+
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification == nameof(PrescriptionDeclareViewModel))
@@ -827,8 +820,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CheckCustomPrescriptions(true);
                         CurrentPrescription.Treatment.GetLastMedicalNumber();
+                        CheckCustomPrescriptions(true);
                     }
                     else
                     {
