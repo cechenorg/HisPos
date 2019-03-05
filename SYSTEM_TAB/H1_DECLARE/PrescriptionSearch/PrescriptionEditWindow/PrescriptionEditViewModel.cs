@@ -247,8 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 .Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.PaySelf)
                 .Sum(m => m.TotalPrice);
             EditedPrescription.PrescriptionPoint.AmountSelfPay = Convert.ToInt32(Math.Ceiling(totalSelfPay));
-            if(EditedPrescription.PrescriptionPoint.AmountSelfPay == 0)
-                EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
+            EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
         }
 
         private void InitialItemsSources()
@@ -453,6 +452,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 else
                     EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
+                MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
                 switch (viewModel)
                 {
                     case ViewModelEnum.PrescriptionSearch:

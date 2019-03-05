@@ -491,16 +491,28 @@
                         <Label Content="總點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Label Content="自費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60"/>
+                        <TextBox Text="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="70" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
                         <Label Content="押金" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                        <Rectangle Width="46"/>
+                        <Rectangle Width="36"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}">
                         <Label Content="自費金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                        <Label Content="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
+                        <TextBox Text="{Binding EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="70" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
                         <Label Content="實收金額" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
                         <Rectangle Width="670"/>
