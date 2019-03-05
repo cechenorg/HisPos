@@ -54,11 +54,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             get { return currentManufactory; }
             set
             {
-                if (IsDataChanged)
-                {
-                    return;
-                }
-
                 MainWindow.ServerConnection.OpenConnection();
                 value?.GetManufactoryDetailData();
                 MainWindow.ServerConnection.CloseConnection();
