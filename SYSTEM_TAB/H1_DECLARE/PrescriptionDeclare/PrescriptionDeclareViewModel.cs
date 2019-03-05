@@ -990,7 +990,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn) {  
                     return false;
                 }
-                CurrentPrescription.PrescriptionStatus.IsSendToSingde = true;
+              
             } 
             CurrentPrescription.PrescriptionStatus.SetRegisterStatus();
             if(CurrentPrescription.Source == PrescriptionSource.Normal)
@@ -1007,7 +1007,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 PurchaseOrder.UpdatePrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
             } //更新傳送藥健康
-      
+            CurrentPrescription.PrescriptionStatus.IsSendToSingde = true;
+            CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
             return true;
         }
         private void InsertPrescribeData()
