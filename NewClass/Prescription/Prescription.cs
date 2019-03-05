@@ -745,7 +745,8 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("Usage", m.Usage),
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
-                        new ReportParameter("Form", m.Form)
+                        new ReportParameter("Form", m.Form),
+                        new ReportParameter("PatientTel", Patient.Tel)
                     };
         }
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
@@ -772,7 +773,8 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
-                new ReportParameter("Division", Treatment.Division.Name)
+                new ReportParameter("Division", Treatment.Division.Name),
+                new ReportParameter("PatientTel", Patient.Tel)
             };
         }
         #endregion
