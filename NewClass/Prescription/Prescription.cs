@@ -802,11 +802,11 @@ namespace His_Pos.NewClass.Prescription
             CreateDeclareFileContent(details);//產生申報資料
             PrescriptionDb.UpdatePrescription(this, details); 
         }
-        public void AdjustMedicines(Medicines originMedicines)
+        public void AdjustMedicines(Prescription originPrescription)
         {
             if (!PrescriptionStatus.IsAdjust) return;
             Medicines compareMeds = new Medicines();
-            foreach (var orm in originMedicines) {
+            foreach (var orm in originPrescription.Medicines) {
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
@@ -818,7 +818,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var nem in Medicines) {
                 if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
                 {
-                    if (originMedicines.Count(m => m.ID == nem.ID) == 0)
+                    if (originPrescription.Medicines.Count(m => m.ID == nem.ID) == 0)
                     {
                         Medicine medicine = new Medicine();
                         medicine.ID = nem.ID;
@@ -832,11 +832,14 @@ namespace His_Pos.NewClass.Prescription
             foreach (var com in compareMeds) {
 
                 if (com.BuckleAmount > 0)
-                    entryvalue += PrescriptionDb.ReturnInventory(com.ID, (double)com.BuckleAmount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue"); 
-                else if (com.BuckleAmount < 0)
                     entryvalue += PrescriptionDb.ProcessInventory(com.ID, (double)com.BuckleAmount, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("BuckleTotalValue"); 
+                else if (com.BuckleAmount < 0)
+                    entryvalue += PrescriptionDb.ReturnInventory(com.ID, (double)com.BuckleAmount*-1, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
             }
             PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
+
+            PrescriptionDb.ProcessCashFlow("自費", "PreMasId", Id, PrescriptionPoint.AmountsPay - originPrescription.PrescriptionPoint.AmountsPay);
+           
         }
 
         public object Clone()

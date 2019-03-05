@@ -456,7 +456,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
                 }
                 else
-                    EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
+                    EditedPrescription.AdjustMedicines(OriginalPrescription);
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
                 switch (viewModel)
                 {
