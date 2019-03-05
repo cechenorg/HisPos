@@ -87,9 +87,17 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" Height="50" Margin="10,0,0,0">
-            <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+            <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left">
+                <Image.InputBindings>
+                    <MouseBinding Command="{Binding AddManufactoryCommand}" MouseAction="LeftClick"/>
+                </Image.InputBindings>
+            </Image>
             <Rectangle Width="115"/>
-            <Image Source="/Images/Delete.png" Width="30"/>
+            <Image Source="/Images/Delete.png" Width="30">
+                <Image.InputBindings>
+                    <MouseBinding Command="{Binding DeleteManufactoryCommand}" MouseAction="LeftClick"/>
+                </Image.InputBindings>
+            </Image>
         </StackPanel>
         <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,10,0" Content="{Binding}">
             <ContentControl.Style>

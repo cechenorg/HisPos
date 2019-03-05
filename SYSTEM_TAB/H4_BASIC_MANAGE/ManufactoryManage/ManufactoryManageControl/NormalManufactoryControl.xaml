@@ -102,7 +102,7 @@
     <Grid Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding CurrentManufactory, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
-            <RowDefinition Height="110"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="350"/>
             <RowDefinition/>
@@ -113,14 +113,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="廠商名稱" Margin="20,0,0,0" BorderThickness="0">
+            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxWidth="500" FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="廠商名稱" Margin="20,0,0,0" BorderThickness="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <TextBox Text="{Binding NickName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="30" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="簡稱" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0">
+            <TextBox Text="{Binding NickName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxWidth="200" FontSize="30" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="簡稱" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -132,6 +132,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -140,9 +141,35 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Background="{StaticResource Shadow}">
+                <Label Content="負責人    姓名" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="140" FontFamily="Segoe UI Semi" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Label Content="LINE" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="5">
                 <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -150,9 +177,9 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="5">
                 <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <TextBox Text="{Binding Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -160,9 +187,9 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="5">
                 <Label Content="統一編號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding EIN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <TextBox Text="{Binding EIN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="120" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -170,9 +197,9 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="5">
                 <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="350" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -180,9 +207,9 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
-                <Label Content="健保代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding MedicalID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="5">
+                <Label Content="機構代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding MedicalID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="120" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -190,19 +217,17 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="5">
                 <Label Content="管藥證號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding ControlMedicineID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <TextBox Text="{Binding ControlMedicineID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="165" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Margin="8">
-                <Label Content="地址" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0">
+                <Label Content="地址" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="582" FontFamily="Segoe UI Semi" Margin="5,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
