@@ -452,12 +452,19 @@ namespace His_Pos.NewClass.Prescription
         }
         public void Delete() {
             PrescriptionDb.DeletePrescription(Id);
-            decimal entryvalue = 0;
-            foreach (Medicine m in Medicines) {
-                if(m.IsBuckle && m.BuckleAmount > 0)
-                    entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "刪單補耗用", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
-            } 
-            PrescriptionDb.ProcessEntry("刪單補耗用", "PreMasId", Id, (double)entryvalue);
+          
+            if (!Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID)) {
+                decimal entryvalue = 0;
+                foreach (Medicine m in Medicines)
+                {
+                    if (m.IsBuckle && m.BuckleAmount > 0)
+                        entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "刪單補耗用", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
+                }
+                if (entryvalue != 0)
+                    PrescriptionDb.ProcessEntry("刪單補耗用", "PreMasId", Id, (double)entryvalue); 
+            }
+           
+
             PrescriptionPoint.GetAmountPaySelf(Id);
             PrescriptionPoint.GetDeposit(Id);
             string copayname = "部分負擔";
