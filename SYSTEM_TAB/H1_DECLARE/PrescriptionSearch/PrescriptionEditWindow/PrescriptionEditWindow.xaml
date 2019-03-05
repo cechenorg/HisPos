@@ -26,6 +26,7 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter" />
         <service:DoubleConverter x:Key="DoubleConverter"/>
+        <service:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -333,7 +334,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
                                                  FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                                 Text="{Binding Dosage, Converter={StaticResource DoubleConverter}, Delay=400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown">
+                                                 Text="{Binding Dosage, Delay=400 ,Converter={StaticResource DoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <command:EventToCommand Command="{Binding DataContext.CheckDataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
@@ -393,10 +394,10 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Amount, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}">
+                                         Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
-                                                <command:EventToCommand Command="{Binding DataContext.CheckDataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedicineAmountChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
@@ -429,7 +430,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicinePrice" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Price, Mode=TwoWay, Delay=400, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
+                                         Text="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <command:EventToCommand Command="{Binding DataContext.CheckDataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
@@ -465,9 +466,9 @@
                         <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
+                                    <TextBox x:Name="BuckleAmountText" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
                                              FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter}, Delay=500, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,IsAsync=True}">
+                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter}, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <command:EventToCommand Command="{Binding DataContext.CheckDataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
@@ -523,10 +524,11 @@
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
                         <Rectangle Width="670"/>
                     </StackPanel>
-                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button Content="刪除" Command="{Binding Delete}" Background="Red" BorderBrush="Red" Margin="10,0,0,0"/>
-                    <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0"/>
-                    <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0"/>
+                    <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

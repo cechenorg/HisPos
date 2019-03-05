@@ -104,7 +104,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         break;
                 }
             }
-            if (!NotPrescribe) return preEdited || pharmacyEdited || adjustDateEdited || medEdited;
+
+            var amountSelfPayEdited = OriginalPrescription.PrescriptionPoint.AmountSelfPay != EditedPrescription.PrescriptionPoint.AmountSelfPay;
+            if (!NotPrescribe)
+            {
+                return preEdited || pharmacyEdited || adjustDateEdited || medEdited || amountSelfPayEdited;
+            }
             var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
             var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate, (DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
@@ -118,12 +123,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var payEdited = !EditedPrescription.Treatment.PaymentCategory.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PaymentCategory);
             var speTreEdited = !EditedPrescription.Treatment.SpecialTreat.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SpecialTreat);
             return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
-                   || payEdited || speTreEdited || medEdited || medicalNumberEdited || payCatEdited;
+                   || payEdited || speTreEdited || medEdited || medicalNumberEdited || payCatEdited || amountSelfPayEdited;
+            
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
-        private Visibility isEdit;
-        public Visibility IsEdit 
+        private bool isEdit;
+        public bool IsEdit 
         {
             get => isEdit;
             set
@@ -192,6 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand PrintReceiptCmd { get; set; }
         public RelayCommand Delete { get; set; }
+        public RelayCommand MedicineAmountChanged { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -214,7 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void Init(Prescription selected)
         {
             InitPrescription(selected);
-            IsEdit = Visibility.Hidden;
+            IsEdit = false;
             InitialItemsSources();
             InitialCommandActions();
             RegisterMessengers();
@@ -277,6 +284,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
             Delete = new RelayCommand(DeleteAction);
+            MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
         }
 
         private void RegisterMessengers()
@@ -466,7 +474,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             InitPrescription((Prescription)OriginalPrescription.Clone());
-            IsEdit = Visibility.Hidden;
+            IsEdit = false;
         }
 
         private void DeleteAction()
@@ -540,6 +548,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if(SelectedMedicine is null ) return;
             EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
         }
+        private void SetBuckleAmount()
+        {
+            if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
+            {
+                if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                    SelectedMedicine.BuckleAmount = 0;
+                else
+                {
+                    SelectedMedicine.BuckleAmount = SelectedMedicine.Amount;
+                }
+                CheckEditStatus();
+            }
+        }
         #endregion
         #region Functions
         private void SetMedicinesPaySelf()
@@ -556,7 +577,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CheckEditStatus()
         {
-            IsEdit = CheckEdit() ? Visibility.Visible : Visibility.Hidden;
+            IsEdit = CheckEdit() ? true : false;
         }
         private void ReadCard()
         {
