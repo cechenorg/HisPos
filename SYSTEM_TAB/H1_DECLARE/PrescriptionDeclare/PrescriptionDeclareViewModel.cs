@@ -707,7 +707,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (receiveSelectedCustomer is null)
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
-            CheckCustomPrescriptions();
+            CheckCustomPrescriptions(false);
         }
         private void GetSelectedPrescription(CustomPrescriptionStruct pre)
         {
@@ -827,7 +827,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CheckCustomPrescriptions();
+                        CheckCustomPrescriptions(true);
                         CurrentPrescription.Treatment.GetLastMedicalNumber();
                     }
                     else
@@ -1063,13 +1063,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         
-        private void CheckCustomPrescriptions()
+        private void CheckCustomPrescriptions(bool byCard)
         {
             CusPreSelectWindow customPrescriptionWindow = null;
             if(customPresChecked) return;
             Messenger.Default.Register<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Register<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
-            customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient, CurrentPrescription.Card);
+            if (byCard)
+            {
+                CurrentPrescription.Patient = new Customer(CurrentPrescription.Card);
+                CurrentPrescription.Patient.Check();
+            }
+            customPrescriptionWindow = new CusPreSelectWindow(CurrentPrescription.Patient.ID, CurrentPrescription.Patient.IDNumber, CurrentPrescription.Card);
         }
 
         private void GetMedicalNumber()

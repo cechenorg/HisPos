@@ -31,8 +31,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public CustomerPrescriptions UngetCardPrescriptions { get; set; }
         public CustomPrescriptionStruct SelectedPrescription { get; set; }
         public IcCard Card { get; set; }
-        public int PatientID { get; set; }
-        public string PatientIDNumber { get; set; }
+        public int PatientID { get; }
+        public string PatientIDNumber { get; }
         private bool isSelectCooperative { get; set; }
         private Visibility cooperativeVisible;
 
@@ -105,18 +105,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         }
         #endregion
         public RelayCommand MakeUpCard { get; set; }
-        public CustomPrescriptionViewModel(Cus cus, IcCard card)
+        public CustomPrescriptionViewModel(int cusID, string cusIDNumber, IcCard card)
         {
-            MainWindow.ServerConnection.OpenConnection();
-            cus.Check();
-            MainWindow.ServerConnection.CloseConnection();
             Card = new IcCard();
             Card = card.DeepCloneViaJson();
-            PatientID = cus.ID;
-            PatientIDNumber = cus.IDNumber;
+            PatientID = cusID;
+            PatientIDNumber = cusIDNumber;
+            RegisterMessenger();
             InitializePrescription();
             MakeUpCard = new RelayCommand(MakeUpCardAction);
-            RegisterMessenger();
         }
 
         private void InitializePrescription()
@@ -142,7 +139,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || RegisteredPrescriptions.Count > 0 || (UngetCardPrescriptions.Count > 0 && !string.IsNullOrEmpty(Card.CardNumber)))
                 ShowDialog = true;
             else
+            {
                 ShowDialog = false;
+                Messenger.Default.Unregister(this);
+            }
         }
 
         private void RegisterMessenger()
@@ -174,6 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             else
                 Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+            Messenger.Default.Unregister(this);
         }
 
         private void MakeUpCardAction()
