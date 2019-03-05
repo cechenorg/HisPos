@@ -590,7 +590,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                IsBusy = false;
                 ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
                 if (!EditedPrescription.Card.IsGetMedicalNumber)
                 {
@@ -637,10 +636,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.PrescriptionStatus.UpdateStatus(EditedPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
                 CheckEditStatus();
+                IsBusy = false;
                 Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage("補卡作業成功", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("補卡作業成功，退還押金" + EditedPrescription.PrescriptionPoint.Deposit + "元", MessageType.SUCCESS);
                 });
-                
             };
             worker.RunWorkerAsync();
         }
