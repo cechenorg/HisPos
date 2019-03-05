@@ -451,8 +451,10 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
         public void Delete() {
+
             PrescriptionDb.DeletePrescription(Id);
-          
+            if (!PrescriptionStatus.IsAdjust) return;
+
             if (!Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID)) {
                 decimal entryvalue = 0;
                 foreach (Medicine m in Medicines)
@@ -799,7 +801,8 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.UpdatePrescription(this, details); 
         }
         public void AdjustMedicines(Medicines originMedicines)
-        { 
+        {
+            if (!PrescriptionStatus.IsAdjust) return;
             Medicines compareMeds = new Medicines();
             foreach (var orm in originMedicines) {
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
