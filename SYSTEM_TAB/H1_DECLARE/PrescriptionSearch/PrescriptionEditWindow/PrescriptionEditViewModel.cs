@@ -687,6 +687,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.PrintMedBag(printSingle);
                     if (printReceipt)
                     {
+                        EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
                         BusyContent = StringRes.收據列印;
                         EditedPrescription.PrintReceipt();
                     }
