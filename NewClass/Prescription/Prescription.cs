@@ -1033,7 +1033,7 @@ namespace His_Pos.NewClass.Prescription
             Id = InsertPrescription();
             var bucklevalue = ProcessInventory("自費調劑", "PreMasID", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
-            ProcessDepositCashFlow("押金");
+            ProcessSelfPayCashFlow("自費");
         }
     }
 }
