@@ -530,7 +530,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker.RunWorkerAsync();
         }
         #endregion
-        #region MessangerReceive
+        #region MessengerReceive
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
