@@ -453,7 +453,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.Update();
                 if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 {
-                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
+                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription); 
                 }
                 else
                     EditedPrescription.AdjustMedicines(OriginalPrescription);

@@ -469,8 +469,8 @@ namespace His_Pos.NewClass.Prescription
 
             PrescriptionPoint.GetAmountPaySelf(Id);
             PrescriptionPoint.GetDeposit(Id);
-            string copayname = "部分負擔";
-            string payself = "自費";
+            string copayname = "部分負擔刪除";
+            string payself = "自費刪除";
             if (Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
             {
                 Medicines.Clear();
@@ -484,7 +484,7 @@ namespace His_Pos.NewClass.Prescription
             if(PrescriptionPoint.AmountSelfPay != 0)
                 PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
             if (PrescriptionPoint.Deposit != 0)
-                PrescriptionDb.ProcessCashFlow("押金", "PreMasId", Id, PrescriptionPoint.Deposit * -1);
+                PrescriptionDb.ProcessCashFlow("押金刪除", "PreMasId", Id, PrescriptionPoint.Deposit * -1);
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
@@ -837,8 +837,8 @@ namespace His_Pos.NewClass.Prescription
                     entryvalue += PrescriptionDb.ReturnInventory(com.ID, (double)com.BuckleAmount*-1, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
             }
             PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
-
-            PrescriptionDb.ProcessCashFlow("自費", "PreMasId", Id, PrescriptionPoint.AmountsPay - originPrescription.PrescriptionPoint.AmountsPay);
+            PrescriptionDb.ProcessCashFlow("部分負擔修改", "PreMasId", Id, PrescriptionPoint.CopaymentPoint - originPrescription.PrescriptionPoint.CopaymentPoint);
+            PrescriptionDb.ProcessCashFlow("自費修改", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - originPrescription.PrescriptionPoint.AmountSelfPay);
            
         }
 
@@ -946,11 +946,11 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.CloseConnection();
         }
 
-        public void AdjustCooperativeMedicines(int amountpayself)
+        public void AdjustCooperativeMedicines(Prescription originprescription)
         { 
-            PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
-            int oldpayself = PrescriptionDb.GetPaySelfByID(Id).Rows[0].Field<int>("CashFlow_Value");
-            PrescriptionDb.ProcessCashFlow("合作自費", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - oldpayself);
+            PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty); 
+            PrescriptionDb.ProcessCashFlow("合作自費修改", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - originprescription.PrescriptionPoint.AmountSelfPay);
+            PrescriptionDb.ProcessCashFlow("合作部分負擔修改", "PreMasId", Id, PrescriptionPoint.CopaymentPoint - originprescription.PrescriptionPoint.CopaymentPoint);
         }
 
         public void SetAdjustStatus()
