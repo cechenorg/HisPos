@@ -59,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWin
         }
         private bool CheckNewDataValid()
         {
-            if (ManufactoryName.Equals(string.Empty))
+            if (ManufactoryName.Trim().Equals(string.Empty))
             {
                 MessageWindow.ShowMessage("供應商名稱為必填欄位!", MessageType.ERROR);
                 return false;

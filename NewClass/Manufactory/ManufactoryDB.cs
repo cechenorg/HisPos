@@ -14,9 +14,12 @@ namespace His_Pos.NewClass.Manufactory
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Manufactory]");
         }
 
-        internal static DataTable DeleteManufactory(string iD)
+        internal static DataTable DeleteManufactory(string manufactoryID)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteManufactoryByManufactoryID]", parameters);
         }
 
         internal static DataTable UpdateManufactoryDetail(ManufactoryManageDetail manufactoryManageDetail)
@@ -42,7 +45,13 @@ namespace His_Pos.NewClass.Manufactory
 
         internal static DataTable AddNewManufactory(string manufactoryName, string manufactoryNickName, string manufactoryTelephone, string manufactoryAddress)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_NAME", manufactoryName));
+            DataBaseFunction.AddSqlParameter(parameters, "MAN_NICKNAME", manufactoryNickName);
+            DataBaseFunction.AddSqlParameter(parameters, "MAN_TEL", manufactoryTelephone);
+            DataBaseFunction.AddSqlParameter(parameters, "MAN_ADDR", manufactoryAddress);
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ManufactoryAddNewManufactory]", parameters);
         }
 
         internal static DataTable GetManufactoryManageDetailsBySearchCondition(string searchManufactoryName, string searchPrincipalName)
