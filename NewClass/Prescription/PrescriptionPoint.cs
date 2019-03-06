@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Prescription {
             SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
-            MedicalServicePoint = r.Field<int>("MedicalServicePoint"); 
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
         }
         public int ApplyPoint { get; set; }//申請點數 
         private int totalPoint;//總點數

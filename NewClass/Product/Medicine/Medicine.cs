@@ -372,7 +372,10 @@ namespace His_Pos.NewClass.Product.Medicine
             get => buckleAmount;
             set
             {
-                Set(() => BuckleAmount, ref buckleAmount, value);
+                if (value >= Amount)
+                    Set(() => BuckleAmount, ref buckleAmount, Amount);
+                else
+                    Set(() => BuckleAmount, ref buckleAmount, value);
             }
         }
         

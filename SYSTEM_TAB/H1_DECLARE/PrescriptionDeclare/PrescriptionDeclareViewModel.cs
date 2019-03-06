@@ -592,14 +592,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DeleteMedicineAction()
         {
             CurrentPrescription.Medicines.RemoveAt(CurrentPrescription.Medicines.IndexOf(SelectedMedicine));
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         private void CountMedicinePoint()
         {
             CurrentPrescription.CountMedicineDays();
             if (!CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 CurrentPrescription.CheckIfSimpleFormDeclare();
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
 
         private void SetBuckleAmount()
@@ -729,7 +729,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Patient.Check();
             CurrentPrescription = p;
             CurrentPrescription.GetCompletePrescriptionData(true, false, false);
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
         }
@@ -749,7 +749,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription = p;
-            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
         }
@@ -765,7 +765,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
                 CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                CurrentPrescription.CountPrescriptionPoint();
+                CurrentPrescription.CountPrescriptionPoint(true);
                 if (selected == CurrentPrescription.Medicines.Count - 1)
                     CurrentPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusDosage");

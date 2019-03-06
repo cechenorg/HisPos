@@ -195,7 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             SelectedPrescription.Patient.Check();
             MainWindow.ServerConnection.CloseConnection();
             SelectedPrescription.GetCompletePrescriptionData(false,true,false);
-            SelectedPrescription.CountPrescriptionPoint();
+            SelectedPrescription.CountPrescriptionPoint(true);
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
             if ((bool)medBagPrint.DialogResult)
             {

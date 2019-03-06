@@ -515,7 +515,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
-        public void CountPrescriptionPoint()
+        public void CountPrescriptionPoint(bool countSelfPay)
         {
             if (!Treatment.AdjustCase.ID.Equals("0"))
             {
@@ -558,7 +558,8 @@ namespace His_Pos.NewClass.Prescription
                                                PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
                 PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             }
-            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+            if(countSelfPay)
+                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
         }
@@ -838,7 +839,7 @@ namespace His_Pos.NewClass.Prescription
             }
             PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
 
-            PrescriptionDb.ProcessCashFlow("自費", "PreMasId", Id, PrescriptionPoint.AmountsPay - originPrescription.PrescriptionPoint.AmountsPay);
+            PrescriptionDb.ProcessCashFlow("自費", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - originPrescription.PrescriptionPoint.AmountSelfPay);
            
         }
 
