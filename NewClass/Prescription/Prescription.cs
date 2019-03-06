@@ -822,6 +822,7 @@ namespace His_Pos.NewClass.Prescription
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
+                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).Amount : orm.Amount;
                     medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
                     compareMeds.Add(medicine);
                 }
@@ -834,6 +835,7 @@ namespace His_Pos.NewClass.Prescription
                     {
                         Medicine medicine = new Medicine();
                         medicine.ID = nem.ID;
+                        medicine.Amount = nem.Amount;
                         medicine.BuckleAmount = nem.BuckleAmount;
                         compareMeds.Add(medicine);
                     }
