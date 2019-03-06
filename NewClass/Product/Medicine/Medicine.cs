@@ -69,6 +69,7 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
+                BuckleAmount = amount;
                 CheckIsPriceReadOnly();
                 CountTotalPrice();
             }
@@ -99,6 +100,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (ID is null) return;
                 if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                     CalculateAmount();
+                CheckIsAmountReadOnly();
             }
         }
         private string _usageName;
@@ -107,7 +109,6 @@ namespace His_Pos.NewClass.Product.Medicine
             get => _usageName;
             set
             {
-                
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
@@ -125,6 +126,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
+                CheckIsAmountReadOnly();
             }
         }
         private Usage.Usage usage;//用法
@@ -181,6 +183,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
+                CheckIsAmountReadOnly();
             }
         }
         private double price;//售價
@@ -378,6 +381,28 @@ namespace His_Pos.NewClass.Product.Medicine
                     Set(() => BuckleAmount, ref buckleAmount, value);
             }
         }
-        
+
+        private bool isAmountReadOnly;
+        public bool IsAmountReadOnly
+        {
+            get => isAmountReadOnly;
+            set
+            {
+                Set(() => IsAmountReadOnly, ref isAmountReadOnly, value);
+            }
+        }
+
+        private void CheckIsAmountReadOnly()
+        {
+            if (Usage != null && !string.IsNullOrEmpty(ID))
+            {
+                if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null && Days > 0 && Dosage != null && Dosage > 0)
+                    IsAmountReadOnly = (double)Dosage * UsagesFunction.CheckUsage((int)Days, ViewModelMainWindow.GetUsage(UsageName)) > 0;
+                else
+                    IsAmountReadOnly = false;
+            }
+            else
+                IsAmountReadOnly = false;
+        }
     }
 }

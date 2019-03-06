@@ -486,7 +486,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (CurrentPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(CurrentPrescription.Treatment.Institution.FullName) && search.Equals(CurrentPrescription.Treatment.Institution.FullName))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusDivision"));
+                Messenger.Default.Send(new NotificationMessage(this,"FocusDivision"));
                 return;
             }
             CurrentPrescription.Treatment.Institution = null;
@@ -525,7 +525,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (string.IsNullOrEmpty(ID) || CurrentPrescription.Treatment.MainDisease is null || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MainDisease.FullName) && ID.Equals(CurrentPrescription.Treatment.MainDisease.FullName)))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusSubDisease"));
+                Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
                 return;
             }
             SetDiseaseCode(ID, true);
@@ -535,7 +535,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (string.IsNullOrEmpty(id) || CurrentPrescription.Treatment.SubDisease is null || (!string.IsNullOrEmpty(CurrentPrescription.Treatment.SubDisease.FullName) && id.Equals(CurrentPrescription.Treatment.SubDisease.FullName)))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
+                Messenger.Default.Send(new NotificationMessage(this, "FocusChronicTotal"));
                 return;
             }
             SetDiseaseCode(id, false);
@@ -768,7 +768,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.CountPrescriptionPoint(true);
                 if (selected == CurrentPrescription.Medicines.Count - 1)
                     CurrentPrescription.Medicines.Add(new Medicine());
-                Messenger.Default.Send(selected, "FocusDosage");
+                Messenger.Default.Send(new NotificationMessage<int>(this, selected, "FocusDosage"));
             }
         }
         #endregion

@@ -415,7 +415,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in Medicines)
             { 
                 if(!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle)
-                    buckleValue += PrescriptionDb.ProcessInventory(m.ID, (double)m.BuckleAmount, type, source, sourceId).Rows[0].Field<decimal>("BuckleTotalValue");
+                    buckleValue += PrescriptionDb.ProcessInventory(m.ID, m.BuckleAmount, type, source, sourceId).Rows[0].Field<decimal>("BuckleTotalValue");
             }
             return buckleValue;
         } 
