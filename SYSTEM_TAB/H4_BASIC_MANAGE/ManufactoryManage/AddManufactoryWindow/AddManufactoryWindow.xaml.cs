@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow
 {
@@ -22,6 +23,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWin
         public AddManufactoryWindow()
         {
             InitializeComponent();
+
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseAddManufactoryWindow") && notificationMessage.Sender is AddManufactoryWindowViewModel)
+                    Close();
+            });
+
+            Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }

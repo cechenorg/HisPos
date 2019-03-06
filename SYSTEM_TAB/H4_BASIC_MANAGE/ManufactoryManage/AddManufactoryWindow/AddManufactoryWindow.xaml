@@ -4,10 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="新增供應商" Height="450" Width="800"
+        Title="新增供應商" Height="250" Width="500"
         WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:AddManufactoryWindowViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBox Text="{Binding ManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="供應商名稱" HorizontalContentAlignment="Center" FontSize="30" FontFamily="Segoe UI Semibold" Margin="10"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="6">
+            <Label Content="簡稱" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Text="{Binding ManufactoryNickName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semi" Width="180"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="6">
+            <Label Content="電話" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Text="{Binding ManufactoryTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semi" Width="180"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="6">
+            <Label Content="地址" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Text="{Binding ManufactoryAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semi" Width="430"/>
+        </StackPanel>
+        <Button Command="{Binding ConfirmAddManufactoryCommand}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="150" Content="新增" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0"/>
     </Grid>
 </Window>

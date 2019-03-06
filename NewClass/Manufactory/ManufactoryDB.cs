@@ -40,6 +40,11 @@ namespace His_Pos.NewClass.Manufactory
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ManufactoryPrincipalsByManufactoryID]", parameters);
         }
 
+        internal static DataTable AddNewManufactory(string manufactoryName, string manufactoryNickName, string manufactoryTelephone, string manufactoryAddress)
+        {
+            throw new NotImplementedException();
+        }
+
         internal static DataTable GetManufactoryManageDetailsBySearchCondition(string searchManufactoryName, string searchPrincipalName)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

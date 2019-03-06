@@ -5,6 +5,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -203,7 +204,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         #region ///// Messenger Functions /////
         private void GetNewManufactory(NotificationMessage<ManufactoryManageDetail> notification)
         {
-            
+            if (notification.Sender is AddManufactoryWindowViewModel && notification.Notification.Equals(nameof(AddManufactoryWindowViewModel)))
+            {
+                ManufactoryManageCollection.Add(notification.Content);
+                CurrentManufactory = notification.Content;
+            }
         }
         #endregion
 

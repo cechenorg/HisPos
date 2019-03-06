@@ -9,6 +9,7 @@
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
              xmlns:manufactoryManageControl="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageControl"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <DataTemplate x:Key="NoManufactoryControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
@@ -44,6 +45,9 @@
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,0,0,0"
                       ItemsSource="{Binding ManufactoryManageCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:ScrollIntoView/>
+            </i:Interaction.Behaviors>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>

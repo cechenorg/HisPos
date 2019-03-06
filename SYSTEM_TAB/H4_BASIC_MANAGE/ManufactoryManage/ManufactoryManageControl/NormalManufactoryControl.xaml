@@ -8,6 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <service:DateTimeConverter x:Key="DateConverter"/>
@@ -168,7 +169,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxWidth="500" FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="廠商名稱" Margin="20,0,0,0" BorderThickness="0">
+            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxWidth="500" FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="供應商名稱" Margin="20,0,0,0" BorderThickness="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -294,6 +295,9 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
             <DataGrid HeadersVisibility="None" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
                       ItemsSource="{Binding Principals, UpdateSourceTrigger=PropertyChanged}" Width="480" SelectedItem="{Binding CurrentPrincipal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Behaviors>
+                    <behaviors:ScrollIntoView/>
+                </i:Interaction.Behaviors>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
