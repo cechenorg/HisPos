@@ -104,7 +104,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public void GetManufactoryDetailData()
         {
             Principals = ManufactoryPrincipals.GetManufactoryPrincipals(ID);
-            //TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
+            TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
 
             if (Principals.Count > 0)
                 CurrentPrincipal = Principals[0];
@@ -118,11 +118,53 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+        internal void ResetData(ManufactoryManageDetail currentManufactoryBackUp)
+        {
+            ID = currentManufactoryBackUp.ID;
+            Name = currentManufactoryBackUp.Name;
+            NickName = currentManufactoryBackUp.NickName;
+            Telephone = currentManufactoryBackUp.Telephone;
+            ResponsibleName = currentManufactoryBackUp.ResponsibleName;
+            ResponsibleTelephone = currentManufactoryBackUp.ResponsibleTelephone;
+            ResponsibleLINE = currentManufactoryBackUp.ResponsibleLINE;
+            Address = currentManufactoryBackUp.Address;
+            Fax = currentManufactoryBackUp.Fax;
+            Email = currentManufactoryBackUp.Email;
+            EIN = currentManufactoryBackUp.EIN;
+            MedicalID = currentManufactoryBackUp.MedicalID;
+            ControlMedicineID = currentManufactoryBackUp.ControlMedicineID;
+            Note = currentManufactoryBackUp.Note;
+
+            Principals.ResetData(currentManufactoryBackUp.Principals);
+
+            if (Principals.Count > 0)
+                CurrentPrincipal = Principals.First();
+            else
+                CurrentPrincipal = null;
+        }
+        internal bool UpdateManufactoryDetail()
+        {
+            DataTable dataTable = ManufactoryDB.UpdateManufactoryDetail(this);
+
+            if (dataTable.Rows.Count == 0)
+                return false;
+            else
+                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+        }
+
+        #region ///// Principal Functions /////
+        internal void AddManufactoryPrincipal()
+        {
+            Principals.AddNewPrincipal();
+            CurrentPrincipal = Principals.Last();
+        }
         public void DeleteManufactoryPrincipal()
         {
             Principals.Remove(CurrentPrincipal);
             CurrentPrincipal = Principals.Last();
         }
+        #endregion
+
         public object Clone()
         {
             ManufactoryManageDetail newManufactoryManageDetail = new ManufactoryManageDetail();
@@ -146,40 +188,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return newManufactoryManageDetail;
         }
-        internal void ResetData(ManufactoryManageDetail currentManufactoryBackUp)
-        {
-            ID = currentManufactoryBackUp.ID;
-            Name = currentManufactoryBackUp.Name;
-            NickName = currentManufactoryBackUp.NickName;
-            Telephone = currentManufactoryBackUp.Telephone;
-            ResponsibleName = currentManufactoryBackUp.ResponsibleName;
-            ResponsibleTelephone = currentManufactoryBackUp.ResponsibleTelephone;
-            ResponsibleLINE = currentManufactoryBackUp.ResponsibleLINE;
-            Address = currentManufactoryBackUp.Address;
-            Fax = currentManufactoryBackUp.Fax;
-            Email = currentManufactoryBackUp.Email;
-            EIN = currentManufactoryBackUp.EIN;
-            MedicalID = currentManufactoryBackUp.MedicalID;
-            ControlMedicineID = currentManufactoryBackUp.ControlMedicineID;
-            Note = currentManufactoryBackUp.Note;
 
-            Principals.ResetData(currentManufactoryBackUp.Principals);
-        }
-        internal bool UpdateManufactoryDetail()
-        {
-            DataTable dataTable = ManufactoryDB.UpdateManufactoryDetail(this);
-
-            if (dataTable.Rows.Count == 0)
-                return false;
-            else
-                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
-        }
-
-        internal void AddManufactoryPrincipal()
-        {
-            Principals.AddNewPrincipal();
-            CurrentPrincipal = Principals.Last();
-        }
         #endregion
     }
 }

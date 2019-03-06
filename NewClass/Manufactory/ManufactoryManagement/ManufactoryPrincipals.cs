@@ -19,20 +19,14 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             }
         }
 
+        #region ----- Define Functions -----
+
+        #region ///// Static Functions /////
         internal static ManufactoryPrincipals GetManufactoryPrincipals(string manufactoryID)
         {
             return new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(manufactoryID));
         }
-
-        public object Clone()
-        {
-            ManufactoryPrincipals principals = new ManufactoryPrincipals();
-
-            foreach (var principal in Items)
-                principals.Add(principal.Clone() as ManufactoryPrincipal);
-
-            return principals;
-        }
+        #endregion
 
         internal void AddNewPrincipal()
         {
@@ -48,5 +42,15 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
                 Add(principal.Clone() as ManufactoryPrincipal);
             }
         }
+        public object Clone()
+        {
+            ManufactoryPrincipals principals = new ManufactoryPrincipals();
+
+            foreach (var principal in Items)
+                principals.Add(principal.Clone() as ManufactoryPrincipal);
+
+            return principals;
+        }
+        #endregion
     }
 }

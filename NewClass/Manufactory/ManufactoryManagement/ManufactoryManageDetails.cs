@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
-    public class ManufactoryManageDetails : Collection<ManufactoryManageDetail>
+    public class ManufactoryManageDetails : ObservableCollection<ManufactoryManageDetail>
     {
         private ManufactoryManageDetails(DataTable dataTable)
         {

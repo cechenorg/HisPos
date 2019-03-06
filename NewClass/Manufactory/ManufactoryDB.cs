@@ -24,6 +24,14 @@ namespace His_Pos.NewClass.Manufactory
             throw new NotImplementedException();
         }
 
+        internal static DataTable GetManufactoryTradeRecords(string manufactoryID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ManufactoryTradeRecordsByManufactoryID]", parameters);
+        }
+
         internal static DataTable GetManufactoryPrincipals(string manufactoryID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

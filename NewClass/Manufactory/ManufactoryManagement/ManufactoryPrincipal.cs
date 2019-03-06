@@ -4,19 +4,56 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
-    public class ManufactoryPrincipal : ICloneable
+    public class ManufactoryPrincipal : ObservableObject, ICloneable
     {
         #region ----- Define Variables -----
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Telephone { get; set; }
-        public string Fax { get; set; }
-        public string Line { get; set; }
-        public string Email { get; set; }
-        public string Note { get; set; }
+        private int id;
+        private string name;
+        private string telephone;
+        private string fax;
+        private string email;
+        private string note;
+        private string line;
+
+        public int ID
+        {
+            get { return id; }
+            set { Set(() => ID, ref id, value); }
+        }
+        public string Name
+        {
+            get { return name; }
+            set { Set(() => Name, ref name, value); }
+        }
+        public string Telephone
+        {
+            get { return telephone; }
+            set { Set(() => Telephone, ref telephone, value); }
+        }
+        public string Fax
+        {
+            get { return fax; }
+            set { Set(() => Fax, ref fax, value); }
+        }
+        public string Email
+        {
+            get { return email; }
+            set { Set(() => Email, ref email, value); }
+        }
+        public string Line
+        {
+            get { return line; }
+            set { Set(() => Line, ref line, value); }
+        }
+        public string Note
+        {
+            get { return note; }
+            set { Set(() => Note, ref note, value); }
+        }
         #endregion
 
         public ManufactoryPrincipal()

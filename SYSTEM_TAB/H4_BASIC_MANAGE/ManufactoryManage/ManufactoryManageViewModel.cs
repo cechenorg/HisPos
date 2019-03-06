@@ -107,6 +107,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         }
         private void DeleteManufactoryAction()
         {
+            if (CurrentManufactory.ID.Equals("0"))
+            {
+                MessageWindow.ShowMessage("杏德生技有限公司無法刪除!", MessageType.WARNING);
+                return;
+            }
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除供應商?\n(刪除後無法復原)", "");
 
             if ((bool) confirmWindow.DialogResult)
