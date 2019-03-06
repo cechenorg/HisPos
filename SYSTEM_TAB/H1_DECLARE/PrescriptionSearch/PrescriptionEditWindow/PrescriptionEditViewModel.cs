@@ -104,14 +104,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         break;
                 }
             }
-
             var amountSelfPayEdited = OriginalPrescription.PrescriptionPoint.AmountSelfPay != EditedPrescription.PrescriptionPoint.AmountSelfPay;
             if (!NotPrescribe)
             {
                 return preEdited || pharmacyEdited || adjustDateEdited || medEdited || amountSelfPayEdited;
             }
             var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
-            var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate, (DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
+            bool treatDateEdited;
+            if(OriginalPrescription.Treatment.TreatDate is null && EditedPrescription.Treatment.TreatDate != null || EditedPrescription.Treatment.TreatDate is null && OriginalPrescription.Treatment.TreatDate != null)
+                treatDateEdited = true;
+            else
+            {
+                treatDateEdited = DateTime.Compare((DateTime) EditedPrescription.Treatment.TreatDate,
+                                      (DateTime) OriginalPrescription.Treatment.TreatDate) != 0;
+            }
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
             var divEdited = !EditedPrescription.Treatment.Division.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Division);
             var mainDiseaseEdited = !EditedPrescription.Treatment.MainDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.MainDisease);
@@ -214,10 +220,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
-            Init((Prescription)selected.Clone());
+            OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
+            Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !NotPrescribe || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
         #region InitialFunctions
+        /*
+         * clone checkEdit
+         */
         private void Init(Prescription selected)
         {
             InitPrescription(selected);
@@ -247,11 +257,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
             EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-            var totalSelfPay = EditedPrescription.Medicines
-                .Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.PaySelf)
-                .Sum(m => m.TotalPrice);
-            EditedPrescription.PrescriptionPoint.AmountSelfPay = Convert.ToInt32(Math.Ceiling(totalSelfPay));
-            EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
         }
 
         private void InitialItemsSources()
@@ -437,19 +442,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CountMedicinePoint()
         {
-            EditedPrescription.CountPrescriptionPoint();
+            EditedPrescription.CountPrescriptionPoint(true);
         }
         private void EditCompleteAction()
         {
             if (CheckEdit())
             {
-                var error = EditedPrescription.CheckPrescriptionRule(true);
-                if (!string.IsNullOrEmpty(error))
+                if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
-                    MessageWindow.ShowMessage(error, MessageType.ERROR);
-                    return;
+                    var error = EditedPrescription.CheckPrescriptionRule(true);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        MessageWindow.ShowMessage(error, MessageType.ERROR);
+                        return;
+                    }
                 }
-                EditedPrescription.CountPrescriptionPoint();
+                EditedPrescription.CountPrescriptionPoint(false);
                 EditedPrescription.Update();
                 if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 {
@@ -536,7 +544,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var selected = EditedPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= EditedPrescription.Medicines.Count) return;
                 EditedPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                EditedPrescription.CountPrescriptionPoint();
+                EditedPrescription.CountPrescriptionPoint(true);
                 if (selected == EditedPrescription.Medicines.Count - 1)
                     EditedPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusDosage");

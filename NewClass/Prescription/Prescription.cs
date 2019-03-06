@@ -515,7 +515,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
-        public void CountPrescriptionPoint()
+        public void CountPrescriptionPoint(bool countSelfPay)
         {
             if (!Treatment.AdjustCase.ID.Equals("0"))
             {
@@ -558,7 +558,8 @@ namespace His_Pos.NewClass.Prescription
                                                PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
                 PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
             }
-            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+            if(countSelfPay)
+                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
             PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
         }
@@ -753,7 +754,9 @@ namespace His_Pos.NewClass.Prescription
         {
             var treatmentDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
-            var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
+            var treatmentDateChi = string.Empty;
+            if(!string.IsNullOrEmpty(treatmentDate))
+                treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
             return new List<ReportParameter>
@@ -795,11 +798,20 @@ namespace His_Pos.NewClass.Prescription
             CountMedicineDays();
             CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
-            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            CreateDeclareFileContent(details);//產生申報資料
+            if (Treatment.AdjustCase.ID.Equals("0"))
+            {
+                PrescriptionPoint.SpecialMaterialPoint = 0;
+                PrescriptionPoint.TotalPoint = 0;
+                PrescriptionPoint.ApplyPoint = 0;
+            }
+            else
+            {
+                PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+                CreateDeclareFileContent(details);//產生申報資料
+            }
             PrescriptionDb.UpdatePrescription(this, details); 
         }
         public void AdjustMedicines(Prescription originPrescription)
