@@ -182,7 +182,11 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public void DeleteManufactoryPrincipal()
         {
             Principals.Remove(CurrentPrincipal);
-            CurrentPrincipal = Principals.Last();
+
+            if (Principals.Count > 0)
+                CurrentPrincipal = Principals.Last();
+            else
+                CurrentPrincipal = null;
         }
         #endregion
 

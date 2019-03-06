@@ -66,6 +66,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.SINGDE;
                 else
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.NORMAL;
+
+                IsDataChanged = false;
             }
         }
         public ManufactoryManageDetails ManufactoryManageCollection
