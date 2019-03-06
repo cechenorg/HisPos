@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
@@ -151,6 +153,25 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+        internal bool CheckUpdateDataValid()
+        {
+            if (Name.Equals(""))
+            {
+                MessageWindow.ShowMessage("供應商名稱不可為空!", MessageType.ERROR);
+                return false;
+            }
+
+            foreach (var principal in Principals)
+            {
+                if (principal.Name.Equals(""))
+                {
+                    MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         #region ///// Principal Functions /////
         internal void AddManufactoryPrincipal()
@@ -188,7 +209,6 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return newManufactoryManageDetail;
         }
-
         #endregion
     }
 }

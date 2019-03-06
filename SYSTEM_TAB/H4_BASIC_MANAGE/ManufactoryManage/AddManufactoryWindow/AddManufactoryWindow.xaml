@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow"
         mc:Ignorable="d"
-        Title="AddManufactoryWindow" Height="450" Width="800">
+        Title="新增供應商" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         
     </Grid>

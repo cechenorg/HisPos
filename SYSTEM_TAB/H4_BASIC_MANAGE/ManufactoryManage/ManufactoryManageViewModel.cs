@@ -151,6 +151,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         }
         private void ConfirmChangeAction()
         {
+            if (!CurrentManufactory.CheckUpdateDataValid()) return;
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認修改資料?", "");
 
             if ((bool)confirmWindow.DialogResult)
@@ -164,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 else
                 {
                     MessageWindow.ShowMessage("更新失敗 請稍後重試!", MessageType.ERROR);
-                    CurrentManufactory.ResetData(currentManufactoryBackUp);
+                    return;
                 }
             }
 
