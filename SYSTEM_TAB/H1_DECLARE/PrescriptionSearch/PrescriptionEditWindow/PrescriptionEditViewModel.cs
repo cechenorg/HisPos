@@ -110,7 +110,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return preEdited || pharmacyEdited || adjustDateEdited || medEdited || amountSelfPayEdited;
             }
             var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
-            var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate, (DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
+            bool treatDateEdited;
+            if(OriginalPrescription.Treatment.TreatDate is null && EditedPrescription.Treatment.TreatDate != null || EditedPrescription.Treatment.TreatDate is null && OriginalPrescription.Treatment.TreatDate != null)
+                treatDateEdited = true;
+            else
+            {
+                treatDateEdited = DateTime.Compare((DateTime) EditedPrescription.Treatment.TreatDate,
+                                      (DateTime) OriginalPrescription.Treatment.TreatDate) != 0;
+            }
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
             var divEdited = !EditedPrescription.Treatment.Division.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Division);
             var mainDiseaseEdited = !EditedPrescription.Treatment.MainDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.MainDisease);
@@ -441,11 +448,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (CheckEdit())
             {
-                var error = EditedPrescription.CheckPrescriptionRule(true);
-                if (!string.IsNullOrEmpty(error))
+                if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
-                    MessageWindow.ShowMessage(error, MessageType.ERROR);
-                    return;
+                    var error = EditedPrescription.CheckPrescriptionRule(true);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        MessageWindow.ShowMessage(error, MessageType.ERROR);
+                        return;
+                    }
                 }
                 EditedPrescription.CountPrescriptionPoint(false);
                 EditedPrescription.Update();
