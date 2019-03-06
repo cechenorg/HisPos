@@ -64,7 +64,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="0,10,0,10">
                     <TextBlock Text="備註" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="15" Foreground="Black"/>
-                    <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="600" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
+                    <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="570" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -142,7 +142,7 @@
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
             <DataGrid HeadersVisibility="None" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
-                      ItemsSource="{Binding Principals, UpdateSourceTrigger=PropertyChanged}" Width="510" SelectedItem="{Binding CurrentPrincipal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                      ItemsSource="{Binding Principals, UpdateSourceTrigger=PropertyChanged}" Width="700" SelectedItem="{Binding CurrentPrincipal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>

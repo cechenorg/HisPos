@@ -37,7 +37,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <Label Content="名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <TextBox Text="{Binding SearchManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Label Content="負責人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="聯絡人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <TextBox Text="{Binding SearchPrincipalName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
             <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="835,0,0,0" Command="{Binding SearchCommand}"/>
         </StackPanel>
