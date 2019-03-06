@@ -17,7 +17,7 @@
         </DataTemplate>
         <DataTemplate x:Key="NoPrincipalControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <Grid Background="{StaticResource Shadow}">
-                <Label Content="無負責人資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+                <Label Content="無聯絡人資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="PrincipalControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
@@ -37,7 +37,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-                    <TextBox Text="{Binding Name, Mode=TwoWay}" FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="負責人姓名" Margin="20,0,0,0" BorderThickness="0">
+                    <TextBox Text="{Binding Name, Mode=TwoWay}" FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="聯絡人姓名" Margin="20,0,0,0" BorderThickness="0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -98,10 +98,57 @@
                 <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Width="660" Content="刪除負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding Path=DataContext.DeleteManufactoryPrincipalCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
             </Grid>
         </DataTemplate>
+        <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="LightGray"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.RowSpan="3" BorderThickness="0" Background="Transparent" />
+                <Track x:Name="PART_Track" Grid.Column="1">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{DynamicResource ScrollBarPageButton}" Command="ScrollBar.PageLeftCommand" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{DynamicResource ScrollBarThumb}" Margin="0" Height="8"/>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{DynamicResource ScrollBarPageButton}" Command="ScrollBar.PageRightCommand" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
     <Grid Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding CurrentManufactory, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="80"/>
             <RowDefinition Height="150"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="350"/>
@@ -143,7 +190,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Background="{StaticResource Shadow}">
                 <Label Content="負責人    姓名" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="140" FontFamily="Segoe UI Semi" Margin="5">
+                <TextBox Text="{Binding ResponsibleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="140" FontFamily="Segoe UI Semi" Margin="5">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -151,7 +198,7 @@
                     </i:Interaction.Triggers>
                 </TextBox>
                 <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
+                <TextBox Text="{Binding ResponsibleTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -159,7 +206,7 @@
                     </i:Interaction.Triggers>
                 </TextBox>
                 <Label Content="LINE" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
+                <TextBox Text="{Binding ResponsibleLINE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="160" FontFamily="Segoe UI Semi" Margin="5">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -237,34 +284,38 @@
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
-            <DataGrid HeadersVisibility="None" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
-                              ItemsSource="{Binding Principals}" Width="510">
+            <DataGrid HeadersVisibility="None" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                      ItemsSource="{Binding Principals, UpdateSourceTrigger=PropertyChanged}" Width="510" SelectedItem="{Binding CurrentPrincipal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="OverridesDefaultStyle" Value="True"/>
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="Auto" />
-                                <Setter Property="Height" Value="10" />
-                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                            </Trigger>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                <Setter Property="Height" Value="5" />
+                                <Setter Property="Template" Value="{DynamicResource HorizontalScrollBar}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </DataGrid.ItemsPanel>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="120" Header="負責對象" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn Width="120" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -274,7 +325,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Width="150" Margin="10,0,0,0" Content="+ 新增負責人" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="16" Background="Gray" BorderThickness="0" Command="{Binding Path=DataContext.AddManufactoryPrincipalCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
+            <Button Width="150" Margin="10,0,0,0" Content="+ 新增聯絡人" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="16" Background="Gray" BorderThickness="0" Command="{Binding Path=DataContext.AddManufactoryPrincipalCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
         </StackPanel>
         <ContentControl Grid.Row="3" Grid.Column="0" Margin="10,0,10,0" Content="{Binding}">
             <ContentControl.Style>

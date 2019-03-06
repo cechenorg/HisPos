@@ -127,13 +127,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void AddManufactoryPrincipalAction()
         {
             CurrentManufactory.AddManufactoryPrincipal();
+            DataChangedAction();
         }
         private void DeleteManufactoryPrincipalAction()
         {
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除負責人?", "");
 
-            if ((bool)confirmWindow.DialogResult)
+            if ((bool) confirmWindow.DialogResult)
+            {
                 CurrentManufactory.DeleteManufactoryPrincipal();
+                DataChangedAction();
+            }
         }
         private void DataChangedAction()
         {
@@ -189,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         #region ///// Messenger Functions /////
         private void GetNewManufactory(NotificationMessage<ManufactoryManageDetail> notification)
         {
-
+            
         }
         #endregion
 

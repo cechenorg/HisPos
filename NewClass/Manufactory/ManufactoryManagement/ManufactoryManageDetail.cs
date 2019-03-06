@@ -12,13 +12,67 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
     {
         #region ----- Define Variables -----
         private ManufactoryPrincipal currentPrincipal;
+        private string responsibleName;
+        private string responsibleTelephone;
+        private string responsibleLINE;
+        private string address;
+        private string fax;
+        private string ein;
+        private string email;
+        private string medicalID;
+        private string controlMedicineID;
+        private string note;
 
-        public string Address { get; set; }
-        public string Fax { get; set; }
-        public string EIN { get; set; }
-        public string Email { get; set; }
-        public string ControlMedicineID { get; set; }
-        public string Note { get; set; }
+        public string ResponsibleName
+        {
+            get { return responsibleName; }
+            set { Set(() => ResponsibleName, ref responsibleName, value); }
+        }
+        public string ResponsibleTelephone
+        {
+            get { return responsibleTelephone; }
+            set { Set(() => ResponsibleTelephone, ref responsibleTelephone, value); }
+        }
+        public string ResponsibleLINE
+        {
+            get { return responsibleLINE; }
+            set { Set(() => ResponsibleLINE, ref responsibleLINE, value); }
+        }
+        public string Address
+        {
+            get { return address; }
+            set { Set(() => Address, ref address, value); }
+        }
+        public string Fax
+        {
+            get { return fax; }
+            set { Set(() => Fax, ref fax, value); }
+        }
+        public string EIN
+        {
+            get { return ein; }
+            set { Set(() => EIN, ref ein, value); }
+        }
+        public string Email
+        {
+            get { return email; }
+            set { Set(() => Email, ref email, value); }
+        }
+        public string MedicalID
+        {
+            get { return medicalID; }
+            set { Set(() => MedicalID, ref medicalID, value); }
+        }
+        public string ControlMedicineID
+        {
+            get { return controlMedicineID; }
+            set { Set(() => ControlMedicineID, ref controlMedicineID, value); }
+        }
+        public string Note
+        {
+            get { return note; }
+            set { Set(() => Note, ref note, value); }
+        }
         public ManufactoryPrincipals Principals { get; set; }
         public ManufactoryTradeRecords TradeRecords { get; set; }
         public ManufactoryPrincipal CurrentPrincipal
@@ -41,6 +95,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             Fax = row.Field<string>("Man_Fax");
             EIN = row.Field<string>("Man_EIN");
             Email = row.Field<string>("Man_Email");
+            MedicalID = row.Field<string>("Man_MedicalID");
             ControlMedicineID = row.Field<string>("Man_ControlMedicineID");
             Note = row.Field<string>("Man_Note");
         }
@@ -66,6 +121,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         public void DeleteManufactoryPrincipal()
         {
             Principals.Remove(CurrentPrincipal);
+            CurrentPrincipal = Principals.Last();
         }
         public object Clone()
         {
@@ -75,9 +131,14 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             newManufactoryManageDetail.Name = Name;
             newManufactoryManageDetail.NickName = NickName;
             newManufactoryManageDetail.Telephone = Telephone;
+            newManufactoryManageDetail.ResponsibleName = ResponsibleName;
+            newManufactoryManageDetail.ResponsibleTelephone = ResponsibleTelephone;
+            newManufactoryManageDetail.ResponsibleLINE = ResponsibleLINE;
             newManufactoryManageDetail.Address = Address;
             newManufactoryManageDetail.Fax = Fax;
+            newManufactoryManageDetail.Email = Email;
             newManufactoryManageDetail.EIN = EIN;
+            newManufactoryManageDetail.MedicalID = MedicalID;
             newManufactoryManageDetail.ControlMedicineID = ControlMedicineID;
             newManufactoryManageDetail.Note = Note;
 
@@ -91,13 +152,18 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             Name = currentManufactoryBackUp.Name;
             NickName = currentManufactoryBackUp.NickName;
             Telephone = currentManufactoryBackUp.Telephone;
+            ResponsibleName = currentManufactoryBackUp.ResponsibleName;
+            ResponsibleTelephone = currentManufactoryBackUp.ResponsibleTelephone;
+            ResponsibleLINE = currentManufactoryBackUp.ResponsibleLINE;
             Address = currentManufactoryBackUp.Address;
             Fax = currentManufactoryBackUp.Fax;
+            Email = currentManufactoryBackUp.Email;
             EIN = currentManufactoryBackUp.EIN;
+            MedicalID = currentManufactoryBackUp.MedicalID;
             ControlMedicineID = currentManufactoryBackUp.ControlMedicineID;
             Note = currentManufactoryBackUp.Note;
 
-            Principals = currentManufactoryBackUp.Principals.Clone() as ManufactoryPrincipals;
+            Principals.ResetData(currentManufactoryBackUp.Principals);
         }
         internal bool UpdateManufactoryDetail()
         {

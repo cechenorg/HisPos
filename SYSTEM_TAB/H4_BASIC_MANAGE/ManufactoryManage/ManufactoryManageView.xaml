@@ -108,7 +108,7 @@
                             <Setter Property="ContentTemplate" Value="{StaticResource NormalManufactoryControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding CurrentManufactoryType, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE">
-                            <Setter Property="ContentTemplate" Value="{StaticResource NormalManufactoryControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource SingdeManufactoryControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
