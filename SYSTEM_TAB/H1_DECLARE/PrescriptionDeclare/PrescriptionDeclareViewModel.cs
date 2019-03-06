@@ -744,14 +744,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 p.Patient.Check();
             else
             {
-                p.Patient = CurrentPrescription.Patient;
-                CurrentPrescription.Patient.Check();
+                if (!CurrentPrescription.Patient.Name.Equals(p.Patient.Name) || !CurrentPrescription.Patient.Name.Equals(p.Patient.Name) ||
+                    DateTime.Compare((DateTime) p.Patient.Birthday, (DateTime) CurrentPrescription.Patient.Birthday) != 0)
+                {
+                    ConfirmWindow c = new ConfirmWindow("此處方病患與所選病患不符，是否取代?","資料不符");
+                    if((bool)c.DialogResult)
+                        p.Patient.Check();
+                    else
+                    {
+                        p.Patient = CurrentPrescription.Patient;
+                        CurrentPrescription.Patient.Check();
+                    }
+                }
+                else
+                {
+                    p.Patient = CurrentPrescription.Patient;
+                    CurrentPrescription.Patient.Check();
+                }
             }
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription = p;
             CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
+            if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
+                MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。",MessageType.WARNING);
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {

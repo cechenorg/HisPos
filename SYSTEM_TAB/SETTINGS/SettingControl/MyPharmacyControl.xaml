@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620" GotFocus="MyPharmacyControl_OnGotFocus">
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
     <Grid Background="LightGray" DataContext="{Binding myPharmacy, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -28,7 +30,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <TextBlock Text="讀卡機設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+                <TextBlock Text="讀卡機設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
                 <TextBlock Text="COM" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40,0,0,0"/>
                 <ComboBox Margin="10,0,0,0" Width="150" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center"
                           ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedIndex="{Binding ReaderCom, Mode=TwoWay}" SelectionChanged="Pharmacy_OnDataChanged">
@@ -48,9 +50,10 @@
                 <TextBlock Text="新" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <TextBlock Text="V P N 設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,0,0,0"/>
-                <TextBox Text="{Binding VpnIp, Mode=TwoWay}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="250" HorizontalContentAlignment="Center" TextChanged="Pharmacy_OnDataChanged"/>
-                <Button Content="醫事人員驗PIN" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="20,10,0,10" BorderBrush="RoyalBlue" Click="VerifyHpcPin_Click"/>
+                <TextBlock Text="健保局IP" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBox Text="{Binding VpnIp, Mode=TwoWay}" FontSize="23" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="10,0,0,8" Width="185" HorizontalContentAlignment="Center" TextChanged="Pharmacy_OnDataChanged"/>
+                <Button Content="醫事卡認證" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="10,10,0,10" BorderBrush="RoyalBlue" Click="VerifyHpcPin_Click"/>
+                <Button Content="安全模組認證" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="10,10,0,10" BorderBrush="RoyalBlue" Click="VerifySAMDC_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
                 <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
@@ -59,4 +62,5 @@
             </StackPanel>
         </Grid>
     </Grid>
+    </xctk:BusyIndicator>
 </UserControl>
