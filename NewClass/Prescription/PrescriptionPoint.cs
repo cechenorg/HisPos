@@ -91,6 +91,7 @@ namespace His_Pos.NewClass.Prescription {
             set
             {
                 Set(() => AmountSelfPay, ref amountSelfPay, value);
+                CountAmountsPay();
             }
         }
         private int change;//自費金額
@@ -115,6 +116,11 @@ namespace His_Pos.NewClass.Prescription {
         public void GetDeposit(int id)
         {
             Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
+        }
+
+        public void CountAmountsPay()
+        {
+            AmountsPay = AmountSelfPay + CopaymentPoint;
         }
         public void GetAmountPaySelf(int id) { 
             AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
