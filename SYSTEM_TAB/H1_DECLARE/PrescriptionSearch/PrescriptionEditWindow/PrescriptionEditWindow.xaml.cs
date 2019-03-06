@@ -314,5 +314,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<Medicine>(this, (Medicine)row.Item, nameof(PrescriptionEditWindow)));
         }
+        private void GetSelectedMedicine(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
+                !((Medicine)row.Item is MedicineSpecialMaterial)) return;
+
+        }
     }
 }

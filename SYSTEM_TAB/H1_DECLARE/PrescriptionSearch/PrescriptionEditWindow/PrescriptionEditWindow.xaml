@@ -285,6 +285,7 @@
                             <Setter Property="FontSize" Value="16" />
                             <Setter Property="Height" Value="40" />
                             <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                            <EventSetter Event="MouseLeftButtonDown" Handler="ShowMedicineDetail"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
