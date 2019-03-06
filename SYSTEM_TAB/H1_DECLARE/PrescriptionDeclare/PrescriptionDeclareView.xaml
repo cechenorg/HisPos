@@ -350,7 +350,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
                                              FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                             Text="{Binding Dosage, Converter={StaticResource DoubleConverter}, Delay=500, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
+                                             Text="{Binding Dosage, Converter={StaticResource DoubleConverter},StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -386,7 +386,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Amount, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged,IsAsync=True}" IsReadOnly="{Binding IsAmountReadOnly,UpdateSourceTrigger=PropertyChanged}">
+                                         Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,StringFormat=N2}" IsReadOnly="{Binding IsAmountReadOnly,UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.MedicineAmountChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
@@ -422,7 +422,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicinePrice" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Price, Mode=TwoWay, Delay=600, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsPriceReadOnly, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -454,11 +454,11 @@
                                 <DataTemplate>
                                     <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
                                              FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter}, Delay=500, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter},StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="40" Header="成本" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn MinWidth="40" Header="成本" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -590,12 +590,11 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,10,0">
                             <Label Content="藥品點數 : " Style="{StaticResource BoldLabelContent18}"/>
                             <Label Content="{Binding CurrentPrescription.PrescriptionPoint.MedicinePoint, UpdateSourceTrigger=PropertyChanged}" Width="100"  Style="{StaticResource BoldLabelContent18}"/>
-                            <Image Width="30" Height="30" Margin="100,10,10,10" Source="/Images/vip.png" Visibility="{Binding CurrentPrescription.PrescriptionStatus.IsCooperativeVIP, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Margin="10,0,10,0" Orientation="Horizontal">
-                            <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}"/>
-                            <TextBox x:Name="CopaymentText"  Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <Label  Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
+                            <TextBox x:Name="SelfCostText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number" CaretBrush="Red"
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.5,0.5">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
@@ -614,15 +613,19 @@
                             <Label Content="{Binding CurrentPrescription.PrescriptionPoint.Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Width="90" HorizontalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Margin="10,0,10,0" Orientation="Horizontal">
-                            <Label  Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
-                            <TextBox x:Name="SelfCostText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number" CaretBrush="Red"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.5,0.5">
+                            <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}"/>
+                            <TextBox x:Name="CopaymentText"  Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </TextBox> 
+                            </TextBox>
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding CurrentPrescription.PrescriptionStatus.IsCooperativeVIP, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Image Width="40" Height="40" Margin="10,0,10,0" Source="/Images/vip.png"/>
+                                <Label Content="免收部分負擔" Style="{StaticResource BoldLabelContent18}" Foreground="IndianRed"/>
+                            </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="4">
                             <ContentControl>
