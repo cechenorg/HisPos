@@ -78,7 +78,7 @@
     <Grid Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding CurrentManufactory, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="350"/>
             <RowDefinition/>
@@ -94,7 +94,7 @@
         </StackPanel>
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="0"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
