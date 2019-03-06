@@ -104,7 +104,7 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Width="660" Content="刪除負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding Path=DataContext.DeleteManufactoryPrincipalCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Width="630" Content="刪除負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding Path=DataContext.DeleteManufactoryPrincipalCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
             </Grid>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
@@ -446,7 +446,7 @@
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource DataNotChanged}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.IsDataChanged, RelativeSource={ RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <DataTrigger Binding="{Binding DataContext.CurrentManufactory.IsDataChanged, RelativeSource={ RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource DataChanged}" />
                             </DataTrigger>
                         </Style.Triggers>

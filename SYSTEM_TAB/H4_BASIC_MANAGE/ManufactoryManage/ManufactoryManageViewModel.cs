@@ -34,22 +34,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         public string SearchPrincipalName { get; set; } = "";
         #endregion
 
-        private bool isDataChanged;
         private ManufactoryManageDetail currentManufactory;
         private ManufactoryManageDetail currentManufactoryBackUp;
         private ManufactoryManageDetails manufactoryManageCollection;
         private CurrentManufactoryTypeEnum currentManufactoryType = CurrentManufactoryTypeEnum.NONE;
-
-        public bool IsDataChanged
-        {
-            get { return isDataChanged; }
-            set
-            {
-                Set(() => IsDataChanged, ref isDataChanged, value);
-                CancelChangeCommand.RaiseCanExecuteChanged();
-                ConfirmChangeCommand.RaiseCanExecuteChanged();
-            }
-        }
+        
         public ManufactoryManageDetail CurrentManufactory
         {
             get { return currentManufactory; }
@@ -68,7 +57,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 else
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.NORMAL;
 
-                IsDataChanged = false;
+                if (CurrentManufactory is null) return;
+
+                CurrentManufactory.IsDataChanged = false;
+                CancelChangeCommand.RaiseCanExecuteChanged();
+                ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
         public ManufactoryManageDetails ManufactoryManageCollection
@@ -150,7 +143,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         }
         private void DataChangedAction()
         {
-            IsDataChanged = true;
+            if(CurrentManufactory is null) return;
+
+            CurrentManufactory.IsDataChanged = true;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         private void ConfirmChangeAction()
         {
@@ -173,14 +170,18 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 }
             }
 
-            IsDataChanged = false;
+            CurrentManufactory.IsDataChanged = false;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         private void CancelChangeAction()
         {
             CurrentManufactory.ResetData(currentManufactoryBackUp);
             RaisePropertyChanged(nameof(CurrentManufactory));
 
-            IsDataChanged = false;
+            CurrentManufactory.IsDataChanged = false;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -198,7 +199,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         }
         private bool IsManufactoryDataChanged()
         {
-            return IsDataChanged;
+            if (CurrentManufactory is null) return false;
+
+            return CurrentManufactory.IsDataChanged;
         }
 
         #region ///// Messenger Functions /////

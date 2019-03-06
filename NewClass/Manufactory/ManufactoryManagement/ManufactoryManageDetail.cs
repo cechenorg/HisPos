@@ -25,6 +25,17 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         private string controlMedicineID;
         private string note;
 
+        private bool isDataChanged;
+
+        public bool IsDataChanged
+        {
+            get { return isDataChanged; }
+            set
+            {
+                Set(() => IsDataChanged, ref isDataChanged, value);
+            }
+        }
+
         public string ResponsibleName
         {
             get { return responsibleName; }
@@ -82,8 +93,13 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             get { return currentPrincipal; }
             set
             {
+                bool oldIsDataChanged = IsDataChanged;
+
                 Set(() => CurrentPrincipal, ref currentPrincipal, value);
                 RaisePropertyChanged(nameof(HasPrincipal));
+
+                if (!oldIsDataChanged)
+                    IsDataChanged = false;
             }
         }
         public bool HasPrincipal => !(CurrentPrincipal is null);
@@ -93,6 +109,10 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
         public ManufactoryManageDetail(DataRow row) : base(row)
         {
+            ResponsibleName = row.Field<string>("Man_ResponsibleName");
+            ResponsibleTelephone = row.Field<string>("Man_ResponsibleTelephone");
+            ResponsibleLINE = row.Field<string>("Man_ResponsibleLINE");
+
             Address = row.Field<string>("Man_Address");
             Fax = row.Field<string>("Man_Fax");
             EIN = row.Field<string>("Man_EIN");

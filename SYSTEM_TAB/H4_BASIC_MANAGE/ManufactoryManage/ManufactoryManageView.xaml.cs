@@ -248,14 +248,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             DataGridRow dataGridRow = sender as DataGridRow;
-            if (dataGridRow is null) return;
+            if (dataGridRow is null || (DataContext as ManufactoryManageViewModel).CurrentManufactory is null) return;
 
-            if ((DataContext as ManufactoryManageViewModel).IsDataChanged)
+            if ((DataContext as ManufactoryManageViewModel).CurrentManufactory.IsDataChanged)
             {
                 MessageWindow.ShowMessage("資料有異動　請先確認變更再切換供應商!", MessageType.ERROR);
                 e.Handled = true;
             }
-
         }
     }
 }

@@ -290,7 +290,7 @@
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource DataNotChanged}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.IsDataChanged, RelativeSource={ RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <DataTrigger Binding="{Binding DataContext.CurrentManufactory.IsDataChanged, RelativeSource={ RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource DataChanged}" />
                             </DataTrigger>
                         </Style.Triggers>
