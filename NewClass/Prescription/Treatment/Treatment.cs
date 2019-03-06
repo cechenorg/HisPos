@@ -308,7 +308,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 Institution = new Ins { ID = "N", Name = string.Empty };
                 return string.Empty;
             }
-            return Institution is null ? StringRes.InstitutionError : string.Empty;
+            if (string.IsNullOrEmpty(Institution.ID))
+                return StringRes.InstitutionError;
+            return VM.GetInstitution(Institution.ID) is null ? StringRes.InstitutionError : string.Empty;
         }
         private string CheckAdjustCase()
         {

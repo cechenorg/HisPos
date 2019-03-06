@@ -29,6 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     Close();
             });
             DataContext = new PrescriptionEditViewModel(selected,vm);
+            Messenger.Default.Register<int>(this, "FocusDosage", FocusDosage);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
 
@@ -273,6 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
             if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
                 rowIndex = dataGridCells.Count - 1;
+            if(rowIndex >= dataGridCells.Count) return;
             dataGridCells[rowIndex].Focus();
             dataGridCells[rowIndex].SelectAll();
             focusGrid.SelectedIndex = rowIndex;
@@ -290,7 +292,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             TextBox textBox = sender as TextBox;
 
             if (textBox is null) return;
-
             textBox.SelectAll();
         }
 
@@ -299,7 +300,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             TextBox textBox = sender as TextBox;
 
             if (textBox is null) return;
-
+            
             e.Handled = true;
             textBox.Focus();
         }
@@ -312,6 +313,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 !((Medicine)row.Item is MedicineSpecialMaterial)) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<Medicine>(this, (Medicine)row.Item, nameof(PrescriptionEditWindow)));
+        }
+        private void GetSelectedMedicine(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
+                !((Medicine)row.Item is MedicineSpecialMaterial)) return;
+
         }
     }
 }

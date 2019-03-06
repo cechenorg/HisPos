@@ -2,6 +2,7 @@
 using His_Pos.NewClass.CooperativeInstitution;
 using System;
 using System.Data;
+using System.Threading;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -371,7 +372,10 @@ namespace His_Pos.NewClass.Product.Medicine
             get => buckleAmount;
             set
             {
-                Set(() => BuckleAmount, ref buckleAmount, value);
+                if (value >= Amount)
+                    Set(() => BuckleAmount, ref buckleAmount, Amount);
+                else
+                    Set(() => BuckleAmount, ref buckleAmount, value);
             }
         }
         

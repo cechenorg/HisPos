@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -10,9 +9,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.HisApi;
 using His_Pos.Interface;
-using His_Pos.NewClass;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -102,14 +99,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 for (var i = 0; i < EditedPrescription.Medicines.Count(m => m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial); i++)
                 {
-                    medEdited = OriginalPrescription.Medicines[i].PublicInstancePropertiesEqual(EditedPrescription.Medicines[i]);
+                    medEdited = !OriginalPrescription.Medicines[i].PublicInstancePropertiesEqual(EditedPrescription.Medicines[i]);
                     if(medEdited)
                         break;
                 }
             }
-            if (!NotPrescribe) return preEdited || pharmacyEdited || adjustDateEdited || medEdited;
+            var amountSelfPayEdited = OriginalPrescription.PrescriptionPoint.AmountSelfPay != EditedPrescription.PrescriptionPoint.AmountSelfPay;
+            if (!NotPrescribe)
+            {
+                return preEdited || pharmacyEdited || adjustDateEdited || medEdited || amountSelfPayEdited;
+            }
             var medicalNumberEdited = !EditedPrescription.Treatment.TempMedicalNumber.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.TempMedicalNumber);
-            var treatDateEdited = DateTime.Compare((DateTime)EditedPrescription.Treatment.TreatDate, (DateTime)OriginalPrescription.Treatment.TreatDate) != 0;
+            bool treatDateEdited;
+            if(OriginalPrescription.Treatment.TreatDate is null && EditedPrescription.Treatment.TreatDate != null || EditedPrescription.Treatment.TreatDate is null && OriginalPrescription.Treatment.TreatDate != null)
+                treatDateEdited = true;
+            else
+            {
+                treatDateEdited = DateTime.Compare((DateTime) EditedPrescription.Treatment.TreatDate,
+                                      (DateTime) OriginalPrescription.Treatment.TreatDate) != 0;
+            }
             var insEdited = !EditedPrescription.Treatment.Institution.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Institution);
             var divEdited = !EditedPrescription.Treatment.Division.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.Division);
             var mainDiseaseEdited = !EditedPrescription.Treatment.MainDisease.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.MainDisease);
@@ -121,12 +129,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var payEdited = !EditedPrescription.Treatment.PaymentCategory.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.PaymentCategory);
             var speTreEdited = !EditedPrescription.Treatment.SpecialTreat.PublicInstancePropertiesEqual(OriginalPrescription.Treatment.SpecialTreat);
             return preEdited || insEdited || divEdited || pharmacyEdited || treatDateEdited || adjustDateEdited || mainDiseaseEdited || subDiseaseEdited || adjCaseEdited || preCaseEdited || copEdited
-                   || payEdited || speTreEdited || medEdited || medicalNumberEdited || payCatEdited;
+                   || payEdited || speTreEdited || medEdited || medicalNumberEdited || payCatEdited || amountSelfPayEdited;
+            
         }
 
         private MedSelectWindow MedicineWindow { get; set; }
-        private Visibility isEdit;
-        public Visibility IsEdit 
+        private bool isEdit;
+        public bool IsEdit 
         {
             get => isEdit;
             set
@@ -195,6 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand PrintReceiptCmd { get; set; }
         public RelayCommand Delete { get; set; }
+        public RelayCommand MedicineAmountChanged { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -210,14 +220,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
-            Init((Prescription)selected.Clone());
+            OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
+            Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !NotPrescribe || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
         #region InitialFunctions
+        /*
+         * clone checkEdit
+         */
         private void Init(Prescription selected)
         {
             InitPrescription(selected);
-            IsEdit = Visibility.Hidden;
+            IsEdit = false;
             InitialItemsSources();
             InitialCommandActions();
             RegisterMessengers();
@@ -243,12 +257,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.Treatment.SpecialTreat != null)
                 EditedPrescription.Treatment.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.Treatment.SpecialTreat?.ID);
             EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-            var totalSelfPay = EditedPrescription.Medicines
-                .Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.PaySelf)
-                .Sum(m => m.TotalPrice);
-            EditedPrescription.PrescriptionPoint.AmountSelfPay = Convert.ToInt32(Math.Ceiling(totalSelfPay));
-            if(EditedPrescription.PrescriptionPoint.AmountSelfPay == 0)
-                EditedPrescription.PrescriptionPoint.GetAmountPaySelf(EditedPrescription.Id);
         }
 
         private void InitialItemsSources()
@@ -281,6 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
             Delete = new RelayCommand(DeleteAction);
+            MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
         }
 
         private void RegisterMessengers()
@@ -433,26 +442,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CountMedicinePoint()
         {
-            EditedPrescription.CountPrescriptionPoint();
+            EditedPrescription.CountPrescriptionPoint(true);
         }
         private void EditCompleteAction()
         {
             if (CheckEdit())
             {
-                var error = EditedPrescription.CheckPrescriptionRule(true);
-                if (!string.IsNullOrEmpty(error))
+                if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
-                    MessageWindow.ShowMessage(error, MessageType.ERROR);
-                    return;
+                    var error = EditedPrescription.CheckPrescriptionRule(true);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        MessageWindow.ShowMessage(error, MessageType.ERROR);
+                        return;
+                    }
                 }
-                EditedPrescription.CountPrescriptionPoint();
+                EditedPrescription.CountPrescriptionPoint(false);
                 EditedPrescription.Update();
                 if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 {
-                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription.PrescriptionPoint.AmountSelfPay); 
+                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription); 
                 }
                 else
-                    EditedPrescription.AdjustMedicines(OriginalPrescription.Medicines);
+                    EditedPrescription.AdjustMedicines(OriginalPrescription);
+                MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
                 switch (viewModel)
                 {
                     case ViewModelEnum.PrescriptionSearch:
@@ -469,7 +482,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             InitPrescription((Prescription)OriginalPrescription.Clone());
-            IsEdit = Visibility.Hidden;
+            IsEdit = false;
         }
 
         private void DeleteAction()
@@ -531,7 +544,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var selected = EditedPrescription.Medicines.IndexOf(SelectedMedicine);
                 if (selected < 0 || selected >= EditedPrescription.Medicines.Count) return;
                 EditedPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                EditedPrescription.CountPrescriptionPoint();
+                EditedPrescription.CountPrescriptionPoint(true);
                 if (selected == EditedPrescription.Medicines.Count - 1)
                     EditedPrescription.Medicines.Add(new Medicine());
                 Messenger.Default.Send(selected, "FocusDosage");
@@ -542,6 +555,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if(SelectedMedicine is null ) return;
             EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
+        }
+        private void SetBuckleAmount()
+        {
+            if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
+            {
+                if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                    SelectedMedicine.BuckleAmount = 0;
+                else
+                {
+                    SelectedMedicine.BuckleAmount = SelectedMedicine.Amount;
+                }
+                CheckEditStatus();
+            }
         }
         #endregion
         #region Functions
@@ -559,7 +585,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void CheckEditStatus()
         {
-            IsEdit = CheckEdit() ? Visibility.Visible : Visibility.Hidden;
+            IsEdit = CheckEdit() ? true : false;
         }
         private void ReadCard()
         {
