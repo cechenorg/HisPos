@@ -43,7 +43,15 @@ namespace His_Pos.NewClass.Prescription {
         }
         public bool IsDeposit { get; set; } //是否押金
         public bool? IsCreateSign { get; set; }
-        public bool IsCooperativeVIP { get; set; }
+        private bool isCooperativeVIP;
+        public bool IsCooperativeVIP
+        {
+            get => isCooperativeVIP;
+            set
+            {
+                Set(() => IsCooperativeVIP, ref isCooperativeVIP, value);
+            }
+        }
         public bool IsCooperativePrescribe { get; set; }
         public void Init()
         {

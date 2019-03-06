@@ -86,10 +86,10 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
             DataBaseFunction.AddSqlParameter(parameterList, "ReturnValue", amount);
-            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
-            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
+            DataBaseFunction.AddSqlParameter(parameterList, "typename", type);
+            DataBaseFunction.AddSqlParameter(parameterList, "sourcename", source);
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-           return MainWindow.ServerConnection.ExecuteProc("[Set].[ReturnInventory]", parameterList);
+           return MainWindow.ServerConnection.ExecuteProc("[Set].[RevertStockValue]", parameterList);
         }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {

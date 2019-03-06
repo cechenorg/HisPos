@@ -173,7 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         public double WindowHeight
         {
-            get => (SystemParameters.WorkArea.Width * 0.85) * 0.48;
+            get => SystemParameters.WorkArea.Height * 0.85;
             set {}
         }
         public double StartTop
@@ -331,7 +331,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             if (EditedPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(EditedPrescription.Treatment.Institution.FullName) && search.Equals(EditedPrescription.Treatment.Institution.FullName))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusDivision"));
+                Messenger.Default.Send(new NotificationMessage(this, "FocusDivision"));
                 return;
             }
             EditedPrescription.Treatment.Institution = null;
@@ -354,7 +354,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (string.IsNullOrEmpty(id)) return;
             if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusSubDisease"));
+                Messenger.Default.Send(new NotificationMessage(this,"FocusSubDisease"));
                 return;
             }
             var result = DiseaseCode.GetDiseaseCodeByID(id);
@@ -367,10 +367,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void GetSubDiseaseCodeByIdAction(string id)
         {
-            if (string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName))
+            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName)))
             {
-                Messenger.Default.Send(new NotificationMessage("FocusChronicTotal"));
+                Messenger.Default.Send(new NotificationMessage(this,"FocusChronicTotal"));
                 return;
             }
             var result = DiseaseCode.GetDiseaseCodeByID(id);
@@ -531,7 +530,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker.RunWorkerAsync();
         }
         #endregion
-        #region MessangerReceive
+        #region MessengerReceive
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
@@ -547,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.CountPrescriptionPoint(true);
                 if (selected == EditedPrescription.Medicines.Count - 1)
                     EditedPrescription.Medicines.Add(new Medicine());
-                Messenger.Default.Send(selected, "FocusDosage");
+                Messenger.Default.Send(new NotificationMessage<int>(this,selected, "FocusDosage"));
             }
         }
 

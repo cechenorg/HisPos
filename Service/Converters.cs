@@ -510,4 +510,24 @@ namespace His_Pos.Service
 
         #endregion
     }
+    [ValueConversion(typeof(int), typeof(string))]
+    public class NullableIntConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null) return string.Empty;
+            var intValue = (int)value;
+            return intValue.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var strValue = value as string;
+            int? result = null;
+            if (int.TryParse(strValue, out var resultInt))
+                result = resultInt;
+            return result;
+        }
+    }
+
 }

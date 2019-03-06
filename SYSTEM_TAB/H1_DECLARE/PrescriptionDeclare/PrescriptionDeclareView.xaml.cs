@@ -8,6 +8,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using DataGrid = System.Windows.Controls.DataGrid;
@@ -28,17 +29,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
-            Messenger.Default.Register<int>(this, "FocusDosage", FocusDosage);
+            Messenger.Default.Register<NotificationMessage<int>>( "FocusDosage", FocusDosage);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
-        private void FocusDosage(int currentIndex)
+        private void FocusDosage(NotificationMessage<int> msg)
         {
-            FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);
+            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusDosage"))
+                FocusDataGridCell("Dosage", PrescriptionMedicines, msg.Content);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusChronicTotal"))
+            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusChronicTotal"))
             {
                 ChronicTotal.Focus();
                 ChronicTotal.SelectionStart = 0;
@@ -47,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusSubDisease"))
+            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusSubDisease"))
             {
                 SecondDiagnosis.Focus();
                 SecondDiagnosis.SelectionStart = 0;
@@ -56,10 +58,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void FocusDivision(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusDivision"))
-            {
+            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusDivision"))
                 DivisionCombo.Focus();
-            }
         }
 
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -70,7 +70,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = index;
         }
 
-        private void DateControl_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }
@@ -281,6 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
             if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
                 rowIndex = dataGridCells.Count - 1;
+            if (rowIndex >= dataGridCells.Count) return;
             dataGridCells[rowIndex].Focus();
             dataGridCells[rowIndex].SelectAll();
             focusGrid.SelectedIndex = rowIndex;
