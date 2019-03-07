@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <service:SentinelConverter x:Key="SentinelConverter"/>
-        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}" x:Key="CantEditAmount">
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}" x:Key="CantEditPrice">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding StartInputVariable}" Value="SUBTOTAL">
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -133,7 +133,7 @@
                 <DataGridTemplateColumn MinWidth="70" Header="單價" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductPriceTextbox" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, Delay=300}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Style="{DynamicResource CantEditAmount}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown"/>
+                            <TextBox x:Name="ProductPriceTextbox" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, Delay=300}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Style="{DynamicResource CantEditPrice}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

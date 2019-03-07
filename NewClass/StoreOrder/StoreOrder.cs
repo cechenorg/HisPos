@@ -143,7 +143,11 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToNormalProcessingStatus()
         {
+            SaveOrder();
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
+            ReceiveID = ID;
+
+            StoreOrderDB.StoreOrderToNormalProcessing(ID);
         }
         private void ToSingdeProcessingStatus()
         {

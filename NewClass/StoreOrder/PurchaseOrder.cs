@@ -50,6 +50,9 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (OrderManufactory.ID.Equals("0"))
                 OrderProducts.SetToSingde();
+
+            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING)
+                OrderProducts.SetToProcessing();
         }
 
         public override void SaveOrder()
@@ -131,7 +134,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -143,7 +146,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "");
 
             return (bool)confirmWindow.DialogResult;
         }

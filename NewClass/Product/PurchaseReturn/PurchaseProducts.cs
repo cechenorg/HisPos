@@ -47,5 +47,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             foreach (var product in Items)
                 product.IsSingde = true;
         }
+
+        internal void SetToProcessing()
+        {
+            foreach (var product in Items)
+                product.IsProcessing = true;
+        }
     }
 }

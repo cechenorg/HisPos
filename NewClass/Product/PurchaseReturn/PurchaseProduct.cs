@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
         public bool IsSingde { get; set; } = false;
+        public bool IsProcessing { get; set; } = false;
         public bool IsSelected
         {
             get { return isSelected; }
@@ -42,7 +43,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set
             {
                 Set(() => RealAmount, ref realAmount, value);
-                CalculatePrice();
+                CalculateRealPrice();
             }
         }
         public double FreeAmount { get; set; }
@@ -57,7 +58,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
 
                 Set(() => Price, ref price, value);
-                CalculatePrice();
+
+                if(IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
             }
         }
         public double SubTotal
@@ -71,7 +76,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
 
                 Set(() => SubTotal, ref subTotal, value);
-                CalculatePrice();
+                
+                if (IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
             }
         }
 
@@ -146,6 +155,26 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                             price = SubTotal / OrderAmount;
                         break;
                 }
+            }
+
+            RaisePropertyChanged(nameof(Price));
+            RaisePropertyChanged(nameof(SubTotal));
+        }
+        private void CalculateRealPrice()
+        {
+            switch (StartInputVariable)
+            {
+                case ProductStartInputVariableEnum.INIT:
+                    break;
+                case ProductStartInputVariableEnum.PRICE:
+                    subTotal = Price * RealAmount;
+                    break;
+                case ProductStartInputVariableEnum.SUBTOTAL:
+                    if (RealAmount <= 0)
+                        price = 0;
+                    else
+                        price = SubTotal / RealAmount;
+                    break;
             }
 
             RaisePropertyChanged(nameof(Price));

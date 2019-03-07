@@ -431,7 +431,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
         }
+        internal static void StoreOrderToNormalProcessing(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
+        }
         internal static void ReturnStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
