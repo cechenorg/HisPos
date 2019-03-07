@@ -382,18 +382,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
         {
             if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
+            EditedPrescription = SelectedPrescription;
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
+                SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
+            MainWindow.ServerConnection.CloseConnection();
+            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
                     SearchAction();
             });
-            EditedPrescription = SelectedPrescription;
-            PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit;
-            prescriptionEdit = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
-            Messenger.Default.Unregister(this);
+            Messenger.Default.Unregister<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+                    SearchAction();
+            });
         }
         private void ClearAction()
         {

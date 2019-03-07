@@ -10,6 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+        xmlns:newClass="clr-namespace:His_Pos.NewClass"
         mc:Ignorable="d" FontFamily="Segoe UI Semibold"
         Height="{Binding WindowHeight, Mode=TwoWay}" 
         Width="{Binding WindowWidth, Mode=TwoWay}" 
@@ -127,7 +128,7 @@
                             </Binding>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
-                                    <command:EventToCommand Command="{Binding TreatDateChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </xctk:MaskedTextBox>
@@ -143,6 +144,11 @@
                                     <service:DateValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </xctk:MaskedTextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
@@ -168,7 +174,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicTotal" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding EditedPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="ChronicTotal_PreviewKeyDown">
+                             Text="{Binding EditedPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="ChronicTotal_PreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
@@ -177,7 +183,7 @@
                         </TextBox>
                         <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="ChronicSequence" Width="72" Height="34" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red"
-                             Text="{Binding EditedPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="ChronicSequence_PreviewKeyDown">
+                             Text="{Binding EditedPrescription.Treatment.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" PreviewKeyDown="ChronicSequence_PreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
@@ -267,6 +273,7 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
+                        <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                     </DataGrid.Resources>
                     <DataGrid.Background>
                         <StaticResource ResourceKey="GridBackGround"/>
@@ -463,7 +470,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True">
+                        <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True" Visibility="{Binding Data.EditedPrescription.PrescriptionStatus.IsCooperative,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},Source={StaticResource proxy}}" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="BuckleAmountText" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"

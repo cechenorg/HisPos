@@ -635,17 +635,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
                 return;
             }
+            if (!CheckMissingCooperativeContinue()) return;
+            CurrentPrescription.CheckIsCooperativePrescribe();
+            if (CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            {
+                MessageWindow.ShowMessage("此合作診所處方藥品皆為自費，不須押金欠卡，請直接按下調劑即可。", MessageType.WARNING);
+                IsAdjusting = false;
+                return;
+            }
             var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑, true);
             if (!(bool)noCard.DialogResult) return;
             IsAdjusting = true;
-            if (CurrentPrescription.Source == PrescriptionSource.Normal && CurrentPrescription.PrescriptionStatus.IsCooperative)
-            {
-                var e = new CooperativeRemarkInsertWindow();
-                CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
-                    return;
-                CheckIsCooperativeVIP();
-            }
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
@@ -664,16 +664,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             IsAdjusting = true;
-            if (!CheckCooperativePrescribeContinue()) return;
-            if(CurrentPrescription.Source == PrescriptionSource.Normal && CurrentPrescription.PrescriptionStatus.IsCooperative)
-            {
-                var e = new CooperativeRemarkInsertWindow();
-                CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
-                    return;
-                CheckIsCooperativeVIP();
-            }
-            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
+            if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
+            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)//合作診所自費不檢查健保規則
             {
                 var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
@@ -685,13 +678,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             PrintConfirm(PrescriptionDeclareStatus.Adjust);
         }
-        
         private bool CheckCooperativePrescribeContinue()
         {
             CurrentPrescription.CheckIsCooperativePrescribe();//檢查是否為合作診所全自費處方
             if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe) return true;
-            var confirm = new ConfirmWindow("此合作診所處方藥品皆為自費，處方不予申報，是否將案件轉為自費調劑?", "合作自費確認");
-            return (bool)confirm.DialogResult;
+            var confirm = new ConfirmWindow("此合作診所處方藥品皆為自費，處方不申報，是否將案件轉為自費調劑?", "合作自費確認");
+            bool result = (bool) confirm.DialogResult;
+            if (!result)
+                IsAdjusting = false;
+            return result;
+        }
+
+        private bool CheckMissingCooperativeContinue()
+        {
+            if (CurrentPrescription.Source == PrescriptionSource.Normal && CurrentPrescription.PrescriptionStatus.IsCooperative)
+            {
+                var e = new CooperativeRemarkInsertWindow();
+                CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
+                {
+                    IsAdjusting = false;
+                    return false;
+                }
+                if(!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+                    CheckIsCooperativeVIP();
+                return true;
+            }
+            return true;
         }
 
         private void RegisterButtonClickAction()
@@ -709,6 +722,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             PrintConfirm(PrescriptionDeclareStatus.Register);
         }
+
         private void PrescribeButtonClickAction()
         {
             if (CurrentPrescription.Patient.ID == 0)

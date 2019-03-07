@@ -30,7 +30,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
         
-        public void GetCooperaPrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
+        public void GetCooperativePrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
         {
             Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.ID, cusIDNum);
             foreach (var r in table)
