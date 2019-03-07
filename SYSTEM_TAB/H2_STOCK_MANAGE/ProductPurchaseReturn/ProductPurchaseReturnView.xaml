@@ -163,7 +163,7 @@
                                             </ContentControl>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                            <Label Content="{Binding OrderManufactory.NickName}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                             <Label Content="{Binding ProductCount, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
                                             <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>

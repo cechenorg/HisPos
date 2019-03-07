@@ -28,17 +28,29 @@ namespace His_Pos.NewClass.Manufactory
         public string Name
         {
             get { return name; }
-            set { Set(() => Name, ref name, value); }
+            set
+            {
+                Set(() => Name, ref name, value);
+                RaisePropertyChanged(nameof(GetName));
+            }
         }
         public string NickName
         {
             get { return nickName; }
-            set { Set(() => NickName, ref nickName, value); }
+            set
+            {
+                Set(() => NickName, ref nickName, value);
+                RaisePropertyChanged(nameof(GetName));
+            }
         }
         public string Telephone
         {
             get { return telephone; }
             set { Set(() => Telephone, ref telephone, value); }
+        }
+        public string GetName
+        {
+            get { return  string.IsNullOrEmpty(NickName)? Name : NickName ; }
         }
         #endregion
     }

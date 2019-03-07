@@ -273,8 +273,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
                 MainWindow.ServerConnection.CloseConnection();
-
-                Messenger.Default.Send(new NotificationMessage<string>(this, notificationMessage.Content.ID, nameof(ProductPurchaseReturnViewModel)));
             }
         }
         #endregion
