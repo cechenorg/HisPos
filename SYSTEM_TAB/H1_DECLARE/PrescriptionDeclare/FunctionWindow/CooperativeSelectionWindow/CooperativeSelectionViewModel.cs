@@ -216,7 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrescriptionSelectedAction()
         {
             if(SelectedPrescription is null) return;
-            Messenger.Default.Send(SelectedPrescription, "CooperativePrescriptionSelected");
+            Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription, "CooperativePrescriptionSelected"));
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
 

@@ -52,6 +52,15 @@ namespace His_Pos.NewClass.Prescription {
                 Set(() => IsCooperativeVIP, ref isCooperativeVIP, value);
             }
         }
+        private bool isCooperative;
+        public bool IsCooperative
+        {
+            get => isCooperative;
+            set
+            {
+                Set(() => IsCooperative, ref isCooperative, value);
+            }
+        }
         public bool IsCooperativePrescribe { get; set; }
         public void Init()
         {
@@ -66,6 +75,7 @@ namespace His_Pos.NewClass.Prescription {
             IsCreateSign = null;
             IsCooperativePrescribe = false;
             IsDeposit = false;
+            IsCooperative = false;
         }
 
         public void UpdateStatus(int id)

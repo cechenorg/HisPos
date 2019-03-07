@@ -66,7 +66,6 @@ namespace His_Pos.HisApi
             MainWindow.ServerConnection.OpenConnection();
             IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
             MainWindow.ServerConnection.CloseConnection();
-            Console.WriteLine(uploadData);
         }
 
         public static bool OpenCom()
