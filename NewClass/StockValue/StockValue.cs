@@ -13,8 +13,7 @@ namespace His_Pos.NewClass.StockValue {
             PurchaseValue = Math.Round(r.Field<double>("DaiSto_PurchaseValue"), 2);   
             ReturnValue = Math.Round(r.Field<double>("DaiSto_ReturnValue"),2);
             StockCheckValue = Math.Round(r.Field<double>("DaiSto_StockCheckValue"),2);
-            MedUseValue = Math.Round(r.Field<double>("DaiSto_MedUseValue"),2);
-            PurchaseAdjustValue = Math.Round(r.Field<double>("DaiSto_PurchaseAdjustValue"), 2);
+            MedUseValue = Math.Round(r.Field<double>("DaiSto_MedUseValue"),2); 
             FinalStockValue = Math.Round(r.Field<double>("DaiSto_FinalValue"),2); 
         }
         public DateTime Date { get; set; }
@@ -46,13 +45,7 @@ namespace His_Pos.NewClass.StockValue {
         {
             get { return medUseValue; }
             set { Set(() => MedUseValue, ref medUseValue, value); }
-        }
-        private double purchaseAdjustValue;
-        public double PurchaseAdjustValue
-        {
-            get { return purchaseAdjustValue; }
-            set { Set(() => PurchaseAdjustValue, ref purchaseAdjustValue, value); }
-        }
+        } 
         private double finalStockValue;
         public double FinalStockValue
         {
