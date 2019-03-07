@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
 
@@ -40,7 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                     textBox.Text = "";
 
                     if (ProductDataGrid.Items.Count != oldCount)
-                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[4]);
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[3]);
                 }
                 else if (ProductDataGrid.CurrentCell.Item is Product)
                 {
@@ -55,7 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                     if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
                         textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
 
-                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[4]);
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[3]);
                 }
 
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
@@ -78,6 +80,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 e.Handled = true;
                 MoveFocusNext(textBox);
             }
+            else if (textBox.Name.Equals("ProductPriceTextbox") && textBox.IsReadOnly)
+                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 單價 請先將小計歸零!", MessageType.WARNING);
+            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
+                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
         }
         private void MoveFocusNext(object sender)
         {

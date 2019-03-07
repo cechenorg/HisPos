@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.NewClass.StoreOrder;
 
@@ -39,6 +40,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 return false;
 
             return true;
+        }
+
+        internal void SetToSingde()
+        {
+            foreach (var product in Items)
+                product.IsSingde = true;
         }
     }
 }

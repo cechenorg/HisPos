@@ -47,6 +47,9 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
             TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+
+            if (OrderManufactory.ID.Equals("0"))
+                OrderProducts.SetToSingde();
         }
 
         public override void SaveOrder()
@@ -63,7 +66,7 @@ namespace His_Pos.NewClass.StoreOrder
             //backgroundWorker.RunWorkerAsync();
         }
 
-        public override void AddProductByID(string iD)
+        public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (OrderProducts.Count(p => p.ID == iD) > 0)
             {
@@ -88,7 +91,9 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            if (SelectedItem is PurchaseProduct)
+            if (OrderManufactory.ID.Equals("0")) purchaseProduct.IsSingde = true;
+
+            if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
                 int selectedProductIndex = OrderProducts.IndexOf((PurchaseProduct)SelectedItem);
 

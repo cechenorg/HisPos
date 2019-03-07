@@ -170,7 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
 
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProductFromAddButton);
             ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum);
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
@@ -271,7 +271,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
             {
                 MainWindow.ServerConnection.OpenConnection();
-                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, false);
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
+        private void GetSelectedProductFromAddButton(NotificationMessage<ProductStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, true);
                 MainWindow.ServerConnection.CloseConnection();
             }
         }

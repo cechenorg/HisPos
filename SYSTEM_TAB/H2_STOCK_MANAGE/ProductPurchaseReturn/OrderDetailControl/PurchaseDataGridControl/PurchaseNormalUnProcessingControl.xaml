@@ -13,6 +13,54 @@
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <service:SentinelConverter x:Key="SentinelConverter"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}" x:Key="CantEditAmount">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StartInputVariable}" Value="SUBTOTAL">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="0,2,0,0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsFocused" Value="true">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}" x:Key="CantEditSubTotal">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StartInputVariable}" Value="PRICE">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="0,2,0,0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsFocused" Value="true">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
          <Grid.RowDefinitions>
@@ -72,13 +120,20 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="200" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn Width="360" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="70" Header="單價" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox x:Name="ProductPriceTextbox" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, Delay=300}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Style="{DynamicResource CantEditAmount}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -90,13 +145,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="單價" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox x:Name="ProductPriceTextbox" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -130,7 +178,7 @@
                 <DataGridTemplateColumn MinWidth="70" Header="小計" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductTotalPriceTextbox" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown">
+                            <TextBox x:Name="ProductSubTotalTextbox" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, Delay=300}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Style="{DynamicResource CantEditSubTotal}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus"  PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"  KeyDown="UIElement_OnKeyDown">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>

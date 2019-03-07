@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.SaveReturnOrder(returnOrder);
         }
 
-        public override void AddProductByID(string iD)
+        public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (OrderProducts.Count(p => p.ID == iD) > 0)
             {
@@ -74,7 +74,7 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            if (SelectedItem is PurchaseProduct)
+            if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
                 int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
 

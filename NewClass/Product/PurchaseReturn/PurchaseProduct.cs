@@ -9,9 +9,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         #region ----- Define Variables -----
         private bool isSelected = false;
         private double orderAmount;
+        private double realAmount;
         private double subTotal;
         private double price;
+        private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
+        public bool IsSingde { get; set; } = false;
         public bool IsSelected
         {
             get { return isSelected; }
@@ -33,18 +36,45 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 CalculatePrice();
             }
         }
-        public double RealAmount { get; set; }
+        public double RealAmount
+        {
+            get { return realAmount; }
+            set
+            {
+                Set(() => RealAmount, ref realAmount, value);
+                CalculatePrice();
+            }
+        }
         public double FreeAmount { get; set; }
         public double Price
         {
             get { return price; }
-            set { Set(() => Price, ref price, value); }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
+
+                Set(() => Price, ref price, value);
+                CalculatePrice();
+            }
         }
         public double SubTotal
         {
             get { return subTotal; }
-            set { Set(() => SubTotal, ref subTotal, value); }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
+
+                Set(() => SubTotal, ref subTotal, value);
+                CalculatePrice();
+            }
         }
+
         public string Invoice { get; set; }
         public DateTime? ValidDate { get; set; }
         public string BatchNumber { get; set; }
@@ -54,6 +84,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SingdePackageAmount { get; } 
         public double SingdePackagePrice { get; }
         public double SingdePrice { get; }
+
+        public ProductStartInputVariableEnum StartInputVariable
+        {
+            get { return startInputVariable; }
+            set { Set(() => StartInputVariable, ref startInputVariable, value); }
+        }
         #endregion
 
         public PurchaseProduct() : base() {}
@@ -82,14 +118,42 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
         }
 
+        #region ----- Define Functions -----
         private void CalculatePrice()
         {
-            if (OrderAmount >= SingdePackageAmount)
-                Price = SingdePackagePrice;
-            else
-                Price = SingdePrice;
+            if (IsSingde)
+            {
+                if (OrderAmount >= SingdePackageAmount)
+                    price = SingdePackagePrice;
+                else
+                    price = SingdePrice;
 
-            SubTotal = Price * OrderAmount;
+                subTotal = Price * OrderAmount;
+            }
+            else
+            {
+                switch (StartInputVariable)
+                {
+                    case ProductStartInputVariableEnum.INIT:
+                        break;
+                    case ProductStartInputVariableEnum.PRICE:
+                        subTotal = Price * OrderAmount;
+                        break;
+                    case ProductStartInputVariableEnum.SUBTOTAL:
+                        if (OrderAmount <= 0)
+                            price = 0;
+                        else
+                            price = SubTotal / OrderAmount;
+                        break;
+                }
+            }
+
+            RaisePropertyChanged(nameof(Price));
+            RaisePropertyChanged(nameof(SubTotal));
+        }
+        private void SetStartInputVariable(ProductStartInputVariableEnum startInputVariable)
+        {
+            StartInputVariable = startInputVariable;
         }
 
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
@@ -103,6 +167,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = purchaseProduct.ValidDate;
             BatchNumber = purchaseProduct.BatchNumber;
             Note = purchaseProduct.Note;
+
+            IsSingde = purchaseProduct.IsSingde;
+            StartInputVariable = purchaseProduct.StartInputVariable;
         }
+        #endregion
     }
 }

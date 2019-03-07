@@ -101,7 +101,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Abstract Function /////
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
-        public abstract void AddProductByID(string iD);
+        public abstract void AddProductByID(string iD, bool isFromAddButton);
         public abstract void DeleteSelectedProduct();
         public abstract void CalculateTotalPrice();
         #endregion

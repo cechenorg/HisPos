@@ -425,6 +425,7 @@
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ProductStartInputVariableEnum.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProduct.cs" />
