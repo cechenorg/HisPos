@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -484,15 +485,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.AdjustMedicines(OriginalPrescription);
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
-                switch (viewModel)
-                {
-                    case ViewModelEnum.PrescriptionSearch:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel)+ "PrescriptionEdited"));
-                        break;
-                    case ViewModelEnum.DeclareFileManage:
-                        Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
-                        break;
-                }
+                //switch (viewModel)
+                //{
+                //    case ViewModelEnum.PrescriptionSearch:
+                //        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel)+ "PrescriptionEdited"));
+                //        break;
+                //    case ViewModelEnum.DeclareFileManage:
+                //        Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
+                //        break;
+                //}
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
