@@ -996,6 +996,9 @@ namespace His_Pos.NewClass.Prescription
                 Id = InsertPrescription();
             else
                 Update();
+            if(Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
+                AdjustPredictResere();
+
             var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
