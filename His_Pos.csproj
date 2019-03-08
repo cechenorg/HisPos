@@ -320,6 +320,7 @@
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryManagement\CurrentManufactoryTypeEnum.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetails.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipal.cs" />
@@ -433,6 +434,7 @@
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ProductStartInputVariableEnum.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProduct.cs" />

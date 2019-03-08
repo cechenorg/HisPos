@@ -16,14 +16,15 @@ namespace His_Pos.Behaviors
             if (sender is DataGrid)
             {
                 DataGrid grid = (sender as DataGrid);
-                if (grid.SelectedItem != null)
+
+                grid.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    grid.Dispatcher.BeginInvoke(new Action(delegate
+                    if (grid.SelectedItem != null)
                     {
                         grid.UpdateLayout();
                         grid.ScrollIntoView(grid.SelectedItem, null);
-                    }));
-                }
+                    }
+                }));
             }
         }
         protected override void OnDetaching()

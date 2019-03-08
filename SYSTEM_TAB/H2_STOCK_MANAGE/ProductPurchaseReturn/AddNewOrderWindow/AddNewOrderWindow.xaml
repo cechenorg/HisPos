@@ -28,7 +28,7 @@
             <RadioButton Tag="P" Content="進貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding ToPurchaseCommand}"/>
             <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Command="{Binding ToReturnCommand}"/>
         </StackPanel>
-        <ContentControl Grid.Row="1">
+        <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}"/>

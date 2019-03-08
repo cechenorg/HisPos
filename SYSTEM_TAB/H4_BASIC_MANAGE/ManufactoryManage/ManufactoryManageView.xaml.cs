@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -6,7 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -44,7 +47,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         //private void Manufactory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //{
         //    if((sender as DataGrid).SelectedItem is null) return;
-            
+
         //    CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
 
         //    Notes.Document.Blocks.Clear();
@@ -154,7 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         //private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
         //{
         //    ManageManufactory newManageManufactory = null;/// ManufactoryDb.AddNewManageManufactory();
-            
+
         //    ManageManufactories.Add(newManageManufactory);
 
         //    ManageManufactoryDataGrid.SelectedItem = newManageManufactory;
@@ -225,5 +228,33 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 
         //    ManageManufactoryDataGrid.SelectedIndex = 0;
         //}
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //DataGrid dataGrid = sender as DataGrid;
+
+            //if(dataGrid is null) return;
+
+            //int index = dataGrid.Items.IndexOf(dataGrid.SelectedItem);
+
+            //if (index != dataGrid.SelectedIndex)
+            //{
+            //    MessageWindow.ShowMessage("資料有異動　請先確認變更再切換供應商!", MessageType.ERROR);
+            //    dataGrid.UnselectAllCells();
+            //    dataGrid.SelectedItem = e.RemovedItems[0];
+            //    e.Handled = true;
+            //}
+        }
+
+        private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow dataGridRow = sender as DataGridRow;
+            if (dataGridRow is null || (DataContext as ManufactoryManageViewModel).CurrentManufactory is null) return;
+
+            if ((DataContext as ManufactoryManageViewModel).CurrentManufactory.IsDataChanged)
+            {
+                MessageWindow.ShowMessage("資料有異動　請先確認變更再切換供應商!", MessageType.ERROR);
+                e.Handled = true;
+            }
+        }
     }
 }
