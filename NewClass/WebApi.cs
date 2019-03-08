@@ -32,7 +32,6 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetCooperativeClinicId", keyValues);
             if (table.Count == 0)
-
                 return string.Empty;
             return table[0].SelectSingleNode("ArrayOfString/string").InnerText;
         }

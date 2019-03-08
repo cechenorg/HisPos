@@ -1282,8 +1282,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ClearPrescription();
         }
         private int UpdatePrescriptionCount()//計算處方張數
-        {
-            return PrescriptionDb.GetPrescriptionCountByID(CurrentPrescription.Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount");
+        { 
+           return CurrentPrescription.Treatment.Pharmacist != null 
+                ? PrescriptionDb.GetPrescriptionCountByID(CurrentPrescription.Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount")
+                : 0; 
         }
         #endregion
         #region CommandExecuteChecking
