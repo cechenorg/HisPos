@@ -790,6 +790,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var cus = new Customer(Card);
                 Patient = cus;
+                Patient.Check();
                 PrescriptionStatus.IsGetCard = true;
             }
             return success;
