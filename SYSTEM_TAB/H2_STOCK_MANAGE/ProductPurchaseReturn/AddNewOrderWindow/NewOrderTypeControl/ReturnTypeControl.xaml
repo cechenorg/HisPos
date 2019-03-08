@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
              xmlns:addNewOrderWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
              mc:Ignorable="d" Height="300">
-    <UserControl.DataContext>
-        <addNewOrderWindow:AddNewOrderWindowViewModel/>
-    </UserControl.DataContext>
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -17,7 +14,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15,0,0,0">
             <RadioButton GroupName="ReturnRadio" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
-            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="NickName" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
+            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="GetName" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
                       ItemsSource="{Binding ManufactoryCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding ReturnOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <RadioButton  GroupName="ReturnRadio" Grid.Row="1" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="15,0,0,0"/>

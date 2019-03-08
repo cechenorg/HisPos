@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
-    public class ManufactoryPrincipals : Collection<ManufactoryPrincipal>, ICloneable
+    public class ManufactoryPrincipals : ObservableCollection<ManufactoryPrincipal>, ICloneable
     {
         private ManufactoryPrincipals() { }
         public ManufactoryPrincipals(DataTable dataTable)
@@ -19,11 +19,29 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             }
         }
 
+        #region ----- Define Functions -----
+
+        #region ///// Static Functions /////
         internal static ManufactoryPrincipals GetManufactoryPrincipals(string manufactoryID)
         {
             return new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(manufactoryID));
         }
+        #endregion
 
+        internal void AddNewPrincipal()
+        {
+            Add(new ManufactoryPrincipal());
+        }
+
+        internal void ResetData(ManufactoryPrincipals principals)
+        {
+            Clear();
+
+            foreach (var principal in principals)
+            {
+                Add(principal.Clone() as ManufactoryPrincipal);
+            }
+        }
         public object Clone()
         {
             ManufactoryPrincipals principals = new ManufactoryPrincipals();
@@ -33,10 +51,6 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return principals;
         }
-
-        internal void AddNewPrincipal()
-        {
-            Add(new ManufactoryPrincipal());
-        }
+        #endregion
     }
 }

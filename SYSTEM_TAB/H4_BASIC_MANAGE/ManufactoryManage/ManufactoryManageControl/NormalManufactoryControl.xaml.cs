@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageControl
 {
@@ -23,6 +24,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManage
         public NormalManufactoryControl()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = ((DependencyObject)sender).FindChild<ScrollViewer>("DG_ScrollViewer");
+            scrollViewer.ScrollToHorizontalOffset(-e.Delta);
         }
     }
 }

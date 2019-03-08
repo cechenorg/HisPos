@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using System.Data;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -26,50 +28,71 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         #endregion
 
         #region ----- Define Variables -----
-        private bool isDataChanged;
+
+        #region ///// Search Variables /////
+        public string SearchManufactoryName { get; set; } = "";
+        public string SearchPrincipalName { get; set; } = "";
+        #endregion
+
         private ManufactoryManageDetail currentManufactory;
         private ManufactoryManageDetail currentManufactoryBackUp;
-
-        public bool IsDataChanged
-        {
-            get { return isDataChanged; }
-            set
-            {
-                Set(() => IsDataChanged, ref isDataChanged, value);
-                CancelChangeCommand.RaiseCanExecuteChanged();
-                ConfirmChangeCommand.RaiseCanExecuteChanged();
-            }
-        }
+        private ManufactoryManageDetails manufactoryManageCollection;
+        private CurrentManufactoryTypeEnum currentManufactoryType = CurrentManufactoryTypeEnum.NONE;
+        
         public ManufactoryManageDetail CurrentManufactory
         {
             get { return currentManufactory; }
             set
             {
-                if (IsDataChanged)
-                {
-                    MessageWindow.ShowMessage("資料有異動　請先確認變更再切換供應商!", MessageType.ERROR);
-                    return;
-                }
-
                 MainWindow.ServerConnection.OpenConnection();
                 value?.GetManufactoryDetailData();
                 MainWindow.ServerConnection.CloseConnection();
                 currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
                 Set(() => CurrentManufactory, ref currentManufactory, value);
+
+                if(CurrentManufactory is null)
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.NONE;
+                else if (CurrentManufactory.ID == "0")
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.SINGDE;
+                else
+                    CurrentManufactoryType = CurrentManufactoryTypeEnum.NORMAL;
+
+                if (CurrentManufactory is null) return;
+
+                CurrentManufactory.IsDataChanged = false;
+                CancelChangeCommand.RaiseCanExecuteChanged();
+                ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
-        public ManufactoryManageDetails ManufactoryManageCollection { get; set; }
+        public ManufactoryManageDetails ManufactoryManageCollection
+        {
+            get { return manufactoryManageCollection; }
+            set { Set(() => ManufactoryManageCollection, ref manufactoryManageCollection, value); }
+        }
+        public CurrentManufactoryTypeEnum CurrentManufactoryType
+        {
+            get { return currentManufactoryType; }
+            set { Set(() => CurrentManufactoryType, ref currentManufactoryType, value); }
+        }
         #endregion
 
         public ManufactoryManageViewModel()
         {
             RegisterCommand();
+            SearchAction();
         }
 
         #region ----- Define Actions -----
         private void SearchAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            ManufactoryManageCollection = ManufactoryManageDetails.GetManufactoryManageDetailsBySearchCondition(SearchManufactoryName, SearchPrincipalName);
+            MainWindow.ServerConnection.CloseConnection();
 
+            if (ManufactoryManageCollection.Count > 0)
+                CurrentManufactory = ManufactoryManageCollection[0];
+            else
+                MessageWindow.ShowMessage("無符合條件項目", MessageType.ERROR);
         }
         private void AddManufactoryAction()
         {
@@ -80,6 +103,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         }
         private void DeleteManufactoryAction()
         {
+            if (CurrentManufactory.ID.Equals("0"))
+            {
+                MessageWindow.ShowMessage("杏德生技有限公司無法刪除!", MessageType.WARNING);
+                return;
+            }
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除供應商?\n(刪除後無法復原)", "");
 
             if ((bool) confirmWindow.DialogResult)
@@ -100,20 +129,30 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void AddManufactoryPrincipalAction()
         {
             CurrentManufactory.AddManufactoryPrincipal();
+            DataChangedAction();
         }
         private void DeleteManufactoryPrincipalAction()
         {
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除負責人?", "");
 
-            if ((bool)confirmWindow.DialogResult)
+            if ((bool) confirmWindow.DialogResult)
+            {
                 CurrentManufactory.DeleteManufactoryPrincipal();
+                DataChangedAction();
+            }
         }
         private void DataChangedAction()
         {
-            IsDataChanged = true;
+            if(CurrentManufactory is null) return;
+
+            CurrentManufactory.IsDataChanged = true;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         private void ConfirmChangeAction()
         {
+            if (!CurrentManufactory.CheckUpdateDataValid()) return;
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認修改資料?", "");
 
             if ((bool)confirmWindow.DialogResult)
@@ -127,17 +166,22 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 else
                 {
                     MessageWindow.ShowMessage("更新失敗 請稍後重試!", MessageType.ERROR);
-                    CurrentManufactory.ResetData(currentManufactoryBackUp);
+                    return;
                 }
             }
 
-            IsDataChanged = false;
+            CurrentManufactory.IsDataChanged = false;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         private void CancelChangeAction()
         {
             CurrentManufactory.ResetData(currentManufactoryBackUp);
+            RaisePropertyChanged(nameof(CurrentManufactory));
 
-            IsDataChanged = false;
+            CurrentManufactory.IsDataChanged = false;
+            CancelChangeCommand.RaiseCanExecuteChanged();
+            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -145,23 +189,29 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void RegisterCommand()
         {
             SearchCommand = new RelayCommand(SearchAction);
-            AddManufactoryCommand = new RelayCommand(SearchAction);
-            DeleteManufactoryCommand = new RelayCommand(SearchAction);
-            AddManufactoryPrincipalCommand = new RelayCommand(SearchAction);
-            DeleteManufactoryPrincipalCommand = new RelayCommand(SearchAction);
-            DataChangedCommand = new RelayCommand(SearchAction);
-            ConfirmChangeCommand = new RelayCommand(SearchAction, IsManufactoryDataChanged);
-            CancelChangeCommand = new RelayCommand(SearchAction, IsManufactoryDataChanged);
+            AddManufactoryCommand = new RelayCommand(AddManufactoryAction);
+            DeleteManufactoryCommand = new RelayCommand(DeleteManufactoryAction);
+            AddManufactoryPrincipalCommand = new RelayCommand(AddManufactoryPrincipalAction);
+            DeleteManufactoryPrincipalCommand = new RelayCommand(DeleteManufactoryPrincipalAction);
+            DataChangedCommand = new RelayCommand(DataChangedAction);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsManufactoryDataChanged);
+            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsManufactoryDataChanged);
         }
         private bool IsManufactoryDataChanged()
         {
-            return IsDataChanged;
+            if (CurrentManufactory is null) return false;
+
+            return CurrentManufactory.IsDataChanged;
         }
 
         #region ///// Messenger Functions /////
         private void GetNewManufactory(NotificationMessage<ManufactoryManageDetail> notification)
         {
-
+            if (notification.Sender is AddManufactoryWindowViewModel && notification.Notification.Equals(nameof(AddManufactoryWindowViewModel)))
+            {
+                ManufactoryManageCollection.Add(notification.Content);
+                CurrentManufactory = notification.Content;
+            }
         }
         #endregion
 
