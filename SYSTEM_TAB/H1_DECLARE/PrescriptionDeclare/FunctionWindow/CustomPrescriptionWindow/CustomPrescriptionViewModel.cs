@@ -120,7 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             CooperativePrescriptions = new Prescriptions();
             MainWindow.ServerConnection.OpenConnection();
-            CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(PatientIDNumber);
+            CooperativePrescriptions.GetCooperativePrescriptionsByCusIDNumber(PatientIDNumber);
             ReservedPrescriptions = new RegisterAndReservePrescriptions();
             ReservedPrescriptions.GetReservePrescriptionByCusId(PatientID);
             RegisteredPrescriptions = new RegisterAndReservePrescriptions();
@@ -170,7 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (SelectedPrescription.ID is null) return;
             Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
             if (SelectedPrescription.Source == PrescriptionSource.Cooperative)
-                Messenger.Default.Send(CooperativePrescriptions.Single(p=>p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected");
+                Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
             else
                 Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
             Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));

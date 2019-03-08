@@ -20,9 +20,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
-using Application = System.Windows.Application;
 using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
@@ -305,14 +303,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
                 previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
+                SearchPrescriptions = previews;
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
-                UpdateCollectionView();
                 MainWindow.ServerConnection.CloseConnection();
+                UpdateCollectionView();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -335,7 +333,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             SearchPrescriptions.Clear();
             //查詢預約慢箋
+            MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetReservePrescription(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
+            MainWindow.ServerConnection.CloseConnection();
             UpdateCollectionView();
             SetPrescriptionsSummary(true);
         }
@@ -382,18 +382,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
         {
             if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
-                    SearchAction();
-            });
             EditedPrescription = SelectedPrescription;
-            PrescriptionEditWindow.PrescriptionEditWindow prescriptionEdit;
-            prescriptionEdit = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetPrescriptionByID(),ViewModelEnum.PrescriptionSearch) : 
-                new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.GetReservePrescriptionByID(), ViewModelEnum.PrescriptionSearch);
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
+                SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
+            MainWindow.ServerConnection.CloseConnection();
+            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
+            //Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            //{
+            //    if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+            //        SearchAction();
+            //});
             prescriptionEdit.ShowDialog();
-            Messenger.Default.Unregister(this);
+            //Messenger.Default.Unregister<NotificationMessage>(this, (notificationMessage) =>
+            //{
+            //    if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+            //        SearchAction();
+            //});
         }
         private void ClearAction()
         {
@@ -441,7 +446,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             fdlg.RestoreDirectory = true;
             XmlDocument doc = new XmlDocument();
             doc.PreserveWhitespace = true;
-            List<ImportDeclareXml.Ddata> ddatasCollection = new List<Ddata>(); 
+            List<Ddata> ddatasCollection = new List<Ddata>(); 
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 Properties.Settings.Default.DeclareXmlPath = fdlg.FileName.Replace("\\" + fdlg.SafeFileName, "");

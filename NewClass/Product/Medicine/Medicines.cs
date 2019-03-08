@@ -93,7 +93,11 @@ namespace His_Pos.NewClass.Product.Medicine
             foreach (var m in Items)
             {
                 if (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial)
+                {
+                    if (!b)
+                        m.BuckleAmount = 0;
                     m.IsBuckle = b;
+                }
             }
         }
     }

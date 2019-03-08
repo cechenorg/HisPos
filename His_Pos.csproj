@@ -308,6 +308,7 @@
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
+    <Compile Include="NewClass\BindingProxy.cs" />
     <Compile Include="NewClass\CashFlow\CashFlow.cs" />
     <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
     <Compile Include="NewClass\CashFlow\CashFlows.cs" />

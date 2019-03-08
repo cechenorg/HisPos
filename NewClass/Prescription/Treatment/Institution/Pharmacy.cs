@@ -2,6 +2,7 @@
 using System.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using ZeroFormatter;
 
@@ -55,7 +56,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         {
             if (ViewModelMainWindow.CurrentUser.WorkPositionName.Equals("藥師"))
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));
-            return MedicalPersonnels[0];
+            
+                return MedicalPersonnels.Count > 0 ? MedicalPersonnels[0] : null;
+           
         }
         public void SetPharmacy() {
             PharmacyDb.SetPharmacy(this);
