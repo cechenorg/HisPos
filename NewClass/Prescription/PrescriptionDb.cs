@@ -86,10 +86,10 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
             DataBaseFunction.AddSqlParameter(parameterList, "ReturnValue", amount);
-            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
-            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
+            DataBaseFunction.AddSqlParameter(parameterList, "typename", type);
+            DataBaseFunction.AddSqlParameter(parameterList, "sourcename", source);
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-           return MainWindow.ServerConnection.ExecuteProc("[Set].[ReturnInventory]", parameterList);
+           return MainWindow.ServerConnection.ExecuteProc("[Set].[RevertStockValue]", parameterList);
         }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {
@@ -205,9 +205,25 @@ namespace His_Pos.NewClass.Prescription
         public static void PredictThreeMonthPrescription() {
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
-         
-        public static void SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        public static DataTable DeletePrescription(int preId)
         {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preId);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
+        }
+        public static DataTable GetStoreOrderIDByPrescriptionID(int preId) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
+        } 
+        public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        {
+            return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
+        }
+        public static bool UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
+            return sendOrderAction(storId,p, PrescriptionSendData, "UpdateDeclareOrder") == "SUCCESS" ? true : false;
+        }
+        public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData,string sql) {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             string Rx_order = Convert.ToDateTime(p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
             string Pt_name = p.Patient.Name; // 藥袋名稱(病患姓名)
@@ -275,7 +291,7 @@ namespace His_Pos.NewClass.Prescription
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
                     if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Substring(0,12).PadRight(12, ' ')); //健保碼
+                        Dtl_data.Append(declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')); //健保碼
                     else
                         Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
 
@@ -286,7 +302,7 @@ namespace His_Pos.NewClass.Prescription
                     if (declareMedicine.ID.Length > 12)
                         Dtl_data.Append(declareMedicine.ID.Split('-')[1].PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
                     else
-                        Dtl_data.Append(declareMedicine.Position.Name.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                        Dtl_data.Append(declareMedicine.Position.ID.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
 
                     if (!declareMedicine.PaySelf)
                         Dtl_data.Append(" ");
@@ -304,33 +320,33 @@ namespace His_Pos.NewClass.Prescription
                         }
                     }
                     Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
-                     
+
                 }
-                //else if( !(declareMedicine is Medicine) )
-                //{
-                //    Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-                //    Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
-                //    Dtl_data.Append(empty.PadRight(16, ' ')); //使用頻率
-                //    Dtl_data.Append(empty.PadRight(3, ' ')); //使用天數
-                //    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                //    Dtl_data.Append(empty.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                //
-                //    Dtl_data.Append(" ");  //自費判斷 Y自費收費 N自費不收費
-                //
-                //    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                //    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
-                //}
-                // 
                 if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
                     Dtl_data.AppendLine();
-                 
                 i++;
             }
-            
-            MainWindow.SingdeConnection.OpenConnection();
-            MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
-            MainWindow.SingdeConnection.CloseConnection(); 
+            string result = "FAIL";
+            DataTable table;
+            switch (sql) {
+                case "AddDeclareOrderToPreDrug":
+                    MainWindow.SingdeConnection.OpenConnection();
+                    table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
+                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        result = "SUCCESS";
+                    MainWindow.SingdeConnection.CloseConnection();
+                    break;
+                case "UpdateDeclareOrder":
+                    MainWindow.SingdeConnection.OpenConnection();
+                    table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrder('{Rx_id}', '{storId}','{Dtl_data}')");
+                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        result = "SUCCESS";
+                    MainWindow.SingdeConnection.CloseConnection();
+                    break;
+            }
+            return result;
         }
+
         public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus,int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -492,6 +508,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", pdata.PaySelf);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -555,6 +573,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_MedicineDays", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
             detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
+            detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
+            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float)); 
             return detailTable;
         }
         public static DataTable SetReserveMaster(Prescription p) {

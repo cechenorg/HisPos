@@ -19,7 +19,6 @@ using His_Pos.NewClass;
 using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.NewClass.StockValue;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
@@ -50,6 +49,7 @@ namespace His_Pos
             ViewModelMainWindow.CurrentUser = user;
             if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
+
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
@@ -160,7 +160,7 @@ namespace His_Pos
             switch (shortcut.Content.ToString())
             {
                 case "調劑":
-                    AddNewTab(Properties.Resources.hisPrescriptionDeclare);
+                    AddNewTab(StringRes.hisPrescriptionDeclare);
                     break;
                 case "交易":
                     break;
@@ -175,7 +175,7 @@ namespace His_Pos
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             try
             {
@@ -244,5 +244,6 @@ namespace His_Pos
             }
             Dispatcher.BeginInvoke((Action)MethodDelegate);
         }
+      
     }
 }

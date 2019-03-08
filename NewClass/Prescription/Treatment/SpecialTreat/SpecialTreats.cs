@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
 
         private void Init()
         {
+            Add(new SpecialTreat());
             var table = SpecialTreatDb.GetData();
             foreach (DataRow row in table.Rows)
             {

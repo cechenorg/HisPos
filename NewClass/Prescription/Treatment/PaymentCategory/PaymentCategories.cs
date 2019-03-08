@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
 
         private void Init()
         {
+            Add(new PaymentCategory());
             var table = PaymentCategoryDb.GetData();
             foreach (DataRow row in table.Rows)
             {

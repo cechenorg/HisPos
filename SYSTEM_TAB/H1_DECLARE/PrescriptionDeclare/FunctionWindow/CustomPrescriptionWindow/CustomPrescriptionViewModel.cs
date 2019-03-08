@@ -12,6 +12,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.CustomerPrescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
@@ -25,11 +26,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     {
         #region Variables
         public Prescriptions CooperativePrescriptions { get; set; }
-        public Prescriptions ReservedPrescriptions { get; set; }
-        public Prescriptions RegisteredPrescriptions { get; set; }
-        public Prescriptions UngetCardPrescriptions { get; set; }
-        public Prescription SelectedPrescription { get; set; }
+        public RegisterAndReservePrescriptions ReservedPrescriptions { get; set; }
+        public RegisterAndReservePrescriptions RegisteredPrescriptions { get; set; }
+        public CustomerPrescriptions UngetCardPrescriptions { get; set; }
+        public CustomPrescriptionStruct SelectedPrescription { get; set; }
         public IcCard Card { get; set; }
+        public int PatientID { get; }
+        public string PatientIDNumber { get; }
         private bool isSelectCooperative { get; set; }
         private Visibility cooperativeVisible;
 
@@ -102,28 +105,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         }
         #endregion
         public RelayCommand MakeUpCard { get; set; }
-        public CustomPrescriptionViewModel(Cus cus, IcCard card)
+        public CustomPrescriptionViewModel(int cusID, string cusIDNumber, IcCard card)
         {
             Card = new IcCard();
             Card = card.DeepCloneViaJson();
-            SelectedPrescription = new Prescription();
-            SelectedPrescription.Patient = cus.DeepCloneViaJson();
+            PatientID = cusID;
+            PatientIDNumber = cusIDNumber;
+            RegisterMessenger();
             InitializePrescription();
             MakeUpCard = new RelayCommand(MakeUpCardAction);
-            RegisterMessenger();
         }
 
         private void InitializePrescription()
         {
             CooperativePrescriptions = new Prescriptions();
             MainWindow.ServerConnection.OpenConnection();
-            CooperativePrescriptions.GetCooperaPrescriptionsByCusIDNumber(SelectedPrescription.Patient.IDNumber);
-            ReservedPrescriptions = new Prescriptions();
-            ReservedPrescriptions.GetReservePrescriptionByCusId(SelectedPrescription.Patient.ID);
-            RegisteredPrescriptions = new Prescriptions();
-            RegisteredPrescriptions.GetRegisterPrescriptionByCusId(SelectedPrescription.Patient.ID);
-            UngetCardPrescriptions = new Prescriptions();
-            UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(SelectedPrescription.Patient.ID);
+            CooperativePrescriptions.GetCooperativePrescriptionsByCusIDNumber(PatientIDNumber);
+            ReservedPrescriptions = new RegisterAndReservePrescriptions();
+            ReservedPrescriptions.GetReservePrescriptionByCusId(PatientID);
+            RegisteredPrescriptions = new RegisterAndReservePrescriptions();
+            RegisteredPrescriptions.GetRegisterPrescriptionByCusId(PatientID);
+            UngetCardPrescriptions = new CustomerPrescriptions();
+            UngetCardPrescriptions.GetPrescriptionsNoGetCardByCusId(PatientID);
             MainWindow.ServerConnection.CloseConnection();
             if (CooperativePrescriptions.Count == 0)
                 CooperativeVisible = Visibility.Collapsed;
@@ -136,61 +139,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (CooperativePrescriptions.Count > 0 || ReservedPrescriptions.Count > 0 || RegisteredPrescriptions.Count > 0 || (UngetCardPrescriptions.Count > 0 && !string.IsNullOrEmpty(Card.CardNumber)))
                 ShowDialog = true;
             else
+            {
                 ShowDialog = false;
+                Messenger.Default.Unregister(this);
+            }
         }
 
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<Prescription>(this, "PrescriptionSelectionChanged", PrescriptionSelectionChanged);
-            Messenger.Default.Register<Prescription>(this, "CooperativePrescriptionSelectionChanged", CooperativePrescriptionSelectionChanged);
-            Messenger.Default.Register<NotificationMessage>("PrescriptionSelected", CustomPrescriptionSelected);
+            Messenger.Default.Register<NotificationMessage<int>> (this, PrescriptionSelectionChanged);
+            Messenger.Default.Register<string>(this, "CooperativePrescriptionSelectionChanged", CooperativePrescriptionSelectionChanged);
+            Messenger.Default.Register<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
         }
 
-        private void PrescriptionSelectionChanged(Prescription p)
+        private void PrescriptionSelectionChanged(NotificationMessage<int> msg)
         {
             isSelectCooperative = false;
-            SelectedPrescription = p;
+            SelectedPrescription = msg.Notification.Equals("ReserveSelectionChanged") ? 
+                new CustomPrescriptionStruct(msg.Content, PrescriptionSource.ChronicReserve,string.Empty) : new CustomPrescriptionStruct(msg.Content, PrescriptionSource.Normal, string.Empty);
         }
-        private void CooperativePrescriptionSelectionChanged(Prescription p)
+        private void CooperativePrescriptionSelectionChanged(string remark)
         {
             isSelectCooperative = true;
-            SelectedPrescription = p;
+            SelectedPrescription = new CustomPrescriptionStruct(0, PrescriptionSource.Cooperative, remark);
         }
 
         private void CustomPrescriptionSelected(NotificationMessage msg)
         {
-            if (!msg.Notification.Equals("PrescriptionSelected")) return;
-            if (SelectedPrescription is null) return;
-            Messenger.Default.Unregister<NotificationMessage>("PrescriptionSelected", CustomPrescriptionSelected);
-            Prescription selected = new Prescription();
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = "取得處方資料...";
-                if (CooperativePrescriptions.Contains(SelectedPrescription))
-                    isSelectCooperative = true;
-                if (isSelectCooperative)
-                    selected = (Prescription)SelectedPrescription.Clone();
-                else
-                {
-                    selected = SelectedPrescription;
-                }
-                if (!string.IsNullOrEmpty(Card.CardNumber))
-                    selected.Card = Card;
-                selected.Patient = SelectedPrescription.Patient;
-                MainWindow.ServerConnection.OpenConnection();
-                selected.Patient.Check();
-                MainWindow.ServerConnection.CloseConnection();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                selected.GetCompletePrescriptionData(true, isSelectCooperative, false);
-                IsBusy = false;
-                Messenger.Default.Send(selected, "CustomPrescriptionSelected");
-                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            if (!msg.Notification.Equals("CustomPrescriptionSelected")) return;
+            if (SelectedPrescription.ID is null) return;
+            Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
+            if (SelectedPrescription.Source == PrescriptionSource.Cooperative)
+                Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
+            else
+                Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
+            Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+            Messenger.Default.Unregister(this);
         }
 
         private void MakeUpCardAction()
@@ -202,9 +186,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 foreach (var p in UngetCardPrescriptions)
                 {
-                    p.GetCompletePrescriptionData(false, false,true);
-                    deposit += p.PrescriptionPoint.Deposit;
-                    ReadCard(p);
+                    var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0], PrescriptionSource.Normal);
+                    pre.GetCompletePrescriptionData(false, false,true);
+                    deposit += pre.PrescriptionPoint.Deposit;
+                    ReadCard(pre);
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>

@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>2.0.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -308,6 +308,7 @@
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
+    <Compile Include="NewClass\BindingProxy.cs" />
     <Compile Include="NewClass\CashFlow\CashFlow.cs" />
     <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
     <Compile Include="NewClass\CashFlow\CashFlows.cs" />
@@ -347,6 +348,11 @@
     <Compile Include="NewClass\Person\Gender.cs" />
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescription.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
@@ -362,6 +368,9 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
@@ -439,6 +448,7 @@
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
+    <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />

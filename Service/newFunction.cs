@@ -409,40 +409,24 @@ namespace His_Pos.Service
         public static List<bool?> CheckPrint(Prescription p)
         {
             var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm);
+            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm, true);
             var printMedBag = medBagPrint.DialogResult;
             bool? printSingle = null;
             bool? receiptPrint = null;
             if (printMedBag != null)
             {
+                if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
+                {
+                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+                    receiptPrint = receiptResult.DialogResult;
+                }
+                else
+                    receiptPrint = false;
                 if ((bool)printMedBag)
                 {
                     var printBySingleMode = new MedBagSelectionWindow();
                     printBySingleMode.ShowDialog();
                     printSingle = printBySingleMode.result;
-                    if (printSingle is null)
-                    {
-                        result.Add(printMedBag);
-                        result.Add(printSingle);
-                        result.Add(receiptPrint);
-                        return result;
-                    }
-                    if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
-                    {
-                        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm);
-                        receiptPrint = receiptResult.DialogResult;
-                    }
-                    else
-                    {
-                        receiptPrint = false;
-                    }
-                }
-                else
-                {
-                    result.Add(printMedBag);
-                    result.Add(printSingle);
-                    result.Add(false);
-                    return result;
                 }
             }
             result.Add(printMedBag);

@@ -17,15 +17,23 @@ namespace His_Pos.NewClass.CashFlow {
             foreach (DataRow r in table.Rows) {
                 cashFlow.Date = r.Field<DateTime>("CashFlow_Time");
                 switch (r.Field<string>("CashFlow_Name")) {
+                    case "部分負擔刪除":
+                    case "部分負擔修改":
                     case "部分負擔":
                         cashFlow.CopaymentValue = (int)r.Field<decimal>("CashFlow_Value");
                         break;
+                    case "合作部分負擔修改":
                     case "合作部分負擔":
+                    case "合作部分負擔刪除":
                         cashFlow.ClinicCopaymentValue = (int)r.Field<decimal>("CashFlow_Value");
-                        break;
+                        break; 
+                    case "自費修改":
+                    case "自費刪除":
                     case "自費":
                         cashFlow.PaySelfValue = (int)r.Field<decimal>("CashFlow_Value");
                         break;
+                    case "合作自費刪除":
+                    case "合作自費修改":
                     case "合作自費":
                         cashFlow.ClinicPaySelfValue = (int)r.Field<decimal>("CashFlow_Value");
                         break; 
@@ -49,11 +57,15 @@ namespace His_Pos.NewClass.CashFlow {
                         break;
                     case "退還押金":
                     case "合作押金":
+                    case "押金刪除":
                     case "押金":
                         cashFlow.DepositValue += r.Field<decimal>("CashFlow_Value");
                         break;
                     case "調劑總量":
                         cashFlow.TotalAdjustAmount = (int)r.Field<decimal>("CashFlow_Value");
+                        break;
+                    case "刪單補耗用":
+                        cashFlow.ReturnDeleteMedUseValue = (int)r.Field<decimal>("CashFlow_Value");
                         break; 
                 }
             }

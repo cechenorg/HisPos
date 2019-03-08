@@ -53,16 +53,20 @@ namespace His_Pos.NewClass.Prescription
         {
             var strLength = 72;
             var icData = new byte[72];
-            Thread.Sleep(1500);
             if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
+                var cardStatus = HisApiBase.hisGetCardStatus(2);
+                if(cardStatus != 2)
+                {
+                    Thread.Sleep(1500);
+                }
                 var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
-                    byte[] BasicDataArr = new byte[72];
+                    var basicDataArr = new byte[72];
                     MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
-                    icData.CopyTo(BasicDataArr, 0);
+                    icData.CopyTo(basicDataArr, 0);
                     PatientBasicData = new BasicData(icData);
                     CardNumber = PatientBasicData.CardNumber;
                     Name = PatientBasicData.Name;
@@ -73,14 +77,11 @@ namespace His_Pos.NewClass.Prescription
                     HisApiFunction.CloseCom();
                     return true;
                 }
-                else
+                var description = MainWindow.GetEnumDescription((ErrorCode)res);
+                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
-                    });
-                }
+                    MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
+                });
                 HisApiFunction.CloseCom();
             }
             return false;

@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
 
         private void Init()
         {
+            Add(new Division());
             var table = DivisionDb.GetData();
             foreach (DataRow row in table.Rows)
             {

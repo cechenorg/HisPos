@@ -13,7 +13,7 @@
         <local:CooperativeEntry/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <service:DateConverter x:Key="DateConverter" />
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,6 +33,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10">
             <Label Content="選擇日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
@@ -40,7 +41,7 @@
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
@@ -86,6 +87,10 @@
             <Label Content="骨科毛利"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.ClinicProfitValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal"  Grid.Row="5" Grid.Column="2" >
+            <Label Content="要給骨科的錢"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding PayToCooperativeClinic,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal"  Grid.Row="6" >
             <Label Content="自費調劑耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.PayselfMedUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
@@ -110,7 +115,10 @@
             <Label Content="押金"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Label Content="{Binding TotalCopaymentEntry.DepositValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
         </StackPanel>
-
+        <StackPanel Orientation="Horizontal"  Grid.Row="12" >
+            <Label Content="刪單補耗用"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalCopaymentEntry.ReturnDeleteMedUseValue}"   FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+        </StackPanel>
 
 
     </Grid>

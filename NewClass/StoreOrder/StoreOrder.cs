@@ -239,7 +239,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public bool DeleteOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要作廢?", "作廢");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要作廢?", "作廢", true);
 
             if (!(bool) confirmWindow.DialogResult)
                 return false;

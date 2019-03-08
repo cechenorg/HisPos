@@ -15,7 +15,6 @@ namespace His_Pos.NewClass.Prescription {
                     break;
                 case PrescriptionSource.ChronicReserve:
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
-                    IsRegister = r.Field<bool>("IsRegister");
                     break;
             } 
         }
@@ -44,7 +43,25 @@ namespace His_Pos.NewClass.Prescription {
         }
         public bool IsDeposit { get; set; } //是否押金
         public bool? IsCreateSign { get; set; }
-        public bool IsCooperativeVIP { get; set; }
+        private bool isCooperativeVIP;
+        public bool IsCooperativeVIP
+        {
+            get => isCooperativeVIP;
+            set
+            {
+                Set(() => IsCooperativeVIP, ref isCooperativeVIP, value);
+            }
+        }
+        private bool isCooperative;
+        public bool IsCooperative
+        {
+            get => isCooperative;
+            set
+            {
+                Set(() => IsCooperative, ref isCooperative, value);
+            }
+        }
+        public bool IsCooperativePrescribe { get; set; }
         public void Init()
         {
             IsGetCard = false;
@@ -56,17 +73,55 @@ namespace His_Pos.NewClass.Prescription {
             IsDeclare = true;
             IsCooperativeVIP = false;
             IsCreateSign = null;
+            IsCooperativePrescribe = false;
+            IsDeposit = false;
+            IsCooperative = false;
         }
 
         public void UpdateStatus(int id)
         {
             PrescriptionDb.UpdatePrescriptionStatus(this,id);
         }
-
+        
+        //未過卡 已調劑 不申報 押金
         public void SetNoCardSatus()
         {
             IsGetCard = false;
+            IsAdjust = true;
             IsDeclare = false;
+            IsDeposit = true;
+        }
+        //已過卡 已調劑 正常申報 不押金
+        public void SetNormalAdjustStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = true;
+            IsDeposit = false;
+        }
+        //已過卡 已調劑 不申報 不押金
+        public void SetCooperativePrescribeStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
+        // 未過卡 未調劑 不申報 不押金
+        public void SetRegisterStatus()
+        {
+            IsGetCard = false;
+            IsAdjust = false;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
+        // 未過卡 已調劑 不申報 不押金
+        public void SetPrescribeStatus()
+        {
+            IsGetCard = false;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
         }
     }
 }

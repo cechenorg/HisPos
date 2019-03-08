@@ -2,6 +2,7 @@
 using His_Pos.NewClass.CooperativeInstitution;
 using System;
 using System.Data;
+using System.Threading;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -23,7 +24,6 @@ namespace His_Pos.NewClass.Product.Medicine
             Vendor = r.Field<string>("Med_Manufactory");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
-
             Usage = new Usage.Usage();
             Position = new Position.Position(); 
         }
@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Product.Medicine
             ChineseName = m.Desc;
             EnglishName = m.Desc;
             UsageName = m.Freq;
-            PositionName = m.Way;
+            PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
@@ -69,6 +69,7 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
+                BuckleAmount = amount;
                 CheckIsPriceReadOnly();
                 CountTotalPrice();
             }
@@ -99,6 +100,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (ID is null) return;
                 if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                     CalculateAmount();
+                CheckIsAmountReadOnly();
             }
         }
         private string _usageName;
@@ -107,7 +109,6 @@ namespace His_Pos.NewClass.Product.Medicine
             get => _usageName;
             set
             {
-                
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
@@ -125,6 +126,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
+                CheckIsAmountReadOnly();
             }
         }
         private Usage.Usage usage;//用法
@@ -139,19 +141,19 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
-        private string _positionName;
-        public string PositionName
+        private string positionID;
+        public string PositionID
         {
-            get => _positionName;
+            get => positionID;
             set
             {
                 if (value != null)
                 {
-                    Set(() => PositionName, ref _positionName, value);
-                    Position = ViewModelMainWindow.GetPosition(_positionName);
+                    Set(() => PositionID, ref positionID, value);
+                    Position = ViewModelMainWindow.GetPosition(positionID);
                     if (Position != null)
                     {
-                        Position.Name = _positionName;
+                        Position.ID = positionID;
                     }
                 }
             }
@@ -181,6 +183,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
+                CheckIsAmountReadOnly();
             }
         }
         private double price;//售價
@@ -365,6 +368,41 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 Set(() => ControlLevel, ref controlLevel, value);
             }
+        }
+        private double buckleAmount = 0;
+        public double BuckleAmount
+        {
+            get => buckleAmount;
+            set
+            {
+                if (value >= Amount)
+                    Set(() => BuckleAmount, ref buckleAmount, Amount);
+                else
+                    Set(() => BuckleAmount, ref buckleAmount, value);
+            }
+        }
+
+        private bool isAmountReadOnly;
+        public bool IsAmountReadOnly
+        {
+            get => isAmountReadOnly;
+            set
+            {
+                Set(() => IsAmountReadOnly, ref isAmountReadOnly, value);
+            }
+        }
+
+        private void CheckIsAmountReadOnly()
+        {
+            if (Usage != null && !string.IsNullOrEmpty(ID))
+            {
+                if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null && Days > 0 && Dosage != null && Dosage > 0)
+                    IsAmountReadOnly = (double)Dosage * UsagesFunction.CheckUsage((int)Days, ViewModelMainWindow.GetUsage(UsageName)) > 0;
+                else
+                    IsAmountReadOnly = false;
+            }
+            else
+                IsAmountReadOnly = false;
         }
     }
 }

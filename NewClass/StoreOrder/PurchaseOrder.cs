@@ -126,7 +126,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE? "進" : "退") + "貨單?\n(資料內容將不能修改)", "",true);
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -138,7 +138,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "", true);
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -154,6 +154,16 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送",MessageType.ERROR);
             } 
         }
-
+        public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData) {
+            string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.Id).Rows[0][0].ToString();
+            try
+            {
+                PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData); 
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage("更新藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@
                 </ScrollViewer>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Margin="140,10,10,10" Width="90" Height="35" Content="否"  Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DimGray" FontFamily="Segoe UI Semibold" Command="{Binding NoCommand}"/>
+                <Button Name="NoButton" Margin="140,10,10,10" Width="90" Height="35" Content="否"  Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DimGray" FontFamily="Segoe UI Semibold" Command="{Binding NoCommand}"/>
                 <Button Name="YesButton" Margin="10" Width="90" Height="35" Content="是" Focusable="True" HorizontalAlignment="Right" Background="IndianRed" BorderBrush="IndianRed" FontFamily="Segoe UI Semibold" Command="{Binding YesCommand}"/>
             </StackPanel>
         </StackPanel>

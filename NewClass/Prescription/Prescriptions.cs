@@ -29,31 +29,8 @@ namespace His_Pos.NewClass.Prescription
                 Add(new Prescription(r, PrescriptionSource.Normal));
             }
         }
-        public void GetPrescriptionsNoGetCardByCusId(int cusID) //取得未過卡處方
-        {
-            var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(cusID);
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Prescription(r, PrescriptionSource.Normal));
-            }
-        } 
-        public void GetReservePrescriptionByCusId(int cusID) //取得預約慢箋
-        {
-            var table = PrescriptionDb.GetReservePrescriptionByCusId(cusID);
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Prescription(r, PrescriptionSource.ChronicReserve));
-            }
-        }
-        public void GetRegisterPrescriptionByCusId(int cusID) //取得登錄慢箋
-        {
-            var table = PrescriptionDb.GetRegisterPrescriptionByCusId(cusID);
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Prescription(r, PrescriptionSource.Normal));
-            }
-        }
-        public void GetCooperaPrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
+        
+        public void GetCooperativePrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
         {
             Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.ID, cusIDNum);
             foreach (var r in table)

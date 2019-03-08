@@ -120,6 +120,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             }
             else
             {
+                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
                 if (HisApi.HisApiFunction.OpenCom())
                 {
                     var iBufferLength = 13;
@@ -266,8 +267,8 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             MedicalOrderTreatDateTime = treatDateTime;
             MedicalOrderCategory = med is MedicineSpecialMaterial ? "4" : "1";
             TreatmentProjectCode = med.ID;
-            if (!string.IsNullOrEmpty(med.PositionName))
-                TreatmentPosition = med.PositionName;
+            if (!string.IsNullOrEmpty(med.PositionID))
+                TreatmentPosition = med.PositionID;
             Usage = med.UsageName;
             Days = med.Days.ToString();
             TotalAmount = $"{med.Amount:00000.0}";

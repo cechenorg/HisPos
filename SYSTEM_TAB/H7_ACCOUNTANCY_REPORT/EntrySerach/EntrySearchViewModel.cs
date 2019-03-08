@@ -85,11 +85,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             CaculateTotalStock();
         }
         private void CaculateTotalStock() {
-            TotalDailyStock.InitStockValue = DailyStockValueCollection[0].InitStockValue;
-            TotalDailyStock.PurchaseValue = DailyStockValueCollection.Sum(d => d.PurchaseValue);
-            TotalDailyStock.ReturnValue = DailyStockValueCollection.Sum(d => d.ReturnValue);
-            TotalDailyStock.MedUseValue = DailyStockValueCollection.Sum(d => d.MedUseValue);
-            TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
+            if (DailyStockValueCollection.Count > 0) {
+                TotalDailyStock.InitStockValue = DailyStockValueCollection[0].InitStockValue;
+                TotalDailyStock.PurchaseValue = DailyStockValueCollection.Sum(d => d.PurchaseValue);
+                TotalDailyStock.ReturnValue = DailyStockValueCollection.Sum(d => d.ReturnValue);
+                TotalDailyStock.MedUseValue = DailyStockValueCollection.Sum(d => d.MedUseValue);
+                TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
+                TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
+            }
+       
         }
         #endregion
     }

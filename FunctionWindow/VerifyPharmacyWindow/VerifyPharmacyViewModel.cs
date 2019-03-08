@@ -85,15 +85,17 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
                 fileWriter.WriteLine("M ");
                 fileWriter.WriteLine("Rc ");
                 fileWriter.WriteLine("Rp ");
+                fileWriter.WriteLine("Com ");
             }
             Properties.Settings.Default.SQL_local =
-                string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+                string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
             Properties.Settings.Default.SQL_global =
-               string.Format("Data Source={0};Persist Security Info=True;User ID=singde;Password=city1234", dbtargetIp);
+               string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
             Properties.Settings.Default.SystemSerialNumber = VerifyNumber;
             Properties.Settings.Default.MedBagPrinter = "";
             Properties.Settings.Default.ReceiptPrinter = "";
-            Properties.Settings.Default.ReportPrinter = ""; 
+            Properties.Settings.Default.ReportPrinter = "";
+            Properties.Settings.Default.ReaderComPort = "";
             Properties.Settings.Default.Save();
 
             Pharmacy p = new Pharmacy();

@@ -275,7 +275,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
-                P5 = m.PositionName;
+                P5 = m.PositionID;
                 P10 = serial;
                 P11 = $"{m.Days:00}";
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
@@ -305,7 +305,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 var dosage = m.Dosage is null ? string.Empty : m.Dosage.ToString();
                 P3 = dosage;
                 P4 = m.UsageName;
-                P5 = m.PositionName;
+                P5 = m.PositionID;
                 P8 = string.Empty;
                 P9 = string.Empty;
                 P10 = string.Empty;
@@ -316,6 +316,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
             }
+            PaySelfValue = m.Price;
+            BuckleAmount = m.BuckleAmount;
         }
 
         public Pdata(PDataType type,string code,int percentage,int amount)
@@ -417,5 +419,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public bool PaySelf { get; set; }
         [XmlIgnore]
         public bool IsBuckle { get; set; }
+        [XmlIgnore]
+        public double? BuckleAmount { get; set; }
+        [XmlIgnore]
+        public double? PaySelfValue { get; set; }
     }
 }

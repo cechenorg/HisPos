@@ -23,7 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         #region ----- Define Variables -----
 
         #region ///// Search Variables /////
-        public DateTime? SearchStartDate { get; set; } = DateTime.Today.AddMonths(-1);
+        public DateTime? SearchStartDate { get; set; } = DateTime.Today;
         public DateTime? SearchEndDate { get; set; } = DateTime.Today;
         public string SearchOrderID { get; set; } = "";
         public string SearchProductID { get; set; } = "";

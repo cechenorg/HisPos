@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.CustomerPrescription;
 using Cus = His_Pos.NewClass.Person.Customer.Customer;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow
@@ -14,10 +15,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomPrescriptionWindow : Window
     {
         private CustomPrescriptionViewModel customPrescriptionViewModel { get; set; }
-        public CustomPrescriptionWindow(Cus cus,IcCard card)
+        public CustomPrescriptionWindow(int cusID,string cusIDNumber, IcCard card)
         {
             InitializeComponent();
-            customPrescriptionViewModel = new CustomPrescriptionViewModel(cus, card);
+            customPrescriptionViewModel = new CustomPrescriptionViewModel(cusID,cusIDNumber, card);
             DataContext = customPrescriptionViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
@@ -33,8 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Messenger.Default.Send(new NotificationMessage("CustomPresChecked"));
                 ShowDialog();
-                Messenger.Default.Unregister(this);
             }
+            Messenger.Default.Unregister(this);
         }
 
         private void Reserved_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -43,7 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Cooperative.SelectedIndex = -1;
                 Registered.SelectedIndex = -1;
-                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
+                Messenger.Default.Send(new NotificationMessage<int>(((RegisterAndReservePrescription)d.SelectedItem).ID, "ReserveSelectionChanged"));
             }
         }
 
@@ -53,7 +54,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Reserved.SelectedIndex = -1;
                 Registered.SelectedIndex = -1;
-                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
+                Messenger.Default.Send(((Prescription)d.SelectedItem).Remark, "CooperativePrescriptionSelectionChanged");
             }
         }
         private void Registered_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,7 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Cooperative.SelectedIndex = -1;
                 Reserved.SelectedIndex = -1;
-                Messenger.Default.Send((Prescription)d.SelectedItem, "PrescriptionSelectionChanged");
+                Messenger.Default.Send(new NotificationMessage<int>(((RegisterAndReservePrescription)d.SelectedItem).ID, "RegisterSelectionChanged"));
             }
         }
 
@@ -76,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             var row = sender as DataGridRow;
             if (row?.Item is null) return;
-            Messenger.Default.Send(new NotificationMessage("PrescriptionSelected"));
+            Messenger.Default.Send(new NotificationMessage("CustomPrescriptionSelected"));
         }
     }
 }

@@ -12,11 +12,7 @@ namespace His_Pos.NewClass.Product
             MedName = m.ChineseName;
             Stock = m.Inventory;
             TreatAmount = m.Amount;
-            if (Stock <= 0 || Stock > TreatAmount)
-                SendAmount = TreatAmount;
-            else if (Stock > 0 && Stock < TreatAmount)
-                SendAmount = TreatAmount - Stock;
-             
+            SendAmount = TreatAmount;
         }
         public string MedId { get; set; }
         public string MedName { get; set; }

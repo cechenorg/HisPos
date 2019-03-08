@@ -29,17 +29,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     Close();
             });
             DataContext = new PrescriptionEditViewModel(selected,vm);
+            Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
+            Messenger.Default.Register<NotificationMessage<int>>("FocusDosage", FocusDosage);
+            Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
+            Messenger.Default.Register<NotificationMessage>( "FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
 
-        private void FocusDosage(int currentIndex)
+        private void FocusDosage(NotificationMessage<int> msg)
         {
-            FocusDataGridCell("Dosage", PrescriptionMedicines, currentIndex);
+            if(msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDosage"))
+                FocusDataGridCell("Dosage", PrescriptionMedicines, msg.Content);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusChronicTotal"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusChronicTotal"))
             {
                 ChronicTotal.Focus();
                 ChronicTotal.SelectionStart = 0;
@@ -48,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusSubDisease"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusSubDisease"))
             {
                 SecondDiagnosis.Focus();
                 SecondDiagnosis.SelectionStart = 0;
@@ -57,10 +62,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void FocusDivision(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("FocusDivision"))
-            {
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDivision"))
                 DivisionCombo.Focus();
-            }
         }
 
         private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -273,6 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
             if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
                 rowIndex = dataGridCells.Count - 1;
+            if(rowIndex >= dataGridCells.Count) return;
             dataGridCells[rowIndex].Focus();
             dataGridCells[rowIndex].SelectAll();
             focusGrid.SelectedIndex = rowIndex;
@@ -290,7 +294,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             TextBox textBox = sender as TextBox;
 
             if (textBox is null) return;
-
             textBox.SelectAll();
         }
 
@@ -299,7 +302,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             TextBox textBox = sender as TextBox;
 
             if (textBox is null) return;
-
+            
             e.Handled = true;
             textBox.Focus();
         }
@@ -312,6 +315,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 !((Medicine)row.Item is MedicineSpecialMaterial)) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<Medicine>(this, (Medicine)row.Item, nameof(PrescriptionEditWindow)));
+        }
+
+        private void GetSelectedMedicine(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
+                !((Medicine)row.Item is MedicineSpecialMaterial)) return;
+
         }
     }
 }

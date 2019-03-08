@@ -1,14 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 {
@@ -17,9 +20,28 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
     /// </summary>
     public partial class MyPharmacyControl : UserControl, INotifyPropertyChanged
     {
-       
-        #region ----- Define Variable -----
 
+        #region ----- Define Variable -----
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                isBusy = value;
+                NotifyPropertyChanged("IsBusy");
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            private set
+            {
+                busyContent = value;
+                NotifyPropertyChanged("BusyContent");
+            }
+        }
         private Pharmacy pharmacy;
         public Pharmacy myPharmacy
         {
@@ -125,6 +147,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             MainWindow.ServerConnection.CloseConnection();
             WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             ClearDataChangedStatus();
+            Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.Save();
+            SavePrinterToFile();
         }
 
         private bool IsVPNValid()
@@ -145,6 +170,44 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         private void VerifyHpcPin_Click(object sender, RoutedEventArgs e)
         {
             HisApiFunction.VerifyHpcPin();
+        }
+        private void SavePrinterToFile()
+        {
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string leftLines = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                leftLines = fileReader.ReadLine();
+            }
+
+            using (TextWriter fileWriter = new StreamWriter(filePath, false))
+            {
+                fileWriter.WriteLine(leftLines);
+                fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
+                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
+                fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
+                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
+            }
+        }
+
+        private void VerifySAMDC_Click(object sender, RoutedEventArgs e)
+        {
+            var verify = false;
+            var bw = new BackgroundWorker();
+            bw.DoWork += (o, ea) =>
+            {
+                BusyContent = Properties.Resources.認證安全模組;
+                verify = HisApiFunction.VerifySamDc();
+            };
+            bw.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                MessageWindow.ShowMessage(verify ? Properties.Resources.認證成功 : Properties.Resources.認證失敗 , verify ? MessageType.SUCCESS : MessageType.ERROR);
+            };
+            IsBusy = true;
+            bw.RunWorkerAsync();
         }
     }
 }

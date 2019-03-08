@@ -13,9 +13,9 @@ namespace His_Pos.NewClass.Product.Medicine.Position
 
         public Position(DataRow r)
         {
-            ID = r.Field<string>("Pos_ID");
-            Name = r.Field<string>("Pos_Name");
-            FullName = r.Field<string>("Pos_FullName");
+            ID = r.Field<string>("Pos_ID").TrimEnd();
+            Name = r.Field<string>("Pos_Name").TrimEnd();
+            FullName = r.Field<string>("Pos_FullName").TrimEnd();
         }
         [Index(0)]
         public virtual string ID { get; set; } = string.Empty;

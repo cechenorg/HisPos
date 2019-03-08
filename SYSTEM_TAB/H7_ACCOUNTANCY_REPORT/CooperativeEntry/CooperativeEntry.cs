@@ -49,6 +49,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
                 Set(() => PaySelfProfit, ref paySelfProfit, value);
             }
         }
+        private decimal payToCooperativeClinic;
+        public decimal PayToCooperativeClinic
+        {
+            get => payToCooperativeClinic;
+            set
+            {
+                Set(() => PayToCooperativeClinic, ref payToCooperativeClinic, value);
+            }
+        }
         private decimal prescriptionProfit;
         public decimal PrescriptionProfit
         {
@@ -79,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
             CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate);
             TotalCopaymentEntry = CooperativeClinicEntryCollection[0];
             PaySelfProfit = TotalCopaymentEntry.PaySelfValue + TotalCopaymentEntry.PayselfMedUseValue;
+            PayToCooperativeClinic = TotalCopaymentEntry.ClinicCopaymentValue + TotalCopaymentEntry.ClinicPaySelfValue;
             PrescriptionProfit = TotalCopaymentEntry.NormalTotalPointValue + TotalCopaymentEntry.ChronicTotalPointValue + 
                                  TotalCopaymentEntry.NormalMedicineUseValue + TotalCopaymentEntry.ChronicmedicineUseValue;
         }

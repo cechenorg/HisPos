@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = m.Days + "天";
-                var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
                 Usage = usagePrint;
                 Form = m.Form;
                 Total = m.Amount.ToString();
@@ -42,7 +42,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                var usagePrint =  GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
+                var usagePrint =  GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
                 Usage = usagePrint;
             }
         }
@@ -62,9 +62,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     MedicineDays = string.Empty;
                 }
-                if (!string.IsNullOrEmpty(m.PositionName) && !string.IsNullOrEmpty(m.UsageName))
+                if (!string.IsNullOrEmpty(m.PositionID) && !string.IsNullOrEmpty(m.UsageName))
                 {
-                    var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )"; ;
+                    var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )"; ;
                     Usage = usagePrint;
                 }
                 else
@@ -102,9 +102,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total += "個";
                 }
-                if (!string.IsNullOrEmpty(m.PositionName) && !string.IsNullOrEmpty(m.UsageName))
+                if (!string.IsNullOrEmpty(m.PositionID) && !string.IsNullOrEmpty(m.UsageName))
                 {
-                    var usagePrint = GetPositionPrintName(m.PositionName) + GetUsagePrintName(m.Usage).Trim();
+                    var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim();
                     Usage = usagePrint;
                 }
                 else
@@ -175,8 +175,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         public string Note { get; set; }
         private string GetPositionPrintName(string mPosition)
         {
-            var positionName = ViewModelMainWindow.Positions
-                .SingleOrDefault(p => p.ID.Replace(" ", "").Equals(mPosition.ToUpper().Replace(" ", "")))?.Name;
+            var positionName = ViewModelMainWindow.GetPosition(mPosition).Name;
             if (string.IsNullOrEmpty(positionName))
                 return string.Empty;
             return "【"+positionName.Replace("  ", string.Empty) + "】";

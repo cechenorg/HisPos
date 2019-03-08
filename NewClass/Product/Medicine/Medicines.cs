@@ -28,11 +28,13 @@ namespace His_Pos.NewClass.Product.Medicine
                 Medicine med = new Medicine(r);
                 med.Dosage = r.Field<double?>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
-                med.PositionName = r.Field<string>("Position");
+                med.PositionID = r.Field<string>("Position");
                 med.Days = r.Field<short?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
+                med.BuckleAmount = r.Field<double>("BuckleAmount");
+                med.Price = (double)r.Field<decimal>("PaySelfValue");
                 Add(med);
             }
         }
@@ -44,7 +46,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 Medicine med = new Medicine(r);
                 med.Dosage = r.Field<double>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
-                med.PositionName = r.Field<string>("Position");
+                med.PositionID = r.Field<string>("Position");
                 med.Days = r.Field<short>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
@@ -63,7 +65,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 {
                     result += "1";
                     result += med.ID.PadLeft(12, ' ');
-                    result += med.PositionName.PadLeft(6, ' ');
+                    result += med.PositionID.PadLeft(6, ' ');
                     result += med.UsageName.PadLeft(18, ' ');
                     result += med.Days.ToString().PadLeft(2, ' ');
                     result += med.Amount.ToString().PadLeft(7, ' ');
@@ -91,7 +93,11 @@ namespace His_Pos.NewClass.Product.Medicine
             foreach (var m in Items)
             {
                 if (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial)
+                {
+                    if (!b)
+                        m.BuckleAmount = 0;
                     m.IsBuckle = b;
+                }
             }
         }
     }
