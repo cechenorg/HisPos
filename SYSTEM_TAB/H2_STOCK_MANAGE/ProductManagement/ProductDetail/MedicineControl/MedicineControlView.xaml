@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="310"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Medicine.ID}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0" IsReadOnly="True"/>
+            <TextBox Text="{Binding Medicine.ID}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" BorderThickness="0"  FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0" IsReadOnly="True"/>
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                 <TextBox Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="1110" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0" BorderBrush="Transparent">
                     <i:Interaction.Triggers>
