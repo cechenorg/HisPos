@@ -568,6 +568,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.CountPrescriptionPoint(true);
                 if (selected == EditedPrescription.Medicines.Count - 1)
                     EditedPrescription.Medicines.Add(new Medicine());
+                CheckEditStatus();
                 Messenger.Default.Send(new NotificationMessage<int>(this,selected, "FocusDosage"));
             }
         }
@@ -576,6 +577,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if(SelectedMedicine is null ) return;
             EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
+            CheckEditStatus();
         }
         private void SetBuckleAmount()
         {
