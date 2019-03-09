@@ -64,8 +64,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             }
             else if (textBox.Name.Equals("ProductPriceTextbox") && textBox.IsReadOnly)
                 MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 單價 請先將小計歸零!", MessageType.WARNING);
-            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
-                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
         }
         private void MoveFocusNext(object sender)
         {
@@ -116,6 +114,36 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 FocusRow(secondChild as TextBox);
             }
         }
+        private void ProductSubTotalTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
+
+                if(ProductDataGrid.Items.Count == index + 1)
+                    MoveFocusNext(textBox);
+                else
+                {
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[3]);
+
+                    ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
+
+                    var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                    UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (firstChild is TextBox)
+                        firstChild.Focus();
+                }
+            }
+            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
+                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
+        }
         #endregion
 
         #region ///// Focus Functions /////
@@ -149,6 +177,5 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
         #endregion
 
         #endregion
-
     }
 }

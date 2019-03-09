@@ -53,6 +53,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING)
                 OrderProducts.SetToProcessing();
+
+            OrderProducts.SetStartEditToPrice();
         }
 
         public override void SaveOrder()
@@ -132,6 +134,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
                     return false;
                 }
+                else if(product.OrderAmount < 0 || product.FreeAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
             }
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
@@ -141,7 +148,51 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckNormalProcessingOrder()
         {
-            throw new NotImplementedException();
+            bool IsLowerThenOrderAmount = false;
+
+            foreach (var product in OrderProducts)
+            {
+                if (product.OrderAmount < 0 || product.FreeAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
+
+                if (product.RealAmount + product.FreeAmount < product.OrderAmount)
+                    IsLowerThenOrderAmount = true;
+            }
+
+            if (IsLowerThenOrderAmount)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"收貨單中有商品的收貨量低於訂購量\r\n是否將不足的部分轉成新的收貨單?", "", false);
+
+                if ((bool) confirmWindow.DialogResult)
+                {
+                    bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
+
+                    if (!isSuccess) return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
+
+            return (bool)confirmWindow1.DialogResult;
+        }
+
+        private bool AddNewStoreOrderLowerThenOrderAmount()
+        {
+            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                return true;
+            }
+            else
+            {
+                MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                return false;
+            }
         }
 
         protected override bool CheckSingdeProcessingOrder()
