@@ -48,19 +48,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
-        private Medicine selectedMedicine;
-        public Medicine SelectedMedicine
-        {
-            get => selectedMedicine;
-            set
-            {
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
-                    ((IDeletableProduct)SelectedMedicine).IsSelected = false;
-                Set(() => SelectedMedicine, ref selectedMedicine, value);
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
-                    ((IDeletableProduct)SelectedMedicine).IsSelected = true;
-            }
-        }
         private bool isBusy;
         public bool IsBusy
         {
@@ -250,7 +237,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             IsEdit = false;
             InitialItemsSources();
             InitialCommandActions();
-            RegisterMessengers();
         }
 
         private void InitPrescription(Prescription selected)
@@ -260,7 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
             MainWindow.ServerConnection.OpenConnection();
-            EditedPrescription.AdjustMedicinesType(true);
+            EditedPrescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
             if (EditedPrescription.Treatment.Division != null)
                 EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.ID);
@@ -307,11 +293,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
             Delete = new RelayCommand(DeleteAction);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
-        }
-
-        private void RegisterMessengers()
-        {
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
         }
         #endregion
         #region CommandActions
@@ -435,11 +416,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
             }
             else
@@ -465,6 +448,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (IsEdit)
             {
+                if (!CheckSameMedicine())return;
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
                     var error = EditedPrescription.CheckPrescriptionRule(true);
@@ -558,40 +542,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.CheckIsCooperative();
             CheckEditStatus();
         }
+
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-            if (msg.Notification == nameof(PrescriptionEditViewModel))
-            {
-                var selected = EditedPrescription.Medicines.IndexOf(SelectedMedicine);
-                if (selected < 0 || selected >= EditedPrescription.Medicines.Count) return;
-                EditedPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                EditedPrescription.CountPrescriptionPoint(true);
-                if (selected == EditedPrescription.Medicines.Count - 1)
-                    EditedPrescription.Medicines.Add(new Medicine());
-                CheckEditStatus();
-                Messenger.Default.Send(new NotificationMessage<int>(this,selected, "FocusDosage"));
-            }
+            if (msg.Notification != nameof(PrescriptionEditViewModel)) return;
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            MainWindow.ServerConnection.OpenConnection();
+            EditedPrescription.AddMedicineBySearch(msg.Content.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            EditedPrescription.CountPrescriptionPoint(true);
+            CheckEditStatus();
         }
 
         private void DeleteMedicineAction()
         {
-            if(SelectedMedicine is null ) return;
-            EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
+            EditedPrescription.Medicines.Remove(EditedPrescription.SelectedMedicine);
             CountMedicinePoint();
             CheckEditStatus();
         }
         private void SetBuckleAmount()
         {
-            if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
+            if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                EditedPrescription.SelectedMedicine.BuckleAmount = 0;
+            else
             {
-                if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                    SelectedMedicine.BuckleAmount = 0;
-                else
-                {
-                    SelectedMedicine.BuckleAmount = SelectedMedicine.Amount;
-                }
-                CheckEditStatus();
+                EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
             }
+            CheckEditStatus();
+        }
+        private bool CheckSameMedicine()
+        {
+            var medicinesSame = EditedPrescription.CheckSameMedicine();
+            if (string.IsNullOrEmpty(medicinesSame)) return true;
+            MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
+            return false;
         }
         #endregion
         #region Functions

@@ -349,15 +349,11 @@ namespace His_Pos.NewClass.Product.Medicine
                 PaySelf = true;
         }
 
-        private bool isSelected;
-
+        private bool isSelected = false;
         public bool IsSelected
         {
             get => isSelected;
-            set
-            {
-                Set(() => IsSelected, ref isSelected, value);
-            }
+            set { Set(() => IsSelected, ref isSelected, value); }
         }
         private int? controlLevel;
 
@@ -403,6 +399,13 @@ namespace His_Pos.NewClass.Product.Medicine
             }
             else
                 IsAmountReadOnly = false;
+        }
+
+        public void CopyPrevious(Medicine preMed)
+        {
+            Dosage = preMed.Dosage;
+            UsageName = preMed.UsageName;
+            Days = preMed.Days;
         }
     }
 }

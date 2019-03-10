@@ -60,14 +60,6 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 DivisionCombo.Focus();
         }
 
-        private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!(sender is DataGrid dg)) return;
-            var index = dg.SelectedIndex;
-            if (index == -1) return;
-            ((PrescriptionDeclareViewModel)DataContext).SelectedMedicinesIndex = index;
-        }
-
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
