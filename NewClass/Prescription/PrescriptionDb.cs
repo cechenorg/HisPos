@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.Prescription
         
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "@ecMas_Id", recMasId); 
+            DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteReserve]", parameterList);  
         }
         public static void PredictResere(int preMasId) {
