@@ -1275,7 +1275,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 查無資料，若要新增顧客請至少填寫姓名與身分證 的當地語系化字串。
+        ///   查詢類似 查無資料，若要新增顧客需填寫姓名.身分證與生日 的當地語系化字串。
         /// </summary>
         internal static string 顧客資料不足 {
             get {

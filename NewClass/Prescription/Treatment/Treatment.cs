@@ -511,13 +511,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
 
         public void Clear()
         {
-            Institution =
-                new Ins
-                {
-                    ID = VM.CurrentPharmacy.ID,
-                    Name = VM.CurrentPharmacy.Name,
-                    FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
-                };
+            if (string.IsNullOrEmpty(Institution.FullName))
+            {
+                Institution =
+                    new Ins
+                    {
+                        ID = VM.CurrentPharmacy.ID,
+                        Name = VM.CurrentPharmacy.Name,
+                        FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
+                    };
+            }
             PrescriptionCase = null;
             TempMedicalNumber = string.Empty;
             Copayment = null;
