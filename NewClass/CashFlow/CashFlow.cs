@@ -8,20 +8,26 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.CashFlow {
     public class CashFlow : ObservableObject {
-        public CashFlow() {
-            CopaymentValue = 0;
-            ClinicCopaymentValue = 0;
-            PaySelfValue = 0;
-            ClinicPaySelfValue = 0;
-            ClinicProfitValue = 0; 
-            PayselfMedUseValue = 0;
-            NormalTotalPointValue = 0;
-            ChronicTotalPointValue = 0;
-            ChronicmedicineUseValue = 0;
-            NormalMedicineUseValue = 0;
-            DepositValue = 0;
+        public CashFlow() { }
+        public CashFlow(DataRow r) {
+            Date = r.Field<DateTime>("CashFlow_Time");
+            CopaymentValue = (int)r.Field<decimal>("部分負擔");
+            ClinicCopaymentValue = (int)r.Field<decimal>("合作部分負擔");
+            PaySelfValue = (int)r.Field<decimal>("自費");
+            ClinicPaySelfValue = (int)r.Field<decimal>("合作自費");
+            ClinicProfitValue = (int)r.Field<decimal>("骨科毛利");
+            NormalTotalPointValue = (int)r.Field<decimal>("一般總點數");
+            NormalMedicineUseValue = (int)r.Field<decimal>("一般調劑耗用");
+            ChronicTotalPointValue = (int)r.Field<decimal>("慢箋總點數");
+            ChronicmedicineUseValue = (int)r.Field<decimal>("慢箋調劑耗用");
+            PayselfAdjustValue = (int)r.Field<decimal>("自費調劑");
+            PayselfMedUseValue = (int)r.Field<decimal>("自費調劑耗用");
+            DepositValue = (int)r.Field<decimal>("押金");
+            TotalAdjustAmount = (int)r.Field<decimal>("處方總量");
+            ClinicAdjustAmount = (int)r.Field<decimal>("合作處方總量");
+            GiveclinicValue = ClinicCopaymentValue + ClinicPaySelfValue;
         }
-        
+
         public DateTime Date { get; set; }
         private int copaymentValue;
         public int CopaymentValue {
@@ -103,6 +109,15 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => ChronicmedicineUseValue, ref chronicmedicineUseValue, value);
             }
         }
+        private decimal payselfAdjustValue;
+        public decimal PayselfAdjustValue //自費調劑收入
+        {
+            get => payselfAdjustValue;
+            set
+            {
+                Set(() => PayselfAdjustValue, ref payselfAdjustValue, value);
+            }
+        }
         private decimal payselfMedUseValue;
         public decimal PayselfMedUseValue //自費調劑耗用
         {
@@ -121,6 +136,15 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => DepositValue, ref depositValue, value);
             }
         }
+        private int clinicAdjustAmount;
+        public int ClinicAdjustAmount //合作診所調劑總量
+        {
+            get => clinicAdjustAmount;
+            set
+            {
+                Set(() => ClinicAdjustAmount, ref clinicAdjustAmount, value);
+            }
+        }
         private int totalAdjustAmount;
         public int TotalAdjustAmount //調劑總量
         {
@@ -130,13 +154,13 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => TotalAdjustAmount, ref totalAdjustAmount, value);
             }
         }
-        private decimal returnDeleteMedUseValue;
-        public decimal ReturnDeleteMedUseValue //刪單補耗用
+        private int giveclinicValue;
+        public int GiveclinicValue //給骨科的錢
         {
-            get => returnDeleteMedUseValue;
+            get => giveclinicValue;
             set
             {
-                Set(() => ReturnDeleteMedUseValue, ref returnDeleteMedUseValue, value);
+                Set(() => GiveclinicValue, ref giveclinicValue, value);
             }
         }
     }
