@@ -31,6 +31,7 @@ namespace His_Pos.NewClass.Prescription
         public Prescription()
         {
             Patient = new Customer();
+            Patient.ID = -1;
             Card = new IcCard();
             Treatment = new Treatment.Treatment();
             Medicines = new Medicines();

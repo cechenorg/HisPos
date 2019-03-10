@@ -577,6 +577,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if(SelectedMedicine is null ) return;
             EditedPrescription.Medicines.RemoveAt(EditedPrescription.Medicines.IndexOf(SelectedMedicine));
+            CountMedicinePoint();
             CheckEditStatus();
         }
         private void SetBuckleAmount()

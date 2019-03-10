@@ -555,8 +555,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Treatment.AdjustCase != null && CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
             {
                 NotPrescribe = false;
-                if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
                 CurrentPrescription.Treatment.Clear();
                 SetMedicinesPaySelf();
             }
@@ -658,11 +656,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void AdjustButtonClickAction()
         {
-            if(CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID == 0)
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
             {
                 MessageWindow.ShowMessage("尚未選擇客戶",MessageType.ERROR);
                 return;
             }
+            if(!CheckNewCustomer())return;
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
@@ -709,11 +708,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterButtonClickAction()
         {
-            if (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID == 0)
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
             {
                 MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
                 return;
             }
+            if (!CheckNewCustomer()) return;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
@@ -725,14 +725,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeButtonClickAction()
         {
-            if (CurrentPrescription.Patient.ID == 0)
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
             {
-                if (!CurrentPrescription.Patient.Name.Equals("匿名") || !CurrentPrescription.Patient.IDNumber.Equals("A111111111") || CurrentPrescription.Patient.Birthday is null || DateTime.Compare(new DateTime(1995, 1, 1), (DateTime)CurrentPrescription.Patient.Birthday) != 0 || !string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
-                {
-                    MessageWindow.ShowMessage("匿名資料不得修改，若要填寫顧客請新增客戶或查詢現有顧客", MessageType.ERROR);
+                var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?","");
+                if ((bool) confirm.DialogResult)
+                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                else
                     return;
-                }
             }
+            if (!CheckNewCustomer()) return;
             PrintConfirm(PrescriptionDeclareStatus.Prescribe);
         }
         #endregion
@@ -1250,8 +1251,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void StartPrescribe()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                CurrentPrescription.Patient = new Customer(CustomerDb.GetCustomerByCusId(0).Rows[0]);
             InsertPrescribeData();
         }
         private void StartNoCardAdjust()
@@ -1286,6 +1285,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
            return CurrentPrescription.Treatment.Pharmacist != null 
                 ? PrescriptionDb.GetPrescriptionCountByID(CurrentPrescription.Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0; 
+        }
+
+        private bool CheckNewCustomer()
+        {
+            var poorData = string.IsNullOrEmpty(CurrentPrescription.Patient.Name) ||
+                           string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) ||
+                           CurrentPrescription.Patient.Birthday is null;
+            if (poorData)
+            {
+                MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
+                return false;
+            }
+            CurrentPrescription.Patient.Check();
+            return true;
         }
         #endregion
         #region CommandExecuteChecking
