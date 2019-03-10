@@ -262,7 +262,7 @@
                 </Grid>
                 <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" CanUserAddRows="False"
                       CanUserSortColumns="False" EnableRowVirtualization="False" SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                      GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="PrescriptionMedicines_SelectionChanged" >
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True" />

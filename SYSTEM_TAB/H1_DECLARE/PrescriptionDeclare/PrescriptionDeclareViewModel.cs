@@ -133,33 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => NotPrescribe, ref notPrescribe, value);
             }
         }
-        private Medicine selectedMedicine;
-        public Medicine SelectedMedicine
-        {
-            get => selectedMedicine;
-            set
-            {
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
-                    ((IDeletableProduct) SelectedMedicine).IsSelected = false;
-                Set(() => SelectedMedicine, ref selectedMedicine, value);
-                if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
-                    ((IDeletableProduct)SelectedMedicine).IsSelected = true;
-            }
-        }
-
-        public int priviousSelectedIndex { get; set; }
-        private int selectedMedicinesIndex;
-        public int SelectedMedicinesIndex
-        {
-            get => selectedMedicinesIndex;
-            set
-            {
-                if (value != -1)
-                {
-                    Set(() => SelectedMedicinesIndex, ref selectedMedicinesIndex, value);
-                }
-            }
-        }
+        
         private CusSelectWindow customerSelectionWindow { get; set; }
         private MedSelectWindow MedicineWindow { get; set; }
         private bool canSendOrder;
@@ -236,7 +210,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand ResetCardReader { get; set; }
         public RelayCommand NoCardAdjust { get; set; }
-        public RelayCommand MedicineNoBuckleClick { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand ErrorCodeSelect { get; set; }
         public RelayCommand DivisionSelectionChanged { get; set; }
@@ -260,7 +233,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void InitializeVariables()
         {
-            SelectedMedicinesIndex = 0;
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
             NotPrescribe = true;
             CanAdjust = true;
@@ -268,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ErrorCode = null;
             CanSendOrder = false;
             IsAdjusting = false;
+            IsBusy = false;
             InitialPrescription();
         }
         private void InitialItemsSources()
@@ -304,7 +277,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
-            MedicineNoBuckleClick = new RelayCommand(MedicineNoBuckleAction);
             SelfPayTextChanged = new RelayCommand(SelfPayTextChangedAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ClearButtonClick = new RelayCommand(ClearPrescription, CheckIsAdjusting);
@@ -337,10 +309,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region EventAction
         private void SetMedicinesPaySelf()
         {
-            var medList = CurrentPrescription.Medicines.Where(m => m is MedicineNHI || m is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial).ToList();
-            if (medList.Count > 0)
+            if (CurrentPrescription.Medicines.Count > 0)
             {
-                foreach (var m in medList)
+                foreach (var m in CurrentPrescription.Medicines)
                 {
                     if(m.PaySelf) continue;
                     m.PaySelf = true;
@@ -590,7 +561,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void DeleteMedicineAction()
         {
-            CurrentPrescription.Medicines.RemoveAt(CurrentPrescription.Medicines.IndexOf(SelectedMedicine));
+            CurrentPrescription.Medicines.Remove(CurrentPrescription.SelectedMedicine);
             CurrentPrescription.CountPrescriptionPoint(true);
         }
         private void CountMedicinePoint()
@@ -603,21 +574,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetBuckleAmount()
         {
-            if (SelectedMedicine is MedicineNHI || SelectedMedicine is MedicineOTC || SelectedMedicine is MedicineSpecialMaterial)
+            if (CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+                CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
+            else
             {
-                if (CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                    SelectedMedicine.BuckleAmount = 0;
-                else
-                {
-                    SelectedMedicine.BuckleAmount = SelectedMedicine.Amount;
-                }
+                CurrentPrescription.SelectedMedicine.BuckleAmount = CurrentPrescription.SelectedMedicine.Amount;
             }
-            
-        }
-
-        private void MedicineNoBuckleAction()
-        {
-            SelectedMedicine.IsBuckle = !SelectedMedicine.IsBuckle;
         }
         private void SelfPayTextChangedAction()
         {
@@ -628,12 +590,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NoCardAdjustAction()
         {
-            if (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID == 0)
-            {
-                MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
-                return;
-            }
-            if (!CheckMissingCooperativeContinue()) return;
+            var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑, true);
+            if (!(bool)noCard.DialogResult) return;
+            if (CheckEmptyCustomer()) return;
+            if (!CheckNewCustomer()) return;
             CurrentPrescription.CheckIsCooperativePrescribe();
             if (CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
             {
@@ -641,9 +601,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑, true);
-            if (!(bool)noCard.DialogResult) return;
+            if (!CheckMissingCooperativeContinue()) return;
             IsAdjusting = true;
+            if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
@@ -652,19 +616,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             CurrentPrescription.PrescriptionPoint.CountDeposit();
-            PrintConfirm(PrescriptionDeclareStatus.NoCard);
+            if(!PrintConfirm(true)) return;
+            SavePatientData();
+            StartNoCardAdjust();
         }
+
         private void AdjustButtonClickAction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
-            {
-                MessageWindow.ShowMessage("尚未選擇客戶",MessageType.ERROR);
-                return;
-            }
+            if(CheckEmptyCustomer()) return;
             if(!CheckNewCustomer())return;
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
+            if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
             if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)//合作診所自費不檢查健保規則
             {
                 var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
@@ -675,7 +643,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
             }
-            PrintConfirm(PrescriptionDeclareStatus.Adjust);
+            if (!PrintConfirm(false)) return;
+            SavePatientData();
+            if (CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+                StartCooperativePrescribe();
+            else
+                StartNormalAdjust();
         }
         private bool CheckCooperativePrescribeContinue()
         {
@@ -708,11 +681,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterButtonClickAction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
-            {
-                MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
-                return;
-            }
+            if (CheckEmptyCustomer()) return;
             if (!CheckNewCustomer()) return;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
@@ -720,22 +689,48 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(error, MessageType.ERROR);
                 return;
             }
-            PrintConfirm(PrescriptionDeclareStatus.Register);
+            if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
+            if (!PrintConfirm(false)) return;
+            SavePatientData();
+            StartRegister();
         }
 
         private void PrescribeButtonClickAction()
         {
-            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) || string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) || CurrentPrescription.Patient.Birthday is null)
             {
-                var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?","");
-                if ((bool) confirm.DialogResult)
+                var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?", "");
+                if ((bool)confirm.DialogResult)
                     CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
                 else
                     return;
             }
             if (!CheckNewCustomer()) return;
-            PrintConfirm(PrescriptionDeclareStatus.Prescribe);
+            if (CurrentPrescription.Medicines.Count == 0)
+            {
+                MessageWindow.ShowMessage("未填寫藥品",MessageType.WARNING);
+                return;
+            }
+            var medicinesAmountZero = CurrentPrescription.CheckMedicines();
+            if (!string.IsNullOrEmpty(medicinesAmountZero))
+            {
+                MessageWindow.ShowMessage(medicinesAmountZero, MessageType.WARNING);
+                return;
+            }
+            if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
+            if (!PrintConfirm(false)) return;
+            SavePatientData();
+            InsertPrescribeData();
         }
+
         #endregion
         #region MessengerReceiveActions
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
@@ -766,16 +761,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             p.Patient = CurrentPrescription.Patient;
             CurrentPrescription.Patient.Check();
             CurrentPrescription = p;
-            CurrentPrescription.GetCompletePrescriptionData(true, false, false);
+            CurrentPrescription.GetCompletePrescriptionData( false, false);
             CurrentPrescription.CountPrescriptionPoint(true);
-            priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
         }
         private void GetCooperativePrescription(NotificationMessage<Prescription> msg)
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
-            msg.Content.GetCompletePrescriptionData(true,true,false);
+            msg.Content.GetCompletePrescriptionData(true,false);
             MainWindow.ServerConnection.OpenConnection();
             msg.Content.Card = CurrentPrescription.Card;
             if(msg.Sender is CooperativeSelectionViewModel)
@@ -789,7 +783,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription = msg.Content;
             CurrentPrescription.CountPrescriptionPoint(true);
             CurrentPrescription.PrescriptionStatus.IsCooperative = true;
-            priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
             if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
                 MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。",MessageType.WARNING);
@@ -803,13 +796,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification != nameof(PrescriptionDeclareViewModel)) return;
-            var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
-            if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
-            CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID);
+            MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint(true);
-            if (selected == CurrentPrescription.Medicines.Count - 1)
-                CurrentPrescription.Medicines.Add(new Medicine());
-            Messenger.Default.Send(new NotificationMessage<int>(this, selected, "FocusDosage"));
         }
         #endregion
         #region GeneralFunctions
@@ -888,37 +879,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckDeclareStatus()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.ID)) return;
+            //自費調劑
             if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.ID) && CurrentPrescription.Treatment.AdjustCase.ID.Equals("0"))
-                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
-            else
             {
-                var adjust = CurrentPrescription.Treatment.AdjustDate;
-                if (adjust is null)
-                    DeclareStatus = PrescriptionDeclareStatus.Adjust;
-                else
-                {
-                    if (DateTime.Today.Date == ((DateTime)adjust).Date)
-                    {
-                        if (CurrentPrescription.Treatment.ChronicSeq != null && CurrentPrescription.Treatment.ChronicSeq > 0 && CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
-                            DeclareStatus = PrescriptionDeclareStatus.Register;
-                        else
-                            DeclareStatus = PrescriptionDeclareStatus.Adjust;
-                    }
-                    else if (DateTime.Today.Date < ((DateTime)adjust).Date)
-                        DeclareStatus = PrescriptionDeclareStatus.Register;
-                    else if (DateTime.Today.Date > ((DateTime)adjust).Date)
-                        DeclareStatus = PrescriptionDeclareStatus.Adjust;
-                }
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+                return;
             }
+            var adjust = CurrentPrescription.Treatment.AdjustDate;
+            if (adjust is null)
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                return;
+            }
+            //調劑日為今天
+            if (DateTime.Today.Date == ((DateTime)adjust).Date)
+            {
+                //填寫領藥次數且調劑案件為慢箋 => 登錄，其餘為調劑
+                if (CurrentPrescription.Treatment.ChronicSeq != null && CurrentPrescription.Treatment.ChronicSeq > 0 && CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
+                    DeclareStatus = PrescriptionDeclareStatus.Register;
+                else
+                    DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                return;
+            }
+            //調劑日為未來 => 登錄
+            if (DateTime.Today.Date < ((DateTime) adjust).Date)
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Register;
+                return;
+            }
+            //調劑日為過去 => 調劑
+            if (DateTime.Today.Date > ((DateTime)adjust).Date)
+                DeclareStatus = PrescriptionDeclareStatus.Adjust;
         }
         private void ClearPrescription()
         {
             InitializeVariables();
             InitialPrescription();
         }
-        private void PrintConfirm(PrescriptionDeclareStatus status)
+        private bool PrintConfirm(bool noCard)
         {
-            var noCard = status == PrescriptionDeclareStatus.NoCard;
             var printResult = NewFunction.CheckPrint(CurrentPrescription);
             var printMedBag = printResult[0];
             var printSingle = printResult[1];
@@ -926,47 +925,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (printMedBag is null || printReceipt is null)
             {
                 IsAdjusting = false;
-                return;
+                return false;
             }
             if ((bool)printMedBag && printSingle is null)
             {
                 IsAdjusting = false;
-                return;
+                return false;
             }
             var printWorker = new BackgroundWorker();
             printWorker.DoWork += (o, ea) =>
             {
-                if (CurrentPrescription.Patient.ID != 0)
-                {
-                    BusyContent = StringRes.更新病患資料;
-                    CurrentPrescription.Patient.Save();
-                }
-                PrintMedBag(noCard, (bool)printMedBag, printSingle, (bool)printReceipt);
-            };
-            printWorker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                switch (status)
-                {
-                    case PrescriptionDeclareStatus.Adjust:
-                        if(CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
-                            StartCooperativePrescribe();
-                        else
-                            StartNormalAdjust();
-                        break;
-                    case PrescriptionDeclareStatus.Register:
-                        StartRegister();
-                        break;
-                    case PrescriptionDeclareStatus.Prescribe:
-                        StartPrescribe();
-                        break;
-                    case PrescriptionDeclareStatus.NoCard:
-                        StartNoCardAdjust();
-                        break;
-                }
+                Print(noCard, (bool)printMedBag, printSingle, (bool)printReceipt);
             };
             IsBusy = true;
             printWorker.RunWorkerAsync();
+            return true;
         }
 
 
@@ -1221,7 +1194,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
         }
 
-        private void PrintMedBag(bool noCard,bool printMedBag,bool? printSingle, bool printReceipt)
+        private void Print(bool noCard,bool printMedBag,bool? printSingle, bool printReceipt)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -1248,10 +1221,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             };
             IsBusy = true;
             worker.RunWorkerAsync();
-        }
-        private void StartPrescribe()
-        {
-            InsertPrescribeData();
         }
         private void StartNoCardAdjust()
         {
@@ -1297,8 +1266,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
                 return false;
             }
-            CurrentPrescription.Patient.Check();
+            if(CurrentPrescription.Patient.ID == -1)
+                CurrentPrescription.Patient.Check();
             return true;
+        }
+        private void SavePatientData()
+        {
+            if (CurrentPrescription.Patient.ID == 0 || CurrentPrescription.Patient.ID == -1) return;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.Save();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private bool CheckEmptyCustomer()
+        {
+            if (!string.IsNullOrEmpty(CurrentPrescription.Patient.Name) || !string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) || !(CurrentPrescription.Patient.Birthday is null)) return false;
+            MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
+            return true;
+        }
+        private bool CheckSameMedicine()
+        {
+            var medicinesSame = CurrentPrescription.CheckSameMedicine();
+            if (string.IsNullOrEmpty(medicinesSame)) return true;
+            MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
+            return false;
         }
         #endregion
         #region CommandExecuteChecking
