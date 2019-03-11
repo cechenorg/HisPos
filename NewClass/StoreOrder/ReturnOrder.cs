@@ -119,7 +119,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "", true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -131,7 +131,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "", true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
 
             return (bool)confirmWindow.DialogResult;
         }
