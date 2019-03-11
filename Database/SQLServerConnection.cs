@@ -56,13 +56,11 @@ namespace His_Pos.Database
 
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
-            while (connection.State == ConnectionState.Executing)
-                Thread.Sleep(500);
-
             var table = new DataTable();
             try
             {
-                var myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." +  procName, connection);
+                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+                
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;
                 if (parameterList != null)
