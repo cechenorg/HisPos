@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
             CashFlow cashFlow = CooperativeClinicEntryCollection[0];
             ClinicProfit = cashFlow != null ? (int)cashFlow.ClinicProfitValue : 0;
             PrescriptionProfit = cashFlow != null ? (int)(cashFlow.NormalTotalPointValue + cashFlow.NormalMedicineUseValue + cashFlow.ChronicTotalPointValue + cashFlow.ChronicmedicineUseValue) : 0;
-            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue - cashFlow.PayselfMedUseValue) : 0;
+            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue + cashFlow.PayselfMedUseValue) : 0;
             SearchCommand = new RelayCommand(SearchAction);
         }
         #region Action
@@ -94,7 +94,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
 
             ClinicProfit = cashFlow != null ? (int)cashFlow.ClinicProfitValue : 0;
             PrescriptionProfit = cashFlow != null ? (int)(cashFlow.NormalTotalPointValue + cashFlow.NormalMedicineUseValue + cashFlow.ChronicTotalPointValue + cashFlow.ChronicmedicineUseValue) : 0;
-            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue - cashFlow.PayselfMedUseValue) : 0; 
+            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue + cashFlow.PayselfMedUseValue) : 0; 
         }
         #endregion
     }
