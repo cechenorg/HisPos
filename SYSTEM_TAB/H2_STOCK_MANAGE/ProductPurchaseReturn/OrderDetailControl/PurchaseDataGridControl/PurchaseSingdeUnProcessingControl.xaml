@@ -135,7 +135,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="散裝價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SingdePrice}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="散裝價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SingdePrice, StringFormat=N2}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -143,7 +143,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="包裝價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SingdePackagePrice}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="包裝價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SingdePackagePrice, StringFormat=N2}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
