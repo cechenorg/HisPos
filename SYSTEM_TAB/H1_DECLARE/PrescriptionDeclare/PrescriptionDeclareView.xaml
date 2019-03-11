@@ -52,6 +52,7 @@
         </DataTemplate>
         <declare:MedicineDataGrid x:Key="MedicineDataGrid" x:Name="MedicineDataGrid"/>
         <Style TargetType="declare:MedicineDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
     </UserControl.Resources>
     <Viewbox x:Name="PrescriptionViewBox" Stretch="Fill">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -121,7 +122,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label  Content="釋出院所" Style="{StaticResource BoldLabelContent18}"/>
-                        <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" CaretBrush="Red"
+                        <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
                              Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.Institution.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
@@ -327,7 +328,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                        <generalCustomControl:ProductStatusIcon IsCommon="{Binding Common}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
+                                        <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
                                         <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Margin="-5,0,0,0"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -374,7 +375,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineAmount" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False" KeyDown="MedicineAmount_OnKeyDown"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}" IsReadOnly="{Binding IsAmountReadOnly,UpdateSourceTrigger=PropertyChanged}" >
+                                         Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.MedicineAmountChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>

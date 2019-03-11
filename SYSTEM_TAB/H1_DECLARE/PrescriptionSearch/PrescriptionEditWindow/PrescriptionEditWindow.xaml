@@ -323,7 +323,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                        <generalCustomControl:ProductStatusIcon IsCommon="{Binding Common}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
+                                        <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
                                         <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Margin="-5,0,0,0"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -394,7 +394,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineAmount" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" CaretBrush="Red" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
-                                         Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}" IsReadOnly="{Binding IsAmountReadOnly,UpdateSourceTrigger=PropertyChanged}" >
+                                         Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.MedicineAmountChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>

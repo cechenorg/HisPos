@@ -305,7 +305,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             });
         }
         #endregion
-
         #region EventAction
         private void SetMedicinesPaySelf()
         {

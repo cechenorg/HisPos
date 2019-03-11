@@ -414,9 +414,9 @@ namespace His_Pos.NewClass.Prescription
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionID = Medicines[medCount].PositionID;
-                temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
+                temp.Amount = Medicines[medCount].Amount;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 temp.BuckleAmount = Medicines[medCount].BuckleAmount;
@@ -1095,7 +1095,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines);
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID) && med.Dosage.Equals(m.Dosage) && med.UsageName.Equals(m.UsageName) && med.PositionID.Equals(m.PositionID)) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID)) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }
