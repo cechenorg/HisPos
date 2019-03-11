@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using His_Pos.Class;
@@ -53,20 +55,23 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING)
                 OrderProducts.SetToProcessing();
+
+            OrderProducts.SetStartEditToPrice();
+
+            CalculateTotalPrice();
         }
 
         public override void SaveOrder()
         {
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
-            StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            //BackgroundWorker backgroundWorker = new BackgroundWorker();
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
 
-            //backgroundWorker.DoWork += (sender, args) =>
-            //{
-            //    StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            //};
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            };
 
-            //backgroundWorker.RunWorkerAsync();
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD, bool isFromAddButton)
@@ -132,6 +137,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
                     return false;
                 }
+                else if(product.OrderAmount < 0 || product.FreeAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
             }
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
@@ -141,7 +151,59 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckNormalProcessingOrder()
         {
-            throw new NotImplementedException();
+            bool IsLowerThenOrderAmount = false;
+
+            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new {ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount)}).ToList();
+            
+            foreach (var product in OrderProducts)
+            {
+                if (product.OrderAmount < 0 || product.FreeAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            foreach (var product in products)
+            {
+                if (product.RealAmount < product.OrderAmount)
+                {
+                    IsLowerThenOrderAmount = true;
+                    break;
+                }
+            }
+
+            if (IsLowerThenOrderAmount)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"收貨單中有商品的收貨量低於訂購量\r\n是否將不足的部分轉成新的收貨單?", "", false);
+
+                if ((bool) confirmWindow.DialogResult)
+                {
+                    bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
+
+                    if (!isSuccess) return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
+
+            return (bool)confirmWindow1.DialogResult;
+        }
+
+        private bool AddNewStoreOrderLowerThenOrderAmount()
+        {
+            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                return true;
+            }
+            else
+            {
+                MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                return false;
+            }
         }
 
         protected override bool CheckSingdeProcessingOrder()
@@ -152,6 +214,73 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        #region ----- Define Function -----
+        public void SplitBatch(string productID)
+        {
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].ID.Equals(productID))
+                {
+                    OrderProducts.Insert(x + 1, AddNewProductBySplit(OrderProducts[x]));
+                    return;
+                }
+            }
+        }
+        private PurchaseProduct AddNewProductBySplit(PurchaseProduct purchaseProduct)
+        {
+            PurchaseProduct newProduct;
+
+            if (purchaseProduct is PurchaseMedicine)
+            {
+                newProduct = new PurchaseMedicine();
+
+                (newProduct as PurchaseMedicine).IsControl = (purchaseProduct as PurchaseMedicine).IsControl;
+                (newProduct as PurchaseMedicine).IsFrozen = (purchaseProduct as PurchaseMedicine).IsFrozen;
+            }
+            else
+            {
+                newProduct = new PurchaseOTC();
+            }
+
+            newProduct.ID = purchaseProduct.ID;
+            newProduct.ChineseName = purchaseProduct.ChineseName;
+            newProduct.EnglishName = purchaseProduct.EnglishName;
+            newProduct.IsCommon = purchaseProduct.IsCommon;
+
+            newProduct.UnitName = purchaseProduct.UnitName;
+            newProduct.UnitAmount = purchaseProduct.UnitAmount;
+
+            newProduct.CopyOldProductData(purchaseProduct);
+
+            newProduct.IsFirstBatch = false;
+            newProduct.BatchNumber = "";
+
+            int leftAmount = ((int)purchaseProduct.RealAmount) % 2;
+
+            newProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2;
+            purchaseProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2 + leftAmount;
+
+            RaisePropertyChanged(nameof(ProductCount));
+
+            return newProduct;
+        }
+
+        public void MergeBatch(PurchaseProduct product)
+        {
+            if (!string.IsNullOrEmpty(product.BatchNumber))
+            {
+                MessageWindow.ShowMessage("請先將批號清除再進行合批!", MessageType.ERROR);
+                return;
+            }
+
+            PurchaseProduct originProduct = OrderProducts.Single(p => p.ID.Equals(product.ID) && p.IsFirstBatch);
+
+            originProduct.RealAmount += product.RealAmount;
+
+            OrderProducts.Remove(product);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try {
@@ -173,5 +302,6 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("更新藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
             }
         }
+        #endregion
     }
 }

@@ -910,7 +910,7 @@ namespace His_Pos.NewClass.Prescription
                 med.ID = m.ID;
                 med.EnglishName = m.EnglishName;
                 med.ChineseName = m.ChineseName;
-                med.Common = m.Common;
+                med.IsCommon = m.IsCommon;
                 med.Price = m.Price;
                 med.BuckleAmount = m.BuckleAmount;
                 p.Medicines.Add(med);

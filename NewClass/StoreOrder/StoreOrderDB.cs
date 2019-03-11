@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -133,7 +135,6 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
-
         private static DataTable SetPurchaseOrderDetail(PurchaseOrder p)
         {
             int detailId = 1;
@@ -307,6 +308,39 @@ namespace His_Pos.NewClass.StoreOrder
             
             return storeOrderDetailTable;
         }
+        private static DataTable SetPurchaseOrderDetail(PurchaseProducts orderProducts)
+        {
+            int detailId = 1;
+            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+
+            var productsAmount = orderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            
+            foreach (var pro in productsAmount)
+            {
+                double newOrderAmount = pro.OrderAmount - pro.RealAmount;
+
+                if(newOrderAmount <= 0) continue;
+                    
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", "");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ProductID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", newOrderAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.Price * newOrderAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", $"上次訂購量 {pro.OrderAmount} 到貨量 {pro.RealAmount}");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;
+            }
+            return storeOrderDetailTable;
+        }
         #endregion
 
         #endregion
@@ -322,6 +356,18 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetDonePurchaseOrdersInOneWeek()
         {
             throw new NotImplementedException();
+        }
+
+        internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+            parameters.Add(new SqlParameter("WARE_ID", warehouseID));
+            parameters.Add(new SqlParameter("PRODUCTS", SetPurchaseOrderDetail(orderProducts)));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
         internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID)
