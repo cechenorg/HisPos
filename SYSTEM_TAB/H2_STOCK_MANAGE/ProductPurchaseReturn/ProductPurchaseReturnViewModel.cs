@@ -37,6 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> FilterOrderStatusCommand { get; set; }
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
+        public RelayCommand CloseTabCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -195,6 +196,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
         }
+        private void CloseTabAction()
+        {
+            CurrentStoreOrder.SaveOrder();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -276,6 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             FilterOrderStatusCommand = new RelayCommand<string>(FilterOrderStatusAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
+            CloseTabCommand = new RelayCommand(CloseTabAction);
         }
         
         #region ///// Messenger Functions /////

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using His_Pos.Class;
@@ -62,15 +63,14 @@ namespace His_Pos.NewClass.StoreOrder
         public override void SaveOrder()
         {
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
-            StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            //BackgroundWorker backgroundWorker = new BackgroundWorker();
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
 
-            //backgroundWorker.DoWork += (sender, args) =>
-            //{
-            //    StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            //};
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            };
 
-            //backgroundWorker.RunWorkerAsync();
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD, bool isFromAddButton)

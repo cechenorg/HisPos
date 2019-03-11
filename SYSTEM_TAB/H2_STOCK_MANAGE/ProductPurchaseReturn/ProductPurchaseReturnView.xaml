@@ -15,6 +15,9 @@
         <i:EventTrigger EventName="Loaded">
             <command:EventToCommand Command="{Binding ReloadCommand}"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <command:EventToCommand Command="{Binding CloseTabCommand}"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseOrderDetail" DataType="{x:Type local:ProductPurchaseReturnViewModel}">

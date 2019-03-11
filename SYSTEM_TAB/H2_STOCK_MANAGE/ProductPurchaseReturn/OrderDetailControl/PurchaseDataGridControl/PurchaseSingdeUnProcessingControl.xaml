@@ -82,7 +82,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="單價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price}">
+                <DataGridTextColumn Header="單價" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price, StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -119,7 +119,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="小計" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SubTotal, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Header="小計" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SubTotal, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -163,7 +163,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="7" Background="{StaticResource GridDarkerBackGround}">
             <Button Content="+ 新增品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Command="{Binding AddProductCommand}"/>
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding CurrentStoreOrder.ProductCount}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

@@ -126,7 +126,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="上次進價" Width="90" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastPrice}" CellStyle="{StaticResource DataGridSpecialCellStyle}" >
+                <DataGridTextColumn Header="上次進價" Width="90" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastPrice, StringFormat=N2}" CellStyle="{StaticResource DataGridSpecialCellStyle}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -166,7 +166,7 @@
                 <DataGridTemplateColumn MinWidth="70" Header="小計" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductSubTotalTextbox" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Style="{DynamicResource CantEditSubTotal}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus" PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" KeyDown="ProductSubTotalTextbox_OnKeyDown">
+                            <TextBox x:Name="ProductSubTotalTextbox" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" InputMethod.IsInputMethodEnabled="False" Style="{DynamicResource CantEditSubTotal}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus" PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" KeyDown="ProductSubTotalTextbox_OnKeyDown">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
@@ -222,7 +222,7 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="8" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding CurrentStoreOrder.OrderProducts.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

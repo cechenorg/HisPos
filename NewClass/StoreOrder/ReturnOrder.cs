@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
@@ -46,7 +47,14 @@ namespace His_Pos.NewClass.StoreOrder
         public override void SaveOrder()
         {
             ReturnOrder returnOrder = this.Clone() as ReturnOrder;
-            StoreOrderDB.SaveReturnOrder(returnOrder);
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SaveReturnOrder(returnOrder);
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD, bool isFromAddButton)
