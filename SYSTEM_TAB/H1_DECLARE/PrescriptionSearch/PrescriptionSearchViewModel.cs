@@ -274,7 +274,46 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region CommandActions
         private void SearchAction()
         {
-            Refresh();
+            if (StartDate is null)
+            {
+                MessageWindow.ShowMessage(StringRes.StartDateEmpty, MessageType.WARNING);
+                return;
+            }
+            if (EndDate is null)
+                EndDate = DateTime.Today;
+            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
+            {
+                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                return;
+            }
+            var end = (DateTime)EndDate;
+            var start = (DateTime)StartDate;
+            var month = (end.Year - start.Year) * 12 + (end.Month - start.Month);
+            if (month > 3)
+            {
+                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
+                return;
+            }
+            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
+            SearchPrescriptions.Clear();
+            MainWindow.ServerConnection.OpenConnection();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.處方查詢;
+                //依條件查詢對應處方
+                previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
+                SearchPrescriptions = previews;
+                SetPrescriptionsSummary(false);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                MainWindow.ServerConnection.CloseConnection();
+                UpdateCollectionView();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void SetPrescriptionsSummary(bool reserve)
@@ -349,17 +388,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
             MainWindow.ServerConnection.CloseConnection();
             var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
-                    Refresh();
-            });
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
             prescriptionEdit.ShowDialog();
-            Messenger.Default.Unregister<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
-                    Refresh();
-            });
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()
         {
@@ -381,48 +412,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Profit = 0;
         }
 
-        private void Refresh()
+        private void Refresh(NotificationMessage msg)
         {
-            if (StartDate is null)
-            {
-                MessageWindow.ShowMessage(StringRes.StartDateEmpty, MessageType.WARNING);
-                return;
-            }
-            if (EndDate is null)
-                EndDate = DateTime.Today;
-            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
-            {
-                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                return;
-            }
-            var end = (DateTime)EndDate;
-            var start = (DateTime)StartDate;
-            var month = (end.Year - start.Year) * 12 + (end.Month - start.Month);
-            if (month > 3)
-            {
-                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
-                return;
-            }
-            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
-            SearchPrescriptions.Clear();
-            MainWindow.ServerConnection.OpenConnection();
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.處方查詢;
-                //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
-                SearchPrescriptions = previews;
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                SetPrescriptionsSummary(false);
-                MainWindow.ServerConnection.CloseConnection();
-                UpdateCollectionView();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+                SearchAction();
         }
         #endregion
         #region Functions

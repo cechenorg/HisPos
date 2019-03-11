@@ -391,7 +391,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (!CheckSameMedicine())return;
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
-                    var error = EditedPrescription.CheckPrescriptionRule(true);
+                    var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
+                    var error = EditedPrescription.CheckPrescriptionRule(noCard);
                     if (!string.IsNullOrEmpty(error))
                     {
                         MessageWindow.ShowMessage(error, MessageType.ERROR);

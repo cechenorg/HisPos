@@ -755,7 +755,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                         new ReportParameter("TreatmentDate", treatmentDateChi),
                         new ReportParameter("RecId", " "), //病歷號
-                        new ReportParameter("Division",Treatment.Division.Name),
+                        new ReportParameter("Division",Treatment.Division is null ?string.Empty:Treatment.Division.Name),
                         new ReportParameter("Hospital", Treatment.Institution.Name),
                         new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
                         new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
@@ -804,7 +804,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
-                new ReportParameter("Division", Treatment.Division.Name),
+                new ReportParameter("Division", Treatment.Division is null ?string.Empty:Treatment.Division.Name),
                 new ReportParameter("PatientTel", patientTel)
             };
         }
