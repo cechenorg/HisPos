@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -125,11 +126,25 @@ namespace His_Pos.NewClass.Prescription
         public List<string> PrescriptionSign { get; set; }
         public int WriteCardSuccess { get; set; }
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
+        private Medicine selectedMedicine;
+        public Medicine SelectedMedicine
+        {
+            get => selectedMedicine;
+            set
+            {
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+
+                Set(() => SelectedMedicine, ref selectedMedicine, value);
+
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
+            }
+        }
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
             PrescriptionStatus.Init();
-            Medicines.Add(new Medicine());
         }
         private int CountCopaymentPoint()
         {
@@ -316,40 +331,45 @@ namespace His_Pos.NewClass.Prescription
             return ma1;
         }
 
-        public void AddMedicineBySearch(string proId, int selectedMedicinesIndex) {
-            MainWindow.ServerConnection.OpenConnection();
+        public void AddMedicineBySearch(string proId) {
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
-            MainWindow.ServerConnection.CloseConnection();
+            var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
             {
                 switch (r.Field<int>("DataType"))
                 {
                     case 0:
-                        Medicines[selectedMedicinesIndex] = new MedicineOTC(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
+                        medicine = new MedicineOTC(r);
+                        medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 1:
-                        Medicines[selectedMedicinesIndex] = new MedicineNHI(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
+                        medicine = new MedicineNHI(r);
+                        medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 2:
-                        Medicines[selectedMedicinesIndex] = new MedicineSpecialMaterial(r);
-                        Medicines[selectedMedicinesIndex].CheckPaySelf(Treatment.AdjustCase.ID);
+                        medicine = new MedicineSpecialMaterial(r);
+                        medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                 }
             }
-
-            if (Medicines[selectedMedicinesIndex].ID.EndsWith("00") ||
-                Medicines[selectedMedicinesIndex].ID.EndsWith("G0"))
-                Medicines[selectedMedicinesIndex].PositionID = "PO";
-            if(selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Dosage != null)
-                Medicines[selectedMedicinesIndex].Dosage = Medicines[selectedMedicinesIndex - 1].Dosage;
-            if (selectedMedicinesIndex > 0 && !string.IsNullOrEmpty(Medicines[selectedMedicinesIndex-1].UsageName))
-                Medicines[selectedMedicinesIndex].UsageName = Medicines[selectedMedicinesIndex - 1].UsageName;
-            if (selectedMedicinesIndex > 0 && Medicines[selectedMedicinesIndex-1].Days != null)
-                Medicines[selectedMedicinesIndex].Days = Medicines[selectedMedicinesIndex - 1].Days;
-            if(Medicines[selectedMedicinesIndex].Amount > 0 && !Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                Medicines[selectedMedicinesIndex].BuckleAmount = Medicines[selectedMedicinesIndex - 1].BuckleAmount;
+            if (medicine.ID.EndsWith("00") ||
+                medicine.ID.EndsWith("G0"))
+                medicine.PositionID = "PO";
+            //if(Medicines[selectedMedicinesIndex].Amount > 0 && !Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+            //    Medicines[selectedMedicinesIndex].BuckleAmount = Medicines[selectedMedicinesIndex - 1].BuckleAmount;
+            int selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
+            if (SelectedMedicine != null)
+            {
+                if(selectedMedicinesIndex > 0)
+                    medicine.CopyPrevious(Medicines[selectedMedicinesIndex-1]);
+                Medicines[selectedMedicinesIndex] = medicine;
+            }
+            else
+            {
+                if(Medicines.Count > 0)
+                    medicine.CopyPrevious(Medicines[Medicines.Count-1]);
+                Medicines.Add(medicine);
+            } 
         }
         public void DeleteReserve() {
             PrescriptionDb.DeleteReserve(SourceId);
@@ -362,7 +382,7 @@ namespace His_Pos.NewClass.Prescription
         }
         
         #endregion
-        public void AdjustMedicinesType(bool addMedicine) {
+        public void AdjustMedicinesType() {
             for(int medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
@@ -394,9 +414,9 @@ namespace His_Pos.NewClass.Prescription
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionID = Medicines[medCount].PositionID;
-                temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
+                temp.Amount = Medicines[medCount].Amount;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 temp.BuckleAmount = Medicines[medCount].BuckleAmount;
@@ -408,8 +428,6 @@ namespace His_Pos.NewClass.Prescription
                 if (!string.IsNullOrEmpty(temp.ID))
                     Medicines[medCount] = temp;
             }
-            if (addMedicine)
-                Medicines.Add(new Medicine());
         }
 
         public decimal ProcessInventory(string type,string source,string sourceId)//扣庫
@@ -454,8 +472,14 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
         public void Delete() {
-
-            PrescriptionDb.DeletePrescription(Id);
+            if (Id == 0)
+            {
+                PrescriptionDb.DeleteReserve(SourceId);
+            }
+            else
+            {
+                PrescriptionDb.DeletePrescription(Id);
+            }
             if (!PrescriptionStatus.IsAdjust) return;
 
             if (!Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID)) {
@@ -496,8 +520,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public string CheckMedicines()
         {
-            var medList = Medicines.Where(m => m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC).ToList();
-            foreach (var med in medList)
+            foreach (var med in Medicines)
             {
                 if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
                 {
@@ -508,21 +531,21 @@ namespace His_Pos.NewClass.Prescription
                     med.Position = VM.GetPosition(med.PositionID);
                 }
             }
-            if (!medList.Any())
+            if (!Medicines.Any())
             {
                 return StringRes.MedicineEmpty;
             }
-            if (medList.Count(m => m.Amount == 0) == 0)
+            if (Medicines.Count(m => m.Amount == 0) == 0)
             {
                 return string.Empty;
             }
-            return medList.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+            return Medicines.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
         public void CountPrescriptionPoint(bool countSelfPay)
         {
             if (!Treatment.AdjustCase.ID.Equals("0"))
             {
-                PrescriptionPoint.MedicinePoint = Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineOTC) && m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
+                PrescriptionPoint.MedicinePoint = Medicines.Count(m => m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
                 if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
                     (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
                 {
@@ -948,12 +971,12 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public void GetCompletePrescriptionData(bool addMedicine,bool updateIsRead,bool getDeposit)
+        public void GetCompletePrescriptionData(bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
             Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
             Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
-            AdjustMedicinesType(addMedicine);
+            AdjustMedicinesType();
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
             if(getDeposit)
@@ -1062,6 +1085,22 @@ namespace His_Pos.NewClass.Prescription
         {
             if(Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID))
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);
+        }
+
+        public string CheckSameMedicine()
+        {
+            var sameList = new List<string>();
+            var sameMed = string.Empty;
+            foreach (var m in Medicines)
+            {
+                var compareList = new List<Medicine>(Medicines);
+                compareList.Remove(m);
+                if (compareList.Count(med => med.ID.Equals(m.ID)) > 0)
+                {
+                    sameList.Add("藥品:" + m.ID + "重複。\n");
+                }
+            }
+            return sameList.Count <= 0 ? sameMed : sameList.Distinct().Aggregate(sameMed, (current, s) => current + s);
         }
     }
 }

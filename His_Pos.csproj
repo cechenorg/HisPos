@@ -496,6 +496,7 @@
       <DependentUpon>DeclareFileManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedicineDataGrid.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsWindow.xaml.cs">
       <DependentUpon>CommonHospitalsWindow.xaml</DependentUpon>

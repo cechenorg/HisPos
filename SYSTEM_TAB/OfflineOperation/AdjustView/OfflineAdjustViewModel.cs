@@ -699,7 +699,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             p.Patient = CurrentPrescription.Patient;
             CurrentPrescription.Patient.Check();
             CurrentPrescription = p;
-            CurrentPrescription.GetCompletePrescriptionData(true, false, false);
+            CurrentPrescription.GetCompletePrescriptionData( false, false);
             CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
@@ -708,7 +708,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
-            p.GetCompletePrescriptionData(true, true, false);
+            p.GetCompletePrescriptionData( true, false);
             MainWindow.ServerConnection.OpenConnection();
             p.Card = CurrentPrescription.Card;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
@@ -748,16 +748,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-            if (msg.Notification == nameof(PrescriptionDeclareViewModel))
-            {
-                var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
-                if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
-                CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                CurrentPrescription.CountPrescriptionPoint(true);
-                if (selected == CurrentPrescription.Medicines.Count - 1)
-                    CurrentPrescription.Medicines.Add(new Medicine());
-                Messenger.Default.Send(new NotificationMessage<int>(this, selected, "FocusDosage"));
-            }
+            if (msg.Notification != nameof(OfflineAdjustViewModel)) return;
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         #endregion
         #region GeneralFunctions

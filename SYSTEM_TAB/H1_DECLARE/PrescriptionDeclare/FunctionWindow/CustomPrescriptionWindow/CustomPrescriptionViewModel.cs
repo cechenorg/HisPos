@@ -187,7 +187,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 foreach (var p in UngetCardPrescriptions)
                 {
                     var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0], PrescriptionSource.Normal);
-                    pre.GetCompletePrescriptionData(false, false,true);
+                    pre.GetCompletePrescriptionData( false,true);
                     deposit += pre.PrescriptionPoint.Deposit;
                     ReadCard(pre);
                 }

@@ -100,7 +100,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (ID is null) return;
                 if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                     CalculateAmount();
-                CheckIsAmountReadOnly();
             }
         }
         private string _usageName;
@@ -126,7 +125,6 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
-                CheckIsAmountReadOnly();
             }
         }
         private Usage.Usage usage;//用法
@@ -183,7 +181,6 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
-                CheckIsAmountReadOnly();
             }
         }
         private double price;//售價
@@ -216,13 +213,6 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 Set(() => TotalPrice, ref totalPrice, value);
             }
-        }
-
-        private void CheckPrice()
-        {
-            if(Amount <=  0 || !PaySelf)return;
-            if (Price != TotalPrice / Amount)
-                Price = Math.Round(TotalPrice / Amount,2,MidpointRounding.AwayFromZero);
         }
 
         private double inventory;//庫存
@@ -349,15 +339,11 @@ namespace His_Pos.NewClass.Product.Medicine
                 PaySelf = true;
         }
 
-        private bool isSelected;
-
+        private bool isSelected = false;
         public bool IsSelected
         {
             get => isSelected;
-            set
-            {
-                Set(() => IsSelected, ref isSelected, value);
-            }
+            set { Set(() => IsSelected, ref isSelected, value); }
         }
         private int? controlLevel;
 
@@ -382,27 +368,11 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        private bool isAmountReadOnly;
-        public bool IsAmountReadOnly
+        public void CopyPrevious(Medicine preMed)
         {
-            get => isAmountReadOnly;
-            set
-            {
-                Set(() => IsAmountReadOnly, ref isAmountReadOnly, value);
-            }
-        }
-
-        private void CheckIsAmountReadOnly()
-        {
-            if (Usage != null && !string.IsNullOrEmpty(ID))
-            {
-                if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null && Days > 0 && Dosage != null && Dosage > 0)
-                    IsAmountReadOnly = (double)Dosage * UsagesFunction.CheckUsage((int)Days, ViewModelMainWindow.GetUsage(UsageName)) > 0;
-                else
-                    IsAmountReadOnly = false;
-            }
-            else
-                IsAmountReadOnly = false;
+            Dosage = preMed.Dosage;
+            UsageName = preMed.UsageName;
+            Days = preMed.Days;
         }
     }
 }
