@@ -29,6 +29,7 @@ using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
@@ -217,7 +218,9 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.合作診所藥品耗用):
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
-                    break; 
+                    break;
+                case nameof(FeatureItem.每日總帳報表):
+                    break;
                 case nameof(FeatureItem.系統函式):
                     break;
                 default:
@@ -339,6 +342,9 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
                     newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[5].Functions[4], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.每日總帳報表):
+                    newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[5], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

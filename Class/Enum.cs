@@ -59,7 +59,8 @@ namespace His_Pos.Class
         合作診所藥品耗用 = 23,
         部分負擔自費報表 = 24,
         系統函式 = 25,
-        管制藥品簿冊申報 = 26
+        管制藥品簿冊申報 = 26,
+        每日總帳報表 = 27
     }
 
     public enum StoreOrderProductType

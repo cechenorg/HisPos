@@ -82,7 +82,7 @@ namespace His_Pos
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare }));
+              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport }));
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
               new[] { StringRes.AdminFunction }));
         }
