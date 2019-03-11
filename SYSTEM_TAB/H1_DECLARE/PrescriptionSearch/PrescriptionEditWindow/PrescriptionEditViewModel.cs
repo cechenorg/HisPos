@@ -251,6 +251,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 if ((bool)printMedBag)
                     PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
+                if ((bool) printReceipt)
+                {
+                    EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
+                    BusyContent = StringRes.收據列印;
+                    EditedPrescription.PrintReceipt();
+                }
             };
             worker.RunWorkerAsync();
         }
