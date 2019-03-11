@@ -34,7 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand CalculateTotalPriceCommand { get; set; }
-        public RelayCommand<string> FilterOrderStatusCommand { get; set; }
+        public RelayCommand<string> FilterOrderCommand { get; set; }
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
@@ -79,6 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
+        public string SearchID { get; set; }
         #endregion
 
         public ProductPurchaseReturnViewModel()
@@ -183,10 +184,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.DeleteSelectedProduct();
         }
-        private void FilterOrderStatusAction(string filterCondition)
+        private void FilterOrderAction(string filterCondition)
         {
-            filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
-            StoreOrderCollectionView.Filter += OrderStatusFilter;
+            if(filterCondition != null)
+                filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
+            StoreOrderCollectionView.Filter += OrderFilter;
         }
         private void SplitBatchAction(string productID)
         {
@@ -206,6 +208,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void InitVariables()
         {
             IsBusy = true;
+            SearchID = "";
             
             BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -255,7 +258,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
                 StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
-                StoreOrderCollectionView.Filter += OrderStatusFilter;
+                StoreOrderCollectionView.Filter += OrderFilter;
 
                 if (!StoreOrderCollectionView.IsEmpty)
                 {
@@ -278,7 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
-            FilterOrderStatusCommand = new RelayCommand<string>(FilterOrderStatusAction);
+            FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
@@ -306,32 +309,36 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ///// Filter Functions /////
-        private bool OrderStatusFilter(object order)
+        private bool OrderFilter(object order)
         {
+            bool returnValue = true;
+
             StoreOrder tempOrder = order as StoreOrder;
+            
+            if(tempOrder.ReceiveID is null && !tempOrder.ID.Contains(SearchID))
+                returnValue = false;
+            else if(tempOrder.ReceiveID != null && !tempOrder.ReceiveID.Contains(SearchID))
+                returnValue = false;
 
             switch (filterStatus)
             {
                 case OrderFilterStatusEnum.ALL:
-                    return true;
+                    break;
                 case OrderFilterStatusEnum.UNPROCESSING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                        return true;
-                    else
-                        return false;
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))
+                        returnValue = false;
+                    break;
                 case OrderFilterStatusEnum.WAITING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.WAITING)
-                        return true;
-                    else
-                        return false;
+                    if (tempOrder.OrderStatus != OrderStatusEnum.WAITING)
+                        returnValue = false;
+                    break;
                 case OrderFilterStatusEnum.PROCESSING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-                        return true;
-                    else
-                        return false;
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                        returnValue = false;
+                    break;
             }
 
-            return false;
+            return returnValue;
         }
         #endregion
 
