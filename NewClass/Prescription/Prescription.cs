@@ -743,6 +743,7 @@ namespace His_Pos.NewClass.Prescription
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
+            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
@@ -773,7 +774,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),
-                        new ReportParameter("PatientTel", Patient.Tel)
+                        new ReportParameter("PatientTel", patientTel)
                     };
         }
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
@@ -785,6 +786,7 @@ namespace His_Pos.NewClass.Prescription
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
+            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",
@@ -803,7 +805,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
                 new ReportParameter("Division", Treatment.Division.Name),
-                new ReportParameter("PatientTel", Patient.Tel)
+                new ReportParameter("PatientTel", patientTel)
             };
         }
         #endregion
