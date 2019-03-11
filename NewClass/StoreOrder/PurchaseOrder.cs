@@ -53,7 +53,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderManufactory.ID.Equals("0"))
                 OrderProducts.SetToSingde();
 
-            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING)
+            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
                 OrderProducts.SetToProcessing();
 
             OrderProducts.SetStartEditToPrice();
