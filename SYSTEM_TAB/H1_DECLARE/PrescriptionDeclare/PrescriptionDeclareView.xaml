@@ -469,12 +469,9 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                            <RadioButton Tag="1" Content="自費調劑" Style="{StaticResource CustomerHistoryRadio}"/>
-                            <Image Width="18" Source="/Images/OrangeDot.png" />
-                            <RadioButton Tag="0" Content="處方" Style="{StaticResource CustomerHistoryRadio}"  />
-                            <Image Width="18" Source="/Images/DarkerHisDot.png" />
-                            <RadioButton Tag="2" Content="全部" Style="{StaticResource CustomerHistoryRadio}" IsChecked="True" />
-                            <Image Width="27" Margin="0,0,15,0" Source="/Images/OrangeLightBlueDot.png" />
+                            <RadioButton Tag="1" Content="已調劑" Style="{StaticResource CustomerHistoryRadio}" IsChecked="True"/>
+                            <RadioButton Tag="0" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}"/>
+                            <RadioButton Tag="2" Content="預約" Style="{StaticResource CustomerHistoryRadio}"/>
                         </StackPanel>
                         <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding ''}"
                               ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden">
