@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -152,6 +153,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool IsLowerThenOrderAmount = false;
 
+            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new {ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount)}).ToList();
+            
             foreach (var product in OrderProducts)
             {
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
@@ -159,9 +162,15 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
+            }
 
-                if (product.RealAmount + product.FreeAmount < product.OrderAmount)
+            foreach (var product in products)
+            {
+                if (product.RealAmount < product.OrderAmount)
+                {
                     IsLowerThenOrderAmount = true;
+                    break;
+                }
             }
 
             if (IsLowerThenOrderAmount)

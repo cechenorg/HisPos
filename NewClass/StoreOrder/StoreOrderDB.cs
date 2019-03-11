@@ -313,25 +313,27 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            List<PurchaseProduct> lowerProducts = orderProducts.Where(p => p.RealAmount < p.OrderAmount + p.FreeAmount).ToList();
-
-            foreach (var pro in lowerProducts)
+            var productsAmount = orderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            
+            foreach (var pro in productsAmount)
             {
-                double newOrderAmount = (pro.OrderAmount + pro.FreeAmount) - pro.RealAmount;
+                double newOrderAmount = pro.OrderAmount - pro.RealAmount;
 
+                if(newOrderAmount <= 0) continue;
+                    
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", "");
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ProductID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", newOrderAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.Price * newOrderAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", $"上次訂購量 {pro.OrderAmount + pro.FreeAmount} 到貨量 {pro.RealAmount}");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", $"上次訂購量 {pro.OrderAmount} 到貨量 {pro.RealAmount}");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
                 storeOrderDetailTable.Rows.Add(newRow);
