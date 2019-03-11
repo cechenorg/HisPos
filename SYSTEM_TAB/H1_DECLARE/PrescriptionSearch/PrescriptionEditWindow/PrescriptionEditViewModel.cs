@@ -251,6 +251,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 if ((bool)printMedBag)
                     PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
+                if ((bool) printReceipt)
+                {
+                    EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
+                    BusyContent = StringRes.收據列印;
+                    EditedPrescription.PrintReceipt();
+                }
             };
             worker.RunWorkerAsync();
         }
@@ -391,7 +397,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (!CheckSameMedicine())return;
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
-                    var error = EditedPrescription.CheckPrescriptionRule(true);
+                    var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
+                    var error = EditedPrescription.CheckPrescriptionRule(noCard);
                     if (!string.IsNullOrEmpty(error))
                     {
                         MessageWindow.ShowMessage(error, MessageType.ERROR);
@@ -412,7 +419,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 switch (viewModel)
                 {
                     case ViewModelEnum.PrescriptionSearch:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                        switch (EditedPrescription.Source)
+                        {
+                            case PrescriptionSource.Normal:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                                break;
+                            case PrescriptionSource.ChronicReserve:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"));
+                                break;
+                        }
                         break;
                     case ViewModelEnum.DeclareFileManage:
                         Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));

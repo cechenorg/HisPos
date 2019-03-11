@@ -13,7 +13,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public PrescriptionSearchView()
         {
             InitializeComponent();
-            Messenger.Default.Register<NotificationMessage>("FocusPreSearchPharmacistCombo", FocusPharmacistCombo);
         }
 
         private void MaskedTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -29,16 +28,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (e.Key == Key.Enter)
             {
-                ReleaseHospital.Focus();
-                ReleaseHospital.SelectAll();
-                e.Handled = true;
-            }
-        }
-        private void FocusPharmacistCombo(NotificationMessage msg)
-        {
-            if (msg.Notification.Equals("FocusPreSearchPharmacistCombo"))
-            {
-                PreSearchPharmacistCombo.Focus();
+                PatientNameText.Focus();
+                PatientNameText.SelectAll();
             }
         }
 
@@ -58,11 +49,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             }
         }
 
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void PatientName_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PatientIdNumberText.Focus();
+            }
+        }
+
+        private void PatientIDNumber_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 PatientBirth.Focus();
+            }
+        }
+
+        private void PatientBirthday_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PreSearchAdjustCaseCombo.Focus();
             }
         }
 

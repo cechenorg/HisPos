@@ -363,6 +363,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                         else
                         {
                             MedicalNumber = TempMedicalNumber;
+                            OriginalMedicalNumber = null;
                         }
                     }
                 }
@@ -386,6 +387,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 else
                 {
                     MedicalNumber = TempMedicalNumber;
+                    OriginalMedicalNumber = null;
                 }
             }
             return string.Empty;
