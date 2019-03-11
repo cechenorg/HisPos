@@ -81,33 +81,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => EndDate, ref endDate, value);
             }
         }
-        private string patient;
-        public string Patient
+        private string patientName;
+        public string PatientName
         {
-            get => patient;
+            get => patientName;
             set
             {
-                Set(() => Patient, ref patient, value);
-                UpdateFilter();
+                Set(() => PatientName, ref patientName, value);
             }
         }
-        private DateTime? birth;
-        public DateTime? Birth
+        private string patientIDNumber;
+        public string PatientIDNumber
         {
-            get => birth;
+            get => patientIDNumber;
             set
             {
-                Set(() => Birth, ref birth, value);
-                UpdateFilter();
+                Set(() => PatientIDNumber, ref patientIDNumber, value);
             }
         }
-        private MedicalPersonnel selectedSelectedPharmacist;
-        public MedicalPersonnel SelectedPharmacist
+        private DateTime? patientBirth;
+        public DateTime? PatientBirth
         {
-            get => selectedSelectedPharmacist;
+            get => patientBirth;
             set
             {
-                Set(() => SelectedPharmacist, ref selectedSelectedPharmacist, value);
+                Set(() => PatientBirth, ref patientBirth, value);
             }
         }
         private AdjustCase selectedAdjustCase;
@@ -117,15 +115,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
-            }
-        }
-        private Institution selectedInstitution;
-        public Institution SelectedInstitution
-        {
-            get => selectedInstitution;
-            set
-            {
-                Set(() => SelectedInstitution, ref selectedInstitution, value);
             }
         }
         private PrescriptionSearchPreview selectedPrescription;
@@ -231,8 +220,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region Commands
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
-        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
-        public RelayCommand<string> CheckInsEmpty { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
         public RelayCommand Clear { get; set; }
         #endregion
@@ -260,9 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             Search = new RelayCommand(SearchAction);
             ReserveSearch = new RelayCommand(ReserveSearchAction);
-            ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
-            CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
             Clear = new RelayCommand(ClearAction);
         }
 
@@ -274,24 +259,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region CommandActions
         private void SearchAction()
         {
-            if (StartDate is null)
-            {
-                MessageWindow.ShowMessage(StringRes.StartDateEmpty, MessageType.WARNING);
-                return;
-            }
-            if (EndDate is null)
-                EndDate = DateTime.Today;
             if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
             {
                 MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                return;
-            }
-            var end = (DateTime)EndDate;
-            var start = (DateTime)StartDate;
-            var month = (end.Year - start.Year) * 12 + (end.Month - start.Month);
-            if (month > 3)
-            {
-                MessageWindow.ShowMessage(StringRes.SearchDateOutOfRange, MessageType.WARNING);
                 return;
             }
             PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
@@ -302,7 +272,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };
@@ -331,53 +301,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void ReserveSearchAction()
         {
+            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
+            {
+                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                return;
+            }
+            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
-            //查詢預約慢箋
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetReservePrescription(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
-            MainWindow.ServerConnection.CloseConnection();
-            UpdateCollectionView();
-            SetPrescriptionsSummary(true);
-        }
-        private void GetInstitutionAction(string search)
-        {
-            if (search.Length < 4)
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
-            if (SelectedInstitution != null && !string.IsNullOrEmpty(SelectedInstitution.FullName) && search.Equals(SelectedInstitution.FullName))
+                BusyContent = StringRes.處方查詢;
+                //依條件查詢對應處方
+                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase);
+                SearchPrescriptions = previews;
+                SetPrescriptionsSummary(true);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
             {
-                Messenger.Default.Send(new NotificationMessage("FocusPreSearchPharmacistCombo"));
-                return;
-            }
-            SelectedInstitution = null;
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
-            switch (result.Count)
-            {
-                case 0:
-                    return;
-                case 1:
-                    SelectedInstitution = result[0];
-                    break;
-                default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
-                    institutionSelectionWindow.ShowDialog();
-                    Messenger.Default.Unregister(this);
-                    break;
-            }
+                IsBusy = false;
+                MainWindow.ServerConnection.CloseConnection();
+                UpdateCollectionView();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         private void ImportDeclareFileAction()
         {
             MainWindow.ServerConnection.OpenConnection();
             ImportDeclareFile();
             MainWindow.ServerConnection.CloseConnection();
-        }
-        private void CheckInsEmptyAction(string search)
-        {
-            if (string.IsNullOrEmpty(search))
-                SelectedInstitution = null;
         }
         private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
         {
@@ -387,6 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             var prescription = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
                 SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
             MainWindow.ServerConnection.CloseConnection();
+            prescription.Source = SelectedPrescription.Source;
             var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             prescriptionEdit.ShowDialog();
@@ -394,13 +349,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void ClearAction()
         {
-            SelectedInstitution = null;
             StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             EndDate = DateTime.Today;
-            SelectedPharmacist = null;
             SelectedAdjustCase = null;
-            Patient = string.Empty;
-            Birth = null;
+            PatientName = string.Empty;
+            PatientIDNumber = string.Empty;
+            PatientBirth = null;
             SearchPrescriptions.Clear();
             UpdateCollectionView();
             TotalCount = 0;
@@ -416,6 +370,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
                 SearchAction();
+            else if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"))
+            {
+                ReserveSearchAction();
+            }
         }
         #endregion
         #region Functions
@@ -425,15 +383,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
             PrescriptionCollectionView.MoveCurrentToFirst();
             SelectedPrescription = (PrescriptionSearchPreview)PrescriptionCollectionView.CurrentItem;
-        }
-        private void UpdateFilter()
-        {
-            if (PrescriptionCollectionVS is null) return;
-            PrescriptionCollectionVS.Filter += FilterByPatient;
-        }
-        private void GetSelectedInstitution(Institution ins)
-        {
-            SelectedInstitution = ins;
         }
         private void ImportDeclareFile() {
             OpenFileDialog fdlg = new OpenFileDialog();
@@ -473,41 +422,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
             }
 
-        }
-        #endregion
-        #region Filters
-        private void FilterByPatient(object sender, FilterEventArgs e)
-        {
-            if (!(e.Item is PrescriptionSearchPreview src))
-                e.Accepted = false;
-            else if (string.IsNullOrEmpty(Patient) && Birth is null)
-                e.Accepted = true;
-            else if(!string.IsNullOrEmpty(Patient) && Birth is null)
-            {
-                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient.ToUpper()))
-                    e.Accepted = true;
-                else
-                    e.Accepted = false;
-            }
-            else if (string.IsNullOrEmpty(Patient) && Birth != null)
-            {
-                if (src.Patient.Birthday != null && DateTime.Compare((DateTime)src.Patient.Birthday,(DateTime)Birth) == 0)
-                    e.Accepted = true;
-                else
-                    e.Accepted = false;
-            }
-            else if (!string.IsNullOrEmpty(Patient) && Birth != null)
-            {
-                if (src.Patient.Name.Contains(Patient) || src.Patient.IDNumber.Contains(Patient.ToUpper()))
-                {
-                    if (src.Patient.Birthday != null && DateTime.Compare((DateTime)src.Patient.Birthday, (DateTime)Birth) == 0)
-                        e.Accepted = true;
-                    else
-                        e.Accepted = false;
-                }
-                else
-                    e.Accepted = false;
-            }
         }
         #endregion
     }
