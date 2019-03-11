@@ -474,9 +474,9 @@
                         <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True" Visibility="{Binding Data.EditedPrescription.PrescriptionStatus.IsCooperative,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},Source={StaticResource proxy}}" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False"
+                                    <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
                                              FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource IsMedicineEditableConverter}}" CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
-                                             Text="{Binding BuckleAmount, Converter={StaticResource DoubleConverter},StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                             Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
                                                 <command:EventToCommand Command="{Binding DataContext.CheckDataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
