@@ -12,10 +12,19 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double realAmount;
         private double subTotal;
         private double price;
+        private bool isProcessing = false;
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
         public bool IsSingde { get; set; } = false;
-        public bool IsProcessing { get; set; } = false;
+        public bool IsProcessing
+        {
+            get { return isProcessing; }
+            set
+            {
+                Set(() => IsProcessing, ref isProcessing, value); 
+                CalculateRealPrice();
+            }
+        }
         public bool IsSelected
         {
             get { return isSelected; }
@@ -115,8 +124,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderAmount = dataRow.Field<double> ("StoOrdDet_OrderAmount");
             RealAmount = dataRow.Field<double>("StoOrdDet_RealAmount");
             FreeAmount = dataRow.Field<double>("StoOrdDet_FreeAmount");
-            Price = (double)dataRow.Field<decimal>("StoOrdDet_Price");
             SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
+            Price = (double)dataRow.Field<decimal>("StoOrdDet_Price");
             Invoice = dataRow.Field<string>("StoOrdDet_Invoice");
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
@@ -190,8 +199,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderAmount = purchaseProduct.OrderAmount;
             RealAmount = purchaseProduct.RealAmount;
             FreeAmount = purchaseProduct.FreeAmount;
-            Price = purchaseProduct.Price;
             SubTotal = purchaseProduct.SubTotal;
+            Price = purchaseProduct.Price;
             Invoice = purchaseProduct.Invoice;
             ValidDate = purchaseProduct.ValidDate;
             BatchNumber = purchaseProduct.BatchNumber;

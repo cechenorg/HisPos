@@ -55,6 +55,8 @@ namespace His_Pos.NewClass.StoreOrder
                 OrderProducts.SetToProcessing();
 
             OrderProducts.SetStartEditToPrice();
+
+            CalculateTotalPrice();
         }
 
         public override void SaveOrder()
@@ -203,6 +205,73 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        #region ----- Define Function -----
+        public void SplitBatch(string productID)
+        {
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].ID.Equals(productID))
+                {
+                    OrderProducts.Insert(x + 1, AddNewProductBySplit(OrderProducts[x]));
+                    return;
+                }
+            }
+        }
+        private PurchaseProduct AddNewProductBySplit(PurchaseProduct purchaseProduct)
+        {
+            PurchaseProduct newProduct;
+
+            if (purchaseProduct is PurchaseMedicine)
+            {
+                newProduct = new PurchaseMedicine();
+
+                (newProduct as PurchaseMedicine).IsControl = (purchaseProduct as PurchaseMedicine).IsControl;
+                (newProduct as PurchaseMedicine).IsFrozen = (purchaseProduct as PurchaseMedicine).IsFrozen;
+            }
+            else
+            {
+                newProduct = new PurchaseOTC();
+            }
+
+            newProduct.ID = purchaseProduct.ID;
+            newProduct.ChineseName = purchaseProduct.ChineseName;
+            newProduct.EnglishName = purchaseProduct.EnglishName;
+            newProduct.IsCommon = purchaseProduct.IsCommon;
+
+            newProduct.UnitName = purchaseProduct.UnitName;
+            newProduct.UnitAmount = purchaseProduct.UnitAmount;
+
+            newProduct.CopyOldProductData(purchaseProduct);
+
+            newProduct.IsFirstBatch = false;
+            newProduct.BatchNumber = "";
+
+            int leftAmount = ((int)purchaseProduct.RealAmount) % 2;
+
+            newProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2;
+            purchaseProduct.RealAmount = ((int)purchaseProduct.RealAmount) / 2 + leftAmount;
+
+            RaisePropertyChanged(nameof(ProductCount));
+
+            return newProduct;
+        }
+
+        public void MergeBatch(PurchaseProduct product)
+        {
+            if (!string.IsNullOrEmpty(product.BatchNumber))
+            {
+                MessageWindow.ShowMessage("請先將批號清除再進行合批!", MessageType.ERROR);
+                return;
+            }
+
+            PurchaseProduct originProduct = OrderProducts.Single(p => p.ID.Equals(product.ID) && p.IsFirstBatch);
+
+            originProduct.RealAmount += product.RealAmount;
+
+            OrderProducts.Remove(product);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try {
@@ -224,5 +293,6 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("更新藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
             }
         }
+        #endregion
     }
 }

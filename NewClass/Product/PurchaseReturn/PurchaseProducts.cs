@@ -9,17 +9,31 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     {
         private PurchaseProducts(DataTable dataTable)
         {
+            string lastID = "";
+            
             foreach (DataRow row in dataTable.Rows)
             {
+                PurchaseProduct purchaseProduct;
+
                 switch (row.Field<string>("TYPE"))
                 {
                     case "O":
-                        Add(new PurchaseOTC(row));
+                        purchaseProduct = new PurchaseOTC(row);
                         break;
                     case "M":
-                        Add(new PurchaseMedicine(row));
+                        purchaseProduct = new PurchaseMedicine(row);
+                        break;
+                    default:
+                        purchaseProduct = new PurchaseProduct();
                         break;
                 }
+
+                if (purchaseProduct.ID.Equals(lastID))
+                    purchaseProduct.IsFirstBatch = false;
+
+                Add(purchaseProduct);
+
+                lastID = row.Field<string>("Pro_ID");
             }
         }
         

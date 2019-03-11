@@ -12,6 +12,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
@@ -34,6 +35,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand CalculateTotalPriceCommand { get; set; }
         public RelayCommand<string> FilterOrderStatusCommand { get; set; }
+        public RelayCommand<string> SplitBatchCommand { get; set; }
+        public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -184,6 +187,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
             StoreOrderCollectionView.Filter += OrderStatusFilter;
         }
+        private void SplitBatchAction(string productID)
+        {
+            (CurrentStoreOrder as PurchaseOrder).SplitBatch(productID);
+        }
+        private void MergeBatchAction(PurchaseProduct product)
+        {
+            (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -263,6 +274,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductCommand = new RelayCommand(AddProductAction);
             CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
             FilterOrderStatusCommand = new RelayCommand<string>(FilterOrderStatusAction);
+            SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
+            MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
         }
         
         #region ///// Messenger Functions /////

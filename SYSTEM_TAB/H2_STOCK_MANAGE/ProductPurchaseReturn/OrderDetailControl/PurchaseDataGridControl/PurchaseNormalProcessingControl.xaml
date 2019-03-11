@@ -181,8 +181,8 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Width="170" Tag="NotSkip">
                                 <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"  GotFocus="UIElement_OnGotFocus" PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" KeyDown="UIElement_OnKeyDown"/>
-                                <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <!--<Button Content="合批" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi"  Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
+                                <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0"  Background="DarkRed" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding Path=DataContext.SplitBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding ID}"/>
+                                <Button Content="合批" Background="IndianRed" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi"  Visibility="{Binding IsFirstBatch, Converter={StaticResource InverseBoolToVisConverter}}" Command="{Binding Path=DataContext.MergeBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
