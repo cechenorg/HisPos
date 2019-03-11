@@ -313,7 +313,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 firstChild.Focus();
         }
 
-        private void MedicineAmount_OnKeyDown(object sender, KeyEventArgs e)
+        private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox t = sender as TextBox;
             if (e.Key == Key.Decimal)
