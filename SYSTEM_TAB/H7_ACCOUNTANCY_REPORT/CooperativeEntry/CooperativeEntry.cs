@@ -73,6 +73,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         public RelayCommand SearchCommand { get; set; } 
         #endregion
         public CooperativeEntry() {
+            CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate, EndDate);
+            CashFlow cashFlow = CooperativeClinicEntryCollection[0];
+            ClinicProfit = cashFlow != null ? (int)cashFlow.ClinicProfitValue : 0;
+            PrescriptionProfit = cashFlow != null ? (int)(cashFlow.NormalTotalPointValue + cashFlow.NormalMedicineUseValue + cashFlow.ChronicTotalPointValue + cashFlow.ChronicmedicineUseValue) : 0;
+            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue + cashFlow.PayselfMedUseValue) : 0;
             SearchCommand = new RelayCommand(SearchAction);
         }
         #region Action
@@ -82,14 +87,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
             CashFlow cashFlow = new CashFlow();
             if (CooperativeClinicEntryCollection.Count(c => c.Date.Equals(DateTime.Today)) == 0) {
                 tempcashFlows.GetCashFlowByDate(DateTime.Today, DateTime.Today);
-                cashFlow = tempcashFlows.Count(t => t.Date.Equals(DateTime.Today)) > 0 ? (CashFlow)tempcashFlows.Where(t => t.Date.Equals(DateTime.Today)) : null; 
+                cashFlow = tempcashFlows.Count(t => t.Date.Equals(DateTime.Today)) > 0 ? (CashFlow)tempcashFlows.Single(t => t.Date.Equals(DateTime.Today)) : null; 
             }
             else
-                cashFlow = CooperativeClinicEntryCollection.Count(t => t.Date.Equals(DateTime.Today)) > 0 ? (CashFlow)CooperativeClinicEntryCollection.Where(t => t.Date.Equals(DateTime.Today)) : null;
+                cashFlow = CooperativeClinicEntryCollection.Count(t => t.Date.Equals(DateTime.Today)) > 0 ? (CashFlow)CooperativeClinicEntryCollection.Single(t => t.Date.Equals(DateTime.Today)) : null;
 
             ClinicProfit = cashFlow != null ? (int)cashFlow.ClinicProfitValue : 0;
             PrescriptionProfit = cashFlow != null ? (int)(cashFlow.NormalTotalPointValue + cashFlow.NormalMedicineUseValue + cashFlow.ChronicTotalPointValue + cashFlow.ChronicmedicineUseValue) : 0;
-            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue - cashFlow.PayselfMedUseValue) : 0; 
+            PrescribeProfit = cashFlow != null ? (int)(cashFlow.PayselfAdjustValue + cashFlow.PayselfMedUseValue) : 0; 
         }
         #endregion
     }

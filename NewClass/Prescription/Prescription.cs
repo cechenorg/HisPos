@@ -414,9 +414,9 @@ namespace His_Pos.NewClass.Prescription
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionID = Medicines[medCount].PositionID;
-                temp.Amount = Medicines[medCount].Amount;
                 temp.Dosage = Medicines[medCount].Dosage;
                 temp.Days = Medicines[medCount].Days;
+                temp.Amount = Medicines[medCount].Amount;
                 temp.PaySelf = Medicines[medCount].PaySelf;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 temp.BuckleAmount = Medicines[medCount].BuckleAmount;
@@ -498,6 +498,10 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.GetDeposit(Id);
             string copayname = "部分負擔刪除";
             string payself = "自費刪除";
+
+            if (Treatment.AdjustCase.ID == "0")
+                payself = "自費調劑刪除";
+
             if (Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
             {
                 Medicines.Clear();
@@ -743,6 +747,7 @@ namespace His_Pos.NewClass.Prescription
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
+            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
@@ -754,7 +759,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                         new ReportParameter("TreatmentDate", treatmentDateChi),
                         new ReportParameter("RecId", " "), //病歷號
-                        new ReportParameter("Division",Treatment.Division.Name),
+                        new ReportParameter("Division",Treatment.Division is null ?string.Empty:Treatment.Division.Name),
                         new ReportParameter("Hospital", Treatment.Institution.Name),
                         new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
                         new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
@@ -773,7 +778,7 @@ namespace His_Pos.NewClass.Prescription
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),
-                        new ReportParameter("PatientTel", Patient.Tel)
+                        new ReportParameter("PatientTel", patientTel)
                     };
         }
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
@@ -785,6 +790,7 @@ namespace His_Pos.NewClass.Prescription
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
+            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",
@@ -802,8 +808,8 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
-                new ReportParameter("Division", Treatment.Division.Name),
-                new ReportParameter("PatientTel", Patient.Tel)
+                new ReportParameter("Division", Treatment.Division is null ?string.Empty:Treatment.Division.Name),
+                new ReportParameter("PatientTel", patientTel)
             };
         }
         #endregion
@@ -877,9 +883,10 @@ namespace His_Pos.NewClass.Prescription
                 else if (com.BuckleAmount < 0)
                     entryvalue += PrescriptionDb.ReturnInventory(com.ID, (double)com.BuckleAmount*-1, "處方調劑調整", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
             }
+
             PrescriptionDb.ProcessEntry("調劑耗用修改", "PreMasId", Id, (double)entryvalue);
             PrescriptionDb.ProcessCashFlow("部分負擔修改", "PreMasId", Id, PrescriptionPoint.CopaymentPoint - originPrescription.PrescriptionPoint.CopaymentPoint);
-            PrescriptionDb.ProcessCashFlow("自費修改", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - originPrescription.PrescriptionPoint.AmountSelfPay);
+            PrescriptionDb.ProcessCashFlow( Treatment.AdjustCase.ID == "0" ? "自費調劑修改" : "自費修改", "PreMasId", Id, PrescriptionPoint.AmountSelfPay - originPrescription.PrescriptionPoint.AmountSelfPay);
            
         }
 
@@ -1095,7 +1102,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines);
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID) && med.Dosage.Equals(m.Dosage) && med.UsageName.Equals(m.UsageName) && med.PositionID.Equals(m.PositionID)) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID)) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }

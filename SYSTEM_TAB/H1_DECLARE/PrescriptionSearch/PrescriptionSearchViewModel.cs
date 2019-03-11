@@ -276,7 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (StartDate is null)
             {
-                MessageWindow.ShowMessage(StringRes.StartDateEmpty,MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.StartDateEmpty, MessageType.WARNING);
                 return;
             }
             if (EndDate is null)
@@ -286,8 +286,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
                 return;
             }
-            var end = (DateTime) EndDate;
-            var start = (DateTime) StartDate;
+            var end = (DateTime)EndDate;
+            var start = (DateTime)StartDate;
             var month = (end.Year - start.Year) * 12 + (end.Month - start.Month);
             if (month > 3)
             {
@@ -304,11 +304,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 //依條件查詢對應處方
                 previews.GetSearchPrescriptions(StartDate, EndDate, SelectedAdjustCase, SelectedInstitution, SelectedPharmacist);
                 SearchPrescriptions = previews;
+                SetPrescriptionsSummary(false);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                SetPrescriptionsSummary(false);
                 MainWindow.ServerConnection.CloseConnection();
                 UpdateCollectionView();
             };
@@ -388,17 +388,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
             MainWindow.ServerConnection.CloseConnection();
             var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
-            //Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            //{
-            //    if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
-            //        SearchAction();
-            //});
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
             prescriptionEdit.ShowDialog();
-            //Messenger.Default.Unregister<NotificationMessage>(this, (notificationMessage) =>
-            //{
-            //    if (notificationMessage.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
-            //        SearchAction();
-            //});
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()
         {
@@ -418,6 +410,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = 0;
             CopaymentPoint = 0;
             Profit = 0;
+        }
+
+        private void Refresh(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+                SearchAction();
         }
         #endregion
         #region Functions
