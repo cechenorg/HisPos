@@ -419,7 +419,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 switch (viewModel)
                 {
                     case ViewModelEnum.PrescriptionSearch:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                        switch (EditedPrescription.Source)
+                        {
+                            case PrescriptionSource.Normal:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                                break;
+                            case PrescriptionSource.ChronicReserve:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"));
+                                break;
+                        }
                         break;
                     case ViewModelEnum.DeclareFileManage:
                         Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));

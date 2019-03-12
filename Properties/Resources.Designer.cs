@@ -201,6 +201,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 合作診所結帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string CooperativeEntryReport {
+            get {
+                return ResourceManager.GetString("CooperativeEntryReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請填寫部分負擔
         /// 的當地語系化字串。
         /// </summary>

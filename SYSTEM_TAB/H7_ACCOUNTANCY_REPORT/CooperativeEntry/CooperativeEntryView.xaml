@@ -63,7 +63,7 @@
                 <Label Content="現金結帳"  FontFamily="Segoe UI Semibold" FontSize="18"  Foreground="{StaticResource ForeGround}" />
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
-                <DataGrid ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                <DataGrid Height="300" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -165,7 +165,7 @@
                 </DataGrid>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="10,10,0,0">
-                <Label Content="今日總結"  FontFamily="Segoe UI Semibold" FontSize="18"  Foreground="{StaticResource ForeGround}" />
+                <Label Content="總結"  FontFamily="Segoe UI Semibold" FontSize="18"  Foreground="{StaticResource ForeGround}" />
                 <Rectangle Width="260"/>
             </StackPanel>
             <StackPanel Orientation="Vertical"  Grid.Row="2" Grid.Column="1" Margin="10,10,10,0"  Background="{StaticResource GridBackGround}">
@@ -197,7 +197,7 @@
                 <Label Content="處方毛利"  FontFamily="Segoe UI Semibold" FontSize="18"  Foreground="{StaticResource ForeGround}" />
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
-                <DataGrid ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                <DataGrid Height="370" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -295,7 +295,7 @@
                 <Label Content="合作處方毛利"  FontFamily="Segoe UI Semibold" FontSize="18"  Foreground="{StaticResource ForeGround}" />
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,10,10,0">
-                <DataGrid ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                <DataGrid Height="370" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
