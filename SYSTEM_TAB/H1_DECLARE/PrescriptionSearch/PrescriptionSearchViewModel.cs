@@ -278,24 +278,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (!CheckCondition()) return;
             if(!CheckStartDate()) return;
-            if (StartDate is null && EndDate != null)
-            {
-                MessageWindow.ShowMessage("請填寫起始日期", MessageType.WARNING);
-                return;
-            }
-            if (StartDate != null && EndDate is null)
-            {
-                MessageWindow.ShowMessage("請填寫結束日期", MessageType.WARNING);
-                return;
-            }
-            if (StartDate != null && EndDate != null)
-            {
-                if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
-                {
-                    MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                    return;
-                }
-            }
+            if (!CheckEndDate()) return;
+            if(!CheckDateOutOfRange()) return;
             PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
@@ -335,6 +319,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (!CheckCondition()) return;
             if (!CheckStartDate()) return;
+            if (!CheckEndDate()) return;
+            if (!CheckDateOutOfRange()) return;
             PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
@@ -469,6 +455,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 MessageWindow.ShowMessage("請填寫起始日期", MessageType.WARNING);
                 return false;
+            }
+            return true;
+        }
+        private bool CheckEndDate()
+        {
+            if (StartDate != null && EndDate is null)
+            {
+                MessageWindow.ShowMessage("請填寫結束日期", MessageType.WARNING);
+                return false;
+            }
+            return true;
+        }
+        private bool CheckDateOutOfRange()
+        {
+            if (StartDate != null && EndDate != null)
+            {
+                if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
+                {
+                    MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                    return false;
+                }
             }
             return true;
         }
