@@ -12,18 +12,18 @@ namespace His_Pos.NewClass.Prescription.Search
     public class PrescriptionSearchPreviews:ObservableCollection<PrescriptionSearchPreview>
     {
 
-        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj)
         {
-            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, adj, ins, pharmacist);
+            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName,patientIDNumber,patientBirth,adj);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r,PrescriptionSource.Normal));
             }
         }
 
-        public void GetReservePrescription(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        public void GetReservePrescription(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj)
         {
-            var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, adj, ins, pharmacist);
+            var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionSource.ChronicReserve));

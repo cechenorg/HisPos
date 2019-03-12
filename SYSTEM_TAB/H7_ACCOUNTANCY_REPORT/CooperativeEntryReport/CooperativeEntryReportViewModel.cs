@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
-    public class CashStockEntryReportViewModel : TabBase {
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport {
+    public class CooperativeEntryReportViewModel: TabBase  {
         #region Variables
-        public override TabBase getTab() {
+        public override TabBase getTab()
+        {
             return this;
-        } 
+        }
         private DateTime startDate = DateTime.Today;
         public DateTime StartDate
         {
@@ -44,13 +45,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         #region Command
         public RelayCommand SearchCommand { get; set; }
         #endregion
-        public CashStockEntryReportViewModel() {
+        public CooperativeEntryReportViewModel()
+        {
             CashflowCollection.GetCashFlowByDate(StartDate, EndDate);
             SearchCommand = new RelayCommand(SearchAction);
         }
         #region Action
-        private void SearchAction() {
-            CashflowCollection.GetCashFlowByDate(StartDate,EndDate);
+        private void SearchAction()
+        {
+            CashflowCollection.GetCashFlowByDate(StartDate, EndDate);
         }
         #endregion
     }

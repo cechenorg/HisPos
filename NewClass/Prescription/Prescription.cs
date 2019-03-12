@@ -1104,7 +1104,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines);
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID)) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }
