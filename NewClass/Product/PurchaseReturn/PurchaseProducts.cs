@@ -5,8 +5,9 @@ using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseProducts : ObservableCollection<PurchaseProduct>
+    public class PurchaseProducts : ObservableCollection<PurchaseProduct>, ICloneable
     {
+        private PurchaseProducts() { }
         private PurchaseProducts(DataTable dataTable)
         {
             string lastID = "";
@@ -24,7 +25,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         purchaseProduct = new PurchaseMedicine(row);
                         break;
                     default:
-                        purchaseProduct = new PurchaseProduct();
+                        purchaseProduct = null;
                         break;
                 }
 
@@ -69,6 +70,15 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             foreach (var product in Items)
                 product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
+        }
+        public object Clone()
+        {
+            PurchaseProducts products = new PurchaseProducts();
+
+            foreach (var product in Items)
+                products.Add(product.Clone() as PurchaseProduct);
+
+            return products;
         }
     }
 }

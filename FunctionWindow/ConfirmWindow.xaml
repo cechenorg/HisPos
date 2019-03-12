@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.Service"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Topmost="True"
         Width="350" Height="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Closing="Window_Closing">
     <Grid Name="MainGrid">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">

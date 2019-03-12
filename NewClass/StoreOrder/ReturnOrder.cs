@@ -12,37 +12,134 @@ namespace His_Pos.NewClass.StoreOrder
     public class ReturnOrder: StoreOrder
     {
         #region ----- Define Variables -----
-        private ReturnProducts orderProducts;
+        private ReturnProducts returnProducts;
 
-        public ReturnProducts OrderProducts
+        public ReturnProducts ReturnProducts
         {
-            get { return orderProducts; }
-            set { Set(() => OrderProducts, ref orderProducts, value); }
+            get { return returnProducts; }
+            set { Set(() => ReturnProducts, ref returnProducts, value); }
         }
         public int ProductCount
         {
             get
             {
-                if (OrderProducts is null) return initProductCount;
-                else return OrderProducts.Count;
+                if (ReturnProducts is null) return initProductCount;
+                else return ReturnProducts.Count;
             }
         }
         #endregion
 
+        private ReturnOrder() { }
         public ReturnOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.RETURN;
         }
 
         #region ----- Override Function -----
+
+        #region ///// Check Function /////
+        protected override bool CheckUnProcessingOrder()
+        {
+            if (ReturnProducts.Count == 0)
+            {
+                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
+                return false;
+            }
+
+            foreach (var product in ReturnProducts)
+            {
+                if (product.ReturnAmount == 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    return false;
+                }
+                else if (product.ReturnAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
+                else if (product.ReturnAmount > product.Inventory)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
+
+            return (bool)confirmWindow.DialogResult;
+        }
+        protected override bool CheckNormalProcessingOrder()
+        {
+            throw new NotImplementedException();
+        }
+        protected override bool CheckSingdeProcessingOrder()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
+
+            return (bool)confirmWindow.DialogResult;
+        }
+        #endregion
+
+        #region ///// Product Function /////
         public override void CalculateTotalPrice()
         {
-            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
         }
         public override void GetOrderProducts()
         {
-            OrderProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
         }
+        public override void SetProductToProcessingStatus()
+        {
+            //ReturnProducts.SetToProcessing();
+        }
+        public override void AddProductByID(string iD, bool isFromAddButton)
+        {
+            if (ReturnProducts.Count(p => p.ID == iD) > 0)
+            {
+                MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
+                return;
+            }
+
+            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
+
+            ReturnProduct returnProduct;
+
+            switch (dataTable.Rows[0].Field<string>("TYPE"))
+            {
+                case "O":
+                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
+                    break;
+                case "M":
+                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
+                    break;
+                default:
+                    returnProduct = null;
+                    break;
+            }
+
+            if (SelectedItem is PurchaseProduct && !isFromAddButton)
+            {
+                int selectedProductIndex = ReturnProducts.IndexOf((ReturnProduct)SelectedItem);
+
+                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
+
+                ReturnProducts.RemoveAt(selectedProductIndex);
+                ReturnProducts.Insert(selectedProductIndex, returnProduct);
+            }
+            else
+                ReturnProducts.Add(returnProduct);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
+        public override void DeleteSelectedProduct()
+        {
+            ReturnProducts.Remove((ReturnProduct)SelectedItem);
+
+            RaisePropertyChanged(nameof(ProductCount));
+        }
+        #endregion
 
         public override void SaveOrder()
         {
@@ -56,95 +153,20 @@ namespace His_Pos.NewClass.StoreOrder
 
             backgroundWorker.RunWorkerAsync();
         }
-
-        public override void AddProductByID(string iD, bool isFromAddButton)
+        public override object Clone()
         {
-            if (OrderProducts.Count(p => p.ID == iD) > 0)
-            {
-                MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
-                return;
-            }
+            ReturnOrder returnOrder = new ReturnOrder();
 
-            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
-            
-            ReturnProduct returnProduct;
+            returnOrder.CloneBaseData(this);
 
-            switch (dataTable.Rows[0].Field<string>("TYPE"))
-            {
-                case "O":
-                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
-                    break;
-                case "M":
-                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
-                    break;
-                default:
-                    returnProduct = new ReturnProduct();
-                    break;
-            }
+            returnOrder.ReturnProducts = ReturnProducts.Clone() as ReturnProducts;
 
-            if (SelectedItem is PurchaseProduct && !isFromAddButton)
-            {
-                int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
-
-                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
-
-                OrderProducts.RemoveAt(selectedProductIndex);
-                OrderProducts.Insert(selectedProductIndex, returnProduct);
-            }
-            else
-                OrderProducts.Add(returnProduct);
-
-            RaisePropertyChanged(nameof(ProductCount));
-        }
-
-        protected override bool CheckUnProcessingOrder()
-        {
-            if (OrderProducts.Count == 0)
-            {
-                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
-                return false;
-            }
-
-            foreach (var product in OrderProducts)
-            {
-                if (product.ReturnAmount == 0)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
-                    return false;
-                }
-                else if (product.ReturnAmount < 0)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
-                    return false;
-                }
-            }
-
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
-
-            return (bool)confirmWindow.DialogResult;
-        }
-
-        protected override bool CheckNormalProcessingOrder()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override bool CheckSingdeProcessingOrder()
-        {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow.DialogResult;
-        }
-
-        public override void DeleteSelectedProduct()
-        {
-            OrderProducts.Remove((ReturnProduct)SelectedItem);
-
-            RaisePropertyChanged(nameof(ProductCount));
+            return returnOrder;
         }
         #endregion
 
         #region ----- Define Function -----
+
         #endregion
     }
 }
