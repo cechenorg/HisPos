@@ -20,7 +20,6 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
-using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using StringRes = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
