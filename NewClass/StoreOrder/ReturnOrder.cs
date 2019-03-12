@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
@@ -46,7 +47,14 @@ namespace His_Pos.NewClass.StoreOrder
         public override void SaveOrder()
         {
             ReturnOrder returnOrder = this.Clone() as ReturnOrder;
-            StoreOrderDB.SaveReturnOrder(returnOrder);
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SaveReturnOrder(returnOrder);
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         public override void AddProductByID(string iD, bool isFromAddButton)
@@ -104,9 +112,14 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
                     return false;
                 }
+                else if (product.ReturnAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "", true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
 
             return (bool)confirmWindow.DialogResult;
         }
@@ -118,7 +131,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckSingdeProcessingOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成" + (OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單?\n(資料內容將不能修改)", "", true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
 
             return (bool)confirmWindow.DialogResult;
         }

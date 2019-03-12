@@ -10,6 +10,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public bool IsFrozen { get; set; }
         #endregion
 
+        public PurchaseMedicine() { }
+
         public PurchaseMedicine(DataRow dataRow) : base(dataRow)
         {
             IsControl = dataRow.Field<byte?>("Med_Control");

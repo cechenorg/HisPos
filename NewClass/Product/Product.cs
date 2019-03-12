@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
-            Common = row.Field<bool>("Pro_IsCommon");
+            IsCommon = row.Field<bool>("Pro_IsCommon");
         }
 
         public Product(ProductStruct p)
@@ -48,15 +48,15 @@ namespace His_Pos.NewClass.Product
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
-        private bool common;//常備品項
-        public bool Common
+        private bool isCommon;//常備品項
+        public bool IsCommon
         {
-            get => common;
+            get => isCommon;
             set
             {
-                if (common != value)
+                if (isCommon != value)
                 {
-                    Set(() => Common, ref common, value);
+                    Set(() => IsCommon, ref isCommon, value);
                 }
             }
         }
