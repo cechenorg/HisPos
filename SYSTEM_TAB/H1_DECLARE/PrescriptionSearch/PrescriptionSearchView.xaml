@@ -35,7 +35,7 @@
                             <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
-                                    <service:DateValidationRule/>
+                                    <service:NullDateValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </xctk:MaskedTextBox.Text>
@@ -47,7 +47,7 @@
                             <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
-                                    <service:DateValidationRule/>
+                                    <service:NullDateValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </xctk:MaskedTextBox.Text>
@@ -63,7 +63,7 @@
                             <Binding Path="PatientBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
-                                    <service:DateValidationRule/>
+                                    <service:NullDateValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </xctk:MaskedTextBox.Text>
@@ -76,6 +76,10 @@
                     <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
+                    <Label Content="藥品健保碼" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Name="MedicineID" Text="{Binding MedicineID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
+                    <Label Content="藥品名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Name="MedicineName" Text="{Binding MedicineName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
                     <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="1290,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
