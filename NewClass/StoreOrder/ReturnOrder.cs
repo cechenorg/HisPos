@@ -58,6 +58,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
+                else if (product.ReturnAmount > product.Inventory)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
+                    return false;
+                }
             }
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
