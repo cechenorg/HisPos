@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -11,9 +12,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public override object Clone()
         {
-            PurchaseOTC purchaseOtc = new PurchaseOTC();
+            PurchaseOTC purchaseOtc = this.DeepCloneViaJson();
 
-            purchaseOtc.CloneBaseData(this);
+            //purchaseOtc.CloneBaseData(this);
 
             return purchaseOtc;
         }

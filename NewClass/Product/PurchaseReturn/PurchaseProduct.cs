@@ -30,13 +30,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return isSelected; }
             set { Set(() => IsSelected, ref isSelected, value); }
         }
-        public double Inventory { get; }
+        public double Inventory { get; private set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
-        public int SafeAmount { get; }
-        public int BasicAmount { get; }
-        public double OnTheWayAmount { get; }
-        public double LastPrice { get; }
+        public int SafeAmount { get; private set; }
+        public int BasicAmount { get; private set; }
+        public double OnTheWayAmount { get; private set; }
+        public double LastPrice { get; private set; }
         public double OrderAmount
         {
             get { return orderAmount; }
@@ -210,18 +210,18 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public abstract object Clone();
 
-        protected void CloneBaseData(PurchaseProduct purchaseProduct)
-        {
-            ID = purchaseProduct.ID;
-            ChineseName = purchaseProduct.ChineseName;
-            EnglishName = purchaseProduct.EnglishName;
-            ID = purchaseProduct.ID;
-            ID = purchaseProduct.ID;
-            ID = purchaseProduct.ID;
-            ID = purchaseProduct.ID;
-            ID = purchaseProduct.ID;
-            ID = purchaseProduct.ID;
-        }
+        //protected void CloneBaseData(PurchaseProduct purchaseProduct)
+        //{
+        //    ID = purchaseProduct.ID;
+        //    ChineseName = purchaseProduct.ChineseName;
+        //    EnglishName = purchaseProduct.EnglishName;
+        //    Inventory = purchaseProduct.Inventory;
+        //    UnitName = purchaseProduct.UnitName;
+        //    UnitAmount = purchaseProduct.UnitAmount;
+        //    SafeAmount = purchaseProduct.SafeAmount;
+        //    BasicAmount = purchaseProduct.BasicAmount;
+        //    OnTheWayAmount = purchaseProduct.OnTheWayAmount;
+        //}
 
         #endregion
     }

@@ -14,7 +14,7 @@
                     <TextBlock Name="Message" VerticalAlignment="Center" TextAlignment="Center" FontSize="18" FontFamily="Segoe UI Semi" TextWrapping="Wrap"/>
                 </ScrollViewer>
             </StackPanel>
-            <Button Name="OkButton" Margin="10" Content="OK" Click="ButtonBase_OnClick" Focusable="True" Background="RoyalBlue" BorderThickness="0"/>
+            <Button Name="OkButton" Margin="10" Content="OK" Click="ButtonBase_OnClick" Focusable="True" Background="DarkSlateBlue" BorderThickness="0"/>
         </StackPanel>
     </Grid>
 </Window>

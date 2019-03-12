@@ -12,19 +12,19 @@ namespace His_Pos.NewClass.StoreOrder
     public class ReturnOrder: StoreOrder
     {
         #region ----- Define Variables -----
-        private ReturnProducts orderProducts;
+        private ReturnProducts returnProducts;
 
-        public ReturnProducts OrderProducts
+        public ReturnProducts ReturnProducts
         {
-            get { return orderProducts; }
-            set { Set(() => OrderProducts, ref orderProducts, value); }
+            get { return returnProducts; }
+            set { Set(() => ReturnProducts, ref returnProducts, value); }
         }
         public int ProductCount
         {
             get
             {
-                if (OrderProducts is null) return initProductCount;
-                else return OrderProducts.Count;
+                if (ReturnProducts is null) return initProductCount;
+                else return ReturnProducts.Count;
             }
         }
         #endregion
@@ -40,13 +40,13 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Check Function /////
         protected override bool CheckUnProcessingOrder()
         {
-            if (OrderProducts.Count == 0)
+            if (ReturnProducts.Count == 0)
             {
                 MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
                 return false;
             }
 
-            foreach (var product in OrderProducts)
+            foreach (var product in ReturnProducts)
             {
                 if (product.ReturnAmount == 0)
                 {
@@ -79,15 +79,15 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Product Function /////
         public override void CalculateTotalPrice()
         {
-            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
         }
         public override void GetOrderProducts()
         {
-            OrderProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
         }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
-            if (OrderProducts.Count(p => p.ID == iD) > 0)
+            if (ReturnProducts.Count(p => p.ID == iD) > 0)
             {
                 MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
                 return;
@@ -106,27 +106,27 @@ namespace His_Pos.NewClass.StoreOrder
                     returnProduct = new ReturnMedicine(dataTable.Rows[0]);
                     break;
                 default:
-                    returnProduct = new ReturnProduct();
+                    returnProduct = null;
                     break;
             }
 
             if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
-                int selectedProductIndex = OrderProducts.IndexOf((ReturnProduct)SelectedItem);
+                int selectedProductIndex = ReturnProducts.IndexOf((ReturnProduct)SelectedItem);
 
                 returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
 
-                OrderProducts.RemoveAt(selectedProductIndex);
-                OrderProducts.Insert(selectedProductIndex, returnProduct);
+                ReturnProducts.RemoveAt(selectedProductIndex);
+                ReturnProducts.Insert(selectedProductIndex, returnProduct);
             }
             else
-                OrderProducts.Add(returnProduct);
+                ReturnProducts.Add(returnProduct);
 
             RaisePropertyChanged(nameof(ProductCount));
         }
         public override void DeleteSelectedProduct()
         {
-            OrderProducts.Remove((ReturnProduct)SelectedItem);
+            ReturnProducts.Remove((ReturnProduct)SelectedItem);
 
             RaisePropertyChanged(nameof(ProductCount));
         }
@@ -150,6 +150,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             returnOrder.CloneBaseData(this);
 
+            returnOrder.ReturnProducts = ReturnProducts.Clone() as ReturnProducts;
 
             return returnOrder;
         }

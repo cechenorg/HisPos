@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -20,12 +21,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public override object Clone()
         {
-            PurchaseMedicine purchaseMedicine = new PurchaseMedicine();
+            PurchaseMedicine purchaseMedicine = this.DeepCloneViaJson();
 
-            purchaseMedicine.CloneBaseData(this);
+            //purchaseMedicine.CloneBaseData(this);
 
-            purchaseMedicine.IsControl = IsControl;
-            purchaseMedicine.IsFrozen = IsFrozen;
+            //purchaseMedicine.IsControl = IsControl;
+            //purchaseMedicine.IsFrozen = IsFrozen;
 
             return purchaseMedicine;
         }
