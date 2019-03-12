@@ -79,7 +79,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         #region Action
         private void SearchAction() {
             CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate, EndDate);
-            CashFlow cashFlow = new CashFlow();
+            ClinicProfit = 0;
+            PrescriptionProfit = 0;
+            PrescribeProfit = 0;
             foreach (CashFlow c in CooperativeClinicEntryCollection)
             {
                 ClinicProfit += (int)c.ClinicProfitValue;
