@@ -71,10 +71,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         #endregion
         #region Command
         public RelayCommand SearchCommand { get; set; } 
+        public RelayCommand ShowPrescriptionPointCommand { get; set; }
+        public RelayCommand ShowCashFlowCommand { get; set; }
         #endregion
         public CooperativeEntry() {
             SearchAction(); 
             SearchCommand = new RelayCommand(SearchAction);
+            ShowPrescriptionPointCommand = new RelayCommand(ShowPrescriptionPointAction);
+            ShowCashFlowCommand = new RelayCommand(ShowCashFlowAction);
         }
         #region Action
         private void SearchAction() {
@@ -88,6 +92,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
                 PrescriptionProfit += (int)(c.NormalTotalPointValue + c.NormalMedicineUseValue + c.ChronicTotalPointValue + c.ChronicmedicineUseValue);
                 PrescribeProfit += (int)(c.PayselfAdjustValue + c.PayselfMedUseValue);
             }
+        }
+        private void ShowPrescriptionPointAction() {
+
+        }
+        private void ShowCashFlowAction() {
+
         }
         #endregion
     }
