@@ -62,7 +62,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         }
         private void ConfirmAddAction()
         {
-            if (!PurchaseOrderManufactory.ID.Equals("0") && OrderType == OrderTypeEnum.RETURN)
+            if ((!ReturnOrderManufactory.ID.Equals("0")) && OrderType == OrderTypeEnum.RETURN)
             {
                 MessageWindow.ShowMessage("非杏德退貨功能尚未完成!", MessageType.ERROR);
                 return;

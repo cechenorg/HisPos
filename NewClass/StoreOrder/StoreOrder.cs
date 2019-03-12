@@ -105,6 +105,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void AddProductByID(string iD, bool isFromAddButton);
         public abstract void DeleteSelectedProduct();
         public abstract void CalculateTotalPrice();
+        public abstract void SetProductToProcessingStatus();
         public abstract object Clone();
         #endregion
 
@@ -148,6 +149,7 @@ namespace His_Pos.NewClass.StoreOrder
             SaveOrder();
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
             ReceiveID = ID;
+            SetProductToProcessingStatus();
 
             StoreOrderDB.StoreOrderToNormalProcessing(ID);
         }

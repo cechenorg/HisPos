@@ -30,6 +30,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return isSelected; }
             set { Set(() => IsSelected, ref isSelected, value); }
         }
+        public ProductStartInputVariableEnum StartInputVariable
+        {
+            get { return startInputVariable; }
+            set { Set(() => StartInputVariable, ref startInputVariable, value); }
+        }
         public double Inventory { get; private set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
@@ -56,24 +61,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             }
         }
         public double FreeAmount { get; set; }
-        public double Price
-        {
-            get { return price; }
-            set
-            {
-                if (value == 0.0)
-                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                else
-                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
-
-                Set(() => Price, ref price, value);
-
-                if(IsProcessing)
-                    CalculateRealPrice();
-                else
-                    CalculatePrice();
-            }
-        }
         public double SubTotal
         {
             get { return subTotal; }
@@ -92,7 +79,24 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculatePrice();
             }
         }
+        public double Price
+        {
+            get { return price; }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
 
+                Set(() => Price, ref price, value);
+
+                if (IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
+            }
+        }
         public string Invoice { get; set; }
         public DateTime? ValidDate { get; set; }
         public string BatchNumber { get; set; }
@@ -102,12 +106,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SingdePackageAmount { get; } 
         public double SingdePackagePrice { get; }
         public double SingdePrice { get; }
-
-        public ProductStartInputVariableEnum StartInputVariable
-        {
-            get { return startInputVariable; }
-            set { Set(() => StartInputVariable, ref startInputVariable, value); }
-        }
         #endregion
 
         public PurchaseProduct() : base() {}

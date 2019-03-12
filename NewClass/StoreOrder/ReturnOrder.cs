@@ -90,6 +90,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
         }
+        public override void SetProductToProcessingStatus()
+        {
+            //ReturnProducts.SetToProcessing();
+        }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (ReturnProducts.Count(p => p.ID == iD) > 0)

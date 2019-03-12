@@ -123,6 +123,12 @@ namespace His_Pos.NewClass.StoreOrder
         {
             TotalPrice = OrderProducts.Sum(p => p.SubTotal);
         }
+
+        public override void SetProductToProcessingStatus()
+        {
+            OrderProducts.SetToProcessing();
+        }
+
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
@@ -253,6 +259,7 @@ namespace His_Pos.NewClass.StoreOrder
             newProduct.CopyOldProductData(purchaseProduct);
 
             newProduct.IsFirstBatch = false;
+            newProduct.IsProcessing = true;
             newProduct.BatchNumber = "";
 
             int leftAmount = ((int)purchaseProduct.RealAmount) % 2;
