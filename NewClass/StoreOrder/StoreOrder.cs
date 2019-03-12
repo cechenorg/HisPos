@@ -104,6 +104,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void AddProductByID(string iD, bool isFromAddButton);
         public abstract void DeleteSelectedProduct();
         public abstract void CalculateTotalPrice();
+        public abstract object Clone();
         #endregion
 
         #region ///// Status Function /////
@@ -261,11 +262,6 @@ namespace His_Pos.NewClass.StoreOrder
 
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
             return dataTable.Rows[0].Field<bool>("RESULT");
-        }
-
-        public object Clone()
-        {
-            return this;
         }
 
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)

@@ -35,6 +35,47 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         #region ----- Override Function -----
+
+        #region ///// Check Function /////
+        protected override bool CheckUnProcessingOrder()
+        {
+            if (OrderProducts.Count == 0)
+            {
+                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
+                return false;
+            }
+
+            foreach (var product in OrderProducts)
+            {
+                if (product.ReturnAmount == 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    return false;
+                }
+                else if (product.ReturnAmount < 0)
+                {
+                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
+
+            return (bool)confirmWindow.DialogResult;
+        }
+        protected override bool CheckNormalProcessingOrder()
+        {
+            throw new NotImplementedException();
+        }
+        protected override bool CheckSingdeProcessingOrder()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
+
+            return (bool)confirmWindow.DialogResult;
+        }
+        #endregion
+
+        #region ///// Product Function /////
         public override void CalculateTotalPrice()
         {
             TotalPrice = OrderProducts.Sum(p => p.SubTotal);
@@ -43,21 +84,6 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
         }
-
-        public override void SaveOrder()
-        {
-            ReturnOrder returnOrder = this.Clone() as ReturnOrder;
-            StoreOrderDB.SaveReturnOrder(returnOrder);
-            //BackgroundWorker backgroundWorker = new BackgroundWorker();
-
-            //backgroundWorker.DoWork += (sender, args) =>
-            //{
-            //    StoreOrderDB.SaveReturnOrder(returnOrder);
-            //};
-
-            //backgroundWorker.RunWorkerAsync();
-        }
-
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (OrderProducts.Count(p => p.ID == iD) > 0)
@@ -67,7 +93,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
-            
+
             ReturnProduct returnProduct;
 
             switch (dataTable.Rows[0].Field<string>("TYPE"))
@@ -97,46 +123,6 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
-
-        protected override bool CheckUnProcessingOrder()
-        {
-            if (OrderProducts.Count == 0)
-            {
-                MessageWindow.ShowMessage("退貨單中不可以沒有商品!", MessageType.ERROR);
-                return false;
-            }
-
-            foreach (var product in OrderProducts)
-            {
-                if (product.ReturnAmount == 0)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
-                    return false;
-                }
-                else if (product.ReturnAmount < 0)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
-                    return false;
-                }
-            }
-
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
-
-            return (bool)confirmWindow.DialogResult;
-        }
-
-        protected override bool CheckNormalProcessingOrder()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override bool CheckSingdeProcessingOrder()
-        {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow.DialogResult;
-        }
-
         public override void DeleteSelectedProduct()
         {
             OrderProducts.Remove((ReturnProduct)SelectedItem);
@@ -145,7 +131,26 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        public override void SaveOrder()
+        {
+            ReturnOrder returnOrder = this.Clone() as ReturnOrder;
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                StoreOrderDB.SaveReturnOrder(returnOrder);
+            };
+
+            backgroundWorker.RunWorkerAsync();
+        }
+        public override object Clone()
+        {
+            return this;
+        }
+        #endregion
+
         #region ----- Define Function -----
+
         #endregion
     }
 }
