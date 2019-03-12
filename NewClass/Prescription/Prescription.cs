@@ -857,8 +857,10 @@ namespace His_Pos.NewClass.Prescription
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
-                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).Amount : orm.Amount;
-                    medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID) > 0 ? Medicines.Single(m => m.ID == orm.ID).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
+                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)) > 0 
+                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)).Amount : orm.Amount;
+                    medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)) > 0 
+                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
                     compareMeds.Add(medicine);
                 }
                
@@ -866,7 +868,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var nem in Medicines) {
                 if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
                 {
-                    if (originPrescription.Medicines.Count(m => m.ID == nem.ID) == 0)
+                    if (originPrescription.Medicines.Count(m => m.ID == nem.ID && m.UsageName.Equals(nem.UsageName) && m.Days.Equals(nem.Days)) == 0)
                     {
                         Medicine medicine = new Medicine();
                         medicine.ID = nem.ID;
