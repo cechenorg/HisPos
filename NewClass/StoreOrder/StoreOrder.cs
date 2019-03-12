@@ -53,6 +53,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        protected StoreOrder() { }
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -278,7 +279,23 @@ namespace His_Pos.NewClass.StoreOrder
                     return null;
             }
         }
+        protected void CloneBaseData(StoreOrder storeOrder)
+        {
+            ID = storeOrder.ID;
+            ReceiveID = storeOrder.ReceiveID;
+            OrderStatus = storeOrder.OrderStatus;
+            OrderType = storeOrder.OrderType;
+            OrderManufactory = storeOrder.OrderManufactory.Clone() as Manufactory.Manufactory;
+            OrderWarehouse = storeOrder.OrderWarehouse.Clone() as WareHouse.WareHouse;
+            OrderEmployeeName = storeOrder.OrderEmployeeName;
+            ReceiveEmployeeName = storeOrder.ReceiveEmployeeName;
+            CreateDateTime = storeOrder.CreateDateTime;
+            DoneDateTime = storeOrder.DoneDateTime;
+            Note = storeOrder.Note;
+            TotalPrice = storeOrder.TotalPrice;
 
+            initProductCount = storeOrder.initProductCount;
+        }
         #endregion
     }
 }

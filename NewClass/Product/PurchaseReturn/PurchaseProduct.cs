@@ -4,7 +4,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseProduct : Product, IDeletableProduct
+    public abstract class PurchaseProduct : Product, IDeletableProduct, ICloneable
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
@@ -111,7 +111,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         #endregion
 
         public PurchaseProduct() : base() {}
-
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
             Inventory = dataRow.Field<double>("Inv_Inventory");
@@ -193,7 +192,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             StartInputVariable = startInputVariable;
         }
-
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
         {
             OrderAmount = purchaseProduct.OrderAmount;
@@ -209,6 +207,22 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             IsSingde = purchaseProduct.IsSingde;
             StartInputVariable = purchaseProduct.StartInputVariable;
         }
+
+        public abstract object Clone();
+
+        protected void CloneBaseData(PurchaseProduct purchaseProduct)
+        {
+            ID = purchaseProduct.ID;
+            ChineseName = purchaseProduct.ChineseName;
+            EnglishName = purchaseProduct.EnglishName;
+            ID = purchaseProduct.ID;
+            ID = purchaseProduct.ID;
+            ID = purchaseProduct.ID;
+            ID = purchaseProduct.ID;
+            ID = purchaseProduct.ID;
+            ID = purchaseProduct.ID;
+        }
+
         #endregion
     }
 }

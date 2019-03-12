@@ -29,6 +29,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        private ReturnOrder() { }
         public ReturnOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.RETURN;
@@ -145,7 +146,12 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public override object Clone()
         {
-            return this;
+            ReturnOrder returnOrder = new ReturnOrder();
+
+            returnOrder.CloneBaseData(this);
+
+
+            return returnOrder;
         }
         #endregion
 

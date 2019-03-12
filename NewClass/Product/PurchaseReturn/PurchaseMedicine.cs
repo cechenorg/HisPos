@@ -17,5 +17,17 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             IsControl = dataRow.Field<byte?>("Med_Control");
             IsFrozen = dataRow.Field<bool>("Med_IsFrozen");
         }
+
+        public override object Clone()
+        {
+            PurchaseMedicine purchaseMedicine = new PurchaseMedicine();
+
+            purchaseMedicine.CloneBaseData(this);
+
+            purchaseMedicine.IsControl = IsControl;
+            purchaseMedicine.IsFrozen = IsFrozen;
+
+            return purchaseMedicine;
+        }
     }
 }

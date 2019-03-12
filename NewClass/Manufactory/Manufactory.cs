@@ -1,9 +1,10 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Manufactory
 {
-    public class Manufactory : ObservableObject
+    public class Manufactory : ObservableObject, ICloneable
     {
         protected Manufactory() { }
         public Manufactory(DataRow row)
@@ -53,5 +54,18 @@ namespace His_Pos.NewClass.Manufactory
             get { return  string.IsNullOrEmpty(NickName)? Name : NickName ; }
         }
         #endregion
+
+        public object Clone()
+        {
+            Manufactory manufactory = new Manufactory();
+
+            manufactory.ID = ID;
+            manufactory.Name = Name;
+            manufactory.NickName = NickName;
+            manufactory.Telephone = Telephone;
+
+            return manufactory;
+        }
+
     }
 }

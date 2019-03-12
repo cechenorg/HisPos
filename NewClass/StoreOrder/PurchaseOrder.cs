@@ -34,6 +34,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        private PurchaseOrder() { }
         public PurchaseOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.PURCHASE;
@@ -158,7 +159,7 @@ namespace His_Pos.NewClass.StoreOrder
                     purchaseProduct = new PurchaseMedicine(dataTable.Rows[0]);
                     break;
                 default:
-                    purchaseProduct = new PurchaseProduct();
+                    purchaseProduct = null;
                     break;
             }
 
@@ -200,7 +201,14 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public override object Clone()
         {
-            return this;
+            PurchaseOrder purchaseOrder = new PurchaseOrder();
+
+            purchaseOrder.CloneBaseData(this);
+
+            purchaseOrder.OrderProducts = OrderProducts.Clone() as PurchaseProducts;
+            purchaseOrder.PatientData = PatientData;
+            
+            return purchaseOrder;
         }
         #endregion
 
