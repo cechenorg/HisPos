@@ -2,6 +2,8 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.StoreOrder;
 
@@ -60,6 +62,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         }
         private void ConfirmAddAction()
         {
+            if (!PurchaseOrderManufactory.ID.Equals("0") && OrderType == OrderTypeEnum.RETURN)
+            {
+                MessageWindow.ShowMessage("非杏德退貨功能尚未完成!", MessageType.ERROR);
+                return;
+            }
+
             MainWindow.ServerConnection.OpenConnection();
             NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.CloseConnection();
