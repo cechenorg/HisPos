@@ -143,13 +143,6 @@ namespace His_Pos.NewClass.Person.Customer
             CheckIDNumber()+
             CheckName();
         }
-
-        public string CheckGender()
-        {
-            if (IDNumber is null) return " ";
-            Gender = IDNumber[1].Equals('2') ? Properties.Resources.Female : Properties.Resources.Male;
-            return Gender;
-        }
         public int Count()
         {
             var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");

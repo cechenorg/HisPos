@@ -20,7 +20,6 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
-using MedicalPersonnel = His_Pos.NewClass.Person.MedicalPerson.MedicalPersonnel;
 using StringRes = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
@@ -216,6 +215,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private string medicineID;
+        public string MedicineID
+        {
+            get => medicineID;
+            set
+            {
+                Set(() => MedicineID, ref medicineID, value);
+            }
+        }
+        private string medicineName;
+        public string MedicineName
+        {
+            get => medicineName;
+            set
+            {
+                Set(() => MedicineName, ref medicineName, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
@@ -240,8 +257,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
-            StartDate = new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
-            EndDate = DateTime.Today;
+            StartDate = null;
+            EndDate = null;
         }
         private void InitialCommands()
         {
@@ -259,11 +276,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region CommandActions
         private void SearchAction()
         {
-            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
-            {
-                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                return;
-            }
+            if (!CheckCondition()) return;
+            if(!CheckStartDate()) return;
+            if (!CheckEndDate()) return;
+            if(!CheckDateOutOfRange()) return;
             PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
@@ -272,7 +288,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };
@@ -301,11 +317,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void ReserveSearchAction()
         {
-            if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
-            {
-                MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                return;
-            }
+            if (!CheckCondition()) return;
+            if (!CheckStartDate()) return;
+            if (!CheckEndDate()) return;
+            if (!CheckDateOutOfRange()) return;
             PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
@@ -314,7 +329,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase);
+                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(true);
             };
@@ -349,12 +364,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void ClearAction()
         {
-            StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            EndDate = DateTime.Today;
+            StartDate = null;
+            EndDate = null;
             SelectedAdjustCase = null;
             PatientName = string.Empty;
             PatientIDNumber = string.Empty;
             PatientBirth = null;
+            MedicineID = string.Empty;
+            MedicineName = string.Empty;
             SearchPrescriptions.Clear();
             UpdateCollectionView();
             TotalCount = 0;
@@ -421,7 +438,46 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 PrescriptionDb.ImportDeclareXml(ddatasCollection, declareFiles, fileId);
                 MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
             }
+        }
+        private bool CheckCondition()
+        {
+            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName))
+            {
+                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品健保碼.藥品名稱請至少擇一填寫", MessageType.WARNING);
+                return false;
+            }
+            return true;
+        }
 
+        private bool CheckStartDate()
+        {
+            if (StartDate is null && EndDate != null)
+            {
+                MessageWindow.ShowMessage("請填寫起始日期", MessageType.WARNING);
+                return false;
+            }
+            return true;
+        }
+        private bool CheckEndDate()
+        {
+            if (StartDate != null && EndDate is null)
+            {
+                MessageWindow.ShowMessage("請填寫結束日期", MessageType.WARNING);
+                return false;
+            }
+            return true;
+        }
+        private bool CheckDateOutOfRange()
+        {
+            if (StartDate != null && EndDate != null)
+            {
+                if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
+                {
+                    MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
     }
