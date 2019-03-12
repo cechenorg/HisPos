@@ -891,6 +891,10 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml.cs">
       <DependentUpon>CooperativeAdjustReportView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntryReport\CooperativeEntryReport.xaml.cs">
+      <DependentUpon>CooperativeEntryReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntryReport\CooperativeEntryReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntry.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
@@ -1412,6 +1416,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntryReport\CooperativeEntryReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

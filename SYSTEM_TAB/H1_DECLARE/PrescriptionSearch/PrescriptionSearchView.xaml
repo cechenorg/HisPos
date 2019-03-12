@@ -52,36 +52,15 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" Margin="0,0,10,0" />
-                    <TextBox Name="ReleaseHospital" Width="375" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" materialDesign:HintAssist.Hint="輸入院所代碼"
-                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
-                        </TextBox.InputBindings>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding CheckInsEmpty}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <Label Content="藥師" Style="{StaticResource BoldLabelContent18}" Margin="10"/>
-                    <ComboBox Name="PreSearchPharmacistCombo" Margin="0,0,10,0" Width="100" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" PreviewKeyDown="PreSearchPharmacistCombo_PreviewKeyDown"/>
-                    <Label Content="案件" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <ComboBox Name="PreSearchAdjustCaseCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PreSearchAdjustCaseCombo_PreviewKeyDown"/>
-                    <Button Name="SearchButton" Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="22,0,0,0"/>
-                    <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
-                    <Label Content="病患篩選" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Text="{Binding Patient,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130"  FontSize="16" Height="35" materialDesign:HintAssist.Hint="輸入姓名或身分證" HorizontalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                    <Label Content="病患生日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="病患姓名" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Name="PatientNameText" Text="{Binding PatientName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
+                    <Label Content="身分證" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Name="PatientIdNumberText" Text="{Binding PatientIDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="100" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientIDNumber_PreviewKeyDown"/>
+                    <Label Content="生日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
                     <xctk:MaskedTextBox Name="PatientBirth" Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="PatientBirthday_PreviewKeyDown">
                         <xctk:MaskedTextBox.Text>
-                            <Binding Path="Birth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                            <Binding Path="PatientBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>
                                     <service:DateValidationRule/>
@@ -89,7 +68,15 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="825,0,10,0"/>
+                    <Label Content="案件" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
+                    <ComboBox Name="PreSearchAdjustCaseCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
+                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PreSearchAdjustCaseCombo_PreviewKeyDown"/>
+                    <Button Name="SearchButton" Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="50,0,0,0"/>
+                    <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
+                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="1290,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >

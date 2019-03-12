@@ -52,7 +52,7 @@
             <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="NotScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
-            <Label Content="{Binding OrderManufactory.NickName}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+            <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <Label Content="處理單已作廢" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>

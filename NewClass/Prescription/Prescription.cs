@@ -220,21 +220,7 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Institution.UpdateUsedTime();
             return PrescriptionDb.InsertPrescription(this, details);
         }
-      
-        public void UpdateReserve() {
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
-                CountMedicineDays();//計算最大給藥日份
 
-            CheckMedicalServiceData();//確認藥事服務資料
-            var details = SetPrescriptionDetail();//產生藥品資料
-            PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
-            PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                           PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-            PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
-            CreateDeclareFileContent(details);//產生申報資料
-            Treatment.Institution.UpdateUsedTime();
-            PrescriptionDb.UpdateReserve(this, details);
-        }
         public List<Pdata> SetPrescriptionDetail()
         {
             var details = new List<Pdata>();
@@ -371,9 +357,6 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(medicine);
             } 
         }
-        public void DeleteReserve() {
-            PrescriptionDb.DeleteReserve(SourceId);
-        }
         public void PredictResere() {
             PrescriptionDb.PredictResere(Id);
         }
@@ -471,14 +454,16 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Institution.UpdateUsedTime();
             PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), Remark.Substring(0, 16));
         }
-        public void Delete() {
-            if (Id == 0)
+        public void Delete()
+        {
+            switch (Source)
             {
-                PrescriptionDb.DeleteReserve(SourceId);
-            }
-            else
-            {
-                PrescriptionDb.DeletePrescription(Id);
+                default:
+                    PrescriptionDb.DeletePrescription(Id);
+                    break;
+                case PrescriptionSource.ChronicReserve:
+                    PrescriptionDb.DeleteReserve(SourceId);
+                    break;
             }
             if (!PrescriptionStatus.IsAdjust) return;
 
@@ -657,6 +642,14 @@ namespace His_Pos.NewClass.Prescription
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var cusGender = Patient.CheckGender();
+            int copaymentPoint = PrescriptionPoint.CopaymentPoint;
+            int actualReceive = PrescriptionPoint.ActualReceive;
+            if (PrescriptionStatus.IsCooperativeVIP)
+            {
+                copaymentPoint = 0;
+                actualReceive = PrescriptionPoint.ActualReceive - PrescriptionPoint.CopaymentPoint;
+            }
+
             if (Treatment.AdjustCase.ID.Equals("0"))
             {
                 var birth = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true);
@@ -697,11 +690,11 @@ namespace His_Pos.NewClass.Prescription
                     new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
                     new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
                     new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
-                    new ReportParameter("CopaymentCost", PrescriptionPoint.CopaymentPoint.ToString()),
+                    new ReportParameter("CopaymentCost", copaymentPoint.ToString()),
                     new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
                     new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
-                    new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
-                    new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
+                    new ReportParameter("ActualReceive", actualReceive.ToString()),
+                    new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(actualReceive))
                 };
                 rptViewer.LocalReport.SetParameters(parameters);
             }
@@ -845,7 +838,16 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
                 CreateDeclareFileContent(details);//產生申報資料
             }
-            PrescriptionDb.UpdatePrescription(this, details); 
+            Treatment.Institution.UpdateUsedTime();
+            switch (Source)
+            {
+                default:
+                    PrescriptionDb.UpdatePrescription(this, details);
+                    break;
+                case PrescriptionSource.ChronicReserve:
+                    PrescriptionDb.UpdateReserve(this, details);
+                    break;
+            }
         }
         public void AdjustMedicines(Prescription originPrescription)
         {
@@ -917,7 +919,7 @@ namespace His_Pos.NewClass.Prescription
                 med.ID = m.ID;
                 med.EnglishName = m.EnglishName;
                 med.ChineseName = m.ChineseName;
-                med.Common = m.Common;
+                med.IsCommon = m.IsCommon;
                 med.Price = m.Price;
                 med.BuckleAmount = m.BuckleAmount;
                 p.Medicines.Add(med);
@@ -1102,7 +1104,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines);
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID)) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }

@@ -57,7 +57,7 @@ namespace His_Pos.Database
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             while (connection.State == ConnectionState.Executing)
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
 
             var table = new DataTable();
             try

@@ -1238,7 +1238,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case PrescriptionSource.Cooperative:
                     CurrentPrescription.Medicines.SetBuckle(false);
-                    CurrentPrescription.CooperativeAdjust(false);
+                    CurrentPrescription.CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:
                     CurrentPrescription.ChronicAdjust(true);
