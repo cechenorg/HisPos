@@ -135,6 +135,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
             DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
@@ -146,6 +148,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
             DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
         }

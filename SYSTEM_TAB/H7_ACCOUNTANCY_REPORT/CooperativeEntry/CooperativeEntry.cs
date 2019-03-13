@@ -71,21 +71,33 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         #endregion
         #region Command
         public RelayCommand SearchCommand { get; set; } 
+        public RelayCommand ShowPrescriptionPointCommand { get; set; }
+        public RelayCommand ShowCashFlowCommand { get; set; }
         #endregion
         public CooperativeEntry() {
             SearchAction(); 
             SearchCommand = new RelayCommand(SearchAction);
+            ShowPrescriptionPointCommand = new RelayCommand(ShowPrescriptionPointAction);
+            ShowCashFlowCommand = new RelayCommand(ShowCashFlowAction);
         }
         #region Action
         private void SearchAction() {
             CooperativeClinicEntryCollection.GetCashFlowByDate(StartDate, EndDate);
-            CashFlow cashFlow = new CashFlow();
+            ClinicProfit = 0;
+            PrescriptionProfit = 0;
+            PrescribeProfit = 0;
             foreach (CashFlow c in CooperativeClinicEntryCollection)
             {
                 ClinicProfit += (int)c.ClinicProfitValue;
                 PrescriptionProfit += (int)(c.NormalTotalPointValue + c.NormalMedicineUseValue + c.ChronicTotalPointValue + c.ChronicmedicineUseValue);
                 PrescribeProfit += (int)(c.PayselfAdjustValue + c.PayselfMedUseValue);
             }
+        }
+        private void ShowPrescriptionPointAction() {
+
+        }
+        private void ShowCashFlowAction() {
+
         }
         #endregion
     }

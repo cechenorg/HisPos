@@ -4,7 +4,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseProduct : Product, IDeletableProduct
+    public abstract class PurchaseProduct : Product, IDeletableProduct, ICloneable
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
@@ -30,13 +30,18 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return isSelected; }
             set { Set(() => IsSelected, ref isSelected, value); }
         }
-        public double Inventory { get; }
+        public ProductStartInputVariableEnum StartInputVariable
+        {
+            get { return startInputVariable; }
+            set { Set(() => StartInputVariable, ref startInputVariable, value); }
+        }
+        public double Inventory { get; private set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
-        public int SafeAmount { get; }
-        public int BasicAmount { get; }
-        public double OnTheWayAmount { get; }
-        public double LastPrice { get; }
+        public int SafeAmount { get; private set; }
+        public int BasicAmount { get; private set; }
+        public double OnTheWayAmount { get; private set; }
+        public double LastPrice { get; private set; }
         public double OrderAmount
         {
             get { return orderAmount; }
@@ -56,24 +61,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             }
         }
         public double FreeAmount { get; set; }
-        public double Price
-        {
-            get { return price; }
-            set
-            {
-                if (value == 0.0)
-                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                else
-                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
-
-                Set(() => Price, ref price, value);
-
-                if(IsProcessing)
-                    CalculateRealPrice();
-                else
-                    CalculatePrice();
-            }
-        }
         public double SubTotal
         {
             get { return subTotal; }
@@ -92,7 +79,24 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculatePrice();
             }
         }
+        public double Price
+        {
+            get { return price; }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
 
+                Set(() => Price, ref price, value);
+
+                if (IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
+            }
+        }
         public string Invoice { get; set; }
         public DateTime? ValidDate { get; set; }
         public string BatchNumber { get; set; }
@@ -102,16 +106,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SingdePackageAmount { get; } 
         public double SingdePackagePrice { get; }
         public double SingdePrice { get; }
-
-        public ProductStartInputVariableEnum StartInputVariable
-        {
-            get { return startInputVariable; }
-            set { Set(() => StartInputVariable, ref startInputVariable, value); }
-        }
         #endregion
 
         public PurchaseProduct() : base() {}
-
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
             Inventory = dataRow.Field<double>("Inv_Inventory");
@@ -193,7 +190,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             StartInputVariable = startInputVariable;
         }
-
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
         {
             OrderAmount = purchaseProduct.OrderAmount;
@@ -209,6 +205,22 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             IsSingde = purchaseProduct.IsSingde;
             StartInputVariable = purchaseProduct.StartInputVariable;
         }
+
+        public abstract object Clone();
+
+        //protected void CloneBaseData(PurchaseProduct purchaseProduct)
+        //{
+        //    ID = purchaseProduct.ID;
+        //    ChineseName = purchaseProduct.ChineseName;
+        //    EnglishName = purchaseProduct.EnglishName;
+        //    Inventory = purchaseProduct.Inventory;
+        //    UnitName = purchaseProduct.UnitName;
+        //    UnitAmount = purchaseProduct.UnitAmount;
+        //    SafeAmount = purchaseProduct.SafeAmount;
+        //    BasicAmount = purchaseProduct.BasicAmount;
+        //    OnTheWayAmount = purchaseProduct.OnTheWayAmount;
+        //}
+
         #endregion
     }
 }

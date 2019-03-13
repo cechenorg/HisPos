@@ -4,7 +4,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class ReturnProduct : Product, IDeletableProduct
+    public abstract class ReturnProduct : Product, IDeletableProduct, ICloneable
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
@@ -58,5 +58,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SubTotal = returnProduct.SubTotal;
             ValidDate = returnProduct.ValidDate;
         }
+
+        public abstract object Clone();
     }
 }

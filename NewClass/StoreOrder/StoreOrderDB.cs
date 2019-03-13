@@ -165,7 +165,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
-            foreach (var pro in r.OrderProducts)
+            foreach (var pro in r.ReturnProducts)
             {
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", r.ID);
@@ -537,7 +537,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-                foreach (var product in ((ReturnOrder)storeOrder).OrderProducts)
+                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
                 {
                     if (product.ID.Length > 12)
                         orderMedicines += product.ID.Substring(0, 12);
