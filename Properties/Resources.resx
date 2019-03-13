@@ -533,8 +533,8 @@
   <data name="免收確認" xml:space="preserve">
     <value>免收確認</value>
   </data>
-  <data name="免收部分負擔" xml:space="preserve">
-    <value>是否免收部分負擔?</value>
+  <data name="收部分負擔" xml:space="preserve">
+    <value>是否收部分負擔?</value>
   </data>
   <data name="藥袋列印" xml:space="preserve">
     <value>藥袋列印中...</value>

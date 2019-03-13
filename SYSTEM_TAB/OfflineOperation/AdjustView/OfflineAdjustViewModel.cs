@@ -1167,8 +1167,8 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 
         private void CheckIsCooperativeVIP()
         {
-            var isVip = new ConfirmWindow(StringRes.免收部分負擔, StringRes.免收確認);
-            CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
+            var isVip = new ConfirmWindow(StringRes.收部分負擔, StringRes.免收確認);
+            CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)!isVip.DialogResult;
         }
 
         private void PrintMedBag(bool noCard, bool printMedBag, bool? printSingle, bool printReceipt)
