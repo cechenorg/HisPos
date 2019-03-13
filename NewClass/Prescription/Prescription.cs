@@ -983,7 +983,8 @@ namespace His_Pos.NewClass.Prescription
                 case "1":
                 case "3":
                     Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
-                    Treatment.Copayment = VM.GetCopayment("I20");
+                    if(!CheckFreeCopayment())
+                        Treatment.Copayment = VM.GetCopayment("I20");
                     break;
                 case "2":
                     Treatment.PrescriptionCase = VM.GetPrescriptionCases("04");

@@ -188,6 +188,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                 root.Element("ddata")?.Element("decId")?.Remove();
                 document = XDocument.Load(root.CreateReader());
                 document.Root?.RemoveAttributes();
+                document.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
                 result = document;
             }
             var declareFileId = DeclareFileDb.InsertDeclareFile(result, this).Rows[0].Field<int>("DecFile_ID");
