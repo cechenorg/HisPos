@@ -31,6 +31,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -626,7 +627,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-                PrescriptionDb.ProcessCashFlow("退還押金", "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
+                string depositName = EditedPrescription.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+
+                PrescriptionDb.ProcessCashFlow(depositName, "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
                 EditedPrescription.PrescriptionStatus.UpdateStatus(EditedPrescription.Id);
                 MainWindow.ServerConnection.CloseConnection();
                 CheckEditStatus();
