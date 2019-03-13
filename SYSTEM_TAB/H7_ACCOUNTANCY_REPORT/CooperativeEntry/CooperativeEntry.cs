@@ -13,6 +13,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
             return this;
         }
         #region Var
+        private CashFlow selectItem;
+        public CashFlow SelectItem {
+            get => selectItem;
+            set
+            {
+                Set(() => SelectItem, ref selectItem, value);
+            }
+        }
         private CashFlows cooperativeClinicEntryCollection = new CashFlows();
         public CashFlows CooperativeClinicEntryCollection
         {
@@ -94,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
             }
         }
         private void ShowPrescriptionPointAction() {
-
+            PrescriptionPointDetail.PrescriptionPointDetail prescriptionPointDetail = new PrescriptionPointDetail.PrescriptionPointDetail(SelectItem.Date); 
         }
         private void ShowCashFlowAction() {
 

@@ -485,6 +485,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.GetDeposit(Id);
             string copayname = "部分負擔刪除";
             string payself = "自費刪除";
+            string deposit = "押金刪除";
 
             if (Treatment.AdjustCase.ID == "0")
                 payself = "自費調劑刪除";
@@ -495,6 +496,7 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
                 copayname = "合作" + copayname;
                 payself = "合作" + payself;
+                deposit = "合作" + deposit;
             } 
 
             if(PrescriptionPoint.CopaymentPoint != 0)
@@ -502,7 +504,7 @@ namespace His_Pos.NewClass.Prescription
             if(PrescriptionPoint.AmountSelfPay != 0)
                 PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
             if (PrescriptionPoint.Deposit != 0)
-                PrescriptionDb.ProcessCashFlow("押金刪除", "PreMasId", Id, PrescriptionPoint.Deposit * -1);
+                PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", Id, PrescriptionPoint.Deposit * -1);
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯

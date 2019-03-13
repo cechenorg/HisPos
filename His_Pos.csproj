@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>18</ApplicationRevision>
+    <ApplicationRevision>22</ApplicationRevision>
     <ApplicationVersion>2.0.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -444,6 +444,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
+    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
@@ -899,6 +902,10 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml.cs">
+      <DependentUpon>PrescriptionPointDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetailViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1424,6 +1431,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
