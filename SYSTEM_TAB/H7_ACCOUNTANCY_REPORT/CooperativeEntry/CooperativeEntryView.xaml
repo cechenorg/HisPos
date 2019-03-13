@@ -65,7 +65,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
                 <DataGrid Height="300" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
+                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding ShowCashFlowCommand}"/>
@@ -204,7 +204,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
                 <DataGrid Height="370" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
+                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding ShowPrescriptionPointCommand}"/>
