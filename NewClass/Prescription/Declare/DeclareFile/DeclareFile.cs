@@ -230,7 +230,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D37 = p.MedicalServiceID;
             D38 = details.Single(pd => pd.P1.Equals("9")).P9;
             D43 = t.OriginalMedicalNumber;
-            D44 = DateTimeExtensions.NullableDateToTWCalender(p.Card.NewBornBirthday, false);
+            if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
+                D44 = p.Card.NewBornBirthday;
             Pdata = new List<Pdata>();
             Pdata = details;
         }
