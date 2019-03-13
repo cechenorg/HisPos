@@ -258,8 +258,12 @@ namespace His_Pos.ChromeTabViewModel
             }
             if (Usages.Count(u => u.Reg != null && u.Reg.IsMatch(usage)) != 0)
             {
-                result = Usages.Where(u => u.Reg != null).SingleOrDefault(u => u.Reg.IsMatch(usage)).DeepCloneViaJson();
-                result.Name = name;
+                var resultList = Usages.Where(u => u.Reg != null).Where(u => u.Reg.IsMatch(usage));
+                foreach (var r in resultList)
+                {
+                    var re = r.DeepCloneViaJson();
+                    result.Name += re.Name; 
+                }
                 if (name.Contains("AC") || name.Contains("PC"))
                 {
                     if (name.Contains("AC"))

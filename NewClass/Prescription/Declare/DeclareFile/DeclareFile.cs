@@ -98,7 +98,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 tempList.Add(p.FileContent);
             }
 
-            foreach (var g in tempList.GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
+            foreach (var g in tempList.OrderBy(d => int.Parse(d.Dhead.D1)).GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
             {
                 var serial = 1;
                 foreach (var ddata in g)

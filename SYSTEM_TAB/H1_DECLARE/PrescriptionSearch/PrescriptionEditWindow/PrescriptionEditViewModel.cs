@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -10,7 +9,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
