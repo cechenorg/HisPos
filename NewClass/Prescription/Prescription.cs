@@ -183,6 +183,8 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "009"://其他免負擔
                 case "I22"://免收
+                case "003"://低收入戶
+                case "004"://榮民
                     return true;
             }
             switch (Treatment.PrescriptionCase.ID)
@@ -557,7 +559,7 @@ namespace His_Pos.NewClass.Prescription
                             Treatment.Copayment = VM.GetCopayment("I20");
                     }
                 }
-                if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
+                if (Treatment.Copayment != null && !CheckFreeCopayment())
                     PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
                 else
                 {
@@ -815,6 +817,10 @@ namespace His_Pos.NewClass.Prescription
                 Patient = cus;
                 Patient.Check();
                 PrescriptionStatus.IsGetCard = true;
+                if (Card.InsuranceMark.Equals("2"))
+                    Treatment.Copayment = VM.GetCopayment("004");
+                else if (Card.InsuranceMark.Equals("1"))
+                    Treatment.Copayment = VM.GetCopayment("003");
             }
             return success;
         }
