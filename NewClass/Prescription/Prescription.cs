@@ -183,6 +183,8 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "009"://其他免負擔
                 case "I22"://免收
+                case "003"://免收
+                case "004"://免收
                     return true;
             }
             switch (Treatment.PrescriptionCase.ID)
