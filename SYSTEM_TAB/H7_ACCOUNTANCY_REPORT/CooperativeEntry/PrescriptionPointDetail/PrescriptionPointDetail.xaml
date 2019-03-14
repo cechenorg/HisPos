@@ -7,7 +7,7 @@
         mc:Ignorable="d"
           xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:service="clr-namespace:His_Pos.Service"
-        Title="排除合作診所調劑處方詳細" Height="450" Width="800">
+        Title="排除合作診所調劑處方詳細" Height="450" Width="1050">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -55,6 +55,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Width="150" Header="院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding InsName}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Width="100" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivisionName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -88,6 +96,14 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="100" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedUse}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="100" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

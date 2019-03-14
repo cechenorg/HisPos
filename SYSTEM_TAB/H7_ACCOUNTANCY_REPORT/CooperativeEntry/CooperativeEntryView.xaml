@@ -266,7 +266,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="一般箋總點數" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding NormalTotalPointValue}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn Width="100" Header="一般總點數" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding NormalTotalPointValue}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -274,7 +274,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="一般箋調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NormalMedicineUseValue}">
+                        <DataGridTextColumn Width="130" Header="一般調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NormalMedicineUseValue}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

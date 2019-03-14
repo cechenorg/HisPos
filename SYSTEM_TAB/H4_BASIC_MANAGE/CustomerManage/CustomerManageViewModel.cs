@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
+using System;
 using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
@@ -17,8 +19,22 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
+        public RelayCommand SearchCommand { get; set; }
+        public RelayCommand ClearCommand { get; set; }
         #endregion
         #region ----- Define Variables -----
+        private string textCusName;
+        public string TextCusName
+        {
+            get { return textCusName; }
+            set { Set(() => TextCusName, ref textCusName, value); }
+        }
+        private DateTime? textCusBirthDay;
+        public DateTime? TextCusBirthDay
+        {
+            get { return textCusBirthDay; }
+            set { Set(() => TextCusBirthDay, ref textCusBirthDay, value); }
+        }
         public bool btnCancelEnable;
         public bool BtnCancelEnable
         {
@@ -44,7 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             set { Set(() => ChangeForeground, ref changeForeground, value); }
         }
         
-        public Customers customerCollection;
+        public Customers customerCollection = new Customers();
         public Customers CustomerCollection
         {
             get { return customerCollection; }
@@ -67,14 +83,32 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             }
         }
         #endregion
-        public CustomerManageViewModel() {
-            InitData();
+        public CustomerManageViewModel() { 
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
             SubmitCommand = new RelayCommand(SubmitAction);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+            SearchCommand = new RelayCommand(SearchAction);
+            ClearCommand = new RelayCommand(ClearAction);
         }
         #region Action
+        private void ClearAction() {
+            TextCusName = string.Empty;
+            TextCusBirthDay = null;
+        }
+        private void SearchAction() {
+            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null) {
+                MessageWindow.ShowMessage("姓名與生日其一不可為空",Class.MessageType.WARNING);
+                return;
+            }
+
+            MainWindow.ServerConnection.OpenConnection(); 
+            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay);
+            MainWindow.ServerConnection.CloseConnection();
+            if (CustomerCollection.Count > 0)
+                Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
+            InitDataChanged(); 
+        }
         public void SelectionChangedAction()
         {
             if (Customer is null) return;
@@ -105,17 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         }
         #endregion
 
-        #region Function
-        public void InitData()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            CustomerCollection = new Customers();
-            CustomerCollection.Init();
-            MainWindow.ServerConnection.CloseConnection();
-            if (CustomerCollection.Count > 0)
-                Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
-            InitDataChanged();
-        }
+        #region Function 
         private void DataChanged()
         {
               
