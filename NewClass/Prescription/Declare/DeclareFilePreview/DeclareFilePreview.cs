@@ -197,7 +197,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
             {
                 presIDList.Add(p.ID);
             }
-            DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, presIDList);
+            //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, presIDList);
             //匯出xml檔案
             Function.ExportXml(result, "匯出申報XML檔案");
         }

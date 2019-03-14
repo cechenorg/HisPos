@@ -88,6 +88,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Tdata = new Tdata(selectedFile);
             List<Ddata> tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
+            var dd = new List<Ddata>();
             foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))
             {
                 foreach (var pdata in p.FileContent.Dbody.Pdata)
@@ -104,8 +105,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 foreach (var ddata in g)
                 {
                     ddata.Dhead.D2 = serial.ToString().PadLeft(6,'0');
-                    Ddata.Add(ddata);
+                    dd.Add(ddata);
                     serial++;
+                }
+            }
+
+            for (int i = 1; i <= 4; i++)
+            {
+                foreach (Ddata d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
+                {
+                    Ddata.Add(d);
                 }
             }
         }

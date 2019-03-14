@@ -36,6 +36,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             {
                 p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);
                 p.FileContent = XmlService.Deserialize<Ddata>(p.FileContentStr);
+                for (int i = 1; i <= p.FileContent.Dbody.Pdata.Count; i++)
+                {
+                    p.FileContent.Dbody.Pdata[i-1].P10 = (i.ToString()).PadLeft(3, '0');
+                }
             }
         }
     }
