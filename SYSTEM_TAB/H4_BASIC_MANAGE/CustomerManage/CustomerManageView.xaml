@@ -12,8 +12,9 @@
              mc:Ignorable="d"  
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="839" d:DesignWidth="1365">
+ 
     <UserControl.Resources>
-        <service:DateConverter x:Key="DateConverter"/>
+        <service:NullableDateConverter x:Key="NullableDateConverter" /> 
         <DataTemplate x:Key="CustomerManageViewModel" DataType="{x:Type local:CustomerManageViewModel}">
             <local:CustomerManageView/>
         </DataTemplate>
@@ -24,12 +25,26 @@
     <Viewbox Stretch="Fill">  
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="55"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0"  Margin="10,10,10,10">
-                <TextBox  Name="EmpId" Margin="10,0,10,0" Width="200" FontSize="16" materialDesign:HintAssist.Hint="輸入員工編號或姓名"  FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="1000"/> 
+                <Label Content="顧客姓名" FontSize="18"/>
+                <TextBox  Text="{Binding TextCusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,10,0" Width="150" FontSize="16"    FontFamily="Segoe UI Semibold"/>
+                <Label Content="顧客生日" FontSize="18"/>
+                <xctk:MaskedTextBox Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite"  >
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="TextCusBirthDay" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:NullDateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Button Content="查詢" Command="{Binding SearchCommand}" FontFamily="Segoe UI Semibold" Background="RoyalBlue" />
+                <Button Content="清除" Command="{Binding ClearCommand}" FontFamily="Segoe UI Semibold" Margin="10,0,10,0"  Background="Gray"  />
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -61,7 +76,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="50">
                                             <Label Content="{Binding Name,UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                            <Label Content="{Binding Birthday,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateConverter}}" Width="200" Foreground="Black"  FontSize="18" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Birthday,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}" Width="200" Foreground="Black"  FontSize="18" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -114,7 +129,7 @@
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" Margin="10,0,0,0">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="Customer.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>

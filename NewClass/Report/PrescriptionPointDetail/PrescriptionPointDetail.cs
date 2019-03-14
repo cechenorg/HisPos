@@ -16,18 +16,23 @@ namespace His_Pos.NewClass.Report.PrescriptionPointDetail
             CusName = r.Field<string>("Cus_Name");
             DivisionName = r.Field<string>("Div_Name");
             AdjustCaseName = r.Field<string>("Adj_Name");
+            InsName = r.Field<string>("Ins_Name");
             Point = (double)r.Field<decimal>("Point");
+            Profit = r.Field<double>("Profit");
             MedUse = r.Field<double>("Meduse");
             TreatmentDate = r.Field<DateTime>("PreMas_TreatmentDate");
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate"); 
+
         }
 
         public int PrescriptionId { get; set; }
         public string CusName { get; set; }
         public string DivisionName { get; set; }
         public string AdjustCaseName { get; set; }
+        public string InsName { get; set; }
         public double Point { get; set; }
         public double MedUse { get; set; }
+        public double Profit { get; set; }
         public DateTime TreatmentDate { get; set; }
         public DateTime AdjustDate { get; set; }
     }

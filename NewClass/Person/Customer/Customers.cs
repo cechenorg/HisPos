@@ -1,4 +1,5 @@
 ﻿using His_Pos.NewClass.Prescription.ImportDeclareXml;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -25,6 +26,15 @@ namespace His_Pos.NewClass.Person.Customer
             {
                 Add(new Customer(r));
             }
+        }
+        public void GetDataByNameOrBirth(string name,DateTime? date) {
+            Clear();
+            var table = CustomerDb.GetDataByNameOrBirth(name, date);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new Customer(r));
+            }
+            
         }
         public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas) {
             DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
