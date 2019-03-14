@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Report.PrescriptionPointDetail
             DivisionName = r.Field<string>("Div_Name");
             AdjustCaseName = r.Field<string>("Adj_Name");
             Point = (double)r.Field<decimal>("Point");
-            MedUse = (double)r.Field<decimal>("Meduse");
+            MedUse = r.Field<double>("Meduse");
             TreatmentDate = r.Field<DateTime>("PreMas_TreatmentDate");
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate"); 
         }

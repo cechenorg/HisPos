@@ -308,8 +308,8 @@ namespace His_Pos.NewClass.StoreOrder
         public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try {
-                PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData);
-                StoreOrderDB.StoreOrderToWaiting(newstoordId);
+                if(PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData))
+                    StoreOrderDB.StoreOrderToWaiting(newstoordId);
             }
             catch (Exception ex) {
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送",MessageType.ERROR);
