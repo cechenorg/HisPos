@@ -222,25 +222,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
                 BusyContent = StringRes.取得就醫序號;
                 p.Card.GetMedicalNumber(2);
-                if (!string.IsNullOrEmpty(p.Card.MedicalNumberData.MedicalNumber))
+                p.Treatment.GetLastMedicalNumber();
+                if (!string.IsNullOrEmpty(p.Treatment.TempMedicalNumber))
                 {
-                    p.Treatment.TempMedicalNumber = p.Card.MedicalNumberData.MedicalNumber;
-                    if (!string.IsNullOrEmpty(p.Treatment.TempMedicalNumber))
+                    if (p.Treatment.ChronicSeq is null)
+                        p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                    else
                     {
-                        if (p.Treatment.ChronicSeq is null)
-                            p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                        if (p.Treatment.ChronicSeq > 1)
+                        {
+                            p.Treatment.MedicalNumber = "IC0" + p.Treatment.ChronicSeq;
+                            p.Treatment.OriginalMedicalNumber = p.Treatment.TempMedicalNumber;
+                        }
                         else
                         {
-                            if (p.Treatment.ChronicSeq > 1)
-                            {
-                                p.Treatment.MedicalNumber = "IC0" + p.Treatment.ChronicSeq;
-                                p.Treatment.OriginalMedicalNumber = p.Treatment.TempMedicalNumber;
-                            }
-                            else
-                            {
-                                p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
-                                p.Treatment.OriginalMedicalNumber = null;
-                            }
+                            p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                            p.Treatment.OriginalMedicalNumber = null;
                         }
                     }
                 }
