@@ -627,8 +627,8 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 return;
             }
             IsAdjusting = true;
-            CurrentPrescription.CheckIsCooperativePrescribe();//檢查是否為合作診所全自費處方
-            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            CurrentPrescription.CheckIsPrescribe();//檢查是否為合作診所全自費處方
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
                 var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
@@ -683,7 +683,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
-            Prescription p = new Prescription();
+            var p = new Prescription();
             MainWindow.ServerConnection.OpenConnection();
             switch (pre.Source)
             {
@@ -789,10 +789,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 catch (Exception e)
                 {
                     NewFunction.ExceptionLog(e.Message);
-                    Application.Current.Dispatcher.Invoke((Action)(() =>
-                    {
-                        MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
-                    }));
+                    Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -803,14 +800,9 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     IsBusy = false;
                     CanAdjust = true;
                     if (isGetCard)
-                    {
                         CurrentPrescription.Treatment.GetLastMedicalNumber();
-                    }
                     else
-                    {
-                        CusSelectWindow customerSelectionWindow = null;
                         SearchCustomer();
-                    }
                 }
                 else
                 {
@@ -894,7 +886,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 switch (status)
                 {
                     case PrescriptionDeclareStatus.Adjust:
-                        if (CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+                        if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
                             StartCooperativePrescribe();
                         else
                             StartNormalAdjust();
@@ -1144,7 +1136,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     CurrentPrescription.ChronicAdjust(false);
                     break;
             }
-            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
                 if (CurrentPrescription.Card.IsGetMedicalNumber)
                 {

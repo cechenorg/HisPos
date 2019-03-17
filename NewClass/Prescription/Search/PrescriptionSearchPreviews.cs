@@ -12,18 +12,18 @@ namespace His_Pos.NewClass.Prescription.Search
     public class PrescriptionSearchPreviews:ObservableCollection<PrescriptionSearchPreview>
     {
 
-        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj,string medID,string medName)
+        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj,string medID,string medName, Institution ins)
         {
-            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName,patientIDNumber,patientBirth,adj,medID,medName);
+            var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName,patientIDNumber,patientBirth,adj,medID,medName,ins);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r,PrescriptionSource.Normal));
             }
         }
 
-        public void GetReservePrescription(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName)
+        public void GetReservePrescription(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins)
         {
-            var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj, medID, medName);
+            var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj, medID, medName,ins);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionSource.ChronicReserve));

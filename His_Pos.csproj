@@ -333,10 +333,7 @@
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBase.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBases.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescribeHistory.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />

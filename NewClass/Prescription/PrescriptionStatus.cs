@@ -61,7 +61,7 @@ namespace His_Pos.NewClass.Prescription {
                 Set(() => IsCooperative, ref isCooperative, value);
             }
         }
-        public bool IsCooperativePrescribe { get; set; }
+        public bool IsPrescribe { get; set; }
         public void Init()
         {
             IsGetCard = false;
@@ -73,7 +73,7 @@ namespace His_Pos.NewClass.Prescription {
             IsDeclare = true;
             IsCooperativeVIP = false;
             IsCreateSign = null;
-            IsCooperativePrescribe = false;
+            IsPrescribe = false;
             IsDeposit = false;
             IsCooperative = false;
         }

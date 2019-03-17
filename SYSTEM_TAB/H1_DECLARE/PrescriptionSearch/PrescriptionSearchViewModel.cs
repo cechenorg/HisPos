@@ -11,7 +11,6 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Search;
@@ -32,7 +31,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             return this;
         }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
         public Institutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
         private PrescriptionSearchPreviews searchPrescriptions;
@@ -233,12 +231,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => MedicineName, ref medicineName, value);
             }
         }
+        private Institution selectedInstitution;
+        public Institution SelectedInstitution
+        {
+            get => selectedInstitution;
+            set
+            {
+                Set(() => SelectedInstitution, ref selectedInstitution, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
         public RelayCommand Clear { get; set; }
+        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand<string> CheckInsEmpty { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
         {
@@ -254,7 +263,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void InitialVariables()
         {
             SearchPrescriptions = new PrescriptionSearchPreviews();
-            MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
             StartDate = null;
@@ -266,6 +274,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
             Clear = new RelayCommand(ClearAction);
+            ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
+            CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
         }
 
         private void RegisterMessengers()
@@ -280,7 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if(!CheckStartDate()) return;
             if (!CheckEndDate()) return;
             if(!CheckDateOutOfRange()) return;
-            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
+            var previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
             var worker = new BackgroundWorker();
@@ -288,7 +298,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName,SelectedInstitution);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };
@@ -304,8 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SetPrescriptionsSummary(bool reserve)
         {
-            List<int> summary = new List<int>();
-            summary = SearchPrescriptions.GetSummary(reserve);
+            var summary = SearchPrescriptions.GetSummary(reserve);
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
             TotalPoint = summary[0];
@@ -321,7 +330,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if (!CheckStartDate()) return;
             if (!CheckEndDate()) return;
             if (!CheckDateOutOfRange()) return;
-            PrescriptionSearchPreviews previews = new PrescriptionSearchPreviews();
+            var previews = new PrescriptionSearchPreviews();
             SearchPrescriptions.Clear();
             MainWindow.ServerConnection.OpenConnection();
             var worker = new BackgroundWorker();
@@ -329,7 +338,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName);
+                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName, SelectedInstitution);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(true);
             };
@@ -392,6 +401,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 ReserveSearchAction();
             }
         }
+        private void GetInstitutionAction(string search)
+        {
+            if (search.Length < 4)
+            {
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
+                return;
+            }
+            SelectedInstitution = null;
+            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
+            switch (result.Count)
+            {
+                case 0:
+                    return;
+                case 1:
+                    SelectedInstitution = result[0];
+                    break;
+                default:
+                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
+                    institutionSelectionWindow.ShowDialog();
+                    Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
+                    break;
+            }
+        }
+        private void CheckInsEmptyAction(string search)
+        {
+            if (string.IsNullOrEmpty(search))
+                SelectedInstitution = null;
+        }
         #endregion
         #region Functions
         private void UpdateCollectionView()
@@ -441,9 +479,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private bool CheckCondition()
         {
-            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName))
+            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && string.IsNullOrEmpty(SelectedInstitution.Name))
             {
-                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品健保碼.藥品名稱請至少擇一填寫", MessageType.WARNING);
+                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品健保碼.藥品名稱或釋出院所請至少擇一填寫", MessageType.WARNING);
                 return false;
             }
             return true;
@@ -478,6 +516,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
             }
             return true;
+        }
+        private void GetSelectedInstitution(Institution ins)
+        {
+            SelectedInstitution = ins;
         }
         #endregion
     }

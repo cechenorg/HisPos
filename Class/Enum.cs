@@ -611,9 +611,9 @@ namespace His_Pos.Class
 
     public enum HistoryType
     {
-        Prescription = 0,
-        Prescribe = 1,
-        ALL = 2
+        AdjustRecord = 0,
+        RegisterRecord = 1,
+        ReservedPrescription = 2
     }
 
 }
