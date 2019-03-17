@@ -88,6 +88,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Tdata = new Tdata(selectedFile);
             List<Ddata> tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
+            var dd = new List<Ddata>();
             foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))
             {
                 foreach (var pdata in p.FileContent.Dbody.Pdata)
@@ -98,14 +99,22 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 tempList.Add(p.FileContent);
             }
 
-            foreach (var g in tempList.GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
+            foreach (var g in tempList.OrderBy(d => int.Parse(d.Dhead.D1)).GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
             {
                 var serial = 1;
                 foreach (var ddata in g)
                 {
                     ddata.Dhead.D2 = serial.ToString().PadLeft(6,'0');
-                    Ddata.Add(ddata);
+                    dd.Add(ddata);
                     serial++;
+                }
+            }
+
+            for (int i = 1; i <= 4; i++)
+            {
+                foreach (var d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
+                {
+                    Ddata.Add(d);
                 }
             }
         }
@@ -230,7 +239,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D37 = p.MedicalServiceID;
             D38 = details.Single(pd => pd.P1.Equals("9")).P9;
             D43 = t.OriginalMedicalNumber;
-            D44 = DateTimeExtensions.NullableDateToTWCalender(p.Card.NewBornBirthday, false);
+            if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
+                D44 = p.Card.NewBornBirthday;
             Pdata = new List<Pdata>();
             Pdata = details;
         }

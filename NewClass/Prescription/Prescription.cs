@@ -183,8 +183,8 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "009"://其他免負擔
                 case "I22"://免收
-                case "003"://免收
-                case "004"://免收
+                case "003"://低收入戶
+                case "004"://榮民
                     return true;
             }
             switch (Treatment.PrescriptionCase.ID)
@@ -250,7 +250,7 @@ namespace His_Pos.NewClass.Prescription
                             d.P8 = $"{0.00:0000000.00}";
                             d.P9 = "00000000";
                         }
-                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
+                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
                         details.Add(simpleForm);
                     }
                 }
@@ -285,7 +285,7 @@ namespace His_Pos.NewClass.Prescription
         public int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
-            if (MedicineDays > 3 && !Treatment.AdjustCase.ID.Equals("1"))
+            if (MedicineDays > 3)
             {
                 if (Treatment.AdjustCase.ID.Equals("3"))
                     Treatment.AdjustCase = VM.GetAdjustCase("1");
@@ -485,6 +485,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionPoint.GetDeposit(Id);
             string copayname = "部分負擔刪除";
             string payself = "自費刪除";
+            string deposit = "押金刪除";
 
             if (Treatment.AdjustCase.ID == "0")
                 payself = "自費調劑刪除";
@@ -495,6 +496,7 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
                 copayname = "合作" + copayname;
                 payself = "合作" + payself;
+                deposit = "合作" + deposit;
             } 
 
             if(PrescriptionPoint.CopaymentPoint != 0)
@@ -502,7 +504,7 @@ namespace His_Pos.NewClass.Prescription
             if(PrescriptionPoint.AmountSelfPay != 0)
                 PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
             if (PrescriptionPoint.Deposit != 0)
-                PrescriptionDb.ProcessCashFlow("押金刪除", "PreMasId", Id, PrescriptionPoint.Deposit * -1);
+                PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", Id, PrescriptionPoint.Deposit * -1);
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
@@ -559,7 +561,7 @@ namespace His_Pos.NewClass.Prescription
                             Treatment.Copayment = VM.GetCopayment("I20");
                     }
                 }
-                if (Treatment.Copayment != null && !Treatment.Copayment.Id.Equals("I21"))
+                if (Treatment.Copayment != null && !CheckFreeCopayment())
                     PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
                 else
                 {
@@ -817,6 +819,10 @@ namespace His_Pos.NewClass.Prescription
                 Patient = cus;
                 Patient.Check();
                 PrescriptionStatus.IsGetCard = true;
+                if (Card.InsuranceMark.Equals("2"))
+                    Treatment.Copayment = VM.GetCopayment("004");
+                else if (Card.InsuranceMark.Equals("1"))
+                    Treatment.Copayment = VM.GetCopayment("003");
             }
             return success;
         }
@@ -870,10 +876,10 @@ namespace His_Pos.NewClass.Prescription
                 if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
-                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)) > 0 
-                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days == orm.Days ).Amount : orm.Amount;
-                    medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days)) > 0 
-                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days == orm.Days ).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
+                    medicine.Amount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days) && m.PaySelf == orm.PaySelf) > 0 
+                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days == orm.Days && m.PaySelf == orm.PaySelf).Amount : orm.Amount;
+                    medicine.BuckleAmount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days) && m.PaySelf == orm.PaySelf) > 0 
+                        ? Medicines.Single(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days == orm.Days && m.PaySelf == orm.PaySelf).BuckleAmount - orm.BuckleAmount : orm.BuckleAmount * -1;
                     compareMeds.Add(medicine);
                 }
                
@@ -881,7 +887,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var nem in Medicines) {
                 if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
                 {
-                    if (originPrescription.Medicines.Count(m => m.ID == nem.ID && m.UsageName.Equals(nem.UsageName) && m.Days == nem.Days ) == 0)
+                    if (originPrescription.Medicines.Count(m => m.ID == nem.ID && m.UsageName.Equals(nem.UsageName) && m.Days == nem.Days && m.PaySelf == nem.PaySelf) == 0)
                     {
                         Medicine medicine = new Medicine();
                         medicine.ID = nem.ID;
@@ -979,7 +985,8 @@ namespace His_Pos.NewClass.Prescription
                 case "1":
                 case "3":
                     Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
-                    Treatment.Copayment = VM.GetCopayment("I20");
+                    if(!CheckFreeCopayment())
+                        Treatment.Copayment = VM.GetCopayment("I20");
                     break;
                 case "2":
                     Treatment.PrescriptionCase = VM.GetPrescriptionCases("04");

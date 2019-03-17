@@ -97,7 +97,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,0,10,10" Visibility="{Binding ReservedVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="慢箋預約處方" Style="{StaticResource BoldLabelContent18}"/>
-                    <DataGrid Name="Reserved"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
+                    <DataGrid Name="Reserved"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False"  MaxHeight="280" VerticalScrollBarVisibility="Auto"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding ReservedPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Reserved_SelectionChanged" >
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
@@ -195,7 +195,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Vertical" Margin="10,0,10,10" Visibility="{Binding RegisteredVisible,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="已登錄處方" Style="{StaticResource BoldLabelContent18}"/>
-                    <DataGrid Name="Registered"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" 
+                    <DataGrid Name="Registered"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" MaxHeight="280" VerticalScrollBarVisibility="Auto"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding RegisteredPrescriptions, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Registered_SelectionChanged" >
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">

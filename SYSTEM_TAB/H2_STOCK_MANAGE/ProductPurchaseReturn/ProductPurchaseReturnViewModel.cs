@@ -200,7 +200,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void CloseTabAction()
         {
-            CurrentStoreOrder.SaveOrder();
+            if(CurrentStoreOrder != null)
+                CurrentStoreOrder.SaveOrder();
         }
         #endregion
 

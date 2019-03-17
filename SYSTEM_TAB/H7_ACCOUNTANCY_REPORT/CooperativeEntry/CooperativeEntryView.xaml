@@ -57,7 +57,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="900"/>
+                <ColumnDefinition Width="1080"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Margin="10,10,0,0">
@@ -65,7 +65,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
                 <DataGrid Height="300" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
+                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding ShowCashFlowCommand}"/>
@@ -151,7 +151,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositValue}">
+                        <DataGridTextColumn Width="80" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositValue}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="合作押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ClinicDepositValue}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -160,6 +168,14 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Width="100" Header="給骨科的錢" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding GiveclinicValue}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="總計" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding TotalCash}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -180,7 +196,7 @@
                     <Label Content="{Binding ClinicProfit}"  FontFamily="Segoe UI Semibold" FontSize="24"  Foreground="{StaticResource ForeGround}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="慢箋 + 其他 收入"  FontFamily="Segoe UI Semibold" FontSize="24"  Foreground="{StaticResource ForeGround}" />
+                    <Label Content="慢箋+其他收入"  FontFamily="Segoe UI Semibold" FontSize="24"  Foreground="{StaticResource ForeGround}" />
                     <Label Content="{Binding PrescriptionProfit}"   FontFamily="Segoe UI Semibold" FontSize="24"  Foreground="{StaticResource ForeGround}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -204,7 +220,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1"  Margin="10,10,10,0">
                 <DataGrid Height="370" ItemsSource="{Binding CooperativeClinicEntryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
+                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding ShowPrescriptionPointCommand}"/>
@@ -250,7 +266,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="一般箋總點數" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding NormalTotalPointValue}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn Width="100" Header="一般總點數" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True" Binding="{Binding NormalTotalPointValue}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -258,7 +274,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="一般箋調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NormalMedicineUseValue}">
+                        <DataGridTextColumn Width="130" Header="一般調劑耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NormalMedicineUseValue}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

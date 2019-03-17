@@ -751,15 +751,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 是否免收部分負擔? 的當地語系化字串。
-        /// </summary>
-        internal static string 免收部分負擔 {
-            get {
-                return ResourceManager.GetString("免收部分負擔", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 未填寫顧客資料，是否以匿名取代? 的當地語系化字串。
         /// </summary>
         internal static string 匿名自費 {
@@ -955,6 +946,15 @@ namespace His_Pos.Properties {
         internal static string 收據列印 {
             get {
                 return ResourceManager.GetString("收據列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 是否收部分負擔? 的當地語系化字串。
+        /// </summary>
+        internal static string 收部分負擔 {
+            get {
+                return ResourceManager.GetString("收部分負擔", resourceCulture);
             }
         }
         

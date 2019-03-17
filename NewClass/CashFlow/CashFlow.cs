@@ -11,21 +11,23 @@ namespace His_Pos.NewClass.CashFlow {
         public CashFlow() { }
         public CashFlow(DataRow r) {
             Date = r.Field<DateTime>("CashFlow_Time");
-            CopaymentValue = (int)r.Field<decimal>("部分負擔");
-            ClinicCopaymentValue = (int)r.Field<decimal>("合作部分負擔");
-            PaySelfValue = (int)r.Field<decimal>("自費");
-            ClinicPaySelfValue = (int)r.Field<decimal>("合作自費");
-            ClinicProfitValue = (int)r.Field<decimal>("骨科毛利");
-            NormalTotalPointValue = (int)r.Field<decimal>("一般總點數");
-            NormalMedicineUseValue = (int)r.Field<decimal>("一般調劑耗用");
-            ChronicTotalPointValue = (int)r.Field<decimal>("慢箋總點數");
-            ChronicmedicineUseValue = (int)r.Field<decimal>("慢箋調劑耗用");
-            PayselfAdjustValue = (int)r.Field<decimal>("自費調劑");
-            PayselfMedUseValue = (int)r.Field<decimal>("自費調劑耗用");
-            DepositValue = (int)r.Field<decimal>("押金");
-            TotalAdjustAmount = (int)r.Field<decimal>("處方總量");
-            ClinicAdjustAmount = (int)r.Field<decimal>("合作處方總量");
-            GiveclinicValue = ClinicCopaymentValue + ClinicPaySelfValue;
+            CopaymentValue = r.Field<int>("部分負擔");
+            ClinicCopaymentValue = r.Field<int>("合作部分負擔");
+            PaySelfValue = r.Field<int>("自費");
+            ClinicPaySelfValue = r.Field<int>("合作自費");
+            ClinicProfitValue = r.Field<int>("骨科毛利");
+            NormalTotalPointValue = r.Field<int>("一般總點數");
+            NormalMedicineUseValue = r.Field<int>("一般調劑耗用");
+            ChronicTotalPointValue = r.Field<int>("慢箋總點數");
+            ChronicmedicineUseValue = r.Field<int>("慢箋調劑耗用");
+            PayselfAdjustValue = r.Field<int>("自費調劑");
+            PayselfMedUseValue = r.Field<int>("自費調劑耗用");
+            DepositValue = r.Field<int>("押金");
+            ClinicDepositValue = r.Field<int>("合作押金");
+            TotalAdjustAmount = r.Field<int>("處方總量");
+            ClinicAdjustAmount = r.Field<int>("合作處方總量");
+            GiveclinicValue = ClinicCopaymentValue + ClinicPaySelfValue + (int)ClinicDepositValue;
+            TotalCash = CopaymentValue + ClinicCopaymentValue + PaySelfValue + ClinicPaySelfValue  + (int)DepositValue + (int)ClinicDepositValue + (int)PayselfAdjustValue;
         }
 
         public DateTime Date { get; set; }
@@ -136,6 +138,15 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => DepositValue, ref depositValue, value);
             }
         }
+        private decimal clinicDepositValue;
+        public decimal ClinicDepositValue
+        {
+            get => clinicDepositValue;
+            set
+            {
+                Set(() => ClinicDepositValue, ref clinicDepositValue, value);
+            }
+        }
         private int clinicAdjustAmount;
         public int ClinicAdjustAmount //合作診所調劑總量
         {
@@ -163,6 +174,16 @@ namespace His_Pos.NewClass.CashFlow {
                 Set(() => GiveclinicValue, ref giveclinicValue, value);
             }
         }
+        private int totalCash;
+        public int TotalCash //總計
+        {
+            get => totalCash;
+            set
+            {
+                Set(() => TotalCash, ref totalCash, value);
+            }
+        }
+        
     }
 }
 

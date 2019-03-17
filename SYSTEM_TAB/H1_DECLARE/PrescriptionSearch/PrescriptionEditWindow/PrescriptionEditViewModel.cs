@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -10,7 +9,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -33,6 +31,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -582,6 +581,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                     BusyContent = StringRes.取得就醫序號;
                     EditedPrescription.Card.GetMedicalNumber(2);
+                    EditedPrescription.Treatment.GetLastMedicalNumber();
+                    if (!string.IsNullOrEmpty(EditedPrescription.Treatment.TempMedicalNumber))
+                    {
+                        if (EditedPrescription.Treatment.ChronicSeq is null)
+                            EditedPrescription.Treatment.MedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                        else
+                        {
+                            if (EditedPrescription.Treatment.ChronicSeq > 1)
+                            {
+                                EditedPrescription.Treatment.MedicalNumber = "IC0" + EditedPrescription.Treatment.ChronicSeq;
+                                EditedPrescription.Treatment.OriginalMedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                            }
+                            else
+                            {
+                                EditedPrescription.Treatment.MedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                                EditedPrescription.Treatment.OriginalMedicalNumber = null;
+                            }
+                        }
+                    }
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -628,8 +646,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-                PrescriptionDb.ProcessCashFlow("退還押金", "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
+                string depositName = EditedPrescription.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+                PrescriptionDb.ProcessCashFlow(depositName, "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
                 EditedPrescription.PrescriptionStatus.UpdateStatus(EditedPrescription.Id);
+                EditedPrescription.Update();
                 MainWindow.ServerConnection.CloseConnection();
                 CheckEditStatus();
                 IsBusy = false;
