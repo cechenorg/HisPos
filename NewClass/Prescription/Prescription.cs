@@ -250,7 +250,7 @@ namespace His_Pos.NewClass.Prescription
                             d.P8 = $"{0.00:0000000.00}";
                             d.P9 = "00000000";
                         }
-                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, 1);
+                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
                         details.Add(simpleForm);
                     }
                 }
@@ -285,7 +285,7 @@ namespace His_Pos.NewClass.Prescription
         public int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
-            if (MedicineDays > 3 && !Treatment.AdjustCase.ID.Equals("1"))
+            if (MedicineDays > 3)
             {
                 if (Treatment.AdjustCase.ID.Equals("3"))
                     Treatment.AdjustCase = VM.GetAdjustCase("1");

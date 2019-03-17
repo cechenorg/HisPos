@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 
             for (int i = 1; i <= 4; i++)
             {
-                foreach (Ddata d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
+                foreach (var d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
                 {
                     Ddata.Add(d);
                 }
