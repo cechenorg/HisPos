@@ -64,7 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
         }
         private void SelectionChangedAction() {
-            ControlMedicineDetailsCollection.GetDataById(SelectItem.Id); 
+            ControlMedicineDetailsCollection.GetDataById(SelectItem.ID); 
         }
     }
 }
