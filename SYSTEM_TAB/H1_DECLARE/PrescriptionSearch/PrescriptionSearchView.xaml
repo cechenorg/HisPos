@@ -80,7 +80,19 @@
                     <TextBox Name="MedicineID" Text="{Binding MedicineID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown" CharacterCasing="Upper"/>
                     <Label Content="藥品名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                     <TextBox Name="MedicineName" Text="{Binding MedicineName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
-                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="780,0,10,0"/>
+                    <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <TextBox Name="ReleaseHospital" Width="375" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" materialDesign:HintAssist.Hint="輸入院所代碼"
+                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding CheckInsEmpty}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="305,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >

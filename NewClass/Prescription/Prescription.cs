@@ -177,8 +177,10 @@ namespace His_Pos.NewClass.Prescription
         public bool CheckFreeCopayment()
         {
             if (Treatment.Copayment is null) return false;
-            if (Treatment.AdjustCase.ID.Equals("2") || Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
-                return true;
+            if (Treatment.AdjustCase.ID.Equals("2"))
+                Treatment.Copayment = VM.GetCopayment("I22");
+            if(Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
+                Treatment.Copayment = VM.GetCopayment("009");
             switch (Treatment.Copayment.Id)
             {
                 case "009"://其他免負擔
@@ -198,6 +200,7 @@ namespace His_Pos.NewClass.Prescription
                 case "16"://牙醫特殊專案
                 case "19"://牙醫其他專案
                 case "C1"://論病計酬
+                    Treatment.Copayment = VM.GetCopayment("I22");
                     return true;
             }
             return false;
@@ -206,7 +209,7 @@ namespace His_Pos.NewClass.Prescription
         #region Function
         public int InsertPrescription()
         {
-            if (PrescriptionStatus.IsCooperativePrescribe)
+            if (PrescriptionStatus.IsPrescribe)
                 Treatment.AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
             if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 CountMedicineDays();
@@ -240,7 +243,7 @@ namespace His_Pos.NewClass.Prescription
                 CountMedicineDays();//計算最大給藥日份
                 if (Treatment.AdjustCase.ID.Equals("1") || Treatment.AdjustCase.ID.Equals("3"))
                 {
-                    int dailyPrice = CheckIfSimpleFormDeclare();
+                    var dailyPrice = CheckIfSimpleFormDeclare();
                     if (dailyPrice > 0)
                     {
                         foreach (var d in details)
@@ -291,7 +294,7 @@ namespace His_Pos.NewClass.Prescription
                     Treatment.AdjustCase = VM.GetAdjustCase("1");
                 return 0;
             }
-            double medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
+            var medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
             var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
             var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
             if (dailyPrice * MedicineDays < medicinePoint)
@@ -345,7 +348,7 @@ namespace His_Pos.NewClass.Prescription
                 medicine.PositionID = "PO";
             //if(Medicines[selectedMedicinesIndex].Amount > 0 && !Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
             //    Medicines[selectedMedicinesIndex].BuckleAmount = Medicines[selectedMedicinesIndex - 1].BuckleAmount;
-            int selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
+            var selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
             if (SelectedMedicine != null)
             {
                 if(selectedMedicinesIndex > 0)
@@ -359,16 +362,16 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(medicine);
             } 
         }
-        public void PredictResere() {
-            PrescriptionDb.PredictResere(Id);
+        public void PredictReserve() {
+            PrescriptionDb.PredictReserve(Id);
         }
-        public void AdjustPredictResere() {
-            PrescriptionDb.AdjustPredictResere(Id.ToString());
+        public void AdjustPredictReserve() {
+            PrescriptionDb.AdjustPredictReserve(Id.ToString());
         }
         
         #endregion
         public void AdjustMedicinesType() {
-            for(int medCount = 0; medCount < Medicines.Count; medCount++){
+            for(var medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
                 if (table.Rows.Count > 0)
@@ -1024,7 +1027,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void SetAdjustStatus()
         {
-            if (PrescriptionStatus.IsCooperativePrescribe) //合作診所處方全自費藥
+            if (PrescriptionStatus.IsPrescribe) //處方全自費
             {
                 PrescriptionStatus.SetCooperativePrescribeStatus();
             }
@@ -1033,16 +1036,11 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionStatus.SetNormalAdjustStatus();
             }
         }
-        //檢查是否為合作診所全自費處方
-        public void CheckIsCooperativePrescribe()
+        //檢查是否為全自費處方
+        public void CheckIsPrescribe()
         {
-            if (Source == PrescriptionSource.Cooperative || Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-            {
-                PrescriptionStatus.IsCooperativePrescribe =
-                    Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && !m.PaySelf) == 0;
-            }
-            else
-                PrescriptionStatus.IsCooperativePrescribe = false;
+            PrescriptionStatus.IsPrescribe =
+                Medicines.Count(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && !m.PaySelf) == 0;
         }
 
         public void NormalAdjust(bool noCard)
@@ -1052,7 +1050,7 @@ namespace His_Pos.NewClass.Prescription
             else
                 Update();
             if(Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
-                AdjustPredictResere();
+                AdjustPredictReserve();
             var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
@@ -1078,7 +1076,7 @@ namespace His_Pos.NewClass.Prescription
         public void ChronicAdjust(bool noCard)
         {
             Id = InsertPrescription();
-            AdjustPredictResere();
+            AdjustPredictReserve();
             var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
@@ -1092,7 +1090,7 @@ namespace His_Pos.NewClass.Prescription
             if (Id == 0)
             {
                 Id = InsertPrescription();
-                PredictResere();
+                PredictReserve();
             }
             else
                 Update();
@@ -1101,7 +1099,7 @@ namespace His_Pos.NewClass.Prescription
         public void ChronicRegister()
         {
             Id = InsertPrescription();
-            AdjustPredictResere();
+            AdjustPredictReserve();
         }
 
         public void Prescribe()

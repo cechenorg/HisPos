@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
@@ -31,6 +33,25 @@ namespace His_Pos.NewClass.Person.Customer
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
+        private CollectionViewSource historyCollectionViewSource;
+        public CollectionViewSource HistoryCollectionViewSource
+        {
+            get => historyCollectionViewSource;
+            set
+            {
+                Set(() => HistoryCollectionViewSource, ref historyCollectionViewSource, value);
+            }
+        }
+
+        private ICollectionView historyCollectionView;
+        public ICollectionView HistoryCollectionView
+        {
+            get => historyCollectionView;
+            set
+            {
+                Set(() => HistoryCollectionView, ref historyCollectionView, value);
+            }
+        }
         #region Function
         public void Save()
         {
@@ -75,7 +96,6 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
         #endregion
-
         public int CountAge()
         {
             var today = DateTime.Today;

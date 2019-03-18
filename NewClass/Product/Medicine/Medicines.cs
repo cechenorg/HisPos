@@ -56,6 +56,14 @@ namespace His_Pos.NewClass.Product.Medicine
         }
         public string CreateMedicalData(string dateTime)
         {
+            foreach (var m in Items)
+            {
+                if (!(m is MedicineNHI) || m.PaySelf) continue;
+                if (string.IsNullOrEmpty(m.PositionID))
+                    m.PositionID = "XX";
+                if (string.IsNullOrEmpty(m.UsageName))
+                    m.UsageName = "ASORDER";
+            }
             var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
             var result = string.Empty;
             foreach (var med in medList)

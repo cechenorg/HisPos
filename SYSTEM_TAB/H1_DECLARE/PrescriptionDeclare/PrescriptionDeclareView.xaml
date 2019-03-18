@@ -459,8 +459,8 @@
                 </declare:MedicineDataGrid>
                 <Grid Grid.Row="3" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="350" />
-                        <ColumnDefinition Width="650" />
+                        <ColumnDefinition Width="400" />
+                        <ColumnDefinition Width="600" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
@@ -473,8 +473,8 @@
                             <RadioButton Tag="0" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}"/>
                             <RadioButton Tag="2" Content="預約" Style="{StaticResource CustomerHistoryRadio}"/>
                         </StackPanel>
-                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding ''}"
-                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden">
+                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
+                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription.Patient}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Setter Property="Background" Value="Transparent" />
@@ -489,28 +489,28 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Width="Auto" MinWidth="15">
+                                <DataGridTemplateColumn Header="status" Width="30" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate x:Name="CustomHistoriesTypeIcon">
-                                            <Image Width="15" Height="15" Source="{Binding TypeIcon}" />
+                                        <DataTemplate>
+                                            <Image Source="/Images/Declared.png" Width="15" Visibility="{Binding Status,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn MinWidth="90" Header="date" IsReadOnly="True">
+                                <DataGridTextColumn MinWidth="70" Header="date" IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Text" Value="{Binding Date, Converter={StaticResource DateConverter}}" />
+                                            <Setter Property="Text" Value="{Binding AdjustDate, Converter={StaticResource DateConverter}}" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="220" Header="title" IsReadOnly="True">
+                                <DataGridTextColumn Width="300" Header="title" IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Left" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Text" Value="{Binding CustomerHistoryData}" />
+                                            <Setter Property="Text" Value="{Binding Title}" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>

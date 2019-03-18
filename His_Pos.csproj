@@ -333,10 +333,7 @@
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBase.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBases.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescribeHistory.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
@@ -372,6 +369,9 @@
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetail.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetailDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetails.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
