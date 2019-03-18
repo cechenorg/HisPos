@@ -102,10 +102,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             MainWindow.ServerConnection.OpenConnection();
             SelectedCustomer.UpdateEditTime();
-            SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.ID);
+            //SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.ID);
             MainWindow.ServerConnection.CloseConnection();
-            SelectedCustomer.HistoryCollectionViewSource = new CollectionViewSource { Source = SelectedCustomer.Histories };
-            SelectedCustomer.HistoryCollectionView = SelectedCustomer.HistoryCollectionViewSource.View;
+            //SelectedCustomer.HistoryCollectionViewSource = new CollectionViewSource { Source = SelectedCustomer.Histories };
+            //SelectedCustomer.HistoryCollectionView = SelectedCustomer.HistoryCollectionViewSource.View;
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
             Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
         }

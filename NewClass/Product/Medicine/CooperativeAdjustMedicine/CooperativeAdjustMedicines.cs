@@ -8,6 +8,7 @@ namespace His_Pos.NewClass.Product.Medicine.CooperativeAdjustMedicine {
              
         }
         public void GetDataByDate(DateTime sDate,DateTime eDate) {
+            Clear();
             var table = CooperativeAdjustMedicineDb.GetDataByDate(sDate,eDate);
             foreach (DataRow r in table.Rows) {
                 Add(new CooperativeAdjustMedicine(r));

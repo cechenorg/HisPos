@@ -531,7 +531,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            if (CurrentPrescription.CheckFreeCopayment()) return;
+            if (CurrentPrescription.CheckFreeCopayment())
+            {
+                CurrentPrescription.PrescriptionPoint.CopaymentPoint = CurrentPrescription.CountCopaymentPoint();
+                return;
+            }
             CurrentPrescription.Treatment.Copayment = VM.GetCopayment(CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
         }
         private void AddMedicineAction(string medicineID)

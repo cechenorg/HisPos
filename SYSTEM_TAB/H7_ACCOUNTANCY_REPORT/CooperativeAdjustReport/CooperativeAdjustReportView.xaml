@@ -7,10 +7,11 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
+             xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
-        <service:DateConverter x:Key="DateConverter"/>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <UserControl.DataContext>
         <local:CooperativeAdjustReport/>
@@ -31,7 +32,7 @@
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
@@ -44,7 +45,7 @@
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
@@ -56,7 +57,7 @@
         </StackPanel>
         <Label Content="調劑耗用" Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
         <DataGrid Grid.Row="2" Grid.Column="0" Background="White" Margin="10" ItemsSource="{Binding CooperativeAdjustMedCollection,UpdateSourceTrigger=PropertyChanged}"
-                  ColumnHeaderStyle="{StaticResource GreenDataGridColumnHeaderStyle}" Height="Auto" AutoGenerateColumns="False"
+                  ColumnHeaderStyle="{StaticResource GreenDataGridColumnHeaderStyle}" Height="Auto" AutoGenerateColumns="False" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}"
                   BorderThickness="2" BorderBrush="DarkSeaGreen" CanUserSortColumns="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -91,7 +92,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedId}">
+                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -99,14 +100,16 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="商品名稱" Width="250" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedName}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Left"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="200" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <generalCustomControl:ProductStatusIcon  ControlLevel="{Binding IsControl}"  />
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="耗用量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedUseAmount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
