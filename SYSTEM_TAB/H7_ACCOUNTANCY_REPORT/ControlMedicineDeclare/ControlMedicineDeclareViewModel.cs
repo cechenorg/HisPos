@@ -1,5 +1,7 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare;
+using His_Pos.NewClass.Product.Medicine.ControlMedicineDetail;
 using System;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
@@ -36,9 +38,33 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
                 Set(() => ControlMedicineDeclares, ref controlMedicineDeclares, value);
             }
         }
+        private NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare selectItem;
+        public NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare SelectItem
+        {
+            get { return selectItem; }
+            set
+            {
+                Set(() => SelectItem, ref selectItem, value);
+            }
+        }
+        private ControlMedicineDetails controlMedicineDetailsCollection = new ControlMedicineDetails();
+        public ControlMedicineDetails ControlMedicineDetailsCollection
+        {
+            get { return controlMedicineDetailsCollection; }
+            set
+            {
+                Set(() => ControlMedicineDetailsCollection, ref controlMedicineDetailsCollection, value);
+            }
+        }
+        
         #endregion
+        public RelayCommand SelectionChangedCommand { get; set; }
         public ControlMedicineDeclareViewModel() {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
+            SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+        }
+        private void SelectionChangedAction() {
+            ControlMedicineDetailsCollection.GetDataById(SelectItem.Id); 
         }
     }
 }
