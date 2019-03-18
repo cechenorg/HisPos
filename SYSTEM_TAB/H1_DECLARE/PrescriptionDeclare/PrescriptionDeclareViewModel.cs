@@ -14,6 +14,7 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescription;
@@ -26,6 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using His_Pos.Service;
 using CooPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow.CooperativeSelectionWindow;
 using CusPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow.CustomPrescriptionWindow;
@@ -181,6 +183,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private bool customPresChecked { get; set; }
+        private CustomerHistory selectedHistory;
+        public CustomerHistory SelectedHistory
+        {
+            get => selectedHistory;
+            set
+            {
+                Set(() => SelectedHistory, ref selectedHistory, value);
+                if (SelectedHistory != null)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    SelectedHistory.Products = new CustomerHistoryProducts();
+                }
+            }
+        }
+        private MedicalPersonnel selectedPharmacist;
+        public MedicalPersonnel SelectedPharmacist
+        {
+            get => selectedPharmacist;
+            set
+            {
+                Set(() => SelectedPharmacist, ref selectedPharmacist, value);
+            }
+        }
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode { get; set; }
         #endregion
         #region Commands
@@ -216,21 +241,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #endregion
         public PrescriptionDeclareViewModel()
         {
-            Initial();
+            Initial(true);
         }
         ~PrescriptionDeclareViewModel()
         {
             Messenger.Default.Unregister(this);
         }
         #region InitialFunctions
-        private void Initial()
+        private void Initial(bool setPharmacist)
         {
             InitialItemsSources();
             InitialCommandActions();
             RegisterMessengers();
-            InitializeVariables();
+            InitializeVariables(setPharmacist);
         }
-        private void InitializeVariables()
+        private void InitializeVariables(bool setPharmacist)
         {
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
             NotPrescribe = true;
@@ -240,7 +265,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CanSendOrder = false;
             IsAdjusting = false;
             IsBusy = false;
-            InitialPrescription();
+            InitialPrescription(setPharmacist);
         }
         private void InitialItemsSources()
         {
@@ -285,10 +310,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
         }
 
-        private void InitialPrescription()
+        private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
             CurrentPrescription.InitialCurrentPrescription();
+            if (setPharmacist)
+                SelectedPharmacist = VM.CurrentPharmacy.GetPharmacist();
             MainWindow.ServerConnection.OpenConnection();
             PrescriptionCount = UpdatePrescriptionCount();
             MainWindow.ServerConnection.CloseConnection();
@@ -907,8 +934,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ClearPrescription()
         {
-            InitializeVariables();
-            InitialPrescription();
+            InitializeVariables(false);
         }
         private bool PrintConfirm(bool noCard)
         {
@@ -995,7 +1021,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 medicinesSendSingdeWindow = new MedSendWindow(CurrentPrescription);
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                     return false;
-            } 
+            }
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.PrescriptionStatus.SetRegisterStatus();
             if(CurrentPrescription.Source == PrescriptionSource.Normal)
                 CurrentPrescription.NormalRegister();
@@ -1017,6 +1044,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void InsertPrescribeData()
         {
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.PrescriptionStatus.SetPrescribeStatus();
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Prescribe();//自費調劑金流
@@ -1142,6 +1170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void InsertAdjustData()
         {
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.SetAdjustStatus();//設定處方狀態
             switch (CurrentPrescription.Source)
@@ -1217,6 +1246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void StartNoCardAdjust()
         {
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.PrescriptionStatus.SetNoCardSatus();
             MainWindow.ServerConnection.OpenConnection();
             switch (CurrentPrescription.Source)

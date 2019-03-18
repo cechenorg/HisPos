@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Product
     {
         internal static DataTable GetProductStructsBySearchString(string searchString)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
+            var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructBySearchString]", parameters);
@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Product
 
         internal static DataTable GetPurchaseProductStructCountBySearchString(string searchString)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
+            var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductStructCountBySearchString]", parameters);
@@ -24,10 +24,16 @@ namespace His_Pos.NewClass.Product
 
         internal static DataTable GetReturnProductStructCountBySearchString(string searchString)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
+            var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductStructCountBySearchString]", parameters);
+        }
+
+        internal static DataTable GetCustomerHistoryProducts(int id)
+        {
+            var parameters = new List<SqlParameter>();
+            return MainWindow.ServerConnection.ExecuteProc("", parameters);
         }
     }
 }

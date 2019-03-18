@@ -145,7 +145,7 @@
                     <StackPanel Grid.Row="0" Grid.Column="3" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="HisPerson"  Margin="0,0,10,0" Width="170" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Pharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
+                              SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding PharmacistSelectionChanged}"/>
@@ -518,8 +518,8 @@
                         </DataGrid>
                     </Grid>
                     <StackPanel Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource GridDarkerBackGround}">
-                        <DataGrid x:Name="CusHistoryDetailPos" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" 
-                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding CustomerHistoryPos}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                        <DataGrid x:Name="CusHistoryDetailPos" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}"
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding SelectedHistory}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Setter Property="Background" Value="Transparent" />
@@ -534,10 +534,14 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="250" Binding="{Binding ProductName, Mode=OneWay}" Header="品名" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding Price, Mode=OneWay}" Header="單價" />
+                                <DataGridTextColumn Width="250" Binding="{Binding ID, Mode=OneWay}" Header="代碼" />
+                                <DataGridTextColumn Width="250" Binding="{Binding FullName, Mode=OneWay}" Header="品名" />
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding UsageName, Mode=OneWay}" Header="用法" />
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding Days, Mode=OneWay}" Header="天數" />
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding PositionID, Mode=OneWay}" Header="途徑" />
                                 <DataGridTextColumn MinWidth="90" Binding="{Binding Amount, Mode=OneWay}" Header="數量" />
-                                <DataGridTextColumn MinWidth="70" Binding="{Binding SubTotal, Mode=OneWay}" Header="小計" />
+                                <DataGridTextColumn MinWidth="70" Binding="{Binding TotalPrice, Mode=OneWay}" Header="小計" />
                             </DataGrid.Columns>
                         </DataGrid>
                         <DataGrid x:Name="CusHistoryDetailHis" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"

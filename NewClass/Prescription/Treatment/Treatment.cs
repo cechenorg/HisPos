@@ -418,12 +418,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckTreatDate()
         {
-            if (TreatDate is null)
-            {
-                if (CheckIsHomeCare())
-                    return string.Empty;
-                return StringRes.TreatDateError;
-            }
+            if (TreatDate is null) return CheckIsHomeCare() ? string.Empty : StringRes.TreatDateError;
+            if (TreatDate != null && DateTime.Compare((DateTime)TreatDate, (DateTime)AdjustDate) > 0) return "就醫日不可大於調劑日";
             return string.Empty;
         }
         private string CheckPaymentCategory()
@@ -490,7 +486,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             Division = null;
             SpecialTreat = null;
-            Pharmacist = VM.CurrentPharmacy.GetPharmacist();
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;
             AdjustCase = VM.GetAdjustCase("1");
