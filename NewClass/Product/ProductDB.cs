@@ -29,11 +29,5 @@ namespace His_Pos.NewClass.Product
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductStructCountBySearchString]", parameters);
         }
-
-        internal static DataTable GetCustomerHistoryProducts(int id)
-        {
-            var parameters = new List<SqlParameter>();
-            return MainWindow.ServerConnection.ExecuteProc("", parameters);
-        }
     }
 }

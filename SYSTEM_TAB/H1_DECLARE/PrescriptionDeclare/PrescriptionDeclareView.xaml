@@ -474,7 +474,7 @@
                             <RadioButton Tag="2" Content="預約" Style="{StaticResource CustomerHistoryRadio}"/>
                         </StackPanel>
                         <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
-                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription.Patient}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False">
+                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription.Patient}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Setter Property="Background" Value="Transparent" />
@@ -519,12 +519,12 @@
                     </Grid>
                     <StackPanel Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource GridDarkerBackGround}">
                         <DataGrid x:Name="CusHistoryDetailPos" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}"
-                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding SelectedHistory}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Setter Property="Background" Value="Transparent" />
                                     <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FontSize" Value="16" />
+                                    <Setter Property="FontSize" Value="14" />
                                     <Setter Property="Height" Value="40" />
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
@@ -534,37 +534,13 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="250" Binding="{Binding ID, Mode=OneWay}" Header="代碼" />
+                                <DataGridTextColumn Width="110" Binding="{Binding ID, Mode=OneWay}" Header="代碼" />
                                 <DataGridTextColumn Width="250" Binding="{Binding FullName, Mode=OneWay}" Header="品名" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding UsageName, Mode=OneWay}" Header="用法" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding Days, Mode=OneWay}" Header="天數" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding PositionID, Mode=OneWay}" Header="途徑" />
-                                <DataGridTextColumn MinWidth="90" Binding="{Binding Amount, Mode=OneWay}" Header="數量" />
-                                <DataGridTextColumn MinWidth="70" Binding="{Binding TotalPrice, Mode=OneWay}" Header="小計" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <DataGrid x:Name="CusHistoryDetailHis" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                  DataContext="{Binding CustomerHistoryHis}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
-                            <DataGrid.RowStyle>
-                                <Style TargetType="{x:Type DataGridRow}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FontSize" Value="16" />
-                                    <Setter Property="Height" Value="40" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="250" Binding="{Binding MedicineName, Mode=OneWay}" Header="藥品" />
-                                <DataGridTextColumn MinWidth="60" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
-                                <DataGridTextColumn MinWidth="40" Binding="{Binding Usage, Mode=OneWay}" Header="用法" />
-                                <DataGridTextColumn MinWidth="40" Binding="{Binding Days, Mode=OneWay}" Header="天數" />
-                                <DataGridTextColumn MinWidth="60" Binding="{Binding Total, Mode=OneWay}" Header="總量" />
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding UsageName, Mode=OneWay}" Header="用法" />
+                                <DataGridTextColumn MinWidth="25" Binding="{Binding Days, Mode=OneWay}" Header="天數" />
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding PositionID, Mode=OneWay}" Header="途徑" />
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding Amount, Mode=OneWay}" Header="數量" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

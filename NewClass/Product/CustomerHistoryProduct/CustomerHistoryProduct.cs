@@ -11,15 +11,14 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
     {
         public CustomerHistoryProduct(DataRow r)
         {
-            ID = r.Field<string>("");
-            ChineseName = r.Field<string>("");
-            EnglishName = r.Field<string>("");
-            Dosage = (double)r.Field<decimal>("");
-            UsageName = r.Field<string>("");
-            PositionID = r.Field<string>("");
-            Days = r.Field<int>("");
-            Amount = (double)r.Field<decimal>("");
-            TotalPrice = (double)r.Field<decimal>("");
+            ID = r.Field<string>("Pro_ID");
+            ChineseName = r.Field<string>("Pro_ChineseName");
+            EnglishName = r.Field<string>("Pro_EnglishName");
+            Dosage = r.Field<double>("Dosage");
+            UsageName = r.Field<string>("Usage");
+            PositionID = r.Field<string>("Position");
+            Days = r.Field<short>("MedicineDays");
+            Amount = r.Field<double>("TotalAmount");
         }
         public string ID { get; set; }
         public string ChineseName { get; set; }
@@ -38,6 +37,5 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
         public string PositionID { get; set; }
         public int Days { get; set; }
         public double Amount { get; set; }
-        public double TotalPrice { get; set; }
     }
 }

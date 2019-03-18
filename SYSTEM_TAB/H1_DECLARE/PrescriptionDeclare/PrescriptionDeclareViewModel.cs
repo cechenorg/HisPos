@@ -4,7 +4,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -194,6 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     MainWindow.ServerConnection.OpenConnection();
                     SelectedHistory.Products = new CustomerHistoryProducts();
+                    SelectedHistory.Products.GetCustomerHistoryProducts(SelectedHistory.SourceId, SelectedHistory.Type);
                 }
             }
         }
@@ -558,7 +558,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void CopaymentSelectionChangedAction()
         {
-            if (CurrentPrescription.CheckFreeCopayment()) return;
+            if (CurrentPrescription.CheckFreeCopayment())
+            {
+                CurrentPrescription.PrescriptionPoint.CopaymentPoint = CurrentPrescription.CountCopaymentPoint();
+                return;
+            }
             CurrentPrescription.Treatment.Copayment = VM.GetCopayment(CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
         }
         private void AddMedicineAction(string medicineID)

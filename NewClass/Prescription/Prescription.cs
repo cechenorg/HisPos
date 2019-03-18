@@ -144,7 +144,7 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Initial();
             PrescriptionStatus.Init();
         }
-        private int CountCopaymentPoint()
+        public int CountCopaymentPoint()
         {
             if (CheckFreeCopayment())
                 return 0;
