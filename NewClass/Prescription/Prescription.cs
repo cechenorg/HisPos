@@ -971,7 +971,6 @@ namespace His_Pos.NewClass.Prescription
             {
                 Treatment.AdjustCase = VM.GetAdjustCase("2");
             }
-            
 
             switch (Treatment.AdjustCase.ID)
             {
