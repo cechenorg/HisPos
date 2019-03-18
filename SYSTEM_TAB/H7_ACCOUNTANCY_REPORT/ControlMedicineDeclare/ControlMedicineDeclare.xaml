@@ -228,14 +228,6 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="效期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Validate,Converter={StaticResource NullableDateConverter}}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
                     <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="結存數量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FinalStock}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
