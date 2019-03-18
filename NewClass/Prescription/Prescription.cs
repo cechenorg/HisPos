@@ -146,7 +146,7 @@ namespace His_Pos.NewClass.Prescription
             Treatment.Initial();
             PrescriptionStatus.Init();
         }
-        private int CountCopaymentPoint()
+        public int CountCopaymentPoint()
         {
             if (CheckFreeCopayment())
                 return 0;
@@ -981,7 +981,6 @@ namespace His_Pos.NewClass.Prescription
             {
                 Treatment.AdjustCase = VM.GetAdjustCase("2");
             }
-            
 
             switch (Treatment.AdjustCase.ID)
             {
