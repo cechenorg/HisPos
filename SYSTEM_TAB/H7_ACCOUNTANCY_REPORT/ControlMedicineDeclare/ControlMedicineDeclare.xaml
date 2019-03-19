@@ -11,8 +11,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.Resources>
-        <service:DateConverter x:Key="DateConverter" />
+    <UserControl.Resources> 
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -24,24 +23,24 @@
             <RowDefinition  />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
-            <Label Content="開始日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
+            <Label Content="處方調劑日"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
             <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Label Content="結束日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+            <Label Content="~"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             <xctk:MaskedTextBox Name="end" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
@@ -54,16 +53,17 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="700"/>
+                <ColumnDefinition Width="18*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ControlMedicineDeclares, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                   SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10" Grid.Row="1">
+                   SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DataGrid.Resources> 
+                <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -152,7 +152,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <DataGrid  Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ControlMedicineDetailsCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,0,10,10" Grid.Row="1" Grid.Column="2">
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,0,10,10" Grid.Column="1" Grid.ColumnSpan="2">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -197,7 +197,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="100" Header="日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource NullableDateConverter} }">
+                    <DataGridTextColumn Width="100" Header="處方調劑日" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource NullableDateConverter} }">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

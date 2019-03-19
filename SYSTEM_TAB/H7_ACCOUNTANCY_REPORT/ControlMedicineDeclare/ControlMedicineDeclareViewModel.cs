@@ -59,12 +59,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
         
         #endregion
         public RelayCommand SelectionChangedCommand { get; set; }
+        public RelayCommand SearchCommand { get; set; }
         public ControlMedicineDeclareViewModel() {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+            SearchCommand = new RelayCommand(SearchAction);
+        }
+        private void SearchAction() {
+            ControlMedicineDeclares.GetData(SDateTime, EDateTime);
         }
         private void SelectionChangedAction() {
-            ControlMedicineDetailsCollection.GetDataById(SelectItem.ID); 
+            if(SelectItem != null)
+            ControlMedicineDetailsCollection.GetDataById(SelectItem.ID,SDateTime,EDateTime); 
         }
     }
 }

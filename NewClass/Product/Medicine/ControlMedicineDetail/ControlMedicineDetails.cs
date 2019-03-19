@@ -13,9 +13,9 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
         public ControlMedicineDetails( ) {
           
         }
-        public void GetDataById(string medId) {
+        public void GetDataById(string medId,DateTime sDate,DateTime eDate) {
             Clear();
-            DataTable table = ControlMedicineDetailDb.GetDataById(medId);
+            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate,eDate);
             foreach (DataRow r in table.Rows) {
                 Add(new ControlMedicineDetail(r));
             }
