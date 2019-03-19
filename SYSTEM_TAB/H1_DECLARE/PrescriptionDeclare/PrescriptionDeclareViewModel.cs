@@ -622,6 +622,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(bool)noCard.DialogResult) return;
             if (CheckEmptyCustomer()) return;
             if (!CheckNewCustomer()) return;
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.CheckIsPrescribe();
             if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
@@ -653,6 +654,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(CheckEmptyCustomer()) return;
             if(!CheckNewCustomer())return;
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
@@ -712,6 +714,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (CheckEmptyCustomer()) return;
             if (!CheckNewCustomer()) return;
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
@@ -740,6 +743,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
             }
             if (!CheckNewCustomer()) return;
+            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             if (CurrentPrescription.Medicines.Count == 0)
             {
                 MessageWindow.ShowMessage("未填寫藥品",MessageType.WARNING);
@@ -1026,7 +1030,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                     return false;
             }
-            CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.PrescriptionStatus.SetRegisterStatus();
             if(CurrentPrescription.Source == PrescriptionSource.Normal)
                 CurrentPrescription.NormalRegister();
