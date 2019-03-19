@@ -822,10 +822,6 @@ namespace His_Pos.NewClass.Prescription
                 Patient = cus;
                 Patient.Check();
                 PrescriptionStatus.IsGetCard = true;
-                if (Card.InsuranceMark.Equals("2"))
-                    Treatment.Copayment = VM.GetCopayment("004");
-                else if (Card.InsuranceMark.Equals("1"))
-                    Treatment.Copayment = VM.GetCopayment("003");
             }
             return success;
         }

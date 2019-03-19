@@ -59,7 +59,29 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 }
             }
             PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
-            Copayment = VM.GetCopayment(insurance.CopaymentCode);
+            Copayment = new Cop();
+            if (!string.IsNullOrEmpty(insurance.CopaymentCode))
+            {
+                switch (insurance.CopaymentCode)
+                {
+                    case "003":
+                    case "004":
+                    case "007":
+                    case "009":
+                    case "I22":
+                    case "001":
+                    case "002":
+                    case "005":
+                    case "006":
+                    case "008":
+                    case "902":
+                    case "903":
+                    case "906":
+                    case "907":
+                        Copayment = VM.GetCopayment(insurance.CopaymentCode);
+                        break;
+                }       
+            }             
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -81,8 +103,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
             AdjustDate = DateTime.Today;
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
-            Pharmacist = VM.CurrentPharmacy.GetPharmacist();
-            Copayment = new Cop();
         }
 
         public Treatment(DataRow r)
