@@ -479,7 +479,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private bool CheckCondition()
         {
-            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && string.IsNullOrEmpty(SelectedInstitution.Name))
+            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && (SelectedInstitution is null || string.IsNullOrEmpty(SelectedInstitution.Name)) )
             {
                 MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品健保碼.藥品名稱或釋出院所請至少擇一填寫", MessageType.WARNING);
                 return false;

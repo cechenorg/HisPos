@@ -25,17 +25,7 @@ namespace His_Pos.NewClass.Prescription.IcData
         [Index(7)]
         public string CardLogoutMark;
         [Index(8)]
-        public string InsurerID;
-        [Index(9)]
-        public string InsuranceMark;
-        [Index(10)]
-        public DateTime ValidityPeriod;
-        [Index(11)]
-        public int AvailableTimes;
-        [Index(12)]
-        public string NewBornBirthday;
-        [Index(13)]
-        public string NewBornMark;
+        public string Tel;
         /*
          * 卡片號碼(1-12)
          * 姓名(13-32)
@@ -44,12 +34,7 @@ namespace His_Pos.NewClass.Prescription.IcData
          * 性別(50)
          * 發卡日期(51-57)
          * 卡片註銷註記(58)
-         * 保險人代碼(59-60)
-         * 保險對象身份註記(61)
-         * 卡片有效期限(62-68)
-         * 就醫可用次數(69-70)
-         * 新生兒依附註記之新生兒出生日期(71-77)
-         * 新生兒依附註記之新生兒胞胎註記(78)
+         * 連絡電話(59-72)
          */
         public BasicData(byte[] pBuffer)
         {
@@ -62,14 +47,9 @@ namespace His_Pos.NewClass.Prescription.IcData
             string dateString = Function.ByteArrayToString(7, pBuffer, 50);
             CardReleaseDate = DateTimeExtensions.TWDateStringToDateOnly(dateString);
             CardLogoutMark = Function.ByteArrayToString(1, pBuffer, 57);
-            InsurerID = Function.ByteArrayToString(2, pBuffer, 58);
-            InsuranceMark = Function.ByteArrayToString(1, pBuffer, 60);
-            ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 61));
-            AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 68));
-            NewBornBirthday = Function.ByteArrayToString(7, pBuffer, 70);
-            NewBornMark = Function.ByteArrayToString(1, pBuffer, 77);
+            Tel = Function.ByteArrayToString(14, pBuffer, 58);
         }
-        public BasicData(string cardNum, string name, string idNum, DateTime birthday, string birth, string gender, DateTime cardRelease, string cardLogout, string insurerID, string insuranceMark, DateTime validityPeriod, int availableTimes, string newBornBirthday, string newBornMark)
+        public BasicData(string cardNum, string name, string idNum, DateTime birthday, string birth, string gender, DateTime cardRelease, string cardLogout, string tel)
         {
             CardNumber = cardNum;
             Name = name;
@@ -79,12 +59,7 @@ namespace His_Pos.NewClass.Prescription.IcData
             Gender = gender;
             CardReleaseDate = cardRelease;
             CardLogoutMark = cardLogout;
-            InsurerID = insurerID;
-            InsuranceMark = insuranceMark;
-            ValidityPeriod = validityPeriod;
-            AvailableTimes = availableTimes;
-            NewBornBirthday = newBornBirthday;
-            NewBornMark = newBornMark;
+            Tel = tel;
         }
     }
 }

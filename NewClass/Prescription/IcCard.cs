@@ -50,15 +50,11 @@ namespace His_Pos.NewClass.Prescription
         [Index(12)]
         public virtual string TreatDateTime { get; set; } = string.Empty;
         [Index(13)]
-        public virtual string InsurerID { get; set; }
-        [Index(14)]
-        public virtual string InsuranceMark { get; set; }
-        [Index(15)]
-        public virtual string NewBornMark { get; set; }
+        public virtual string Tel { get; set; }
         public bool GetBasicData()
         {
-            var strLength = 78;
-            var icData = new byte[78];
+            var strLength = 72;
+            var icData = new byte[72];
             if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
@@ -67,10 +63,10 @@ namespace His_Pos.NewClass.Prescription
                 {
                     Thread.Sleep(1500);
                 }
-                var res = HisApiBase.hisGetRegisterBasic(icData, ref strLength);
+                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 if (res == 0)
                 {
-                    var basicDataArr = new byte[78];
+                    var basicDataArr = new byte[72];
                     MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
                     icData.CopyTo(basicDataArr, 0);
                     PatientBasicData = new BasicData(icData);
@@ -80,11 +76,7 @@ namespace His_Pos.NewClass.Prescription
                     Gender = PatientBasicData.Gender;
                     IDNumber = PatientBasicData.IDNumber;
                     CardReleaseDate = PatientBasicData.CardReleaseDate;
-                    AvailableTimes = PatientBasicData.AvailableTimes;
-                    NewBornBirthday = PatientBasicData.NewBornBirthday;
-                    InsurerID = PatientBasicData.InsurerID;
-                    InsuranceMark = PatientBasicData.InsuranceMark;
-                    NewBornMark = PatientBasicData.NewBornMark;
+                    Tel = PatientBasicData.Tel;
                     HisApiFunction.CloseCom();
                     return true;
                 }
