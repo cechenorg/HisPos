@@ -171,7 +171,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         public object Clone()
         {
-            Customer c = new Customer();
+            var c = new Customer();
             c.ContactNote = ContactNote;
             c.LastEdit = LastEdit;
             c.Address = Address;

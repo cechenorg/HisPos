@@ -941,7 +941,7 @@ namespace His_Pos.NewClass.Prescription
             p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
             p.DeclareContent = DeclareContent;
             p.Patient = (Customer)Patient.Clone();
-            Card = new IcCard();
+            p.Card = new IcCard();
             p.MedicalServiceID = MedicalServiceID;
             p.DeclareFileID = DeclareFileID;
             p.MedicineDays = MedicineDays;
