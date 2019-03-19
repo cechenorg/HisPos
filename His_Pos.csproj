@@ -382,6 +382,7 @@
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />

@@ -228,7 +228,7 @@ namespace His_Pos.NewClass.Prescription
         {
             var details = new List<Pdata>();
             var serialNumber = 1;
-            foreach (var med in Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
+            foreach (var med in Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf))
             {
                 details.Add(new Pdata(med, serialNumber.ToString()));
                 serialNumber++;
@@ -384,6 +384,9 @@ namespace His_Pos.NewClass.Prescription
                             break;
                         case 2:
                             temp = new MedicineSpecialMaterial(table.Rows[0]);
+                            break;
+                        case 3:
+                            temp = new MedicineVirtual(table.Rows[0]);
                             break;
                     }
                 }
@@ -787,7 +790,7 @@ namespace His_Pos.NewClass.Prescription
                     VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
                 new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                new ReportParameter("MedicalPerson",VM.CurrentPharmacy.GetPharmacist().Name),
+                new ReportParameter("MedicalPerson", VM.CurrentPharmacy.GetPharmacist().Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("PatientGender_Birthday",cusGender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
@@ -937,7 +940,7 @@ namespace His_Pos.NewClass.Prescription
             p.PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson();
             p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
             p.DeclareContent = DeclareContent;
-            p.Patient = Patient.DeepCloneViaJson();
+            p.Patient = (Customer)Patient.Clone();
             Card = new IcCard();
             p.MedicalServiceID = MedicalServiceID;
             p.DeclareFileID = DeclareFileID;

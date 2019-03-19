@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         {
             if (!singleMode)
             {
-                int i = 1;
+                var i = 1;
                 foreach (var m in medList)
                 {
                     switch (m)

@@ -307,6 +307,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
             }
+            else if(m is MedicineVirtual)
+            {
+                P1 = "G";
+                P2 = m.ID;
+                P7 = $"{0.00:00000.0}";
+                P8 = $"{0.00:0000000.00}";
+                P9 = $"{0.00:0000000}";
+                P10 = serial;
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P13 = P12;
+                PaySelf = false;
+                IsBuckle = false;
+                BuckleAmount = 0;
+            }
             else
             {
                 P1 = "0";

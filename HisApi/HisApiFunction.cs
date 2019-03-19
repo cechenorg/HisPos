@@ -21,7 +21,7 @@ namespace His_Pos.HisApi
         {
             p.WriteCardSuccess = -1;
             var signList = new List<string>();
-            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
+            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
             var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
