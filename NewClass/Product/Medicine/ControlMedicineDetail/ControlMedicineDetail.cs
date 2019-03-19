@@ -15,11 +15,13 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
             Amount = r.Field<double>("Amount");
             BatchNumber = r.Field<string>("InvRec_BatchNumber");
             FinalStock = r.Field<double>("InvRec_NewStock");
+            Description = r.Field<string>("Description");
         }
         public DateTime Date { get; set; }
         public string TypeName { get; set; }
         public double Amount { get; set; }
         public string BatchNumber { get; set; }
         public double FinalStock { get; set; }
+        public string Description { get; set; }
     }
 }
