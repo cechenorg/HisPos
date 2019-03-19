@@ -69,6 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
         }
         private void SelectionChangedAction() {
+            if(SelectItem != null)
             ControlMedicineDetailsCollection.GetDataById(SelectItem.ID,SDateTime,EDateTime); 
         }
     }
