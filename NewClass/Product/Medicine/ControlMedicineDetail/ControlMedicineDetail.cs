@@ -10,7 +10,7 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
 {
     public class ControlMedicineDetail : ObservableObject {
         public ControlMedicineDetail(DataRow r) {
-            Date = r.Field<DateTime>("InvRec_Time");
+            Date = r.Field<DateTime>("Date");
             TypeName = r.Field<string>("InvRec_Type");
             Amount = r.Field<double>("Amount");
             BatchNumber = r.Field<string>("InvRec_BatchNumber");
