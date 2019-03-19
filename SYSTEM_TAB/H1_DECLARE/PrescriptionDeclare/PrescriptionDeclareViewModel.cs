@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -27,6 +28,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using CooPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow.CooperativeSelectionWindow;
 using CusPreSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow.CustomPrescriptionWindow;
@@ -93,7 +95,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-        
+        private Prescription tempPre;
+        public Prescription TempPre
+        {
+            get => tempPre;
+            set
+            {
+                if (tempPre != value)
+                {
+                    Set(() => TempPre, ref tempPre, value);
+                }
+            }
+        }
+
         private bool isBusy;
         public bool IsBusy
         {
@@ -570,8 +584,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
-                return;
+                MedicineVirtual m = new MedicineVirtual();
+                switch (medicineID)
+                {
+                    case "R001":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "處方箋遺失或毀損，提前回診";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        CurrentPrescription.Medicines.Add(m);
+                        return;
+                    case "R002":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "醫師請假，提前回診";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        CurrentPrescription.Medicines.Add(m);
+                        return;
+                    case "R003":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        CurrentPrescription.Medicines.Add(m);
+                        return;
+                    case "R004":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "其他非屬R001~R003之提前回診或慢性病連續處方箋提前領取藥品";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        CurrentPrescription.Medicines.Add(m);
+                        return;
+                    default:
+                        MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        return;
+                }
             }
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
@@ -673,6 +724,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
             }
+            
             if (!PrintConfirm(false)) return;
             SavePatientData();
             if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
@@ -960,11 +1012,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return false;
             }
+            TempPre = new Prescription();
+            TempPre = (Prescription)CurrentPrescription.Clone();
+            TempPre.AdjustMedicinesType();
             var printWorker = new BackgroundWorker();
             printWorker.DoWork += (o, ea) =>
             {
                 Print(noCard, (bool)printMedBag, printSingle, (bool)printReceipt);
             };
+            printWorker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             IsBusy = true;
             printWorker.RunWorkerAsync();
             return true;
@@ -1225,31 +1281,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void Print(bool noCard,bool printMedBag,bool? printSingle, bool printReceipt)
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (printMedBag)
             {
-                if (printMedBag)
-                {
-                    BusyContent = StringRes.藥袋列印;
-                    CurrentPrescription.PrintMedBag((bool)printSingle);
-                }
-                if (printReceipt)
-                {
-                    BusyContent = StringRes.收據列印;
-                    CurrentPrescription.PrintReceipt();
-                }
-                if (noCard)
-                {
-                    BusyContent = StringRes.押金單據列印;
-                    CurrentPrescription.PrintDepositSheet();
-                }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
+                BusyContent = StringRes.藥袋列印;
+                TempPre.PrintMedBag((bool)printSingle);
+            }
+            if (printReceipt)
             {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+                BusyContent = StringRes.收據列印;
+                TempPre.PrintReceipt();
+            }
+            if (noCard)
+            {
+                BusyContent = StringRes.押金單據列印;
+                TempPre.PrintDepositSheet();
+            }
         }
         private void StartNoCardAdjust()
         {

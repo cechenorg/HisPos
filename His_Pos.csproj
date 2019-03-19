@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>38</ApplicationRevision>
+    <ApplicationRevision>39</ApplicationRevision>
     <ApplicationVersion>2.0.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -382,6 +382,7 @@
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
