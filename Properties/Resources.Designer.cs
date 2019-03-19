@@ -61,6 +61,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 額外收入登錄 的當地語系化字串。
+        /// </summary>
+        internal static string AdditionalCashFlowManage {
+            get {
+                return ResourceManager.GetString("AdditionalCashFlowManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請選擇調劑案件
         /// 的當地語系化字串。
         /// </summary>

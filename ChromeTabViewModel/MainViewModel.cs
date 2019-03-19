@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
@@ -160,6 +161,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.匯出申報檔):
                     break;
+                case nameof(FeatureItem.額外收入登錄):
+                    break;
                 case nameof(FeatureItem.商品查詢):
                     break;
 
@@ -271,6 +274,10 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.匯出申報檔):
                     newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
+                case nameof(FeatureItem.額外收入登錄):
+                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[5], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                    
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
                     newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
