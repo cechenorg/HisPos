@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
             TypeName = r.Field<string>("InvRec_Type");
             Amount = r.Field<double>("Amount");
             BatchNumber = r.Field<string>("InvRec_BatchNumber");
-            FinalStock = r.Field<double>("InvRec_NewStock");
+            //FinalStock = r.Field<double>("InvRec_NewStock");
             Description = r.Field<string>("Description");
         }
         public DateTime Date { get; set; }
