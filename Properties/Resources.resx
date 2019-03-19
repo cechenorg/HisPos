@@ -545,4 +545,7 @@
   <data name="CooperativeEntryReport" xml:space="preserve">
     <value>合作診所結帳報表</value>
   </data>
+  <data name="AdditionalCashFlowManage" xml:space="preserve">
+    <value>額外收入登錄</value>
+  </data>
 </root>

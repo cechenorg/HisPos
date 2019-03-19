@@ -61,7 +61,8 @@ namespace His_Pos.Class
         系統函式 = 25,
         管制藥品簿冊申報 = 26,
         每日總帳報表 = 27,
-        合作診所結帳報表 = 28
+        合作診所結帳報表 = 28,
+        額外收入登錄 = 29
     }
 
     public enum StoreOrderProductType
