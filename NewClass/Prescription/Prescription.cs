@@ -13,9 +13,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedBag;
-using His_Pos.NewClass.StoreOrder;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -519,22 +517,14 @@ namespace His_Pos.NewClass.Prescription
             foreach (var med in Medicines)
             {
                 if (!string.IsNullOrEmpty(med.UsageName) && med.Usage is null)
-                {
                     med.Usage = VM.GetUsage(med.UsageName);
-                }
                 if (!string.IsNullOrEmpty(med.PositionID) && med.Position is null)
-                {
                     med.Position = VM.GetPosition(med.PositionID);
-                }
             }
             if (!Medicines.Any())
-            {
                 return StringRes.MedicineEmpty;
-            }
             if (Medicines.Count(m => m.Amount == 0) == 0)
-            {
                 return string.Empty;
-            }
             return Medicines.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
         public void CountPrescriptionPoint(bool countSelfPay)
@@ -1126,5 +1116,6 @@ namespace His_Pos.NewClass.Prescription
             }
             return sameList.Count <= 0 ? sameMed : sameList.Distinct().Aggregate(sameMed, (current, s) => current + s);
         }
+
     }
 }

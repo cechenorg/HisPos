@@ -198,7 +198,7 @@
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="AdjustCombo"  Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}" IsEnabled="False"
                               SelectedItem="{Binding EditedPrescription.Treatment.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
