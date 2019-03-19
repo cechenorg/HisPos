@@ -2,6 +2,7 @@
 using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
+using His_Pos.NewClass.Product.CustomerHistoryProduct;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
@@ -26,15 +27,19 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
             SourceId = r.Field<int>("SourceId");
             InsName = r.Field<string>("Ins_Name");
             DivName = r.Field<string>("Div_Name");
-            Title = r.Field<string>("");
+            if (InsName.Length > 8)
+                Title = InsName.Substring(0, 8) + " " + DivName;
+            else
+                Title = InsName + " " + DivName;
             Status = r.Field<bool>("Status");
         } 
         public HistoryType Type { get; }
-        public string InsName { get; set; }
-        public string DivName { get; set; }
-        public int SourceId { get; set; }
-        public DateTime AdjustDate { get; set; } //日期
-        public string Title { get; set; }//標題
-        public bool Status { get; set; }//已調劑處方:是否未過卡 已登錄處方:是否傳送藥健康 預約:無
+        public string InsName { get; }
+        public string DivName { get; }
+        public int SourceId { get; }
+        public DateTime AdjustDate { get; } //日期
+        public string Title { get; }//標題
+        public bool Status { get; }//已調劑處方:是否未過卡 已登錄處方:是否傳送藥健康 預約:無
+        public CustomerHistoryProducts Products { get; set; }
     }
 }

@@ -366,6 +366,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
+    <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
