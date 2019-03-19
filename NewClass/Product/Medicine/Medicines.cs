@@ -25,11 +25,11 @@ namespace His_Pos.NewClass.Product.Medicine
         public void GetDataByPrescriptionId(int preId) {
             DataTable table = MedicineDb.GetDataByPrescriptionId(preId);
             foreach (DataRow r in table.Rows) {
-                Medicine med = new Medicine(r);
+                var med = new Medicine(r);
                 med.Dosage = r.Field<double?>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
                 med.PositionID = r.Field<string>("Position");
-                med.Days = r.Field<short?>("MedicineDays");
+                med.Days = r.Field<int?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
@@ -47,7 +47,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 med.Dosage = r.Field<double>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
                 med.PositionID = r.Field<string>("Position");
-                med.Days = r.Field<short>("MedicineDays");
+                med.Days = r.Field<int>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
@@ -64,7 +64,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (string.IsNullOrEmpty(m.UsageName))
                     m.UsageName = "ASORDER";
             }
-            var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).ToList();
+            var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
             var result = string.Empty;
             foreach (var med in medList)
             {
@@ -78,6 +78,16 @@ namespace His_Pos.NewClass.Product.Medicine
                     result += med.Days.ToString().PadLeft(2, ' ');
                     result += med.Amount.ToString().PadLeft(7, ' ');
                     result += "01";
+                }
+                else if (med is MedicineVirtual)
+                {
+                    result += "G";
+                    result += med.ID.PadLeft(12, ' ');
+                    result += string.Empty.PadLeft(6, ' ');
+                    result += string.Empty.PadLeft(18, ' ');
+                    result += string.Empty.PadLeft(2, ' ');
+                    result += med.Amount.ToString().PadLeft(7, ' ');
+                    result += string.Empty.PadLeft(2, ' ');
                 }
                 else
                 {
@@ -105,6 +115,11 @@ namespace His_Pos.NewClass.Product.Medicine
                     if (!b)
                         m.BuckleAmount = 0;
                     m.IsBuckle = b;
+                }
+                if (m is MedicineVirtual)
+                {
+                    m.BuckleAmount = 0;
+                    m.IsBuckle = false;
                 }
             }
         }

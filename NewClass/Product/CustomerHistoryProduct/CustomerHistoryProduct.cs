@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
             Dosage = r.Field<double>("Dosage");
             UsageName = r.Field<string>("Usage");
             PositionID = r.Field<string>("Position");
-            Days = r.Field<short>("MedicineDays");
+            Days = r.Field<int>("MedicineDays");
             Amount = r.Field<double>("TotalAmount");
         }
         public string ID { get; set; }

@@ -12,7 +12,7 @@ using IcCard = His_Pos.NewClass.Prescription.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
-    public class Customer:Person
+    public class Customer:Person,ICloneable
     {
         public Customer() {}
 
@@ -167,6 +167,25 @@ namespace His_Pos.NewClass.Person.Customer
         {
             var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");
             return count;
+        }
+
+        public object Clone()
+        {
+            Customer c = new Customer();
+            c.ContactNote = ContactNote;
+            c.LastEdit = LastEdit;
+            c.Address = Address;
+            c.Birthday = Birthday;
+            c.CellPhone = CellPhone;
+            c.Email = Email;
+            c.Gender = Gender;
+            c.ID = ID;
+            c.IDNumber = IDNumber;
+            c.Line = Line;
+            c.Name = Name;
+            c.Note = Note;
+            c.Tel = Tel;
+            return c;
         }
     }
 }
