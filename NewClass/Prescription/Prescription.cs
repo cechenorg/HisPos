@@ -816,6 +816,7 @@ namespace His_Pos.NewClass.Prescription
                 Patient.Check();
                 PrescriptionStatus.IsGetCard = true;
             }
+
             return success;
         }
 
