@@ -381,16 +381,16 @@ namespace His_Pos.NewClass.Prescription
                     {
                         case "R001":
                             temp.ChineseName = "處方箋遺失或毀損，提前回診";
-                            return;
+                            break;
                         case "R002":
                             temp.ChineseName = "醫師請假，提前回診";
-                            return;
+                            break;
                         case "R003":
                             temp.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
-                            return;
+                            break;
                         case "R004":
                             temp.ChineseName = "其他提前回診或慢箋提前領藥";
-                            return;
+                            break;
                     }
                 }
                 else
@@ -549,7 +549,7 @@ namespace His_Pos.NewClass.Prescription
                 return StringRes.MedicineEmpty;
             if (Medicines.Count(m => m.Amount == 0) == 0)
                 return string.Empty;
-            return Medicines.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+            return Medicines.Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
         public void CountPrescriptionPoint(bool countSelfPay)
         {
