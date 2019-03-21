@@ -305,14 +305,19 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
-        public static  void InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
+        public static  bool InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try {
-                if(PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData))
+                if (PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData)) { 
                     StoreOrderDB.StoreOrderToWaiting(newstoordId);
+                    return true;
+                }
+                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
+                return false;
             }
             catch (Exception ex) {
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送",MessageType.ERROR);
+                return false;
             } 
         }
         public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData) {

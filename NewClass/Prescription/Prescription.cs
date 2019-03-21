@@ -866,7 +866,8 @@ namespace His_Pos.NewClass.Prescription
 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originPrescription.Medicines) {
-                if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
+                if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID) && !(orm is MedicineVirtual))
+                {
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
                     medicine.Amount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days) && m.PaySelf == orm.PaySelf) > 0 
@@ -878,7 +879,7 @@ namespace His_Pos.NewClass.Prescription
                
             }
             foreach (var nem in Medicines) {
-                if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
+                if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID) && !(nem is MedicineVirtual) )
                 {
                     if (originPrescription.Medicines.Count(m => m.ID == nem.ID && m.UsageName.Equals(nem.UsageName) && m.Days == nem.Days && m.PaySelf == nem.PaySelf) == 0)
                     {
