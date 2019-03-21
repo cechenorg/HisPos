@@ -390,6 +390,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = 0;
             CopaymentPoint = 0;
             Profit = 0;
+            SelectedInstitution = null;
         }
 
         private void Refresh(NotificationMessage msg)
