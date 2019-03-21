@@ -312,11 +312,13 @@ namespace His_Pos.NewClass.StoreOrder
                     StoreOrderDB.StoreOrderToWaiting(newstoordId);
                     return true;
                 }
-                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }
             catch (Exception ex) {
-                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後至進退貨管理傳送",MessageType.ERROR);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             } 
         }
@@ -328,7 +330,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             catch (Exception ex)
             {
-                MessageWindow.ShowMessage("更新藥健康失敗 請稍後至進退貨管理傳送", MessageType.ERROR);
+                MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
             }
         }
         #endregion
