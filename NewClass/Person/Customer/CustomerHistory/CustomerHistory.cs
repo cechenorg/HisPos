@@ -2,6 +2,7 @@
 using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
@@ -41,5 +42,15 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public string Title { get; }//標題
         public bool Status { get; }//已調劑處方:是否未過卡 已登錄處方:是否傳送藥健康 預約:無
         public CustomerHistoryProducts Products { get; set; }
+
+        public Prescription.Prescription GetPrescriptionByID()
+        {
+            return new Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionSource.Normal);
+        }
+
+        public Prescription.Prescription GetReservePrescriptionByID()
+        {
+            return new Prescription.Prescription(PrescriptionDb.GetReservePrescriptionByID(SourceId).Rows[0], PrescriptionSource.ChronicReserve);
+        }
     }
 }

@@ -32,6 +32,7 @@ using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -98,13 +99,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
         private ViewModelEnum viewModel { get; set; }
-        private bool notPrescribe;
-        public bool NotPrescribe
+        private bool canMakeup;
+        public bool CanMakeup
         {
-            get => notPrescribe;
+            get => canMakeup;
             set
             {
-                Set(() => NotPrescribe, ref notPrescribe, value);
+                Set(() => CanMakeup, ref canMakeup, value);
             }
         }
         public double WindowWidth
@@ -159,11 +160,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #endregion
         public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
         {
-            NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
+            CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
             OriginalPrescription = selected;
             OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
             Init((Prescription)OriginalPrescription.Clone());
-            IsGetCard = !NotPrescribe || EditedPrescription.PrescriptionStatus.IsGetCard;
+            IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
             viewModel = vm;
         }
         #region InitialFunctions
@@ -353,8 +354,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
-                return;
+                MedicineVirtual m = new MedicineVirtual();
+                switch (medicineID)
+                {
+                    case "R001":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "處方箋遺失或毀損，提前回診";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        EditedPrescription.Medicines.Add(m);
+                        return;
+                    case "R002":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "醫師請假，提前回診";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        EditedPrescription.Medicines.Add(m);
+                        return;
+                    case "R003":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        EditedPrescription.Medicines.Add(m);
+                        return;
+                    case "R004":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "其他提前回診或慢箋提前領藥";
+                        m.Amount = 0;
+                        m.TotalPrice = 0;
+                        EditedPrescription.Medicines.Add(m);
+                        return;
+                    default:
+                        MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        return;
+                }
             }
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit);
@@ -417,6 +455,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
                 switch (viewModel)
                 {
+                    case ViewModelEnum.PrescriptionDeclare:
+                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclareViewModel) + "PrescriptionEdited"));
+                        break;
                     case ViewModelEnum.PrescriptionSearch:
                         switch (EditedPrescription.Source)
                         {
@@ -453,8 +494,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MainWindow.ServerConnection.CloseConnection();
                 switch (viewModel)
                 {
+                    case ViewModelEnum.PrescriptionDeclare:
+                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclareViewModel) + "PrescriptionEdited"));
+                        break;
                     case ViewModelEnum.PrescriptionSearch:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                        switch (EditedPrescription.Source)
+                        {
+                            case PrescriptionSource.Normal:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
+                                break;
+                            case PrescriptionSource.ChronicReserve:
+                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"));
+                                break;
+                        }
                         break;
                     case ViewModelEnum.DeclareFileManage:
                         Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
@@ -717,7 +769,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private bool CheckIsNotPrescribe()
         {
-            return NotPrescribe;
+            return CanMakeup;
         }
 
         #endregion

@@ -477,15 +477,15 @@
                               ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription.Patient}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FontSize" Value="14" />
-                                    <Setter Property="Height" Value="35" />
                                     <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="LightGray" />
+                                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                         </Trigger>
                                     </Style.Triggers>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <EventSetter Event="MouseDoubleClick" Handler="ShowPrescriptionEditWindow"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Height" Value="40"/>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>

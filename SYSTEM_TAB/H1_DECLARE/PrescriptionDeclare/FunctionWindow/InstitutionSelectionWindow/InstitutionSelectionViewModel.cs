@@ -69,23 +69,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         {
             if (IsEditing)
             {
-                if (Search.Length >= 4)
+                IsEditing = false;
+                InsCollectionViewSource.Filter += FilterBySearchText;
+                switch (Institutions.Count)
                 {
-                    IsEditing = false;
-                    InsCollectionViewSource.Filter += FilterBySearchText;
-                    switch (Institutions.Count)
-                    {
-                        case 0:
-                            MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
-                            break;
-                        default:
-                            InsCollectionViewSource.View.MoveCurrentToFirst();
-                            SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
-                            break;
-                    }
+                    case 0:
+                        MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
+                        break;
+                    default:
+                        InsCollectionViewSource.View.MoveCurrentToFirst();
+                        SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
+                        break;
                 }
-                else
-                    MessageWindow.ShowMessage("查詢字串需至少4碼", MessageType.WARNING);
             }
             else
             {
