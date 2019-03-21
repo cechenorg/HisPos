@@ -16,21 +16,6 @@ namespace His_Pos.NewClass.Product
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             IsCommon = row.Field<bool>("Pro_IsCommon");
-            switch (ID)
-            {
-                case "R001":
-                    ChineseName = "處方箋遺失或毀損，提前回診";
-                    return;
-                case "R002":
-                    ChineseName = "醫師請假，提前回診";
-                    return;
-                case "R003":
-                    ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
-                    return;
-                case "R004":
-                    ChineseName = "其他提前回診或慢箋提前領藥";
-                    return;
-            }
         }
 
         public Product(ProductStruct p)

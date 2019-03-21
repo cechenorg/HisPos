@@ -372,8 +372,27 @@ namespace His_Pos.NewClass.Prescription
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
-                if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") || Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
-                    temp = new MedicineVirtual(table.Rows[0]);
+                if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
+                    Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
+                {
+                    temp = new MedicineVirtual();
+                    temp.ID = Medicines[medCount].ID;
+                    switch (temp.ID)
+                    {
+                        case "R001":
+                            temp.ChineseName = "處方箋遺失或毀損，提前回診";
+                            return;
+                        case "R002":
+                            temp.ChineseName = "醫師請假，提前回診";
+                            return;
+                        case "R003":
+                            temp.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
+                            return;
+                        case "R004":
+                            temp.ChineseName = "其他提前回診或慢箋提前領藥";
+                            return;
+                    }
+                }
                 else
                 {
                     if (table.Rows.Count > 0)
