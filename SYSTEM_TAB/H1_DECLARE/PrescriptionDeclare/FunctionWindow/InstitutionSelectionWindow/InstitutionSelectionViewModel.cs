@@ -85,7 +85,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                     }
                 }
                 else
-                    MessageWindow.ShowMessage("查詢ID需至少4碼", MessageType.WARNING);
+                    MessageWindow.ShowMessage("查詢字串需至少4碼", MessageType.WARNING);
             }
             else
             {

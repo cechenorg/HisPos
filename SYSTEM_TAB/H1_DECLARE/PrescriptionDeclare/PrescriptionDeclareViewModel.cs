@@ -202,13 +202,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get => selectedHistory;
             set
             {
-                Set(() => SelectedHistory, ref selectedHistory, value);
-                if (SelectedHistory != null)
+                if (value != null)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    SelectedHistory.Products = new CustomerHistoryProducts();
-                    SelectedHistory.Products.GetCustomerHistoryProducts(SelectedHistory.SourceId, SelectedHistory.Type);
+                    value.Products = new CustomerHistoryProducts();
+                    value.Products.GetCustomerHistoryProducts(value.SourceId, value.Type);
+                    MainWindow.ServerConnection.CloseConnection();
                 }
+                Set(() => SelectedHistory, ref selectedHistory, value);
+                
             }
         }
         private MedicalPersonnel selectedPharmacist;
@@ -285,7 +287,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Institutions = VM.Institutions;
             Divisions = VM.Divisions;
-            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels;
+            MedicalPersonnels = new MedicalPersonnels(false);
+            foreach (var m in VM.CurrentPharmacy.MedicalPersonnels.Where(e => e.IsEnable))
+            {
+                MedicalPersonnels.Add(m);
+            }
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;
@@ -336,7 +342,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel)+"InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
             Messenger.Default.Register<NotificationMessage>("CustomPresChecked",(notificationMessage) =>
             {
@@ -499,15 +504,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             CurrentPrescription.Treatment.Institution = null;
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:
                     return;
                 case 1:
                     CurrentPrescription.Treatment.Institution = result[0];
+                    CurrentPrescription.CheckIsCooperative();
                     break;
                 default:
+                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
                     var institutionSelectionWindow = new InsSelectWindow(search, ViewModelEnum.PrescriptionDeclare);
                     institutionSelectionWindow.ShowDialog();
                     break;
@@ -614,7 +621,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     case "R004":
                         m.ID = medicineID;
                         m.NHIPrice = 0;
-                        m.ChineseName = "其他非屬R001~R003之提前回診或慢性病連續處方箋提前領取藥品";
+                        m.ChineseName = "其他提前回診或慢箋提前領藥";
                         m.Amount = 0;
                         m.TotalPrice = 0;
                         CurrentPrescription.Medicines.Add(m);
@@ -875,6 +882,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
+            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
             CurrentPrescription.CheckIsCooperative();
         }
@@ -1052,7 +1060,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (ErrorCode is null)
             {
-                if (!IsReadCard)
+                if (string.IsNullOrEmpty(CurrentPrescription.Card.PatientBasicData.CardNumber))
                     ReadCard(false);
                 else
                     GetMedicalNumber();
@@ -1326,8 +1334,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private int UpdatePrescriptionCount()//計算處方張數
         { 
-           return CurrentPrescription.Treatment.Pharmacist != null 
-                ? PrescriptionDb.GetPrescriptionCountByID(CurrentPrescription.Treatment.Pharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount")
+           return SelectedPharmacist != null 
+                ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0; 
         }
 

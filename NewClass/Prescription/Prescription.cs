@@ -372,34 +372,36 @@ namespace His_Pos.NewClass.Prescription
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
-                if (table.Rows.Count > 0)
-                {
-                    switch (table.Rows[0].Field<int>("DataType"))
-                    {
-                        case 0:
-                            temp = new MedicineOTC(table.Rows[0]); 
-                            break;
-                        case 1:
-                            temp = new MedicineNHI(table.Rows[0]); 
-                            break;
-                        case 2:
-                            temp = new MedicineSpecialMaterial(table.Rows[0]);
-                            break;
-                        case 3:
-                            temp = new MedicineVirtual(table.Rows[0]);
-                            break;
-                    }
-                }
+                if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") || Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
+                    temp = new MedicineVirtual(table.Rows[0]);
                 else
                 {
-                    temp = new MedicineOTC
+                    if (table.Rows.Count > 0)
                     {
-                        ID = Medicines[medCount].ID,
-                        ChineseName = Medicines[medCount].ChineseName,
-                        EnglishName = Medicines[medCount].EnglishName
-                    };
-                    if (!string.IsNullOrEmpty(temp.ID))
-                        MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
+                        switch (table.Rows[0].Field<int>("DataType"))
+                        {
+                            case 0:
+                                temp = new MedicineOTC(table.Rows[0]);
+                                break;
+                            case 1:
+                                temp = new MedicineNHI(table.Rows[0]);
+                                break;
+                            case 2:
+                                temp = new MedicineSpecialMaterial(table.Rows[0]);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        temp = new MedicineOTC
+                        {
+                            ID = Medicines[medCount].ID,
+                            ChineseName = Medicines[medCount].ChineseName,
+                            EnglishName = Medicines[medCount].EnglishName
+                        };
+                        if (!string.IsNullOrEmpty(temp.ID))
+                            MedicineDb.InsertCooperativeMedicineOTC(temp.ID, temp.ChineseName);//新增合作診所MedicineOtc
+                    }
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionID = Medicines[medCount].PositionID;
@@ -528,7 +530,7 @@ namespace His_Pos.NewClass.Prescription
                 return StringRes.MedicineEmpty;
             if (Medicines.Count(m => m.Amount == 0) == 0)
                 return string.Empty;
-            return Medicines.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+            return Medicines.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
         public void CountPrescriptionPoint(bool countSelfPay)
         {
@@ -977,7 +979,10 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "1":
                 case "3":
-                    Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
+                    if (Treatment.Division != null && Treatment.Division.ID.Equals("40"))
+                        Treatment.PrescriptionCase = VM.GetPrescriptionCases("19");
+                    else
+                        Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
                     if(!CheckFreeCopayment())
                         Treatment.Copayment = VM.GetCopayment("I20");
                     break;
