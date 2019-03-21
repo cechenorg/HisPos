@@ -108,6 +108,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => CanMakeup, ref canMakeup, value);
             }
         }
+        private bool notPrescribe;
+        public bool NotPrescribe
+        {
+            get => notPrescribe;
+            set
+            {
+                Set(() => NotPrescribe, ref notPrescribe, value);
+            }
+        }
         public double WindowWidth
         {
             get => SystemParameters.WorkArea.Width * 0.85;
@@ -161,6 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
         {
             CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
+            NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
             OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
             Init((Prescription)OriginalPrescription.Clone());
