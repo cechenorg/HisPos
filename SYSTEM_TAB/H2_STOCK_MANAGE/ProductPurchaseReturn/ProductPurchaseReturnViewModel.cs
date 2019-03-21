@@ -38,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
+        public RelayCommand ChooseBatchNumberCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 

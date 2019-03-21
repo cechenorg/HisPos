@@ -62,7 +62,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                     textBox.Text = "";
 
                     if (ProductDataGrid.Items.Count != oldCount)
-                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[4]);
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[3]);
                 }
                 else if (ProductDataGrid.CurrentCell.Item is Product)
                 {
@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                     if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
                         textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
 
-                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[4]);
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[3]);
                 }
 
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;

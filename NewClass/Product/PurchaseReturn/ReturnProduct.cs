@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Interface;
 
@@ -20,11 +21,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; set; }
         public string Note { get; set; }
         public string BatchNumber { get; set; }
+        public string BatchLimit { get; set; }
         public double ReturnAmount { get; set; }
         public double RealAmount { get; set; }
         public double Price { get; set; }
         public double SubTotal { get; set; }
         public DateTime? ValidDate { get; set; }
+        public Collection<string> BatchNumbers { get; set; }
         #endregion
 
         public ReturnProduct() : base() {}

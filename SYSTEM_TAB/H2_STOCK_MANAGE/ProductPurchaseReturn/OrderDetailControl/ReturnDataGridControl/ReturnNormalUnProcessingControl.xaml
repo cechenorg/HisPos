@@ -67,7 +67,7 @@
                 <DataGridTemplateColumn MinWidth="110" Header="商品代碼">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="170" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center"/>
+                            <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="170" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_OnKeyDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -84,11 +84,11 @@
                 <DataGridTemplateColumn MinWidth="70" Header="退貨價">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Price" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DoubleToStringConverter}}"  IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
+                            <TextBox x:Name="Price" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, Delay=400}"  IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -99,7 +99,7 @@
                 <DataGridTemplateColumn MinWidth="70" Header="退貨量">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
+                            <TextBox x:Name="Amount" Text="{Binding ReturnAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -113,7 +113,9 @@
                 <DataGridTemplateColumn MinWidth="120" Header="批號">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedItem="{Binding BatchNumber}"/>
+                            <ComboBox SelectedItem="{Binding BatchNumber}">
+                                <ComboBox></ComboBox>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -137,9 +139,9 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <Button Content="+ 新增退貨品項" Width="150" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0"/>
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <TextBlock Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2, FallbackValue=0}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-            <Label Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="{Binding CurrentStoreOrder.ProductCount, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Rectangle Width="265"/>
             <Button Width="120" Content="作廢" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="DimGray"/>
