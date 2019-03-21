@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Interface;
+using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service;
@@ -321,6 +322,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 e.Handled = true;
                 t.CaretIndex++;
             }
+        }
+        private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row?.Item is null) return;
+            if (!(row.Item is CustomerHistory)) return;
+            Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow"));
         }
     }
 }

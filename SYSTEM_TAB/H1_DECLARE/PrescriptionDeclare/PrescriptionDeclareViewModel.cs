@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -47,6 +48,7 @@ using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -343,6 +345,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
+            Messenger.Default.Register<NotificationMessage>(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow", ShowPrescriptionEditWindowAction);
             Messenger.Default.Register<NotificationMessage>("CustomPresChecked",(notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CustomPresChecked"))
@@ -364,6 +367,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!adjustChange.Notification.Equals("AdjustDateChanged")) return;
             CheckDeclareStatus();
+        }
+        private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
+        {
+            if (SelectedHistory is null || !msg.Notification.Equals(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow")) return;
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ?
+                SelectedHistory.GetReservePrescriptionByID(): SelectedHistory.GetPrescriptionByID();
+            MainWindow.ServerConnection.CloseConnection();
+            prescription.Source = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
+            var prescriptionEdit = new PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionDeclare);
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            prescriptionEdit.ShowDialog();
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
+        }
+        private void Refresh(NotificationMessage msg)
+        {
+            if (!msg.Notification.Equals(nameof(PrescriptionDeclareViewModel) + "PrescriptionEdited")) return;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.Histories = new CustomerHistories(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription.Patient.HistoryCollectionViewSource = new CollectionViewSource { Source = CurrentPrescription.Patient.Histories };
+            CurrentPrescription.Patient.HistoryCollectionView = CurrentPrescription.Patient.HistoryCollectionViewSource.View;
         }
         #endregion
         #region Actions
@@ -493,11 +518,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ShowInsSelectionWindowAction(string search)
         {
-            if (search.Length < 4)
-            {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
             if (CurrentPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(CurrentPrescription.Treatment.Institution.FullName) && search.Equals(CurrentPrescription.Treatment.Institution.FullName))
             {
                 Messenger.Default.Send(new NotificationMessage(this,"FocusDivision"));
