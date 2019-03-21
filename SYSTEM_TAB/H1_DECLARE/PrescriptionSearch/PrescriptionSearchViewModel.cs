@@ -403,13 +403,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void GetInstitutionAction(string search)
         {
-            if (search.Length < 4)
-            {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
             SelectedInstitution = null;
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:

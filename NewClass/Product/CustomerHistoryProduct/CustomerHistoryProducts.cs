@@ -12,7 +12,7 @@ using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.NewClass.Product.CustomerHistoryProduct
 {
-    public class CustomerHistoryProducts:Collection<CustomerHistoryProduct>
+    public class CustomerHistoryProducts:ObservableCollection<CustomerHistoryProduct>
     {
         public CustomerHistoryProducts()
         {
