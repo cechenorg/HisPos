@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;

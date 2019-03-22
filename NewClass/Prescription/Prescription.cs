@@ -1134,9 +1134,9 @@ namespace His_Pos.NewClass.Prescription
         {
             var sameList = new List<string>();
             var sameMed = string.Empty;
-            foreach (var m in Medicines)
+            foreach (var m in Medicines.Where(m => !(m is MedicineVirtual)))
             {
-                var compareList = new List<Medicine>(Medicines);
+                var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
                 compareList.Remove(m);
                 if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
                 {
