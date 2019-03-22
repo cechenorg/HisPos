@@ -1065,7 +1065,7 @@ namespace His_Pos.NewClass.Prescription
                 Update();
             if(Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
                 AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
             ProcessSelfPayCashFlow("自費");
@@ -1091,7 +1091,7 @@ namespace His_Pos.NewClass.Prescription
         {
             Id = InsertPrescription();
             AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
             ProcessSelfPayCashFlow("自費");
@@ -1119,7 +1119,7 @@ namespace His_Pos.NewClass.Prescription
         public void Prescribe()
         {
             Id = InsertPrescription();
-            var bucklevalue = ProcessInventory("自費調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("自費調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessSelfPayCashFlow("自費調劑");
         }
