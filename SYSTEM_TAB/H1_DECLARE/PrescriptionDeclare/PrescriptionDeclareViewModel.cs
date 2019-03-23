@@ -449,7 +449,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+                    CurrentPrescription.Patient.Check();
+                    //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
                 }
             }
         }

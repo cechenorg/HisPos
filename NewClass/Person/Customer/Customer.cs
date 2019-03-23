@@ -66,30 +66,15 @@ namespace His_Pos.NewClass.Person.Customer
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             return customer;
         }
-        public void Check() {
+        public Customers Check() {
             DataTable table = CustomerDb.CheckCustomer(this);
-            Customer newCustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            if (newCustomer is null)
+            Customers customers = new Customers();
+            if (table.Rows.Count == 0) return customers;
+            foreach (DataRow r in table.Rows)
             {
-                Application.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    MessageWindow.ShowMessage("取得顧客資料發生異常，請重試。", MessageType.WARNING);
-                }));
-                return;
+                customers.Add(new Customer(r));
             }
-            ID = newCustomer.ID;
-            Name = newCustomer.Name;
-            Birthday = newCustomer.Birthday;
-            IDNumber = newCustomer.IDNumber;
-            Tel = newCustomer.Tel;
-            ContactNote = newCustomer.ContactNote;
-            CellPhone = newCustomer.CellPhone;
-            Line = newCustomer.Line;
-            Note = newCustomer.Note;
-            Address = newCustomer.Address;
-            Email = newCustomer.Email;
-            Gender = newCustomer.Gender;
-            LastEdit = newCustomer.LastEdit;
+            return customers;
         }
         public void UpdateEditTime() {
             CustomerDb.UpdateEditTime(ID);
@@ -168,7 +153,10 @@ namespace His_Pos.NewClass.Person.Customer
             var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");
             return count;
         }
-
+        public bool CheckData()
+        {
+            return IDNumber.Length == 10 && Birthday != null && !string.IsNullOrEmpty(Name);
+        }
         public object Clone()
         {
             var c = new Customer();
@@ -186,6 +174,11 @@ namespace His_Pos.NewClass.Person.Customer
             c.Note = Note;
             c.Tel = Tel;
             return c;
+        }
+
+        public void InsertData()
+        {
+            CustomerDb.InsertCustomerData(this);
         }
     }
 }

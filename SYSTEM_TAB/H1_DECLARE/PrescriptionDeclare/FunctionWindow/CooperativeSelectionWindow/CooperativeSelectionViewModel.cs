@@ -191,9 +191,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrintAction()
         {
             if(SelectedPrescription is null) return;
-            MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription.Patient.Check();
-            MainWindow.ServerConnection.CloseConnection();
+            //MainWindow.ServerConnection.OpenConnection();
+            //var customers = SelectedPrescription.Patient.Check();
+            //if (customers.Count == 0)
+            //{
+            //    if (SelectedPrescription.Patient.CheckData())
+            //        SelectedPrescription.Patient.InsertData();
+            //}
+            //MainWindow.ServerConnection.CloseConnection();
+            //if (customers.Count == 1)
+            //{
+            //    SelectedPrescription.Patient.ID = customers[0].ID;
+            //    SelectedPrescription.Patient.Name = customers[0].Name;
+            //    SelectedPrescription.Patient.Birthday = customers[0].Birthday;
+            //    SelectedPrescription.Patient.IDNumber = customers[0].IDNumber;
+            //    SelectedPrescription.Patient.Tel = customers[0].Tel;
+            //    SelectedPrescription.Patient.ContactNote = customers[0].ContactNote;
+            //    SelectedPrescription.Patient.CellPhone = customers[0].CellPhone;
+            //    SelectedPrescription.Patient.Line = customers[0].Line;
+            //    SelectedPrescription.Patient.Note = customers[0].Note;
+            //    SelectedPrescription.Patient.Address = customers[0].Address;
+            //    SelectedPrescription.Patient.Email = customers[0].Email;
+            //    SelectedPrescription.Patient.Gender = customers[0].Gender;
+            //    SelectedPrescription.Patient.LastEdit = customers[0].LastEdit;
+            //}
             SelectedPrescription.GetCompletePrescriptionData(true,false);
             SelectedPrescription.CountPrescriptionPoint(true);
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
