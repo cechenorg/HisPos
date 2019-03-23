@@ -67,8 +67,8 @@ namespace His_Pos.NewClass.Person.Customer
             return customer;
         }
         public Customers Check() {
-            DataTable table = CustomerDb.CheckCustomer(this);
-            Customers customers = new Customers();
+            var table = CustomerDb.CheckCustomer(this);
+            var customers = new Customers();
             if (table.Rows.Count == 0) return customers;
             foreach (DataRow r in table.Rows)
             {
@@ -173,12 +173,41 @@ namespace His_Pos.NewClass.Person.Customer
             c.Name = Name;
             c.Note = Note;
             c.Tel = Tel;
+            c.Histories = new CustomerHistories();
+            if (Histories != null)
+            {
+                foreach (var h in Histories)
+                    c.Histories.Add(h);
+                c.HistoryCollectionViewSource = new CollectionViewSource{Source = c.Histories };
+                c.HistoryCollectionView = HistoryCollectionViewSource.View;
+            }
             return c;
         }
 
         public void InsertData()
         {
-            CustomerDb.InsertCustomerData(this);
+            var table = CustomerDb.InsertCustomerData(this);
+            var c = new Customer(table.Rows[0]);
+            ID = c.ID;
+            Name = c.Name;
+            IDNumber = c.IDNumber;
+            Birthday = c.Birthday;
+            Tel = c.Tel;
+            ContactNote = c.ContactNote;
+            LastEdit = c.LastEdit;
+            Address = c.Address;
+            CellPhone = c.CellPhone;
+            Email = c.Email;
+            Gender = c.Gender;
+            Line = c.Line;
+            Note = c.Note;
+        }
+
+        public void GetHistories()
+        {
+            Histories = new CustomerHistories(ID);
+            HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
+            HistoryCollectionView =HistoryCollectionViewSource.View;
         }
     }
 }

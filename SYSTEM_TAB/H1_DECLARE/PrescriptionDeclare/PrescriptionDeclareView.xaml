@@ -31,6 +31,7 @@
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:IntegerStringConverter x:Key="IntegerStringConverter"/>
         <service:SentinelConverter x:Key="SentinelConverter"/>
+        <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
         <Image x:Key="PrescriptionHistory" Source="/Images/medical-history.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
@@ -65,24 +66,24 @@
                 </Grid.RowDefinitions>
                 <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                     <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
-                    <TextBox Width="150" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
+                    <TextBox Name="PatientIDNumber" Width="150" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding SearchCustomerByIDNumber}" Key="Enter"/>
+                            <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Image Width="30" Height="30" Source="/Images/User_48px.png" Margin="10,0,10,0"/>
-                    <TextBox Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
+                    <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
                              Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding SearchCustomerByName}" Key="Enter" />
+                            <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientName}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                     <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus">
                         <xctk:MaskedTextBox.InputBindings>
-                            <KeyBinding Command="{Binding SearchCustomerByBirthday}" Key="Enter" />
+                            <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientBirthday}"/>
                         </xctk:MaskedTextBox.InputBindings>
                         <Binding Path="CurrentPrescription.Patient.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -92,10 +93,10 @@
                         </Binding>
                     </xctk:MaskedTextBox>
                     <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                    <TextBox Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientTel" Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding SearchCustomerByTel}" Key="Enter" />
+                            <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientTel}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Button Content="{StaticResource PrescriptionHistory}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Hidden"/>
@@ -469,19 +470,19 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                            <RadioButton Tag="1" Content="已調劑" Style="{StaticResource CustomerHistoryRadio}" IsChecked="True"/>
-                            <RadioButton Tag="0" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}"/>
-                            <RadioButton Tag="2" Content="預約" Style="{StaticResource CustomerHistoryRadio}"/>
+                            <RadioButton GroupName="CusHistoryGroup" Content="已調劑" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
+                            <RadioButton GroupName="CusHistoryGroup" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
+                            <RadioButton GroupName="CusHistoryGroup" Content="預約" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
                         </StackPanel>
                         <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
-                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}">
+                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="250" VerticalAlignment="Bottom">
                             <DataGrid.Resources>
                                 <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                             </DataGrid.Resources>
                             <DataGrid.ContextMenu>
-                                <ContextMenu TextBlock.TextAlignment="Left">
-                                    <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}"/>
-                                    <MenuItem Header="代出" Command="{Binding Source={StaticResource proxy}, Path=Data.GetPrescription}"/>
+                                <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}" CommandParameter="copy"/>
+                                    <MenuItem Header="代出" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}" CommandParameter="get" Visibility="{Binding Source={StaticResource proxy}, Path=Data.SelectedHistory.CopyOnly,Converter={StaticResource InverseBoolToVisConverter}}"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.RowStyle>

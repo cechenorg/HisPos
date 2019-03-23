@@ -104,15 +104,27 @@ namespace His_Pos.NewClass.Prescription
                     MedicalNumberData = new SeqNumber(pBuffer);
                     IsGetMedicalNumber = true;
                     TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
+                    HisApiFunction.CloseCom();
+                    return;
                 }
-                else
+                if (res == 5003)
                 {
-                    var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                    Application.Current.Dispatcher.Invoke(delegate
+                    UpdateCard();
+                    res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                    if (res == 0)
                     {
-                        MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
-                    });
+                        MedicalNumberData = new SeqNumber(pBuffer);
+                        IsGetMedicalNumber = true;
+                        TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
+                        HisApiFunction.CloseCom();
+                        return;
+                    }
                 }
+                var description = MainWindow.GetEnumDescription((ErrorCode)res);
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
+                });
                 HisApiFunction.CloseCom();
             }
         }

@@ -15,12 +15,15 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
             switch (r.Field<string>("Type")) {
                 case "Adjust":
                     Type = HistoryType.AdjustRecord;
+                    CopyOnly = true;
                     break;
                 case "Register":
                     Type = HistoryType.RegisterRecord;
+                    CopyOnly = false;
                     break;
                 case "Reserve":
                     Type = HistoryType.ReservedPrescription;
+                    CopyOnly = false;
                     break; 
             }
             
@@ -41,6 +44,7 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public DateTime AdjustDate { get; } //日期
         public string Title { get; }//標題
         public bool Status { get; }//已調劑處方:是否未過卡 已登錄處方:是否傳送藥健康 預約:無
+        public bool CopyOnly { get; }
         public CustomerHistoryProducts Products { get; set; }
 
         public Prescription.Prescription GetPrescriptionByID()

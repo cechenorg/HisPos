@@ -24,6 +24,7 @@ namespace His_Pos.HisApi
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
+            p.Card.GetBasicData();
             var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
             var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
             byte[] pDateTime = ConvertData.StringToBytes(treatDateTime+"\0",14);

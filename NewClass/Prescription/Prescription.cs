@@ -40,9 +40,7 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(DataRow r,PrescriptionSource prescriptionSource)
         { 
             Patient = new Customer();
-            Patient.ID = r.Field<int>("CustomerID");
-            Patient.IDNumber = r.Field<string>("CustomerIDNumber");
-            Patient.Name = r.Field<string>("CustomerName");  
+            Patient = Patient.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines();
@@ -834,10 +832,13 @@ namespace His_Pos.NewClass.Prescription
             {
                 var cus = new Customer(Card);
                 Patient = cus;
-                Patient.Check();
+                var customers = Patient.Check();
+                if(customers.Count == 0)
+                    Patient.InsertData();
+                else
+                    Patient = customers[0];
                 PrescriptionStatus.IsGetCard = true;
             }
-
             return success;
         }
 

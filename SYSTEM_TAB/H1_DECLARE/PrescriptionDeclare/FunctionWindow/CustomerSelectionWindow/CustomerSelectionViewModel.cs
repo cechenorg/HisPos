@@ -102,22 +102,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             MainWindow.ServerConnection.OpenConnection();
             SelectedCustomer.UpdateEditTime();
-            SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.ID);
+            SelectedCustomer.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
-            SelectedCustomer.HistoryCollectionViewSource = new CollectionViewSource { Source = SelectedCustomer.Histories };
-            SelectedCustomer.HistoryCollectionView = SelectedCustomer.HistoryCollectionViewSource.View;
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSelection"));
             Messenger.Default.Send(SelectedCustomer, "SelectedCustomer");
         }
         #endregion
-        public CustomerSelectionViewModel(string condition, int option)
+        public CustomerSelectionViewModel(string condition, int option,Customers customers)
         {
             SearchingTextChanged = new RelayCommand(ExecuteSearchingTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             Customers = new Customers();
-            MainWindow.ServerConnection.OpenConnection();
-            Customers.Init();
-            MainWindow.ServerConnection.CloseConnection();
+            Customers = customers;
             CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
             CustomersCollectionView = CustomersCollectionViewSource.View;
             Searching = condition;
@@ -137,30 +133,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         #region FilterFunctions
         private void InitializeFilter(int option)
         {
-            if (string.IsNullOrEmpty(Searching))
+            switch (option)
             {
-                SelectedRadioButton = "Option1";
-            }
-            else
-            {
-                switch (option)
-                {
-                    case 1:
-                        SelectedRadioButton = "Option1";
-                        break;
-                    case 2:
-                        SelectedRadioButton = "Option2";
-                        break;
-                    case 3:
-                        SelectedRadioButton = "Option3";
-                        break;
-                    case 4:
-                        SelectedRadioButton = "Option4";
-                        break;
-                    default:
-                        SelectedRadioButton = "Option1";
-                        break;
-                }
+                case 1:
+                    SelectedRadioButton = "Option1";
+                    break;
+                case 2:
+                    SelectedRadioButton = "Option2";
+                    break;
+                case 3:
+                    SelectedRadioButton = "Option3";
+                    break;
+                case 4:
+                    SelectedRadioButton = "Option4";
+                    break;
+                default:
+                    SelectedRadioButton = "Option1";
+                    break;
             }
             CustomersCollectionViewSource.Filter += FilterBySearchingText;
         }
