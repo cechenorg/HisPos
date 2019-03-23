@@ -18,7 +18,7 @@ using StringRes = His_Pos.Properties.Resources;
 namespace His_Pos.NewClass.Prescription
 {
     [ZeroFormattable]
-    public class IcCard : ObservableObject
+    public class IcCard : ObservableObject,ICloneable
     {
         public IcCard() { }
         [Index(0)]
@@ -182,6 +182,27 @@ namespace His_Pos.NewClass.Prescription
                 }
                 HisApiFunction.CloseCom();
             }
+        }
+
+        public object Clone()
+        {
+            var c = new IcCard();
+            c.CardNumber = CardNumber;
+            c.Name = Name;
+            c.Birthday = Birthday;
+            c.Gender = Gender;
+            c.IDNumber = IDNumber;
+            c.CardReleaseDate = CardReleaseDate;
+            c.ValidityPeriod = ValidityPeriod;
+            c.AvailableTimes = AvailableTimes;
+            c.NewBornBirthday = NewBornBirthday;
+            c.PatientBasicData = PatientBasicData.DeepCloneViaJson();
+            c.MedicalNumberData = MedicalNumberData.DeepCloneViaJson();
+            c.TreatRecords = TreatRecords?.DeepCloneViaJson();
+            c.IsGetMedicalNumber = IsGetMedicalNumber;
+            c.TreatDateTime = TreatDateTime;
+            c.Tel = Tel;
+            return c;
         }
     }
 }

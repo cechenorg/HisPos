@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -255,6 +256,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ErrorCodeSelect { get; set; }
         public RelayCommand DivisionSelectionChanged { get; set; }
         public RelayCommand SelfPayTextChanged { get; set; }
+        public RelayCommand CopyPrescription { get; set; }
+        public RelayCommand GetPrescription { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -329,8 +332,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction,CheckIsAdjusting);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
+            CopyPrescription = new RelayCommand(CopyPrescriptionAction);
+            GetPrescription = new RelayCommand(GetPrescriptionAction);
         }
-
         private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
@@ -388,6 +392,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.Patient.HistoryCollectionViewSource = new CollectionViewSource { Source = CurrentPrescription.Patient.Histories };
             CurrentPrescription.Patient.HistoryCollectionView = CurrentPrescription.Patient.HistoryCollectionViewSource.View;
+        }
+        private void CopyPrescriptionAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ?
+                SelectedHistory.GetReservePrescriptionByID() : SelectedHistory.GetPrescriptionByID();
+            MainWindow.ServerConnection.CloseConnection();
+            prescription.Card = CurrentPrescription.Card;
+            prescription.Patient = CurrentPrescription.Patient;
+            CurrentPrescription = prescription;
+        }
+        private void GetPrescriptionAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ?
+                SelectedHistory.GetReservePrescriptionByID() : SelectedHistory.GetPrescriptionByID();
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription = (Prescription)prescription.Clone();
+            CurrentPrescription.Id = 0;
         }
         #endregion
         #region Actions

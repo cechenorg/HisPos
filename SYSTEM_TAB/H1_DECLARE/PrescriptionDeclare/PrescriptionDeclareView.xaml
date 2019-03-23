@@ -292,7 +292,6 @@
                     </declare:MedicineDataGrid.Resources>
                     <declare:MedicineDataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
-                            <Setter Property="ContextMenu" Value="{DynamicResource MedicineContextMenu}"/>
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
                             <Setter Property="FontSize" Value="17" />
@@ -474,8 +473,17 @@
                             <RadioButton Tag="0" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}"/>
                             <RadioButton Tag="2" Content="預約" Style="{StaticResource CustomerHistoryRadio}"/>
                         </StackPanel>
-                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
-                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CurrentPrescription.Patient}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
+                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <DataGrid.Resources>
+                                <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
+                            </DataGrid.Resources>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu TextBlock.TextAlignment="Left">
+                                    <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}"/>
+                                    <MenuItem Header="代出" Command="{Binding Source={StaticResource proxy}, Path=Data.GetPrescription}"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
