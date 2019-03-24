@@ -119,5 +119,25 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", c.Tel);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
         }
+
+        public static DataTable InsertCustomerData(Customer c)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", c.IDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", c.Name);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", c.Birthday);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", c.Tel);
+            DataBaseFunction.AddSqlParameter(parameterList, "gender", c.CheckGender());
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
+        }
+        public static DataTable CheckCustomerIDNumberExist(string idNumber)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", DBNull.Value);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", DBNull.Value);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", DBNull.Value);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
+        }
     }
 }

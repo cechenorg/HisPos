@@ -92,18 +92,7 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
 
         private void ChangeCus_Click(object sender, RoutedEventArgs e)
         {
-            var prescriptions = new DeclarePrescriptions();
-            prescriptions.GetSearchPrescriptions(new DateTime(2019,02,28), new DateTime(2019, 02, 28));
-            foreach (var p in prescriptions.Where(pre => pre.Patient.ID == 0))
-            {
-                Ddata d = XmlService.Deserialize<Ddata>(p.FileContentStr);
-                NewClass.Person.Customer.Customer c = new NewClass.Person.Customer.Customer();
-                c.Name = d.Dhead.D20;
-                c.IDNumber = d.Dhead.D3;
-                c.Birthday = DateTimeExtensions.TWDateStringToDateOnly(d.Dhead.D6);
-                c.Check();
-                Console.WriteLine(p.ID +":"+ c.ID);
-            }
+
         }
     }
 }

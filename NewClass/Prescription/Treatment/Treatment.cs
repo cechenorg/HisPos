@@ -129,8 +129,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
             }
-            Pharmacist = new MedicalPersonnel(r);
-            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(r.Field<string>("Emp_IDNumber")));
             SpecialTreat = new SpeTre();
             if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
             {

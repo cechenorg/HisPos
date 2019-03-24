@@ -367,7 +367,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     else
                     {
                         Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+                        //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
                     }
                 }
             }
@@ -385,7 +385,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+                    //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
                 }
             }
         }
@@ -402,7 +402,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+                    //customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
                 }
             }
         }
@@ -419,7 +419,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
+                    //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
                 }
             }
         }
@@ -772,7 +772,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         private void SearchCustomer()
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-            customerSelectionWindow = new CusSelectWindow();
+            //customerSelectionWindow = new CusSelectWindow();
         }
         private void ReadCard(bool showCusWindow)
         {

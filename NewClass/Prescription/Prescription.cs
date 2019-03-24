@@ -40,9 +40,7 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(DataRow r,PrescriptionSource prescriptionSource)
         { 
             Patient = new Customer();
-            Patient.ID = r.Field<int>("CustomerID");
-            Patient.IDNumber = r.Field<string>("CustomerIDNumber");
-            Patient.Name = r.Field<string>("CustomerName");  
+            Patient = Patient.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines();
@@ -372,34 +370,55 @@ namespace His_Pos.NewClass.Prescription
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
                 var temp = new Medicine();
-                if (table.Rows.Count > 0)
+                if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
+                    Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
                 {
-                    switch (table.Rows[0].Field<int>("DataType"))
+                    temp = new MedicineVirtual();
+                    temp.ID = Medicines[medCount].ID;
+                    switch (temp.ID)
                     {
-                        case 0:
-                            temp = new MedicineOTC(table.Rows[0]); 
+                        case "R001":
+                            temp.ChineseName = "處方箋遺失或毀損，提前回診";
                             break;
-                        case 1:
-                            temp = new MedicineNHI(table.Rows[0]); 
+                        case "R002":
+                            temp.ChineseName = "醫師請假，提前回診";
                             break;
-                        case 2:
-                            temp = new MedicineSpecialMaterial(table.Rows[0]);
+                        case "R003":
+                            temp.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
                             break;
-                        case 3:
-                            temp = new MedicineVirtual(table.Rows[0]);
+                        case "R004":
+                            temp.ChineseName = "其他提前回診或慢箋提前領藥";
                             break;
                     }
                 }
                 else
                 {
-                    temp = new MedicineOTC
+                    if (table.Rows.Count > 0)
                     {
-                        ID = Medicines[medCount].ID,
-                        ChineseName = Medicines[medCount].ChineseName,
-                        EnglishName = Medicines[medCount].EnglishName
-                    };
-                    if (!string.IsNullOrEmpty(temp.ID))
-                        MedicineDb.InsertCooperativeMedicineOTC(temp.ID , temp.ChineseName);//新增合作診所MedicineOtc
+                        switch (table.Rows[0].Field<int>("DataType"))
+                        {
+                            case 0:
+                                temp = new MedicineOTC(table.Rows[0]);
+                                break;
+                            case 1:
+                                temp = new MedicineNHI(table.Rows[0]);
+                                break;
+                            case 2:
+                                temp = new MedicineSpecialMaterial(table.Rows[0]);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        temp = new MedicineOTC
+                        {
+                            ID = Medicines[medCount].ID,
+                            ChineseName = Medicines[medCount].ChineseName,
+                            EnglishName = Medicines[medCount].EnglishName
+                        };
+                        if (!string.IsNullOrEmpty(temp.ID))
+                            MedicineDb.InsertCooperativeMedicineOTC(temp.ID, temp.ChineseName);//新增合作診所MedicineOtc
+                    }
                 }
                 temp.UsageName = Medicines[medCount].UsageName;
                 temp.PositionID = Medicines[medCount].PositionID;
@@ -528,7 +547,7 @@ namespace His_Pos.NewClass.Prescription
                 return StringRes.MedicineEmpty;
             if (Medicines.Count(m => m.Amount == 0) == 0)
                 return string.Empty;
-            return Medicines.Where(m => m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+            return Medicines.Where(m => (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
         public void CountPrescriptionPoint(bool countSelfPay)
         {
@@ -813,10 +832,13 @@ namespace His_Pos.NewClass.Prescription
             {
                 var cus = new Customer(Card);
                 Patient = cus;
-                Patient.Check();
+                var customers = Patient.Check();
+                if(customers.Count == 0)
+                    Patient.InsertData();
+                else
+                    Patient = customers[0];
                 PrescriptionStatus.IsGetCard = true;
             }
-
             return success;
         }
 
@@ -866,7 +888,8 @@ namespace His_Pos.NewClass.Prescription
 
             Medicines compareMeds = new Medicines();
             foreach (var orm in originPrescription.Medicines) {
-                if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID)){
+                if ((bool)orm.IsBuckle && !string.IsNullOrEmpty(orm.ID) && !(orm is MedicineVirtual))
+                {
                     Medicine medicine = new Medicine();
                     medicine.ID = orm.ID;
                     medicine.Amount = Medicines.Count(m => m.ID == orm.ID && m.UsageName.Equals(orm.UsageName) && m.Days.Equals(orm.Days) && m.PaySelf == orm.PaySelf) > 0 
@@ -878,7 +901,7 @@ namespace His_Pos.NewClass.Prescription
                
             }
             foreach (var nem in Medicines) {
-                if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID))
+                if ((bool)nem.IsBuckle && !string.IsNullOrEmpty(nem.ID) && !(nem is MedicineVirtual) )
                 {
                     if (originPrescription.Medicines.Count(m => m.ID == nem.ID && m.UsageName.Equals(nem.UsageName) && m.Days == nem.Days && m.PaySelf == nem.PaySelf) == 0)
                     {
@@ -942,7 +965,7 @@ namespace His_Pos.NewClass.Prescription
             p.PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson();
             p.DeclareContent = DeclareContent;
             p.Patient = (Customer)Patient.Clone();
-            p.Card = new IcCard();
+            p.Card = (IcCard)Card.Clone();
             p.MedicalServiceID = MedicalServiceID;
             p.DeclareFileID = DeclareFileID;
             p.MedicineDays = MedicineDays;
@@ -976,7 +999,10 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "1":
                 case "3":
-                    Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
+                    if (Treatment.Division != null && Treatment.Division.ID.Equals("40"))
+                        Treatment.PrescriptionCase = VM.GetPrescriptionCases("19");
+                    else
+                        Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
                     if(!CheckFreeCopayment())
                         Treatment.Copayment = VM.GetCopayment("I20");
                     break;
@@ -1040,7 +1066,7 @@ namespace His_Pos.NewClass.Prescription
                 Update();
             if(Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
                 AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
             ProcessSelfPayCashFlow("自費");
@@ -1066,7 +1092,7 @@ namespace His_Pos.NewClass.Prescription
         {
             Id = InsertPrescription();
             AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessCopaymentCashFlow("部分負擔");
             ProcessSelfPayCashFlow("自費");
@@ -1094,7 +1120,7 @@ namespace His_Pos.NewClass.Prescription
         public void Prescribe()
         {
             Id = InsertPrescription();
-            var bucklevalue = ProcessInventory("自費調劑", "PreMasID", Id.ToString());
+            var bucklevalue = ProcessInventory("自費調劑", "PreMasId", Id.ToString());
             ProcessMedicineUseEntry(bucklevalue);
             ProcessSelfPayCashFlow("自費調劑");
         }
@@ -1109,9 +1135,9 @@ namespace His_Pos.NewClass.Prescription
         {
             var sameList = new List<string>();
             var sameMed = string.Empty;
-            foreach (var m in Medicines)
+            foreach (var m in Medicines.Where(m => !(m is MedicineVirtual)))
             {
-                var compareList = new List<Medicine>(Medicines);
+                var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
                 compareList.Remove(m);
                 if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
                 {

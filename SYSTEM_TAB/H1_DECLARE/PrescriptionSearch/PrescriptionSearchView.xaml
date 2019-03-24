@@ -105,7 +105,7 @@
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
                             <EventSetter Event="MouseDoubleClick" Handler="ShowSelectedPrescriptionEditWindow"/>
-                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontSize" Value="15"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>
                     </DataGrid.RowStyle>
@@ -117,6 +117,14 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="120" MaxWidth="120" Header="藥袋狀態" IsReadOnly="True"  Binding="{Binding StoStatus,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Width="120" Header="病患姓名" IsReadOnly="True"  Binding="{Binding Patient.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -157,7 +165,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="調劑日期" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="150" Header="處方調劑日" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -165,7 +173,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="就醫日期" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="150" Header="處方就醫日" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="150" Header="實際調劑日" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
