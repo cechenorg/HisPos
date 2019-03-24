@@ -209,5 +209,11 @@ namespace His_Pos.NewClass.Person.Customer
             HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
             HistoryCollectionView =HistoryCollectionViewSource.View;
         }
+
+        public bool CheckIDNumberExist()
+        {
+            var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
+            return table.Rows[0].Field<int>("Count") > 0;
+        }
     }
 }

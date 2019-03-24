@@ -130,5 +130,14 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "gender", c.CheckGender());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
         }
+        public static DataTable CheckCustomerIDNumberExist(string idNumber)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", DBNull.Value);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", DBNull.Value);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", DBNull.Value);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
+        }
     }
 }

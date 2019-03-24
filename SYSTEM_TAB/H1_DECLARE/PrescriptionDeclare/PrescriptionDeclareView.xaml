@@ -540,7 +540,7 @@
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Text" Value="3-2" />
+                                            <Setter Property="Text" Value="{Binding Case}" />
                                             <Setter Property="Margin" Value="5,0,0,0" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
@@ -548,7 +548,7 @@
                                 <DataGridTextColumn Width="120" Header="院所" IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment" Value="Left" />
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
                                             <Setter Property="Text" Value="{Binding InsName}" />
                                             <Setter Property="Margin" Value="5,0,0,0" />

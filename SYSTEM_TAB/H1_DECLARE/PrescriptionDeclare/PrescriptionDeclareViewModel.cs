@@ -860,6 +860,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (receiveSelectedCustomer is null)
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.UpdateEditTime();
+            CurrentPrescription.Patient.GetHistories();
+            MainWindow.ServerConnection.CloseConnection();
             CheckCustomPrescriptions();
         }
         private void GetSelectedPrescription(CustomPrescriptionStruct pre)
@@ -951,9 +955,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if ((bool) confirm.DialogResult)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    CurrentPrescription.Patient.InsertData();
-                    CurrentPrescription.Patient.GetHistories();
-                    MainWindow.ServerConnection.CloseConnection();
+                    if (CurrentPrescription.Patient.CheckIDNumberExist())
+                    {
+                        MessageWindow.ShowMessage("此身分證已存在，請確認顧客資料", MessageType.WARNING);
+                        MainWindow.ServerConnection.CloseConnection();
+                    }
+                    else
+                    {
+                        CurrentPrescription.Patient.InsertData();
+                        CurrentPrescription.Patient.GetHistories();
+                        MainWindow.ServerConnection.CloseConnection();
+                    }
                 }
             }
         }
@@ -1404,7 +1416,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 switch (customers.Count)
                 {
                     case 0:
-                        CurrentPrescription.Patient.InsertData();
+                        MainWindow.ServerConnection.OpenConnection();
+                        if (CurrentPrescription.Patient.CheckIDNumberExist())
+                        {
+                            MessageWindow.ShowMessage("此身分證已存在，請確認顧客資料", MessageType.WARNING);
+                            MainWindow.ServerConnection.CloseConnection();
+                        }
+                        else
+                        {
+                            CurrentPrescription.Patient.InsertData();
+                            MainWindow.ServerConnection.CloseConnection();
+                        }
                         return true;
                     case 1:
                         CurrentPrescription.Patient = customers[0];
