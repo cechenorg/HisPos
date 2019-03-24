@@ -63,7 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             return this;
         }
-        public enum RadioOptions { Option1, Option2, Option3}
+        public enum RadioOptions { Option1 }
         private string selectedRadioButton;
         public string SelectedRadioButton
         {
@@ -71,11 +71,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             set
             {
                 Set(() => SelectedRadioButton, ref selectedRadioButton, value);
-                if (CurrentPrescription?.Patient.Histories != null && CurrentPrescription.Patient.Histories.Count > 0)
-                {
-                    CurrentPrescription.Patient.HistoryCollectionViewSource.Filter -= FilterByHistoryType;
-                    CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
-                }
             }
         }
         #region ItemsSources
@@ -271,7 +266,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ErrorCodeSelect { get; set; }
         public RelayCommand DivisionSelectionChanged { get; set; }
         public RelayCommand SelfPayTextChanged { get; set; }
-        public RelayCommand<string> CopyPrescription { get; set; }
+        public RelayCommand CopyPrescription { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -344,7 +339,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction,CheckIsAdjusting);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
-            CopyPrescription = new RelayCommand<string>(CopyPrescriptionAction);
+            CopyPrescription = new RelayCommand(CopyPrescriptionAction);
         }
         private void InitialPrescription(bool setPharmacist)
         {
@@ -386,8 +381,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (SelectedHistory is null || !msg.Notification.Equals(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow")) return;
             MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ?
-                SelectedHistory.GetReservePrescriptionByID(): SelectedHistory.GetPrescriptionByID();
+            var prescription = SelectedHistory.GetPrescriptionByID();
             MainWindow.ServerConnection.CloseConnection();
             prescription.Source = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
             var prescriptionEdit = new PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionDeclare);
@@ -401,23 +395,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
-            CurrentPrescription.Patient.HistoryCollectionViewSource = new CollectionViewSource { Source = CurrentPrescription.Patient.Histories };
-            CurrentPrescription.Patient.HistoryCollectionView = CurrentPrescription.Patient.HistoryCollectionViewSource.View;
-            CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
         }
-        private void CopyPrescriptionAction(string menu)
+        private void CopyPrescriptionAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ?
-                SelectedHistory.GetReservePrescriptionByID() : SelectedHistory.GetPrescriptionByID();
+            var prescription = SelectedHistory.GetPrescriptionByID();
             prescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
             prescription.Card = CurrentPrescription.Card;
             prescription.Patient = CurrentPrescription.Patient;
             CurrentPrescription = prescription;
-            if (menu.Equals("copy"))
-                CurrentPrescription.Id = 0;
-            CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
+            CurrentPrescription.Id = 0;
         }
         #endregion
         #region Actions
@@ -438,7 +426,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Patient.UpdateEditTime();
                     CurrentPrescription.Patient.GetHistories();
                     MainWindow.ServerConnection.CloseConnection();
-                    CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
                     break;
                 default:
                     if (sender is MaskedTextBox)
@@ -553,6 +540,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ShowCommonInsSelectionWindowAction()
         {
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
             var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
             commonInsSelectionWindow.ShowDialog();
         }
@@ -710,7 +698,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Debug.Assert(noCard.DialogResult != null, "noCard.DialogResult != null");
             if (!(bool)noCard.DialogResult) return;
             if (CheckEmptyCustomer()) return;
-            if (!CheckNewCustomer()) return;
+            if (!CheckCustomer()) return;
             CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             CurrentPrescription.CheckIsPrescribe();
             if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
@@ -742,7 +730,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustButtonClickAction()
         {
             if(CheckEmptyCustomer()) return;
-            if(!CheckNewCustomer())return;
+            if(!CheckCustomer())return;
             SetPharmacist();
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
@@ -812,7 +800,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void RegisterButtonClickAction()
         {
             if (CheckEmptyCustomer()) return;
-            if (!CheckNewCustomer()) return;
+            if (!CheckCustomer()) return;
             SetPharmacist();
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
@@ -841,7 +829,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 else
                     return;
             }
-            if (!CheckNewCustomer()) return;
+            if (!CheckCustomer()) return;
             SetPharmacist();
             if (CurrentPrescription.Medicines.Count == 0)
             {
@@ -872,7 +860,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (receiveSelectedCustomer is null)
                 return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
-            CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
             CheckCustomPrescriptions();
         }
         private void GetSelectedPrescription(CustomPrescriptionStruct pre)
@@ -920,7 +907,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.Patient.UpdateEditTime();
                         CurrentPrescription.Patient.GetHistories();
                         MainWindow.ServerConnection.CloseConnection();
-                        CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
                         break;
                 }
             }
@@ -967,7 +953,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainWindow.ServerConnection.OpenConnection();
                     CurrentPrescription.Patient.InsertData();
                     CurrentPrescription.Patient.GetHistories();
-                    CurrentPrescription.Patient.HistoryCollectionViewSource.Filter += FilterByHistoryType;
                     MainWindow.ServerConnection.CloseConnection();
                 }
             }
@@ -1406,26 +1391,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 : 0; 
         }
 
-        private bool CheckNewCustomer()
+        private bool CheckCustomer()
         {
             if (!CurrentPrescription.Patient.CheckData())
             {
                 MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
                 return false;
             }
-            var customers = CurrentPrescription.Patient.Check();
-            switch (customers.Count)
+            if (CurrentPrescription.Patient.ID == -1)//新顧客
             {
-                case 0:
-                    CurrentPrescription.Patient.InsertData();
-                    return true;
-                case 1:
-                    CurrentPrescription.Patient = customers[0];
-                    return true;
-                default:
-                    MessageWindow.ShowMessage("顧客資料超過一人，請確認顧客資料", MessageType.WARNING);
-                    return false;
+                var customers = CurrentPrescription.Patient.Check();
+                switch (customers.Count)
+                {
+                    case 0:
+                        CurrentPrescription.Patient.InsertData();
+                        return true;
+                    case 1:
+                        CurrentPrescription.Patient = customers[0];
+                        return true;
+                    default:
+                        MessageWindow.ShowMessage("顧客資料查詢結果超過一人符合，請確認顧客資料", MessageType.WARNING);
+                        return false;
+                }
             }
+            return true;
         }
         private void SavePatientData()
         {
@@ -1447,26 +1436,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;
-        }
-        private void FilterByHistoryType(object sender, FilterEventArgs e)
-        {
-            if (!(e.Item is CustomerHistory src))
-                e.Accepted = false;
-            else
-            {
-                switch (SelectedRadioButton)
-                {
-                    case "Option1":
-                        e.Accepted = src.Type.Equals(HistoryType.AdjustRecord);
-                        break;
-                    case "Option2":
-                        e.Accepted = src.Type.Equals(HistoryType.RegisterRecord);
-                        break;
-                    case "Option3":
-                        e.Accepted = src.Type.Equals(HistoryType.ReservedPrescription);
-                        break;
-                }
-            }
         }
         #endregion
         #region CommandExecuteChecking

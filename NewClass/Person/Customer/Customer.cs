@@ -155,7 +155,7 @@ namespace His_Pos.NewClass.Person.Customer
         }
         public bool CheckData()
         {
-            return IDNumber.Length == 10 && Birthday != null && !string.IsNullOrEmpty(Name);
+            return (!string.IsNullOrEmpty(IDNumber) && IDNumber.Length == 10) && Birthday != null && !string.IsNullOrEmpty(Name);
         }
         public object Clone()
         {

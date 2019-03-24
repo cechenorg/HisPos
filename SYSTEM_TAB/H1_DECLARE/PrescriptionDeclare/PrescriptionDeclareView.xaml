@@ -54,6 +54,18 @@
         <declare:MedicineDataGrid x:Key="MedicineDataGrid" x:Name="MedicineDataGrid"/>
         <Style TargetType="declare:MedicineDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
+        <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="10,0,10,0" />
+            <Setter Property="Background" Value="RoyalBlue" />
+        </Style>
+        <Style x:Key="CusHistoryColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="8,5,5,5" />
+        </Style>
     </UserControl.Resources>
     <Viewbox x:Name="PrescriptionViewBox" Stretch="Fill">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -460,29 +472,26 @@
                 </declare:MedicineDataGrid>
                 <Grid Grid.Row="3" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="350" />
-                        <ColumnDefinition Width="650" />
+                        <ColumnDefinition Width="450" />
+                        <ColumnDefinition Width="550" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="40" />
+                            <RowDefinition Height="32" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                            <RadioButton GroupName="CusHistoryGroup" Content="已調劑" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
-                            <RadioButton GroupName="CusHistoryGroup" Content="已登錄" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
-                            <RadioButton GroupName="CusHistoryGroup" Content="預約" Style="{StaticResource CustomerHistoryRadio}" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
+                            <RadioButton GroupName="CusHistoryGroup" Content="調劑" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" FontSize="14"/>
                         </StackPanel>
-                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}"
-                              ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Auto" CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="250" VerticalAlignment="Bottom">
+                        <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}" CanUserReorderColumns="False"
+                              ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="258" VerticalAlignment="Bottom">
                             <DataGrid.Resources>
                                 <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                             </DataGrid.Resources>
                             <DataGrid.ContextMenu>
                                 <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}" CommandParameter="copy"/>
-                                    <MenuItem Header="代出" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}" CommandParameter="get" Visibility="{Binding Source={StaticResource proxy}, Path=Data.SelectedHistory.CopyOnly,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                                    <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.RowStyle>
@@ -495,32 +504,64 @@
                                     <Setter Property="Background" Value="Transparent"/>
                                     <EventSetter Event="MouseDoubleClick" Handler="ShowPrescriptionEditWindow"/>
                                     <Setter Property="FontSize" Value="14"/>
-                                    <Setter Property="Height" Value="40"/>
+                                    <Setter Property="Height" Value="35"/>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="status" Width="30" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="過卡" Width="45" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Image Source="/Images/Declared.png" Width="15" Visibility="{Binding Status,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn MinWidth="70" Header="date" IsReadOnly="True">
+                                <DataGridTextColumn MinWidth="70" Header="就醫日" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Text" Value="{Binding TreatDate, Converter={StaticResource NullableDateConverter}}" />
+                                            <Setter Property="Margin" Value="5,0,0,0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn MinWidth="70" Header="調劑日" IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
                                             <Setter Property="Text" Value="{Binding AdjustDate, Converter={StaticResource DateConverter}}" />
+                                            <Setter Property="Margin" Value="5,0,0,0" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="200" Header="title" IsReadOnly="True">
+                                <DataGridTextColumn Width="45" Header="案件" IsReadOnly="True" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Text" Value="3-2" />
+                                            <Setter Property="Margin" Value="5,0,0,0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="120" Header="院所" IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Left" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Text" Value="{Binding Title}" />
+                                            <Setter Property="Text" Value="{Binding InsName}" />
+                                            <Setter Property="Margin" Value="5,0,0,0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" MaxWidth="110" Header="科別" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Text" Value="{Binding DivName}" />
+                                            <Setter Property="Margin" Value="5,0,0,0" />
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
@@ -528,29 +569,54 @@
                         </DataGrid>
                     </Grid>
                     <StackPanel Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource GridDarkerBackGround}">
-                        <DataGrid x:Name="CusHistoryDetailPos" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}"
-                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible">
+                        <DataGrid x:Name="CusHistoryDetail" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
+                                  ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"
+                                  CanUserReorderColumns="False">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FontSize" Value="14" />
-                                    <Setter Property="Height" Value="40" />
                                     <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                         </Trigger>
                                     </Style.Triggers>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Height" Value="40"/>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="110" Binding="{Binding ID, Mode=OneWay}" Header="代碼" />
-                                <DataGridTextColumn Width="250" Binding="{Binding FullName, Mode=OneWay}" Header="品名" />
-                                <DataGridTextColumn MinWidth="50" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
-                                <DataGridTextColumn MinWidth="50" Binding="{Binding UsageName, Mode=OneWay}" Header="用法" />
-                                <DataGridTextColumn MinWidth="25" Binding="{Binding Days, Mode=OneWay}" Header="天數" />
-                                <DataGridTextColumn MinWidth="50" Binding="{Binding PositionID, Mode=OneWay}" Header="途徑" />
-                                <DataGridTextColumn MinWidth="50" Binding="{Binding Amount, Mode=OneWay}" Header="數量" />
+                                <DataGridTextColumn Width="110" Binding="{Binding ID, Mode=OneWay}" Header="代碼" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="250" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn MinWidth="25" Binding="{Binding Days, Mode=OneWay}" Header="天數" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding Amount, Mode=OneWay}" Header="總量" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
