@@ -426,6 +426,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Patient.UpdateEditTime();
                     CurrentPrescription.Patient.GetHistories();
                     MainWindow.ServerConnection.CloseConnection();
+                    CheckCustomPrescriptions();
                     break;
                 default:
                     if (sender is MaskedTextBox)
