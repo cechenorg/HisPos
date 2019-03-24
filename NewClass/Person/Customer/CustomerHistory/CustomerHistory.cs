@@ -31,6 +31,9 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
             SourceId = r.Field<int>("SourceId");
             InsName = r.Field<string>("Ins_Name");
             DivName = r.Field<string>("Div_Name");
+            ChronicSeq = r.Field<byte?>("ChronicSequence");
+            ChronicTotal = r.Field<byte?>("ChronicTotal");
+            var temp = r.Field<string>("AdjustCaseID");
             if (InsName.Length > 8)
                 Title = InsName.Substring(0, 8) + " " + DivName;
             else
@@ -41,6 +44,8 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public string InsName { get; }
         public string DivName { get; }
         public int SourceId { get; }
+        public int? ChronicSeq { get; }
+        public int? ChronicTotal { get; }
         public DateTime AdjustDate { get; } //日期
         public string Title { get; }//標題
         public bool Status { get; }//已調劑處方:是否未過卡 已登錄處方:是否傳送藥健康 預約:無
