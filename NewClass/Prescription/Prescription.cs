@@ -817,7 +817,7 @@ namespace His_Pos.NewClass.Prescription
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
         {
             var treatmentDate =
-                DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
+                DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var treatmentDateChi = string.Empty;
             if(!string.IsNullOrEmpty(treatmentDate))
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
@@ -1160,7 +1160,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID) && (!string.IsNullOrEmpty(m.UsageName) && !string.IsNullOrEmpty(med.UsageName) && med.UsageName.Equals(m.UsageName)) && (m.Days!=null && med.Days != null && med.Days.Equals(m.Days)) ) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }
