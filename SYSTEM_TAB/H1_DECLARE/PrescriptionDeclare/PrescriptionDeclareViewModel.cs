@@ -432,7 +432,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if (sender is MaskedTextBox)
                     {
                         if (CurrentPrescription.Patient.Birthday is null)
-                            SearchCustomer(1);
+                            SearchCustomer(1, customers);
                         else
                             customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1, customers);
                     }
@@ -443,19 +443,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         {
                             case "PatientName":
                                 if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                                    SearchCustomer(2);
+                                    SearchCustomer(2, customers);
                                 else
                                     customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2, customers);
                                 break;
                             case "PatientIDNumber":
                                 if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
-                                    SearchCustomer(3);
+                                    SearchCustomer(3, customers);
                                 else
                                     customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3, customers);
                                 break;
                             case "PatientTel":
                                 if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
-                                    SearchCustomer(4);
+                                    SearchCustomer(4, customers);
                                 else
                                     customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 4, customers);
                                 break;
@@ -970,10 +970,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-        private void SearchCustomer(int condition)
+        private void SearchCustomer(int condition,Customers customers)
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-            customerSelectionWindow = new CusSelectWindow(condition,CurrentPrescription.Patient.Check());
+            customerSelectionWindow = new CusSelectWindow(condition, customers);
         }
         private void ReadCard(bool showCusWindow)
         {
@@ -1012,7 +1012,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CheckCustomPrescriptions();
                     }
                     else
-                        SearchCustomer(1);
+                    {
+                        MainWindow.ServerConnection.OpenConnection();
+                        var customers = new Customers();
+                        customers.Init();
+                        MainWindow.ServerConnection.CloseConnection();
+                        SearchCustomer(1, customers);
+                    }
                 }
                 else
                 {
