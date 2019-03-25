@@ -668,9 +668,6 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
-      <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
@@ -1126,10 +1123,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

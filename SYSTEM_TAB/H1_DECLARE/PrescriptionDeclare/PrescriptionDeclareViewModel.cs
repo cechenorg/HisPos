@@ -261,6 +261,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand ResetCardReader { get; set; }
+        public RelayCommand ErrorAdjust { get; set; }
         public RelayCommand NoCardAdjust { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand ErrorCodeSelect { get; set; }
@@ -335,12 +336,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SelfPayTextChanged = new RelayCommand(SelfPayTextChangedAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             ClearButtonClick = new RelayCommand(ClearPrescription, CheckIsAdjusting);
+            ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
             NoCardAdjust = new RelayCommand(NoCardAdjustAction, CheckIsNoCard);
             AdjustButtonClick = new RelayCommand(AdjustButtonClickAction,CheckIsAdjusting);
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
         }
+
         private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
@@ -692,6 +695,36 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.PrescriptionPoint.AmountsPay = CurrentPrescription.PrescriptionPoint.CopaymentPoint + CurrentPrescription.PrescriptionPoint.AmountSelfPay;
             else
                 CurrentPrescription.PrescriptionPoint.AmountsPay = CurrentPrescription.PrescriptionPoint.AmountSelfPay;
+        }
+        private void ErrorAdjustAction()
+        {
+            var errorAdjustConfirm = new ConfirmWindow("確認異常結案?", "異常確認");
+            if(!(bool)errorAdjustConfirm.DialogResult)
+                return;
+            if (CheckEmptyCustomer()) return;
+            if (!CheckCustomer()) return;
+            SetPharmacist();
+            IsAdjusting = true;
+            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
+            if (!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
+            if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)//合作診所自費不檢查健保規則
+            {
+                var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
+                if (!string.IsNullOrEmpty(error))
+                {
+                    MessageWindow.ShowMessage(error, MessageType.ERROR);
+                    IsAdjusting = false;
+                    return;
+                }
+            }
+            if (!PrintConfirm(false)) return;
+            SavePatientData();
+            InsertAdjustData(false);
         }
         private void NoCardAdjustAction()
         {
@@ -1119,13 +1152,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 resetWorker.RunWorkerCompleted += (obj, arg) =>
                 {
                     IsBusy = false;
-                    InsertAdjustData();
+                    InsertAdjustData(true);
                 };
                 IsBusy = true;
                 resetWorker.RunWorkerAsync();
             }
             else
-                InsertAdjustData();
+                InsertAdjustData(true);
         }
         private void StartNormalAdjust()
         {
@@ -1288,7 +1321,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     IsCardReading = false;
                     return;
                 }
-                InsertAdjustData();
+                InsertAdjustData(true);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1309,7 +1342,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return true;
         }
 
-        private void InsertAdjustData()
+        private void InsertAdjustData(bool normal)
         {
             CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             MainWindow.ServerConnection.OpenConnection();
@@ -1333,7 +1366,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.ChronicAdjust(false);
                     break;
             }
-            CheckDailyUpload();
+            if(normal)
+                CheckDailyUpload();
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
