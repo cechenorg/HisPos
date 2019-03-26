@@ -1613,6 +1613,7 @@
     </EmbeddedResource>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
+    <Content Include="CsHis.dll" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1805,8 +1806,6 @@
     <Resource Include="Images\OpenRecord.png" />
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
-    <Content Include="DLLs\csHis.dll" />
-    <Content Include="DLLs\Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

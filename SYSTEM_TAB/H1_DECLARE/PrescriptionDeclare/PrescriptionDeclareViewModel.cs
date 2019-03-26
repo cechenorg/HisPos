@@ -469,18 +469,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ResetCardReaderAction()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.重置讀卡機;
-                HisApiBase.csSoftwareReset(3);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            //var worker = new BackgroundWorker();
+            //worker.DoWork += (o, ea) =>
+            //{
+            //    BusyContent = StringRes.重置讀卡機;
+            //    HisApiBase.csSoftwareReset(3);
+            //};
+            //worker.RunWorkerCompleted += (o, ea) =>
+            //{
+            //    IsBusy = false;
+            //};
+            //IsBusy = true;
+            //worker.RunWorkerAsync();
         }
         private void ErrorCodeSelectAction()
         {
@@ -1143,19 +1143,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (IsReadCard)
             {
-                var resetWorker = new BackgroundWorker();
-                resetWorker.DoWork += (obj, arg) =>
-                {
-                    BusyContent = StringRes.重置讀卡機;
-                    HisApiBase.csSoftwareReset(3);
-                };
-                resetWorker.RunWorkerCompleted += (obj, arg) =>
-                {
-                    IsBusy = false;
-                    InsertAdjustData(true);
-                };
-                IsBusy = true;
-                resetWorker.RunWorkerAsync();
+                //var resetWorker = new BackgroundWorker();
+                //resetWorker.DoWork += (obj, arg) =>
+                //{
+                //    BusyContent = StringRes.重置讀卡機;
+                //    HisApiBase.csSoftwareReset(3);
+                //};
+                //resetWorker.RunWorkerCompleted += (obj, arg) =>
+                //{
+                //    IsBusy = false;
+                //    InsertAdjustData(true);
+                //};
+                //IsBusy = true;
+                //resetWorker.RunWorkerAsync();
             }
             else
                 InsertAdjustData(true);
@@ -1243,12 +1243,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CreatePrescriptionSign()
         {
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                HisApiBase.csSoftwareReset(3);
-            };
-            worker.RunWorkerAsync();
+            //var worker = new BackgroundWorker();
+            //worker.DoWork += (o, ea) =>
+            //{
+            //    HisApiBase.csSoftwareReset(3);
+            //};
+            //worker.RunWorkerAsync();
             BusyContent = StringRes.產生每日上傳資料;
             if (CurrentPrescription.WriteCardSuccess != 0)
             {
