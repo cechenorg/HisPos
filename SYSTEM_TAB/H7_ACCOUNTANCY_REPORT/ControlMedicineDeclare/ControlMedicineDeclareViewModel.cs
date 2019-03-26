@@ -56,7 +56,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
                 Set(() => ControlMedicineDetailsCollection, ref controlMedicineDetailsCollection, value);
             }
         }
-        
+        private ControlMedicineDetails controlMedicineBagDetailsCollection = new ControlMedicineDetails();
+        public ControlMedicineDetails ControlMedicineBagDetailsCollection
+        {
+            get { return controlMedicineBagDetailsCollection; }
+            set
+            {
+                Set(() => ControlMedicineBagDetailsCollection, ref controlMedicineBagDetailsCollection, value);
+            }
+        }
         #endregion
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
@@ -69,8 +77,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
         }
         private void SelectionChangedAction() {
-            if(SelectItem != null)
-            ControlMedicineDetailsCollection.GetDataById(SelectItem.ID,SDateTime,EDateTime); 
+            if (SelectItem == null) return;
+            ControlMedicineDetails temp = new ControlMedicineDetails();
+            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime);
+            ControlMedicineBagDetailsCollection.Clear();
+            ControlMedicineDetailsCollection.Clear();
+            foreach (ControlMedicineDetail c in temp) {
+                switch (c.TypeName) {
+                    case "處方調劑(未過卡)":
+                        ControlMedicineBagDetailsCollection.Add(c);
+                        break;
+                    default:
+                        ControlMedicineDetailsCollection.Add(c);
+                        break;
+                }  
+            } 
         }
     }
 }
