@@ -1451,7 +1451,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
                 return false;
             }
-            if (CurrentPrescription.Patient.ID == -1)//新顧客
+            if (CurrentPrescription.Patient.ID == -1 || (CurrentPrescription.Patient.ID == 0 && !CurrentPrescription.Patient.Name.Equals("匿名")))//新顧客
             {
                 var customers = CurrentPrescription.Patient.Check();
                 switch (customers.Count)
