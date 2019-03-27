@@ -39,10 +39,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         #region Action
         private void ShowInsSelectionWindowAction(string search)
         {
-
-            CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
-            SelectItem = CooperativeClinicSettingCollection[0];
-            SelectItem.CooperavieClinic = null;
+            if (CooperativeClinicSettingCollection.Count == 0 && SelectItem is null) {
+                CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
+                SelectItem = CooperativeClinicSettingCollection[0];
+            }
+           
             var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
             {

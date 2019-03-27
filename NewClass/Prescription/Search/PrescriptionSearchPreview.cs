@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
+            MedicalNumber = r.Field<string>("MedicalNumber");
             if (s == PrescriptionSource.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
@@ -134,6 +135,15 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => StoStatus, ref stoStatus, value);
+            }
+        }
+        private string medicalNumber;
+        public string MedicalNumber
+        {
+            get => medicalNumber;
+            set
+            {
+                Set(() => MedicalNumber, ref medicalNumber, value);
             }
         }
         private string insertDate;
