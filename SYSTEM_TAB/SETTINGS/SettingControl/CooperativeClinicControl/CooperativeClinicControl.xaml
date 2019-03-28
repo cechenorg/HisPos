@@ -6,6 +6,20 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
              mc:Ignorable="d" 
               d:DesignHeight="500" d:DesignWidth="620">
+    <UserControl.Resources>
+        <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
+            <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
+                                        Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CooperavieClinic.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
+        </DataTemplate>
+        <DataTemplate x:Key="DisableInstitution" DataType="{x:Type Label}">
+            <Label x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
+                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding CooperavieClinic.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </DataTemplate>
+    </UserControl.Resources>
     <UserControl.DataContext>
         <local:CooperativeClinicControlViewModel/>
     </UserControl.DataContext>
@@ -49,29 +63,21 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ContentControl Margin="10,0,0,0">
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="200" Header="院所代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
-                                        Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CooperavieClinic.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                            </StackPanel>
+                            <ContentControl>
+                                <ContentControl.Style>
+                                    <Style TargetType="{x:Type ContentControl}">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource EnableInstitution}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsInstitutionEdit}" Value="true">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource DisableInstitution}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -85,13 +91,13 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="250" Header="處方路徑"  >
+                <DataGridTemplateColumn Width="270" Header="處方路徑"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="-5,0,0,0"/>
-                                <Button FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="-5,0,0,0"/>
-                            </StackPanel>
+                                <TextBlock Width="210" Text="{Binding FilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" />
+                                <Button Width="50" Content="..." Command="{Binding DataContext.OpenFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="DarkCyan" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" />
+                            </StackPanel> 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

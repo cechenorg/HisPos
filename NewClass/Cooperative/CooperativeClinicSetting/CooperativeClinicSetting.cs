@@ -19,6 +19,12 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return cooperavieClinic; }
             set { Set(() => CooperavieClinic, ref cooperavieClinic, value); }
         }
+        private bool isInstitutionEdit = false;
+        public bool IsInstitutionEdit
+        {
+            get { return isInstitutionEdit; }
+            set { Set(() => IsInstitutionEdit, ref isInstitutionEdit, value); }
+        }
         private bool isBuckle;
         public bool IsBuckle
         {

@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using System.Windows.Forms;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
 {
@@ -31,18 +33,27 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         #endregion
         #region Command
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand OpenFileCommand { get; set; }
         #endregion
         public CooperativeClinicControlViewModel() {
             Institutions = VM.Institutions;
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
+            OpenFileCommand = new RelayCommand(OpenFileAction);
         }
         #region Action
-        private void ShowInsSelectionWindowAction(string search)
-        {
-            if (CooperativeClinicSettingCollection.Count == 0 && SelectItem is null) {
-                CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
-                SelectItem = CooperativeClinicSettingCollection[0];
+        private void OpenFileAction() {
+            if (SelectItem is null)
+                MessageWindow.ShowMessage("請先填寫院所戴碼",Class.MessageType.WARNING);
+            FolderBrowserDialog fdlg = new FolderBrowserDialog(); 
+            if (fdlg.ShowDialog() == DialogResult.OK) {
+                SelectItem.FilePath = fdlg.SelectedPath;
             }
+        }
+        private void ShowInsSelectionWindowAction(string search)
+        { 
+              CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
+              SelectItem = CooperativeClinicSettingCollection[0];
+            
            
             var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
@@ -58,6 +69,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
+            SelectItem.IsInstitutionEdit = true;
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
