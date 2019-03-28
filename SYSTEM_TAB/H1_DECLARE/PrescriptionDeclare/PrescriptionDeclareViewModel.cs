@@ -695,15 +695,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
+            if (!CheckMedicalNumber())
+            {
+                IsAdjusting = false;
+                return;
+            }
             if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)//合作診所自費不檢查健保規則
             {
-                var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
+                var error = CurrentPrescription.CheckPrescriptionRule(false);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
                 {
                     MessageWindow.ShowMessage(error, MessageType.ERROR);
                     IsAdjusting = false;
                     return;
                 }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("此為全自費處方不須異常結案，請按調劑按紐完成調劑", MessageType.ERROR);
+                IsAdjusting = false;
+                return;
             }
             if (!PrintConfirm(false)) return;
             SavePatientData();
@@ -757,9 +768,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
+            if (!CheckMedicalNumber())
+            {
+                IsAdjusting = false;
+                return;
+            }
             if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)//合作診所自費不檢查健保規則
             {
-                var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
+                var error = CurrentPrescription.CheckPrescriptionRule(false);//檢查健保規則
+                if (!string.IsNullOrEmpty(error))
+                {
+                    MessageWindow.ShowMessage(error, MessageType.ERROR);
+                    IsAdjusting = false;
+                    return;
+                }
+            }
+            else
+            {
+                var error = CurrentPrescription.CheckPrescribeRule();
                 if (!string.IsNullOrEmpty(error))
                 {
                     MessageWindow.ShowMessage(error, MessageType.ERROR);
@@ -826,6 +852,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
+            if (!CheckMedicalNumber())
             {
                 IsAdjusting = false;
                 return;
@@ -1138,24 +1169,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartCooperativePrescribe()
         {
-            if (IsReadCard)
-            {
-                //var resetWorker = new BackgroundWorker();
-                //resetWorker.DoWork += (obj, arg) =>
-                //{
-                //    BusyContent = StringRes.重置讀卡機;
-                //    HisApiBase.csSoftwareReset(3);
-                //};
-                //resetWorker.RunWorkerCompleted += (obj, arg) =>
-                //{
-                //    IsBusy = false;
-                //    InsertAdjustData(true);
-                //};
-                //IsBusy = true;
-                //resetWorker.RunWorkerAsync();
-            }
-            else
-                InsertAdjustData(true);
+            InsertAdjustData(false);
         }
         private void StartNormalAdjust()
         {
@@ -1240,12 +1254,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CreatePrescriptionSign()
         {
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
-            //var worker = new BackgroundWorker();
-            //worker.DoWork += (o, ea) =>
-            //{
-            //    HisApiBase.csSoftwareReset(3);
-            //};
-            //worker.RunWorkerAsync();
             BusyContent = StringRes.產生每日上傳資料;
             if (CurrentPrescription.WriteCardSuccess != 0)
             {
@@ -1510,6 +1518,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool CheckIsNoCard()
         {
             return !CurrentPrescription.PrescriptionStatus.IsGetCard && !IsAdjusting;
+        }
+        private bool CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.TempMedicalNumber))
+            {
+                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續調劑(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認",null);
+                return (bool) medicalNumberEmptyConfirm.DialogResult;
+            }
+            return true;
         }
         #endregion
     }

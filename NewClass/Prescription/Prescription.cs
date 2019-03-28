@@ -179,12 +179,19 @@ namespace His_Pos.NewClass.Prescription
                 Treatment.Copayment = VM.GetCopayment("I22");
             if(Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
                 Treatment.Copayment = VM.GetCopayment("009");
+            //、006，001~009(除006)，801，802，901，902，903，904
             switch (Treatment.Copayment.Id)
             {
-                case "009"://其他免負擔
-                case "I22"://免收
+                case "006"://勞保被人因職業傷害或疾病門診者
+                case "001"://重大傷病
+                case "002"://分娩
                 case "003"://低收入戶
                 case "004"://榮民
+                case "005"://結核病患至指定之醫療院所就醫者
+                case "007"://山地離島就醫/戒菸免收
+                case "008"://經離島醫院診所轉至台灣本門及急救者
+                case "009"://其他免負擔
+                case "I22"://免收
                     return true;
             }
             switch (Treatment.PrescriptionCase.ID)
@@ -535,6 +542,10 @@ namespace His_Pos.NewClass.Prescription
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
         {
             return CheckMedicines() + Treatment.Check(noCard) + Patient.CheckBasicData();
+        }
+        public string CheckPrescribeRule()
+        {
+            return CheckMedicines() + Treatment.CheckPrescribe() + Patient.CheckBasicData();
         }
         public string CheckMedicines()
         {

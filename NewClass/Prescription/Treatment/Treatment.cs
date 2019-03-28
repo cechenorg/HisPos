@@ -331,6 +331,19 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 return StringRes.InstitutionError;
             return VM.GetInstitution(Institution.ID) is null ? StringRes.InstitutionError : string.Empty;
         }
+        private void CheckPrescribeInstitution()
+        {
+            if (string.IsNullOrEmpty(Institution.FullName))
+            {
+                Institution =
+                    new Ins
+                    {
+                        ID = VM.CurrentPharmacy.ID,
+                        Name = VM.CurrentPharmacy.Name,
+                        FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
+                    };
+            }
+        }
         private string CheckAdjustCase()
         {
             if (string.IsNullOrEmpty(AdjustCase.ID))
@@ -498,6 +511,15 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckPaymentCategory() +
              CheckDiseaseCode() +
              CheckChronicTimes();
+        }
+        public string CheckPrescribe()
+        {
+            CheckPrescribeInstitution();
+            if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
+                AdjustCase = VM.GetAdjustCase("0");
+            return
+                CheckAdjustDate() +
+                CheckPharmacist();
         }
         #endregion
 
