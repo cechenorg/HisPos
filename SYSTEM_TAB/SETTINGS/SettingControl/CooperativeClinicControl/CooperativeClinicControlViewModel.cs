@@ -52,7 +52,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         private void ShowInsSelectionWindowAction(string search)
         { 
               CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
-              SelectItem = CooperativeClinicSettingCollection[0];
+              SelectItem = CooperativeClinicSettingCollection[CooperativeClinicSettingCollection.Count-1];
             
            
             var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
@@ -69,12 +69,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
-            SelectItem.IsInstitutionEdit = true;
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             Messenger.Default.Unregister<Institution>(this, nameof(CooperativeClinicControlViewModel) + "InsSelected", GetSelectedInstitution);
-            SelectItem.CooperavieClinic = receiveSelectedInstitution; 
+            SelectItem.CooperavieClinic = receiveSelectedInstitution;
+            SelectItem.IsInstitutionEdit = true;
         }
         #endregion
 
