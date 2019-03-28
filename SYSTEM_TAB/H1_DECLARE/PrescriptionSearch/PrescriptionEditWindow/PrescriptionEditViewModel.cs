@@ -586,7 +586,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void SetBuckleAmount()
         {
-            if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+            if (!string.IsNullOrEmpty(VM.CooperativeInstitutionID) && EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 EditedPrescription.SelectedMedicine.BuckleAmount = 0;
             else
             {

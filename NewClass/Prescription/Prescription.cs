@@ -179,12 +179,19 @@ namespace His_Pos.NewClass.Prescription
                 Treatment.Copayment = VM.GetCopayment("I22");
             if(Treatment.AdjustCase.ID.Equals("4") || Treatment.AdjustCase.ID.Equals("0"))
                 Treatment.Copayment = VM.GetCopayment("009");
+            //、006，001~009(除006)，801，802，901，902，903，904
             switch (Treatment.Copayment.Id)
             {
-                case "009"://其他免負擔
-                case "I22"://免收
+                case "006"://勞保被人因職業傷害或疾病門診者
+                case "001"://重大傷病
+                case "002"://分娩
                 case "003"://低收入戶
                 case "004"://榮民
+                case "005"://結核病患至指定之醫療院所就醫者
+                case "007"://山地離島就醫/戒菸免收
+                case "008"://經離島醫院診所轉至台灣本門及急救者
+                case "009"://其他免負擔
+                case "I22"://免收
                     return true;
             }
             switch (Treatment.PrescriptionCase.ID)
@@ -327,15 +334,15 @@ namespace His_Pos.NewClass.Prescription
             {
                 switch (r.Field<int>("DataType"))
                 {
-                    case 0:
-                        medicine = new MedicineOTC(r);
-                        medicine.CheckPaySelf(Treatment.AdjustCase.ID);
-                        break;
                     case 1:
                         medicine = new MedicineNHI(r);
                         medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 2:
+                        medicine = new MedicineOTC(r);
+                        medicine.CheckPaySelf(Treatment.AdjustCase.ID);
+                        break;
+                    case 3:
                         medicine = new MedicineSpecialMaterial(r);
                         medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
@@ -399,13 +406,13 @@ namespace His_Pos.NewClass.Prescription
                     {
                         switch (table.Rows[0].Field<int>("DataType"))
                         {
-                            case 0:
-                                temp = new MedicineOTC(table.Rows[0]);
-                                break;
                             case 1:
                                 temp = new MedicineNHI(table.Rows[0]);
                                 break;
                             case 2:
+                                temp = new MedicineOTC(table.Rows[0]);
+                                break;
+                            case 3:
                                 temp = new MedicineSpecialMaterial(table.Rows[0]);
                                 break;
                         }
@@ -535,6 +542,10 @@ namespace His_Pos.NewClass.Prescription
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
         {
             return CheckMedicines() + Treatment.Check(noCard) + Patient.CheckBasicData();
+        }
+        public string CheckPrescribeRule()
+        {
+            return CheckMedicines() + Treatment.CheckPrescribe() + Patient.CheckBasicData();
         }
         public string CheckMedicines()
         {
@@ -817,7 +828,7 @@ namespace His_Pos.NewClass.Prescription
         private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
         {
             var treatmentDate =
-                DateTimeExtensions.NullableDateToTWCalender(Treatment.TreatDate, true);
+                DateTimeExtensions.NullableDateToTWCalender(Treatment.AdjustDate, true);
             var treatmentDateChi = string.Empty;
             if(!string.IsNullOrEmpty(treatmentDate))
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
@@ -1061,7 +1072,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.ProcessCashFlow("合作部分負擔修改", "PreMasId", Id, PrescriptionPoint.CopaymentPoint - originprescription.PrescriptionPoint.CopaymentPoint);
         }
 
-        public void SetAdjustStatus()
+        public void SetAdjustStatus(bool errorAdjust)
         {
             if (PrescriptionStatus.IsPrescribe) //處方全自費
             {
@@ -1069,7 +1080,10 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                PrescriptionStatus.SetNormalAdjustStatus();
+                if(errorAdjust)
+                    PrescriptionStatus.SetErrorAdjustStatus();
+                else
+                    PrescriptionStatus.SetNormalAdjustStatus();
             }
         }
         //檢查是否為全自費處方
@@ -1160,7 +1174,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
                 compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID) && med.UsageName.Equals(m.UsageName) && med.Days.Equals(m.Days) ) > 0)
+                if (compareList.Count(med => med.ID.Equals(m.ID) && (!string.IsNullOrEmpty(m.UsageName) && !string.IsNullOrEmpty(med.UsageName) && med.UsageName.Equals(m.UsageName)) && (m.Days!=null && med.Days != null && med.Days.Equals(m.Days)) ) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
                 }

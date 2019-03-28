@@ -35,13 +35,13 @@
         <Image x:Key="PrescriptionHistory" Source="/Images/medical-history.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
-            <Button Content="調劑" Command="{Binding DataContext.AdjustButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="175" Height="30" Margin="30,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <Button Content="調劑" Command="{Binding DataContext.AdjustButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonRegister" DataType="{x:Type Button}">
-            <Button Content="登錄" Command="{Binding DataContext.RegisterButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="175" Height="30" Margin="30,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="登錄" Command="{Binding DataContext.RegisterButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonPrescribe" DataType="{x:Type Button}">
-            <Button Content="自費調劑" Command="{Binding DataContext.PrescribeButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="175" Height="30" Margin="30,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="自費調劑" Command="{Binding DataContext.PrescribeButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="UpdateSendToSingde" DataType="{x:Type CheckBox}">
             <CheckBox Width="133" Height="35" Content="修改傳送杏德"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="IndianRed" Margin="10,0,0,0"
@@ -114,8 +114,7 @@
                     <Button Content="{StaticResource PrescriptionHistory}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Hidden"/>
                     <Label Content="處方張數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Rectangle Width="14"/>
-                    <Button Content="重置" Background="Gray" Command="{Binding ResetCardReader}" FontFamily="Segoe UI Semibold" FontSize="16" Height="32" Padding="5" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Rectangle Width="65"/>
                     <Button Content="異常代碼" Background="IndianRed" Command="{Binding ErrorCodeSelect}" FontFamily="Segoe UI Semibold" FontSize="16" Height="32" Padding="5" BorderThickness="0" Margin="10,0,0,0"/>
                     <Button Content="合作診所處方" Background="DarkCyan" BorderThickness="0" Margin="10,0,0,0" Command="{Binding ShowCooperativeSelectionWindow}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
@@ -337,7 +336,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
+                        <DataGridTemplateColumn MinWidth="400" MaxWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
@@ -682,10 +681,11 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                            <Button Width="175" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}" Margin="20,0,0,0"/>
+                            <Button Width="145" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}" Margin="50,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">
-                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding NoCardAdjust}" Margin="55,0,0,0"/>
+                            <Button Width="95" Height="30" Background="DimGray" BorderThickness="0" Content="異常結案" FontSize="16" Command="{Binding ErrorAdjust}" />
+                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding NoCardAdjust}" Margin="10,0,0,0"/>
                             <ContentControl>
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">

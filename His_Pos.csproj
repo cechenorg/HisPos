@@ -312,11 +312,16 @@
     <Compile Include="NewClass\CashFlow\CashFlow.cs" />
     <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
     <Compile Include="NewClass\CashFlow\CashFlows.cs" />
-    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJson.cs" />
-    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
-    <Compile Include="NewClass\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
-    <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
-    <Compile Include="NewClass\CooperativeInstitution\CooperativePrescriptions.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJson.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSetting.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettingDb.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettings.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescription.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescriptions.cs" />
+    <Compile Include="NewClass\Cooperative\ZhanwangPrescription\ZhanwangPrescription.cs" />
+    <Compile Include="NewClass\Cooperative\ZhanwangPrescription\ZhanwangPrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
@@ -668,9 +673,6 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
-      <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
@@ -1068,6 +1070,10 @@
       <DependentUpon>OfflineOperationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChromeTabViewModel\OfflineOperationWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControl.xaml.cs">
+      <DependentUpon>CooperativeClinicControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\DatabaseControl.xaml.cs">
       <DependentUpon>DatabaseControl.xaml</DependentUpon>
     </Compile>
@@ -1126,10 +1132,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1582,6 +1584,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\DatabaseControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1620,6 +1626,7 @@
     </EmbeddedResource>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
+    <Content Include="CsHis.dll" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1812,8 +1819,6 @@
     <Resource Include="Images\OpenRecord.png" />
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
-    <Content Include="DLLs\csHis.dll" />
-    <Content Include="DLLs\Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

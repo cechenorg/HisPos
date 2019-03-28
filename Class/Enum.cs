@@ -14,7 +14,8 @@ namespace His_Pos.Class
     {
         MyPharmacy = 1,
         Printer = 2,
-        Database = 3
+        Database = 3,
+        CooperativeClinic = 4
     }
 
     public enum StoreOrderCategory

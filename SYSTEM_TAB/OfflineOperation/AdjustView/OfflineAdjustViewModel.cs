@@ -1111,7 +1111,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         private void InsertAdjustData()
         {
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.SetAdjustStatus();//設定處方狀態
+            CurrentPrescription.SetAdjustStatus(false);//設定處方狀態
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:

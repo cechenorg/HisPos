@@ -68,7 +68,7 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         [XmlAttribute(AttributeName = "serial_code")]
         public string MedicalNumber { get; set; }
         [XmlAttribute(AttributeName = "except_code")]
-        public string IcErrorCode { get; set; }
+        public string IcErrorCode { get; set; } //例外就醫
         [XmlAttribute(AttributeName = "copayment_code")]
         public string CopaymentCode { get; set; }
         [XmlAttribute(AttributeName = "case_type")]
