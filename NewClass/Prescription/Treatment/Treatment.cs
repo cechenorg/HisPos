@@ -99,7 +99,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
-            if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode))
+            if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
 
             TreatDate =  Convert.ToDateTime(c.InsertDate);
