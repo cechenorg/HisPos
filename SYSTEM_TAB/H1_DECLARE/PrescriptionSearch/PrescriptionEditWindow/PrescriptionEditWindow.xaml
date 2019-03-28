@@ -319,7 +319,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
+                        <DataGridTemplateColumn MinWidth="400" MaxWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">

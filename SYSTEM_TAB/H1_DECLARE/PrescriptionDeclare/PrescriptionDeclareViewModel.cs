@@ -260,7 +260,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ClearButtonClick { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
-        public RelayCommand ResetCardReader { get; set; }
         public RelayCommand ErrorAdjust { get; set; }
         public RelayCommand NoCardAdjust { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
@@ -316,7 +315,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void InitialCommandActions()
         {
             SearchCustomerByConditions = new RelayCommand<object>(SearchCusAction);
-            ResetCardReader = new RelayCommand(ResetCardReaderAction);
             ErrorCodeSelect = new RelayCommand(ErrorCodeSelectAction);
             ShowCooperativeSelectionWindow = new RelayCommand(ShowCooperativeWindowAction);
             GetPatientData = new RelayCommand(GetPatientDataAction, CheckIsCardReading);
@@ -466,21 +464,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     }
                     break;
             }
-        }
-        private void ResetCardReaderAction()
-        {
-            //var worker = new BackgroundWorker();
-            //worker.DoWork += (o, ea) =>
-            //{
-            //    BusyContent = StringRes.重置讀卡機;
-            //    HisApiBase.csSoftwareReset(3);
-            //};
-            //worker.RunWorkerCompleted += (o, ea) =>
-            //{
-            //    IsBusy = false;
-            //};
-            //IsBusy = true;
-            //worker.RunWorkerAsync();
         }
         private void ErrorCodeSelectAction()
         {
@@ -682,7 +665,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetBuckleAmount()
         {
-            if (CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+            if (!string.IsNullOrEmpty(VM.CooperativeInstitutionID) && CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
                 CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
             else
             {
@@ -902,63 +885,77 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetSelectedPrescription(CustomPrescriptionStruct pre)
         {
-            Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
-            var p = new Prescription();
-            MainWindow.ServerConnection.OpenConnection();
-            switch (pre.Source)
+            try
             {
-                case PrescriptionSource.ChronicReserve:
-                    p = new Prescription(PrescriptionDb.GetReservePrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.ChronicReserve);
-                    break;
-                case PrescriptionSource.Normal:
-                    p = new Prescription(PrescriptionDb.GetPrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.Normal);
-                    break;
+                Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
+                Messenger.Default.Unregister<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
+                var p = new Prescription();
+                MainWindow.ServerConnection.OpenConnection();
+                switch (pre.Source)
+                {
+                    case PrescriptionSource.ChronicReserve:
+                        p = new Prescription(PrescriptionDb.GetReservePrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.ChronicReserve);
+                        break;
+                    case PrescriptionSource.Normal:
+                        p = new Prescription(PrescriptionDb.GetPrescriptionByID((int)pre.ID).Rows[0], PrescriptionSource.Normal);
+                        break;
+                }
+                MainWindow.ServerConnection.CloseConnection();
+                p.Card = CurrentPrescription.Card;
+                p.Patient = CurrentPrescription.Patient;
+                CurrentPrescription.Patient.Check();
+                CurrentPrescription = p;
+                CurrentPrescription.GetCompletePrescriptionData(false, false);
+                CurrentPrescription.CountPrescriptionPoint(true);
+                CanAdjust = true;
             }
-            MainWindow.ServerConnection.CloseConnection();
-            p.Card = CurrentPrescription.Card;
-            p.Patient = CurrentPrescription.Patient;
-            CurrentPrescription.Patient.Check();
-            CurrentPrescription = p;
-            CurrentPrescription.GetCompletePrescriptionData( false, false);
-            CurrentPrescription.CountPrescriptionPoint(true);
-            CanAdjust = true;
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+            }
         }
         private void GetCooperativePrescription(NotificationMessage<Prescription> msg)
         {
-            Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
-            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
-            msg.Content.GetCompletePrescriptionData(true,false);
-            MainWindow.ServerConnection.OpenConnection();
-            msg.Content.Card = CurrentPrescription.Card;
-            if (msg.Sender is CooperativeSelectionViewModel)
+            try
             {
-                var customers = msg.Content.Patient.Check();
-                switch (customers.Count)
+                Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
+                Messenger.Default.Unregister<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
+                msg.Content.GetCompletePrescriptionData(true, false);
+                MainWindow.ServerConnection.OpenConnection();
+                msg.Content.Card = CurrentPrescription.Card;
+                if (msg.Sender is CooperativeSelectionViewModel)
                 {
-                    case 0:
-                        AskAddCustomerData();
-                        break;
-                    case 1:
-                        CurrentPrescription.Patient = customers[0];
-                        MainWindow.ServerConnection.OpenConnection();
-                        CurrentPrescription.Patient.UpdateEditTime();
-                        CurrentPrescription.Patient.GetHistories();
-                        MainWindow.ServerConnection.CloseConnection();
-                        break;
+                    var customers = msg.Content.Patient.Check();
+                    switch (customers.Count)
+                    {
+                        case 0:
+                            AskAddCustomerData();
+                            break;
+                        case 1:
+                            CurrentPrescription.Patient = customers[0];
+                            MainWindow.ServerConnection.OpenConnection();
+                            CurrentPrescription.Patient.UpdateEditTime();
+                            CurrentPrescription.Patient.GetHistories();
+                            MainWindow.ServerConnection.CloseConnection();
+                            break;
+                    }
                 }
+                else
+                {
+                    msg.Content.Patient = CurrentPrescription.Patient;
+                }
+                MainWindow.ServerConnection.CloseConnection();
+                CurrentPrescription = msg.Content;
+                CurrentPrescription.CountPrescriptionPoint(true);
+                CurrentPrescription.PrescriptionStatus.IsCooperative = true;
+                CanAdjust = true;
+                if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
+                    MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。", MessageType.WARNING);
             }
-            else
+            catch (Exception e)
             {
-                msg.Content.Patient = CurrentPrescription.Patient;
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
-            MainWindow.ServerConnection.CloseConnection();
-            CurrentPrescription = msg.Content;
-            CurrentPrescription.CountPrescriptionPoint(true);
-            CurrentPrescription.PrescriptionStatus.IsCooperative = true;
-            CanAdjust = true;
-            if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
-                MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。",MessageType.WARNING);
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
