@@ -34,13 +34,34 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         #region Command
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand OpenFileCommand { get; set; }
+        public RelayCommand UpdateCommand { get; set; }
+        public RelayCommand DeleteInstitutionCommand { get; set; }
         #endregion
+
         public CooperativeClinicControlViewModel() {
+            MainWindow.ServerConnection.OpenConnection();
+            CooperativeClinicSettingCollection.Init();
+            MainWindow.ServerConnection.CloseConnection();
             Institutions = VM.Institutions;
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             OpenFileCommand = new RelayCommand(OpenFileAction);
+            UpdateCommand = new RelayCommand(UpdateAction);
+            DeleteInstitutionCommand = new RelayCommand(DeleteInstitutionAction);
         }
         #region Action
+        private void DeleteInstitutionAction() {
+            CooperativeClinicSettingCollection.Remove(SelectItem);
+        }
+        public void Init() {
+            MainWindow.ServerConnection.OpenConnection();
+            CooperativeClinicSettingCollection.Init();
+            MainWindow.ServerConnection.CloseConnection(); 
+        }
+        private void UpdateAction() {
+            var dailyUploadConfirm = new ConfirmWindow("更新後會影響處方資料串接與扣庫 是否更新合作診所? ", "合作診所更新確認", false);
+            if (dailyUploadConfirm.DialogResult == true)
+                CooperativeClinicSettingCollection.Update(); 
+        }
         private void OpenFileAction() {
             if (SelectItem is null)
                 MessageWindow.ShowMessage("請先填寫院所戴碼",Class.MessageType.WARNING);
@@ -50,18 +71,17 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             }
         }
         private void ShowInsSelectionWindowAction(string search)
-        { 
-              CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
-              SelectItem = CooperativeClinicSettingCollection[CooperativeClinicSettingCollection.Count-1];
-            
-           
+        {  
             var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:
                     return;
                 case 1:
-                    SelectItem.CooperavieClinic = result[0]; 
+                    if (CheckInsSame(result[0])) {
+                        CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
+                        SelectItem.CooperavieClinic = result[0];
+                    } 
                     break;
                 default:
                     Messenger.Default.Register<Institution>(this,nameof(CooperativeClinicControlViewModel) + "InsSelected", GetSelectedInstitution);
@@ -73,8 +93,21 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
             Messenger.Default.Unregister<Institution>(this, nameof(CooperativeClinicControlViewModel) + "InsSelected", GetSelectedInstitution);
-            SelectItem.CooperavieClinic = receiveSelectedInstitution;
-            SelectItem.IsInstitutionEdit = true;
+            if (CheckInsSame(receiveSelectedInstitution)) {
+                CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
+                SelectItem = CooperativeClinicSettingCollection[CooperativeClinicSettingCollection.Count - 1];
+                SelectItem.CooperavieClinic = receiveSelectedInstitution;
+                SelectItem.IsInstitutionEdit = true;
+            } 
+        }
+        private bool CheckInsSame(Institution receiveSelectedInstitution) {
+            if (CooperativeClinicSettingCollection.Where(c => !(c.CooperavieClinic is null)).Count(c => c.CooperavieClinic.ID == receiveSelectedInstitution.ID) > 0)
+            {
+                MessageWindow.ShowMessage("合作院所重複新增", Class.MessageType.ERROR);
+                return false;
+            }
+            else
+                return true;
         }
         #endregion
 

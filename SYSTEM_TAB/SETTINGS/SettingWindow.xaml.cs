@@ -131,6 +131,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                     CurrentControl = databaseControl;
                     break;
                 case SettingTabs.CooperativeClinic:
+                    ((CooperativeClinicControlViewModel)cooperativeClinicControl.DataContext).Init();
                     CurrentControl = cooperativeClinicControl;
                     break;
             }

@@ -2,14 +2,23 @@
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
 {
    public class CooperativeClinicSetting : ObservableObject
     {
+        public CooperativeClinicSetting(DataRow r)
+        {
+            CooperavieClinic = VM.GetInstitution(r.Field<string>("CooCli_ID"));
+            IsBuckle = r.Field<bool>("CooCli_IsBuckle");
+            FilePath = r.Field<string>("CooCli_FolderPath");
+            IsInstitutionEdit = true;
+        }
         public CooperativeClinicSetting() {
 
         }

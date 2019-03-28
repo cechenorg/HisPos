@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
-                                        Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CooperavieClinic.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                        Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" >
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                 </TextBox.InputBindings>
@@ -17,7 +17,7 @@
         </DataTemplate>
         <DataTemplate x:Key="DisableInstitution" DataType="{x:Type Label}">
             <Label x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding CooperavieClinic.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding CooperavieClinic.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -63,10 +63,21 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsInstitutionEdit, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Image.InputBindings>
+                                    <MouseBinding Command="{Binding DataContext.DeleteInstitutionCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                </Image.InputBindings>
+                            </Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="200" Header="院所代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl>
+                            <ContentControl Content="{Binding}">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource EnableInstitution}" />
@@ -104,9 +115,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right">
-            <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False" />
-            <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0" />
+            <Button  Width="150" Content="更新" Command="{Binding UpdateCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0"   Margin="0,0,10,0" />
         </StackPanel>
     </Grid>
 </UserControl>
