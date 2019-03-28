@@ -335,11 +335,11 @@ namespace His_Pos.NewClass.Prescription
                 switch (r.Field<int>("DataType"))
                 {
                     case 1:
-                        medicine = new MedicineOTC(r);
+                        medicine = new MedicineNHI(r);
                         medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 2:
-                        medicine = new MedicineNHI(r);
+                        medicine = new MedicineOTC(r);
                         medicine.CheckPaySelf(Treatment.AdjustCase.ID);
                         break;
                     case 3:
@@ -407,10 +407,10 @@ namespace His_Pos.NewClass.Prescription
                         switch (table.Rows[0].Field<int>("DataType"))
                         {
                             case 1:
-                                temp = new MedicineOTC(table.Rows[0]);
+                                temp = new MedicineNHI(table.Rows[0]);
                                 break;
                             case 2:
-                                temp = new MedicineNHI(table.Rows[0]);
+                                temp = new MedicineOTC(table.Rows[0]);
                                 break;
                             case 3:
                                 temp = new MedicineSpecialMaterial(table.Rows[0]);
