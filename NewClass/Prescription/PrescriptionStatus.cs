@@ -123,5 +123,13 @@ namespace His_Pos.NewClass.Prescription {
             IsDeclare = false;
             IsDeposit = false;
         }
+        //已過卡 已調劑 預設不申報 不押金
+        public void SetErrorAdjustStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
     }
 }

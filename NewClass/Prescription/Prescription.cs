@@ -1072,7 +1072,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionDb.ProcessCashFlow("合作部分負擔修改", "PreMasId", Id, PrescriptionPoint.CopaymentPoint - originprescription.PrescriptionPoint.CopaymentPoint);
         }
 
-        public void SetAdjustStatus()
+        public void SetAdjustStatus(bool errorAdjust)
         {
             if (PrescriptionStatus.IsPrescribe) //處方全自費
             {
@@ -1080,7 +1080,10 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
-                PrescriptionStatus.SetNormalAdjustStatus();
+                if(errorAdjust)
+                    PrescriptionStatus.SetErrorAdjustStatus();
+                else
+                    PrescriptionStatus.SetNormalAdjustStatus();
             }
         }
         //檢查是否為全自費處方

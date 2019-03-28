@@ -718,7 +718,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (!PrintConfirm(false)) return;
             SavePatientData();
-            InsertAdjustData(false);
+            InsertAdjustData(false,true);
         }
         private void NoCardAdjustAction()
         {
@@ -1169,7 +1169,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartCooperativePrescribe()
         {
-            InsertAdjustData(false);
+            InsertAdjustData(false,false);
         }
         private void StartNormalAdjust()
         {
@@ -1326,7 +1326,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     IsCardReading = false;
                     return;
                 }
-                InsertAdjustData(true);
+                InsertAdjustData(true,false);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1347,11 +1347,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return true;
         }
 
-        private void InsertAdjustData(bool normal)
+        private void InsertAdjustData(bool normal,bool errorAdjust)
         {
             CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.SetAdjustStatus();//設定處方狀態
+            CurrentPrescription.SetAdjustStatus(errorAdjust);//設定處方狀態
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
