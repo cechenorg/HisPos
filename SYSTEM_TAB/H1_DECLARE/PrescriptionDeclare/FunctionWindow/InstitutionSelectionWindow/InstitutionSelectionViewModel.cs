@@ -10,6 +10,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -102,6 +103,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                     break;
                 case ViewModelEnum.DeclareFileManage:
                     Messenger.Default.Send(SelectedInstitution, nameof(DeclareFileManageViewModel) + "InsSelected");
+                    break;
+                case ViewModelEnum.CooperativeClinicControl:
+                    Messenger.Default.Send(SelectedInstitution, nameof(CooperativeClinicControlViewModel) + "InsSelected");
                     break;
             }
             Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));

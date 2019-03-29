@@ -265,11 +265,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 p.PrescriptionSign = new List<string>();
             }
-            if (HisApiFunction.OpenCom())
-            {
-                HisApiBase.csSoftwareReset(3);
-                HisApiFunction.CloseCom();
-            }
+            //if (HisApiFunction.OpenCom())
+            //{
+            //    HisApiBase.csSoftwareReset(3);
+            //    HisApiFunction.CloseCom();
+            //}
             BusyContent = StringRes.產生每日上傳資料;
             if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {
