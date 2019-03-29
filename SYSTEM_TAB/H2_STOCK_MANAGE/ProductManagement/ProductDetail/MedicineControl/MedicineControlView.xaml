@@ -328,7 +328,7 @@
                     <!--<generalCustomControl:DecimalControl Decimal="{Binding MedicineDetail.SingdePackagePrice}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource Shadow}">
-                    <Label Content="倉庫庫存量" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="133,0,0,0"/>
+                    <Label Content="杏德庫存量" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="133,0,0,0"/>
                     <TextBlock Text="{Binding MedicineDetail.SindeStock}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="8,0,0,0"/>
                     <Label Content="包裝量" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="11,0,0,0"/>
                     <TextBlock Text="{Binding MedicineDetail.PackageAmount}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="8,0,0,0"/>
