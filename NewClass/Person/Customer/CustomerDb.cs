@@ -123,7 +123,7 @@ namespace His_Pos.NewClass.Person.Customer
         public static DataTable InsertCustomerData(Customer c)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", c.IDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", c.IDNumber.Trim());
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", c.Name);
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", c.Birthday);
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", c.Tel);
