@@ -32,7 +32,6 @@ namespace His_Pos.NewClass.Prescription
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
         
-        
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 

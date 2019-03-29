@@ -268,8 +268,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions = new PrescriptionSearchPreviews();
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
-            StartDate = null;
-            EndDate = null;
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
         }
         private void InitialCommands()
         {
