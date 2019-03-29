@@ -40,6 +40,12 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return isBuckle; }
             set { Set(() => IsBuckle, ref isBuckle, value); }
         }
+        private string typeName;
+        public string TypeName
+        {
+            get { return typeName; }
+            set { Set(() => TypeName, ref typeName, value); }
+        }
         private string filePath;
         public string FilePath
         {

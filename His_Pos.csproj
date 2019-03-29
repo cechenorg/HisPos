@@ -320,8 +320,9 @@
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettings.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescription.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescriptions.cs" />
-    <Compile Include="NewClass\Cooperative\ZhanwangPrescription\ZhanwangPrescription.cs" />
-    <Compile Include="NewClass\Cooperative\ZhanwangPrescription\ZhanwangPrescriptions.cs" />
+    <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescription.cs" />
+    <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptionDb.cs" />
+    <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />

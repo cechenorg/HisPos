@@ -5,6 +5,7 @@ using System.Data;
 using System.Threading;
 using His_Pos.Interface;
 using His_Pos.Service;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -61,7 +62,32 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
             }
         }
-    
+        public Medicine(XmlOfPrescription.Item m) {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            UsageName = m.Freq;
+            PositionID = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Divided_dose);
+            Days = Convert.ToInt32(m.Days);
+            PaySelf = !string.IsNullOrEmpty(m.Remark);
+            IsBuckle = false;
+            switch (m.Remark)
+            {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    break;
+            }
+        }
         private double amount;//總量
         public double Amount
         {

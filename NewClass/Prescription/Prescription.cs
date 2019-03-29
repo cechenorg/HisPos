@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -97,7 +98,36 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }
-        } 
+        }
+        public Prescription(XmlOfPrescription.Prescription c,string sourceId,bool IsRead) { 
+            #region CooPreVariable
+            var prescription = c;
+            var customer = prescription.CustomerProfile.Customer;
+            var birthYear = int.Parse(customer.Birth.Substring(0, 3)) + 1911;
+            var birthMonth = int.Parse(customer.Birth.Substring(3, 2));
+            var birthDay = int.Parse(customer.Birth.Substring(5, 2));
+            #endregion 
+            Source = PrescriptionSource.XmlOfPrescription;
+            SourceId = sourceId; 
+             
+            MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
+            Treatment = new Treatment.Treatment(c);
+            Patient = new Customer
+            {
+                IDNumber = customer.IdNumber,
+                Name = customer.Name,
+                Birthday = new DateTime(birthYear, birthMonth, birthDay),
+                Tel = customer.Phone
+            };
+            Card = new IcCard();
+            PrescriptionStatus.IsSendToSingde = false;
+            PrescriptionStatus.IsAdjust = false;
+            PrescriptionStatus.IsRead = IsRead;
+            foreach (var m in prescription.MedicineOrder.Item)
+            {
+                Medicines.Add(new Medicine(m));
+            }
+        }
         public int Id { get; set; }
         private Customer patient;
         public Customer Patient
