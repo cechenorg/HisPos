@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             PackageAmount = row.Field<int>("SinData_PackageAmount").ToString();
             SingdePackagePrice = (double)row.Field<decimal>("SinData_PackagePrice");
             SindePrice = (double)row.Field<decimal>("SinData_SinglePrice");
+            SindeStock = row.Field<int>("SinData_Stock");
             Form = row.Field<string>("Med_Form");
             ATC = row.Field<string>("Med_ATC");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
@@ -27,6 +28,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public double SingdePackagePrice { get; }
         public string SingdeMinOrderAmount { get; }
         public double SindePrice { get; }
+        public int SindeStock { get; }
         public string Form { get; }
         public string ATC { get; }
         public string Manufactory { get; }
