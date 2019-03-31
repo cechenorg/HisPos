@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -14,8 +15,10 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.NewClass.Prescription.Search;
 using His_Pos.Service;
 using Customer = His_Pos.Class.Person.Customer;
+using Prescription = His_Pos.NewClass.CooperativeInstitution.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -92,7 +95,19 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
 
         private void ChangeCus_Click(object sender, RoutedEventArgs e)
         {
+            var prescriptionsPreviews = new PrescriptionSearchPreviews();
+            var prescriptions = new Prescriptions();
+            DataTable table = PrescriptionDb.GetSearchPrescriptionsData(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                DateTime.Today, null, null, null, null, null, null, null);
+            foreach (DataRow r in table.Rows)
+            {
+                prescriptionsPreviews.Add(new PrescriptionSearchPreview(r,PrescriptionSource.Normal));
+            }
 
+            foreach (var p in prescriptionsPreviews)
+            {
+                prescriptions.Add(new NewClass.Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],PrescriptionSource.Normal));
+            }
         }
     }
 }
