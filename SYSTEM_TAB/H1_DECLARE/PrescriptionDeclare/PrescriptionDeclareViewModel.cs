@@ -3,11 +3,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -15,7 +12,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.HisApi;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -242,7 +238,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
         public RelayCommand GetPatientData { get; set; }
-        // ReSharper disable once InconsistentNaming
         public RelayCommand<object> SearchCustomerByConditions { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand PharmacistSelectionChanged { get; set; }
@@ -1095,6 +1090,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckPrescriptionVariable()
         {
             CurrentPrescription.CheckPrescriptionVariable();
+            if (CurrentPrescription.Treatment.AdjustCase.ID.Equals("2"))
+                CurrentPrescription.Treatment.PaymentCategory = PaymentCategories[0];
             CheckDeclareStatus();
         }
         private void CheckDeclareStatus()

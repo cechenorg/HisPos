@@ -331,7 +331,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P4 = m.UsageName;
                 P5 = m.PositionID;
                 P8 = string.Empty;
-                P9 = string.Empty;
+                P9 = $"{Math.Round(m.TotalPrice, 0, MidpointRounding.AwayFromZero):0000000}";
                 P10 = string.Empty;
                 var days = m.Days is null ? string.Empty : m.Days.ToString();
                 P11 = days;

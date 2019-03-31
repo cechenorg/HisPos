@@ -140,7 +140,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
-            TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
+            TempMedicalNumber = AdjustCase.ID.Equals("2") ? OriginalMedicalNumber : MedicalNumber;
         }
 
         #region Variables
@@ -519,7 +519,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             CheckPrescribeInstitution();
             if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
-                AdjustCase = VM.GetAdjustCase("0");
+                AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
             return
                 CheckAdjustDate() +
                 CheckPharmacist();

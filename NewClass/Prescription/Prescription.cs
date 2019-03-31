@@ -435,13 +435,14 @@ namespace His_Pos.NewClass.Prescription
                 temp.Days = Medicines[medCount].Days;
                 temp.Amount = Medicines[medCount].Amount;
                 temp.PaySelf = Medicines[medCount].PaySelf;
+                temp.Price = Medicines[medCount].Price;
                 temp.TotalPrice = Medicines[medCount].TotalPrice;
                 temp.BuckleAmount = Medicines[medCount].BuckleAmount;
-                if (Medicines[medCount].PaySelf && Medicines[medCount].TotalPrice > 0)
-                {
-                    temp.Price = Medicines[medCount].Price == 0 ? 
-                        Math.Round(Medicines[medCount].TotalPrice / Medicines[medCount].Amount, 2, MidpointRounding.AwayFromZero) : Medicines[medCount].Price;
-                }
+                //if (Medicines[medCount].PaySelf && Medicines[medCount].TotalPrice > 0)
+                //{
+                //    temp.Price = Medicines[medCount].Price == 0 ? 
+                //        Math.Round(Medicines[medCount].TotalPrice / Medicines[medCount].Amount, 2, MidpointRounding.AwayFromZero) : Medicines[medCount].Price;
+                //}
                 if (!string.IsNullOrEmpty(temp.ID))
                     Medicines[medCount] = temp;
             }
@@ -983,13 +984,13 @@ namespace His_Pos.NewClass.Prescription
                 med.PaySelf = m.PaySelf;
                 med.PositionID = m.PositionID;
                 med.UsageName = m.UsageName;
+                med.Price = m.Price;
                 med.TotalPrice = m.TotalPrice;
                 med.Vendor = m.Vendor;
                 med.ID = m.ID;
                 med.EnglishName = m.EnglishName;
                 med.ChineseName = m.ChineseName;
                 med.IsCommon = m.IsCommon;
-                med.Price = m.Price;
                 med.BuckleAmount = m.BuckleAmount;
                 p.Medicines.Add(med);
             }
@@ -1037,6 +1038,7 @@ namespace His_Pos.NewClass.Prescription
                         Treatment.PrescriptionCase = VM.GetPrescriptionCases("09");
                     if(!CheckFreeCopayment())
                         Treatment.Copayment = VM.GetCopayment("I20");
+                    Treatment.OriginalMedicalNumber = null;
                     break;
                 case "2":
                     Treatment.PrescriptionCase = VM.GetPrescriptionCases("04");
@@ -1048,6 +1050,7 @@ namespace His_Pos.NewClass.Prescription
                     Treatment.Copayment = VM.GetCopayment("009");
                     Treatment.SpecialTreat = new SpecialTreat();
                     Treatment.TreatDate = null;
+                    Treatment.OriginalMedicalNumber = null;
                     break;
             }
         }
