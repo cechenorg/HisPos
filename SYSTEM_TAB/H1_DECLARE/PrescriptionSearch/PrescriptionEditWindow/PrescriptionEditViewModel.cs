@@ -193,9 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             MainWindow.ServerConnection.OpenConnection();
             selected.Patient = selected.Patient.GetCustomerByCusId(selected.Patient.ID);
-            MainWindow.ServerConnection.OpenConnection();
             EditedPrescription = selected;
-            MainWindow.ServerConnection.OpenConnection();
             EditedPrescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
             if (EditedPrescription.Treatment.Division != null)

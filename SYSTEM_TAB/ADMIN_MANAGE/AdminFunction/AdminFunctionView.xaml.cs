@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
@@ -106,7 +107,26 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
 
             foreach (var p in prescriptionsPreviews)
             {
-                prescriptions.Add(new NewClass.Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],PrescriptionSource.Normal));
+                var pre = new NewClass.Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
+                    PrescriptionSource.Normal);
+                MainWindow.ServerConnection.OpenConnection();
+                pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
+                pre.AdjustMedicinesType();
+                MainWindow.ServerConnection.CloseConnection();
+                if (pre.Treatment.Division != null)
+                    pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
+                pre.Treatment.Pharmacist =
+                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IdNumber.Equals(pre.Treatment.Pharmacist.IdNumber));
+                pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
+                pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
+                if (pre.Treatment.PrescriptionCase != null)
+                    pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
+                if (pre.Treatment.SpecialTreat != null)
+                    pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
+                pre.PrescriptionPoint.GetDeposit(pre.Id);
+                pre.CheckIsCooperative();
+                if(pre.PrescriptionStatus.IsDeclare)
+                    prescriptions.Add(pre);
             }
         }
     }
