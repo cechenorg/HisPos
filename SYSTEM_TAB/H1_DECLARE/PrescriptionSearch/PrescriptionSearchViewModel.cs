@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Xml;
@@ -245,6 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
+        public RelayCommand ExportCsvCommand { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> CheckInsEmpty { get; set; }
@@ -265,14 +268,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions = new PrescriptionSearchPreviews();
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
-            StartDate = null;
-            EndDate = null;
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
         }
         private void InitialCommands()
         {
             Search = new RelayCommand(SearchAction);
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
+            ExportCsvCommand = new RelayCommand(ExportCsvAction);
             Clear = new RelayCommand(ClearAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
@@ -390,6 +394,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = 0;
             CopaymentPoint = 0;
             Profit = 0;
+            SelectedInstitution = null;
         }
 
         private void Refresh(NotificationMessage msg)
@@ -403,13 +408,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private void GetInstitutionAction(string search)
         {
-            if (search.Length < 4)
-            {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
             SelectedInstitution = null;
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
+            var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
             switch (result.Count)
             {
                 case 0:
@@ -432,6 +432,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         #endregion
         #region Functions
+        private void ExportCsvAction() {
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "處方存檔";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "我是處方請存我|*.csv";
+            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + "處方存檔";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLineAsync("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
+                        foreach (var s in SearchPrescriptions)
+                        {
+                            string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
+                            file.WriteLineAsync($"{s_adjust},{s.StoStatus},{s.Institution.Name},{s.Division.Name},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber},{s.Patient.Birthday},{s.TreatDate},{s.AdjustDate},{s.InsertDate}");
+                        }
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex) {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+                
+            }
+        }
         private void UpdateCollectionView()
         {
             PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };

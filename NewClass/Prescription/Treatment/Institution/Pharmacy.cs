@@ -49,16 +49,15 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public static Pharmacy GetCurrentPharmacy() { 
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
-            pharmacy.MedicalPersonnels = new MedicalPersonnels(); 
+            pharmacy.MedicalPersonnels = new MedicalPersonnels(true); 
             return pharmacy;
         }
         public MedicalPersonnel GetPharmacist()
         {
             if (ViewModelMainWindow.CurrentUser.WorkPositionName.Equals("藥師"))
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));
-            
-                return MedicalPersonnels.Count > 0 ? MedicalPersonnels[0] : null;
-           
+            var medicalPersonnels = MedicalPersonnels.Where(m => m.IsEnable).ToList();
+                return medicalPersonnels.Count > 0 ? medicalPersonnels[0] : null;
         }
         public void SetPharmacy() {
             PharmacyDb.SetPharmacy(this);

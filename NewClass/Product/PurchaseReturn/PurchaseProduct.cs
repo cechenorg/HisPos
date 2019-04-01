@@ -106,6 +106,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SingdePackageAmount { get; } 
         public double SingdePackagePrice { get; }
         public double SingdePrice { get; }
+        public int SingdeStock { get; }
         #endregion
 
         public PurchaseProduct() : base() {}
@@ -131,6 +132,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
+            SingdeStock = dataRow.Field<int>("SinData_Stock");
         }
 
         #region ----- Define Functions -----

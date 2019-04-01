@@ -134,7 +134,7 @@ namespace His_Pos.ChromeTabViewModel
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels(true);
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;

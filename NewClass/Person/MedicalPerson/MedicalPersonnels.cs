@@ -5,9 +5,10 @@ namespace His_Pos.NewClass.Person.MedicalPerson
 {
     public class MedicalPersonnels:Collection<MedicalPersonnel>
     {
-        public MedicalPersonnels()
+        public MedicalPersonnels(bool init)
         {
-            Init();
+            if(init)
+                Init();
         }
 
         private void Init()

@@ -27,12 +27,12 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
             Times = r.Field<byte?>("Usa_Times") ??0;
             PreDefault = r.Field<bool>("Usa_Default");
 
-            PrintIcons[0] = r.Field<bool>("UsaPri_Morning");
-            PrintIcons[1] = r.Field<bool>("UsaPri_Noon");
-            PrintIcons[2] = r.Field<bool>("UsaPri_Night");
-            PrintIcons[3] = r.Field<bool>("UsaPri_Sleep");
-            PrintIcons[4] = r.Field<bool>("UsaPri_BeforeMeal");
-            PrintIcons[5] = r.Field<bool>("UsaPri_AfterMeal");
+            //PrintIcons[0] = r.Field<bool>("UsaPri_Morning");
+            //PrintIcons[1] = r.Field<bool>("UsaPri_Noon");
+            //PrintIcons[2] = r.Field<bool>("UsaPri_Night");
+            //PrintIcons[3] = r.Field<bool>("UsaPri_Sleep");
+            //PrintIcons[4] = r.Field<bool>("UsaPri_BeforeMeal");
+            //PrintIcons[5] = r.Field<bool>("UsaPri_AfterMeal");
         }
         [Index(0)]
         public virtual int ID { get; set; }
@@ -52,8 +52,8 @@ namespace His_Pos.NewClass.Product.Medicine.Usage
         public virtual int Times { get; set; }
         [Index(7)]
         public virtual bool PreDefault { get; set; }
-        [Index(8)]
-        public virtual bool[] PrintIcons { get; set; } = new bool[6];
+        //[Index(8)]
+        //public virtual bool[] PrintIcons { get; set; } = new bool[6];
 
         public object Clone()
         {

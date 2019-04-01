@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
@@ -27,8 +28,32 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustCase = ViewModelMainWindow.GetAdjustCase(r.Field<string>("AdjustCaseID"));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
-            if(s == PrescriptionSource.Normal)
-            IsAdjust = r.Field<bool>("IsAdjust"); 
+            MedicalNumber = r.Field<string>("MedicalNumber");
+            if (s == PrescriptionSource.Normal)
+            {
+                IsAdjust = r.Field<bool>("IsAdjust");
+                TaiwanCalendar tc = new TaiwanCalendar();
+                if (r.Field<DateTime?>("InsertTime") != null) {
+                    DateTime istime = r.Field<DateTime>("InsertTime");
+                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
+                         
+                } 
+                
+                switch (r.Field<string>("StoOrd_Status")) {
+                    case "W":
+                        StoStatus = "等待確認";
+                        break;
+                    case "P":
+                        StoStatus = "等待收貨";
+                        break;
+                    case "D":
+                        StoStatus = "已收貨";
+                        break;
+                    default:
+                        StoStatus = "無訂單";
+                        break;
+                }
+            }
         }
 
         private Customer patient;
@@ -101,6 +126,33 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => IsAdjust, ref isAdjust, value);
+            }
+        }
+        private string stoStatus;
+        public string StoStatus
+        {
+            get => stoStatus;
+            set
+            {
+                Set(() => StoStatus, ref stoStatus, value);
+            }
+        }
+        private string medicalNumber;
+        public string MedicalNumber
+        {
+            get => medicalNumber;
+            set
+            {
+                Set(() => MedicalNumber, ref medicalNumber, value);
+            }
+        }
+        private string insertDate;
+        public string InsertDate
+        {
+            get => insertDate;
+            set
+            {
+                Set(() => InsertDate, ref insertDate, value);
             }
         }
         public PrescriptionSource Source { get; set; }

@@ -166,15 +166,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private void CustomPrescriptionSelected(NotificationMessage msg)
         {
-            if (!msg.Notification.Equals("CustomPrescriptionSelected")) return;
-            if (SelectedPrescription.ID is null) return;
-            Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
-            if (SelectedPrescription.Source == PrescriptionSource.Cooperative)
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
-            else
-                Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
-            Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
-            Messenger.Default.Unregister(this);
+            try
+            {
+                if (!msg.Notification.Equals("CustomPrescriptionSelected")) return;
+                if (SelectedPrescription.ID is null) return;
+                Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
+                if (SelectedPrescription.Source == PrescriptionSource.Cooperative)
+                    Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
+                else
+                    Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
+                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+                Messenger.Default.Unregister(this);
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+            }
         }
 
         private void MakeUpCardAction()
@@ -249,7 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             p.PrescriptionStatus.IsDeclare = true;
             p.PrescriptionStatus.IsAdjust = true;
             MainWindow.ServerConnection.OpenConnection();
-            string deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+            var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
             PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
             p.PrescriptionStatus.UpdateStatus(p.Id);
             p.Treatment.CheckMedicalNumber(false);
@@ -265,11 +272,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 p.PrescriptionSign = new List<string>();
             }
-            if (HisApiFunction.OpenCom())
-            {
-                HisApiBase.csSoftwareReset(3);
-                HisApiFunction.CloseCom();
-            }
+            //if (HisApiFunction.OpenCom())
+            //{
+            //    HisApiBase.csSoftwareReset(3);
+            //    HisApiFunction.CloseCom();
+            //}
             BusyContent = StringRes.產生每日上傳資料;
             if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {

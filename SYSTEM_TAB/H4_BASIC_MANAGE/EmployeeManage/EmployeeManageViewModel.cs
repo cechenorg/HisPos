@@ -168,7 +168,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             Employee.WorkPositionID = WorkPositions.Single(w => w.WorkPositionName == Employee.WorkPositionName).WorkPositionId;
             Employee = Employee.Save();
             ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Clear();
-            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels();
+            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels(true);
             MainWindow.ServerConnection.CloseConnection();
             InitDataChanged(); 
         }

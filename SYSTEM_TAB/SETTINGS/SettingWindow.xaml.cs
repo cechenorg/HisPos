@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl;
+using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS
 {
@@ -35,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         private PrinterControl printerControl;
         private DatabaseControl databaseControl;
         private MyPharmacyControl myPharmacyControl;
+        private CooperativeClinicControl cooperativeClinicControl;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -67,6 +69,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             printerControl = new PrinterControl();
             databaseControl = new DatabaseControl();
             myPharmacyControl = new MyPharmacyControl();
+            cooperativeClinicControl = new CooperativeClinicControl();
         }
 
         private void InitSettingDatas()
@@ -126,6 +129,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 case SettingTabs.Database:
                     databaseControl.ResetConnection();
                     CurrentControl = databaseControl;
+                    break;
+                case SettingTabs.CooperativeClinic:
+                    ((CooperativeClinicControlViewModel)cooperativeClinicControl.DataContext).Init();
+                    CurrentControl = cooperativeClinicControl;
                     break;
             }
         }

@@ -13,9 +13,5 @@ namespace His_Pos.NewClass.Product.Medicine
         {
 
         }
-        public MedicineVirtual(DataRow r):base(r)
-        {
-
-        }
     }
 }

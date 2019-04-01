@@ -99,6 +99,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
+            if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
+                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
+
             TreatDate =  Convert.ToDateTime(c.InsertDate);
             AdjustDate = DateTime.Today;
             PaymentCategory = VM.GetPaymentCategory("4");
@@ -129,8 +132,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
             }
-            Pharmacist = new MedicalPersonnel(r);
-            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(Pharmacist.IdNumber));
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(r.Field<string>("Emp_IDNumber")));
             SpecialTreat = new SpeTre();
             if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
             {
@@ -138,7 +140,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
-            TempMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber) ? MedicalNumber : OriginalMedicalNumber;
+            TempMedicalNumber = AdjustCase.ID.Equals("2") ? OriginalMedicalNumber : MedicalNumber;
         }
 
         #region Variables
@@ -332,6 +334,19 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 return StringRes.InstitutionError;
             return VM.GetInstitution(Institution.ID) is null ? StringRes.InstitutionError : string.Empty;
         }
+        private void CheckPrescribeInstitution()
+        {
+            if (string.IsNullOrEmpty(Institution.FullName))
+            {
+                Institution =
+                    new Ins
+                    {
+                        ID = VM.CurrentPharmacy.ID,
+                        Name = VM.CurrentPharmacy.Name,
+                        FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
+                    };
+            }
+        }
         private string CheckAdjustCase()
         {
             if (string.IsNullOrEmpty(AdjustCase.ID))
@@ -499,6 +514,15 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckPaymentCategory() +
              CheckDiseaseCode() +
              CheckChronicTimes();
+        }
+        public string CheckPrescribe()
+        {
+            CheckPrescribeInstitution();
+            if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
+                AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
+            return
+                CheckAdjustDate() +
+                CheckPharmacist();
         }
         #endregion
 
