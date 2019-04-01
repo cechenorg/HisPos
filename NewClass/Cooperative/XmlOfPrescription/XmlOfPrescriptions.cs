@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
             cooperativeClinicSettings.Init();
             List<XDocument> xmls = new List<XDocument>();
             List<string> cusIdNumbers = new List<string>();
+            List<string> filepaths = new List<string>();
             foreach (var c in cooperativeClinicSettings) {
                 string path = c.FilePath;
                 string[] fileEntries = Directory.GetFiles(path);
@@ -27,9 +28,10 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
                     XDocument xDocument = XDocument.Load(s);
                     string cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                     xmls.Add(xDocument);
-                    cusIdNumbers.Add(cusIdNumber); 
+                    cusIdNumbers.Add(cusIdNumber);
+                    filepaths.Add(s);
                 }
-                XmlOfPrescriptionDb.Insert(cusIdNumbers, xmls, c.TypeName);
+                XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName);
             }
         }
          

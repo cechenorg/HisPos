@@ -29,7 +29,9 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             {
                 DataRow newRow = cooperativeClinicTable.NewRow(); 
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_ID",c.CooperavieClinic.ID);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_Type", c.TypeName);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_IsBuckle", c.IsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_IsPurge", c.IsPurge); 
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_FolderPath", c.FilePath);
                 cooperativeClinicTable.Rows.Add(newRow);
             }
@@ -38,7 +40,9 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         public static DataTable CooperativeClinicTable() {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("CooCli_ID", typeof(string));
+            masterTable.Columns.Add("CooCli_Type", typeof(string));
             masterTable.Columns.Add("CooCli_IsBuckle", typeof(bool));
+            masterTable.Columns.Add("CooCli_IsPurge", typeof(bool));
             masterTable.Columns.Add("CooCli_FolderPath", typeof(string)); 
             return masterTable;  
         }

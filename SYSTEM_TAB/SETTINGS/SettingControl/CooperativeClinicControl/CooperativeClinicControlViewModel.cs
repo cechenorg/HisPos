@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using System.Windows.Forms;
 using His_Pos.FunctionWindow;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
 {
@@ -30,6 +31,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             get { return cooperativeClinicSettingCollection; }
             set { Set(() => CooperativeClinicSettingCollection, ref cooperativeClinicSettingCollection, value); }
         }
+        public ObservableCollection<string> typeCollection = new ObservableCollection<string>();
+        public ObservableCollection<string> TypeCollection
+        {
+            get { return typeCollection; }
+            set { Set(() => TypeCollection, ref typeCollection, value); }
+        }
         #endregion
         #region Command
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -39,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         #endregion
 
         public CooperativeClinicControlViewModel() {
+            InitTypeCollection();
             MainWindow.ServerConnection.OpenConnection();
             CooperativeClinicSettingCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
@@ -49,6 +57,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             DeleteInstitutionCommand = new RelayCommand(DeleteInstitutionAction);
         }
         #region Action
+        private void InitTypeCollection() {
+            TypeCollection.Add("展望");
+        }
         private void DeleteInstitutionAction() {
             CooperativeClinicSettingCollection.Remove(SelectItem);
         }
@@ -68,6 +79,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             FolderBrowserDialog fdlg = new FolderBrowserDialog(); 
             if (fdlg.ShowDialog() == DialogResult.OK) {
                 SelectItem.FilePath = fdlg.SelectedPath;
+                var tempsplit = SelectItem.FilePath.Split('\\');
+                SelectItem.DisplayFilePath = tempsplit[tempsplit.Length - 1]; 
             }
         }
         private void ShowInsSelectionWindowAction(string search)
