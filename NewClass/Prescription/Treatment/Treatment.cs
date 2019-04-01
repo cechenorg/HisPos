@@ -108,7 +108,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
         }
-        public Treatment(XmlOfPrescription.Prescription c) {
+        public Treatment(XmlOfPrescription.Prescription c,DateTime treatDate) {
             var prescription = c;
             var study = prescription.Study;
             var diseases = study.Diseases.Disease;
@@ -178,8 +178,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
-
-            TreatDate = Convert.ToDateTime(c.Date);
+             
+            TreatDate = treatDate;
             AdjustDate = DateTime.Today;
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();

@@ -114,8 +114,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox Width="145"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding TypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 DisplayMemberPath="Content"   ItemsSource="{Binding TypeCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
+                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding TypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                    <ComboBoxItem>展望</ComboBoxItem> 
+                                </ComboBox>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

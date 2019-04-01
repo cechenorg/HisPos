@@ -99,7 +99,7 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(new Medicine(m));
             }
         }
-        public Prescription(XmlOfPrescription.Prescription c,string sourceId,bool IsRead) { 
+        public Prescription(XmlOfPrescription.Prescription c,DateTime treatDate,string sourceId,bool IsRead) { 
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
@@ -111,7 +111,7 @@ namespace His_Pos.NewClass.Prescription
             SourceId = sourceId; 
              
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
-            Treatment = new Treatment.Treatment(c);
+            Treatment = new Treatment.Treatment(c, treatDate);
             Patient = new Customer
             {
                 IDNumber = customer.IdNumber,

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Xml;
+using System.Xml.Linq;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -19,6 +23,18 @@ namespace His_Pos.NewClass.Prescription
                 Add(p);
             }
            
+        }
+        public void GetXmlOfPrescriptions  (DateTime sDate, DateTime eDate) {
+            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByDate( sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
+                XmlDocument xDocument = new XmlDocument();
+                xDocument.LoadXml(r["CooCli_XML"].ToString());
+               
+                Add(new Prescription(XmlService.Deserialize<XmlOfPrescription.Prescription>(xDocument.InnerXml)
+                    ,r.Field<DateTime>("CooCli_InsertTime"),r.Field<int>("CooCli_ID").ToString(),r.Field<bool>("CooCli_IsRead")));
+            }
+
         }
         
         public  void GetPrescriptionsByCusIdNumber(string cusIDNumber) //取得處方

@@ -31,12 +31,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             get { return cooperativeClinicSettingCollection; }
             set { Set(() => CooperativeClinicSettingCollection, ref cooperativeClinicSettingCollection, value); }
         }
-        public ObservableCollection<string> typeCollection = new ObservableCollection<string>();
-        public ObservableCollection<string> TypeCollection
-        {
-            get { return typeCollection; }
-            set { Set(() => TypeCollection, ref typeCollection, value); }
-        }
+         
         #endregion
         #region Command
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -45,8 +40,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         public RelayCommand DeleteInstitutionCommand { get; set; }
         #endregion
 
-        public CooperativeClinicControlViewModel() {
-            InitTypeCollection();
+        public CooperativeClinicControlViewModel() { 
             MainWindow.ServerConnection.OpenConnection();
             CooperativeClinicSettingCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
@@ -57,9 +51,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             DeleteInstitutionCommand = new RelayCommand(DeleteInstitutionAction);
         }
         #region Action
-        private void InitTypeCollection() {
-            TypeCollection.Add("展望");
-        }
+       
         private void DeleteInstitutionAction() {
             CooperativeClinicSettingCollection.Remove(SelectItem);
         }

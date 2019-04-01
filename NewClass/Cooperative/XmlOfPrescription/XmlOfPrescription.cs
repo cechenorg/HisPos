@@ -109,12 +109,17 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
             [XmlElement(ElementName = "item")]
             public List<Item> Disease { get; set; }
         }
+        [XmlRoot(ElementName = "treatments")]
+        public class Treatments {
+            [XmlElement(ElementName = "item")]
+            public List<Item> Disease { get; set; }
+        }
         [XmlRoot(ElementName = "study")]
         public class Study {
             [XmlElement(ElementName = "diseases")]
             public Diseases Diseases { get; set; }
             [XmlElement(ElementName = "treatments")]
-            public string Treatments { get; set; }
+            public Treatments Treatments { get; set; }
             [XmlElement(ElementName = "chief_complain")]
             public string Chief_complain { get; set; }
             [XmlElement(ElementName = "physical_examination")]
