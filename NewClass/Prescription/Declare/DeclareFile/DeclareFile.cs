@@ -86,7 +86,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public DeclareFile(DeclareFilePreview.DeclareFilePreview selectedFile)
         {
             Tdata = new Tdata(selectedFile);
-            List<Ddata> tempList = new List<Ddata>();
+            var tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
             var dd = new List<Ddata>();
             foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))

@@ -1185,5 +1185,25 @@ namespace His_Pos.NewClass.Prescription
             return sameList.Count <= 0 ? sameMed : sameList.Distinct().Aggregate(sameMed, (current, s) => current + s);
         }
 
+        public void RemakeDeclareFile()
+        {
+            CountMedicineDays();
+            CheckMedicalServiceData();//確認藥事服務資料
+            var details = SetPrescriptionDetail();//產生藥品資料
+            if (Treatment.AdjustCase.ID.Equals("0"))
+            {
+                PrescriptionPoint.SpecialMaterialPoint = 0;
+                PrescriptionPoint.TotalPoint = 0;
+                PrescriptionPoint.ApplyPoint = 0;
+            }
+            else
+            {
+                PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+                CreateDeclareFileContent(details);//產生申報資料
+            }
+        }
     }
 }
