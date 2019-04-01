@@ -202,18 +202,20 @@
                 <StackPanel Orientation="Horizontal"   Grid.Row="3" Margin="10,0">
                     <Label Content="處方總數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="50" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="慢箋張數" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="慢箋數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="50" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="總點數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="70" Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="藥品點" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="70" Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="藥服點" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="70" Content="{Binding MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="80" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="藥品量" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Content="{Binding MedicineCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Button Command="{Binding ExportCsvCommand}" Width="120" Height="30" Content="匯出Excel" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="155,0,0,0" />
                     <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" />
                 </StackPanel>

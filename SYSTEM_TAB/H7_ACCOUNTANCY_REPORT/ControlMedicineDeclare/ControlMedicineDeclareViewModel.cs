@@ -84,7 +84,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
             ControlMedicineDetailsCollection.Clear();
             foreach (ControlMedicineDetail c in temp) {
                 switch (c.TypeName) {
-                    case "處方調劑(未過卡)":
+                    case "調劑耗用(未過卡)":
                         ControlMedicineBagDetailsCollection.Add(c);
                         break;
                     default:

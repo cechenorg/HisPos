@@ -197,6 +197,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => Profit, ref profit, value);
             }
         }
+        private int medicineCount;
+        public int MedicineCount
+        {
+            get => medicineCount;
+            set
+            {
+                Set(() => MedicineCount, ref medicineCount, value);
+            }
+        }
         private bool isBusy;
         public bool IsBusy
         {
@@ -326,6 +335,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = summary[2];
             CopaymentPoint = summary[3];
             Profit = summary[4];
+            MedicineCount = summary[5];
         }
 
         private void ReserveSearchAction()
@@ -394,6 +404,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = 0;
             CopaymentPoint = 0;
             Profit = 0;
+            MedicineCount = 0;
             SelectedInstitution = null;
         }
 
