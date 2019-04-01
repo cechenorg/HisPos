@@ -436,6 +436,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void CountMedicinePoint()
         {
             EditedPrescription.CountPrescriptionPoint(true);
+            CheckEditStatus();
         }
         private void EditCompleteAction()
         {

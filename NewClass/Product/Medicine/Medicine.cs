@@ -104,16 +104,7 @@ namespace His_Pos.NewClass.Product.Medicine
         private void CountTotalPrice()
         {
             if(Amount <= 0) return;
-            if (PaySelf)
-            {
-                TotalPrice = Price > 0 ? 
-                    Math.Round(Amount * Price,MidpointRounding.AwayFromZero)
-                    : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
-            }
-            else
-            {
-                TotalPrice = Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
-            }
+            TotalPrice = PaySelf ? Math.Round(Amount * Price, MidpointRounding.AwayFromZero) : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
         }
 
         private double? dosage;//每次用量
