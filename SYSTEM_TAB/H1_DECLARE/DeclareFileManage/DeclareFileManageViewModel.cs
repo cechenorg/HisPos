@@ -137,7 +137,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             DecFilePreViews = new DeclareFilePreviews();
             DecEnd = DateTime.Today;
-            DecStart = new DateTime(((DateTime)DecEnd).Year, ((DateTime)DecEnd).Month, 1).AddMonths(-3);
+            DecStart = new DateTime(((DateTime)DecEnd).Year, ((DateTime)DecEnd).Month, 1).AddMonths(-1);
             MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
             AdjustCases = ViewModelMainWindow.AdjustCases;
             Institutions = ViewModelMainWindow.Institutions;
@@ -174,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             if (search.Length < 4)
             {
-                MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "4", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
                 return;
             }
             var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
@@ -221,15 +221,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                IsBusy = false;
-                var decFile = new DeclareFile(SelectedFile);
-                if (SelectedFile.CheckFileExist())
-                {
-                    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
-                    if (!(bool)confirm.DialogResult)
-                        return;
-                }
-                SelectedFile.CreateDeclareFile(decFile);
+                //IsBusy = false;
+                //var decFile = new DeclareFile(SelectedFile);
+                ////if (SelectedFile.CheckFileExist())
+                ////{
+                ////    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
+                ////    if (!(bool)confirm.DialogResult)
+                ////        return;
+                ////}
+                //SelectedFile.CreateDeclareFile(decFile);
             };
             IsBusy = true;
             worker.RunWorkerAsync();

@@ -24,5 +24,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         {
             InitializeComponent();
         }
+
+       
     }
 }

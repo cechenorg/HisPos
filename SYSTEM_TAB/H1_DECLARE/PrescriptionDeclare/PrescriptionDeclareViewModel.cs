@@ -48,6 +48,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Cooperati
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Xceed.Wpf.Toolkit;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -475,7 +476,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             getCooperativePresWorker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.取得合作處方;
-                cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
+                XmlOfPrescriptions.GetFile();
+                cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today, DateTime.Today); 
+                cooperative.GetXmlOfPrescriptions(DateTime.Today, DateTime.Today);
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
             {

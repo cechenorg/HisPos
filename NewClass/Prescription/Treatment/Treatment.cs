@@ -16,6 +16,7 @@ using PayCat = His_Pos.NewClass.Prescription.Treatment.PaymentCategory.PaymentCa
 using SpeTre = His_Pos.NewClass.Prescription.Treatment.SpecialTreat.SpecialTreat;
 using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
@@ -107,7 +108,82 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
         }
-
+        public Treatment(XmlOfPrescription.Prescription c,DateTime treatDate) {
+            var prescription = c;
+            var study = prescription.Study;
+            var diseases = study.Diseases.Disease;
+            var insurance = prescription.Insurance;
+            var chronic = prescription.Continous_prescription;
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
+            MainDisease = new DisCode();
+            SubDisease = new DisCode();
+            for (int i = 0; i < diseaseCount; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        MainDisease.ID = diseases[i].Code;
+                        break;
+                    case 1:
+                        SubDisease.ID = diseases[i].Code;
+                        break;
+                }
+            }
+            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
+            Copayment = new Cop();
+            if (!string.IsNullOrEmpty(insurance.CopaymentCode))
+            {
+                switch (insurance.CopaymentCode)
+                {
+                    case "003":
+                    case "004":
+                    case "007":
+                    case "009":
+                    case "I22":
+                    case "001":
+                    case "002":
+                    case "005":
+                    case "006":
+                    case "008":
+                    case "902":
+                    case "903":
+                    case "906":
+                    case "907":
+                        Copayment = VM.GetCopayment(insurance.CopaymentCode);
+                        break;
+                }
+            }
+            int.TryParse(chronic.Count, out var seq);
+            if (seq != 0)
+                ChronicSeq = seq;
+            int.TryParse(chronic.Total, out var total);
+            if (total != 0)
+                ChronicTotal = total;
+            if (ChronicSeq != null && ChronicTotal != null)
+            {
+                OriginalMedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = "IC0" + ChronicSeq;
+                AdjustCase = VM.GetAdjustCase("2");
+                TempMedicalNumber = OriginalMedicalNumber;
+            }
+            else
+            {
+                MedicalNumber = insurance.MedicalNumber;
+                AdjustCase = VM.GetAdjustCase("1");
+                TempMedicalNumber = MedicalNumber;
+            }
+            if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
+                TempMedicalNumber = c.Insurance.IcErrorCode;
+             
+            TreatDate = treatDate;
+            AdjustDate = DateTime.Today;
+            PaymentCategory = VM.GetPaymentCategory("4");
+            SpecialTreat = new SpeTre();
+        } 
         public Treatment(DataRow r)
         {
             Division = VM.GetDivision(r.Field<string>("DivisionID"));

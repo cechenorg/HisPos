@@ -33,8 +33,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             }
         }
 
-        private PrinterControl printerControl;
-        private DatabaseControl databaseControl;
+        private PrinterControl printerControl; 
         private MyPharmacyControl myPharmacyControl;
         private CooperativeClinicControl cooperativeClinicControl;
 
@@ -66,8 +65,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
 
         private void InitControls()
         {
-            printerControl = new PrinterControl();
-            databaseControl = new DatabaseControl();
+            printerControl = new PrinterControl(); 
             myPharmacyControl = new MyPharmacyControl();
             cooperativeClinicControl = new CooperativeClinicControl();
         }
@@ -125,11 +123,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 case SettingTabs.Printer:
                     printerControl.ResetPrinter();
                     CurrentControl = printerControl;
-                    break;
-                case SettingTabs.Database:
-                    databaseControl.ResetConnection();
-                    CurrentControl = databaseControl;
-                    break;
+                    break; 
                 case SettingTabs.CooperativeClinic:
                     ((CooperativeClinicControlViewModel)cooperativeClinicControl.DataContext).Init();
                     CurrentControl = cooperativeClinicControl;

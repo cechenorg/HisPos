@@ -30,7 +30,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                 SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True" AutoGenerateColumns="False" Margin="10,0,0,10">
+                 SelectedItem="{Binding SelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True" AutoGenerateColumns="False" Margin="10,0,0,10"  >
               <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -74,7 +74,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="院所代碼" IsReadOnly="True">
+                <DataGridTemplateColumn Width="150" Header="院所代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding}">
@@ -91,23 +91,43 @@
                             </ContentControl>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-               
-                <DataGridTemplateColumn Width="80" Header="是否扣庫" IsReadOnly="True">
+                </DataGridTemplateColumn> 
+                <DataGridTemplateColumn   IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="扣庫" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="-5,0,0,0"/>
+                                <CheckBox  IsChecked="{Binding IsBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="扣庫" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="270" Header="處方路徑"  >
+                <DataGridTemplateColumn   IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Width="210" Text="{Binding FilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" />
-                                <Button Width="50" Content="..." Command="{Binding DataContext.OpenFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="DarkCyan" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" />
+                                <CheckBox  IsChecked="{Binding IsPurge,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="檔案移除" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="80" Header="類別"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding TypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                    <ComboBoxItem>展望</ComboBoxItem> 
+                                </ComboBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="140" Header="處方路徑"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="90" Text="{Binding DisplayFilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Margin="10,0,0,0"/>
+                                <Button Width="40" Content="..." Command="{Binding DataContext.OpenFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="DarkCyan" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" />
                             </StackPanel> 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
