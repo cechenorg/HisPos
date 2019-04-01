@@ -459,12 +459,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 {
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
-                        file.WriteLineAsync("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
+                        file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
                         foreach (var s in SearchPrescriptions)
                         {
                             string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
-                            file.WriteLineAsync($"{s_adjust},{s.StoStatus},{s.Institution.Name},{s.Division.Name},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber},{s.Patient.Birthday},{s.TreatDate},{s.AdjustDate},{s.InsertDate}");
+                            file.WriteLine($"{s_adjust},{s.StoStatus},{s.Institution.Name},{s.Division.Name},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber},{s.Patient.Birthday},{s.TreatDate},{s.AdjustDate},{s.InsertDate}");
                         }
+                        file.Close();
+                        file.Dispose();
                     }
                     MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
                 }
