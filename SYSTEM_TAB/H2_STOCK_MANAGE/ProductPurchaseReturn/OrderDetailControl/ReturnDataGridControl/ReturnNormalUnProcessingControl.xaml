@@ -113,8 +113,7 @@
                 <DataGridTemplateColumn MinWidth="120" Header="批號">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedItem="{Binding BatchNumber}">
-                                <ComboBox></ComboBox>
+                            <ComboBox SelectedItem="{Binding BatchNumber}" ItemsSource="{Binding BatchNumbers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
