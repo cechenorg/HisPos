@@ -111,7 +111,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
-        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
@@ -144,7 +143,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void InitialCommands()
         {
-            ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
@@ -157,40 +155,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(DeclareFileManageViewModel) + "InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"))
                     GetPrescriptions();
             });
         }
-        private void GetSelectedInstitution(Institution receiveSelectedInstitution)
-        {
-            SelectedFile.SelectedInstitution = receiveSelectedInstitution;
-        }
         #endregion
         #region CommandActions
-        private void ShowInsSelectionWindowAction(string search)
-        {
-            if (search.Length < 4)
-            {
-                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
-            switch (result.Count)
-            {
-                case 0:
-                    return;
-                case 1:
-                    SelectedFile.SelectedInstitution = result[0];
-                    break;
-                default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.DeclareFileManage);
-                    institutionSelectionWindow.ShowDialog();
-                    break;
-            }
-        }
         private void ShowPrescriptionEditWindowAction()
         {
             if (SelectedFile.SelectedPrescription is null) return;

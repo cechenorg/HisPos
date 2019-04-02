@@ -17,10 +17,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     public class Tdata
     {
         public Tdata() { }
-        public Tdata(DeclareFilePreview.DeclareFilePreview selectedFile)
+        public Tdata(DeclareFilePreview.DeclareFilePreview selectedFile,string pharmacyID)
         {
             T1 = "30";
-            T2 = selectedFile.PharmacyID;
+            T2 = pharmacyID;
             T3 = (selectedFile.Date.Year-1911).ToString().PadLeft(3, '0') +
                  selectedFile.Date.Month.ToString().PadLeft(2, '0');
             T4 = "2";
@@ -83,9 +83,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public DeclareFile()
         {
         }
-        public DeclareFile(DeclareFilePreview.DeclareFilePreview selectedFile)
+        public DeclareFile(DeclareFilePreview.DeclareFilePreview selectedFile, string pharmacyID)
         {
-            Tdata = new Tdata(selectedFile);
+            Tdata = new Tdata(selectedFile, pharmacyID);
             var tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
             var dd = new List<Ddata>();

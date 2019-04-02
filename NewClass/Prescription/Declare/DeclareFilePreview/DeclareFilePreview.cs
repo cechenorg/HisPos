@@ -26,23 +26,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
         public int NormalCount { get; set; }
         public int ChronicCount { get; set; }
         public int SimpleFormCount { get; set; }
-        public int TotalPoint { get; set; }
-        public string PharmacyID { get; set; }
         public int DeclareCount { get; set; }
         public int NotDeclareCount { get; set; }
-        public int NotGetCardCount { get; set; }
-        public int TotalCount { get; set; }
         public int Day => Date.Day;
-
-        private Institution selectedInstitution;
-        public Institution SelectedInstitution
-        {
-            get => selectedInstitution;
-            set
-            {
-                Set(() => SelectedInstitution, ref selectedInstitution, value);
-            }
-        }
         private CollectionViewSource decPresViewSource;
         private CollectionViewSource DecPresViewSource
         {
@@ -84,16 +70,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
                 SelectedPrescription = DecPresViewCollectionView.CurrentItem.Cast<DeclarePrescription.DeclarePrescription>();
             }
             Date = DeclarePrescriptions[0].AdjustDate;
-            PharmacyID = DeclarePrescriptions[0].PharmacyID;
             NormalCount = DeclarePrescriptions.Count(p =>
                 (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D")) && p.IsDeclare);
             SimpleFormCount = DeclarePrescriptions.Count(p=>p.AdjustCase.ID.Equals("3") && p.IsDeclare);
             ChronicCount = DeclarePrescriptions.Count(p => p.AdjustCase.ID.Equals("2") && p.IsDeclare);
-            TotalPoint = DeclarePrescriptions.Where(p=>p.IsDeclare).Sum(p => p.TotalPoint);
             DeclareCount = DeclarePrescriptions.Count(p => p.IsDeclare);
             NotDeclareCount = DeclarePrescriptions.Count(p => !p.IsDeclare);
-            NotGetCardCount = DeclarePrescriptions.Count(p => !p.IsGetCard);
-            TotalCount = DeclarePrescriptions.Count;
         }
 
         public void CreateDeclareFile(DeclareFile.DeclareFile doc)
