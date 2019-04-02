@@ -327,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SetPrescriptionsSummary(bool reserve)
         {
-            var summary = SearchPrescriptions.GetSummary(reserve);
+            var summary = SearchPrescriptions.GetSummary(reserve, MedicineID);
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
             TotalPoint = summary[0];
