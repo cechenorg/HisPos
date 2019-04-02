@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content",
                 new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(doc).InnerXml, XmlNodeType.Document, null)));
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_CreateTime",DateTime.Now);
-            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_DeclareTime", new DateTime(preview.DeclareYear,preview.DeclareMonth,1));
+            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_DeclareTime", new DateTime(preview.Date.Year,preview.Date.Month,1));
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_ChronicCount", preview.ChronicCount);
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_NormalCount", preview.NormalCount);
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_SimpleFormCount", preview.SimpleFormCount);
