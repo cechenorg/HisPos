@@ -376,16 +376,18 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByResId]", parameterList);
         }
-        public static DataTable GetSearchPrescriptionsSummary(List<int> presId)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId)); 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsSummary]", parameterList);
-        }  
-        public static DataTable GetSearchReservesSummary(List<int> presId)
+        public static DataTable GetSearchPrescriptionsSummary(List<int> presId,string MedicineID )
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId));
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", MedicineID); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsSummary]", parameterList);
+        }  
+        public static DataTable GetSearchReservesSummary(List<int> presId, string MedicineID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId));
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", MedicineID); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchReservesSummary]", parameterList);
         }
         public static DataTable GetXmlOfPrescriptionsByDate(DateTime sDate, DateTime eDate) {
