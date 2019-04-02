@@ -21,13 +21,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; set; }
         public string Note { get; set; }
         public string BatchNumber { get; set; }
-        public string BatchLimit { get; set; }
         public double ReturnAmount { get; set; }
         public double RealAmount { get; set; }
         public double Price { get; set; }
         public double SubTotal { get; set; }
         public DateTime? ValidDate { get; set; }
-        public Collection<string> BatchNumbers { get; set; }
         #endregion
 
         public ReturnProduct() : base() {}
@@ -47,6 +45,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = row.Field<DateTime?>("StoOrdDet_ValidDate");
         }
 
+        #region ----- Define Variables -----
         public void CopyOldProductData(ReturnProduct returnProduct)
         {
             Inventory = returnProduct.Inventory;
@@ -63,5 +62,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         }
 
         public abstract object Clone();
+        #endregion
     }
 }
