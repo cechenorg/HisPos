@@ -440,15 +440,16 @@ namespace His_Pos.NewClass.Prescription.Treatment
             if (AdjustDate is null) return StringRes.AdjustDateError;
             if (TreatDate == null || !(ChronicSeq is null)) return string.Empty;
             var startDate = (DateTime)TreatDate;
+            var tmpStartDate = startDate.DeepCloneViaJson();
             var endDate = (DateTime)AdjustDate;
             var holiday = 0;
-            while (startDate < endDate)
+            while (tmpStartDate < endDate)
             {
-                if ((int)startDate.DayOfWeek == 0 || (int)startDate.DayOfWeek == 6)
+                if ((int)tmpStartDate.DayOfWeek == 0 || (int)tmpStartDate.DayOfWeek == 6)
                 {
                     holiday += 1;
                 }
-                startDate = startDate.AddDays(1);
+                tmpStartDate = tmpStartDate.AddDays(1);
             }
             if (new TimeSpan(endDate.Ticks - startDate.Ticks).Days - holiday > 3)
             {
