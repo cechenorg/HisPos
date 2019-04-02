@@ -9,6 +9,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
+        private string batchNumber;
 
         public bool IsSelected
         {
@@ -20,7 +21,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double UnitAmount { get; set; }
         public int SafeAmount { get; set; }
         public string Note { get; set; }
-        public string BatchNumber { get; set; }
+        public string BatchNumber
+        {
+            get { return batchNumber; }
+            set { Set(() => BatchNumber, ref batchNumber, value); }
+        }
         public double ReturnAmount { get; set; }
         public double RealAmount { get; set; }
         public double Price { get; set; }

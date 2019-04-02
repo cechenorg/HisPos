@@ -72,7 +72,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="200" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn Width="200" MaxWidth="300" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -116,7 +116,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="140" Margin="0,0,0,2"/>
-                                <Button Content="..." Padding="8" Background="Gray" Margin="5,0,0,0" BorderThickness="0" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"/>
+                                <Button Content="..." Padding="8" Background="Gray" Margin="5,0,0,0" BorderThickness="0" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Command="{Binding Path=DataContext.ChooseBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

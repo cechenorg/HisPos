@@ -15,6 +15,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -38,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
+        public RelayCommand ChooseBatchCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -203,6 +205,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if(CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
+        private void ChooseBatchAction()
+        {
+            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID);
+            
+            ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
+
+            if (dataContext.IsSelected)
+                ((ReturnProduct)CurrentStoreOrder.SelectedItem).BatchNumber = dataContext.ChoosedBatchNumber;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -285,6 +296,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
+            ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
         }
         
