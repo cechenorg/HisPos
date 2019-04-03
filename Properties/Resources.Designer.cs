@@ -570,7 +570,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 處方已超過可領取時限
+        ///   查詢類似 處方已超過可領取時限，如繼續調劑申報會產生錯誤，是否繼續調劑?
         /// 的當地語系化字串。
         /// </summary>
         internal static string PrescriptoinOutOfDate {

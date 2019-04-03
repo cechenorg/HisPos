@@ -444,6 +444,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
                     var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
+                    if (!EditedPrescription.Treatment.CheckAdjustDate())
+                        return;
                     var error = EditedPrescription.CheckPrescriptionRule(noCard);
                     if (!string.IsNullOrEmpty(error))
                     {
