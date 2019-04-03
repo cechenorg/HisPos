@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="400" Width="300" ResizeMode="NoResize">
+        Title="{Binding Title}" Height="400" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <DataGrid Margin="10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" HeadersVisibility="None" Background="{StaticResource GridBackGround}"
                   ItemsSource="{Binding BatchNumberCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">

@@ -96,7 +96,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
-            if (ReturnProducts.Count(p => p.ID == iD) > 0)
+            if (ReturnProducts.Count(p => p.ID == iD && string.IsNullOrEmpty(p.BatchNumber)) > 0)
             {
                 MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
                 return;

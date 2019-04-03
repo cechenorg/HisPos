@@ -20,6 +20,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
     /// </summary>
     public partial class ChooseBatchWindow : Window
     {
+        private bool isWindowClosed = false;
+
         public ChooseBatchWindow(string productID)
         {
             InitializeComponent();
@@ -27,13 +29,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification == "CloseChooseBatchWindow")
+                {
+                    isWindowClosed = true;
                     Close();
+                }
             });
 
             DataContext = new ChooseBatchWindowViewModel(productID);
 
-            
-            ShowDialog();
+            if(!isWindowClosed)
+                ShowDialog();
         }
     }
 }
