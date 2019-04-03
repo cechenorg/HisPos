@@ -89,10 +89,18 @@ namespace His_Pos.NewClass.StoreOrder
         public override void GetOrderProducts()
         {
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
+
+            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
+                ReturnProducts.SetToProcessing();
+
+            ReturnProducts.SetStartEditToPrice();
+
+            CalculateTotalPrice();
         }
         public override void SetProductToProcessingStatus()
         {
-            //ReturnProducts.SetToProcessing();
+            ReturnProducts.SetToProcessing();
         }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
