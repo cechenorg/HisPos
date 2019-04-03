@@ -46,6 +46,17 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
+            var products = ReturnProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, ReturnAmount = g.Sum(p => p.ReturnAmount), Inventory = g.First().Inventory }).ToList();
+
+            foreach (var product in products)
+            {
+                if (product.Inventory < product.ReturnAmount)
+                {
+                    MessageWindow.ShowMessage(product.ProductID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             foreach (var product in ReturnProducts)
             {
                 if (product.ReturnAmount == 0)
@@ -56,11 +67,6 @@ namespace His_Pos.NewClass.StoreOrder
                 else if (product.ReturnAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
-                    return false;
-                }
-                else if (product.ReturnAmount > product.Inventory)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
                     return false;
                 }
             }
