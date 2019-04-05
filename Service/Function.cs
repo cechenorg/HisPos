@@ -116,7 +116,7 @@ namespace His_Pos.Service
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             var settings = new XmlWriterSettings();
             settings.Indent = true;
-            settings.Encoding = Encoding.GetEncoding("big5");
+            settings.Encoding = Encoding.GetEncoding(950);
             var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();
