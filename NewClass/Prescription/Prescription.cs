@@ -73,9 +73,10 @@ namespace His_Pos.NewClass.Prescription
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
             var customer = prescription.CustomerProfile.Customer;
-            var birthYear = int.Parse(customer.Birth.Substring(0, 3)) + 1911;
-            var birthMonth = int.Parse(customer.Birth.Substring(3, 2));
-            var birthDay = int.Parse(customer.Birth.Substring(5, 2));
+
+            var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
+            var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
+            var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
             #endregion 
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
@@ -103,10 +104,10 @@ namespace His_Pos.NewClass.Prescription
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
-            var birthYear = int.Parse(customer.Birth.Substring(0, 3)) + 1911;
-            var birthMonth = int.Parse(customer.Birth.Substring(3, 2));
-            var birthDay = int.Parse(customer.Birth.Substring(5, 2));
-            #endregion 
+            var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
+            var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
+            var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            #endregion
             Source = PrescriptionSource.XmlOfPrescription;
             SourceId = sourceId; 
              
