@@ -152,7 +152,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D2 = string.Empty;
             D3 = p.Patient.IDNumber;
             D4 = string.Empty;
-            D5 = t.PaymentCategory?.ID;
+            if(!D1.Equals("2") && !D1.Equals("D"))
+                D5 = t.PaymentCategory?.ID;
             D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
             D7 = t.MedicalNumber;
             D8 = t.MainDisease.ID;

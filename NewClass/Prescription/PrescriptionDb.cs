@@ -17,6 +17,7 @@ using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using System.Linq;
+using System.Xml.Linq;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 
@@ -814,5 +815,13 @@ namespace His_Pos.NewClass.Prescription
             return table;
         }
         #endregion
+
+        public static void UpdateDeclareContent(int id, XDocument declareContent)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(declareContent).InnerXml, XmlNodeType.Document, null)));
+            DataBaseFunction.AddSqlParameter(parameterList, "id", id);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
+        }
     }
 }

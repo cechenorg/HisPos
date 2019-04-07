@@ -114,9 +114,11 @@ namespace His_Pos.Service
                 path_file +=  year + month + day;
             if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
+            xml.Declaration = new XDeclaration("1.0","Big5","no");
             var settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = Encoding.GetEncoding(950);
+            settings.OmitXmlDeclaration = true;
             var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();

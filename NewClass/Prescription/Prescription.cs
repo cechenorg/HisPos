@@ -1235,5 +1235,10 @@ namespace His_Pos.NewClass.Prescription
                 CreateDeclareFileContent(details);//產生申報資料
             }
         }
+
+        public void UpdateDeclareContent()
+        {
+            PrescriptionDb.UpdateDeclareContent(Id,DeclareContent);
+        }
     }
 }
