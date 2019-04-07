@@ -309,7 +309,7 @@
 </value>
   </data>
   <data name="PrescriptoinOutOfDate" xml:space="preserve">
-    <value>處方已超過可領取時限
+    <value>處方已超過可領取時限，如繼續調劑申報會產生錯誤，是否繼續調劑?
 </value>
   </data>
   <data name="TreatDateError" xml:space="preserve">

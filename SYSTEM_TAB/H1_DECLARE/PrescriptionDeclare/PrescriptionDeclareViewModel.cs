@@ -159,7 +159,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => NotPrescribe, ref notPrescribe, value);
             }
         }
-        
         private CusSelectWindow customerSelectionWindow { get; set; }
         private MedSelectWindow MedicineWindow { get; set; }
         private bool canSendOrder;
@@ -426,37 +425,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CheckCustomPrescriptions();
                     break;
                 default:
-                    if (sender is MaskedTextBox)
+                    switch (sender)
                     {
-                        if (CurrentPrescription.Patient.Birthday is null)
+                        case MaskedTextBox _ when CurrentPrescription.Patient.Birthday is null:
                             SearchCustomer(1, customers);
-                        else
+                            break;
+                        case MaskedTextBox _:
                             customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1, customers);
-                    }
-                    else
-                    {
-                        var t = sender as TextBox;
-                        switch (t.Name)
-                        {
-                            case "PatientName":
-                                if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                                    SearchCustomer(2, customers);
-                                else
-                                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2, customers);
-                                break;
-                            case "PatientIDNumber":
-                                if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
-                                    SearchCustomer(3, customers);
-                                else
-                                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3, customers);
-                                break;
-                            case "PatientTel":
-                                if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
-                                    SearchCustomer(4, customers);
-                                else
-                                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 4, customers);
-                                break;
-                        }
+                            break;
+                        case TextBox t:
+                            switch (t.Name)
+                            {
+                                case "PatientName":
+                                    if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
+                                        SearchCustomer(2, customers);
+                                    else
+                                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name,
+                                            2, customers);
+                                    break;
+                                case "PatientIDNumber":
+                                    if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber))
+                                        SearchCustomer(3, customers);
+                                    else
+                                        customerSelectionWindow =
+                                            new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3, customers);
+                                    break;
+                                case "PatientTel":
+                                    if (string.IsNullOrEmpty(CurrentPrescription.Patient.Tel))
+                                        SearchCustomer(4, customers);
+                                    else
+                                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name,
+                                            4, customers);
+                                    break;
+                            }
+
+                            break;
                     }
                     break;
             }
@@ -680,11 +683,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ErrorAdjustAction()
         {
             var errorAdjustConfirm = new ConfirmWindow("確認異常結案?(非必要請勿使用此功能，若過卡率低於九成，將被勸導限期改善並列為輔導對象，最重可能勒令停業)", "異常確認");
+            Debug.Assert(errorAdjustConfirm.DialogResult != null, "errorAdjustConfirm.DialogResult != null");
             if(!(bool)errorAdjustConfirm.DialogResult)
                 return;
             if (CheckEmptyCustomer()) return;
             if (!CheckCustomer()) return;
             SetPharmacist();
+            if (!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if (!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
@@ -700,6 +705,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)//合作診所自費不檢查健保規則
             {
+                if(!CurrentPrescription.Treatment.CheckAdjustDate())
+                {
+                    IsAdjusting = false;
+                    return;
+                }
                 var error = CurrentPrescription.CheckPrescriptionRule(false);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
                 {
@@ -726,6 +736,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CheckEmptyCustomer()) return;
             if (!CheckCustomer()) return;
             CurrentPrescription.Treatment.Pharmacist = SelectedPharmacist;
+            if (!CheckPrescriptionCount()) return;
             CurrentPrescription.CheckIsPrescribe();
             if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
@@ -736,6 +747,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckMissingCooperativeContinue()) return;
             IsAdjusting = true;
             if (!CheckSameMedicine())
+            {
+                IsAdjusting = false;
+                return;
+            }
+            if (!CurrentPrescription.Treatment.CheckAdjustDate())
             {
                 IsAdjusting = false;
                 return;
@@ -756,8 +772,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustButtonClickAction()
         {
             if(CheckEmptyCustomer()) return;
-            if(!CheckCustomer())return;
+            if(!CheckCustomer()) return;
             SetPharmacist();
+            if(!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
@@ -773,6 +790,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)//合作診所自費不檢查健保規則
             {
+                if (!CurrentPrescription.Treatment.CheckAdjustDate())
+                {
+                    IsAdjusting = false;
+                    return;
+                }
                 var error = CurrentPrescription.CheckPrescriptionRule(false);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
                 {
@@ -783,6 +805,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
+                if(!CurrentPrescription.Treatment.CheckAdjustDate())
+                {
+                    IsAdjusting = false;
+                    return;
+                }
                 var error = CurrentPrescription.CheckPrescribeRule();
                 if (!string.IsNullOrEmpty(error))
                 {
@@ -797,6 +824,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 StartCooperativePrescribe();
             else
                 StartNormalAdjust();
+        }
+
+        private bool CheckPrescriptionCount()
+        {
+            if (PrescriptionCount >= 80)
+            {
+                var confirm = new ConfirmWindow(StringRes.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?","調劑張數提醒",true);
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                return (bool)confirm.DialogResult;
+            }
+            return true;
         }
 
         private void SetPharmacist()
@@ -843,6 +881,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CheckEmptyCustomer()) return;
             if (!CheckCustomer()) return;
             SetPharmacist();
+            if (!CurrentPrescription.Treatment.CheckAdjustDate())
+            {
+                IsAdjusting = false;
+                return;
+            }
             var error = CurrentPrescription.CheckPrescriptionRule(true);
             if (!string.IsNullOrEmpty(error))
             {
@@ -938,7 +981,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.CountPrescriptionPoint(true);
                 CanAdjust = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
@@ -981,7 +1024,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
                     MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。", MessageType.WARNING);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
@@ -1393,6 +1436,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckIsCooperativeVIP()
         {
             var isVip = new ConfirmWindow(StringRes.收部分負擔, StringRes.免收確認);
+            Debug.Assert(isVip.DialogResult != null, "isVip.DialogResult != null");
             CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)!isVip.DialogResult;
         }
 
@@ -1401,6 +1445,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (printMedBag)
             {
                 BusyContent = StringRes.藥袋列印;
+                Debug.Assert(printSingle != null, nameof(printSingle) + " != null");
                 TempPre.PrintMedBag((bool)printSingle);
             }
             if (printReceipt)
@@ -1523,7 +1568,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.TempMedicalNumber))
             {
-                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續調劑(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認",null);
+                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續調劑(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
+                Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
                 return (bool) medicalNumberEmptyConfirm.DialogResult;
             }
             return true;

@@ -26,10 +26,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T4 = "2";
             T5 = "1";
             T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today,false);
-            var normalPres = selectedFile.DeclarePrescriptions.Where(p =>
-                p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
-                || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D")).ToList();
-            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.AdjustCase.ID.Equals("2")).ToList();
+            var normalPres = selectedFile.DeclarePrescriptions.Where(p => p.IsDeclare &&
+                (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
+                || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D"))).ToList();
+            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.IsDeclare && p.AdjustCase.ID.Equals("2")).ToList();
             var normalCount = normalPres.Count;
             var chronicCount = chronicPres.Count;
             var normalApplyPoints = normalPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
@@ -110,7 +110,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 }
             }
 
-            for (int i = 1; i <= 4; i++)
+            for (var i = 1; i <= 4; i++)
             {
                 foreach (var d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
                 {
