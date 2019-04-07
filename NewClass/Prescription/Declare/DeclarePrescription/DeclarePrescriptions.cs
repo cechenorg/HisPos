@@ -54,7 +54,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
                 pre.RemakeDeclareFile();
                 pre.UpdateDeclareContent();
-                //p.FileContent = XmlService.Deserialize<Ddata>(pre.DeclareContent.ToString()); 
+                p.FileContent = XmlService.Deserialize<Ddata>(pre.DeclareContent.ToString());
 
                 //p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);
                 ////p.FileContent = XmlService.Deserialize<Ddata>(p.FileContentStr);
