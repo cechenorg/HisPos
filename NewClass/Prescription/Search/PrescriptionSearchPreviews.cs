@@ -30,7 +30,7 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public List<int> GetSummary(bool reserve)
+        public List<int> GetSummary(bool reserve,string MedicineID)
         {
             var presID = new List<int>();
             var summary = new List<int>();
@@ -40,10 +40,10 @@ namespace His_Pos.NewClass.Prescription.Search
             }
             DataTable table = new DataTable();
             if(reserve)
-                table = PrescriptionDb.GetSearchReservesSummary(presID);
+                table = PrescriptionDb.GetSearchReservesSummary(presID, MedicineID);
             else 
             {
-                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID, MedicineID);
             }
             foreach (DataColumn c in table.Rows[0].Table.Columns)
             {

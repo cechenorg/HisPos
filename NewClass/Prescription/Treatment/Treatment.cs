@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -435,26 +438,33 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 return StringRes.PrescriptionCaseError;
             return string.Empty;
         }
-        private string CheckAdjustDate()
+        public bool CheckAdjustDate()
         {
-            if (AdjustDate is null) return StringRes.AdjustDateError;
-            if (TreatDate == null || !(ChronicSeq is null)) return string.Empty;
+            if (AdjustDate is null)
+            {
+                MessageWindow.ShowMessage(StringRes.AdjustDateError, MessageType.WARNING);
+                return false;
+            }
+            if (TreatDate == null || !(ChronicSeq is null)) return true;
             var startDate = (DateTime)TreatDate;
+            var tmpStartDate = startDate.DeepCloneViaJson();
             var endDate = (DateTime)AdjustDate;
             var holiday = 0;
-            while (startDate < endDate)
+            while (tmpStartDate < endDate)
             {
-                if ((int)startDate.DayOfWeek == 0 || (int)startDate.DayOfWeek == 6)
+                if ((int)tmpStartDate.DayOfWeek == 0 || (int)tmpStartDate.DayOfWeek == 6)
                 {
                     holiday += 1;
                 }
-                startDate = startDate.AddDays(1);
+                tmpStartDate = tmpStartDate.AddDays(1);
             }
             if (new TimeSpan(endDate.Ticks - startDate.Ticks).Days - holiday > 3)
             {
-                return StringRes.PrescriptoinOutOfDate;
+                var adjustDateOutOfRange = new ConfirmWindow(StringRes.PrescriptoinOutOfDate,"");
+                Debug.Assert(adjustDateOutOfRange.DialogResult != null, "adjustDateOutOfRange.DialogResult != null");
+                return (bool)adjustDateOutOfRange.DialogResult;
             }
-            return string.Empty;
+            return true;
         }
         public string CheckMedicalNumber(bool noCard)
         {
@@ -581,7 +591,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
              CheckInstitution() +
              CheckAdjustCase() +
              CheckPrescriptionCase() +
-             CheckAdjustDate() +
              CheckPharmacist() +
              CheckMedicalNumber(noCard) +
              CheckCopayment() +
@@ -596,9 +605,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             CheckPrescribeInstitution();
             if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
                 AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
-            return
-                CheckAdjustDate() +
-                CheckPharmacist();
+            return CheckPharmacist();
         }
         #endregion
 

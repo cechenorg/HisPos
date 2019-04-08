@@ -63,7 +63,7 @@ namespace His_Pos.Service
                     xmlserializer.Serialize(writer, value);
                     var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
                     document.Descendants()
-                        .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
+                        .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
                         .Remove();
                     document.Root?.RemoveAttributes();
                     return document;
