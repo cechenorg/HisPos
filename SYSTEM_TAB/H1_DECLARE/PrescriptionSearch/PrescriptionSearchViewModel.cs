@@ -311,7 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName,SelectedInstitution);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName.Trim(),PatientIDNumber.Trim(), PatientBirth, SelectedAdjustCase,MedicineID.Trim(), MedicineName.Trim(), SelectedInstitution);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };

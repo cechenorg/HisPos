@@ -196,14 +196,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                var decFile = new DeclareFile(SelectedFile);
+                //var decFile = new DeclareFile(SelectedFile,SelectedFile.);
                 //if (SelectedFile.CheckFileExist())
                 //{
                 //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
                 //    if (!(bool)confirm.DialogResult)
                 //        return;
                 //}
-                SelectedFile.CreateDeclareFile(decFile);
+                //SelectedFile.CreateDeclareFile(decFile);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
