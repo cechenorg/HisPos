@@ -49,6 +49,9 @@ namespace His_Pos.NewClass.Prescription.Search
                     case "D":
                         StoStatus = "已收貨";
                         break;
+                    case "S":
+                        StoStatus = "訂單做廢";
+                        break;
                     default:
                         StoStatus = "無訂單";
                         break;

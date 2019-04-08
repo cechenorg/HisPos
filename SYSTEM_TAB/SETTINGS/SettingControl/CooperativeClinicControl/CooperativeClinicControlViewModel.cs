@@ -13,6 +13,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using System.Windows.Forms;
 using His_Pos.FunctionWindow;
 using System.Collections.ObjectModel;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
 {
@@ -20,6 +21,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
     {
         #region Var
         public Institutions Institutions { get; set; }
+        private WareHouses wareHouses;
+        public WareHouses WareHouses
+        {
+            get { return wareHouses; }
+            set { Set(() => WareHouses, ref wareHouses, value); }
+        }
         public CooperativeClinicSetting selectItem; 
         public CooperativeClinicSetting SelectItem {
             get { return selectItem; }
@@ -45,6 +52,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             CooperativeClinicSettingCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
             Institutions = VM.Institutions;
+            WareHouses = VM.WareHouses;
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             OpenFileCommand = new RelayCommand(OpenFileAction);
             UpdateCommand = new RelayCommand(UpdateAction);

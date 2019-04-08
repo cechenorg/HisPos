@@ -471,6 +471,8 @@
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
+    <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
+    <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="Service\ObjectCompareFunctions.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />

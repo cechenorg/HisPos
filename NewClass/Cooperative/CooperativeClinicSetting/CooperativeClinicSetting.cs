@@ -15,16 +15,19 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         public CooperativeClinicSetting(DataRow r)
         {
             CooperavieClinic = VM.GetInstitution(r.Field<string>("CooCli_ID"));
+            WareHouse = VM.GetWareHouse(r.Field<int>("War_ID").ToString());
             TypeName = r.Field<string>("CooCli_Type");
             IsPurge = r.Field<bool>("CooCli_IsPurge");
             IsBuckle = r.Field<bool>("CooCli_IsBuckle");
             FilePath = r.Field<string>("CooCli_FolderPath");
-            var tempsplit = FilePath.Split('\\');
-            DisplayFilePath = tempsplit[tempsplit.Length - 1];
+            if (!(FilePath is null)) {
+                var tempsplit = FilePath.Split('\\');
+                DisplayFilePath = tempsplit[tempsplit.Length - 1];
+            }
             IsInstitutionEdit = true;
         }
         public CooperativeClinicSetting() {
-
+            WareHouse = VM.GetWareHouse("0");
         }
          
         private Institution cooperavieClinic;
@@ -68,5 +71,12 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return displayFilePath; }
             set { Set(() => DisplayFilePath, ref displayFilePath, value); }
         }
+        private WareHouse.WareHouse wareHouse;
+        public WareHouse.WareHouse WareHouse
+        {
+            get { return wareHouse; }
+            set { Set(() => WareHouse, ref wareHouse, value); }
+        }
+         
     }
 }
