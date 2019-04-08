@@ -65,6 +65,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 p.FileContent.Dbody.D31 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("3")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(7, '0');
                 p.FileContent.Dbody.D33 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("1")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
                 p.FileContent.Dbody.D38 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("9")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
+                p.FileContent.Dhead.D18 = (int.Parse(p.FileContent.Dbody.D31) + int.Parse(p.FileContent.Dbody.D32) + int.Parse(p.FileContent.Dbody.D33) + int.Parse(p.FileContent.Dbody.D38)).ToString().PadLeft(8,'0');
                 p.FileContent.Dhead.D16 = (int.Parse(p.FileContent.Dhead.D18) - int.Parse(p.FileContent.Dhead.D17)).ToString().PadLeft(8, '0');
             }
         }
