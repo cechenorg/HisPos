@@ -225,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.取得合作處方;
-                CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
+                CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today.AddDays(-10), DateTime.Today);
                 XmlOfPrescriptions.GetFile();
             };
             worker.RunWorkerCompleted += (o, ea) =>
