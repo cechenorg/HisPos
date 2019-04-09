@@ -480,7 +480,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 BusyContent = StringRes.取得合作處方;
                 XmlOfPrescriptions.GetFile();
-                cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today, DateTime.Today); 
+                cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today.AddDays(-10), DateTime.Today); 
                 cooperative.GetXmlOfPrescriptions(DateTime.Today, DateTime.Today);
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
@@ -686,12 +686,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Debug.Assert(errorAdjustConfirm.DialogResult != null, "errorAdjustConfirm.DialogResult != null");
             if(!(bool)errorAdjustConfirm.DialogResult)
                 return;
+            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
+            if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
+            {
+                if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) || string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) || CurrentPrescription.Patient.Birthday is null)
+                {
+                    var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                    Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                    if ((bool)confirm.DialogResult)
+                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    else
+                        return;
+                }
+            }
             if (CheckEmptyCustomer()) return;
             if (!CheckCustomer()) return;
             SetPharmacist();
             if (!CheckPrescriptionCount()) return;
             IsAdjusting = true;
-            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if (!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
             if (!CheckSameMedicine())
             {
@@ -771,12 +783,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustButtonClickAction()
         {
-            if(CheckEmptyCustomer()) return;
+            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
+            if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
+            {
+                if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) || string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) || CurrentPrescription.Patient.Birthday is null)
+                {
+                    var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                    Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                    if ((bool)confirm.DialogResult)
+                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    else
+                        return;
+                }
+            }
+            if (CheckEmptyCustomer()) return;
             if(!CheckCustomer()) return;
             SetPharmacist();
             if(!CheckPrescriptionCount()) return;
             IsAdjusting = true;
-            if (!CheckCooperativePrescribeContinue()) return;//檢查合作診所自費並確認是否繼續調劑
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
             if (!CheckSameMedicine())
             {

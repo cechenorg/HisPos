@@ -24,7 +24,7 @@ namespace His_Pos.NewClass.Person.Customer
         public static DataTable CheckCustomer(Customer customer)
         {
             var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", customer.IDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", string.IsNullOrEmpty(customer.IDNumber) ? null : customer.IDNumber);
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", customer.Name);
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", customer.Birthday);
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", customer.Tel); 
