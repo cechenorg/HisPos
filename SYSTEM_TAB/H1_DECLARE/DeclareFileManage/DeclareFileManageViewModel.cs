@@ -217,7 +217,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.產生申報資料;
+                MainWindow.ServerConnection.OpenConnection();
                 SelectedFile.DeclarePrescriptions.SerializeFileContent();
+                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {

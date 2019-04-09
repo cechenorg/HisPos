@@ -471,6 +471,8 @@
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
+    <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
+    <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="Service\ObjectCompareFunctions.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
@@ -1715,6 +1717,7 @@
     <Folder Include="Class\Position\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
+    <Folder Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

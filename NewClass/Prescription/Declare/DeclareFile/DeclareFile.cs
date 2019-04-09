@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             T1 = "30";
             T2 = selectedFile.PharmacyID;
-            T3 = selectedFile.DeclareYear.ToString().PadLeft(3, '0') +
+            T3 = (selectedFile.DeclareYear-1911).ToString().PadLeft(3, '0') +
                  selectedFile.DeclareMonth.ToString().PadLeft(2, '0');
             T4 = "2";
             T5 = "1";
@@ -152,7 +152,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D2 = string.Empty;
             D3 = p.Patient.IDNumber;
             D4 = string.Empty;
-            D5 = t.PaymentCategory?.ID;
+            if(!D1.Equals("2") && !D1.Equals("D"))
+                D5 = t.PaymentCategory?.ID;
             D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
             D7 = t.MedicalNumber;
             D8 = t.MainDisease.ID;
@@ -230,14 +231,14 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             var t = p.Treatment;
             var point = p.PrescriptionPoint;
             D26 = t.SpecialTreat?.ID;
-            D30 = p.MedicineDays.ToString();
+            D30 = p.Treatment.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2,'0');
             D31 = $"{point.SpecialMaterialPoint:0000000}";
             D32 = "00000000";
-            D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString();
+            D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
             D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
             D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
             D37 = p.MedicalServiceID;
-            D38 = details.Single(pd => pd.P1.Equals("9")).P9;
+            D38 = details.Single(pd => pd.P1.Equals("9")).P9.PadLeft(8, '0');
             D43 = t.OriginalMedicalNumber;
             if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
@@ -333,7 +334,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P8 = string.Empty;
                 P9 = $"{Math.Round(m.TotalPrice, 0, MidpointRounding.AwayFromZero):0000000}";
                 P10 = string.Empty;
-                var days = m.Days is null ? string.Empty : m.Days.ToString();
+                var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
                 P11 = days;
                 P12 = string.Empty;
                 P13 = P12;
