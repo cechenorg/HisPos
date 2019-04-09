@@ -85,6 +85,12 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
+            if (OrderProducts.Sum(p => p.RealAmount) == 0.0)
+            {
+                MessageWindow.ShowMessage("訂單總進貨量不可為0!", MessageType.ERROR);
+                return false;
+            }
+
             foreach (var product in products)
             {
                 if (product.RealAmount < product.OrderAmount)

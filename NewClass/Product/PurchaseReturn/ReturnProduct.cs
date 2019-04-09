@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Interface;
 
@@ -8,22 +9,97 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
+        private string batchNumber;
+        private double returnAmount;
+        private double realAmount;
+        private double subTotal;
+        private double price;
+        private bool isProcessing = false;
+        private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
         public bool IsSelected
         {
             get { return isSelected; }
             set { Set(() => IsSelected, ref isSelected, value); }
         }
+        public bool IsProcessing
+        {
+            get { return isProcessing; }
+            set
+            {
+                Set(() => IsProcessing, ref isProcessing, value);
+                CalculateRealPrice();
+            }
+        }
         public double Inventory { get; set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
         public int SafeAmount { get; set; }
         public string Note { get; set; }
-        public string BatchNumber { get; set; }
-        public double ReturnAmount { get; set; }
-        public double RealAmount { get; set; }
-        public double Price { get; set; }
-        public double SubTotal { get; set; }
+        public string BatchNumber
+        {
+            get { return batchNumber; }
+            set { Set(() => BatchNumber, ref batchNumber, value); }
+        }
+        public ProductStartInputVariableEnum StartInputVariable
+        {
+            get { return startInputVariable; }
+            set { Set(() => StartInputVariable, ref startInputVariable, value); }
+        }
+        public double ReturnAmount
+        {
+            get { return returnAmount; }
+            set
+            {
+                Set(() => ReturnAmount, ref returnAmount, value);
+                CalculatePrice();
+            }
+        }
+        public double RealAmount
+        {
+            get { return realAmount; }
+            set
+            {
+                Set(() => RealAmount, ref realAmount, value);
+                CalculateRealPrice();
+            }
+        }
+        public double SubTotal
+        {
+            get { return subTotal; }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
+
+                Set(() => SubTotal, ref subTotal, value);
+
+                if (IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
+            }
+        }
+        public double Price
+        {
+            get { return price; }
+            set
+            {
+                if (value == 0.0)
+                    SetStartInputVariable(ProductStartInputVariableEnum.INIT);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
+
+                Set(() => Price, ref price, value);
+
+                if (IsProcessing)
+                    CalculateRealPrice();
+                else
+                    CalculatePrice();
+            }
+        }
         public DateTime? ValidDate { get; set; }
         #endregion
 
@@ -44,6 +120,51 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = row.Field<DateTime?>("StoOrdDet_ValidDate");
         }
 
+        #region ----- Define Variables -----
+        private void SetStartInputVariable(ProductStartInputVariableEnum startInputVariable)
+        {
+            StartInputVariable = startInputVariable;
+        }
+        private void CalculatePrice()
+        {
+            switch (StartInputVariable)
+            {
+                case ProductStartInputVariableEnum.INIT:
+                    break;
+                case ProductStartInputVariableEnum.PRICE:
+                    subTotal = Price * ReturnAmount;
+                    break;
+                case ProductStartInputVariableEnum.SUBTOTAL:
+                    if (ReturnAmount <= 0)
+                        price = 0;
+                    else
+                        price = SubTotal / ReturnAmount;
+                    break;
+            }
+
+            RaisePropertyChanged(nameof(Price));
+            RaisePropertyChanged(nameof(SubTotal));
+        }
+        private void CalculateRealPrice()
+        {
+            switch (StartInputVariable)
+            {
+                case ProductStartInputVariableEnum.INIT:
+                    break;
+                case ProductStartInputVariableEnum.PRICE:
+                    subTotal = Price * RealAmount;
+                    break;
+                case ProductStartInputVariableEnum.SUBTOTAL:
+                    if (RealAmount <= 0)
+                        price = 0;
+                    else
+                        price = SubTotal / RealAmount;
+                    break;
+            }
+
+            RaisePropertyChanged(nameof(Price));
+            RaisePropertyChanged(nameof(SubTotal));
+        }
         public void CopyOldProductData(ReturnProduct returnProduct)
         {
             Inventory = returnProduct.Inventory;
@@ -58,7 +179,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SubTotal = returnProduct.SubTotal;
             ValidDate = returnProduct.ValidDate;
         }
-
         public abstract object Clone();
+        #endregion
     }
 }
