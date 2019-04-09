@@ -1715,6 +1715,7 @@
     <Folder Include="Class\Position\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
+    <Folder Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
