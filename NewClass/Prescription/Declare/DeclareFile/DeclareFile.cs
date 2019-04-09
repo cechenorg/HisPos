@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             T1 = "30";
             T2 = selectedFile.PharmacyID;
-            T3 = selectedFile.DeclareYear.ToString().PadLeft(3, '0') +
+            T3 = (selectedFile.DeclareYear-1911).ToString().PadLeft(3, '0') +
                  selectedFile.DeclareMonth.ToString().PadLeft(2, '0');
             T4 = "2";
             T5 = "1";
