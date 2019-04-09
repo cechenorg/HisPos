@@ -45,8 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Cooperative.SelectedIndex = -1;
                 Registered.SelectedIndex = -1;
-                Setcps(d);
-                Messenger.Default.Send(cps, "CooperativePrescriptionSelectionChanged");
+                Messenger.Default.Send(new NotificationMessage<int>(((RegisterAndReservePrescription)d.SelectedItem).ID, "ReserveSelectionChanged"));
             }
         }
 
@@ -66,8 +65,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Cooperative.SelectedIndex = -1;
                 Reserved.SelectedIndex = -1;
-                Setcps(d);
-                Messenger.Default.Send(cps, "CooperativePrescriptionSelectionChanged");
+                Messenger.Default.Send(new NotificationMessage<int>(((RegisterAndReservePrescription)d.SelectedItem).ID, "RegisterSelectionChanged"));
             }
         }
         private void Setcps(DataGrid d) {
@@ -75,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 cps = new CustomPrescriptionStruct(0, ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
             else if (((Prescription)d.SelectedItem).Source == PrescriptionSource.XmlOfPrescription)
                 cps = new CustomPrescriptionStruct(int.Parse(((Prescription)d.SelectedItem).SourceId), ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
+             
         }
         private void CustomPrescriptionWindow_OnClosing(object sender, CancelEventArgs e)
         {
