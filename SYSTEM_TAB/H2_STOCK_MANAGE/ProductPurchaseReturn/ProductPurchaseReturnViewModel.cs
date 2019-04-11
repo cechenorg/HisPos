@@ -324,12 +324,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ///// Filter Functions /////
         private bool OrderFilter(object order)
         {
-            bool returnValue = false;
+            bool returnValue = true;
 
             StoreOrder tempOrder = order as StoreOrder;
             
-            if (string.IsNullOrEmpty(SearchString))
+            if (!string.IsNullOrEmpty(SearchString))
             {
+                returnValue = false;
+
                 //Order ID Filter
                 if (tempOrder.ReceiveID is null && tempOrder.ID.Contains(SearchString))
                     returnValue = true;
@@ -338,6 +340,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 //Order Note Filter
                 if (tempOrder.Note != null && tempOrder.Note.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Customer Filter
+                if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
                     returnValue = true;
 
                 //Order Product Note Filter
