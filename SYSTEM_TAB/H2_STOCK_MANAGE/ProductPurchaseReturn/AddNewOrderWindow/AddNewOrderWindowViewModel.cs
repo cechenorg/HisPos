@@ -62,11 +62,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         }
         private void ConfirmAddAction()
         {
-            if ((!ReturnOrderManufactory.ID.Equals("0")) && OrderType == OrderTypeEnum.RETURN)
-            {
-                MessageWindow.ShowMessage("非杏德退貨功能尚未完成!", MessageType.ERROR);
-                return;
-            }
+            //if ((!ReturnOrderManufactory.ID.Equals("0")) && OrderType == OrderTypeEnum.RETURN)
+            //{
+            //    MessageWindow.ShowMessage("非杏德退貨功能尚未完成!", MessageType.ERROR);
+            //    return;
+            //}
 
             MainWindow.ServerConnection.OpenConnection();
             NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID);
