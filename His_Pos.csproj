@@ -459,6 +459,9 @@
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />

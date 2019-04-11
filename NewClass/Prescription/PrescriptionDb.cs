@@ -227,7 +227,13 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
-        } 
+        }
+        public static void UpdateXmfOfPrescriptionStatus(string Id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", Id);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]");
+        }
         public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;

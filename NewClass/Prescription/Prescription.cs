@@ -1241,5 +1241,10 @@ namespace His_Pos.NewClass.Prescription
         {
             PrescriptionDb.UpdateDeclareContent(Id,DeclareContent);
         }
+        public void UpdateXmfOfPrescriptionStatus()
+        {
+            PrescriptionDb.UpdateXmfOfPrescriptionStatus(SourceId);
+        }
+        
     }
 }
