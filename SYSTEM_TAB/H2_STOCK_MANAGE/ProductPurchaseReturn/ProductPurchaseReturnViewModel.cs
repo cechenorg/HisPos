@@ -81,7 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
-        public string SearchID { get; set; }
+        public string SearchString { get; set; }
         #endregion
 
         public ProductPurchaseReturnViewModel()
@@ -220,7 +220,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void InitVariables()
         {
             IsBusy = true;
-            SearchID = "";
+            SearchString = "";
             
             BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -324,15 +324,44 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ///// Filter Functions /////
         private bool OrderFilter(object order)
         {
-            bool returnValue = true;
+            bool returnValue = false;
 
             StoreOrder tempOrder = order as StoreOrder;
             
-            if(tempOrder.ReceiveID is null && !tempOrder.ID.Contains(SearchID))
-                returnValue = false;
-            else if(tempOrder.ReceiveID != null && !tempOrder.ReceiveID.Contains(SearchID))
-                returnValue = false;
+            if (string.IsNullOrEmpty(SearchString))
+            {
+                //Order ID Filter
+                if (tempOrder.ReceiveID is null && tempOrder.ID.Contains(SearchString))
+                    returnValue = true;
+                else if (tempOrder.ReceiveID != null && tempOrder.ReceiveID.Contains(SearchString))
+                    returnValue = true;
 
+                //Order Note Filter
+                if (tempOrder.Note != null && tempOrder.Note.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Product Note Filter
+                if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
+                {
+                    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+                else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
+                {
+                    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+            }
+
+            //Order Status Filter
             switch (filterStatus)
             {
                 case OrderFilterStatusEnum.ALL:
