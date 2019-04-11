@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.NewClass.Product.ProductManagement;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -20,12 +21,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
     public partial class NHIMedicineHistoryPriceWindow : Window
     {
         #region ----- Define Variables -----
-        public string 
+        public HistoryPrices HistoryPriceCollection { get; set; }
         #endregion
 
-        public NHIMedicineHistoryPriceWindow()
+        public NHIMedicineHistoryPriceWindow(string medicineID)
         {
             InitializeComponent();
+            InitData(medicineID);
+
+            DataContext = this;
         }
+
+        #region ----- Define Functions -----
+        private void InitData(string medicineID)
+        {
+            HistoryPriceCollection = HistoryPrices.GetHistoryPrices(medicineID);
+        }
+        #endregion
     }
 }

@@ -132,7 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void ViewHistoryPriceAction()
         {
-            NHIMedicineHistoryPriceWindow medicineHistoryPriceWindow = new NHIMedicineHistoryPriceWindow();
+            NHIMedicineHistoryPriceWindow medicineHistoryPriceWindow = new NHIMedicineHistoryPriceWindow(Medicine.ID);
             medicineHistoryPriceWindow.ShowDialog();
         }
         private void DataChangedAction()
