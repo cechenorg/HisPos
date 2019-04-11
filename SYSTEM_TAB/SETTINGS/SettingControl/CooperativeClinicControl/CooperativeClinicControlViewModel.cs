@@ -92,8 +92,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
                     return;
                 case 1:
                     if (CheckInsSame(result[0])) {
+                        CooperativeClinicSetting temp = new CooperativeClinicSetting(); 
                         CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
+                        SelectItem = CooperativeClinicSettingCollection[CooperativeClinicSettingCollection.Count - 1];
                         SelectItem.CooperavieClinic = result[0];
+                        SelectItem.IsInstitutionEdit = true;
                     } 
                     break;
                 default:

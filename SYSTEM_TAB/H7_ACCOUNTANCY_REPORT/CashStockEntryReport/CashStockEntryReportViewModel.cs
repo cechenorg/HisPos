@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CashFlow;
+using His_Pos.NewClass.Report.CashReport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => EndDate, ref endDate, value);
             }
         }
-        private CashFlows cashflowCollection = new CashFlows();
-        public CashFlows CashflowCollection
+        private CashReport totalCashFlow = new CashReport();
+        public CashReport TotalCashFlow
+        {
+            get => totalCashFlow;
+            set
+            {
+                Set(() => TotalCashFlow, ref totalCashFlow, value);
+            }
+        }
+        private CashReports cashflowCollection = new CashReports();
+        public CashReports CashflowCollection
         {
             get => cashflowCollection;
             set
@@ -45,12 +55,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand SearchCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
-            CashflowCollection.GetCashFlowByDate(StartDate, EndDate);
-            SearchCommand = new RelayCommand(SearchAction);
+            CashflowCollection.GetDataByDate(StartDate,EndDate);
+            CaculateTotalCashFlow();
         }
         #region Action
-        private void SearchAction() {
-            CashflowCollection.GetCashFlowByDate(StartDate,EndDate);
+        private void SearchAction() { 
+        }
+        private void CaculateTotalCashFlow() {
+            TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
+            TotalCashFlow.PaySelfPrice = CashflowCollection.Sum(c => c.PaySelfPrice);
+            TotalCashFlow.AllPaySelfPrice = CashflowCollection.Sum(c => c.AllPaySelfPrice);
+            TotalCashFlow.DepositPrice = CashflowCollection.Sum(c => c.DepositPrice);
+            TotalCashFlow.OtherPrice = CashflowCollection.Sum(c => c.OtherPrice);
+            TotalCashFlow.TotalPrice = CashflowCollection.Sum(c => c.TotalPrice); 
         }
         #endregion
     }

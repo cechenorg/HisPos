@@ -8,6 +8,9 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.DataContext>
+        <local:CashStockEntryReportViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
@@ -28,7 +31,7 @@
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
-                    <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
@@ -41,7 +44,7 @@
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
-                    <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
@@ -58,9 +61,9 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <DataGrid Grid.Row="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding }" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False">
+                      ItemsSource="{Binding CashflowCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="100" Header="" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TypeName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -68,7 +71,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CopayMentPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -76,7 +79,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="自費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="自費" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PaySelfPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -84,7 +87,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="配藥" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="配藥" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AllPaySelfPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -92,7 +95,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="押金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DepositPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -100,7 +103,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="小計" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                    <DataGridTextColumn Width="100" Header="其他" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OtherPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -108,15 +111,25 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="小計" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TotalPrice}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" >
                 <Label Content="總計" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-                <Label Content="0" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-                <Label Content="0" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-                <Label Content="0" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-                <Label Content="0" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-                <Label Content="0" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.CopayMentPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.PaySelfPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.AllPaySelfPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.DepositPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.OtherPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+                <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
         <Label Grid.Row="3" Grid.Column="0" Content="處方毛利" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom"/>
