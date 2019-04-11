@@ -24,13 +24,78 @@ namespace His_Pos.NewClass.Report.CashReport
             OtherPrice = r.Field<int>("OtherPrice");
             TotalPrice = r.Field<int>("TotalPrice");
         }
-        public string TypeId { get; set; }
-        public string TypeName { get; set; }
-        public int CopayMentPrice { get; set; }
-        public int PaySelfPrice { get; set; }
-        public int AllPaySelfPrice { get; set; }
-        public int DepositPrice { get; set; }
-        public int OtherPrice { get; set; }
-        public int TotalPrice { get; set; }
+        public string typeId;
+        public string TypeId
+        {
+            get => typeId;
+            set
+            {
+                Set(() => TypeId, ref typeId, value);
+            }
+        }
+        public string typeName;
+        public string TypeName
+        {
+            get => typeName;
+            set
+            {
+                Set(() => TypeName, ref typeName, value);
+            }
+        }
+        private int copayMentPrice;
+        public int CopayMentPrice
+        {
+            get => copayMentPrice;
+            set
+            {
+                Set(() => CopayMentPrice, ref copayMentPrice, value);
+            }
+        }
+        private int paySelfPrice;
+        public int PaySelfPrice
+        {
+            get => paySelfPrice;
+            set
+            {
+                Set(() => PaySelfPrice, ref paySelfPrice, value);
+            }
+        }
+        private int allPaySelfPrice;
+        public int AllPaySelfPrice
+        {
+            get => allPaySelfPrice;
+            set
+            {
+                Set(() => AllPaySelfPrice, ref allPaySelfPrice, value);
+            }
+        }
+        private int depositPrice;
+        public int DepositPrice
+        {
+            get => depositPrice;
+            set
+            {
+                Set(() => DepositPrice, ref depositPrice, value);
+            }
+        }
+        private int otherPrice;
+        public int OtherPrice
+        {
+            get => otherPrice;
+            set
+            {
+                Set(() => OtherPrice, ref otherPrice, value);
+            }
+        }
+        private int totalPrice;
+        public int TotalPrice
+        {
+            get => totalPrice;
+            set
+            {
+                Set(() => TotalPrice, ref totalPrice, value);
+            }
+        }
+        
     }
 }

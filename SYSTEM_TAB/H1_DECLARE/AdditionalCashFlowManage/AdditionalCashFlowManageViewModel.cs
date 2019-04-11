@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CashFlow;
 using His_Pos.NewClass.Prescription;
 using System;
@@ -52,7 +53,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             if (GainCheck)
                 PrescriptionDb.ProcessCashFlow("額外收入", CashflowName, 0, CashflowValue);
             else
-                PrescriptionDb.ProcessCashFlow("額外收入", CashflowName, 0, CashflowValue * -1); 
+                PrescriptionDb.ProcessCashFlow("額外收入", CashflowName, 0, CashflowValue * -1);
+
+            MessageWindow.ShowMessage("新增成功!",Class.MessageType.SUCCESS);
         }
     }
 }

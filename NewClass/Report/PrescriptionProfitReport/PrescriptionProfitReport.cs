@@ -23,13 +23,76 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
             MedUse = r.Field<double>("MedUse"); 
             Profit = r.Field<double>("Profit"); 
         }
-        public string TypeId { get; set; }
-        public string TypeName { get; set; }
-        public int Count { get; set; }
-        public double MedicalServicePoint { get; set; }
-        public double MedicinePoint { get; set; }
-        public double PaySelfPoint { get; set; }
-        public double MedUse  { get; set; }
-        public double Profit { get; set; }
+        private string typeId;
+        public string TypeId {
+            get => typeId;
+            set
+            {
+                Set(() => TypeId, ref typeId, value);
+            }
+        }
+        public string typeName;
+        public string TypeName
+        {
+            get => typeName;
+            set
+            {
+                Set(() => TypeName, ref typeName, value);
+            }
+        }
+        public int count;
+        public int Count
+        {
+            get => count;
+            set
+            {
+                Set(() => Count, ref count, value);
+            }
+        }
+        public double medicalServicePoint;
+        public double MedicalServicePoint
+        {
+            get => medicalServicePoint;
+            set
+            {
+                Set(() => MedicalServicePoint, ref medicalServicePoint, value);
+            }
+        }
+        public double medicinePoint;
+        public double MedicinePoint
+        {
+            get => medicinePoint;
+            set
+            {
+                Set(() => MedicinePoint, ref medicinePoint, value);
+            }
+        }
+        public double paySelfPoint;
+        public double PaySelfPoint
+        {
+            get => paySelfPoint;
+            set
+            {
+                Set(() => PaySelfPoint, ref paySelfPoint, value);
+            }
+        }
+        public double medUse;
+        public double MedUse
+        {
+            get => medUse;
+            set
+            {
+                Set(() => MedUse, ref medUse, value);
+            }
+        }
+        public double profit;
+        public double Profit
+        {
+            get => profit;
+            set
+            {
+                Set(() => Profit, ref profit, value);
+            }
+        }
     }
 }

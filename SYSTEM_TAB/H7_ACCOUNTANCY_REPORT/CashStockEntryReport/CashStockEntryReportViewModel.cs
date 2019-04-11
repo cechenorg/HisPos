@@ -138,7 +138,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TotalCashFlow.TotalPrice = CashflowCollection.Sum(c => c.TotalPrice); 
         }
         private void CaculateTotalPrescriptionProfit() {
-
+            TotalPrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in TotalPrescriptionProfitReportCollection)
             {
                 TotalPrescriptionProfitReport.Count += r.Count;
@@ -151,6 +151,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CaculateSelfPrescriptionProfit()
         {
+            SelfPrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in SelfPrescriptionProfitReportCollection) {
                 SelfPrescriptionProfitReport.Count += r.Count;
                 SelfPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
@@ -163,6 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CaculateCooperativePrescriptionProfit()
         {
+            CooperativePrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in CooperativePrescriptionProfitReportCollection)
             {
                 CooperativePrescriptionProfitReport.Count += r.Count;

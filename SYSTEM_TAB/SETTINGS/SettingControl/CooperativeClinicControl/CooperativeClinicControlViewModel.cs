@@ -70,8 +70,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         }
         private void UpdateAction() {
             var dailyUploadConfirm = new ConfirmWindow("更新後會影響處方資料串接與扣庫 是否更新合作診所? ", "合作診所更新確認", false);
-            if (dailyUploadConfirm.DialogResult == true)
-                CooperativeClinicSettingCollection.Update(); 
+            if (dailyUploadConfirm.DialogResult == true) {
+                CooperativeClinicSettingCollection.Update();
+                MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
+            }
+                
         }
         private void OpenFileAction() {
             if (SelectItem is null)
