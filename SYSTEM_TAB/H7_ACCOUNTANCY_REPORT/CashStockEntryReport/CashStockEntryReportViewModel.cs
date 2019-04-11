@@ -129,6 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             CaculateCooperativePrescriptionProfit();
         }
         private void CaculateTotalCashFlow() {
+            
             TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
             TotalCashFlow.PaySelfPrice = CashflowCollection.Sum(c => c.PaySelfPrice);
             TotalCashFlow.AllPaySelfPrice = CashflowCollection.Sum(c => c.AllPaySelfPrice);
@@ -140,7 +141,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
             foreach (var r in TotalPrescriptionProfitReportCollection)
             {
-               TotalPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
+                TotalPrescriptionProfitReport.Count += r.Count;
+                TotalPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
                TotalPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
                TotalPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
                TotalPrescriptionProfitReport.MedUse += r.MedUse;
@@ -150,6 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         private void CaculateSelfPrescriptionProfit()
         {
             foreach (var r in SelfPrescriptionProfitReportCollection) {
+                SelfPrescriptionProfitReport.Count += r.Count;
                 SelfPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
                 SelfPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
                 SelfPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
@@ -162,6 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         {
             foreach (var r in CooperativePrescriptionProfitReportCollection)
             {
+                CooperativePrescriptionProfitReport.Count += r.Count;
                 CooperativePrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
                 CooperativePrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
                 CooperativePrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
