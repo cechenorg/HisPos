@@ -436,6 +436,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             if (!CheckIsHomeCare() && !CheckIsQuitSmoking() && string.IsNullOrEmpty(PrescriptionCase.ID))
                 return StringRes.PrescriptionCaseError;
+            if (Division.ID.Equals("40") && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+                PrescriptionCase = VM.GetPrescriptionCases("19");
             return string.Empty;
         }
         public bool CheckAdjustDate()
