@@ -14,6 +14,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomPrescriptionWindow : Window
     {
+        private CustomPrescriptionStruct cps = new CustomPrescriptionStruct();
         private CustomPrescriptionViewModel customPrescriptionViewModel { get; set; }
         public CustomPrescriptionWindow(int cusID,string cusIDNumber, IcCard card)
         {
@@ -54,7 +55,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             {
                 Reserved.SelectedIndex = -1;
                 Registered.SelectedIndex = -1;
-                Messenger.Default.Send(((Prescription)d.SelectedItem).Remark, "CooperativePrescriptionSelectionChanged");
+                Setcps(d);
+                Messenger.Default.Send(cps, "CooperativePrescriptionSelectionChanged");
             }
         }
         private void Registered_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -66,7 +68,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Messenger.Default.Send(new NotificationMessage<int>(((RegisterAndReservePrescription)d.SelectedItem).ID, "RegisterSelectionChanged"));
             }
         }
-
+        private void Setcps(DataGrid d) {
+            if (((Prescription)d.SelectedItem).Source == PrescriptionSource.Cooperative)
+                cps = new CustomPrescriptionStruct(0, ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
+            else if (((Prescription)d.SelectedItem).Source == PrescriptionSource.XmlOfPrescription)
+                cps = new CustomPrescriptionStruct(int.Parse(((Prescription)d.SelectedItem).SourceId), ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
+             
+        }
         private void CustomPrescriptionWindow_OnClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;

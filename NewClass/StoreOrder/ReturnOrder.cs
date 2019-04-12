@@ -46,6 +46,17 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
+            var products = ReturnProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, ReturnAmount = g.Sum(p => p.ReturnAmount), Inventory = g.First().Inventory }).ToList();
+
+            foreach (var product in products)
+            {
+                if (product.Inventory < product.ReturnAmount)
+                {
+                    MessageWindow.ShowMessage(product.ProductID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             foreach (var product in ReturnProducts)
             {
                 if (product.ReturnAmount == 0)
@@ -58,11 +69,6 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
-                else if (product.ReturnAmount > product.Inventory)
-                {
-                    MessageWindow.ShowMessage(product.ID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
-                    return false;
-                }
             }
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
@@ -71,7 +77,15 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckNormalProcessingOrder()
         {
-            throw new NotImplementedException();
+            if (ReturnProducts.Sum(p => p.RealAmount) == 0.0)
+            {
+                MessageWindow.ShowMessage("退貨單總退貨量不可為0!", MessageType.ERROR);
+                return false;
+            }
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
+
+            return (bool)confirmWindow.DialogResult;
         }
         protected override bool CheckSingdeProcessingOrder()
         {
@@ -89,14 +103,22 @@ namespace His_Pos.NewClass.StoreOrder
         public override void GetOrderProducts()
         {
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
+
+            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
+                ReturnProducts.SetToProcessing();
+
+            ReturnProducts.SetStartEditToPrice();
+
+            CalculateTotalPrice();
         }
         public override void SetProductToProcessingStatus()
         {
-            //ReturnProducts.SetToProcessing();
+            ReturnProducts.SetToProcessing();
         }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
-            if (ReturnProducts.Count(p => p.ID == iD) > 0)
+            if (ReturnProducts.Count(p => p.ID == iD && string.IsNullOrEmpty(p.BatchNumber)) > 0)
             {
                 MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
                 return;
@@ -166,7 +188,6 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #region ----- Define Function -----
-
         #endregion
     }
 }

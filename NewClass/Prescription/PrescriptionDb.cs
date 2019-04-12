@@ -162,7 +162,11 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
         }
-
+        public static DataTable GetXmlOfPrescriptionsByCusIDNumber(string cusIdNumber) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIdNumber", cusIdNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionsByCusIDNumber]", parameterList);
+        }
         public static DataTable GetPrescriptionsByCusIdNumber(string cusIdnumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

@@ -11,10 +11,14 @@ namespace His_Pos.NewClass.Product.Medicine
 
         public int CountMedicinePoint()
         {
-            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf)
-                .Sum(m => m.NHIPrice * m.Amount) + this.Where(m => m is MedicineSpecialMaterial && !m.PaySelf)
-                                    .Sum(m => m.NHIPrice * m.Amount * 1.05);
+            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount);
             return (int)Math.Round(medicinePoint, 0, MidpointRounding.AwayFromZero);
+        }
+
+        public int CountSpecialMedicinePoint()
+        {
+            var specialMaterial = this.Where(m => m is MedicineSpecialMaterial && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount * 1.05);
+            return (int)Math.Round(specialMaterial, 0, MidpointRounding.AwayFromZero);
         }
 
         public int CountSelfPay()

@@ -15,6 +15,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -38,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
+        public RelayCommand ChooseBatchCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -79,7 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
-        public string SearchID { get; set; }
+        public string SearchString { get; set; }
         #endregion
 
         public ProductPurchaseReturnViewModel()
@@ -203,13 +205,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if(CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
+        private void ChooseBatchAction()
+        {
+            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID);
+            
+            ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
+
+            if (dataContext.IsSelected)
+                ((ReturnProduct)CurrentStoreOrder.SelectedItem).BatchNumber = dataContext.ChoosedBatchNumber;
+        }
         #endregion
 
         #region ----- Define Functions -----
         private void InitVariables()
         {
             IsBusy = true;
-            SearchID = "";
+            SearchString = "";
             
             BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -285,6 +296,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
+            ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
         }
         
@@ -316,11 +328,56 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             StoreOrder tempOrder = order as StoreOrder;
             
-            if(tempOrder.ReceiveID is null && !tempOrder.ID.Contains(SearchID))
-                returnValue = false;
-            else if(tempOrder.ReceiveID != null && !tempOrder.ReceiveID.Contains(SearchID))
+            if (!string.IsNullOrEmpty(SearchString))
+            {
                 returnValue = false;
 
+                //Order ID Filter
+                if (tempOrder.ReceiveID is null && tempOrder.ID.Contains(SearchString))
+                    returnValue = true;
+                else if (tempOrder.ReceiveID != null && tempOrder.ReceiveID.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Note Filter
+                if (tempOrder.Note != null && tempOrder.Note.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Customer Filter
+                if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Product ID Name Note Filter
+                if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
+                {
+                    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+                else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
+                {
+                    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+            }
+
+            //Order Status Filter
             switch (filterStatus)
             {
                 case OrderFilterStatusEnum.ALL:

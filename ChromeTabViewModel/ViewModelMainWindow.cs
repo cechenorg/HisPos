@@ -25,6 +25,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.NewClass.StockValue;
+using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using StringRes = His_Pos.Properties.Resources;
@@ -115,6 +116,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         public static Institutions Institutions { get; set; }
+        public static WareHouses WareHouses { get; set; }
         public static Divisions Divisions { get; set; }
         public static AdjustCases AdjustCases { get; set; }
         public static PaymentCategories PaymentCategories { get; set; }
@@ -170,6 +172,9 @@ namespace His_Pos.ChromeTabViewModel
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "取得倉庫名";
+                WareHouses = new WareHouses();
+                WareHouses.Init();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
                 BusyContent = StringRes.取得科別;
@@ -208,7 +213,10 @@ namespace His_Pos.ChromeTabViewModel
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-
+        public static WareHouse GetWareHouse(string id) {
+            var result = WareHouses.SingleOrDefault(i => i.ID.Equals(id));
+            return result;
+        }
         public static Institution GetInstitution(string id)
         {
             var result = Institutions.SingleOrDefault(i => i.ID.Equals(id));
