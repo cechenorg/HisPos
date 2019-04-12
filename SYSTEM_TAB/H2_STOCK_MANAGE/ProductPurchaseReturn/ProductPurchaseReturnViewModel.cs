@@ -346,11 +346,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
                     returnValue = true;
 
-                //Order Product Note Filter
+                //Order Product ID Name Note Filter
                 if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
                 {
                     foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
                         if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
                         {
                             returnValue = true;
                             break;
@@ -360,6 +365,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
                         if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
                         {
                             returnValue = true;
                             break;
