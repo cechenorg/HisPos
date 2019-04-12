@@ -37,5 +37,15 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return products;
         }
+        internal void SetToProcessing()
+        {
+            foreach (var product in Items)
+                product.IsProcessing = true;
+        }
+        internal void SetStartEditToPrice()
+        {
+            foreach (var product in Items)
+                product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
+        }
     }
 }

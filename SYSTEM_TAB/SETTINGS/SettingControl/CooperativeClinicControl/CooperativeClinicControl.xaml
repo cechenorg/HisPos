@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
              mc:Ignorable="d" 
-              d:DesignHeight="500" d:DesignWidth="620">
+              d:DesignHeight="500" d:DesignWidth="840">
     <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
@@ -110,7 +110,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="80" Header="類別"  >
+                <DataGridTemplateColumn Width="100" Header="類別"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -122,12 +122,24 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="140" Header="處方路徑"  >
+                <DataGridTemplateColumn Width="100" Header="倉庫"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding WareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding DataContext.WareHouses,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                 </ComboBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="200" Header="處方路徑"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Width="90" Text="{Binding DisplayFilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Margin="10,0,0,0"/>
-                                <Button Width="40" Content="..." Command="{Binding DataContext.OpenFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="DarkCyan" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" />
+                                <Rectangle Width="10"/>
+                                <Button Width="60" Content="..." Command="{Binding DataContext.OpenFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="DarkCyan" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" />
                             </StackPanel> 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

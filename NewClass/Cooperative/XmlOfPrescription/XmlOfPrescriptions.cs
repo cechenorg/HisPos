@@ -23,15 +23,24 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
             List<string> filepaths = new List<string>();
             foreach (var c in cooperativeClinicSettings) {
                 string path = c.FilePath;
-                string[] fileEntries = Directory.GetFiles(path);
-                foreach (string s in fileEntries) { 
-                    XDocument xDocument = XDocument.Load(s);
-                    string cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                    xmls.Add(xDocument);
-                    cusIdNumbers.Add(cusIdNumber);
-                    filepaths.Add(s);
-                }
-                XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName);
+                if (!string.IsNullOrEmpty(path)) {
+                    string[] fileEntries = Directory.GetFiles(path);
+                    foreach (string s in fileEntries)
+                    {
+                        try
+                        {
+                            XDocument xDocument = XDocument.Load(s);
+                            string cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                            xmls.Add(xDocument);
+                            cusIdNumbers.Add(cusIdNumber);
+                            filepaths.Add(s);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                    XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName);
+                } 
             }
         }
          

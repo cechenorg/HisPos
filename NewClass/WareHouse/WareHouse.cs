@@ -1,10 +1,10 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 
 namespace His_Pos.NewClass.WareHouse
 {
-    public class WareHouse : ICloneable
-    {
+    public class WareHouse : ObservableObject,ICloneable {
         private WareHouse() { }
         public WareHouse(DataRow row)
         {
