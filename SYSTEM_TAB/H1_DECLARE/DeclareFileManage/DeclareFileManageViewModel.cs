@@ -47,7 +47,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
 
         private DeclareFilePreviews decFilePreViews;
-
         public DeclareFilePreviews DecFilePreViews
         {
             get => decFilePreViews;
@@ -56,34 +55,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DecFilePreViews, ref decFilePreViews, value);
             }
         }
-        private DeclareFilePreview selectedFile;
-        public DeclareFilePreview SelectedFile
+        private DeclareFilePreview selectedPreview;
+        public DeclareFilePreview SelectedPreview
         {
-            get => selectedFile;
+            get => selectedPreview;
             set
             {
-                Set(() => SelectedFile, ref selectedFile, value);
+                Set(() => SelectedPreview, ref selectedPreview, value);
             }
         }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
-        public AdjustCases AdjustCases { get; set; }
-        public Institutions Institutions { get; set; }
-        private DateTime? decStart;
-        public DateTime? DecStart
+        private DateTime? declareDate;
+        public DateTime? DeclareDate
         {
-            get => decStart;
+            get => declareDate;
             set
             {
-                Set(() => DecStart, ref decStart, value);
-            }
-        }
-        private DateTime? decEnd;
-        public DateTime? DecEnd
-        {
-            get => decEnd;
-            set
-            {
-                Set(() => DecEnd, ref decEnd, value);
+                Set(() => DeclareDate, ref declareDate, value);
             }
         }
         private bool isBusy;
@@ -99,14 +86,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public string BusyContent
         {
             get => busyContent;
-            private set
+            set
             {
                 Set(() => BusyContent, ref busyContent, value);
+            }
+        }
+        private int startDay;
+        public int StartDay
+        {
+            get => startDay;
+            set
+            {
+                Set(() => StartDay, ref startDay, value);
+            }
+        }
+        private int endDay;
+        public int EndDay
+        {
+            get => endDay;
+            set
+            {
+                Set(() => EndDay, ref endDay, value);
             }
         }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
+        public RelayCommand AdjustPharmacistSetting { get; set; }
+        public RelayCommand AdjustPharmacistOfDay { get; set; }
+        public RelayCommand AdjustPharmacistOfMonth { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
@@ -131,15 +139,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialVariables()
         {
             DecFilePreViews = new DeclareFilePreviews();
-            DecEnd = DateTime.Today;
-            DecStart = new DateTime(((DateTime)DecEnd).Year, ((DateTime)DecEnd).Month, 1).AddMonths(-1);
-            MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
-            AdjustCases = ViewModelMainWindow.AdjustCases;
-            Institutions = ViewModelMainWindow.Institutions;
+            DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
+            StartDay = 1;
+            EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
         }
         private void InitialCommands()
         {
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
+            AdjustPharmacistSetting = new RelayCommand(AdjustPharmacistSettingAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
@@ -148,6 +155,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void GetPreviewPrescriptionsActions()
         {
             GetPrescriptions();
+        }
+        private void AdjustPharmacistSettingAction()
+        {
+
         }
         private void RegisterMessengers()
         {
@@ -161,13 +172,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #region CommandActions
         private void ShowPrescriptionEditWindowAction()
         {
-            if (SelectedFile.SelectedPrescription is null) return;
+            if (SelectedPreview.SelectedPrescription is null) return;
             MainWindow.ServerConnection.OpenConnection();
-            Prescription selected =
-                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedFile.SelectedPrescription.ID).Rows[0],
-                    PrescriptionSource.Normal);
+            var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
+            var prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
             prescriptionEdit.ShowDialog();
         }
         private void SetDecFilePreViewSummaryAction()
@@ -180,26 +189,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void CreateDeclareFileAction()
         {
-            if(SelectedFile is null) return;
+            if(SelectedPreview is null) return;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.產生申報資料;
                 MainWindow.ServerConnection.OpenConnection();
-                SelectedFile.DeclarePrescriptions.SerializeFileContent();
+                SelectedPreview.DeclarePrescriptions.SerializeFileContent();
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                //var decFile = new DeclareFile(SelectedFile,SelectedFile.);
-                //if (SelectedFile.CheckFileExist())
+                //var decFile = new DeclareFile(SelectedPreview,SelectedPreview.);
+                //if (SelectedPreview.CheckFileExist())
                 //{
                 //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
                 //    if (!(bool)confirm.DialogResult)
                 //        return;
                 //}
-                //SelectedFile.CreateDeclareFile(decFile);
+                //SelectedPreview.CreateDeclareFile(decFile);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -207,8 +216,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         private void GetPrescriptions()
         {
+            var sDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month,StartDay);
+            var eDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, EndDay);
             var prescriptions = new DeclarePrescriptions();
-            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
+            prescriptions.GetSearchPrescriptions(sDate, eDate);
             DecFilePreViews.Clear();
             foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
             {
@@ -225,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
             {
                 DecFilePreViewCollectionView.MoveCurrentToFirst();
-                SelectedFile = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
+                SelectedPreview = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
             }
         }
 

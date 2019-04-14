@@ -12,6 +12,7 @@
              d:DesignHeight="450" d:DesignWidth="800" FontFamily="Segoe UI Semibold">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:DateConverterNoDate x:Key="DateConverterNoDate" />
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
@@ -39,8 +40,22 @@
                         <StackPanel.Background>
                             <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8" />
                         </StackPanel.Background>
-                        <Label Content="年 :" Style="{StaticResource BoldLabelContent18}" Margin="10,10,0,10" />
-                        <TextBox Width="50" Height="35" Text="108" />
+                        <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
+                        <xctk:MaskedTextBox Width="60" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
+                                            Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding Path="DeclareDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRuleNoDate/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                        <Label Content="區間:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
+                        <TextBox Width="30" Height="35" Text="{Binding StartDay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center"/>
+                        <Label Content=" ~ " Style="{StaticResource BoldLabelContent18}" />
+                        <TextBox Width="30" Height="35" Text="{Binding EndDay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DecFilePreViewCollectionView,UpdateSourceTrigger=PropertyChanged}"
                               Height="720" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
@@ -119,8 +134,8 @@
                             </ItemsControl>
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
-                            <Button Width="100" Margin="35,5,0,0" Background="RoyalBlue" BorderThickness="0" Content="調整設定" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                            <Button Width="100" Margin="35,10,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                            <Button Width="100" Margin="35,5,0,0" Background="RoyalBlue" BorderThickness="0" Content="調整設定" Command="{Binding DataContext.AdjustPharmacistSetting,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                            <Button Width="100" Margin="35,10,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.AdjustPharmacistOfDay,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         </StackPanel>
                         </StackPanel>
                     <DataGrid Height="717" MaxHeight="717" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
@@ -270,7 +285,7 @@
                     <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="總點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                     <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
-                    <Button Width="100" Margin="70,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="區間調整" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                    <Button Width="100" Margin="70,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="區間調整" Command="{Binding DataContext.AdjustPharmacistOfMonth,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     <Button Width="105" Margin="10,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                 </StackPanel>
             </Grid>
