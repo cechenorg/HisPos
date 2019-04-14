@@ -9,7 +9,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" FontFamily="Segoe UI Semibold">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
@@ -39,28 +39,8 @@
                         <StackPanel.Background>
                             <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8" />
                         </StackPanel.Background>
-                        <Label Content="區間 :" Style="{StaticResource BoldLabelContent18}" Margin="10,10,0,10" />
-                        <xctk:MaskedTextBox Width="80" Height="35" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
-                            <xctk:MaskedTextBox.Text>
-                                <Binding Path="DecStart" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                    <Binding.ValidationRules>
-                                        <service:DateValidationRuleNoDate />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </xctk:MaskedTextBox.Text>
-                        </xctk:MaskedTextBox>
-                        <Label Content=" ~ " VerticalAlignment="Center" />
-                        <xctk:MaskedTextBox Width="80" Height="35" Margin="0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                            Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
-                            <xctk:MaskedTextBox.Text>
-                                <Binding Path="DecStart" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                    <Binding.ValidationRules>
-                                        <service:DateValidationRuleNoDate />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </xctk:MaskedTextBox.Text>
-                        </xctk:MaskedTextBox>
+                        <Label Content="年 :" Style="{StaticResource BoldLabelContent18}" Margin="10,10,0,10" />
+                        <TextBox Width="50" Height="35" Text="108" />
                     </StackPanel>
                     <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DecFilePreViewCollectionView,UpdateSourceTrigger=PropertyChanged}"
                               Height="720" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
@@ -138,8 +118,11 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
-                        <Button Width="100" Margin="35,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                    </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Button Width="100" Margin="35,5,0,0" Background="RoyalBlue" BorderThickness="0" Content="調整設定" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                            <Button Width="100" Margin="35,10,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        </StackPanel>
+                        </StackPanel>
                     <DataGrid Height="717" MaxHeight="717" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                               CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                               CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8"
