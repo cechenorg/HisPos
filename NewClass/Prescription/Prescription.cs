@@ -252,6 +252,7 @@ namespace His_Pos.NewClass.Prescription
             if (!Treatment.AdjustCase.ID.Equals("0"))
                 CheckMedicalServiceData();//確認藥事服務資料
             var details = SetPrescriptionDetail();//產生藥品資料
+            PrescriptionPoint.MedicinePoint = details.Count(p => p.P1.Equals("1")) > 0 ? details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)) : 0;
             PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
             PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
                                            PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
@@ -598,7 +599,8 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!Treatment.AdjustCase.ID.Equals("0"))
             {
-                PrescriptionPoint.MedicinePoint = Medicines.Count(m => m.Amount > 0) <= 0 ? 0 : Medicines.CountMedicinePoint();
+                PrescriptionPoint.MedicinePoint = Medicines.Count(m => !m.PaySelf) <= 0 ? 0 : Medicines.CountMedicinePoint();
+                PrescriptionPoint.SpecialMaterialPoint = Medicines.Count(m => !m.PaySelf && m is MedicineSpecialMaterial) <= 0 ? 0 : Medicines.CountSpecialMedicinePoint();
                 if (Treatment.AdjustCase.ID.Equals("2") || (Treatment.ChronicSeq != null && Treatment.ChronicSeq > 0) ||
                     (Treatment.ChronicTotal != null && Treatment.ChronicTotal > 0))
                 {

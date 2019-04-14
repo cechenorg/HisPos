@@ -26,7 +26,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         }
         public void AddPrescriptions(List<DeclarePrescription> pres)
         {
-            foreach (var p in pres)
+            foreach (var p in pres.OrderBy(p => p.IsDeclare))
             {
                 Add(p);
             }
@@ -34,38 +34,39 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 
         public void SerializeFileContent()
         {
-            foreach (var p in Items.Where(pre => pre.IsDeclare))
+            foreach (var p in Items/*.Where(pre => pre.IsDeclare)*/)
             {
-                //var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
-                //    PrescriptionSource.Normal);
-                //MainWindow.ServerConnection.OpenConnection();
-                //pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
-                //pre.AdjustMedicinesType();
-                //MainWindow.ServerConnection.CloseConnection();
-                //if (pre.Treatment.Division != null)
-                //    pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
-                //pre.Treatment.Pharmacist =
-                //    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IdNumber.Equals(pre.Treatment.Pharmacist.IdNumber));
-                //pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
-                //pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
-                //if (pre.Treatment.PrescriptionCase != null)
-                //    pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
-                //if (pre.Treatment.SpecialTreat != null)
-                //    pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
-                //pre.RemakeDeclareFile();
-                //pre.UpdateDeclareContent();
+                var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
+                    PrescriptionSource.Normal);
+                MainWindow.ServerConnection.OpenConnection();
+                pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
+                pre.AdjustMedicinesType();
+                MainWindow.ServerConnection.CloseConnection();
+                if (pre.Treatment.Division != null)
+                    pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
+                pre.Treatment.Pharmacist =
+                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IdNumber.Equals(pre.Treatment.Pharmacist.IdNumber));
+                pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
+                pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
+                if (pre.Treatment.PrescriptionCase != null)
+                    pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
+                if (pre.Treatment.SpecialTreat != null)
+                    pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
+                pre.RemakeDeclareFile();
+                pre.UpdateDeclareContent();
                 //p.FileContent = XmlService.Deserialize<Ddata>(pre.DeclareContent.ToString());
 
-                p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);
-                p.FileContent = XmlService.Deserialize<Ddata>(p.FileContentStr);
-                for (var i = 1; i <= p.FileContent.Dbody.Pdata.Count; i++)
-                {
-                    p.FileContent.Dbody.Pdata[i - 1].P10 = (i.ToString()).PadLeft(3, '0');
-                }
-                p.FileContent.Dbody.D31 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("3")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(7, '0');
-                p.FileContent.Dbody.D33 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("1")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
-                p.FileContent.Dbody.D38 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("9")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
-                p.FileContent.Dhead.D16 = (int.Parse(p.FileContent.Dhead.D18) - int.Parse(p.FileContent.Dhead.D17)).ToString().PadLeft(8, '0');
+                //p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);
+                //p.FileContent = XmlService.Deserialize<Ddata>(p.FileContentStr);
+                //for (var i = 1; i <= p.FileContent.Dbody.Pdata.Count; i++)
+                //{
+                //    p.FileContent.Dbody.Pdata[i - 1].P10 = (i.ToString()).PadLeft(3, '0');
+                //}
+                //p.FileContent.Dbody.D31 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("3")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(7, '0');
+                //p.FileContent.Dbody.D33 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("1")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
+                //p.FileContent.Dbody.D38 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("9")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
+                //p.FileContent.Dhead.D18 = (int.Parse(p.FileContent.Dbody.D31) + int.Parse(p.FileContent.Dbody.D32) + int.Parse(p.FileContent.Dbody.D33) + int.Parse(p.FileContent.Dbody.D38)).ToString().PadLeft(8, '0');
+                //p.FileContent.Dhead.D16 = (int.Parse(p.FileContent.Dhead.D18) - int.Parse(p.FileContent.Dhead.D17)).ToString().PadLeft(8, '0');
             }
         }
     }

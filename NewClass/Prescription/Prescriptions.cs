@@ -54,6 +54,18 @@ namespace His_Pos.NewClass.Prescription
                 Add(r);
             }
         }
+        public void GetXmlOfPrescriptionsByCusIDNumber(string cusIDNum) //取得合作XML格式處方  
+        {
+            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByCusIDNumber(cusIDNum);
+            foreach (DataRow r in table.Rows)
+            {
+                XmlDocument xDocument = new XmlDocument();
+                xDocument.LoadXml(r["CooCli_XML"].ToString());
+
+                Add(new Prescription(XmlService.Deserialize<XmlOfPrescription.Prescription>(xDocument.InnerXml)
+                    , r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
+            }
+        }
         public static void PredictThreeMonthPrescription() {
             PrescriptionDb.PredictThreeMonthPrescription();
         }
