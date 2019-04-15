@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -117,6 +118,7 @@ namespace His_Pos.ChromeTabViewModel
 
         public static Institutions Institutions { get; set; }
         public static WareHouses WareHouses { get; set; }
+        public static CooperativeClinicSettings CooperativeClinicSettings { get; set; }
         public static Divisions Divisions { get; set; }
         public static AdjustCases AdjustCases { get; set; }
         public static PaymentCategories PaymentCategories { get; set; }
@@ -171,12 +173,15 @@ namespace His_Pos.ChromeTabViewModel
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.ServerConnection.OpenConnection(); 
                 BusyContent = "取得倉庫名";
                 WareHouses = new WareHouses();
                 WareHouses.Init();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
+                BusyContent = "取得合作院所設定";
+                CooperativeClinicSettings = new CooperativeClinicSettings();
+                CooperativeClinicSettings.Init();
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;
