@@ -380,7 +380,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
             MainWindow.ServerConnection.CloseConnection();
             prescription.Source = SelectedPrescription.Source;
-            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionSearch);
+            var pSource = SelectedPrescription.Source;
+            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             prescriptionEdit.ShowDialog();
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);

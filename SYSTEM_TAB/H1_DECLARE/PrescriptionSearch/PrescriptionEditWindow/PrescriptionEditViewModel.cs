@@ -98,7 +98,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
         }
-        private ViewModelEnum viewModel { get; set; }
         private bool canMakeup;
         public bool CanMakeup
         {
@@ -167,15 +166,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
         #endregion
-        public PrescriptionEditViewModel(Prescription selected, ViewModelEnum vm)
+        public PrescriptionEditViewModel(int preID,PrescriptionSource pSource)
         {
+            MainWindow.ServerConnection.OpenConnection();
+            var selected = pSource.Equals(PrescriptionSource.Normal) ? 
+                new Prescription(PrescriptionDb.GetPrescriptionByID(preID).Rows[0], PrescriptionSource.Normal) : 
+                new Prescription(PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0], PrescriptionSource.ChronicReserve);
+            MainWindow.ServerConnection.CloseConnection();
             CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
             OriginalPrescription = selected;
             OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
             Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
-            viewModel = vm;
         }
         #region InitialFunctions
         /*
@@ -464,26 +467,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.AdjustMedicines(OriginalPrescription);
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
-                switch (viewModel)
-                {
-                    case ViewModelEnum.PrescriptionDeclare:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclareViewModel) + "PrescriptionEdited"));
-                        break;
-                    case ViewModelEnum.PrescriptionSearch:
-                        switch (EditedPrescription.Source)
-                        {
-                            case PrescriptionSource.Normal:
-                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
-                                break;
-                            case PrescriptionSource.ChronicReserve:
-                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"));
-                                break;
-                        }
-                        break;
-                    case ViewModelEnum.DeclareFileManage:
-                        Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
-                        break;
-                }
+                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
@@ -503,26 +487,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Delete();
                 MainWindow.ServerConnection.CloseConnection();
-                switch (viewModel)
-                {
-                    case ViewModelEnum.PrescriptionDeclare:
-                        Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclareViewModel) + "PrescriptionEdited"));
-                        break;
-                    case ViewModelEnum.PrescriptionSearch:
-                        switch (EditedPrescription.Source)
-                        {
-                            case PrescriptionSource.Normal:
-                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"));
-                                break;
-                            case PrescriptionSource.ChronicReserve:
-                                Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"));
-                                break;
-                        }
-                        break;
-                    case ViewModelEnum.DeclareFileManage:
-                        Messenger.Default.Send(new NotificationMessage(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"));
-                        break;
-                }
+                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
                 Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
             }
         }

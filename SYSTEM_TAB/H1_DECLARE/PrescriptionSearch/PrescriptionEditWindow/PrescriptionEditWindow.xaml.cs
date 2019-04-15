@@ -20,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionEditWindow : Window
     {
-        public PrescriptionEditWindow(Prescription selected, ViewModelEnum vm)
+        public PrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -28,11 +28,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            DataContext = new PrescriptionEditViewModel(selected,vm);
+            
+            DataContext = new PrescriptionEditViewModel(preID, pSource);
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage<int>>("FocusDosage", FocusDosage);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
-            Messenger.Default.Register<NotificationMessage>( "FocusChronicTotal", FocusChronicTotal);
+            Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
 
