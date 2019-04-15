@@ -40,10 +40,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productManageMedicine.ID));
-            parameters.Add(new SqlParameter("PRO_CHINAME", productManageMedicine.ChineseName));
-            parameters.Add(new SqlParameter("PRO_ENGNAME", productManageMedicine.EnglishName));
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_CHINAME", productManageMedicine.ChineseName);
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_ENGNAME", productManageMedicine.EnglishName);
             parameters.Add(new SqlParameter("PRO_ISENABLE", productManageMedicine.Status));
-            parameters.Add(new SqlParameter("PRO_BARCODE", productManageMedicine.BarCode));
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_BARCODE", productManageMedicine.BarCode);
             parameters.Add(new SqlParameter("PRO_ISCOMMON", productManageMedicine.IsCommon));
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SAFEAMOUNT", productManageMedicine.SafeAmount);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_BASICAMOUNT", productManageMedicine.BasicAmount);
