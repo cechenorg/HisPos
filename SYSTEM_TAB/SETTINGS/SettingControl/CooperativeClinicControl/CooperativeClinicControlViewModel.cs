@@ -73,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             if (dailyUploadConfirm.DialogResult == true) {
                 CooperativeClinicSettingCollection.Update();
                 MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
+                VM.CooperativeClinicSettings.Init();
             }
                 
         }
