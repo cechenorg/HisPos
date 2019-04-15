@@ -17,6 +17,7 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
@@ -35,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         public Institutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
+        public Divisions Divisions { get; set; }
         private PrescriptionSearchPreviews searchPrescriptions;
         public PrescriptionSearchPreviews SearchPrescriptions
         {
@@ -251,6 +253,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedInstitution, ref selectedInstitution, value);
             }
         }
+        private Division selectedDivision;
+        public Division SelectedDivision
+        {
+            get => selectedDivision;
+            set
+            {
+                Set(() => SelectedDivision, ref selectedDivision, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand Search { get; set; }
@@ -277,6 +288,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions = new PrescriptionSearchPreviews();
             Institutions = ViewModelMainWindow.Institutions;
             AdjustCases = ViewModelMainWindow.AdjustCases;
+            Divisions = ViewModelMainWindow.Divisions;
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
         }
@@ -311,7 +323,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName,SelectedInstitution);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName,SelectedInstitution,SelectedDivision);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };
@@ -352,7 +364,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName, SelectedInstitution);
+                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName, SelectedInstitution,SelectedDivision);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(true);
             };
@@ -526,9 +538,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         private bool CheckCondition()
         {
-            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && (SelectedInstitution is null || string.IsNullOrEmpty(SelectedInstitution.Name)) )
+            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && (SelectedInstitution is null || string.IsNullOrEmpty(SelectedInstitution.Name)) && SelectedDivision is null)
             {
-                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品健保碼.藥品名稱或釋出院所請至少擇一填寫", MessageType.WARNING);
+                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品代碼.藥品名稱.釋出院所或科別請至少擇一填寫", MessageType.WARNING);
                 return false;
             }
             return true;
