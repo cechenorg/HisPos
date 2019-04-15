@@ -4,9 +4,90 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
+        xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="申報藥師調整設定" Height="450" Width="800">
-    <Grid>
-        
+        Title="申報藥師調整設定" Height="470" Width="820">
+    <Window.Resources>
+        <service:DateTimeToEnableMultiConverter x:Key="DateTimeToEnableMultiConverter" />
+    </Window.Resources>
+            <Grid  Grid.RowSpan="4" Margin="10" Background="White" Width="800" Height="450" HorizontalAlignment="Right">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button VerticalAlignment="Center"  Command="{Binding YearCommand}" CommandParameter="Pre" Style="{StaticResource TransparentButtonStyle}">
+                <Button.Content>
+                    <TextBlock Text="&lt;" FontSize="20"></TextBlock>
+                </Button.Content>
+            </Button>
+            <TextBlock VerticalAlignment="Center" FontSize="15" Text="{Binding CurrentYear}"></TextBlock>
+            <Button VerticalAlignment="Center"  Command="{Binding YearCommand}" CommandParameter="Next" Style="{StaticResource TransparentButtonStyle}">
+                <Button.Content>
+                    <TextBlock Text="&gt;" FontSize="20"></TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Margin="50,10,10,10" VerticalAlignment="Center" Command="{Binding MonthCommand}" CommandParameter="Pre" Style="{StaticResource TransparentButtonStyle}">
+                <Button.Content>
+                    <TextBlock Text="&lt;" FontSize="20"></TextBlock>
+                </Button.Content>
+            </Button>
+            <TextBlock VerticalAlignment="Center" Text="{Binding CurrentMonth}" FontSize="15"></TextBlock>
+            <Button VerticalAlignment="Center" Command="{Binding MonthCommand}" CommandParameter="Next" Style="{StaticResource TransparentButtonStyle}">
+                <Button.Content>
+                    <TextBlock Text="&gt;" FontSize="20"></TextBlock>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <UniformGrid Grid.Row="1" Columns="7">
+            <TextBlock Text="一" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="二" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="三" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="四" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="五" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="六" TextAlignment="Center"></TextBlock>
+            <TextBlock Text="日" TextAlignment="Center"></TextBlock>
+        </UniformGrid>
+        <ItemsControl Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ItemsSource="{Binding Days}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Background="{Binding Converter={StaticResource DateTimeToColorConverter}}" Style="{StaticResource CalendarTransparentButtonStyle}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.ChooseDateCommand,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Label Content="{Binding Converter={StaticResource DateTimeToDayConverter}}"></Label>
+                        <!--MouseDoubleClick="Button_MouseDoubleClick"-->
+                        <!--<StackPanel.Foreground>
+                            <MultiBinding Converter="{StaticResource BACKUP_DateTimeToForegroundMultiConverter}">
+                                <Binding></Binding>
+                                <Binding Path="DataContext.CurrentMonth" RelativeSource="{RelativeSource FindAncestor,AncestorType={x:Type Window}}"></Binding>
+                            </MultiBinding>
+                        </StackPanel.Foreground>-->
+                        <StackPanel.IsEnabled>
+                            <MultiBinding Converter="{StaticResource DateTimeToEnableMultiConverter}">
+                                <Binding></Binding>
+                                <Binding Path="DataContext.CutoffDayBegin" RelativeSource="{RelativeSource FindAncestor,AncestorType={x:Type Window}}"></Binding>
+                                <Binding Path="DataContext.CutoffDayEnd" RelativeSource="{RelativeSource FindAncestor,AncestorType={x:Type Window}}"></Binding>
+                            </MultiBinding>
+                        </StackPanel.IsEnabled>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="7"></UniformGrid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,31" Orientation="Horizontal">
+            <Button Content="編輯完成" Style="{StaticResource btnPrimaryStyle}" Grid.Row="2" Command="{Binding HideCalendarCommand}"></Button>
+        </StackPanel>
     </Grid>
 </Window>
