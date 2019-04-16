@@ -140,6 +140,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID); 
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
         public static DataTable GetReservePrescriptionsData(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
@@ -154,6 +155,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
         }
       
