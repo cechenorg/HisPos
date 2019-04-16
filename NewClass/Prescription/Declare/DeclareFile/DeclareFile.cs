@@ -132,7 +132,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public Ddata(Prescription p, List<Pdata> details)
         {
             Dhead = new Dhead(p);
-            Dbody = new Dbody(p,details);
+            Dbody = new Dbody(p, details);
+            Dhead.D18 = $"{int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33) + int.Parse(Dbody.D38):00000000}";
+            Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
@@ -161,9 +163,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D13 = t.Division?.ID;
             D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate, false);
             D15 = t.Copayment.Id;
-            D16 = $"{point.ApplyPoint:00000000}";
             D17 = $"{point.CopaymentPoint:0000}";
-            D18 = $"{point.TotalPoint:00000000}";
             D20 = p.Patient.Name;
             D21 = t.Institution.ID;
             D22 = t.PrescriptionCase?.ID;
@@ -232,7 +232,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             var point = p.PrescriptionPoint;
             D26 = t.SpecialTreat?.ID;
             D30 = p.Treatment.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2,'0');
-            D31 = $"{point.SpecialMaterialPoint:0000000}";
+            D31 = $"{details.Where(d => d.P1.Equals("3")).Sum(d => int.Parse(d.P9)):0000000}";
             D32 = "00000000";
             D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
             D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
