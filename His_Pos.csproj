@@ -913,6 +913,12 @@
       <DependentUpon>CashStockEntryReport.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReportViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml.cs">
+      <DependentUpon>CashDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml.cs">
+      <DependentUpon>PrescriptionDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -1457,6 +1463,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1740,7 +1754,6 @@
     <Folder Include="Class\Position\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
-    <Folder Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
