@@ -86,7 +86,7 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
@@ -204,7 +204,7 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
@@ -308,7 +308,7 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
@@ -396,7 +396,7 @@
             </StackPanel>
         </Grid>
         <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Margin="10,0,0,0">
-
+            
         </ContentControl>
     </Grid>
 </UserControl>
