@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.DataContext>
@@ -13,6 +14,12 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <DataTemplate x:Key="CashDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:CashDetailControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PrescriptionDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:PrescriptionDetailControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -397,8 +404,17 @@
                 <TextBlock Text="{Binding TotalPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Right" Width="100"/>
             </StackPanel>
         </Grid>
-        <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Margin="10,0,0,0">
-            
+        <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Margin="10,0,0,0" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource CashDetailControl}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DetailSource, UpdateSourceTrigger=PropertyChanged}" Value="NAME">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionDetailControl}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
         </ContentControl>
     </Grid>
 </UserControl>
