@@ -469,13 +469,13 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-        internal static void PurchaseStoreOrderToDone(string storeOrderID)
+        internal static DataTable PurchaseStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
         }
         internal static void StoreOrderToNormalProcessing(string storeOrderID)
         {
@@ -484,13 +484,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
         }
-        internal static void ReturnStoreOrderToDone(string storeOrderID)
+        internal static DataTable ReturnStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
         }
 
         internal static void StoreOrderToScrap(string storeOrderID)
