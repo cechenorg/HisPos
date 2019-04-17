@@ -173,12 +173,12 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="預定客戶" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="580,0,0,0"/>
-            <TextBox Width="120" Text="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center"/>
+            <TextBox Width="120" Text="{Binding CurrentStoreOrder.PreOrderCustomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center"/>
             <Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <xctk:MaskedTextBox Width="120" Height="30" HorizontalContentAlignment="Center"  FontSize="20" Style="{StaticResource MaterialDesignTextBox}" Margin="10,0,0,0"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                 <xctk:MaskedTextBox.Text>
-                    <Binding Path="SearchStartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                    <Binding Path="CurrentStoreOrder.PlanArriveDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>

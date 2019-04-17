@@ -17,6 +17,8 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
         private PurchaseProducts orderProducts;
 
+        public string PreOrderCustomer { get; set; }
+        public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public PurchaseProducts OrderProducts
@@ -39,6 +41,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderType = OrderTypeEnum.PURCHASE;
             PatientData = row.Field<string>("CUS_DATA");
+            PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
+            PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
         }
 
         #region ----- Override Function -----
@@ -46,6 +50,12 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Check Function /////
         protected override bool CheckUnProcessingOrder()
         {
+            if (PlanArriveDate != null && PlanArriveDate <= DateTime.Today)
+            {
+                MessageWindow.ShowMessage("預定到貨日需大於今日!", MessageType.ERROR);
+                return false;
+            }
+
             if (OrderProducts.Count == 0)
             {
                 MessageWindow.ShowMessage("進貨單中不可以沒有商品!", MessageType.ERROR);

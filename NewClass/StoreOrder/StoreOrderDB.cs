@@ -437,6 +437,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", returnOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
+            DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
 
@@ -447,6 +449,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", purchaseOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
+            DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
 
@@ -516,6 +520,8 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
+            string cusName = "";
+            string planDate = "";
 
             if (storeOrder is PurchaseOrder)
             {
@@ -534,6 +540,11 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }
+
+                cusName = ((PurchaseOrder) storeOrder).PreOrderCustomer;
+
+                if (((PurchaseOrder) storeOrder).PlanArriveDate != null)
+                    planDate = (((PurchaseOrder) storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
@@ -554,7 +565,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
         }
 
         internal static DataTable GetNewSingdeOrders()
