@@ -787,7 +787,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDetailControl.xaml.cs">
       <DependentUpon>ReturnDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnLocator.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml.cs">
       <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>

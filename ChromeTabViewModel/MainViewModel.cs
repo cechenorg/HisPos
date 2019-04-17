@@ -284,11 +284,11 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = (Application.Current.FindResource("ProductPurchaseReturnLocator") as ProductPurchaseReturnLocator).ProductPurchaseReturn;
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseReturn;
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
-                    newTab = new ProductPurchaseRecordViewModel() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseRecord;
                     break;
 
                 case nameof(FeatureItem.商品類別管理):

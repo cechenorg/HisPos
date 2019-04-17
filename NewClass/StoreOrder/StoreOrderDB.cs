@@ -383,8 +383,8 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("START_DATE", searchStartDate));
-            parameters.Add(new SqlParameter("END_DATE", searchEndDate));
+            DataBaseFunction.AddSqlParameter(parameters, "START_DATE", searchStartDate);
+            DataBaseFunction.AddSqlParameter(parameters, "END_DATE", searchEndDate);
             parameters.Add(new SqlParameter("ORDER_ID", searchOrderID));
             parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
             parameters.Add(new SqlParameter("PRODUCT", searchProductID));
