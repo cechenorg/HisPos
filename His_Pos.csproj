@@ -940,10 +940,7 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml.cs">
-      <DependentUpon>ManReportControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReport.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
       <DependentUpon>PurchaseReturnReportView.xaml</DependentUpon>
     </Compile>
@@ -1484,10 +1481,6 @@
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
       <SubType>Designer</SubType>

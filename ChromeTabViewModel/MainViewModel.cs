@@ -342,7 +342,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
-                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new PurchaseReturnReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };

@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 {
-    public class PurchaseReturnReport : TabBase
+    public class PurchaseReturnReportViewModel : TabBase
     {
         public override TabBase getTab()
         {
