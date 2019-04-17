@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CashFlow;
 using His_Pos.NewClass.Report;
+using His_Pos.NewClass.Report.CashDetailReport;
 using His_Pos.NewClass.Report.CashReport;
 using His_Pos.NewClass.Report.PrescriptionDetailReport;
 using His_Pos.NewClass.Report.PrescriptionProfitReport;
@@ -51,6 +52,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => CashflowCollection, ref cashflowCollection, value);
+            }
+        }
+        private CashReport cashflowSelectedItem = new CashReport();
+        public CashReport CashflowSelectedItem
+        {
+            get => cashflowSelectedItem;
+            set
+            {
+                Set(() => CashflowSelectedItem, ref cashflowSelectedItem, value);
             }
         }
         private PrescriptionProfitReport selfPrescriptionSelectedItem;
@@ -118,6 +128,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => PrescriptionDetailReportCollection, ref prescriptionDetailReportCollection, value);
             }
         }
+        private CashDetailReports cashDetailReportCollection = new CashDetailReports();
+        public CashDetailReports CashDetailReportCollection
+        {
+            get => cashDetailReportCollection;
+            set
+            {
+                Set(() => CashDetailReportCollection, ref cashDetailReportCollection, value);
+            }
+        }
+
         private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
         public CashStockEntryReportEnum CashStockEntryReportEnum
         {
@@ -130,14 +150,25 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         #endregion
         #region Command
         public RelayCommand PrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand CashSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
             PrescriptionSelectionChangedCommand = new RelayCommand(PrescriptionSelectionChangedAction);
+            CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
             GetData(); 
         }
         #region Action
+        private void CashSelectionChangedAction() {
+            if (CashflowSelectedItem is null)
+            {
+                CashDetailReportCollection.Clear();
+                return;
+            }
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
+            CashDetailReportCollection.GetDataByDate(CashflowSelectedItem.TypeId, StartDate, EndDate); 
+        }
         private void PrescriptionSelectionChangedAction() {
             if (SelfPrescriptionSelectedItem is null) {
                 PrescriptionDetailReportCollection.Clear();
