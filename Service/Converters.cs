@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 
 namespace His_Pos.Service
 {
@@ -609,38 +611,77 @@ namespace His_Pos.Service
         }
     }
 
-    public class DateTimeToEnableMultiConverter : IMultiValueConverter
+    [ValueConversion(typeof(ObservableCollection<Appointment>), typeof(ObservableCollection<Appointment>))]
+    public class AppointmentsConverter : IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        #region IMultiValueConverter Members
+
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            DateTime date = (DateTime)values[1];
 
-            DateTime currentDay, cutoffDayBegin, cutoffDayEnd;
-            if (values[0] is DateTime && values[1] is DateTime && values[2] is DateTime)
+            ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
+            foreach (Appointment appointment in (ObservableCollection<Appointment>)values[0])
             {
-                currentDay = (DateTime) values[0];
-                cutoffDayBegin = (DateTime) values[1];
-                cutoffDayEnd = (DateTime) values[2];
-                if (DateTime.Compare(currentDay, cutoffDayBegin) >= 0 &&
-                    DateTime.Compare(currentDay, cutoffDayEnd) <= 0)
+                if (appointment.Date.Date == date)
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    appointments.Add(appointment);
                 }
             }
-            else
-            {
-                return false;
-            }
 
-
+            return appointments;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+    [ValueConversion(typeof(string), typeof(string))]
+    public class DayNameConverter : IValueConverter
+    {
+        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTimeFormatInfo dateTimeFormat = GetCurrentDateFormat();
+            string[] shortestDayNames = dateTimeFormat.ShortestDayNames;
+            string[] dayNames = dateTimeFormat.DayNames;
+
+            for (int i = 0; i < shortestDayNames.Length; i++)
+            {
+                if (shortestDayNames[i] == value.ToString())
+                {
+                    return dayNames[i];
+                }
+            }
+
             return null;
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static DateTimeFormatInfo GetCurrentDateFormat()
+        {
+            if (CultureInfo.CurrentCulture.Calendar is GregorianCalendar)
+            {
+                return CultureInfo.CurrentCulture.DateTimeFormat;
+            }
+            foreach (var cal in CultureInfo.CurrentCulture.OptionalCalendars)
+            {
+                if (cal is GregorianCalendar)
+                {
+                    var dtfi = new CultureInfo(CultureInfo.CurrentCulture.Name).DateTimeFormat;
+                    dtfi.Calendar = cal;
+                    return dtfi;
+                }
+            }
+            DateTimeFormatInfo dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
+            dt.Calendar = new GregorianCalendar();
+            return dt;
         }
     }
 }

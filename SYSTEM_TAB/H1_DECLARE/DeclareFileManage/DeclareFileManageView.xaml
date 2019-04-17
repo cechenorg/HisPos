@@ -32,7 +32,7 @@
                             <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8" />
                         </StackPanel.Background>
                         <Label Content="機構代碼 :" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10" />
-                        <ComboBox SelectedItem="{Binding }" DisplayMemberPath="ID" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                        <ComboBox  DisplayMemberPath="ID" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                   HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="120" />
                         <Button Margin="55,10,10,10" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
                     </StackPanel>
