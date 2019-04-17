@@ -8,6 +8,7 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl"
              mc:Ignorable="d" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.DataContext>
         <local:CashStockEntryReportViewModel/>
@@ -187,9 +188,14 @@
             <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="LightSkyBlue" Margin="0,45,0,0"/>
             <TextBlock Text="排除合作" FontFamily="Segoe UI Semibold" FontSize="25" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,45,0,0"/>
             <DataGrid Grid.Row="0" Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding SelfPrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
+                      ItemsSource="{Binding SelfPrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelfPrescriptionSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
                       CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False">
-                <DataGrid.Resources>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding PrescriptionSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Resources> 
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -292,8 +298,13 @@
             <Rectangle Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Fill="DarkSeaGreen" Margin="0,0,0,10"/>
             <TextBlock Text="合作" FontFamily="Segoe UI Semibold" FontSize="25" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10"/>
             <DataGrid Grid.Row="2" Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding CooperativePrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" HeadersVisibility="None"
+                      ItemsSource="{Binding CooperativePrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding SelfPrescriptionSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" HeadersVisibility="None"
                       CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding PrescriptionSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -409,7 +420,7 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource CashDetailControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding DetailSource, UpdateSourceTrigger=PropertyChanged}" Value="NAME">
+                        <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Prescription">
                             <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionDetailControl}" />
                         </DataTrigger>
                     </Style.Triggers>

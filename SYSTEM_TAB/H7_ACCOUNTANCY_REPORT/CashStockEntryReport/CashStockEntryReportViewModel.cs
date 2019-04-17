@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CashFlow;
+using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashReport;
+using His_Pos.NewClass.Report.PrescriptionDetailReport;
 using His_Pos.NewClass.Report.PrescriptionProfitReport;
 using System;
 using System.Collections.Generic;
@@ -51,6 +53,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CashflowCollection, ref cashflowCollection, value);
             }
         }
+        private PrescriptionProfitReport selfPrescriptionSelectedItem;
+        public PrescriptionProfitReport SelfPrescriptionSelectedItem
+        {
+            get => selfPrescriptionSelectedItem;
+            set
+            {
+                Set(() => SelfPrescriptionSelectedItem, ref selfPrescriptionSelectedItem, value);
+            }
+        }
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
         public PrescriptionProfitReports SelfPrescriptionProfitReportCollection
         {
@@ -98,17 +109,43 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => TotalPrescriptionProfitReport, ref totalPrescriptionProfitReport, value);
             }
         }
-
+        private PrescriptionDetailReports prescriptionDetailReportCollection = new PrescriptionDetailReports();
+        public PrescriptionDetailReports PrescriptionDetailReportCollection
+        {
+            get => prescriptionDetailReportCollection;
+            set
+            {
+                Set(() => PrescriptionDetailReportCollection, ref prescriptionDetailReportCollection, value);
+            }
+        }
+        private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
+        public CashStockEntryReportEnum CashStockEntryReportEnum
+        {
+            get => cashStockEntryReportEnum;
+            set
+            {
+                Set(() => CashStockEntryReportEnum, ref cashStockEntryReportEnum, value);
+            }
+        }
         #endregion
         #region Command
+        public RelayCommand PrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
-           
+            PrescriptionSelectionChangedCommand = new RelayCommand(PrescriptionSelectionChangedAction);
             GetData(); 
         }
         #region Action
+        private void PrescriptionSelectionChangedAction() {
+            if (SelfPrescriptionSelectedItem is null) {
+                PrescriptionDetailReportCollection.Clear();
+                return;
+            }
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            PrescriptionDetailReportCollection.GetDataByDate(SelfPrescriptionSelectedItem.TypeId,StartDate,EndDate);
+        }
         private void SearchAction() {
             GetData();
         }

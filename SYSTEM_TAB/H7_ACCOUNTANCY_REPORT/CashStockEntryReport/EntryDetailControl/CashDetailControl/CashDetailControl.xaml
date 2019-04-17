@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl.PrescriptionDetailControl"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl.CashDetailControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,9 +13,9 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="30"/>
+        <Label Grid.Row="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="30"/>
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding PrescriptionDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  ItemsSource="{Binding CashflowCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -50,7 +50,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CusName}">
+                <DataGridTextColumn Width="100" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -58,7 +58,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding InsName}">
+                <DataGridTextColumn Width="100" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -66,7 +66,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="藥服(估)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalServicePoint}">
+                <DataGridTextColumn Width="100" Header="藥服(估)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -74,7 +74,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="藥品" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalPoint}">
+                <DataGridTextColumn Width="100" Header="藥品" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -82,7 +82,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Meduse}">
+                <DataGridTextColumn Width="100" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -90,7 +90,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
+                <DataGridTextColumn Width="100" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

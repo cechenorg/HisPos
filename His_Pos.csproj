@@ -455,9 +455,16 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReport.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReport.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
+    <Compile Include="NewClass\Report\CashStockEntryReportEnum.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />

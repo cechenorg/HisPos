@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl
 {
     /// <summary>
-    /// PrescriptionDetailControl.xaml 的互動邏輯
+    /// CashDetailControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionDetailControl : UserControl
+    public partial class CashDetailControl : UserControl
     {
-        public PrescriptionDetailControl()
+        public CashDetailControl()
         {
             InitializeComponent();
-            
         }
     }
 }
