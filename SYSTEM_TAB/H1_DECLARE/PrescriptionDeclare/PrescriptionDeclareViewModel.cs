@@ -399,6 +399,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             prescription.Patient = CurrentPrescription.Patient;
             CurrentPrescription = prescription;
             CurrentPrescription.Id = 0;
+            CurrentPrescription.CheckIsCooperative();
         }
         #endregion
         #region Actions
@@ -1254,6 +1255,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case PrescriptionSource.Normal:
                 case PrescriptionSource.ChronicReserve:
+                case PrescriptionSource.XmlOfPrescription:
                     if (!InsertRegisterData())
                         return;
                     break;
@@ -1419,13 +1421,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (!CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                        CurrentPrescription.NormalAdjust(false);
-                    else
-                    {
-                        CurrentPrescription.Medicines.SetBuckle(false);
-                        CurrentPrescription.CooperativeAdjust(false);
-                    }
+                    CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
                     CurrentPrescription.Medicines.SetBuckle(false);
@@ -1433,6 +1429,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case PrescriptionSource.ChronicReserve:
                     CurrentPrescription.ChronicAdjust(false);
+                    break;
+                case PrescriptionSource.XmlOfPrescription:
+                    CurrentPrescription.Medicines.SetBuckle(CurrentPrescription.PrescriptionStatus.IsBuckle);
+                    CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
             }
             if(normal)
