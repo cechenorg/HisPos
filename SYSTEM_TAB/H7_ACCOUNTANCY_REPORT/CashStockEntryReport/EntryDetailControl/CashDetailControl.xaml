@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl"
              mc:Ignorable="d" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,8 +16,13 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="30"/>
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding CashDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False">
+                  ItemsSource="{Binding CashDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  CanUserSortColumns="False" CanUserReorderColumns="False" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding CashDetailClickCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -105,7 +111,7 @@
 
         </StackPanel>
         <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding CashflowCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  ItemsSource="{Binding CashDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -140,7 +146,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="時間" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                <DataGridTextColumn Width="100" Header="時間" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -148,7 +154,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="類別名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                <DataGridTextColumn Width="100" Header="類別名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TypeName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -156,7 +162,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding}">
+                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

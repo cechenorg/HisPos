@@ -24,5 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
         {
             InitializeComponent();
         }
+
+        
     }
 }

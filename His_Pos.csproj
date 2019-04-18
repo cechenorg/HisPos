@@ -455,6 +455,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReports.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReport.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
@@ -462,6 +465,9 @@
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
     <Compile Include="NewClass\Report\CashStockEntryReportEnum.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepotDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepots.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />

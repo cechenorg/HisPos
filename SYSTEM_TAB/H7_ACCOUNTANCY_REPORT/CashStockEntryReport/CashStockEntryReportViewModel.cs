@@ -3,8 +3,10 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CashFlow;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashDetailReport;
+using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
 using His_Pos.NewClass.Report.CashReport;
 using His_Pos.NewClass.Report.PrescriptionDetailReport;
+using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
 using His_Pos.NewClass.Report.PrescriptionProfitReport;
 using System;
 using System.Collections.Generic;
@@ -137,7 +139,34 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CashDetailReportCollection, ref cashDetailReportCollection, value);
             }
         }
-
+        private CashDetailReport cashDetailReportSelectItem;
+        public CashDetailReport CashDetailReportSelectItem
+        {
+            get => cashDetailReportSelectItem;
+            set
+            {
+                Set(() => CashDetailReportSelectItem, ref cashDetailReportSelectItem, value);
+            }
+        }
+        private CashDetailRecordReports cashDetailRecordReportCollection = new CashDetailRecordReports();
+        public CashDetailRecordReports CashDetailRecordReportCollection
+        {
+            get => cashDetailRecordReportCollection;
+            set
+            {
+                Set(() => CashDetailRecordReportCollection, ref cashDetailRecordReportCollection, value);
+            }
+        }
+        private PrescriptionDetailMedicineRepots  prescriptionDetailMedicineRepotCollection = new PrescriptionDetailMedicineRepots();
+        public PrescriptionDetailMedicineRepots PrescriptionDetailMedicineRepotCollection
+        {
+            get => prescriptionDetailMedicineRepotCollection;
+            set
+            {
+                Set(() => PrescriptionDetailMedicineRepotCollection, ref prescriptionDetailMedicineRepotCollection, value);
+            }
+        }
+        
         private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
         public CashStockEntryReportEnum CashStockEntryReportEnum
         {
@@ -152,14 +181,24 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand CashSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
+        public RelayCommand CashDetailClickCommand { get; set; }
+        public RelayCommand PrescriptionDetailClickCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
             PrescriptionSelectionChangedCommand = new RelayCommand(PrescriptionSelectionChangedAction);
             CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
+            CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
             GetData(); 
         }
         #region Action
+        private void CashDetailClickAction() {
+            if (CashDetailReportSelectItem is null) {
+                CashDetailRecordReportCollection.Clear();
+                return;
+            } 
+            CashDetailRecordReportCollection.GetDateByDate(CashDetailReportSelectItem.Id,StartDate,EndDate);
+        }
         private void CashSelectionChangedAction() {
             if (CashflowSelectedItem is null)
             {
