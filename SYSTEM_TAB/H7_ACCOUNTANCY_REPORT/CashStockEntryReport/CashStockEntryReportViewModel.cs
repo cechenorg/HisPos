@@ -233,8 +233,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
             if (PrescriptionDetailMedicineRepotSelectItem is null) return;
-            ProductDetailWindow.ShowProductDetailWindow();
-            MedicineControlViewModel medicineControlViewModel = new MedicineControlViewModel(PrescriptionDetailMedicineRepotSelectItem.Id);
         } 
         private void PrescriptionDetailDoubleClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
