@@ -130,6 +130,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => PrescriptionDetailReportCollection, ref prescriptionDetailReportCollection, value);
             }
         }
+        private PrescriptionDetailReport prescriptionDetailReportSelectItem;
+        public PrescriptionDetailReport PrescriptionDetailReportSelectItem
+        {
+            get => prescriptionDetailReportSelectItem;
+            set
+            {
+                Set(() => PrescriptionDetailReportSelectItem, ref prescriptionDetailReportSelectItem, value);
+            }
+        }
         private CashDetailReports cashDetailReportCollection = new CashDetailReports();
         public CashDetailReports CashDetailReportCollection
         {
@@ -189,9 +198,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionSelectionChangedCommand = new RelayCommand(PrescriptionSelectionChangedAction);
             CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
+            PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             GetData(); 
         }
         #region Action
+        private void PrescriptionDetailClickAction() {
+            if (PrescriptionDetailReportSelectItem is null)
+            {
+                PrescriptionDetailMedicineRepotCollection.Clear();
+                return;
+            }
+            PrescriptionDetailMedicineRepotCollection.GerDataById(PrescriptionDetailReportSelectItem.Id);
+        }
         private void CashDetailClickAction() {
             if (CashDetailReportSelectItem is null) {
                 CashDetailRecordReportCollection.Clear();
