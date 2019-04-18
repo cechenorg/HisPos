@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CashFlow;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashDetailReport;
 using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
@@ -8,6 +10,9 @@ using His_Pos.NewClass.Report.CashReport;
 using His_Pos.NewClass.Report.PrescriptionDetailReport;
 using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
 using His_Pos.NewClass.Report.PrescriptionProfitReport;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +77,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => SelfPrescriptionSelectedItem, ref selfPrescriptionSelectedItem, value);
+            }
+        }
+        private PrescriptionProfitReport cooperativePrescriptionSelectedItem;
+        public PrescriptionProfitReport CooperativePrescriptionSelectedItem
+        {
+            get => cooperativePrescriptionSelectedItem;
+            set
+            {
+                Set(() => CooperativePrescriptionSelectedItem, ref cooperativePrescriptionSelectedItem, value);
             }
         }
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
@@ -175,7 +189,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => PrescriptionDetailMedicineRepotCollection, ref prescriptionDetailMedicineRepotCollection, value);
             }
         }
-        
+        private PrescriptionDetailMedicineRepot prescriptionDetailMedicineRepotSelectItem ;
+        public PrescriptionDetailMedicineRepot PrescriptionDetailMedicineRepotSelectItem
+        {
+            get => prescriptionDetailMedicineRepotSelectItem;
+            set
+            {
+                Set(() => PrescriptionDetailMedicineRepotSelectItem, ref prescriptionDetailMedicineRepotSelectItem, value);
+            }
+        }
         private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
         public CashStockEntryReportEnum CashStockEntryReportEnum
         {
@@ -187,21 +209,42 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         #endregion
         #region Command
-        public RelayCommand PrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand CooperativePrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand CashSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand CashDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
+        public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
+        public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
-            PrescriptionSelectionChangedCommand = new RelayCommand(PrescriptionSelectionChangedAction);
+            SelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionSelectionChangedAction);
+            CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
             CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
+            PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
+            PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             GetData(); 
         }
         #region Action
+        private void PrescriptionDetailMedicineDoubleClickAction()
+        {
+            if (PrescriptionDetailMedicineRepotSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            MedicineControlViewModel medicineControlViewModel = new MedicineControlViewModel(PrescriptionDetailMedicineRepotSelectItem.Id);
+        } 
+        private void PrescriptionDetailDoubleClickAction() {
+            if (PrescriptionDetailReportSelectItem is null)
+            {
+                PrescriptionDetailMedicineRepotCollection.Clear();
+                return;
+            }
+            PrescriptionEditWindow prescriptionEditWindow = new PrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id);
+            prescriptionEditWindow.ShowDialog();
+        }
         private void PrescriptionDetailClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
             {
@@ -224,15 +267,32 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 return;
             }
             CashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
-            CashDetailReportCollection.GetDataByDate(CashflowSelectedItem.TypeId, StartDate, EndDate); 
+            CashDetailReportCollection.GetDataByDate(CashflowSelectedItem.TypeId, StartDate, EndDate);
+            CooperativePrescriptionSelectedItem = null;
+            SelfPrescriptionSelectedItem = null;
         }
-        private void PrescriptionSelectionChangedAction() {
-            if (SelfPrescriptionSelectedItem is null) {
+        private void CooperativePrescriptionSelectionChangedAction()
+        {
+          
+            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) 
                 PrescriptionDetailReportCollection.Clear();
+            if (CooperativePrescriptionSelectedItem is null)
                 return;
-            }
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            PrescriptionDetailReportCollection.GetDataByDate(CooperativePrescriptionSelectedItem.TypeId, StartDate, EndDate);
+            SelfPrescriptionSelectedItem = null;
+            CashflowSelectedItem = null;
+        }
+        private void SelfPrescriptionSelectionChangedAction() { 
+            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null)
+                PrescriptionDetailReportCollection.Clear();
+            if (SelfPrescriptionSelectedItem is null)
+                return;
+            
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
             PrescriptionDetailReportCollection.GetDataByDate(SelfPrescriptionSelectedItem.TypeId,StartDate,EndDate);
+            CooperativePrescriptionSelectedItem = null;
+            CashflowSelectedItem = null;
         }
         private void SearchAction() {
             GetData();
