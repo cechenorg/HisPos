@@ -368,6 +368,9 @@
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserve.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDb.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserves.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
