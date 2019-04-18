@@ -474,6 +474,10 @@
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrderDetail.cs" />
+    <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrderDetails.cs" />
+    <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrders.cs" />
     <Compile Include="NewClass\StoreOrder\ReturnOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
