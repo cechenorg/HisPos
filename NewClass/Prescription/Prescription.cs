@@ -1241,6 +1241,7 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
+            Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
         public string CheckSameMedicine()

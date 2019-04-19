@@ -281,7 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (search.Length < 4)
             {
-                MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "4", MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "4", MessageType.WARNING);
                 return;
             }
             if (EditedPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(EditedPrescription.Treatment.Institution.FullName) && search.Equals(EditedPrescription.Treatment.Institution.FullName))
@@ -465,6 +465,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 else
                 {
+                    if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+                        EditedPrescription.Medicines.SetBuckle(false);
                     EditedPrescription.AdjustMedicines(OriginalPrescription);
                 }
                 MainWindow.ServerConnection.CloseConnection();

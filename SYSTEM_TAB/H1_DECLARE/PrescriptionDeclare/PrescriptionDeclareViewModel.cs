@@ -1431,7 +1431,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.ChronicAdjust(false);
                     break;
                 case PrescriptionSource.XmlOfPrescription:
-                    CurrentPrescription.Medicines.SetBuckle(CurrentPrescription.PrescriptionStatus.IsBuckle);
                     CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
             }
