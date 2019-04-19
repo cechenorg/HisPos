@@ -32,7 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         {
             Appointment appointment = new Appointment();
             //appointment.MedicalPersonnel = subjectTbx.Text;
-            appointment.Date = datePicker.SelectedDate.Value;
+            //appointment.Date = datePicker.SelectedDate.Value;
 
             saveCallback(appointment);
         }

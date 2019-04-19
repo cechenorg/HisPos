@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="AppointmentWindow" Height="154" Width="300">
     <Grid>
-        <Label Height="28" Margin="2,12,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="61">Subject:</Label>
-        <Label Margin="2,46,0,42" HorizontalAlignment="Left" Width="61">Date:</Label>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <Label Height="35" Margin="10" HorizontalAlignment="Left" Width="85" FontSize="18" Content="選擇藥師:"/>
+            <ComboBox Width="120"/>
+        </StackPanel>
         <Button Height="23" Margin="110,0,93,12" VerticalAlignment="Bottom" Click="SaveBtn_Click" Background="RoyalBlue" BorderBrush="RoyalBlue">新增</Button>
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" VerticalAlignment="Bottom" Width="75" Click="CancelBtn_Click" Background="DimGray" BorderBrush="DimGray">取消</Button>
-        <TextBox Height="23" Margin="56,13,12,0" Name="subjectTbx" VerticalAlignment="Top" />
-        <my:DatePicker Margin="56,46,12,45" Name="datePicker" xmlns:my="http://schemas.microsoft.com/wpf/2008/toolkit" />
     </Grid>
 </Window>

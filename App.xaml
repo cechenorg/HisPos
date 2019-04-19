@@ -291,7 +291,7 @@
                                         <DataTemplate x:Key="DayTitleTemplate">
                                             <Grid>
                                                 <Rectangle Margin="-1" Fill="#FFE3EFFF" />
-                                                <TextBlock FontWeight="Normal" FontFamily="Arial" FontSize="10.5" 
+                                                <TextBlock FontWeight="Normal" FontFamily="Arial" FontSize="16" 
                                                            Foreground="#FF7C93D7" HorizontalAlignment="Center"
                                                            Text="{Binding Converter={StaticResource DayNameConverter}}" Margin="0,6,0,6" VerticalAlignment="Center"/>
                                             </Grid>
@@ -425,6 +425,7 @@
                                                                 </vsm:VisualStateManager.VisualStateGroups>
                                                                 <ContentPresenter x:Name="buttonContent" Content="{TemplateBinding Content}" 
                                                                                   ContentTemplate="{TemplateBinding ContentTemplate}" Margin="1,4,1,9" 
+                                                                                  TextElement.FontSize="17"
                                                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                                                     <TextElement.Foreground>
@@ -527,7 +528,7 @@
                         <Setter Property="Background" Value="#FFBADDE9"/>
                         <Setter Property="MinWidth" Value="5"/>
                         <Setter Property="MinHeight" Value="5"/>
-                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="FontSize" Value="15"/>
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         <Setter Property="VerticalContentAlignment" Value="Center"/>
                         <Setter Property="Template">
