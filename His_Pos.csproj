@@ -370,6 +370,9 @@
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserve.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDb.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetail.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetailDb.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetails.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserves.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
@@ -390,6 +393,9 @@
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
