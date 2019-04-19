@@ -393,6 +393,9 @@
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
