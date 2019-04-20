@@ -10,13 +10,12 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
     {
         public MedicineSetItem()
         {
-
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
         }
         public MedicineSetItem(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("");
-            Inventory = r.Field<double>("");
-            CostPrice = (double)r.Field<decimal>("");
             Frozen = r.Field<bool>("");
             Usage = VM.GetUsage("");
             Position = VM.GetPosition("");
@@ -67,10 +66,10 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                 if (value != null)
                 {
                     Set(() => UsageName, ref _usageName, value);
-                    Usage = ViewModelMainWindow.FindUsageByQuickName(value);
+                    Usage = VM.FindUsageByQuickName(value);
                     if (Usage is null)
                     {
-                        Usage = ViewModelMainWindow.GetUsage(value);
+                        Usage = VM.GetUsage(value);
                         Usage.Name = UsageName;
                     }
                     else
@@ -173,30 +172,6 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                 Set(() => Price, ref price, value);
             }
         }
-        private double inventory;//庫存
-        public double Inventory
-        {
-            get => inventory;
-            set
-            {
-                if (inventory != value)
-                {
-                    Set(() => Inventory, ref inventory, value);
-                }
-            }
-        }
-        private double costPrice;//成本
-        public double CostPrice
-        {
-            get => costPrice;
-            set
-            {
-                if (costPrice != value)
-                {
-                    Set(() => CostPrice, ref costPrice, value);
-                }
-            }
-        }
         private bool isPriceReadOnly;
         public bool IsPriceReadOnly
         {
@@ -236,5 +211,12 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
             }
         }
         #endregion
+
+        public void CopyPrevious(MedicineSetItem previousItem)
+        {
+            Dosage = previousItem.Dosage;
+            UsageName = previousItem.UsageName;
+            Days = previousItem.Days;
+        }
     }
 }

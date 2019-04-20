@@ -12,7 +12,10 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
 {
     public class MedicineSet:ObservableObject
     {
-        public MedicineSet() { }
+        public MedicineSet()
+        {
+            MedicineSetItems = new MedicineSetItems();
+        }
 
         public MedicineSet(DataRow r)
         {
@@ -29,13 +32,13 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                 Set(() => Name, ref name, value);
             }
         }
-        private ObservableCollection<MedicineSetItem> medicines;
-        public ObservableCollection<MedicineSetItem> Medicines
+        private MedicineSetItems medicineSetItems;
+        public MedicineSetItems MedicineSetItems
         {
-            get => medicines;
+            get => medicineSetItems;
             set
             {
-                Set(() => Medicines, ref medicines, value);
+                Set(() => MedicineSetItems, ref medicineSetItems, value);
             }
         }
         private MedicineSetItem selectedMedicine;
@@ -53,12 +56,31 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                     ((IDeletableProduct)selectedMedicine).IsSelected = true;
             }
         }
-        public void GetSetItems()
+
+        public void AddMedicine(ProductStruct p)
         {
-            var table = MedicineSetDb.GetMedicineSetDetail(ID);
-            foreach (DataRow r in table.Rows)
+            var medicine = new MedicineSetItem();
+            medicine.ID = p.ID;
+            medicine.ChineseName = p.ChineseName;
+            medicine.EnglishName = p.EnglishName;
+            medicine.NHIPrice = p.NHIPrice;
+            medicine.IsCommon = p.IsCommon;
+            medicine.Frozen = p.IsFrozen;
+            if (medicine.ID.EndsWith("00") ||
+                medicine.ID.EndsWith("G0"))
+                medicine.PositionID = "PO";
+            var selectedMedicinesIndex = MedicineSetItems.IndexOf(SelectedMedicine);
+            if (SelectedMedicine != null)
             {
-                Medicines.Add(new MedicineSetItem(r));
+                if (selectedMedicinesIndex > 0)
+                    medicine.CopyPrevious(MedicineSetItems[selectedMedicinesIndex - 1]);
+                MedicineSetItems[selectedMedicinesIndex] = medicine;
+            }
+            else
+            {
+                if (MedicineSetItems.Count > 0)
+                    medicine.CopyPrevious(MedicineSetItems[MedicineSetItems.Count - 1]);
+                MedicineSetItems.Add(medicine);
             }
         }
     }

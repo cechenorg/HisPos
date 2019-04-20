@@ -395,6 +395,7 @@
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetItem.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetItems.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetMode.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />

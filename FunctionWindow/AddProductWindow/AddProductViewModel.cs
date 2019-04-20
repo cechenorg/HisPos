@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
@@ -195,6 +196,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     break;
                 case AddProductEnum.PrescriptionEdit:
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(PrescriptionEditViewModel)));
+                    break;
+                case AddProductEnum.MedicineSetWindow:
+                    Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(MedicineSetViewModel)));
                     break;
             }
             Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));

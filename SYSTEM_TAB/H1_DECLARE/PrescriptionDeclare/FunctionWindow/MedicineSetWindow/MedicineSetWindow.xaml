@@ -10,7 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Title="藥品組合設定" Height="600" Width="1200">
+        Title="藥品組合設定" Height="600" Width="1100" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:SentinelConverter x:Key="SentinelConverter"/>
@@ -23,10 +23,10 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="組合名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,10,0"/>
-            <TextBox Width="150" Height="35" Text="{Binding CurrentSet.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Width="150" Height="35" Text="{Binding CurrentSet.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
-        <declare:MedicineDataGrid Grid.Row="1" x:Name="MedicineSetGrid" Margin="10,0,10,10" DataContext="{Binding CurrentSet,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Medicines, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" 
+        <declare:MedicineDataGrid Grid.Row="1" x:Name="MedicineSetGrid" Margin="10,0,10,10" DataContext="{Binding CurrentSet,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MedicineSetItems, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" HorizontalGridLinesBrush="Transparent"
                                   AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
                                   FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" >
             <declare:MedicineDataGrid.Resources>
@@ -162,22 +162,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn MinWidth="40" Header="成本" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
             </declare:MedicineDataGrid.Columns>
         </declare:MedicineDataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">

@@ -4,7 +4,11 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using StringRes = His_Pos.Properties.Resources;
+using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {
@@ -22,6 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         }
 
         #region Commands
+        public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand Save { get; set; }
         public RelayCommand Cancel { get; set; }
@@ -34,21 +39,76 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             {
                 Debug.Assert(setID != null, nameof(setID) + " != null");
                 CurrentSet.ID = (int)setID;
-                CurrentSet.GetSetItems();
+                CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
             }
             InitialCommands();
         }
 
         private void InitialCommands()
         {
+            AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             Save = new RelayCommand(SaveAction);
             Cancel = new RelayCommand(CancelAction);
         }
         #region CommandActions
+        private void AddMedicineAction(string medicineID)
+        {
+            if (string.IsNullOrEmpty(medicineID)) return;
+            if (medicineID.Length < 5)
+            {
+                MedicineSetItem m = new MedicineSetItem();
+                switch (medicineID)
+                {
+                    case "R001":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "處方箋遺失或毀損，提前回診";
+                        m.Amount = 0;
+                        CurrentSet.MedicineSetItems.Add(m);
+                        return;
+                    case "R002":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "醫師請假，提前回診";
+                        m.Amount = 0;
+                        CurrentSet.MedicineSetItems.Add(m);
+                        return;
+                    case "R003":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
+                        m.Amount = 0;
+                        CurrentSet.MedicineSetItems.Add(m);
+                        return;
+                    case "R004":
+                        m.ID = medicineID;
+                        m.NHIPrice = 0;
+                        m.ChineseName = "其他提前回診或慢箋提前領藥";
+                        m.Amount = 0;
+                        CurrentSet.MedicineSetItems.Add(m);
+                        return;
+                    default:
+                        MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        return;
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
+            MainWindow.ServerConnection.CloseConnection();
+            if (productCount == 0)
+                MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
+            else
+            {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+                var MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.MedicineSetWindow);
+                if (productCount > 1)
+                    MedicineWindow.ShowDialog();
+            }
+        }
         private void DeleteMedicineAction()
         {
-            CurrentSet.Medicines.Remove(CurrentSet.SelectedMedicine);
+            CurrentSet.MedicineSetItems.Remove(CurrentSet.SelectedMedicine);
         }
         private void SaveAction()
         {
@@ -62,11 +122,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         {
             Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
         }
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
+        {
+            if (msg.Notification != nameof(MedicineSetViewModel)) return;
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            CurrentSet.AddMedicine(msg.Content);
+        }
         #endregion
         #region Functions
         private bool CheckSetValid()
         {
-            if (CurrentSet.Medicines.Count == 0)
+            if (CurrentSet.MedicineSetItems.Count == 0)
             {
                 MessageWindow.ShowMessage("藥品組合不得為空",MessageType.ERROR);
                 return false;

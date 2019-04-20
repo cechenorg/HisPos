@@ -433,7 +433,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case "Get":
                     MainWindow.ServerConnection.OpenConnection();
-                    CurrentSet.GetSetItems();
+                    CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
                     CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet);
                     MainWindow.ServerConnection.CloseConnection();
                     break;

@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             var row = sender as DataGridRow;
             if (!(row?.Item is Medicine med)) return;
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<Medicine>(this, med, nameof(PrescriptionDeclareView)));
+            Messenger.Default.Send(new NotificationMessage<Medicine>(this, med, nameof(MedicineSetWindow)));
         }
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -46,7 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (MedicineSetGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = MedicineSetGrid.Items.Count;
-                (DataContext as PrescriptionDeclareViewModel)?.AddMedicine.Execute(textBox.Text);
+                (DataContext as MedicineSetViewModel)?.AddMedicine.Execute(textBox.Text);
                 textBox.Text = string.Empty;
 
                 if (MedicineSetGrid.Items.Count != itemsCount)
@@ -55,7 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             else if (MedicineSetGrid.CurrentCell.Item is Medicine med)
             {
                 if (!med.ID.Equals(textBox.Text))
-                    ((PrescriptionDeclareViewModel)DataContext).AddMedicine.Execute(textBox.Text);
+                    ((MedicineSetViewModel)DataContext).AddMedicine.Execute(textBox.Text);
 
                 var textBoxList = new List<TextBox>();
                 NewFunction.FindChildGroup(MedicineSetGrid, "MedicineID", ref textBoxList);

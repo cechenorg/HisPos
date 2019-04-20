@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
     {
         public MedicineSets()
         {
-            Init();
+            //Init();
         }
         public void Init()
         {
