@@ -6,6 +6,7 @@ using System.Threading;
 using His_Pos.Interface;
 using His_Pos.Service;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -90,6 +91,13 @@ namespace His_Pos.NewClass.Product.Medicine
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
                     break;
             }
+        }
+        public Medicine(MedicineSetItem m) : base(m)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            Price = m.Price;
+            NHIPrice = m.NHIPrice;
         }
         private double amount;//總量
         public double Amount

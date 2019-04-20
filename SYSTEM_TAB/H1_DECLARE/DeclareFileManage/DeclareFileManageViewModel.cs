@@ -178,7 +178,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MainWindow.ServerConnection.OpenConnection();
             var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            var prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
+            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
             prescriptionEdit.ShowDialog();
         }
         private void SetDecFilePreViewSummaryAction()

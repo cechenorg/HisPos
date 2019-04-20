@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -49,6 +50,8 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -79,6 +82,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionCases PrescriptionCases { get; set; }
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
+        private MedicineSets medicineSets;
+        public MedicineSets MedicineSets
+        {
+            get => medicineSets;
+            set
+            {
+                Set(() => MedicineSets, ref medicineSets, value);
+            }
+        }
         #endregion
         private PrescriptionDeclareStatus declareStatus;
         public PrescriptionDeclareStatus DeclareStatus
@@ -234,6 +246,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode { get; set; }
+        private MedicineSet currentSet;
+        public MedicineSet CurrentSet
+        {
+            get => currentSet;
+            set
+            {
+                Set(() => CurrentSet, ref currentSet, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -262,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand DivisionSelectionChanged { get; set; }
         public RelayCommand SelfPayTextChanged { get; set; }
         public RelayCommand CopyPrescription { get; set; }
+        public RelayCommand<string> EditMedicineSet { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -306,6 +328,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescriptionCases = VM.PrescriptionCases;
             Copayments = VM.Copayments;
             SpecialTreats = VM.SpecialTreats;
+            MainWindow.ServerConnection.OpenConnection();
+            MedicineSets = new MedicineSets();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void InitialCommandActions()
         {
@@ -335,8 +360,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
+            EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
         }
-
         private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
@@ -400,6 +425,52 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription = prescription;
             CurrentPrescription.Id = 0;
             CurrentPrescription.CheckIsCooperative();
+        }
+        private void EditMedicineSetAction(string mode)
+        {
+            MedicineSetWindow medicineSetWindow;
+            switch (mode)
+            {
+                case "Get":
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentSet.GetSetItems();
+                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet);
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+                case "Add":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
+                    medicineSetWindow.ShowDialog();
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+                case "Edit":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit,CurrentSet.ID);
+                    medicineSetWindow.ShowDialog();
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+                case "Delete":
+                    var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:"+ CurrentSet.Name,"");
+                    Debug.Assert(deleteConfirm.DialogResult != null, "deleteConfirm.DialogResult != null");
+                    if ((bool)deleteConfirm.DialogResult)
+                    {
+                        MainWindow.ServerConnection.OpenConnection();
+                        MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
+                        MedicineSets = new MedicineSets();
+                        MainWindow.ServerConnection.CloseConnection();
+                    }
+                    break;
+            }
+        }
+        private void AddMedicineSetAction()
+        {
+            var medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
+            medicineSetWindow.ShowDialog();
+            MainWindow.ServerConnection.OpenConnection();
+            MedicineSets = new MedicineSets();
+            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Actions

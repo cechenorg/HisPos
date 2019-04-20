@@ -477,14 +477,14 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="32" />
-                            <RowDefinition />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
+                        <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal" >
                             <RadioButton GroupName="CusHistoryGroup" Content="調劑" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" FontSize="14"/>
                         </StackPanel>
                         <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged}" CanUserReorderColumns="False"
-                              ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="258" VerticalAlignment="Bottom">
+                              ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="250" VerticalAlignment="Bottom">
                             <DataGrid.Resources>
                                 <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                             </DataGrid.Resources>
@@ -568,6 +568,14 @@
                         </DataGrid>
                     </Grid>
                     <StackPanel Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource GridDarkerBackGround}">
+                        <StackPanel Orientation="Horizontal" Height="40" Background="{StaticResource GridBackGround}">
+                            <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="10,0,10,0"/>
+                            <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="代入" BorderBrush="Transparent" Background="DarkCyan" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Get"/>
+                            <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
+                            <Button Content="編輯" BorderBrush="Transparent" Background="IndianRed" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
+                            <Button Content="刪除" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Delete"/>
+                        </StackPanel>
                         <DataGrid x:Name="CusHistoryDetail" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
                                   ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"
                                   CanUserReorderColumns="False">

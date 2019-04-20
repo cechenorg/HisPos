@@ -393,8 +393,10 @@
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetItem.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetMode.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
@@ -581,6 +583,10 @@
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\ViewModelEnum.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicineSetWindow\MedicineSetViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicineSetWindow\MedicineSetWindow.xaml.cs">
+      <DependentUpon>MedicineSetWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicinesSendSingdeWindow\MedicinesSendSingdeWindow.xaml.cs">
       <DependentUpon>MedicinesSendSingdeWindow.xaml</DependentUpon>
@@ -1219,6 +1225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedicineSetWindow\MedicineSetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

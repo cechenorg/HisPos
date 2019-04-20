@@ -144,5 +144,13 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+
+        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet)
+        {
+            foreach (var m in currentSet.Medicines)
+            {
+                Add(new Medicine(m));
+            }
+        }
     }
 }
