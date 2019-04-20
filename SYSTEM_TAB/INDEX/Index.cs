@@ -8,6 +8,7 @@ using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.Product.ProductDaliyPurchase;
 using His_Pos.NewClass.StoreOrder;
 using System;
+using System.Collections.Generic;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -85,19 +86,58 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #endregion
         #region Command
         public RelayCommand ReserveSearchCommand { get; set; }
+        public RelayCommand ReserveMedicineSendCommand { get; set; }
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
+        public RelayCommand SetPhoneCallNoCommand { get; set; }
+        public RelayCommand SetPhoneCallYesCommand { get; set; }
+        public RelayCommand SetPrepareMedNoCommand { get; set; }
         #endregion
         public Index() {
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
             IndexReserveSelectionChangedCommand = new RelayCommand(IndexReserveSelectionChangedAction);
+            SetPhoneCallNoCommand = new RelayCommand(SetPhoneCallNoAction);
+            SetPhoneCallYesCommand = new RelayCommand(SetPhoneCallYesAction);
+            SetPrepareMedNoCommand = new RelayCommand(SetPrepareMedNoAction);
+            ReserveMedicineSendCommand = new RelayCommand(ReserveMedicineSendAction);
         }
         #region Action
+        private void ReserveMedicineSendAction()
+        {
+            List<int> idList = new List<int>();
+            foreach (var r in IndexReserveCollection) {
+                if (r.IsSend)
+                {
+                    idList.Add(r.Id);
+                    r.PrepareStatus = "D";
+                } 
+            } 
+            StoreOrderDB.StoreOrderReserveByResIDList(idList);
+            MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認",MessageType.SUCCESS);
+            IndexReserveCollection.GetDataByDate(StartDate, EndDate,IsShowUnPhoneCall,IsShowUnPrepareReserve);
+        }
+        private void SetPhoneCallNoAction() {
+            if (IndexReserveSelectedItem is null) return;
+            IndexReserveSelectedItem.PhoneCallStatus = "F";
+            IndexReserveSelectedItem.SaveStatus();
+            IndexReserveCollection.Remove(IndexReserveSelectedItem);
+        }
+        private void SetPhoneCallYesAction() {
+            if (IndexReserveSelectedItem is null) return;
+            IndexReserveSelectedItem.PhoneCallStatus = "D";
+            IndexReserveSelectedItem.SaveStatus();
+        }
+        private void SetPrepareMedNoAction() {
+            if (IndexReserveSelectedItem is null) return;
+            IndexReserveSelectedItem.PrepareStatus = "F";
+            IndexReserveSelectedItem.SaveStatus();
+            IndexReserveCollection.Remove(IndexReserveSelectedItem);
+        }
         private void IndexReserveSelectionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
         }
         private void ReserveSearchAction() {
-            IndexReserveCollection.GetDataByDate(StartDate, EndDate);
+            IndexReserveCollection.GetDataByDate(StartDate, EndDate, IsShowUnPhoneCall, IsShowUnPrepareReserve);
         }
         #endregion
     }

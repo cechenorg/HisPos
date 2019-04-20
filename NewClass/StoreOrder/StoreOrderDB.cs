@@ -49,6 +49,23 @@ namespace His_Pos.NewClass.StoreOrder
             detailTable.Columns.Add("StoOrdDet_Invoice", typeof(string));
             return detailTable;
         }
+        private static DataTable IDTable()
+        {
+            DataTable idTable = new DataTable();
+            idTable.Columns.Add("ID", typeof(int));
+            return idTable;
+        }
+        public static DataTable SetIDTable(List<int> IDList)
+        {
+            DataTable table = IDTable();
+            foreach (int id in IDList)
+            {
+                DataRow newRow = table.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                table.Rows.Add(newRow);
+            }
+            return table;
+        }
         private static string GetOrderStatus(OrderStatusEnum OrderStatus)
         {
             switch (OrderStatus)
@@ -571,11 +588,15 @@ namespace His_Pos.NewClass.StoreOrder
         internal static void DailyProductsReturn()
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnByDailyCondition]", parameters);
         }
-
-
+        internal static void StoreOrderReserveByResIDList(List<int>IDList)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("IDList", SetIDTable(IDList))); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
+        } 
     }
 }
