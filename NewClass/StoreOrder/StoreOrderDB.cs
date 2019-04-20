@@ -50,6 +50,7 @@ namespace His_Pos.NewClass.StoreOrder
             detailTable.Columns.Add("StoOrdDet_Invoice", typeof(string));
             return detailTable;
         }
+
         private static string GetOrderStatus(OrderStatusEnum OrderStatus)
         {
             switch (OrderStatus)
@@ -604,6 +605,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
+        }
+        internal static void UpdateManufactoryTaxFlag(int manufactoryID, bool includeTax)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TAX_FLAG", includeTax));
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryTaxFlag]", parameters);
         }
     }
 }

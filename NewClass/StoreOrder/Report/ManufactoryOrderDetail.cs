@@ -55,7 +55,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
                 UnTaxPrice = TaxPrice * 100 / 105;
 
-                Tax = TaxPrice * 5 / 100;
+                Tax = UnTaxPrice * 5 / 100;
             }
             else
             {

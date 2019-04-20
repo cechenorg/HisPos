@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
         }
         private void SaveTaxFlag()
         {
-
+            StoreOrderDB.UpdateManufactoryTaxFlag(ManufactoryID, IncludeTax);
         }
         #endregion
     }
