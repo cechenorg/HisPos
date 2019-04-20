@@ -235,7 +235,7 @@ namespace His_Pos.NewClass.Prescription
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SourceId", Id);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]");
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]", parameterList);
         }
         public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
