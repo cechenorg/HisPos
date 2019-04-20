@@ -41,6 +41,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; private set; }
         public int BasicAmount { get; private set; }
         public double OnTheWayAmount { get; private set; }
+        public double MedBagOnTheWayAmount { get; private set; }
         public double LastPrice { get; private set; }
         public double OrderAmount
         {
@@ -116,6 +117,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = dataRow.Field<double>("Inv_OnTheWay");
+            MedBagOnTheWayAmount = dataRow.Field<double>("Inv_MedBagOnTheWay");
             LastPrice = (double)dataRow.Field<decimal>("Pro_LastPrice");
             UnitName = dataRow.Field<string>("StoOrdDet_UnitName");
             UnitAmount = dataRow.Field<double>("StoOrdDet_UnitAmount");
