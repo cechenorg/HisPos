@@ -47,12 +47,12 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Label Content="供應商" FontSize="25" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="20,0,0,0"/>
-            <TextBox Width="150" FontSize="25" FontFamily="Segoe UI Semi" Margin="10,0,0,5"/>
+            <TextBox Text="{Binding ManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" FontSize="25" FontFamily="Segoe UI Semi" Margin="10,0,0,5"/>
             <Button Width="120" Command="{Binding SearchCommand}" Margin="590,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
         <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}"
-                      SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding ManufactoryOrderCollection}"
+                      SelectedItem="{Binding CurrentManufactoryOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="Transparent"/>
@@ -82,12 +82,12 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <Label Content="{Binding}" Grid.Row="0" FontSize="25" FontFamily="Segoe UI Semibold"/>
+                                <Label Content="{Binding ManufactoryName}" Grid.Row="0" FontSize="25" FontFamily="Segoe UI Semibold"/>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     <Label Content="訂單數量" FontSize="25" FontFamily="Segoe UI Semibold"/>
-                                    <Label Content="{Binding}" FontSize="25" FontFamily="Segoe UI Semibold"/>
+                                    <Label Content="{Binding PurchaseCount}" FontSize="25" FontFamily="Segoe UI Semibold"/>
                                     <Label Content="總金額" FontSize="25" FontFamily="Segoe UI Semibold"/>
-                                    <Label Content="{Binding}" FontSize="25" FontFamily="Segoe UI Semibold"/>
+                                    <Label Content="{Binding PurchasePrice, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semibold"/>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -103,9 +103,9 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                 <Label Content="訂單計價規則" FontSize="25" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
-                <RadioButton Content="未稅" FontSize="25" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="10,0,0,0" IsChecked="True"/>
-                <RadioButton Content="含稅" FontSize="25" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
-                <Button Content="結果輸出 CSV" FontFamily="Segoe UI Semibold" BorderThickness="0" Margin="585,0,0,0" Background="IndianRed"/>
+                <RadioButton Content="未稅" FontSize="25" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="10,0,0,0" IsChecked="True" Command="{Binding ChangeTaxFlagCommand}" CommandParameter="U"/>
+                <RadioButton Content="含稅" FontSize="25" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="10,0,0,0" Command="{Binding ChangeTaxFlagCommand}" CommandParameter="T"/>
+                <Button Content="結果輸出 CSV" FontFamily="Segoe UI Semibold" BorderThickness="0" Margin="585,0,0,0" Background="IndianRed" Command="{Binding ExportCSVCommand}"/>
             </StackPanel>
             <DataGrid Grid.Row="1" Grid.Column="0" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
