@@ -1,6 +1,8 @@
 ﻿using System;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder.Report;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
@@ -21,16 +23,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         #region ----- Define Variables -----
 
         #region ///// Search Variables /////
-        private DateTime startDate;
-        private DateTime endDate;
-        private string manufactoryName;
+        private DateTime? startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        private DateTime? endDate = DateTime.Today;
+        private string manufactoryName = "";
 
-        public DateTime StartDate
+        public DateTime? StartDate
         {
             get { return startDate; }
             set { Set(() => StartDate, ref startDate, value); }
         }
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
@@ -45,6 +47,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         private ManufactoryOrders manufactoryOrderCollection;
         private ManufactoryOrder currentManufactoryOrder;
 
+        private DateTime SearchStartDate { get; set; }
+        private DateTime SearchEndDate { get; set; }
         public ManufactoryOrders ManufactoryOrderCollection
         {
             get { return manufactoryOrderCollection; }
@@ -56,7 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             set
             {
                 MainWindow.ServerConnection.OpenConnection();
-                value?.GetOrderDetails();
+                value?.GetOrderDetails(SearchStartDate, SearchEndDate);
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentManufactoryOrder, ref currentManufactoryOrder, value);
             }
@@ -76,6 +80,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             MainWindow.ServerConnection.OpenConnection();
             ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, ManufactoryName);
             MainWindow.ServerConnection.CloseConnection();
+
+            SearchStartDate = (DateTime)StartDate;
+            SearchEndDate = (DateTime)EndDate;
         }
         private void ChangeTaxFlagAction(string taxFlag)
         {
@@ -98,7 +105,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         }
         private bool IsSearchConditionValid()
         {
-            return false;
+            if (StartDate is null || EndDate is null)
+            {
+                MessageWindow.ShowMessage("查詢時間為必填欄位!", MessageType.ERROR);
+                return false;
+            }
+
+            if (EndDate < StartDate)
+            {
+                MessageWindow.ShowMessage("起始日期大於終結日期!", MessageType.ERROR);
+                return false;
+            }
+            
+            return true;
         }
         #endregion
     }

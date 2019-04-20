@@ -30,6 +30,7 @@ namespace His_Pos.NewClass.StoreOrder
             masterTable.Columns.Add("StoOrd_IsEnable", typeof(bool));
             return masterTable;
         }
+
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -586,7 +587,23 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnByDailyCondition]", parameters);
         }
+        internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", startDate));
+            parameters.Add(new SqlParameter("EDATE", endDate));
+            parameters.Add(new SqlParameter("MAN_NAME", manufactoryName));
 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
+        }
+        internal static DataTable GetManufactoryOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", searchStartDate));
+            parameters.Add(new SqlParameter("EDATE", searchEndDate));
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
+        }
     }
 }

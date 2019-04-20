@@ -10,7 +10,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
     public class ManufactoryOrder
     {
         #region ----- Define Variables -----
-        public string ManufactoryID { get; set; }
+        public int ManufactoryID { get; set; }
         public string ManufactoryName { get; set; }
         public int PurchaseCount { get; set; }
         public double PurchasePrice { get; set; }
@@ -22,19 +22,19 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
         public ManufactoryOrder(DataRow dataRow)
         {
-            ManufactoryID = dataRow.Field<string>("");
-            ManufactoryName = dataRow.Field<string>("");
-            PurchaseCount = dataRow.Field<int>("");
-            PurchasePrice = (double)dataRow.Field<decimal>("");
-            ReturnCount = dataRow.Field<int>("");
-            ReturnPrice = (double)dataRow.Field<decimal>("");
-            IncludeTax = dataRow.Field<bool>("");
+            ManufactoryID = dataRow.Field<int>("Man_ID");
+            ManufactoryName = dataRow.Field<string>("Man_Name");
+            PurchaseCount = dataRow.Field<int>("PURCHASE_COUNT");
+            PurchasePrice = (double)dataRow.Field<decimal>("PURCHASE_PRICE");
+            ReturnCount = dataRow.Field<int>("RETURN_COUNT");
+            ReturnPrice = (double)dataRow.Field<decimal>("RETURN_PRICE");
+            IncludeTax = dataRow.Field<bool>("Man_IncludeTax");
         }
 
         #region ----- Define Functions -----
-        public void GetOrderDetails()
+        public void GetOrderDetails(DateTime searchStartDate, DateTime searchEndDate)
         {
-            OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID);
+            OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate);
         }
         public void ChangeIncludeTaxFlag(bool taxFlag)
         {
