@@ -28,8 +28,8 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>65</ApplicationRevision>
-    <ApplicationVersion>2.0.4.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>2.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -368,6 +368,12 @@
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserve.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDb.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetail.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetailDb.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetails.cs" />
+    <Compile Include="NewClass\Prescription\IndexReserve\IndexReserves.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
@@ -387,6 +393,9 @@
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
@@ -455,9 +464,28 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReports.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReport.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
+    <Compile Include="NewClass\Report\CashReport\CashReport.cs" />
+    <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
+    <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
+    <Compile Include="NewClass\Report\CashStockEntryReportEnum.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepotDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepots.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
@@ -916,6 +944,12 @@
       <DependentUpon>CashStockEntryReport.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReportViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml.cs">
+      <DependentUpon>CashDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml.cs">
+      <DependentUpon>PrescriptionDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -1468,6 +1502,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1751,7 +1793,6 @@
     <Folder Include="Class\Position\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
-    <Folder Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

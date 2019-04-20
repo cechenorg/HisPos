@@ -62,6 +62,7 @@ namespace His_Pos.NewClass.Prescription {
             }
         }
         public bool IsPrescribe { get; set; }
+        public bool IsBuckle { get; set; }
         public void Init()
         {
             IsGetCard = false;
@@ -76,6 +77,7 @@ namespace His_Pos.NewClass.Prescription {
             IsPrescribe = false;
             IsDeposit = false;
             IsCooperative = false;
+            IsBuckle = true;
         }
 
         public void UpdateStatus(int id)

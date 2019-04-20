@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using His_Pos.NewClass.Product.Medicine;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Product
 {
@@ -7,7 +8,7 @@ namespace His_Pos.NewClass.Product
         public PrescriptionSendDatas() { }
         public void ConvertMedToSendData(Medicine.Medicines ms) {
             foreach (Medicine.Medicine m in ms) {
-                if(!string.IsNullOrEmpty(m.ID))
+                if(!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC) )
                 Add(new PrescriptionSendData(m));
             } 
         }

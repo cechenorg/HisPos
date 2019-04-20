@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
-using His_Pos.FunctionWindow;
-
+using His_Pos.FunctionWindow;  
+ 
 namespace His_Pos
 {
     /// <summary>

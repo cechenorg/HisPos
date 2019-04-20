@@ -1170,6 +1170,25 @@ namespace His_Pos.NewClass.Prescription
             if (noCard)
                 ProcessDepositCashFlow("押金");
         }
+        public void XmlOfPrescriptionAdjust(bool noCard)
+        {
+            if (Id == 0)
+                Id = InsertPrescription();
+            else
+                Update();
+            if (Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
+                AdjustPredictReserve();
+            if (PrescriptionStatus.IsBuckle)
+            {
+                var buckleValue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
+                ProcessMedicineUseEntry(buckleValue);
+            }
+            ProcessCopaymentCashFlow("部分負擔");
+            ProcessSelfPayCashFlow("自費");
+            if (noCard)
+                ProcessDepositCashFlow("押金");
+            UpdateXmfOfPrescriptionStatus();
+        }
 
         public void NormalRegister()
         {
@@ -1191,15 +1210,38 @@ namespace His_Pos.NewClass.Prescription
         public void Prescribe()
         {
             Id = InsertPrescription();
-            var bucklevalue = ProcessInventory("自費調劑", "PreMasId", Id.ToString());
-            ProcessMedicineUseEntry(bucklevalue);
+            if (PrescriptionStatus.IsBuckle)
+            {
+                var bucklevalue = ProcessInventory("自費調劑", "PreMasId", Id.ToString());
+                ProcessMedicineUseEntry(bucklevalue);
+            }
             ProcessSelfPayCashFlow("自費調劑");
         }
 
         public void CheckIsCooperative()
         {
-            if(Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID))
-                PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);
+            if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
+            {
+                PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
+                if (PrescriptionStatus.IsCooperative)
+                {
+                    PrescriptionStatus.IsBuckle = false;
+                    Source = PrescriptionSource.Cooperative;//來源骨科
+                }
+                else
+                {
+                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
+                    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
+                    Source = PrescriptionSource.XmlOfPrescription;//來源其他合作診所
+                }
+            }
+            else//非合作診所
+            {
+                PrescriptionStatus.IsBuckle = true;
+                if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
+                    Source = PrescriptionSource.Normal;
+            }
+            Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
         public string CheckSameMedicine()
@@ -1242,6 +1284,10 @@ namespace His_Pos.NewClass.Prescription
         public void UpdateDeclareContent()
         {
             PrescriptionDb.UpdateDeclareContent(Id,DeclareContent);
+        }
+        public void UpdateXmfOfPrescriptionStatus()
+        {
+            PrescriptionDb.UpdateXmfOfPrescriptionStatus(SourceId);
         }
     }
 }
