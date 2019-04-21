@@ -59,7 +59,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                 DataRow newRow = medicineSetDetailTable.NewRow(); 
                 DataBaseFunction.AddColumnValue(newRow, "MedSetDet_ID", ID);
                 DataBaseFunction.AddColumnValue(newRow, "MedSetDet_MedicineID", m.ID);
-                DataBaseFunction.AddColumnValue(newRow, "MedSetDet_Dossage", m.Dosage);
+                DataBaseFunction.AddColumnValue(newRow, "MedSetDet_Dosage", m.Dosage);
                 DataBaseFunction.AddColumnValue(newRow, "MedSetDet_Usage", m.UsageName);
                 DataBaseFunction.AddColumnValue(newRow, "MedSetDet_Position", m.Position.ID);
                 DataBaseFunction.AddColumnValue(newRow, "MedSetDet_MedicineDays", m.Days);
