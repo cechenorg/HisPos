@@ -122,16 +122,25 @@ namespace His_Pos.NewClass.Product.Medicine
         {
             foreach (var m in Items)
             {
-                if (m is MedicineNHI || m is MedicineOTC || m is MedicineSpecialMaterial)
+                switch (m)
                 {
-                    if (!b)
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        if (!b)
+                            m.BuckleAmount = 0;
+                        else
+                        {
+                            m.BuckleAmount = m.Amount;
+                        }
+                        m.IsBuckle = b;
+                        break;
+                    }
+                    case MedicineVirtual _:
                         m.BuckleAmount = 0;
-                    m.IsBuckle = b;
-                }
-                if (m is MedicineVirtual)
-                {
-                    m.BuckleAmount = 0;
-                    m.IsBuckle = false;
+                        m.IsBuckle = false;
+                        break;
                 }
             }
         }

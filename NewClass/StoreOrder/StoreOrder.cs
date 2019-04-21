@@ -167,17 +167,22 @@ namespace His_Pos.NewClass.StoreOrder
             SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
 
+            DataTable result = new DataTable();
+
             switch (OrderType)
             {
                 case OrderTypeEnum.PURCHASE:
-                    StoreOrderDB.PurchaseStoreOrderToDone(ID);
+                    result = StoreOrderDB.PurchaseStoreOrderToDone(ID);
                     break;
                 case OrderTypeEnum.RETURN:
-                    StoreOrderDB.ReturnStoreOrderToDone(ID);
+                    result = StoreOrderDB.ReturnStoreOrderToDone(ID);
                     break;
             }
 
-            MessageWindow.ShowMessage("已完成"+ (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
+            if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+            else
+                MessageWindow.ShowMessage("已完成" + (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         #endregion
 

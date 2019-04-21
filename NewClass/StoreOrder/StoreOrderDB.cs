@@ -30,6 +30,7 @@ namespace His_Pos.NewClass.StoreOrder
             masterTable.Columns.Add("StoOrd_IsEnable", typeof(bool));
             return masterTable;
         }
+
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -48,6 +49,23 @@ namespace His_Pos.NewClass.StoreOrder
             detailTable.Columns.Add("StoOrdDet_FreeAmount", typeof(int));
             detailTable.Columns.Add("StoOrdDet_Invoice", typeof(string));
             return detailTable;
+        }
+        private static DataTable IDTable()
+        {
+            DataTable idTable = new DataTable();
+            idTable.Columns.Add("ID", typeof(int));
+            return idTable;
+        }
+        public static DataTable SetIDTable(List<int> IDList)
+        {
+            DataTable table = IDTable();
+            foreach (int id in IDList)
+            {
+                DataRow newRow = table.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                table.Rows.Add(newRow);
+            }
+            return table;
         }
         private static string GetOrderStatus(OrderStatusEnum OrderStatus)
         {
@@ -383,8 +401,8 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("START_DATE", searchStartDate));
-            parameters.Add(new SqlParameter("END_DATE", searchEndDate));
+            DataBaseFunction.AddSqlParameter(parameters, "START_DATE", searchStartDate);
+            DataBaseFunction.AddSqlParameter(parameters, "END_DATE", searchEndDate);
             parameters.Add(new SqlParameter("ORDER_ID", searchOrderID));
             parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
             parameters.Add(new SqlParameter("PRODUCT", searchProductID));
@@ -437,6 +455,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", returnOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
+            DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
 
@@ -447,6 +467,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", purchaseOrder.ID));
+            DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
+            DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
 
@@ -469,13 +491,13 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-        internal static void PurchaseStoreOrderToDone(string storeOrderID)
+        internal static DataTable PurchaseStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
         }
         internal static void StoreOrderToNormalProcessing(string storeOrderID)
         {
@@ -484,13 +506,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
         }
-        internal static void ReturnStoreOrderToDone(string storeOrderID)
+        internal static DataTable ReturnStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
         }
 
         internal static void StoreOrderToScrap(string storeOrderID)
@@ -516,6 +538,8 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
+            string cusName = "";
+            string planDate = "";
 
             if (storeOrder is PurchaseOrder)
             {
@@ -534,6 +558,11 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += product.Note;
                     orderMedicines += "\r\n";
                 }
+
+                cusName = ((PurchaseOrder) storeOrder).PreOrderCustomer;
+
+                if (((PurchaseOrder) storeOrder).PlanArriveDate != null)
+                    planDate = (((PurchaseOrder) storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
@@ -554,7 +583,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}', '{storeOrder.Note}', '{orderMedicines}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
         }
 
         internal static DataTable GetNewSingdeOrders()
@@ -571,11 +600,47 @@ namespace His_Pos.NewClass.StoreOrder
         internal static void DailyProductsReturn()
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnByDailyCondition]", parameters);
         }
+        internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", startDate));
+            parameters.Add(new SqlParameter("EDATE", endDate));
+            parameters.Add(new SqlParameter("MAN_NAME", manufactoryName));
 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
+        }
+        internal static DataTable GetManufactoryOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", searchStartDate));
+            parameters.Add(new SqlParameter("EDATE", searchEndDate));
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
+        }
+        internal static void UpdateManufactoryTaxFlag(int manufactoryID, bool includeTax)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TAX_FLAG", includeTax));
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryTaxFlag]", parameters);
+        }
+        internal static void StoreOrderReserveByResIDList(List<int>IDList)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("IDList", SetIDTable(IDList))); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
+        }
+        internal static void StoreOrderCommonMedicine()
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
+        }
     }
 }

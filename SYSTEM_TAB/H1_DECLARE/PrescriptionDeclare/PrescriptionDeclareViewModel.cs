@@ -376,11 +376,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
         {
             if (SelectedHistory is null || !msg.Notification.Equals(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow")) return;
-            MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedHistory.GetPrescriptionByID();
-            MainWindow.ServerConnection.CloseConnection();
-            prescription.Source = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
-            var prescriptionEdit = new PrescriptionEditWindow(prescription, ViewModelEnum.PrescriptionDeclare);
+            var pSource = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
+            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             prescriptionEdit.ShowDialog();
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
@@ -402,6 +399,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             prescription.Patient = CurrentPrescription.Patient;
             CurrentPrescription = prescription;
             CurrentPrescription.Id = 0;
+            CurrentPrescription.CheckIsCooperative();
         }
         #endregion
         #region Actions
@@ -1257,6 +1255,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case PrescriptionSource.Normal:
                 case PrescriptionSource.ChronicReserve:
+                case PrescriptionSource.XmlOfPrescription:
                     if (!InsertRegisterData())
                         return;
                     break;
@@ -1422,13 +1421,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (!CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                        CurrentPrescription.NormalAdjust(false);
-                    else
-                    {
-                        CurrentPrescription.Medicines.SetBuckle(false);
-                        CurrentPrescription.CooperativeAdjust(false);
-                    }
+                    CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
                     CurrentPrescription.Medicines.SetBuckle(false);
@@ -1436,6 +1429,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case PrescriptionSource.ChronicReserve:
                     CurrentPrescription.ChronicAdjust(false);
+                    break;
+                case PrescriptionSource.XmlOfPrescription:
+                    CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
             }
             if(normal)

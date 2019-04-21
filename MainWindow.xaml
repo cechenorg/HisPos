@@ -119,7 +119,7 @@
         <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
             <entrySearch:EntrySearchView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReport}">
+        <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
             <purchaseReturnReport:PurchaseReturnReportView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeAdjustReport:CooperativeAdjustReport}">

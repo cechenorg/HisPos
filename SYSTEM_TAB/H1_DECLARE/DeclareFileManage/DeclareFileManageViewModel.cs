@@ -194,12 +194,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void ShowPrescriptionEditWindowAction()
         {
             if (SelectedFile.SelectedPrescription is null) return;
-            MainWindow.ServerConnection.OpenConnection();
-            Prescription selected =
-                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedFile.SelectedPrescription.ID).Rows[0],
-                    PrescriptionSource.Normal);
-            MainWindow.ServerConnection.CloseConnection();
-            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
+            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(SelectedFile.SelectedPrescription.ID);
             prescriptionEdit.ShowDialog();
         }
         private void SetDecFilePreViewSummaryAction()

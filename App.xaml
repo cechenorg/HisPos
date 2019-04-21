@@ -16,9 +16,6 @@
                     <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>
-                    <productPurchaseReturn:ProductPurchaseReturnLocator x:Key="ProductPurchaseReturnLocator" d:IsDataSource="True" />
-                </ResourceDictionary>
-                <ResourceDictionary>
                     <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="Transparent" />
