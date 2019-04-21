@@ -475,17 +475,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
                         MedicineSets = new MedicineSets();
                         MainWindow.ServerConnection.CloseConnection();
+                        MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
                     }
                     break;
             }
-        }
-        private void AddMedicineSetAction()
-        {
-            var medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
-            medicineSetWindow.ShowDialog();
-            MainWindow.ServerConnection.OpenConnection();
-            MedicineSets = new MedicineSets();
-            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Actions
