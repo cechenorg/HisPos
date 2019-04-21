@@ -428,6 +428,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void EditMedicineSetAction(string mode)
         {
+            if (CurrentSet is null && !mode.Equals("Add"))
+            {
+                MessageWindow.ShowMessage("尚未選擇藥品組合",MessageType.ERROR);
+                return;
+            }
             MedicineSetWindow medicineSetWindow;
             switch (mode)
             {
@@ -440,16 +445,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "Add":
                     medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
                     medicineSetWindow.ShowDialog();
-                    MainWindow.ServerConnection.OpenConnection();
-                    MedicineSets = new MedicineSets();
-                    MainWindow.ServerConnection.CloseConnection();
                     break;
                 case "Edit":
-                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit,CurrentSet.ID);
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit,CurrentSet);
                     medicineSetWindow.ShowDialog();
+                    var tempID = CurrentSet.ID;
                     MainWindow.ServerConnection.OpenConnection();
                     MedicineSets = new MedicineSets();
                     MainWindow.ServerConnection.CloseConnection();
+                    CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
                     break;
                 case "Delete":
                     var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:"+ CurrentSet.Name,"");

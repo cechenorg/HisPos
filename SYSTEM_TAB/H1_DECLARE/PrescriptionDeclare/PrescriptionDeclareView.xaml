@@ -570,7 +570,7 @@
                     <StackPanel Grid.Column="1" Margin="0,0,10,0" Background="{StaticResource GridDarkerBackGround}">
                         <StackPanel Orientation="Horizontal" Height="40" Background="{StaticResource GridBackGround}">
                             <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="10,0,10,0"/>
-                            <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="18" FontFamily="Segoe UI SemiBold" HorizontalContentAlignment="Center"/>
                             <Button Content="代入" BorderBrush="Transparent" Background="DarkCyan" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Get"/>
                             <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
                             <Button Content="編輯" BorderBrush="Transparent" Background="IndianRed" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>

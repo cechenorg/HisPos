@@ -20,7 +20,11 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
             var itemsTable = MedicineSetDb.GetMedicineSetDetail(id);
             foreach (DataRow r in itemsTable.Rows)
             {
-                Add(new MedicineSetItem(r));
+                var item = new MedicineSetItem(r);
+                item.UsageName = r.Field<string>("MedSetDet_Usage");
+                item.PositionID = r.Field<string>("MedSetDet_Position");
+                Add(item);
+
             }
         }
     }

@@ -32,14 +32,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         public RelayCommand Save { get; set; }
         public RelayCommand Cancel { get; set; }
         #endregion
-        public MedicineSetViewModel(MedicineSetMode mode, int? setID = null)
+        public MedicineSetViewModel(MedicineSetMode mode, MedicineSet selected = null)
         {
             Mode = mode;
             CurrentSet = new MedicineSet();
             if (Mode.Equals(MedicineSetMode.Edit))
             {
-                Debug.Assert(setID != null, nameof(setID) + " != null");
-                CurrentSet.ID = (int)setID;
+                Debug.Assert(selected != null, nameof(selected) + " != null");
+                CurrentSet.ID = selected.ID;
+                CurrentSet.Name = selected.Name;
                 CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
             }
             InitialCommands();

@@ -17,10 +17,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
     public partial class MedicineSetWindow : Window
     {
         private MedicineSetViewModel medicineSetViewModel;
-        public MedicineSetWindow(MedicineSetMode mode, int? setID = null)
+        public MedicineSetWindow(MedicineSetMode mode, MedicineSet selected = null)
         {
             InitializeComponent();
-            medicineSetViewModel = new MedicineSetViewModel(mode, setID);
+            medicineSetViewModel = new MedicineSetViewModel(mode, selected);
             DataContext = medicineSetViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {

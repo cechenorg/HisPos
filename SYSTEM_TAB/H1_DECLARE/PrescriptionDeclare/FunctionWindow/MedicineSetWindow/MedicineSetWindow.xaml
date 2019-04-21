@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="組合名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,10,0"/>
-            <TextBox Width="150" Height="35" Text="{Binding CurrentSet.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150" Height="35" Text="{Binding CurrentSet.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"/>
         </StackPanel>
         <declare:MedicineDataGrid Grid.Row="1" x:Name="MedicineSetGrid" Margin="10,0,10,10" DataContext="{Binding CurrentSet,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MedicineSetItems, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" HorizontalGridLinesBrush="Transparent"
