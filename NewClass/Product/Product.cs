@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
@@ -24,7 +25,12 @@ namespace His_Pos.NewClass.Product
             ChineseName = p.ChineseName;
             EnglishName = p.EnglishName;
         }
-
+        public Product(MedicineSetItem m)
+        {
+            ID = m.ID;
+            ChineseName = m.ChineseName;
+            EnglishName = m.EnglishName;
+        }
         #region ----- Define Variables -----
 
         private string id;

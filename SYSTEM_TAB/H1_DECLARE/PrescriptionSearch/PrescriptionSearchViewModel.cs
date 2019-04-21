@@ -323,7 +323,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 BusyContent = StringRes.處方查詢;
                 //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName,PatientIDNumber, PatientBirth, SelectedAdjustCase,MedicineID,MedicineName,SelectedInstitution,SelectedDivision);
+                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName?.Trim(),PatientIDNumber?.Trim(), PatientBirth, SelectedAdjustCase,MedicineID?.Trim(), MedicineName?.Trim(), SelectedInstitution,SelectedDivision);
                 SearchPrescriptions = previews;
                 SetPrescriptionsSummary(false);
             };
@@ -408,6 +408,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PatientBirth = null;
             MedicineID = string.Empty;
             MedicineName = string.Empty;
+            SelectedInstitution = null;
+            SelectedDivision = null;
             SearchPrescriptions.Clear();
             UpdateCollectionView();
             TotalCount = 0;
@@ -418,7 +420,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             CopaymentPoint = 0;
             Profit = 0;
             MedicineCount = 0;
-            SelectedInstitution = null;
         }
 
         private void Refresh(NotificationMessage msg)

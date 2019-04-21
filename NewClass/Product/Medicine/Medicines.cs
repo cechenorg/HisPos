@@ -144,5 +144,38 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+
+        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet)
+        {
+            foreach (var item in currentSet.MedicineSetItems)
+            {
+                var table = MedicineDb.GetMedicinesBySearchId(item.ID);
+                var medicine = new Medicine();
+                foreach (DataRow r in table.Rows)
+                {
+                    switch (r.Field<int>("DataType"))
+                    {
+                        case 1:
+                            medicine = new MedicineNHI(r);
+                            break;
+                        case 2:
+                            medicine = new MedicineOTC(r);
+                            break;
+                        case 3:
+                            medicine = new MedicineSpecialMaterial(r);
+                            break;
+                    }
+                }
+                medicine.Dosage = item.Dosage;
+                medicine.UsageName = item.UsageName;
+                medicine.PositionID = item.PositionID;
+                medicine.Days = item.Days;
+                medicine.Amount = item.Amount;
+                medicine.PaySelf = item.PaySelf;
+                if (medicine.PaySelf)
+                    medicine.Price = item.Price;
+                Add(medicine);
+            }
+        }
     }
 }

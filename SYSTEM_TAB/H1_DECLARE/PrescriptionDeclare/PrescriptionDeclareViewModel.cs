@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -49,6 +50,8 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -79,6 +82,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionCases PrescriptionCases { get; set; }
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
+        private MedicineSets medicineSets;
+        public MedicineSets MedicineSets
+        {
+            get => medicineSets;
+            set
+            {
+                Set(() => MedicineSets, ref medicineSets, value);
+            }
+        }
         #endregion
         private PrescriptionDeclareStatus declareStatus;
         public PrescriptionDeclareStatus DeclareStatus
@@ -234,6 +246,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode { get; set; }
+        private MedicineSet currentSet;
+        public MedicineSet CurrentSet
+        {
+            get => currentSet;
+            set
+            {
+                Set(() => CurrentSet, ref currentSet, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -262,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand DivisionSelectionChanged { get; set; }
         public RelayCommand SelfPayTextChanged { get; set; }
         public RelayCommand CopyPrescription { get; set; }
+        public RelayCommand<string> EditMedicineSet { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -306,6 +328,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescriptionCases = VM.PrescriptionCases;
             Copayments = VM.Copayments;
             SpecialTreats = VM.SpecialTreats;
+            MainWindow.ServerConnection.OpenConnection();
+            MedicineSets = new MedicineSets();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void InitialCommandActions()
         {
@@ -335,8 +360,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             RegisterButtonClick = new RelayCommand(RegisterButtonClickAction);
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
+            EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
         }
-
         private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
@@ -400,6 +425,60 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription = prescription;
             CurrentPrescription.Id = 0;
             CurrentPrescription.CheckIsCooperative();
+        }
+        private void EditMedicineSetAction(string mode)
+        {
+            if (CurrentSet is null && !mode.Equals("Add"))
+            {
+                MessageWindow.ShowMessage("尚未選擇藥品組合",MessageType.ERROR);
+                return;
+            }
+            MedicineSetWindow medicineSetWindow;
+            int tempID = 0;
+            switch (mode)
+            {
+                case "Get":
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentSet.MedicineSetItems = new MedicineSetItems();
+                    CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
+                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet);
+                    CurrentPrescription.CountPrescriptionPoint(true);
+                    CurrentPrescription.CheckIsCooperative();
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+                case "Add":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
+                    medicineSetWindow.ShowDialog();
+                    if(CurrentSet != null)
+                        tempID = CurrentSet.ID;
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (CurrentSet != null)
+                        CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    break;
+                case "Edit":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit,CurrentSet);
+                    medicineSetWindow.ShowDialog();
+                    tempID = CurrentSet.ID;
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    break;
+                case "Delete":
+                    var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:"+ CurrentSet.Name,"");
+                    Debug.Assert(deleteConfirm.DialogResult != null, "deleteConfirm.DialogResult != null");
+                    if ((bool)deleteConfirm.DialogResult)
+                    {
+                        MainWindow.ServerConnection.OpenConnection();
+                        MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
+                        MedicineSets = new MedicineSets();
+                        MainWindow.ServerConnection.CloseConnection();
+                        MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                    }
+                    break;
+            }
         }
         #endregion
         #region Actions
@@ -703,7 +782,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if (!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -756,7 +835,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (!CheckMissingCooperativeContinue()) return;
             IsAdjusting = true;
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -800,7 +879,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -914,7 +993,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(error, MessageType.ERROR);
                 return;
             }
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -953,7 +1032,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(medicinesAmountZero, MessageType.WARNING);
                 return;
             }
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -1563,9 +1642,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return true;
         }
-        private bool CheckSameMedicine()
+        private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = CurrentPrescription.CheckSameMedicine();
+            var medicinesSame = CurrentPrescription.CheckSameOrIDEmptyMedicine();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

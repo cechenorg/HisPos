@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using DataGrid = System.Windows.Controls.DataGrid;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -166,7 +159,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             //按 Enter 下一欄
             if (e.Key != Key.Enter) return;
-            TextBox t = sender as TextBox;
             e.Handled = true;
             MoveFocusNext(sender);
         }
@@ -193,7 +185,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     if ((child is TextBox  || child is TextBlock))
                         break;
                 }
-                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                focusedCell?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 focusedCell =
                     PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             }
@@ -316,11 +309,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox t = sender as TextBox;
+            var t = sender as TextBox;
             if (e.Key == Key.Decimal)
             {
                 e.Handled = true;
-                t.CaretIndex++;
+                if (t != null) t.CaretIndex++;
             }
         }
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
