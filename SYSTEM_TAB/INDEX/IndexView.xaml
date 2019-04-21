@@ -32,7 +32,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,10,0,0">
                     <Label Content="慢箋預約訂藥" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-                    <Button Width="150"  Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="常備藥採購" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
+                    <Button Width="150"  Command="{Binding CommonMedStoreOrderCommand}" Margin="10,0,0,0" Content="常備藥採購" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,10,0,0">
                     <Label Content="調劑日" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>

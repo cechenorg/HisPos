@@ -91,6 +91,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand SetPhoneCallNoCommand { get; set; }
         public RelayCommand SetPhoneCallYesCommand { get; set; }
         public RelayCommand SetPrepareMedNoCommand { get; set; }
+        public RelayCommand CommonMedStoreOrderCommand { get; set; }
         #endregion
         public Index() {
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
@@ -99,8 +100,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             SetPhoneCallYesCommand = new RelayCommand(SetPhoneCallYesAction);
             SetPrepareMedNoCommand = new RelayCommand(SetPrepareMedNoAction);
             ReserveMedicineSendCommand = new RelayCommand(ReserveMedicineSendAction);
+            CommonMedStoreOrderCommand = new RelayCommand(CommonMedStoreOrderAction);
         }
         #region Action
+        private void CommonMedStoreOrderAction() {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
+            StoreOrderDB.StoreOrderCommonMedicine();
+        }
         private void ReserveMedicineSendAction()
         {
             List<int> idList = new List<int>();
