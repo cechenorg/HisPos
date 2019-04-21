@@ -1244,10 +1244,11 @@ namespace His_Pos.NewClass.Prescription
             Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
-        public string CheckSameMedicine()
+        public string CheckSameOrIDEmptyMedicine()
         {
             var sameList = new List<string>();
             var sameMed = string.Empty;
+
             foreach (var m in Medicines.Where(m => !(m is MedicineVirtual)))
             {
                 var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
@@ -1255,6 +1256,10 @@ namespace His_Pos.NewClass.Prescription
                 if (compareList.Count(med => med.ID.Equals(m.ID) && (!string.IsNullOrEmpty(m.UsageName) && !string.IsNullOrEmpty(med.UsageName) && med.UsageName.Equals(m.UsageName)) && (m.Days!=null && med.Days != null && med.Days.Equals(m.Days)) ) > 0)
                 {
                     sameList.Add("藥品:" + m.ID + "重複。\n");
+                }
+                if (string.IsNullOrEmpty(m.ID))
+                {
+                    sameList.Add("藥品:" + m.FullName + "代碼不得為空。\n");
                 }
             }
             return sameList.Count <= 0 ? sameMed : sameList.Distinct().Aggregate(sameMed, (current, s) => current + s);

@@ -434,22 +434,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             MedicineSetWindow medicineSetWindow;
+            int tempID = 0;
             switch (mode)
             {
                 case "Get":
                     MainWindow.ServerConnection.OpenConnection();
+                    CurrentSet.MedicineSetItems = new MedicineSetItems();
                     CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
                     CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet);
+                    CurrentPrescription.CountPrescriptionPoint(true);
+                    CurrentPrescription.CheckIsCooperative();
                     MainWindow.ServerConnection.CloseConnection();
                     break;
                 case "Add":
                     medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
                     medicineSetWindow.ShowDialog();
+                    if(CurrentSet != null)
+                        tempID = CurrentSet.ID;
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (CurrentSet != null)
+                        CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
                     break;
                 case "Edit":
                     medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit,CurrentSet);
                     medicineSetWindow.ShowDialog();
-                    var tempID = CurrentSet.ID;
+                    tempID = CurrentSet.ID;
                     MainWindow.ServerConnection.OpenConnection();
                     MedicineSets = new MedicineSets();
                     MainWindow.ServerConnection.CloseConnection();
@@ -778,7 +789,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if (!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -831,7 +842,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             if (!CheckMissingCooperativeContinue()) return;
             IsAdjusting = true;
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -875,7 +886,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!CheckPrescriptionCount()) return;
             IsAdjusting = true;
             if(!CheckMissingCooperativeContinue()) return;//檢查是否為合作診所漏傳手動輸入之處方
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -989,7 +1000,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(error, MessageType.ERROR);
                 return;
             }
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -1028,7 +1039,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(medicinesAmountZero, MessageType.WARNING);
                 return;
             }
-            if (!CheckSameMedicine())
+            if (!CheckSameOrIDEmptyMedicine())
             {
                 IsAdjusting = false;
                 return;
@@ -1638,9 +1649,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return true;
         }
-        private bool CheckSameMedicine()
+        private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = CurrentPrescription.CheckSameMedicine();
+            var medicinesSame = CurrentPrescription.CheckSameOrIDEmptyMedicine();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

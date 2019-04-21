@@ -443,7 +443,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (IsEdit)
             {
-                if (!CheckSameMedicine())return;
+                if (!CheckSameOrIDEmptyMedicine())return;
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
                     var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
@@ -564,9 +564,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             CheckEditStatus();
         }
-        private bool CheckSameMedicine()
+        private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = EditedPrescription.CheckSameMedicine();
+            var medicinesSame = EditedPrescription.CheckSameOrIDEmptyMedicine();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

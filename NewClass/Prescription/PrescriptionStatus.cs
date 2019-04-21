@@ -62,7 +62,15 @@ namespace His_Pos.NewClass.Prescription {
             }
         }
         public bool IsPrescribe { get; set; }
-        public bool IsBuckle { get; set; }
+        private bool isBuckle;
+        public bool IsBuckle
+        {
+            get => isBuckle;
+            set
+            {
+                Set(() => IsBuckle, ref isBuckle, value);
+            }
+        }
         public void Init()
         {
             IsGetCard = false;

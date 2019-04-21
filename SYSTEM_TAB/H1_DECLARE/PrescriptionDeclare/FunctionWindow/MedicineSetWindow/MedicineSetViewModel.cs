@@ -59,41 +59,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (string.IsNullOrEmpty(medicineID)) return;
             if (medicineID.Length < 5)
             {
-                MedicineSetItem m = new MedicineSetItem();
-                switch (medicineID)
-                {
-                    case "R001":
-                        m.ID = medicineID;
-                        m.NHIPrice = 0;
-                        m.ChineseName = "處方箋遺失或毀損，提前回診";
-                        m.Amount = 0;
-                        CurrentSet.MedicineSetItems.Add(m);
-                        return;
-                    case "R002":
-                        m.ID = medicineID;
-                        m.NHIPrice = 0;
-                        m.ChineseName = "醫師請假，提前回診";
-                        m.Amount = 0;
-                        CurrentSet.MedicineSetItems.Add(m);
-                        return;
-                    case "R003":
-                        m.ID = medicineID;
-                        m.NHIPrice = 0;
-                        m.ChineseName = "病情變化提前回診，經醫師認定需要改藥或調整藥品劑量或換藥";
-                        m.Amount = 0;
-                        CurrentSet.MedicineSetItems.Add(m);
-                        return;
-                    case "R004":
-                        m.ID = medicineID;
-                        m.NHIPrice = 0;
-                        m.ChineseName = "其他提前回診或慢箋提前領藥";
-                        m.Amount = 0;
-                        CurrentSet.MedicineSetItems.Add(m);
-                        return;
-                    default:
-                        MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
-                        return;
-                }
+                MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
+                return;
             }
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
@@ -117,9 +84,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if(!CheckSetValid()) return;
             MainWindow.ServerConnection.OpenConnection();
             var table = MedicineSetDb.UpdateMedicineSet(CurrentSet);
-            CurrentSet.ID = table.Rows[0].Field<int>("NewID");
+            if (table.Rows.Count == 1)
+            {
+                CurrentSet.ID = table.Rows[0].Field<int>("NewID");
+                MessageWindow.ShowMessage("儲存成功", MessageType.SUCCESS);
+                Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
+            }
+            else
+            {
+                MessageWindow.ShowMessage("儲存異常，請稍後重試", MessageType.WARNING);
+            }
             MainWindow.ServerConnection.CloseConnection();
-            Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
         }
         private void CancelAction()
         {
