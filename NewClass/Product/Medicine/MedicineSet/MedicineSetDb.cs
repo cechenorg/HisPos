@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
             DataTable detailTable = new DataTable();
             detailTable.Columns.Add("MedSetDet_ID", typeof(int));
             detailTable.Columns.Add("MedSetDet_MedicineID", typeof(String));
-            detailTable.Columns.Add("MedSetDet_Dossage", typeof(double));
+            detailTable.Columns.Add("MedSetDet_Dosage", typeof(double));
             detailTable.Columns.Add("MedSetDet_Usage", typeof(String));
             detailTable.Columns.Add("MedSetDet_Position", typeof(String));
             detailTable.Columns.Add("MedSetDet_MedicineDays", typeof(int));
