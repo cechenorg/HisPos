@@ -105,7 +105,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #region Action
         private void CommonMedStoreOrderAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
-            StoreOrderDB.StoreOrderCommonMedicine();
+            if ((bool)confirmWindow.DialogResult)
+            {
+                StoreOrderDB.StoreOrderCommonMedicine();
+                MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
+            }
         }
         private void ReserveMedicineSendAction()
         {
