@@ -1292,6 +1292,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void UpdateXmfOfPrescriptionStatus()
         {
+            if( !string.IsNullOrEmpty(SourceId) )
             PrescriptionDb.UpdateXmfOfPrescriptionStatus(SourceId);
         }
     }

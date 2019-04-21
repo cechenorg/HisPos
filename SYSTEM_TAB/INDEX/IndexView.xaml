@@ -32,7 +32,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,10,0,0">
                     <Label Content="慢箋預約訂藥" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-                    <Button Width="150"  Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="常備藥採購" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
+                    <Button Width="150" Visibility="Hidden" Command="{Binding CommonMedStoreOrderCommand}" Margin="10,0,0,0" Content="常備藥採購" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,10,0,0">
                     <Label Content="調劑日" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
@@ -63,7 +63,8 @@
                     </xctk:MaskedTextBox>
                     <CheckBox  IsChecked="{Binding IsShowUnPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                     <CheckBox  IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                    <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="135,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                    <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                    <Button Width="120" Command="{Binding ReserveMedicineSendCommand}" Margin="10,0,0,0" Content="轉採購單" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="IndianRed" BorderThickness="0" />
                 </StackPanel>
                 <DataGrid   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding IndexReserveCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -73,6 +74,13 @@
                             <i:InvokeCommandAction Command="{Binding IndexReserveSelectionChangedCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu TextBlock.TextAlignment="Left"  >
+                            <MenuItem Header="電話已接"  Command="{Binding SetPhoneCallYesCommand }"/>
+                            <MenuItem Header="電話未接"  Command="{Binding SetPhoneCallNoCommand}"/> 
+                            <MenuItem Header="不備藥"  Command="{Binding SetPrepareMedNoCommand}"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -143,7 +151,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn  Width="100" Header="聯絡狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PhoneCallStatus}">
+                        <DataGridTextColumn  Width="100" Header="聯絡狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PhoneCallStatusName}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
