@@ -408,6 +408,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PatientBirth = null;
             MedicineID = string.Empty;
             MedicineName = string.Empty;
+            SelectedInstitution = null;
+            SelectedDivision = null;
             SearchPrescriptions.Clear();
             UpdateCollectionView();
             TotalCount = 0;
@@ -418,7 +420,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             CopaymentPoint = 0;
             Profit = 0;
             MedicineCount = 0;
-            SelectedInstitution = null;
         }
 
         private void Refresh(NotificationMessage msg)
