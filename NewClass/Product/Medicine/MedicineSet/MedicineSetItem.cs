@@ -15,10 +15,15 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
         }
         public MedicineSetItem(DataRow r) : base(r)
         {
-            NHIPrice = (double)r.Field<decimal>("");
-            Frozen = r.Field<bool>("");
-            Usage = VM.GetUsage("");
-            Position = VM.GetPosition("");
+            NHIPrice = (double)r.Field<decimal>("Med_Price");
+            Frozen = r.Field<bool>("Med_IsFrozen");
+            Usage = VM.GetUsage(r.Field<string>("MedSetDet_Usage"));
+            Position = VM.GetPosition(r.Field<string>("MedSetDet_Position"));
+            Days = r.Field<int>("MedSetDet_MedicineDays");
+            Amount = r.Field<double>("MedSetDet_TotalAmount");
+            Dosage = r.Field<double>("MedSetDet_Dossage");
+            PaySelf = r.Field<bool>("MedSetDet_IsPaySelf");
+            Price = r.Field<double>("MedSetDet_PaySelfPrice");
         }
         public MedicineSetItem(ProductStruct p) : base(p)
         {

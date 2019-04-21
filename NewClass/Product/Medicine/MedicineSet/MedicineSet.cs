@@ -13,14 +13,14 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
     public class MedicineSet:ObservableObject
     {
         public MedicineSet()
-        {
+        { 
             MedicineSetItems = new MedicineSetItems();
         }
 
         public MedicineSet(DataRow r)
         {
-            ID = r.Field<int>("");
-            Name = r.Field<string>("");
+            ID = r.Field<int>("MedSet_ID");
+            Name = r.Field<string>("MedSet_Name"); 
         }
         public int ID { get; set; }
         private string name;

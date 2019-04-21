@@ -9,6 +9,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {
@@ -114,7 +115,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         {
             if(!CheckSetValid()) return;
             MainWindow.ServerConnection.OpenConnection();
-            MedicineSetDb.UpdateMedicineSet(CurrentSet);
+            var table = MedicineSetDb.UpdateMedicineSet(CurrentSet);
+            CurrentSet.ID = table.Rows[0].Field<int>("NewID");
             MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
         }
