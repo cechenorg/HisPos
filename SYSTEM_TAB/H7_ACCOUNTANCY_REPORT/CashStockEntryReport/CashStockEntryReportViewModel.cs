@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CashFlow;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Report;
@@ -15,9 +17,12 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -217,6 +222,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand PrintCashPerDayCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
@@ -227,9 +233,47 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
+            PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
             GetData(); 
         }
         #region Action
+        private void PrintCashPerDayAction() {
+            if (CashflowSelectedItem is null) 
+                return;  
+            DataTable table = CashReportDb.GetPerDayDataByDate(StartDate, EndDate, CashflowSelectedItem.TypeId);
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "金流存檔";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + ViewModelMainWindow.CurrentPharmacy.Name + "_" +  CashflowSelectedItem.TypeName + "金流存檔";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("日期,金額");
+                        foreach (DataRow s in table.Rows)
+                        {
+                            
+                            file.WriteLine($"{s.Field<DateTime>("CashFlow_Time").AddYears(-1911).ToString("yyy/MM/dd")},{s.Field<int>("CashFlow_Value")}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+
+            }
+        }
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
             if (PrescriptionDetailMedicineRepotSelectItem is null) return;
