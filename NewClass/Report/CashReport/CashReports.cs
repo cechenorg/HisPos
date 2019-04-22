@@ -20,5 +20,7 @@ namespace His_Pos.NewClass.Report.CashReport
                 Add(new CashReport(r));
             }
         }
+      
+        
     }
 }
