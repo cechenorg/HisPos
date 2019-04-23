@@ -16,7 +16,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         #region ----- Define Commands -----
         public RelayCommand SearchCommand { get; set; }
-        public RelayCommand<string> ChangeTaxFlagCommand { get; set; }
         public RelayCommand ExportCSVCommand { get; set; }
         #endregion
 
@@ -63,8 +62,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 value?.GetOrderDetails(SearchStartDate, SearchEndDate);
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentManufactoryOrder, ref currentManufactoryOrder, value);
+
+                RaisePropertyChanged("HasManufactory");
             }
         }
+        public bool HasManufactory { get { return CurrentManufactoryOrder != null; } }
         #endregion
 
         public PurchaseReturnReportViewModel()
@@ -84,12 +86,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             SearchStartDate = (DateTime)StartDate;
             SearchEndDate = (DateTime)EndDate;
         }
-        private void ChangeTaxFlagAction(string taxFlag)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            CurrentManufactoryOrder.ChangeIncludeTaxFlag(taxFlag.Equals("T"));
-            MainWindow.ServerConnection.CloseConnection();
-        }
         private void ExportCSVAction()
         {
             CurrentManufactoryOrder.ExportToCSV();
@@ -100,7 +96,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         private void RegisterCommands()
         {
             SearchCommand = new RelayCommand(SearchAction);
-            ChangeTaxFlagCommand = new RelayCommand<string>(ChangeTaxFlagAction);
             ExportCSVCommand = new RelayCommand(ExportCSVAction);
         }
         private bool IsSearchConditionValid()

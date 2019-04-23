@@ -4,19 +4,21 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
-    public class ManufactoryOrder
+    public class ManufactoryOrder : ObservableObject
     {
         #region ----- Define Variables -----
+        private bool includeTax;
+
         public int ManufactoryID { get; set; }
         public string ManufactoryName { get; set; }
         public int PurchaseCount { get; set; }
         public double PurchasePrice { get; set; }
         public int ReturnCount { get; set; }
         public double ReturnPrice { get; set; }
-        public bool IncludeTax { get; set; }
         public ManufactoryOrderDetails OrderDetails { get; set; }
         #endregion
 
@@ -28,7 +30,6 @@ namespace His_Pos.NewClass.StoreOrder.Report
             PurchasePrice = (double)dataRow.Field<decimal>("PURCHASE_PRICE");
             ReturnCount = dataRow.Field<int>("RETURN_COUNT");
             ReturnPrice = (double)dataRow.Field<decimal>("RETURN_PRICE");
-            IncludeTax = dataRow.Field<bool>("Man_IncludeTax");
         }
 
         #region ----- Define Functions -----
@@ -36,20 +37,9 @@ namespace His_Pos.NewClass.StoreOrder.Report
         {
             OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate);
         }
-        public void ChangeIncludeTaxFlag(bool taxFlag)
-        {
-            IncludeTax = taxFlag;
-
-            OrderDetails.ReCalculateTax(IncludeTax);
-            SaveTaxFlag();
-        }
         public void ExportToCSV()
         {
 
-        }
-        private void SaveTaxFlag()
-        {
-            StoreOrderDB.UpdateManufactoryTaxFlag(ManufactoryID, IncludeTax);
         }
         #endregion
     }
