@@ -10,6 +10,7 @@
     xmlns:primitives="http://schemas.microsoft.com/wpf/2008/toolkit"
     xmlns:vsm="clr-namespace:System.Windows;assembly=WPFToolkit" 
     xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     d1p1:Ignorable="d" StartupUri="LoginPage.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -277,6 +278,8 @@
                 </ResourceDictionary>
                 <ResourceDictionary
                     xmlns:primitives="clr-namespace:Microsoft.Windows.Controls.Primitives;assembly=WPFToolkit">
+                    <Image x:Key="NextButton" Source="../Images/next.png"/>
+                    <Image x:Key="PreviousButton" Source="../Images/previous.png"/>
                     <!--CalendarItem-->
                     <Style x:Key="CalendarItemStyle" TargetType="primitives:CalendarItem">
                         <Setter Property="Template">
@@ -287,9 +290,9 @@
                                         <!-- Start: Data template for header button -->
                                         <DataTemplate x:Key="DayTitleTemplate">
                                             <Grid>
-                                                <Rectangle Margin="-1" Fill="#FFE3EFFF" />
-                                                <TextBlock FontWeight="Normal" FontFamily="Arial" FontSize="16" 
-                                                           Foreground="#FF7C93D7" HorizontalAlignment="Center"
+                                                <Rectangle Margin="-1" Fill="Transparent" />
+                                                <TextBlock FontWeight="Normal" FontFamily="Segoe UI Semibold" FontSize="18" 
+                                                           HorizontalAlignment="Center"
                                                            Text="{Binding Converter={StaticResource DayNameConverter}}" Margin="0,6,0,6" VerticalAlignment="Center"/>
                                             </Grid>
                                         </DataTemplate>
@@ -341,7 +344,7 @@
                                                             </Setter>
                                                         </Style>
                                                         <!-- Start: Previous button template -->
-                                                        <ControlTemplate x:Key="PreviousButtonTemplate" TargetType="Button">
+                                                        <!--<ControlTemplate x:Key="PreviousButtonTemplate" TargetType="Button">
                                                             <Grid Cursor="Hand">
                                                                 <vsm:VisualStateManager.VisualStateGroups>
                                                                     <vsm:VisualStateGroup x:Name="CommonStates">
@@ -369,10 +372,10 @@
                                                                     <Path Margin="4,0,0,0" Height="10" Width="12" VerticalAlignment="Center" HorizontalAlignment="Left" Stretch="Fill" Data="M283,236.625 L297,236.625" Stroke="#FF406CA6" StrokeThickness="2"/>
                                                                 </Grid>
                                                             </Grid>
-                                                        </ControlTemplate>
+                                                        </ControlTemplate>-->
                                                         <!-- End: Previous button template -->
                                                         <!-- Start: Next button template -->
-                                                        <ControlTemplate x:Key="NextButtonTemplate" TargetType="Button">
+                                                        <!--<ControlTemplate x:Key="NextButtonTemplate" TargetType="Button">
                                                             <Grid Cursor="Hand">
                                                                 <vsm:VisualStateManager.VisualStateGroups>
                                                                     <vsm:VisualStateGroup x:Name="CommonStates">
@@ -400,7 +403,7 @@
                                                                     <Path Margin="4,0,0,0" Height="10" Width="12" VerticalAlignment="Center" HorizontalAlignment="Left" Stretch="Fill" Data="M283,236.625 L297,236.625" Stroke="#FF406CA6" StrokeThickness="2"/>
                                                                 </Grid>
                                                             </Grid>
-                                                        </ControlTemplate>
+                                                        </ControlTemplate>-->
                                                         <!-- End: Next button template -->
                                                         <!-- Start: Header button template -->
                                                         <ControlTemplate x:Key="HeaderButtonTemplate" TargetType="Button">
@@ -421,8 +424,10 @@
                                                                     </vsm:VisualStateGroup>
                                                                 </vsm:VisualStateManager.VisualStateGroups>
                                                                 <ContentPresenter x:Name="buttonContent" Content="{TemplateBinding Content}" 
-                                                                                  ContentTemplate="{TemplateBinding ContentTemplate}" Margin="1,4,1,9" 
-                                                                                  TextElement.FontSize="17"
+                                                                                  ContentTemplate="{TemplateBinding ContentTemplate}" Margin="10,4,10,-1" 
+                                                                                  Height="40"
+                                                                                  TextElement.FontSize="23"
+                                                                                  TextElement.FontFamily="Segoe UI Semi"
                                                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                                                     <TextElement.Foreground>
@@ -433,19 +438,19 @@
                                                         </ControlTemplate>
                                                         <!-- End: Header button template -->
                                                     </Grid.Resources>
-                                                    <Rectangle Fill="#FFE3EFFF" Grid.ColumnSpan="4"/>
+                                                    <Rectangle Fill="Transparent" Grid.ColumnSpan="4"/>
                                                     <!-- Start: Previous button content -->
-                                                    <Button x:Name="PART_PreviousButton" Margin="4" Grid.Row="0" Grid.Column="0" Template="{StaticResource PreviousButtonTemplate}" 
-                                                            Height="20" Width="20" HorizontalAlignment="Left" Focusable="False"/>
+                                                    <Button x:Name="PART_PreviousButton" Margin="4" Grid.Row="0" Grid.Column="0" Content="{StaticResource PreviousButton}"
+                                                            Height="25" Width="25" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Padding="0"/>
                                                     <!-- End: Previous button content -->
                                                     <!-- Start: Header button content -->
-                                                    <Button x:Name="PART_HeaderButton" Grid.Row="0" Grid.Column="2" 
+                                                    <Button x:Name="PART_HeaderButton" Grid.Row="0" Grid.Column="1" 
                                                             Template="{StaticResource HeaderButtonTemplate}" HorizontalAlignment="Center" 
                                                             VerticalAlignment="Center" FontWeight="Normal" FontSize="20" Focusable="False" />
                                                     <!-- End: Header button content -->
                                                     <!-- Start: Next button content -->
-                                                    <Button x:Name="PART_NextButton" Margin="4" Grid.Row="0" Grid.Column="1" Height="20" Width="20" 
-                                                            HorizontalAlignment="Right" Template="{StaticResource NextButtonTemplate}" Focusable="False"/>
+                                                    <Button x:Name="PART_NextButton" Margin="4" Grid.Row="0" Grid.Column="2" Height="25" Width="25" Background="Transparent"
+                                                            BorderBrush="Transparent" HorizontalAlignment="Right" Content="{StaticResource NextButton}" Padding="0"/>
                                                     <!-- End: Next button content -->
                                                     <!-- Start: Month Content Grid -->
                                                     <Grid x:Name="PART_MonthView" Grid.Row="1" Grid.ColumnSpan="4" Visibility="Visible" >
@@ -522,7 +527,7 @@
                     </Style>
                     <!--CalendarDayButton-->
                     <Style x:Key="CalendarDayButtonStyle" TargetType="primitives:CalendarDayButton">
-                        <Setter Property="Background" Value="#FFBADDE9"/>
+                        <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="MinWidth" Value="5"/>
                         <Setter Property="MinHeight" Value="5"/>
                         <Setter Property="FontSize" Value="15"/>
@@ -617,14 +622,14 @@
                                                     <vsm:VisualTransition GeneratedDuration="0" />
                                                 </vsm:VisualStateGroup.Transitions>
                                                 <vsm:VisualState x:Name="RegularDay" />
-                                                <vsm:VisualState x:Name="Today">
+                                                <!--<vsm:VisualState x:Name="Today">
                                                     <Storyboard>
                                                         <ColorAnimation Duration="0" Storyboard.TargetName="StartGradient" Storyboard.TargetProperty="Color" To="#FFF7D275"></ColorAnimation>
                                                         <ColorAnimation Duration="0" Storyboard.TargetName="EndGradient" Storyboard.TargetProperty="Color" To="#FFF3B84B"></ColorAnimation>
                                                         <ColorAnimation Duration="0" Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" To="#FFF3B84B"></ColorAnimation>
                                                         <DoubleAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="StrokeThickness" To="2"></DoubleAnimation>
                                                     </Storyboard>
-                                                </vsm:VisualState>
+                                                </vsm:VisualState>-->
                                             </vsm:VisualStateGroup>
                                             <vsm:VisualStateGroup x:Name="BlackoutDayStates">
                                                 <vsm:VisualStateGroup.Transitions>
@@ -638,19 +643,19 @@
                                                 </vsm:VisualState>
                                             </vsm:VisualStateGroup>
                                         </vsm:VisualStateManager.VisualStateGroups>
-                                        <Rectangle x:Name="SelectedBackground" Grid.Row="1" RadiusX="1" RadiusY="1" Opacity="0" Fill="{TemplateBinding Background}"/>
-                                        <Rectangle x:Name="Background" Grid.Row="1" RadiusX="1" RadiusY="1" Opacity="0" Fill="{TemplateBinding Background}" />
-                                        <Rectangle x:Name="InactiveBackground" Grid.Row="1" RadiusX="1" RadiusY="1" Opacity="0" Fill="#FFA5BFE1"/>
-                                        <Border>
+                                        <Rectangle x:Name="SelectedBackground" Grid.Row="0" Grid.RowSpan="2" RadiusX="1" RadiusY="1" Opacity="0" Fill="{StaticResource GridSelected}"/>
+                                        <Rectangle x:Name="Background" Grid.Row="0" Grid.RowSpan="2" RadiusX="1" RadiusY="1" Opacity="0" Fill="{StaticResource GridSelected}" />
+                                        <Rectangle x:Name="InactiveBackground" Grid.Row="0" Grid.RowSpan="2" RadiusX="1" RadiusY="1" Opacity="0" Fill="{StaticResource Shadow}"/>
+                                        <Border Grid.Row="0">
                                             <Border.Background>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                    <GradientStop x:Name="StartGradient" Color="#FFDFE8F5" Offset="0"/>
+                                                    <GradientStop x:Name="StartGradient" Color="Transparent" Offset="0"/>
                                                     <GradientStop Color="{Binding ElementName=StartGradient, Path=Color}" Offset="0.5"/>
-                                                    <GradientStop x:Name="EndGradient" Color="#FFC9D9ED" Offset="0.5"/>
+                                                    <GradientStop x:Name="EndGradient" Color="Transparent" Offset="0.5"/>
                                                     <GradientStop Color="{Binding ElementName=EndGradient, Path=Color}" Offset="1"/>
                                                 </LinearGradientBrush>
                                             </Border.Background>
-                                            <ContentPresenter x:Name="NormalText" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="5,1,5,1">
+                                            <ContentPresenter x:Name="NormalText" TextElement.FontSize="18" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="5,1,5,1">
                                                 <TextElement.Foreground>
                                                     <SolidColorBrush x:Name="selectedText" Color="#FF333333"/>
                                                 </TextElement.Foreground>
@@ -658,7 +663,7 @@
                                         </Border>
                                         <Rectangle x:Name="Border" StrokeThickness="0.5" Grid.RowSpan="2" SnapsToDevicePixels="True">
                                             <Rectangle.Stroke>
-                                                <SolidColorBrush x:Name="BorderBrush" Color="#FF5D8CC9"/>
+                                                <SolidColorBrush x:Name="BorderBrush" Color="DarkGray"/>
                                             </Rectangle.Stroke>
                                         </Rectangle>
                                         <Path x:Name="Blackout" Grid.Row="1" Opacity="0" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Fill="#FF000000" Stretch="Fill" Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z"/>

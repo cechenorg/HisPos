@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:adjustPharmacistSetting="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
-        mc:Ignorable="d"
-        Title="申報藥師調整設定" Height="700" Width="950">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="申報藥師調整設定" Height="800" Width="1200">
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
+    </Window.Background>
     <Grid>
         <adjustPharmacistSetting:MonthViewCalendar Style="{StaticResource MonthViewCalendarStyle}"/>
     </Grid>
