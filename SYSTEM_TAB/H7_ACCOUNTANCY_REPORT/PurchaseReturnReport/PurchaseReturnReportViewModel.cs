@@ -88,7 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         }
         private void ExportCSVAction()
         {
-            CurrentManufactoryOrder.ExportToCSV();
+            CurrentManufactoryOrder.ExportToCSV(SearchStartDate, SearchEndDate);
         }
         #endregion
 
