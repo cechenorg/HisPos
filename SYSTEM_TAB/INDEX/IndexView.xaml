@@ -28,6 +28,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,10,0,0">
@@ -61,26 +62,22 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <CheckBox  IsChecked="{Binding IsShowUnPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                    <CheckBox  IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                    <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                     <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
                     <Button Width="120" Command="{Binding ReserveMedicineSendCommand}" Margin="10,0,0,0" Content="轉採購單" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="IndianRed" BorderThickness="0" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="10,10,0,0">
+                    <Label Content="備藥狀態" FontSize="25" VerticalAlignment="Center"/>
+                    <CheckBox  IsChecked="{Binding IsShowUnPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                    <CheckBox  IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                </StackPanel>
                 <DataGrid   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding IndexReserveCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="3" ItemsSource="{Binding ReserveCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                             SelectedItem="{Binding IndexReserveSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding IndexReserveSelectionChangedCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu TextBlock.TextAlignment="Left"  >
-                            <MenuItem Header="電話已接"  Command="{Binding SetPhoneCallYesCommand }"/>
-                            <MenuItem Header="電話未接"  Command="{Binding SetPhoneCallNoCommand}"/> 
-                            <MenuItem Header="不備藥"  Command="{Binding SetPrepareMedNoCommand}"/>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -94,15 +91,6 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox  IsChecked="{Binding IsSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTextColumn Width="100" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CusName}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -151,7 +139,39 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn  Width="100" Header="聯絡狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PhoneCallStatusName}">
+                        <DataGridTemplateColumn Width="100" IsReadOnly="True" Header="聯絡狀態" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PhoneCallStatusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding DataContext.PhoneCallStatusString,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"> 
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.StatusChangedCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="100" IsReadOnly="True" Header="備藥狀態">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrepareStatusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding DataContext.MedPrepareStatusString,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.StatusChangedCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </StackPanel> 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn  Width="100" Header="備藥狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PrepareStatusName}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

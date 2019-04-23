@@ -12,23 +12,11 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
     {
         public IndexReserves() { }
 
-        public void GetDataByDate(DateTime sDate,DateTime eDate,bool IsShowUnPhoneCall,bool IsShowUnPrepareReserve) {
+        public void GetDataByDate(DateTime sDate,DateTime eDate) {
             Clear();
             DataTable table = IndexReserveDb.GetDataByDate( sDate, eDate);
             foreach (DataRow r in table.Rows) {
                 IndexReserve indexReserve = new IndexReserve(r);
-                if (indexReserve.PhoneCallStatus == "F") {
-                    if (IsShowUnPhoneCall)
-                        Add(indexReserve);
-                    else
-                        continue;
-                } 
-                if (indexReserve.PrepareStatus == "F") {
-                    if (IsShowUnPrepareReserve)
-                        Add(indexReserve);
-                    else
-                        continue;
-                }
                 Add(indexReserve);
             }
         }

@@ -184,18 +184,6 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ContentControl Margin="10,0,0,0">
-                                        <ContentControl.Style>
-                                            <Style TargetType="{x:Type ContentControl}">
-                                            </Style>
-                                        </ContentControl.Style>
-                                    </ContentControl>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTextColumn Width="100" Header="處方調劑日" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource NullableDateConverter} }">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -241,7 +229,7 @@
                         <DataGridTextColumn  Width="200" Header="備註" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Description}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center" />
+                                    <Setter Property="HorizontalAlignment"  Value="Left" />
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
