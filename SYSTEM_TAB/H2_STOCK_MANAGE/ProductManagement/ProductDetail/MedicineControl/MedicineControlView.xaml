@@ -118,7 +118,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <CheckBox Content="常備藥" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                <CheckBox Content="常備藥" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
                     <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                     <TextBox Text="{Binding SafeAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
