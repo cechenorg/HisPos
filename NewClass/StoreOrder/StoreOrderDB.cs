@@ -621,14 +621,6 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
         }
-        internal static void UpdateManufactoryTaxFlag(int manufactoryID, bool includeTax)
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("TAX_FLAG", includeTax));
-            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
-
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryTaxFlag]", parameters);
-        }
         internal static void StoreOrderReserveByResIDList(List<int>IDList)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

@@ -43,28 +43,17 @@ namespace His_Pos.NewClass.StoreOrder.Report
             DoneTime = dataRow.Field<DateTime>("StoOrd_ReceiveTime");
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
 
-            CalculateTax(dataRow.Field<bool>("Man_IncludeTax"));
+            CalculateTax();
         }
 
         #region ----- Define Functions -----
-        internal void CalculateTax(bool includeTax)
+        internal void CalculateTax()
         {
-            if (includeTax)
-            {
-                TaxPrice = InitialPrice;
+            TaxPrice = InitialPrice;
 
-                UnTaxPrice = TaxPrice * 100 / 105;
+            UnTaxPrice = Math.Round(TaxPrice * 100 / 105, MidpointRounding.AwayFromZero);
 
-                Tax = UnTaxPrice * 5 / 100;
-            }
-            else
-            {
-                UnTaxPrice = InitialPrice;
-
-                Tax = InitialPrice * 5 / 100;
-
-                TaxPrice = UnTaxPrice + Tax;
-            }
+            Tax = TaxPrice - UnTaxPrice;
         }
         #endregion
     }
