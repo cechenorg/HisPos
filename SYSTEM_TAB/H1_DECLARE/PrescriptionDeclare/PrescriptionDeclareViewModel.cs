@@ -558,7 +558,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 BusyContent = StringRes.取得合作處方;
                 XmlOfPrescriptions.GetFile();
                 cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today.AddDays(-10), DateTime.Today); 
-                cooperative.GetXmlOfPrescriptions(DateTime.Today, DateTime.Today);
+                cooperative.GetXmlOfPrescriptions(DateTime.Today.AddDays(-10), DateTime.Today);
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
             {
