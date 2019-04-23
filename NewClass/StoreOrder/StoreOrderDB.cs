@@ -629,11 +629,12 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryTaxFlag]", parameters);
         }
-        internal static void StoreOrderReserveByResIDList(List<int>IDList)
+        internal static void StoreOrderReserveByResIDList(DateTime sDate  , DateTime eDate )
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("IDList", SetIDTable(IDList))); 
+            parameters.Add(new SqlParameter("sDate", sDate));
+            parameters.Add(new SqlParameter("eDate", eDate));
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
         }
         internal static void StoreOrderCommonMedicine()

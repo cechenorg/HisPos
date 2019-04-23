@@ -182,7 +182,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
              
-            TreatDate = treatDate;
+            TreatDate = treatDate.Date;
             AdjustDate = DateTime.Today;
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();

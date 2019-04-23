@@ -11,7 +11,7 @@ using System.Xml;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
+using His_Pos.Class; 
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
@@ -19,6 +19,7 @@ using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
@@ -267,7 +268,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Search { get; set; }
         public RelayCommand ReserveSearch { get; set; }
         public RelayCommand ImportDeclareFileCommand { get; set; }
-        public RelayCommand ExportCsvCommand { get; set; }
+        public RelayCommand ExportPrescriptionCsvCommand { get; set; }
+        public RelayCommand ExportMedicineCsvCommand { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> CheckInsEmpty { get; set; }
@@ -297,10 +299,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Search = new RelayCommand(SearchAction);
             ReserveSearch = new RelayCommand(ReserveSearchAction);
             ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
-            ExportCsvCommand = new RelayCommand(ExportCsvAction);
+            ExportPrescriptionCsvCommand = new RelayCommand(ExportPrescriptionCsvAction);
+            ExportMedicineCsvCommand = new RelayCommand(ExportMedicineCsvAction);
             Clear = new RelayCommand(ClearAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
+
         }
 
         private void RegisterMessengers()
@@ -457,10 +461,49 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         #endregion
         #region Functions
-        private void ExportCsvAction() {
+        private void ExportMedicineCsvAction() {
+            List<int> idList = new List<int>();
+            foreach (var a in SearchPrescriptions) {
+                idList.Add(a.ID);
+            }
+            DataTable table = MedicineDb.GetPrescriptionMedicineSumById(idList); 
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "藥品統計存檔";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") +  "藥品統計存檔";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("日期,藥品名稱,數量");
+                        foreach (DataRow s in table.Rows)
+                        {
+
+                            file.WriteLine($"{s.Field<string>("ID")},{s.Field<string>("Name")},{s.Field<int>("TotalAmount")}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+
+            }
+        }
+        private void ExportPrescriptionCsvAction() {
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "處方存檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "我是處方請存我|*.csv";
             fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + "處方存檔";
             fdlg.FilterIndex = 2;
@@ -479,12 +522,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                             string insName = s.Institution is null ? "" : s.Institution.Name;
                             string divName = s.Division is null ? "" : s.Division.Name;
                             string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
-                            file.WriteLine($"{s_adjust},{s.StoStatus},{insName},{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber},{s.Patient.Birthday},{s.TreatDate},{s.AdjustDate},{s.InsertDate}");
+                            file.WriteLine($"{s_adjust},{s.StoStatus},{insName},{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber},{((DateTime)s.Patient.Birthday).AddYears(-1911).ToString("yyy/MM/dd")},{((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd")},{((DateTime)s.AdjustDate).AddYears(-1911).ToString("yyy/MM/dd")},{s.InsertDate}");
                         }
                         file.Close();
                         file.Dispose();
                     }
-                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
                 }
                 catch (Exception ex) {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
