@@ -18,14 +18,6 @@ namespace His_Pos.NewClass.StoreOrder.Report
             }
         }
 
-        internal void ReCalculateTax(bool includeTax)
-        {
-            foreach (var detail in Items)
-            {
-                detail.CalculateTax(includeTax);
-            }
-        }
-
         internal static ManufactoryOrderDetails GetOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate)
         {
             return new ManufactoryOrderDetails(StoreOrderDB.GetManufactoryOrderDetails(manufactoryID, searchStartDate, searchEndDate));

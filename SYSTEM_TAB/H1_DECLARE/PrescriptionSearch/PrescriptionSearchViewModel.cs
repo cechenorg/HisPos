@@ -503,7 +503,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ExportPrescriptionCsvAction() {
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "處方存檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "我是處方請存我|*.csv";
             fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + "處方存檔";
             fdlg.FilterIndex = 2;
@@ -527,7 +527,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                         file.Close();
                         file.Dispose();
                     }
-                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
                 }
                 catch (Exception ex) {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
