@@ -10,6 +10,11 @@
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
     <Grid>
-        <adjustPharmacistSetting:MonthViewCalendar Style="{StaticResource MonthViewCalendarStyle}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Margin="10,0,0,0" VerticalAlignment="Center"/>
+        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

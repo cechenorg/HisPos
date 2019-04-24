@@ -20,11 +20,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
     public partial class AdjustPharmacistWindow : Window
     {
         private AdjustPharmacistViewModel adjustPharmacistViewModel { get; set; }
-        public AdjustPharmacistWindow()
+        public AdjustPharmacistWindow(DateTime declare)
         {
-            InitializeComponent();
-            adjustPharmacistViewModel = new AdjustPharmacistViewModel();
+            adjustPharmacistViewModel = new AdjustPharmacistViewModel(declare);
             this.DataContext = adjustPharmacistViewModel;
+            InitializeComponent();
             Show();
         }
     }
