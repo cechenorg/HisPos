@@ -165,7 +165,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveSelectedItem.SaveStatus();
-            ReserveCollectionViewSource.Filter += Filter;
+            //ReserveCollectionViewSource.Filter += Filter;
         }
         private void CommonMedStoreOrderAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
@@ -196,6 +196,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveCollectionViewSource.Filter += Filter;
         }
         private void Filter(object sender, FilterEventArgs e) {
+            if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))
                 e.Accepted = false;
 
