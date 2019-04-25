@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" >
     <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter"/>
         <DataTemplate x:Key="PruchaseReturnIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
@@ -28,6 +30,34 @@
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
+            <xctk:MaskedTextBox Width="120" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="25" Style="{StaticResource MaterialDesignTextBox}"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                InsertKeyMode="Overwrite" >
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                        <Binding.ValidationRules>
+                            <service:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Label Content="~" FontSize="25" VerticalAlignment="Center"/>
+            <xctk:MaskedTextBox Width="120" Margin="10,0,0,5" HorizontalContentAlignment="Center" FontSize="25" Style="{StaticResource MaterialDesignTextBox}"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                InsertKeyMode="Overwrite" >
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                        <Binding.ValidationRules>
+                            <service:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Button Content="查詢" BorderThickness="0" FontSize="20" Width="100" FontFamily="Segoe UI Semi" Height="40" Background="RoyalBlue" Margin="25,0,0,0"/>
+        </StackPanel>
         <StackPanel Grid.Row="1" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
             <CheckBox Content="訂退貨" Name="PurchaseCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True"/>
             <Image Source="/Images/BlueDot.png" Width="20" Margin="5,0,0,0"/>

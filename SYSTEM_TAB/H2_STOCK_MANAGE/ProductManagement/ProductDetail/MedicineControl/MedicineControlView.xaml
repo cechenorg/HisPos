@@ -8,6 +8,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
+             xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PriceControl"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
@@ -15,6 +16,17 @@
         </DataTemplate>
         <DataTemplate x:Key="DataChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+        </DataTemplate>
+        <DataTemplate x:Key="NHIMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <priceControl:NHIMedicinePriceControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="NHISpecialMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <priceControl:NHISpecialMedicinePriceControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="OTCMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <StackPanel Background="{StaticResource GridBackGround}">
+                <sharedControl:SingdePriceControl/>
+            </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1580" Height="880" Margin="10">
@@ -283,6 +295,27 @@
                 <Button Width="120" Content="取消" Name="CancelBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" Command="{Binding CancelChangeCommand}"/>
                 <Button Width="150" Content="確認" Name="ConfirmBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ConfirmChangeCommand}"/>
             </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ContentControl Margin="0,10,10,0" Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource NHIMedicinePriceControl}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="RETURN">
+                                <Setter Property="ContentTemplate" Value="{StaticResource NHISpecialMedicinePriceControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="RETURN">
+                                <Setter Property="ContentTemplate" Value="{StaticResource OTCMedicinePriceControl}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="2" Margin="0,10,0,0">
             <Grid.RowDefinitions>
