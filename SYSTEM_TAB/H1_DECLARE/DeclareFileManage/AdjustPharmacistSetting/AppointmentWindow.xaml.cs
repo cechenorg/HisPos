@@ -20,11 +20,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
     public partial class AppointmentWindow : Window
     {
         private Action<Appointment> saveCallback;
-
-        public AppointmentWindow(Action<Appointment> saveCallback)
+        private DateTime selectedDate;
+        public AppointmentWindow(Action<Appointment> saveCallback,DateTime selected)
         {
             InitializeComponent();
-
+            selectedDate = selected;
             this.saveCallback = saveCallback;
         }
 
@@ -32,7 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         {
             Appointment appointment = new Appointment();
             //appointment.MedicalPersonnel = subjectTbx.Text;
-            //appointment.Date = datePicker.SelectedDate.Value;
+            appointment.Date = selectedDate;
 
             saveCallback(appointment);
         }
