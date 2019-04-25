@@ -756,12 +756,27 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml.cs">
+      <DependentUpon>NHIMedicinePriceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHISpecialMedicinePriceControl.xaml.cs">
+      <DependentUpon>NHISpecialMedicinePriceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml.cs">
       <DependentUpon>OTCControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml.cs">
       <DependentUpon>ProductDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\ProductRecordDetailControl.xaml.cs">
+      <DependentUpon>ProductRecordDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\SingdePriceControl.xaml.cs">
+      <DependentUpon>SingdePriceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\StockControl.xaml.cs">
+      <DependentUpon>StockControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\StockTakingNoLastPriceWindow.xaml.cs">
       <DependentUpon>StockTakingNoLastPriceWindow.xaml</DependentUpon>
@@ -1273,11 +1288,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHISpecialMedicinePriceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\ProductRecordDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\SingdePriceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\StockControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
