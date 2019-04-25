@@ -260,7 +260,9 @@ namespace His_Pos.NewClass.Prescription
             if(!Treatment.AdjustCase.ID.Equals("0"))
                 CreateDeclareFileContent(details);//產生申報資料
             Treatment.Institution.UpdateUsedTime();
-            return PrescriptionDb.InsertPrescription(this, details);
+            // return PrescriptionDb.InsertPrescription(this, details);
+            PrescriptionDb.InsertPrescriptionByType(this, details);
+            return 0;
         }
 
         public List<Pdata> SetPrescriptionDetail()
@@ -1135,40 +1137,17 @@ namespace His_Pos.NewClass.Prescription
                 Id = InsertPrescription();
             else
                 Update();
-            if(Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
-                AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
-            ProcessMedicineUseEntry(bucklevalue);
-            ProcessCopaymentCashFlow("部分負擔");
-            ProcessSelfPayCashFlow("自費");
-            if (noCard)
-                ProcessDepositCashFlow("押金");
         }
 
         public void CooperativeAdjust(bool noCard)
         {
             Id = InsertPrescription();
-            InsertCooperAdjust();
-            if (PrescriptionStatus.IsCooperativeVIP)
-                ProcessVipCopaymentCashFlow("合作VIP部分負擔");
-            else
-                ProcessCopaymentCashFlow("合作部分負擔");
-            ProcessSelfPayCashFlow("合作自費");
-            if (noCard)
-                ProcessDepositCashFlow("合作押金");
             UpdateCooperativePrescriptionStatus();
         }
 
         public void ChronicAdjust(bool noCard)
         {
             Id = InsertPrescription();
-            AdjustPredictReserve();
-            var bucklevalue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
-            ProcessMedicineUseEntry(bucklevalue);
-            ProcessCopaymentCashFlow("部分負擔");
-            ProcessSelfPayCashFlow("自費");
-            if (noCard)
-                ProcessDepositCashFlow("押金");
         }
         public void XmlOfPrescriptionAdjust(bool noCard)
         {
@@ -1176,27 +1155,12 @@ namespace His_Pos.NewClass.Prescription
                 Id = InsertPrescription();
             else
                 Update();
-            if (Treatment.ChronicSeq != null && Treatment.ChronicTotal != null) //如果慢箋直接調劑 做預約慢箋
-                AdjustPredictReserve();
-            if (PrescriptionStatus.IsBuckle)
-            {
-                var buckleValue = ProcessInventory("處方調劑", "PreMasId", Id.ToString());
-                ProcessMedicineUseEntry(buckleValue);
-            }
-            ProcessCopaymentCashFlow("部分負擔");
-            ProcessSelfPayCashFlow("自費");
-            if (noCard)
-                ProcessDepositCashFlow("押金");
-            UpdateXmfOfPrescriptionStatus();
         }
 
         public void NormalRegister()
         {
             if (Id == 0)
-            {
                 Id = InsertPrescription();
-                PredictReserve();
-            }
             else
                 Update();
         }
@@ -1210,12 +1174,6 @@ namespace His_Pos.NewClass.Prescription
         public void Prescribe()
         {
             Id = InsertPrescription();
-            if (PrescriptionStatus.IsBuckle)
-            {
-                var bucklevalue = ProcessInventory("自費調劑", "PreMasId", Id.ToString());
-                ProcessMedicineUseEntry(bucklevalue);
-            }
-            ProcessSelfPayCashFlow("自費調劑");
         }
 
         public void CheckIsCooperative()

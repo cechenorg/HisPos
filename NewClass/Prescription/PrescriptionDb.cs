@@ -33,7 +33,21 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
-        
+        public static int InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
+            DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+            string typename = prescription.Treatment.AdjustCase.ID == "0" ? "自費調劑" : "處方調劑";
+            DataBaseFunction.AddSqlParameter(parameterList, "ProBuckleList", SetProductBuckle(prescription, typename));
+            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
+            return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString());
+        }  
+
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
@@ -490,6 +504,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Treatment.Copayment?.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", p.PrescriptionPoint.Deposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Treatment.Institution.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", p.Treatment.PrescriptionCase?.ID);
@@ -544,7 +560,39 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptionDetailTable;
         }
-        public static DataTable PrescriptionMasterTable() {
+        public static DataTable ProductBuckleTable()
+        {
+            DataTable masterTable = new DataTable();
+            masterTable.Columns.Add("ProId", typeof(string));
+            masterTable.Columns.Add("BuckleValue", typeof(double));
+            masterTable.Columns.Add("Type", typeof(string));
+            masterTable.Columns.Add("Source", typeof(string));
+            masterTable.Columns.Add("War_ID", typeof(int)); 
+            return masterTable;
+        }
+        public static DataTable SetProductBuckle (Prescription p,string type )
+        {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == p.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == p.Treatment.Institution.ID).WareHouse.ID;
+            DataTable productBuckleTable = ProductBuckleTable();
+           
+            foreach (var m in p.Medicines)
+            {
+                DataRow newRow = productBuckleTable.NewRow();
+                if (!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle) {
+                    DataBaseFunction.AddColumnValue(newRow, "ProId", m.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "BuckleValue", m.BuckleAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "Type", type);
+                    DataBaseFunction.AddColumnValue(newRow, "Source", "PreMasId");
+                    DataBaseFunction.AddColumnValue(newRow, "War_ID", warID);
+                }  
+                productBuckleTable.Rows.Add(newRow);
+            }
+            return productBuckleTable;
+        }
+     
+    public static DataTable PrescriptionMasterTable() {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("PreMas_ID", typeof(int));
             masterTable.Columns.Add("PreMas_CustomerID", typeof(int));
@@ -563,6 +611,8 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_CopaymentID", typeof(string));
             masterTable.Columns.Add("PreMas_ApplyPoint", typeof(int));
             masterTable.Columns.Add("PreMas_CopaymentPoint", typeof(short));
+            masterTable.Columns.Add("PreMas_PaySelfPoint", typeof(int));
+            masterTable.Columns.Add("PreMas_DepositPoint", typeof(int)); 
             masterTable.Columns.Add("PreMas_TotalPoint", typeof(int));
             masterTable.Columns.Add("PreMas_InstitutionID", typeof(string));
             masterTable.Columns.Add("PreMas_PrescriptionCaseID", typeof(string));
@@ -699,6 +749,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", ViewModelMainWindow.GetCopayment(d.D15)?.Id );
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", d.D16);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint",  d.D17);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", 0);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", 0); 
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", d.D18);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", d.D21);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", d.D22);
