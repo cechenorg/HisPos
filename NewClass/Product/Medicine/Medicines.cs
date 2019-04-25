@@ -149,6 +149,7 @@ namespace His_Pos.NewClass.Product.Medicine
 
         public void GetMedicineBySet(MedicineSet.MedicineSet currentSet)
         {
+            Clear();
             var medicineIDList = new List<string>();
             foreach (var item in currentSet.MedicineSetItems)
             {
@@ -157,31 +158,28 @@ namespace His_Pos.NewClass.Product.Medicine
             var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList);
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                foreach (DataRow r in table.Rows)
+                var medicine = new Medicine();
+                switch (table.Rows[i].Field<int>("DataType"))
                 {
-                    var medicine = new Medicine();
-                    switch (r.Field<int>("DataType"))
-                    {
-                        case 1:
-                            medicine = new MedicineNHI(r);
-                            break;
-                        case 2:
-                            medicine = new MedicineOTC(r);
-                            break;
-                        case 3:
-                            medicine = new MedicineSpecialMaterial(r);
-                            break;
-                    }
-                    medicine.Dosage = currentSet.MedicineSetItems[i].Dosage;
-                    medicine.UsageName = currentSet.MedicineSetItems[i].UsageName;
-                    medicine.PositionID = currentSet.MedicineSetItems[i].PositionID;
-                    medicine.Days = currentSet.MedicineSetItems[i].Days;
-                    medicine.Amount = currentSet.MedicineSetItems[i].Amount;
-                    medicine.PaySelf = currentSet.MedicineSetItems[i].PaySelf;
-                    if (medicine.PaySelf)
-                        medicine.Price = currentSet.MedicineSetItems[i].Price;
-                    Add(medicine);
+                    case 1:
+                        medicine = new MedicineNHI(table.Rows[i]);
+                        break;
+                    case 2:
+                        medicine = new MedicineOTC(table.Rows[i]);
+                        break;
+                    case 3:
+                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
+                        break;
                 }
+                medicine.Dosage = currentSet.MedicineSetItems[i].Dosage;
+                medicine.UsageName = currentSet.MedicineSetItems[i].UsageName;
+                medicine.PositionID = currentSet.MedicineSetItems[i].PositionID;
+                medicine.Days = currentSet.MedicineSetItems[i].Days;
+                medicine.Amount = currentSet.MedicineSetItems[i].Amount;
+                medicine.PaySelf = currentSet.MedicineSetItems[i].PaySelf;
+                if (medicine.PaySelf)
+                    medicine.Price = currentSet.MedicineSetItems[i].Price;
+                Add(medicine);
             }
         }
     }

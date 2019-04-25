@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
 
         public void GetItems(int id)
         {
+            Clear();
             var itemsTable = MedicineSetDb.GetMedicineSetDetail(id);
             foreach (DataRow r in itemsTable.Rows)
             {
@@ -24,7 +25,6 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
                 item.UsageName = r.Field<string>("MedSetDet_Usage");
                 item.PositionID = r.Field<string>("MedSetDet_Position");
                 Add(item);
-
             }
         }
     }
