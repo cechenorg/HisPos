@@ -54,13 +54,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 }
             }
         }
-        public static MedicalPersonnels MedicalPersonnels { get; }
+        public static MedicalPersonnels MedicalPersonnels { get; set; }
         public AdjustPharmacistViewModel(DateTime declare)
         {
             CurrentDate = declare;
             MyDisplayDate = declare;
             first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
             last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            MedicalPersonnels = new MedicalPersonnels(false);
             MainWindow.ServerConnection.OpenConnection();
             MedicalPersonnels.GetEnablePharmacist(first,last);
             MainWindow.ServerConnection.CloseConnection();
