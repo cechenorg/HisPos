@@ -961,7 +961,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckMissingCooperativeContinue()
         {
-            if (CurrentPrescription.Source == PrescriptionSource.Normal && CurrentPrescription.PrescriptionStatus.IsCooperative)
+            if (CurrentPrescription.Source == PrescriptionSource.Cooperative && string.IsNullOrEmpty(CurrentPrescription.Remark))
             {
                 var e = new CooperativeRemarkInsertWindow();
                 CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
