@@ -1,4 +1,8 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using His_Pos.Database;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
@@ -7,6 +11,14 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         public static DataTable GetData()
         { 
            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicalPersonnels]");
+        }
+
+        public static DataTable GetEnableMedicalPersonnels(DateTime start, DateTime end)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "", start);
+            DataBaseFunction.AddSqlParameter(parameterList, "", end);
+            return MainWindow.ServerConnection.ExecuteProc("");
         }
     }
 }

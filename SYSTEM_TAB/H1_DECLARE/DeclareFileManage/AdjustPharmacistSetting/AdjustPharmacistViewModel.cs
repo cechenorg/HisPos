@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
@@ -53,12 +54,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 }
             }
         }
+        public static MedicalPersonnels MedicalPersonnels { get; }
         public AdjustPharmacistViewModel(DateTime declare)
         {
             CurrentDate = declare;
             MyDisplayDate = declare;
             first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
             last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            MainWindow.ServerConnection.OpenConnection();
+            MedicalPersonnels.GetEnablePharmacist(first,last);
+            MainWindow.ServerConnection.CloseConnection();
             MonthViewCalendar = new MonthViewCalendar(declare);
         }
     }

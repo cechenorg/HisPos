@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
             <Label Height="35" Margin="10" HorizontalAlignment="Left" Width="85" FontSize="18" Content="選擇藥師:"/>
-            <ComboBox Width="120"/>
+            <ComboBox Width="120" ItemsSource="{Binding MedicalPersonnels}" SelectedItem="{Binding SelectedMedicalPersonnel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <Button Height="23" Margin="110,0,93,12" VerticalAlignment="Bottom" Click="SaveBtn_Click" Background="RoyalBlue" BorderBrush="RoyalBlue">新增</Button>
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" VerticalAlignment="Bottom" Width="75" Click="CancelBtn_Click" Background="DimGray" BorderBrush="DimGray">取消</Button>
