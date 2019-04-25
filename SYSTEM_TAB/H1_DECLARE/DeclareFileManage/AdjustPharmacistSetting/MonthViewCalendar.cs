@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Windows.Controls;
 using Calendar = Microsoft.Windows.Controls.Calendar;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
@@ -40,6 +41,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         public MonthViewCalendar() : base()
         {
             SetValue(AppointmentsProperty, new ObservableCollection<Appointment>());
+            DisplayDate = AdjustPharmacistViewModel.CurrentDate;
+        }
+
+        public MonthViewCalendar(DateTime declare) : base()
+        {
+            DateTime first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
+            DateTime last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            CalendarDateRange cdr = new CalendarDateRange(DateTime.MinValue, first.AddDays(-1));
+            CalendarDateRange cdr2 = new CalendarDateRange(last.AddDays(1), DateTime.MaxValue);
+            BlackoutDates.Add(cdr);
+            BlackoutDates.Add(cdr2);
+            SetValue(AppointmentsProperty, new ObservableCollection<Appointment>());
+            DisplayDate = declare;
         }
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
@@ -50,16 +64,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
             if (element.DataContext is DateTime)
             {
-                AppointmentWindow appointmentWindow = new AppointmentWindow
+                var appointmentWindow = new AppointmentWindow
                 (
-                    (Appointment appointment) =>
+                    appointment =>
                     {
                         Appointments.Add(appointment);
-                        if (PropertyChanged != null)
-                        {
-                            PropertyChanged(this, new PropertyChangedEventArgs("Appointments"));
-                        }
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Appointments"));
                     }
+                    ,AdjustPharmacistViewModel.MySelectedDate
                 );
                 appointmentWindow.Show();
             }

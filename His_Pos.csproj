@@ -1713,6 +1713,8 @@
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
     <Content Include="CsHis.dll" />
+    <Resource Include="Images\next.png" />
+    <Resource Include="Images\previous.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Windows.Documents;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -147,12 +149,17 @@ namespace His_Pos.NewClass.Product.Medicine
 
         public void GetMedicineBySet(MedicineSet.MedicineSet currentSet)
         {
+            var medicineIDList = new List<string>();
             foreach (var item in currentSet.MedicineSetItems)
             {
-                var table = MedicineDb.GetMedicinesBySearchId(item.ID);
-                var medicine = new Medicine();
+                medicineIDList.Add(item.ID);
+            }
+            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList);
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
                 foreach (DataRow r in table.Rows)
                 {
+                    var medicine = new Medicine();
                     switch (r.Field<int>("DataType"))
                     {
                         case 1:
@@ -165,16 +172,16 @@ namespace His_Pos.NewClass.Product.Medicine
                             medicine = new MedicineSpecialMaterial(r);
                             break;
                     }
+                    medicine.Dosage = currentSet.MedicineSetItems[i].Dosage;
+                    medicine.UsageName = currentSet.MedicineSetItems[i].UsageName;
+                    medicine.PositionID = currentSet.MedicineSetItems[i].PositionID;
+                    medicine.Days = currentSet.MedicineSetItems[i].Days;
+                    medicine.Amount = currentSet.MedicineSetItems[i].Amount;
+                    medicine.PaySelf = currentSet.MedicineSetItems[i].PaySelf;
+                    if (medicine.PaySelf)
+                        medicine.Price = currentSet.MedicineSetItems[i].Price;
+                    Add(medicine);
                 }
-                medicine.Dosage = item.Dosage;
-                medicine.UsageName = item.UsageName;
-                medicine.PositionID = item.PositionID;
-                medicine.Days = item.Days;
-                medicine.Amount = item.Amount;
-                medicine.PaySelf = item.PaySelf;
-                if (medicine.PaySelf)
-                    medicine.Price = item.Price;
-                Add(medicine);
             }
         }
     }

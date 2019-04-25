@@ -160,7 +160,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void AdjustPharmacistSettingAction()
         {
-            var adjustPharmacistWindow = new AdjustPharmacistWindow();
+            var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, 1));
         }
         private void RegisterMessengers()
         {
