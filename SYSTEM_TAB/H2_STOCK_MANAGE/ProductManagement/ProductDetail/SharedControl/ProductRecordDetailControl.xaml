@@ -125,7 +125,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="時間" Width="90" Binding="{Binding Time, Converter={StaticResource DateConverter}}" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True">
+                <DataGridTextColumn Header="名稱" Width="130" Binding="{Binding Name}" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -133,7 +133,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="名稱" Width="130" Binding="{Binding Name}" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True">
+                <DataGridTextColumn Header="時間" Width="90" Binding="{Binding Time, Converter={StaticResource DateConverter}}" FontFamily="Segoe UI Semi" FontSize="18" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

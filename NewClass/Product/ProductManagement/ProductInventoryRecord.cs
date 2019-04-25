@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         #region ----- Define Variables -----
         public string ID { get; }
+        public string Name { get; }
         public ProductInventoryRecordType Type { get; }
         public DateTime Time { get; }
         public double Amount { get; }
@@ -41,6 +42,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
 
             ID = row.Field<string>("InvRecSourceID");
+            Name = row.Field<string>("NAME");
             Time = row.Field<DateTime>("InvRec_Time");
             Amount = row.Field<double>("STOCK_DIFF");
             Stock = row.Field<double>("STOCK");
