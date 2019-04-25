@@ -265,8 +265,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             p.PrescriptionStatus.IsDeclare = true;
             p.PrescriptionStatus.IsAdjust = true;
             MainWindow.ServerConnection.OpenConnection();
-            var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
-            PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            //var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+            //PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            p.PrescriptionPoint.Deposit = 0;
             p.PrescriptionStatus.UpdateStatus(p.Id);
             p.Treatment.CheckMedicalNumber(false);
             p.Update();

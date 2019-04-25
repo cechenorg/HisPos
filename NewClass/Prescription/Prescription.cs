@@ -528,50 +528,50 @@ namespace His_Pos.NewClass.Prescription
             switch (Source)
             {
                 default:
-                    PrescriptionDb.DeletePrescription(Id);
+                    PrescriptionDb.DeletePrescription(this);
                     break;
                 case PrescriptionSource.ChronicReserve:
                     PrescriptionDb.DeleteReserve(SourceId);
                     break;
             }
-            if (!PrescriptionStatus.IsAdjust) return;
+            //if (!PrescriptionStatus.IsAdjust) return;
 
-            if (!Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID)) {
-                decimal entryvalue = 0;
-                foreach (Medicine m in Medicines)
-                {
-                    if (m.IsBuckle && m.BuckleAmount > 0)
-                        entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "刪單補耗用", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
-                }
-                if (entryvalue != 0)
-                    PrescriptionDb.ProcessEntry("刪單補耗用", "PreMasId", Id, (double)entryvalue); 
-            }
+           //if (!Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID)) {
+           //    decimal entryvalue = 0;
+           //    foreach (Medicine m in Medicines)
+           //    {
+           //        if (m.IsBuckle && m.BuckleAmount > 0)
+           //            entryvalue += PrescriptionDb.ReturnInventory(m.ID, (double)m.BuckleAmount, "刪單補耗用", "PreMasId", Id.ToString()).Rows[0].Field<decimal>("returnTotalValue");
+           //    }
+           //    if (entryvalue != 0)
+           //        PrescriptionDb.ProcessEntry("刪單補耗用", "PreMasId", Id, (double)entryvalue); 
+           //}
            
 
-            PrescriptionPoint.GetAmountPaySelf(Id);
-            PrescriptionPoint.GetDeposit(Id);
-            string copayname = "部分負擔刪除";
-            string payself = "自費刪除";
-            string deposit = "押金刪除";
-
-            if (Treatment.AdjustCase.ID == "0")
-                payself = "自費調劑刪除";
-
-            if (Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-            {
-                Medicines.Clear();
-                PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
-                copayname = "合作" + copayname;
-                payself = "合作" + payself;
-                deposit = "合作" + deposit;
-            } 
-
-            if(PrescriptionPoint.CopaymentPoint != 0)
-                PrescriptionDb.ProcessCashFlow(copayname, "PreMasId", Id, PrescriptionPoint.CopaymentPoint * -1); 
-            if(PrescriptionPoint.AmountSelfPay != 0)
-                PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
-            if (PrescriptionPoint.Deposit != 0)
-                PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", Id, PrescriptionPoint.Deposit * -1);
+           // PrescriptionPoint.GetAmountPaySelf(Id);
+           // PrescriptionPoint.GetDeposit(Id);
+           // string copayname = "部分負擔刪除";
+           // string payself = "自費刪除";
+           // string deposit = "押金刪除";
+           //
+           // if (Treatment.AdjustCase.ID == "0")
+           //     payself = "自費調劑刪除";
+           //
+           // if (Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+           // {
+           //     Medicines.Clear();
+           //     PrescriptionDb.InsertCooperAdjust(this, SetPrescriptionDetail(), string.Empty);
+           //     copayname = "合作" + copayname;
+           //     payself = "合作" + payself;
+           //     deposit = "合作" + deposit;
+           // } 
+           //
+           // if(PrescriptionPoint.CopaymentPoint != 0)
+           //     PrescriptionDb.ProcessCashFlow(copayname, "PreMasId", Id, PrescriptionPoint.CopaymentPoint * -1); 
+           // if(PrescriptionPoint.AmountSelfPay != 0)
+           //     PrescriptionDb.ProcessCashFlow(payself, "PreMasId", Id, PrescriptionPoint.AmountSelfPay * -1);  
+           // if (PrescriptionPoint.Deposit != 0)
+           //     PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", Id, PrescriptionPoint.Deposit * -1);
         }
         #region DeclareFunctions
         public string CheckPrescriptionRule(bool noCard)//檢查健保邏輯
@@ -933,7 +933,8 @@ namespace His_Pos.NewClass.Prescription
             switch (Source)
             {
                 default:
-                    PrescriptionDb.UpdatePrescription(this, details);
+                    //PrescriptionDb.UpdatePrescription(this, details);
+                    PrescriptionDb.UpdatePrescriptionByType(this, details); 
                     break;
                 case PrescriptionSource.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, details);

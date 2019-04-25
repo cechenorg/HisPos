@@ -35,15 +35,17 @@ namespace His_Pos.NewClass.Prescription
         }
         public static int InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
             DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
-            string typename = prescription.Treatment.AdjustCase.ID == "0" ? "自費調劑" : "處方調劑";
-            DataBaseFunction.AddSqlParameter(parameterList, "ProBuckleList", SetProductBuckle(prescription, typename));
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails)); 
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString());
         }  
@@ -226,6 +228,21 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
         }
+        public static void UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataTable prescriptionMater = SetPrescriptionMaster(prescription);
+            prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", prescriptionMater);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+
+            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
+        } 
         public static DataTable CheckImportDeclareFileExist(string head) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Head", head);
@@ -234,10 +251,15 @@ namespace His_Pos.NewClass.Prescription
         public static void PredictThreeMonthPrescription() {
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
-        public static DataTable DeletePrescription(int preId)
+        public static DataTable DeletePrescription(Prescription prescription)
         {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preId);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }
         public static DataTable GetStoreOrderIDByPrescriptionID(int preId) {
@@ -560,38 +582,7 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptionDetailTable;
         }
-        public static DataTable ProductBuckleTable()
-        {
-            DataTable masterTable = new DataTable();
-            masterTable.Columns.Add("ProId", typeof(string));
-            masterTable.Columns.Add("BuckleValue", typeof(double));
-            masterTable.Columns.Add("Type", typeof(string));
-            masterTable.Columns.Add("Source", typeof(string));
-            masterTable.Columns.Add("War_ID", typeof(int)); 
-            return masterTable;
-        }
-        public static DataTable SetProductBuckle (Prescription p,string type )
-        {
-            string warID = "0";
-            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == p.Treatment.Institution.ID) > 0)
-                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == p.Treatment.Institution.ID).WareHouse.ID;
-            DataTable productBuckleTable = ProductBuckleTable();
-           
-            foreach (var m in p.Medicines)
-            {
-                DataRow newRow = productBuckleTable.NewRow();
-                if (!string.IsNullOrEmpty(m.ID) && (bool)m.IsBuckle) {
-                    DataBaseFunction.AddColumnValue(newRow, "ProId", m.ID);
-                    DataBaseFunction.AddColumnValue(newRow, "BuckleValue", m.BuckleAmount);
-                    DataBaseFunction.AddColumnValue(newRow, "Type", type);
-                    DataBaseFunction.AddColumnValue(newRow, "Source", "PreMasId");
-                    DataBaseFunction.AddColumnValue(newRow, "War_ID", warID);
-                }  
-                productBuckleTable.Rows.Add(newRow);
-            }
-            return productBuckleTable;
-        }
-     
+   
     public static DataTable PrescriptionMasterTable() {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("PreMas_ID", typeof(int));
