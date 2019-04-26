@@ -182,5 +182,27 @@ namespace His_Pos.NewClass.Product.Medicine
                 Add(medicine);
             }
         }
+
+        public void SetNoBuckle()
+        {
+            foreach (var m in Items)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        m.BuckleAmount = 0;
+                        m.IsBuckle = false;
+                        break;
+                    }
+                    case MedicineVirtual _:
+                        m.BuckleAmount = 0;
+                        m.IsBuckle = false;
+                        break;
+                }
+            }
+        }
     }
 }

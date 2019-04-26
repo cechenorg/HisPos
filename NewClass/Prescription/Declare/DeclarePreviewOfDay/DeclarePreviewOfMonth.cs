@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
 
         private DeclarePreviewOfDay selectedDayPreview;
 
-        private DeclarePreviewOfDay SelectedDayPreview
+        public DeclarePreviewOfDay SelectedDayPreview
         {
             get => selectedDayPreview;
             set { Set(() => SelectedDayPreview, ref selectedDayPreview, value); }
