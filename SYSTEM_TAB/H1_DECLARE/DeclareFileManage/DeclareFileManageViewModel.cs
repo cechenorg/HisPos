@@ -82,6 +82,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             get => declareDate;
             set
             {
+                if(value != null)
+
                 Set(() => DeclareDate, ref declareDate, value);
             }
         }
@@ -136,15 +138,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             InitialVariables();
             InitialCommands();
             RegisterMessengers();
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
-            };
-            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            GetPreviewPrescriptionsActions();
         }
         #region Functions
         #region Initial
@@ -167,7 +161,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetPreviewPrescriptionsActions()
         {
-            GetPrescriptions();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = StringRes.取得歷史處方;
+                GetPrescriptions();
+            };
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         private void AdjustPharmacistSettingAction()
         {
@@ -229,9 +231,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         private void GetPrescriptions()
         {
+            var end = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month+1, 1).AddDays(-1).Day;
+            if (EndDay > end)
+                EndDay = end;
             var sDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month,StartDay);
             var eDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, EndDay);
             DeclareFile.GetSearchPrescriptions(sDate, eDate);
+            DeclareFile.SetSummary();
             //DecFilePreViews.Clear();
             //foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
             //{
