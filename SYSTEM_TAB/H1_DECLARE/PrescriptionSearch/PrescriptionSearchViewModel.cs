@@ -428,9 +428,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void Refresh(NotificationMessage msg)
         {
-            if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "PrescriptionEdited"))
+            if (msg.Notification.Equals("PrescriptionEdited"))
                 SearchAction();
-            else if (msg.Notification.Equals(nameof(PrescriptionSearchViewModel) + "ReservePrescriptionEdited"))
+            else if (msg.Notification.Equals("ReservePrescriptionEdited"))
             {
                 ReserveSearchAction();
             }
