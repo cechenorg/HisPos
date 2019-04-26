@@ -470,6 +470,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                 }
                 EditedPrescription.CountPrescriptionPoint(false);
+                if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+                    EditedPrescription.Medicines.SetNoBuckle();
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Update();
                //if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
