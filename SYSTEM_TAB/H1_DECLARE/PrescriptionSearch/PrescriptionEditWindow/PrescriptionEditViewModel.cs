@@ -486,7 +486,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                //}
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
-                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
+                Messenger.Default.Send(EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)
+                    ? new NotificationMessage("ReservePrescriptionEdited")
+                    : new NotificationMessage("PrescriptionEdited"));
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
@@ -506,7 +508,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Delete();
                 MainWindow.ServerConnection.CloseConnection();
-                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
+                Messenger.Default.Send(EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)
+                    ? new NotificationMessage("ReservePrescriptionEdited")
+                    : new NotificationMessage("PrescriptionEdited"));
                 Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
             }
         }
