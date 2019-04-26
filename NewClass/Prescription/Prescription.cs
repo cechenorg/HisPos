@@ -1134,10 +1134,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void NormalAdjust(bool noCard)
         {
-            if (Id == 0)
-                Id = InsertPrescription();
-            else
-                Update();
+            InsertDb();
         }
 
         public void CooperativeAdjust(bool noCard)
@@ -1152,18 +1149,12 @@ namespace His_Pos.NewClass.Prescription
         }
         public void XmlOfPrescriptionAdjust(bool noCard)
         {
-            if (Id == 0)
-                Id = InsertPrescription();
-            else
-                Update();
+            InsertDb();
         }
 
         public void NormalRegister()
         {
-            if (Id == 0)
-                Id = InsertPrescription();
-            else
-                Update();
+            InsertDb();
         }
 
         public void ChronicRegister()
@@ -1253,6 +1244,14 @@ namespace His_Pos.NewClass.Prescription
         {
             if( !string.IsNullOrEmpty(SourceId) )
             PrescriptionDb.UpdateXmfOfPrescriptionStatus(SourceId,Id);
+        }
+
+        private void InsertDb()
+        {
+            if (Id == 0)
+                Id = InsertPrescription();
+            else
+                Update();
         }
     }
 }
