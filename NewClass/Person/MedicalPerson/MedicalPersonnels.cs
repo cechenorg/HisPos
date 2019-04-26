@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
@@ -13,8 +14,17 @@ namespace His_Pos.NewClass.Person.MedicalPerson
 
         private void Init()
         {
-            var tabel = MedicalPersonnelDb.GetData();
-            foreach (DataRow r in tabel.Rows)
+            var table = MedicalPersonnelDb.GetData();
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new MedicalPersonnel(r));
+            }
+        }
+
+        public void GetEnablePharmacist(DateTime start,DateTime end)
+        {
+            var table = MedicalPersonnelDb.GetEnableMedicalPersonnels(start, end);
+            foreach (DataRow r in table.Rows)
             {
                 Add(new MedicalPersonnel(r));
             }

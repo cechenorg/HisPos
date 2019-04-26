@@ -57,9 +57,9 @@
                         <Label Content=" ~ " Style="{StaticResource BoldLabelContent18}" />
                         <TextBox Width="30" Height="35" Text="{Binding EndDay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center"/>
                     </StackPanel>
-                    <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DecFilePreViewCollectionView,UpdateSourceTrigger=PropertyChanged}"
+                    <DataGrid Name="MonthPreview" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DeclareFile.DecPreOfDaysCollectionView,UpdateSourceTrigger=PropertyChanged}"
                               Height="720" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
-                              SelectedItem="{Binding SelectedFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                              SelectedItem="{Binding DeclareFile.SelectedDayPreview,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellStyle>
@@ -86,14 +86,14 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="60">
-                                                <Label Content="{Binding Date}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" />
+                                                <Label Content="{Binding Day,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" Margin="5,10,0,0"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                                                 <Label Content="申報 :" Style="{StaticResource BoldLabelContent16}" />
-                                                <Label Content="{Binding NormalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
+                                                <Label Content="{Binding DeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
                                                        HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                                                 <Label Content="不申報 :" Style="{StaticResource BoldLabelContent16}" />
-                                                <Label Content="{Binding NormalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
+                                                <Label Content="{Binding NotDeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
                                                        HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
@@ -113,7 +113,7 @@
                     </DataGrid>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1"
-                            DataContext="{Binding SelectedFile,UpdateSourceTrigger=PropertyChanged}">
+                            DataContext="{Binding ElementName=MonthPreview, Path=SelectedItem}">
                     <StackPanel Orientation="Horizontal" Margin="10" Height="80">
                         <StackPanel Orientation="Horizontal">
                             <ItemsControl Width="880" Height="50">
@@ -141,7 +141,7 @@
                     <DataGrid Height="717" MaxHeight="717" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                               CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                               CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8"
-                              materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10,10,10,0" ItemsSource="{Binding DecPresViewCollectionView,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10,10,10,0" ItemsSource="{Binding PresOfDayCollectionView,UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
                                 <i:InvokeCommandAction
@@ -270,21 +270,21 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-                <StackPanel Margin="10" Height="50" Background="{StaticResource Shadow}" Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <StackPanel Margin="10" Height="50" Background="{StaticResource Shadow}" Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding DeclareFile,UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="不申報件數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                     <Label Content="{Binding NotDeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="一般箋 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
-                    <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
+                    <Label Content="{Binding NormalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="一般點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
-                    <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
+                    <Label Content="{Binding NormalPoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="慢箋 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
-                    <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
+                    <Label Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="慢箋點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
-                    <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
+                    <Label Content="{Binding ChronicPoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="總件數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                     <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Label Content="總點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
-                    <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
+                    <Label Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                     <Button Width="100" Margin="70,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="區間調整" Command="{Binding DataContext.AdjustPharmacistOfMonth,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     <Button Width="105" Margin="10,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                 </StackPanel>

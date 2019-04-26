@@ -525,7 +525,7 @@ namespace His_Pos.Service
         {
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
 
-            if (value.ToString().Length == 6)
+            if (value.ToString().Length == 6 && !value.ToString().Contains("-"))
             {
                 var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
                 var month = int.Parse(value.ToString().Substring(4, 2));
@@ -536,7 +536,7 @@ namespace His_Pos.Service
                     return new ValidationResult(false, InvalidInput);
                 }
             }
-            else if (value.ToString().Contains(" ") || value.ToString().Length != 9)
+            else if (value.ToString().Contains("-") || value.ToString().Length != 9)
             {
                 return new ValidationResult(false, InvalidInput);
             }

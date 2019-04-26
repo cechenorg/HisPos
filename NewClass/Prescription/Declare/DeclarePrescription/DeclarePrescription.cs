@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             Division.Name = r.Field<string>("Div_Name");
             Division.FullName = Division.ID + " " + Division.Name;
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate");
+            ApplyPoint = r.Field<int>("PreMas_ApplyPoint");
             Pharmacist = new MedicalPersonnel();
             Pharmacist.ID = r.Field<int>("Emp_ID");
             Pharmacist.IdNumber = r.Field<string>("PreMas_PharmacistIDNumber");
@@ -141,6 +142,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             set
             {
                 Set(() => TotalPoint, ref totalPoint, value);
+            }
+        }
+        private int applyPoint;
+
+        public int ApplyPoint
+        {
+            get => applyPoint;
+            set
+            {
+                Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
         private string pharmacyID;

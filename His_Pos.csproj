@@ -28,7 +28,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>2.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -365,6 +365,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePreviewOfDay\DeclarePreviewOfDay.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePreviewOfDay\DeclarePreviewOfMonth.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
@@ -552,6 +554,7 @@
       <DependentUpon>AdjustPharmacistWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\Appointment.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AppointmentViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AppointmentWindow.xaml.cs">
       <DependentUpon>AppointmentWindow.xaml</DependentUpon>
     </Compile>
@@ -1713,6 +1716,8 @@
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
     <Content Include="CsHis.dll" />
+    <Resource Include="Images\next.png" />
+    <Resource Include="Images\previous.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

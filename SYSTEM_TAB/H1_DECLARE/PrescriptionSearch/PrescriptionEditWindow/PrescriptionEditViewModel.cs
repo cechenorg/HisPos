@@ -136,6 +136,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             get => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
             set { }
         }
+        public double TotalMedPoint
+        {
+            get
+            {
+                if (EditedPrescription != null)
+                {
+                    return EditedPrescription.PrescriptionPoint.MedicinePoint +
+                           EditedPrescription.PrescriptionPoint.SpecialMaterialPoint;
+                }
+                return 0;
+            }
+        }
+
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
