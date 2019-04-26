@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
 {
     public class IcDataUploadDb
     {
-        public static void InsertDailyUploadData(int id,string rec,DateTime create)
+        public static DataTable InsertDailyUploadData(int id,string rec,DateTime create)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(rec);
@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", id);
             DataBaseFunction.AddSqlParameter(parameterList, "Content", new SqlXml(new XmlTextReader(xml.InnerXml, XmlNodeType.Document, null)));
             DataBaseFunction.AddSqlParameter(parameterList, "CreateTime", create);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertUploadData]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertUploadData]", parameterList);
         }
         public static DataTable GetDailyUploadData()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using His_Pos.ChromeTabViewModel;
@@ -50,23 +51,27 @@ namespace His_Pos.HisApi
             return signList;
         }
         //正常上傳
-        public static void CreatDailyUploadData(Prescription p, bool isMakeUp)
+        public static DataTable CreatDailyUploadData(Prescription p, bool isMakeUp)
         {
+            DataTable table;
             Rec rec = new Rec(p, isMakeUp);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
             MainWindow.ServerConnection.CloseConnection();
+            return table;
         }
 
         //異常上傳
-        public static void CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
+        public static DataTable CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
+            DataTable table;
             Rec rec = new Rec(p, isMakeUp, e);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
+            table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
             MainWindow.ServerConnection.CloseConnection();
+            return table;
         }
 
         public static bool OpenCom()
