@@ -1503,13 +1503,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckle(false);
+                    CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
+                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.ChronicAdjust(false);
                     break;
                 case PrescriptionSource.XmlOfPrescription:
+                    if(!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
             }
