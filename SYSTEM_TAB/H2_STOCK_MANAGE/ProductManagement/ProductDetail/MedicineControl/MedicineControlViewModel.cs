@@ -29,6 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private string newInventory = "";
         private ProductManageMedicine medicine;
         private ProductInventoryRecords inventoryRecordCollection;
+        private ProductTypeEnum productType;
 
         public bool IsDataChanged
         {
@@ -64,9 +65,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             get { return inventoryRecordCollection; }
             set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
         }
+        public ProductTypeEnum ProductType
+        {
+            get { return productType; }
+            set { Set(() => ProductType, ref productType, value); }
+        }
         #endregion
 
-        public MedicineControlViewModel(string id)
+        public MedicineControlViewModel(string id, ProductTypeEnum type)
         {
             RegisterCommand();
             InitMedicineData(id);

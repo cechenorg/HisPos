@@ -306,10 +306,10 @@
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NHIMedicinePriceControl}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="RETURN">
+                            <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="SpecialMedicine">
                                 <Setter Property="ContentTemplate" Value="{StaticResource NHISpecialMedicinePriceControl}" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="RETURN">
+                            <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="OTCMedicine">
                                 <Setter Property="ContentTemplate" Value="{StaticResource OTCMedicinePriceControl}" />
                             </DataTrigger>
                         </Style.Triggers>

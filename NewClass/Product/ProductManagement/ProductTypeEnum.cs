@@ -2,7 +2,9 @@
 {
     public enum ProductTypeEnum
     {
-        Medicine = 1,
-        OTC = 2
+        NHIMedicine = 1,
+        OTCMedicine = 2,
+        SpecialMedicine = 3,
+        OTC = 4
     }
 }

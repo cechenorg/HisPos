@@ -18,7 +18,7 @@ namespace His_Pos.ChromeTabViewModel
     public class ProductDetailViewModel : ViewModelBase
     {
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
-        public RelayCommand<object> AddTabCommand { get; set; }
+        public RelayCommand<string> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -54,7 +54,7 @@ namespace His_Pos.ChromeTabViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
+            this.AddTabCommand = new RelayCommand<string>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -121,53 +121,37 @@ namespace His_Pos.ChromeTabViewModel
                 
         }
         
-        public void AddTabCommandAction(object newProduct)
+        public void AddTabCommandAction(string newProductID)
         {
             TabBase newTab;
 
-            if (newProduct is Medicine)
+            foreach (TabBase tab in ItemCollection)
             {
-                Medicine tempMedicine = newProduct as Medicine;
-
-                foreach (TabBase tab in ItemCollection)
+                if (tab.TabName == newProductID)
                 {
-                    if (tab.TabName == tempMedicine.ID)
-                    {
-                        this.SelectedTab = tab;
-                        return;
-                    }
+                    SelectedTab = tab;
+                    return;
                 }
-                
-                newTab = new MedicineControlViewModel(tempMedicine.ID) { TabName = tempMedicine.ID, Icon = "/Images/BlueDot.png" };
             }
-            else
+
+            ProductTypeEnum type = ProductTypeEnum.NHIMedicine;
+
+            switch (type)
             {
-                ProductManageStruct tempProduct = (ProductManageStruct)newProduct;
-
-                foreach (TabBase tab in ItemCollection)
-                {
-                    if (tab.TabName == tempProduct.ID)
-                    {
-                        this.SelectedTab = tab;
-                        return;
-                    }
-                }
-
-                switch (tempProduct.ProductType)
-                {
-                    case ProductTypeEnum.OTC:
-                        newTab = new OtcDetailView() { TabName = tempProduct.ID, Icon = "/Images/OrangeDot.png" };
-                        break;
-                    case ProductTypeEnum.Medicine:
-                        newTab = new MedicineControlViewModel(tempProduct.ID) { TabName = tempProduct.ID, Icon = "/Images/BlueDot.png" };
-                        break;
-                    default:
-                        return;
-                }
+                case ProductTypeEnum.OTC:
+                    newTab = new OtcDetailView() { TabName = newProductID, Icon = "/Images/OrangeDot.png" };
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                case ProductTypeEnum.OTCMedicine:
+                case ProductTypeEnum.SpecialMedicine:
+                    newTab = new MedicineControlViewModel(newProductID, type) { TabName = newProductID, Icon = "/Images/BlueDot.png" };
+                    break;
+                default:
+                    return;
             }
             
-            this.ItemCollection.Add(newTab.getTab());
-            this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
+            ItemCollection.Add(newTab.getTab());
+            SelectedTab = ItemCollection[ItemCollection.Count - 1];
         }
     }
 }
