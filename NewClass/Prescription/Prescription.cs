@@ -261,8 +261,7 @@ namespace His_Pos.NewClass.Prescription
                 CreateDeclareFileContent(details);//產生申報資料
             Treatment.Institution.UpdateUsedTime();
             // return PrescriptionDb.InsertPrescription(this, details);
-            PrescriptionDb.InsertPrescriptionByType(this, details);
-            return 0;
+            return PrescriptionDb.InsertPrescriptionByType(this, details); 
         }
 
         public List<Pdata> SetPrescriptionDetail()

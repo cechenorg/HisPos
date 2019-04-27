@@ -237,7 +237,7 @@ namespace His_Pos.NewClass.Prescription
             DataTable prescriptionMater = SetPrescriptionMaster(prescription);
             prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", prescriptionMater);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
 

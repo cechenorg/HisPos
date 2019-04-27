@@ -54,10 +54,10 @@ namespace His_Pos.NewClass.Product.Medicine
             foreach (DataRow r in table.Rows)
             {
                 Medicine med = new Medicine(r);
-                med.Dosage = r.Field<double>("Dosage");
+                med.Dosage = r.Field<double?>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
                 med.PositionID = r.Field<string>("Position");
-                med.Days = r.Field<int>("MedicineDays");
+                med.Days = r.Field<int?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
