@@ -276,17 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private bool CreatePrescriptionSign(Prescription p,bool isGetCard)
         {
             BusyContent = StringRes.寫卡;
-            if (isGetCard)
-                p.PrescriptionSign = HisApiFunction.WritePrescriptionData(p);
-            else
-            {
-                p.PrescriptionSign = new List<string>();
-            }
-            //if (HisApiFunction.OpenCom())
-            //{
-            //    HisApiBase.csSoftwareReset(3);
-            //    HisApiFunction.CloseCom();
-            //}
+            p.PrescriptionSign = isGetCard ? HisApiFunction.WritePrescriptionData(p) : new List<string>();
             BusyContent = StringRes.產生每日上傳資料;
             if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {

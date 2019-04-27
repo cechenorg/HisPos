@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -255,6 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
+        private List<bool?> printResult { get; set; }
         #endregion
         #region Commands
         public RelayCommand ShowCooperativeSelectionWindow { get; set; }
@@ -813,7 +815,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!PrintConfirm(false)) return;
+            if (!PrintConfirm()) return;
             SavePatientData();
             InsertAdjustData(false,true);
         }
@@ -853,7 +855,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             CurrentPrescription.PrescriptionPoint.CountDeposit();
-            if(!PrintConfirm(true)) return;
+            if(!PrintConfirm()) return;
             SavePatientData();
             StartNoCardAdjust();
         }
@@ -919,7 +921,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
                 }
             }
-            if (!PrintConfirm(false)) return;
+            if (!PrintConfirm()) return;
             SavePatientData();
             if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
                 StartCooperativePrescribe();
@@ -1003,7 +1005,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!PrintConfirm(false)) return;
+            if (!PrintConfirm()) return;
             SavePatientData();
             StartRegister();
         }
@@ -1037,7 +1039,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!PrintConfirm(false)) return;
+            if (!PrintConfirm()) return;
             SavePatientData();
             InsertPrescribeData();
         }
@@ -1280,9 +1282,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             InitializeVariables(false);
         }
-        private bool PrintConfirm(bool noCard)
+        private bool PrintConfirm()
         {
-            var printResult = NewFunction.CheckPrint(CurrentPrescription);
+            printResult = NewFunction.CheckPrint(CurrentPrescription);
             var printMedBag = printResult[0];
             var printSingle = printResult[1];
             var printReceipt = printResult[2];
@@ -1299,14 +1301,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             TempPre = new Prescription();
             TempPre = (Prescription)CurrentPrescription.Clone();
             TempPre.AdjustMedicinesType();
-            var printWorker = new BackgroundWorker();
-            printWorker.DoWork += (o, ea) =>
-            {
-                Print(noCard, (bool)printMedBag, printSingle, (bool)printReceipt);
-            };
-            printWorker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
-            IsBusy = true;
-            printWorker.RunWorkerAsync();
             return true;
         }
 
@@ -1370,6 +1364,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 PurchaseOrder.UpdatePrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
             } //更新傳送藥健康
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
+            StartPrint(false);
             return true;
         }
         private void InsertPrescribeData()
@@ -1379,6 +1374,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Prescribe();//自費調劑金流
             MainWindow.ServerConnection.CloseConnection();
+            StartPrint(false);
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
@@ -1471,7 +1467,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     IsCardReading = false;
                     return;
                 }
-                InsertAdjustData(true,false);
+                InsertAdjustData(true, false);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1517,11 +1513,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
             }
-            if(normal)
+            if (normal)
                 CheckDailyUpload();
             MainWindow.ServerConnection.CloseConnection();
+            StartPrint(false);
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
+        }
+
+        private void StartPrint(bool noCard)
+        {
+            var printWorker = new BackgroundWorker();
+            var printMedBag = printResult[0];
+            var printSingle = printResult[1];
+            var printReceipt = printResult[2];
+            printWorker.DoWork += (o, ea) =>
+            {
+                Print(noCard, (bool)printMedBag, printSingle, (bool)printReceipt);
+            };
+            printWorker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            IsBusy = true;
+            printWorker.RunWorkerAsync();
         }
 
         private void CheckDailyUpload()
@@ -1570,23 +1582,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
-                    if (CurrentPrescription.Treatment.Institution.ID != VM.CooperativeInstitutionID)
-                        CurrentPrescription.NormalAdjust(true);
-                    else
-                    {
-                        CurrentPrescription.Medicines.SetBuckle(false);
-                        CurrentPrescription.CooperativeAdjust(true);
-                    }
+                    CurrentPrescription.NormalAdjust(true);
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckle(false);
+                    CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:
+                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.ChronicAdjust(true);
+                    break;
+                case PrescriptionSource.XmlOfPrescription:
+                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
+                    CurrentPrescription.XmlOfPrescriptionAdjust(true);
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
+            StartPrint(true);
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }

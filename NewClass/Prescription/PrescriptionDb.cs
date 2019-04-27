@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
-        public static int InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             string warID = "0";
             if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
@@ -45,9 +45,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails)); 
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
-            return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }  
 
         public static void DeleteReserve(string recMasId) {
@@ -228,7 +227,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
         }
-        public static void UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             string warID = "0";
             if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
@@ -240,8 +239,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
-
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
         } 
         public static DataTable CheckImportDeclareFileExist(string head) {
             List<SqlParameter> parameterList = new List<SqlParameter>();

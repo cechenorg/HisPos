@@ -57,7 +57,7 @@ namespace His_Pos.HisApi
             Rec rec = new Rec(p, isMakeUp);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            table = InsertUploadData(p, uploadData, p.Card.MedicalNumberData.TreatDateTime);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -69,7 +69,7 @@ namespace His_Pos.HisApi
             Rec rec = new Rec(p, isMakeUp, e);
             var uploadData = rec.SerializeDailyUploadObject();
             MainWindow.ServerConnection.OpenConnection();
-            table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, DateTime.Now);
+            table = InsertUploadData(p, uploadData, DateTime.Now);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -236,6 +236,17 @@ namespace His_Pos.HisApi
                 if (upload)
                     UploadFunctions.StartDailyUpload(uploadTable);
             }
+        }
+
+        private static DataTable InsertUploadData(Prescription p,string uploadData,DateTime treat)
+        {
+            var table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            while (table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result"))
+            {
+                MessageWindow.ShowMessage("寫卡資料存檔異常，按下OK重試", MessageType.WARNING);
+                table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
+            }
+            return table;
         }
     }
 }

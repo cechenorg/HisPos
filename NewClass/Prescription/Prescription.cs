@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
@@ -243,7 +244,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #region Function
-        public int InsertPrescription()
+        public void InsertPrescription()
         {
             if (PrescriptionStatus.IsPrescribe)
                 Treatment.AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
@@ -260,8 +261,14 @@ namespace His_Pos.NewClass.Prescription
             if(!Treatment.AdjustCase.ID.Equals("0"))
                 CreateDeclareFileContent(details);//產生申報資料
             Treatment.Institution.UpdateUsedTime();
-            // return PrescriptionDb.InsertPrescription(this, details);
-            return PrescriptionDb.InsertPrescriptionByType(this, details); 
+            var resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+            while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
+            {
+                var retry = new ConfirmWindow("處方登錄異常，是否重試?","登錄異常",true);
+                if((bool)retry.DialogResult)
+                    resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+            }
+            Id = resultTable.Rows[0].Field<int>("DecMasId");
         }
 
         public List<Pdata> SetPrescriptionDetail()
@@ -527,7 +534,12 @@ namespace His_Pos.NewClass.Prescription
             switch (Source)
             {
                 default:
-                    PrescriptionDb.DeletePrescription(this);
+                    var resultTable = PrescriptionDb.DeletePrescription(this);
+                    while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
+                    {
+                        MessageWindow.ShowMessage("處方刪除異常，按下OK重試", MessageType.WARNING);
+                        resultTable = PrescriptionDb.DeletePrescription(this);
+                    }
                     break;
                 case PrescriptionSource.ChronicReserve:
                     PrescriptionDb.DeleteReserve(SourceId);
@@ -933,7 +945,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 default:
                     //PrescriptionDb.UpdatePrescription(this, details);
-                    PrescriptionDb.UpdatePrescriptionByType(this, details); 
+                    var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                    while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
+                    {
+                        MessageWindow.ShowMessage("處方登錄異常，按下OK重試",MessageType.WARNING);
+                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                    }
                     break;
                 case PrescriptionSource.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, details);
@@ -1138,13 +1155,13 @@ namespace His_Pos.NewClass.Prescription
 
         public void CooperativeAdjust(bool noCard)
         {
-            Id = InsertPrescription();
+            InsertPrescription();
             UpdateCooperativePrescriptionStatus();
         }
 
         public void ChronicAdjust(bool noCard)
         {
-            Id = InsertPrescription();
+            InsertPrescription();
         }
         public void XmlOfPrescriptionAdjust(bool noCard)
         {
@@ -1158,13 +1175,13 @@ namespace His_Pos.NewClass.Prescription
 
         public void ChronicRegister()
         {
-            Id = InsertPrescription();
+            InsertPrescription();
             AdjustPredictReserve();
         }
 
         public void Prescribe()
         {
-            Id = InsertPrescription();
+            InsertPrescription();
         }
 
         public void CheckIsCooperative()
@@ -1248,7 +1265,7 @@ namespace His_Pos.NewClass.Prescription
         private void InsertDb()
         {
             if (Id == 0)
-                Id = InsertPrescription();
+                InsertPrescription();
             else
                 Update();
         }
