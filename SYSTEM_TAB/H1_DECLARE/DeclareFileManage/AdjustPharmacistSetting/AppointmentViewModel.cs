@@ -16,7 +16,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         private DateTime selectedDate;
         public MedicalPersonnels MedicalPersonnels { get; set; }
         private MedicalPersonnel selectedMedicalPersonnel;
-        public MedicalPersonnel SelectedMedicalPersonnel { get; set; }
+        public MedicalPersonnel SelectedMedicalPersonnel
+        {
+            get => selectedMedicalPersonnel;
+            set
+            {
+                Set(() => SelectedMedicalPersonnel, ref selectedMedicalPersonnel, value);
+            }
+        }
         public RelayCommand Save { get; set; }
         public RelayCommand Cancel { get; set; }
         public AppointmentViewModel(Action<Appointment> saveCallback, DateTime selected)
@@ -29,10 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         }
         private void SaveAction()
         {
-            Appointment appointment = new Appointment();
-            //appointment.MedicalPersonnel = subjectTbx.Text;
-            appointment.Date = selectedDate;
-
+            var appointment = new Appointment {MedicalPersonnel = new DeclareMedicalPersonnel(SelectedMedicalPersonnel), Date = selectedDate};
             saveCallback(appointment);
         }
         private void CancelAction()

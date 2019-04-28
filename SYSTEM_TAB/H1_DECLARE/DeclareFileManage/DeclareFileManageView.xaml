@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                             BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-        <Grid Background="{StaticResource GridDarkerBackGround}" >
+        <Grid Margin="10" Background="{StaticResource GridDarkerBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
@@ -27,20 +27,14 @@
                 <ColumnDefinition Width="350" />
                 <ColumnDefinition Width="1015" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <StackPanel.Background>
-                    <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8" />
-                </StackPanel.Background>
-                <Label Content="機構代碼 :" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10" />
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
+                <Label Content="機構代碼 :" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0" />
                 <ComboBox  DisplayMemberPath="ID" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"
                            HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="120" />
-                <Button Margin="45,10,10,10" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
+                <Button Margin="45,0,10,0" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <StackPanel.Background>
-                    <SolidColorBrush Color="#FFE4E4E4" Opacity="0.8" />
-                </StackPanel.Background>
-                <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
+                <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                 <xctk:MaskedTextBox Width="60" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}"
                                     Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
@@ -52,14 +46,14 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Label Content="區間:" Style="{StaticResource BoldLabelContent18}" Margin="10,10,5,10"/>
+                <Label Content="區間:" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                 <TextBox Width="30" Height="35" Text="{Binding StartDay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center"/>
                 <Label Content=" ~ " Style="{StaticResource BoldLabelContent18}" />
                 <TextBox Width="30" Height="35" Text="{Binding EndDay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center"/>
             </StackPanel>
             <DataGrid Name="MonthPreview" Grid.Row="2" Grid.Column="0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DeclareFile.DecPreOfDaysCollectionView,UpdateSourceTrigger=PropertyChanged}"
-                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
-                      SelectedItem="{Binding DeclareFile.SelectedDayPreview,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}"
+                      SelectedItem="{Binding DeclareFile.SelectedDayPreview,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" BorderBrush="{StaticResource GridDarkerBackGround}" BorderThickness="0,1,0,0">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellStyle>
@@ -111,14 +105,9 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Orientation="Vertical" Margin="10,10,0,0">
-               
-                
-                
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1"
+            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Background="{StaticResource GridDarkerBackGround}"
                             DataContext="{Binding DeclareFile.SelectedDayPreview,UpdateSourceTrigger=PropertyChanged}">
-                <StackPanel Orientation="Horizontal" Margin="10" Height="80">
+                <StackPanel Orientation="Horizontal" Margin="10,10,10,5" Height="80">
                     <StackPanel Orientation="Horizontal">
                         <ItemsControl Width="880" Height="50">
                             <ItemsControl.ItemsPanel>
@@ -138,14 +127,14 @@
                         </ItemsControl>
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Button Width="100" Margin="35,5,0,0" Background="RoyalBlue" BorderThickness="0" Content="調整設定" Command="{Binding DataContext.AdjustPharmacistSetting,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                        <Button Width="100" Margin="35,10,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.AdjustPharmacistOfDay,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <Button Width="100" Margin="0,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="調整設定" Command="{Binding DataContext.AdjustPharmacistSetting,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <Button Width="100" Margin="0,10,0,0" Background="RoyalBlue" BorderThickness="0" Content="單日調整" Command="{Binding DataContext.AdjustPharmacistOfDay,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </StackPanel>
                 </StackPanel>
-                <DataGrid Height="717" MaxHeight="717" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                <DataGrid Height="700" MaxHeight="700" Background="{StaticResource GridHalfTransBackground}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                               CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                               CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8"
-                              materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10,10,10,0" ItemsSource="{Binding PresOfDayCollectionView,UpdateSourceTrigger=PropertyChanged}">
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="0,6,20,0" ItemsSource="{Binding PresOfDayCollectionView,UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction
@@ -274,7 +263,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
-            <StackPanel Margin="0" Height="50" Background="{StaticResource Shadow}" Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding DeclareFile,UpdateSourceTrigger=PropertyChanged}">
+            <StackPanel Margin="0,0,10,0" Background="{StaticResource Shadow}" Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding DeclareFile,UpdateSourceTrigger=PropertyChanged}">
                 <Label Content="不申報件數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                 <Label Content="{Binding NotDeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                 <Label Content="一般箋 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
@@ -289,7 +278,7 @@
                 <Label Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                 <Label Content="總點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                 <Label Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
-                <Button Width="100" Margin="70,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="區間調整" Command="{Binding DataContext.AdjustPharmacistOfMonth,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                <Button Width="100" Margin="50,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="區間調整" Command="{Binding DataContext.AdjustPharmacistOfMonth,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                 <Button Width="105" Margin="10,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
             </StackPanel>
         </Grid>
