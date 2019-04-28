@@ -11,14 +11,14 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
     {
         public ProductManageDetail(DataRow row)
         {
-            SingdeMinOrderAmount = row.Field<int>("SinData_MinOrder").ToString();
+            SingdePackageAmount = row.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)row.Field<decimal>("SinData_PackagePrice");
             SindePrice = (double)row.Field<decimal>("SinData_SinglePrice");
             SindeStock = row.Field<int>("SinData_Stock");
         }
 
         public double SingdePackagePrice { get; }
-        public string SingdeMinOrderAmount { get; }
+        public int SingdePackageAmount { get; }
         public double SindePrice { get; }
         public int SindeStock { get; }
     }

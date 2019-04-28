@@ -1,11 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
@@ -134,7 +137,15 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
 
-            ProductTypeEnum type = ProductTypeEnum.NHIMedicine;
+            DataTable dataTable = ProductDetailDB.GetProductTypeByID(newProductID);
+
+            if (dataTable is null || dataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            ProductTypeEnum type = (ProductTypeEnum)dataTable.Rows[0].Field<int>("Pro_TypeID");
 
             switch (type)
             {

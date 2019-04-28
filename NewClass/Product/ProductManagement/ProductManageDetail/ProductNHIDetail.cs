@@ -12,7 +12,6 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public ProductNHIDetail(DataRow row) : base(row)
         {
             NHIPrice = (double)row.Field<decimal>("Med_Price");
-            PackageAmount = row.Field<int>("SinData_PackageAmount").ToString();
             Form = row.Field<string>("Med_Form");
             ATC = row.Field<string>("Med_ATC");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
@@ -25,7 +24,6 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public bool IsFrozen { get; }
         public int? ControlLevel { get; }
         public double NHIPrice { get; }
-        public string PackageAmount { get; }
 
         public string Form { get; }
         public string ATC { get; }

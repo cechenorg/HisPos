@@ -11,10 +11,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
     {
         public ProductNHISpecialDetail(DataRow row) : base(row)
         {
-            NHIPrice = (double)row.Field<decimal>("Med_Price");
-            BigCategory = row.Field<string>("Med_Manufactory");
-            SmallCategory = row.Field<string>("Med_Manufactory");
-            Manufactory = row.Field<string>("Med_Manufactory");
+            NHIPrice = (double)row.Field<decimal>("SpeMed_NHIPrice");
+            BigCategory = row.Field<string>("SpeMed_BigCategory");
+            SmallCategory = row.Field<string>("SpeMed_SmallCategory");
+            Manufactory = row.Field<string>("SpeMed_Manufactory");
         }
         
         public double NHIPrice { get; }
