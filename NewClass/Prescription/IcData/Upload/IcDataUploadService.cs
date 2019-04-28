@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Product.Medicine;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
@@ -121,15 +122,15 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             else
             {
                 TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
-                if (HisApi.HisApiFunction.OpenCom())
+                if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
                 {
                     var iBufferLength = 13;
-                    byte[] pBuffer = new byte[iBufferLength];
-                    var res = HisApi.HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
+                    var pBuffer = new byte[iBufferLength];
+                    var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
                     TreatmentDateTime = res == 0 ?
                         ConvertData.ByToString(pBuffer, 0, 13) :
                         DateTimeEx.ToStringWithSecond(DateTime.Now);
-                    HisApi.HisApiFunction.CloseCom();
+                    HisApiFunction.CloseCom();
                 }
                 else
                 {
