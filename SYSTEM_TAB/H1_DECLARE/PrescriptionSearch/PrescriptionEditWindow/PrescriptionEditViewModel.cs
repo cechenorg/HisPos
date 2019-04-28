@@ -470,21 +470,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                 }
                 EditedPrescription.CountPrescriptionPoint(false);
+                if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+                    EditedPrescription.Medicines.SetNoBuckle();
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Update();
-                if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                {
-                    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription); 
-                }
-                else
-                {
-                    if(!EditedPrescription.PrescriptionStatus.IsBuckle)
-                        EditedPrescription.Medicines.SetBuckle(false);
-                    EditedPrescription.AdjustMedicines(OriginalPrescription);
-                }
+               //if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
+               //{
+               //    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription); 
+               //}
+               //else
+               //{
+               //    if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+               //        EditedPrescription.Medicines.SetBuckle(false);
+               //    EditedPrescription.AdjustMedicines(OriginalPrescription);
+               //}
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
-                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
+                Messenger.Default.Send(EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)
+                    ? new NotificationMessage("ReservePrescriptionEdited")
+                    : new NotificationMessage("PrescriptionEdited"));
             }
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
@@ -504,7 +508,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Delete();
                 MainWindow.ServerConnection.CloseConnection();
-                Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
+                Messenger.Default.Send(EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)
+                    ? new NotificationMessage("ReservePrescriptionEdited")
+                    : new NotificationMessage("PrescriptionEdited"));
                 Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
             }
         }
@@ -691,15 +697,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.PrescriptionPoint.GetDeposit(EditedPrescription.Id);
-                string depositName = EditedPrescription.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
-                PrescriptionDb.ProcessCashFlow(depositName, "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
+                var deposit = EditedPrescription.PrescriptionPoint.Deposit;
+                // string depositName = EditedPrescription.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+                // PrescriptionDb.ProcessCashFlow(depositName, "PreMasId", EditedPrescription.Id, EditedPrescription.PrescriptionPoint.Deposit * -1);
+                EditedPrescription.PrescriptionPoint.Deposit = 0;
                 EditedPrescription.PrescriptionStatus.UpdateStatus(EditedPrescription.Id);
                 EditedPrescription.Update();
                 MainWindow.ServerConnection.CloseConnection();
                 CheckEditStatus();
                 IsBusy = false;
                 Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage("補卡作業成功，退還押金" + EditedPrescription.PrescriptionPoint.Deposit + "元", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("補卡作業成功，退還押金" + deposit + "元", MessageType.SUCCESS);
                 });
             };
             worker.RunWorkerAsync();

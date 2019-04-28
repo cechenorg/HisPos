@@ -265,8 +265,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             p.PrescriptionStatus.IsDeclare = true;
             p.PrescriptionStatus.IsAdjust = true;
             MainWindow.ServerConnection.OpenConnection();
-            var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
-            PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            //var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+            //PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            p.PrescriptionPoint.Deposit = 0;
             p.PrescriptionStatus.UpdateStatus(p.Id);
             p.Treatment.CheckMedicalNumber(false);
             p.Update();
@@ -275,17 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private bool CreatePrescriptionSign(Prescription p,bool isGetCard)
         {
             BusyContent = StringRes.寫卡;
-            if (isGetCard)
-                p.PrescriptionSign = HisApiFunction.WritePrescriptionData(p);
-            else
-            {
-                p.PrescriptionSign = new List<string>();
-            }
-            //if (HisApiFunction.OpenCom())
-            //{
-            //    HisApiBase.csSoftwareReset(3);
-            //    HisApiFunction.CloseCom();
-            //}
+            p.PrescriptionSign = isGetCard ? HisApiFunction.WritePrescriptionData(p) : new List<string>();
             BusyContent = StringRes.產生每日上傳資料;
             if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {

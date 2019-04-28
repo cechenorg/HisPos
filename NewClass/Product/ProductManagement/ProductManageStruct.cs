@@ -6,7 +6,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         public ProductManageStruct(DataRow row)
         {
-            ProductType = row.Field<string>("TYPE").Equals("M")? ProductTypeEnum.Medicine : ProductTypeEnum.OTC;
+            ProductType = (ProductTypeEnum)row.Field<int>("TYPE");
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");

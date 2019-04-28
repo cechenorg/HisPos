@@ -86,5 +86,37 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductLastPrice]", parameters);
         }
+
+        internal static DataTable GetProductTypeByID(string newProductID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", newProductID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTypeByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageOTCMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageOTCMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageNHIMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageNHIMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageSpecialMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageSpecialMedicineDetailByID]", parameters);
+        }
     }
 }
