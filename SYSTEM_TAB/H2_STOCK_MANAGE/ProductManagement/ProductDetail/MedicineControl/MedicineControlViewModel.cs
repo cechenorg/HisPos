@@ -5,6 +5,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -29,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private string newInventory = "";
         private ProductManageMedicine medicine;
         private ProductInventoryRecords inventoryRecordCollection;
+        private ProductTypeEnum productType;
 
         public bool IsDataChanged
         {
@@ -58,17 +60,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
         }
         public ProductManageMedicine BackUpMedicine { get; set; }
-        public ProductManageMedicineDetail MedicineDetail { get; set; }
+        public ProductManageDetail MedicineDetail { get; set; }
         public ProductInventoryRecords InventoryRecordCollection
         {
             get { return inventoryRecordCollection; }
             set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
         }
+        public ProductTypeEnum ProductType
+        {
+            get { return productType; }
+            set { Set(() => ProductType, ref productType, value); }
+        }
         #endregion
 
-        public MedicineControlViewModel(string id)
+        public MedicineControlViewModel(string id, ProductTypeEnum type)
         {
             RegisterCommand();
+            ProductType = type;
             InitMedicineData(id);
         }
         
@@ -154,19 +162,46 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void InitMedicineData(string id)
         {
             MainWindow.ServerConnection.OpenConnection();
+            DataTable manageMedicineDetailDataTable = null;
+            
+            switch (ProductType)
+            {
+                case ProductTypeEnum.OTCMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(id);
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageNHIMedicineDetailByID(id);
+                    break;
+                case ProductTypeEnum.SpecialMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(id);
+                    break;
+            }
+
             DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(id);
             InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(id);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (manageMedicineDataTable.Rows.Count == 0)
+            if (manageMedicineDataTable is null || manageMedicineDetailDataTable is null || manageMedicineDataTable.Rows.Count == 0 || manageMedicineDetailDataTable.Rows.Count == 0)
             {
                 MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
                 return;
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
-            MedicineDetail = new ProductManageMedicineDetail(manageMedicineDataTable.Rows[0]);
 
+            switch (ProductType)
+            {
+                case ProductTypeEnum.OTCMedicine:
+                    MedicineDetail = new ProductManageDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                    MedicineDetail = new ProductNHIDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+                case ProductTypeEnum.SpecialMedicine:
+                    MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+            }
+            
             BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
         }
         private bool IsMedicineDataChanged()
