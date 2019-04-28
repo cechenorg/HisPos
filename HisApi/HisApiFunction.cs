@@ -240,7 +240,7 @@ namespace His_Pos.HisApi
 
         private static DataTable InsertUploadData(Prescription p,string uploadData,DateTime treat)
         {
-            var table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            var table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
             while (table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result"))
             {
                 MessageWindow.ShowMessage("寫卡資料存檔異常，按下OK重試", MessageType.WARNING);
