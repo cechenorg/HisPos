@@ -54,10 +54,10 @@ namespace His_Pos.NewClass.Product.Medicine
             foreach (DataRow r in table.Rows)
             {
                 Medicine med = new Medicine(r);
-                med.Dosage = r.Field<double>("Dosage");
+                med.Dosage = r.Field<double?>("Dosage");
                 med.UsageName = r.Field<string>("Usage");
                 med.PositionID = r.Field<string>("Position");
-                med.Days = r.Field<int>("MedicineDays");
+                med.Days = r.Field<int?>("MedicineDays");
                 med.PaySelf = r.Field<bool>("PaySelf");
                 med.IsBuckle = r.Field<bool>("IsBuckle");
                 med.Amount = r.Field<double>("TotalAmount");
@@ -180,6 +180,28 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (medicine.PaySelf)
                     medicine.Price = currentSet.MedicineSetItems[i].Price;
                 Add(medicine);
+            }
+        }
+
+        public void SetNoBuckle()
+        {
+            foreach (var m in Items)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        m.BuckleAmount = 0;
+                        m.IsBuckle = false;
+                        break;
+                    }
+                    case MedicineVirtual _:
+                        m.BuckleAmount = 0;
+                        m.IsBuckle = false;
+                        break;
+                }
             }
         }
     }

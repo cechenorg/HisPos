@@ -54,7 +54,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID, SearchName, SearchIsEnable, SearchIsInventoryZero);
+            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero);
             DataTable dataTable = ProductDetailDB.GetTotalStockValue();
             MainWindow.ServerConnection.CloseConnection();
 
