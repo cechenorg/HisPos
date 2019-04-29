@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:adjustPharmacistSetting="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="申報藥師調整設定" Height="800" Width="1200">
+        Title="申報藥師調整設定" Height="920" Width="1380">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
@@ -14,7 +15,17 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Margin="10,0,0,0" VerticalAlignment="Center"/>
-        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}"/>
+        <Canvas Grid.Row="0" >
+            <Label Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Canvas.Left="10" Canvas.Top="10"/>
+            <Button Command="{Binding DeleteAppointment}" Content="刪除" Canvas.Right="10" Canvas.Top="10"/>
+        </Canvas>
+        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction
+                        Command="{Binding DataContext.AddAppointment,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </adjustPharmacistSetting:MonthViewCalendar>
     </Grid>
 </Window>
