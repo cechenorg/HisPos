@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:adjustPharmacistSetting="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="申報藥師調整設定" Height="920" Width="1380">
+        Title="申報藥師調整設定" Height="920" Width="1440">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding CloseCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
@@ -14,18 +20,21 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Canvas Grid.Row="0" >
-            <Label Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Canvas.Left="10" Canvas.Top="10"/>
-            <Button Command="{Binding DeleteAppointment}" Content="刪除" Canvas.Right="10" Canvas.Top="10"/>
-        </Canvas>
+        <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Button Grid.Row="0" Command="{Binding DeletePharmacistScheduleItem}" Content="刪除" HorizontalAlignment="Right" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
         <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}">
-            <!--<i:Interaction.Triggers>
+            <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction
-                        Command="{Binding DataContext.AddAppointment,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                        Command="{Binding DataContext.AddPharmacistScheduleItem,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>-->
+            </i:Interaction.Triggers>
         </adjustPharmacistSetting:MonthViewCalendar>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Button Command="{Binding SavePharmacistScheduleItem}" Content="儲存" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
+            <Button Command="{Binding Close}" Content="關閉" Background="DimGray" BorderBrush="DimGray" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
+        </StackPanel>
     </Grid>
 </Window>
