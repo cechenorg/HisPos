@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -618,10 +619,10 @@ namespace His_Pos.Service
 
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            DateTime date = (DateTime)values[1];
+            DateTime date = ((AdjustPharmacistViewModel)values[1]).MyDisplayDate;
 
             ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
-            foreach (Appointment appointment in (ObservableCollection<Appointment>)values[0])
+            foreach (Appointment appointment in ((AdjustPharmacistViewModel)values[1]).MonthViewCalendar.Appointments)
             {
                 if (appointment.Date.Date == date)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -8,7 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 {
     public class AdjustPharmacistViewModel : ViewModelBase
     {
-        private MonthViewCalendar monthViewCalendar;
+        public static MonthViewCalendar monthViewCalendar;
         public MonthViewCalendar MonthViewCalendar
         {
             get => monthViewCalendar;
@@ -75,17 +76,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
         private void AddAppointmentAction()
         {
-            if (MySelectedDate != null)
-            {
-                var appointmentWindow = new AppointmentWindow
-                (
-                    appointment =>
-                    {
-                        MonthViewCalendar.Appointments.Add(appointment);
-                    }, MySelectedDate
-                );
-                appointmentWindow.Show();
-            }
+            //if (MySelectedDate != null)
+            //{
+            //    var appointmentWindow = new AppointmentWindow
+            //    (
+            //        appointment =>
+            //        {
+            //            MonthViewCalendar.Appointments.Add(appointment);
+            //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Appointments"));
+            //        }, MySelectedDate
+            //    );
+            //    appointmentWindow.Show();
+            //}
         }
 
         private void DeleteAppointmentAction()

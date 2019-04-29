@@ -20,12 +20,12 @@
             <Button Command="{Binding DeleteAppointment}" Content="刪除" Canvas.Right="10" Canvas.Top="10"/>
         </Canvas>
         <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}">
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction
                         Command="{Binding DataContext.AddAppointment,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
         </adjustPharmacistSetting:MonthViewCalendar>
     </Grid>
 </Window>
