@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         }
         public string Content
         {
-            get => Name + " " + PrescriptionCount;
+            get => Name + " 處方張數:" + PrescriptionCount;
         }
     }
 }

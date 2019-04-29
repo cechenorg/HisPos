@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
@@ -54,9 +55,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 }
             }
         }
+        public RelayCommand DeleteAppointment { get; set; }
+        public RelayCommand AddAppointment { get; set; }
         public static MedicalPersonnels MedicalPersonnels { get; set; }
         public AdjustPharmacistViewModel(DateTime declare)
         {
+            DeleteAppointment = new RelayCommand(DeleteAppointmentAction);
+            AddAppointment = new RelayCommand(AddAppointmentAction);
             CurrentDate = declare;
             MyDisplayDate = declare;
             first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
@@ -66,6 +71,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             MedicalPersonnels.GetEnablePharmacist(first,last);
             MainWindow.ServerConnection.CloseConnection();
             MonthViewCalendar = new MonthViewCalendar(declare);
+        }
+
+        private void AddAppointmentAction()
+        {
+            if (MySelectedDate != null)
+            {
+                var appointmentWindow = new AppointmentWindow
+                (
+                    appointment =>
+                    {
+                        MonthViewCalendar.Appointments.Add(appointment);
+                    }, MySelectedDate
+                );
+                appointmentWindow.Show();
+            }
+        }
+
+        private void DeleteAppointmentAction()
+        {
+            MonthViewCalendar.Appointments.Remove(MonthViewCalendar.SelectedAppointment);
         }
     }
 }
