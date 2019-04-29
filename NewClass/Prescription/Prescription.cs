@@ -1186,27 +1186,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void CheckIsCooperative()
         {
-            if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
-            {
-                PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
-                if (PrescriptionStatus.IsCooperative)
-                {
-                    PrescriptionStatus.IsBuckle = false;
-                    Source = PrescriptionSource.Cooperative;//來源骨科
-                }
-                else
-                {
-                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
-                    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
-                    Source = PrescriptionSource.XmlOfPrescription;//來源其他合作診所
-                }
-            }
-            else//非合作診所
-            {
-                PrescriptionStatus.IsBuckle = true;
-                if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
-                    Source = PrescriptionSource.Normal;
-            }
+            CheckIsBuckleAndSource();
             Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
@@ -1268,6 +1248,30 @@ namespace His_Pos.NewClass.Prescription
                 InsertPrescription();
             else
                 Update();
+        }
+        public void CheckIsBuckleAndSource()
+        {
+            if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
+            {
+                PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
+                if (PrescriptionStatus.IsCooperative)
+                {
+                    PrescriptionStatus.IsBuckle = false;
+                    Source = PrescriptionSource.Cooperative;//來源骨科
+                }
+                else
+                {
+                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
+                    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
+                    Source = PrescriptionSource.XmlOfPrescription;//來源其他合作診所
+                }
+            }
+            else//非合作診所
+            {
+                PrescriptionStatus.IsBuckle = true;
+                if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
+                    Source = PrescriptionSource.Normal;
+            }
         }
     }
 }

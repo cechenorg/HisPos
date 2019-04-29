@@ -275,6 +275,15 @@
                     </Style>
                     <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True"
                         xmlns:vm="clr-namespace:His_Pos.ChromeTabViewModel" />
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Trigger.Setters>
+                                    <Setter Property="Opacity" Value="1.0" />
+                                </Trigger.Setters>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
                 </ResourceDictionary>
                 <ResourceDictionary
                     xmlns:primitives="clr-namespace:Microsoft.Windows.Controls.Primitives;assembly=WPFToolkit">
@@ -511,18 +520,19 @@
                                         <Path x:Name="Blackout" Grid.Row="1" Opacity="0" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Fill="#FF000000" Stretch="Fill" Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z"/>
                                         <Rectangle Width="0" x:Name="DayButtonFocusVisual" Grid.Row="1" Visibility="Collapsed" IsHitTestVisible="false" RadiusX="1" RadiusY="1" Stroke="#FF45D6FA"/>
                                         <!-- Appointments -->
-                                        <ListBox x:Name="appointmentsLbx" Grid.Row="1" Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Stretch">
-                                            <ListBox.ItemsSource>
+                                        <ListBox x:Name="appointmentsLbx" Grid.Row="1" Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" SelectedItem="{Binding DataContext.MonthViewCalendar.SelectedAppointment,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" ItemsSource="{Binding DataContext.MonthViewCalendar.Appointments,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                                            <!--<ListBox.ItemsSource>
                                                 <MultiBinding Converter="{StaticResource AppointmentsConverter}">
-                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type adjustPharmacistSetting:MonthViewCalendar}}" Path="Appointments"/>
-                                                    <Binding RelativeSource="{RelativeSource Mode=Self}" Path="DataContext"/>
+                                                    <Binding Path="MonthViewCalendar.Appointments" UpdateSourceTrigger="PropertyChanged"/>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" Path="DataContext" UpdateSourceTrigger="PropertyChanged"/>
                                                 </MultiBinding>
-                                            </ListBox.ItemsSource>
+                                            </ListBox.ItemsSource>-->
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Background="#FFDFE8F5" BorderBrush="#FF5D8CC9" BorderThickness="1" CornerRadius="4">
-                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding Subject}"/>
-                                                    </Border>
+                                                    <TextBlock HorizontalAlignment="Left" Text="{Binding MedicalPersonnel.Content}"/>
+                                                    <!--<Border Background="#FFDFE8F5" BorderBrush="#FF5D8CC9" BorderThickness="1" CornerRadius="4">
+                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding MedicalPersonnel.Content}"/>
+                                                    </Border>-->
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
