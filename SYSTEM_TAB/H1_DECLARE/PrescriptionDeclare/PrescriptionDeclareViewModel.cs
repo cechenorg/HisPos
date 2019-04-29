@@ -1083,6 +1083,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.GetCompletePrescriptionData(false, false);
                 CurrentPrescription.CountPrescriptionPoint(true);
                 CanAdjust = true;
+                switch (pre.Source)
+                {
+                    case PrescriptionSource.ChronicReserve:
+                        CurrentPrescription.CheckIsCooperative();
+                        break;
+                    case PrescriptionSource.Normal:
+                        CurrentPrescription.CheckIsBuckleAndSource();
+                        break;
+                }
             }
             catch (Exception)
             {
