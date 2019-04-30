@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using GalaSoft.MvvmLight;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person
 {
+    [ZeroFormattable]
     public class Person:ObservableObject
     {
         public Person(){}
@@ -25,16 +27,27 @@ namespace His_Pos.NewClass.Person
             Line = r.Field<string>("Person_LINE");
             Note = r.Field<string>("Person_Note");
         }
-        public int ID { get; set; }
-        public string Name { get; set; }//姓名
-        public string Gender { get; set; }//性別
-        public string IDNumber { get; set; }//身分證字號
+        [Index(0)]
+        public virtual int ID { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }//姓名
+        [Index(2)]
+        public virtual string Gender { get; set; }//性別
+        [Index(3)]
+        public virtual string IDNumber { get; set; }//身分證字號
+        [IgnoreFormat]
         public DateTime? Birthday { get; set; }//生日
+        [IgnoreFormat]
         public string Tel { get; set; }//家電
+        [IgnoreFormat]
         public string CellPhone { get; set; }//手機
+        [IgnoreFormat]
         public string Address { get; set; }//地址
+        [IgnoreFormat]
         public string Email { get; set; }//信箱
+        [IgnoreFormat]
         public string Line { get; set; }
+        [IgnoreFormat]
         public string Note { get; set; }//備註
         public string CheckGender()
         {

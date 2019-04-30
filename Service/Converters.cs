@@ -634,7 +634,7 @@ namespace His_Pos.Service
             return pharmacistSchedule;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -681,7 +681,7 @@ namespace His_Pos.Service
                     return dtfi;
                 }
             }
-            DateTimeFormatInfo dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
+            var dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
             dt.Calendar = new GregorianCalendar();
             return dt;
         }

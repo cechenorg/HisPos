@@ -110,6 +110,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             MedicalPersonnels = new MedicalPersonnels(false);
             MainWindow.ServerConnection.OpenConnection();
             MedicalPersonnels.GetEnablePharmacist(first, last);
+            PharmacistSchedule.GetPharmacistSchedule(first,last);
             MainWindow.ServerConnection.CloseConnection();
             MonthViewCalendar = new MonthViewCalendar(declare);
         }
@@ -150,13 +151,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                     if (PharmacistSchedule.Count(p => p.Date.Equals(MySelectedDate) && p.MedicalPersonnel.ID.Equals(pharmacistScheduleItem.MedicalPersonnel.ID)) > 0)
                     {
                         MessageWindow.ShowMessage("日期 : "+ SelectedDateStr + " 藥師已存在",MessageType.ERROR);
+                        return;
                     }
-                    else
+
+                    if (pharmacistScheduleItem.MedicalPersonnel.StartDate != null && pharmacistScheduleItem.MedicalPersonnel.StartDate > MySelectedDate)
                     {
-                        PharmacistSchedule.Add(pharmacistScheduleItem);
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
-                        IsEdit = true;
+                        MessageWindow.ShowMessage("藥師 : " + pharmacistScheduleItem.MedicalPersonnel.Name + "於此日期未到職", MessageType.ERROR);
+                        return;
                     }
+
+                    if(pharmacistScheduleItem.MedicalPersonnel.LeaveDate != null && pharmacistScheduleItem.MedicalPersonnel.LeaveDate < MySelectedDate)
+                    {
+                        MessageWindow.ShowMessage("藥師 : " + pharmacistScheduleItem.MedicalPersonnel.Name + "於此日期已離職", MessageType.ERROR);
+                        return;
+                    }
+
+                    PharmacistSchedule.Add(pharmacistScheduleItem);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
+                    IsEdit = true;
                 }, MySelectedDate
             );
             addPharmacistScheduleItemWindow.Show();
@@ -164,7 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
         private void SavePharmacistScheduleItemAction()
         {
-            
+            PharmacistSchedule.SaveSchedule(first,last);
         }
 
         private void CloseAction()

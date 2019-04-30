@@ -156,7 +156,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             }
             if (makeUp)
                 MakeUpMark = "2";
-            MedicalPersonIcNumber = p.Treatment.Pharmacist.IdNumber;
+            MedicalPersonIcNumber = p.Treatment.Pharmacist.IDNumber;
             MainDiagnosisCode = p.Treatment.MainDisease.ID;
             if (!string.IsNullOrEmpty(p.Treatment.SubDisease.ID))
                 SecondDiagnosisCode = p.Treatment.SubDisease.ID;

@@ -335,24 +335,6 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Grid.Resources>
-                                                        <!--<Style x:Key="NavigationEllipseStyle" TargetType="{x:Type Ellipse}">
-                                                            <Setter Property="Width" Value="20"/>
-                                                            <Setter Property="Height" Value="20"/>
-                                                            <Setter Property="Stroke" Value="#FF8EB0DC"/>
-                                                            <Setter Property="StrokeThickness" Value="1"/>
-                                                            <Setter Property="Fill">
-                                                                <Setter.Value>
-                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                                        <GradientStop Color="#FFFAFCFF" Offset="0"/>
-                                                                        <GradientStop Color="#FFFAFCFF" Offset="0.5"/>
-                                                                        <GradientStop Color="#FFCCE2FF" Offset="0.5"/>
-                                                                        <GradientStop Color="#FFCCE2FF" Offset="1"/>
-                                                                    </LinearGradientBrush>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </Style>-->
-                                                    </Grid.Resources>
                                                     <Rectangle Fill="Transparent" Grid.ColumnSpan="4"/>
                                                     <!-- Start: Month Content Grid -->
                                                     <Grid x:Name="PART_MonthView" Grid.Row="1" Grid.ColumnSpan="4" Visibility="Visible" >
@@ -530,9 +512,6 @@
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock HorizontalAlignment="Left" Text="{Binding MedicalPersonnel.Content}"/>
-                                                    <!--<Border Background="#FFDFE8F5" BorderBrush="#FF5D8CC9" BorderThickness="1" CornerRadius="4">
-                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding MedicalPersonnel.Content}"/>
-                                                    </Border>-->
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
