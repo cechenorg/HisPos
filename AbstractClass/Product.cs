@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Data;
-using His_Pos.Struct.Product;
 
 namespace His_Pos.AbstractClass
 {
@@ -16,13 +15,13 @@ namespace His_Pos.AbstractClass
             EngName = dataRow["PRO_ENG"].ToString();
         }
 
-        public Product(PurchaseProduct selectedItem)
-        {
-            Id = selectedItem.Id;
-            Name = selectedItem.Name;
-            ChiName = selectedItem.ChiName;
-            EngName = selectedItem.EngName;
-        }
+        //public Product(PurchaseProduct selectedItem)
+        //{
+        //    Id = selectedItem.Id;
+        //    Name = selectedItem.Name;
+        //    ChiName = selectedItem.ChiName;
+        //    EngName = selectedItem.EngName;
+        //}
 
         public string Id { get; set; }
         public string name;

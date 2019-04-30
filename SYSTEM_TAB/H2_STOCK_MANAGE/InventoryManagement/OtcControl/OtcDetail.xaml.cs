@@ -44,7 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
         //public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
-        public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
+        //public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
         //public ObservableCollection<ProductDetailManufactory> OTCManufactoryCollection;
@@ -149,8 +149,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             OTCNotes.Document.Blocks.Clear();
             OTCNotes.AppendText(InventoryOtc.Note.Trim());
 
-            CusOrderOverviewCollection = null;/// OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
-            OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
+            //CusOrderOverviewCollection = null;/// OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
+            //OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
             StoreOrderOverviewCollection = null;/// OTCDb.GetOtcStoOrderByID(InventoryOtc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;

@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.Class.Leave;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave;

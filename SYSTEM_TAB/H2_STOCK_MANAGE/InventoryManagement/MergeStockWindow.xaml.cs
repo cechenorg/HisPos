@@ -6,7 +6,6 @@ using System.Windows.Input;
 using His_Pos.Class.Product;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.Struct.Product;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {

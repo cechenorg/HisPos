@@ -21,16 +21,5 @@ namespace His_Pos.NewClass.Prescription.IcData
          * 總量(53-59)
          * 交付處方註記(60-61) 
          */
-        public IcPrescriptData(DeclareMedicine med)
-        {
-            TreatmentCategory = "1";
-            MedicineId = med.Id;
-            Position = med.Position.PadRight(6);
-            Usage = med.Usage.Name.PadRight(18);
-            Days = med.Days.PadRight(2);
-            Total = med.Amount.ToString().PadRight(7);
-            PrescripSign = "02";
-            DataStr = TreatmentCategory + MedicineId + Position + Usage + Days + Total + PrescripSign;
-        }
     }
 }

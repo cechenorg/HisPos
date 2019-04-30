@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using His_Pos.Class;
-using His_Pos.Class.Leave;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
@@ -31,21 +30,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
         }
 
         Collection<AuthStatus> AuthStatuses { get; set; }
-        private Collection<AuthLeaveRecord> authLeaveRecords;
+        //private Collection<AuthLeaveRecord> authLeaveRecords;
 
-        public Collection<AuthLeaveRecord> AuthLeaveRecords
-        {
-            get { return authLeaveRecords; }
-            set
-            {
-                authLeaveRecords = value;
-                NotifyPropertyChanged("AuthLeaveRecords");
-            }
-        }
+        //public Collection<AuthLeaveRecord> AuthLeaveRecords
+        //{
+        //    get { return authLeaveRecords; }
+        //    set
+        //    {
+        //        authLeaveRecords = value;
+        //        NotifyPropertyChanged("AuthLeaveRecords");
+        //    }
+        //}
 
-        public string AuthLeaveCheckedCount {
-            get { return AuthLeaveRecords.Count(al => al.IsSelected).ToString(); }
-        }
+        //public string AuthLeaveCheckedCount {
+        //    get { return AuthLeaveRecords.Count(al => al.IsSelected).ToString(); }
+        //}
 
         public static AuthenticationManageView Instance;
         public static bool DataChanged;
@@ -105,8 +104,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
         {
             UpdateUi();
 
-            AuthLeaveAllSelectCheckBox.IsChecked =
-                AuthLeaveRecords.Count(al => al.IsSelected) == AuthLeaveRecords.Count;
+            //AuthLeaveAllSelectCheckBox.IsChecked =
+            //    AuthLeaveRecords.Count(al => al.IsSelected) == AuthLeaveRecords.Count;
         }
 
         public void UpdateUi()
@@ -118,10 +117,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
         {
             bool selectStatus = (bool)AuthLeaveAllSelectCheckBox.IsChecked;
 
-            foreach (var authLeaveRecord in AuthLeaveRecords)
-            {
-                authLeaveRecord.IsSelected = selectStatus;
-            }
+            //foreach (var authLeaveRecord in AuthLeaveRecords)
+            //{
+            //    authLeaveRecord.IsSelected = selectStatus;
+            //}
 
             UpdateUi();
         }

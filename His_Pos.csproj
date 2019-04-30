@@ -284,6 +284,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="Class\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
     </Compile>
@@ -524,15 +525,8 @@
     <Compile Include="Class\Authority\Authority.cs" />
     <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="Class\CooperativeClinicJson.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryHis.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryPos.cs" />
     <Compile Include="Class\DeclareTrade.cs" />
-    <Compile Include="Class\DeclareTradeDb.cs" />
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
-    <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\oDeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
@@ -541,7 +535,6 @@
     <Compile Include="NewClass\Prescription\IcData\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadDb.cs" />
-    <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -604,14 +597,8 @@
     <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\Entry\Entry.cs" />
     <Compile Include="Class\Entry\EntryDb.cs" />
-    <Compile Include="Class\FunctionDb.cs" />
     <Compile Include="Class\HisApiData\MedicalInformation.cs" />
-    <Compile Include="Class\IcCardPay.cs" />
-    <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
-    <Compile Include="Class\Leave\AuthLeaveRecord.cs" />
-    <Compile Include="Class\Leave\LeaveDb.cs" />
-    <Compile Include="Class\Leave\LeaveRecord.cs" />
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />
@@ -620,34 +607,18 @@
     <Compile Include="Class\MedBag\MedBag.cs" />
     <Compile Include="Class\MedBag\MedBagDb.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
-    <Compile Include="Class\Person\Customer.cs" />
-    <Compile Include="Class\Declare\DeclareDetail.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
-    <Compile Include="Class\Hospital.cs" />
-    <Compile Include="Class\IcCard.cs" />
-    <Compile Include="Class\IcMarks.cs" />
-    <Compile Include="Class\HospitalDb.cs" />
-    <Compile Include="Class\Person\CustomerDb.cs" />
     <Compile Include="Class\Person\MedicalPersonnel.cs" />
-    <Compile Include="Class\NewbornsData.cs" />
-    <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
-    <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
-    <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
-    <Compile Include="Class\PredictChronic.cs" />
-    <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageMaster.cs" />
-    <Compile Include="Class\Product\CusOrderOverview.cs" />
-    <Compile Include="Class\Product\DeclareMedicine.cs" />
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicine.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
-    <Compile Include="Class\Product\MedicineInformation.cs" />
     <Compile Include="Class\Product\MedXml.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
@@ -655,10 +626,6 @@
     <Compile Include="Class\Product\PrescriptionOTC.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\Product\ProductGroup.cs" />
-    <Compile Include="Class\Product\ProductPurchaseMedicine.cs" />
-    <Compile Include="Class\Product\ProductPurchaseOTC.cs" />
-    <Compile Include="Class\Product\ProductReturnMedicine.cs" />
-    <Compile Include="Class\Product\ProductReturnOTC.cs" />
     <Compile Include="Class\Product\ProductTypeMedicine.cs" />
     <Compile Include="Class\Product\ProductTypeOTC.cs" />
     <Compile Include="Class\Product\StockTakingMedicine.cs" />
@@ -673,15 +640,9 @@
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
-    <Compile Include="Class\Selection.cs" />
-    <Compile Include="Class\Leave\Leave.cs" />
-    <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\OTC.cs" />
     <Compile Include="NewClass\Product\Medicine\Usage\Usage.cs" />
     <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
-    <Compile Include="Class\Vaccination.cs" />
-    <Compile Include="Class\WareHouse.cs" />
-    <Compile Include="Class\WareHouseDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Service\Converters.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
@@ -978,9 +939,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FunctionWindow\LoadingWindow.xaml.cs">
-      <DependentUpon>LoadingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
@@ -1059,10 +1017,7 @@
     <Compile Include="NewClass\Prescription\IcData\IcPrescriptData.cs" />
     <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
-    <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
-    <Compile Include="Struct\Product\PurchaseProduct.cs" />
-    <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
     <Compile Include="SYSTEM_TAB\OfflineOperation\AdjustView\OfflineAdjustView.xaml.cs">
       <DependentUpon>OfflineAdjustView.xaml</DependentUpon>
     </Compile>
@@ -1497,10 +1452,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FunctionWindow\LoadingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1695,7 +1646,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Class\Position\" />
     <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>

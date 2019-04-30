@@ -381,7 +381,7 @@ namespace His_Pos.ChromeTabViewModel
 
                             if (InventoryManagementView.DataChanged)
                             {
-                                InventoryManagementView.Instance.MergingData();
+                                //InventoryManagementView.Instance.MergingData();
                                 InventoryManagementView.Instance.SearchData();
                             }
                             break;
