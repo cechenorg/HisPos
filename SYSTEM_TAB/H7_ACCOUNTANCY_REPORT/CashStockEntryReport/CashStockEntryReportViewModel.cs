@@ -17,6 +17,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => TotalCashFlow, ref totalCashFlow, value);
             }
         }
-        private CashReports cashflowCollection = new CashReports();
+        private CashReports cashflowCollection;
         public CashReports CashflowCollection
         {
             get => cashflowCollection;
@@ -140,7 +141,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => TotalPrescriptionProfitReport, ref totalPrescriptionProfitReport, value);
             }
         }
-        private PrescriptionDetailReports prescriptionDetailReportCollection = new PrescriptionDetailReports();
+        private PrescriptionDetailReports prescriptionDetailReportCollection;
         public PrescriptionDetailReports PrescriptionDetailReportCollection
         {
             get => prescriptionDetailReportCollection;
@@ -210,6 +211,25 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => CashStockEntryReportEnum, ref cashStockEntryReportEnum, value);
+            }
+        }
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                Set(() => IsBusy, ref _isBusy, value);
+            }
+        }
+        private string _busyContent;
+
+        public string BusyContent
+        {
+            get => _busyContent;
+            set
+            {
+                Set(() => BusyContent, ref _busyContent, value);
             }
         }
         #endregion
@@ -319,9 +339,23 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) 
                 PrescriptionDetailReportCollection.Clear();
             if (CooperativePrescriptionSelectedItem is null)
-                return;
+                return; 
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            PrescriptionDetailReportCollection.GetDataByDate(CooperativePrescriptionSelectedItem.TypeId, StartDate, EndDate);
+
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(CooperativePrescriptionSelectedItem.TypeId, StartDate, EndDate);
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync(); 
             SelfPrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
         }
@@ -329,31 +363,60 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null)
                 PrescriptionDetailReportCollection.Clear();
             if (SelfPrescriptionSelectedItem is null)
-                return;
-            
+                return; 
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            PrescriptionDetailReportCollection.GetDataByDate(SelfPrescriptionSelectedItem.TypeId,StartDate,EndDate);
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(SelfPrescriptionSelectedItem.TypeId, StartDate, EndDate); 
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false; 
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
             CooperativePrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
         }
-        private void SearchAction() {
-            GetData();
+        private void SearchAction() { 
+                GetData(); 
         }
         private void GetData() {
-            CashflowCollection.GetDataByDate(StartDate, EndDate);
-            TotalPrescriptionProfitReportCollection.GetDataByDate(StartDate, EndDate);
+            TotalPrescriptionProfitReportCollection.Clear();
             SelfPrescriptionProfitReportCollection.Clear();
             CooperativePrescriptionProfitReportCollection.Clear();
-            foreach (var r in TotalPrescriptionProfitReportCollection) {
-                if (r.TypeId.Length == 1)
-                    SelfPrescriptionProfitReportCollection.Add(r);
-                else
-                    CooperativePrescriptionProfitReportCollection.Add(r);
-            }
-            CaculateTotalCashFlow();
-            CaculateTotalPrescriptionProfit();
-            CaculateSelfPrescriptionProfit();
-            CaculateCooperativePrescriptionProfit();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                CashflowCollection = new CashReports(StartDate,EndDate);
+                TotalPrescriptionProfitReportCollection.GetDataByDate(StartDate, EndDate);
+               
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                foreach (var r in TotalPrescriptionProfitReportCollection)
+                {
+                    if (r.TypeId.Length == 1)
+                        SelfPrescriptionProfitReportCollection.Add(r);
+                    else
+                        CooperativePrescriptionProfitReportCollection.Add(r);
+                }
+                CaculateTotalCashFlow();
+                CaculateTotalPrescriptionProfit();
+                CaculateSelfPrescriptionProfit();
+                CaculateCooperativePrescriptionProfit();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+             
         }
         private void CaculateTotalCashFlow() {
             

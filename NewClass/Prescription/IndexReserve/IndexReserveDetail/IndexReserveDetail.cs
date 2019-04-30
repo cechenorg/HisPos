@@ -12,8 +12,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
         public IndexReserveDetail(DataRow r) {
             Id = r.Field<string>("MedicineID");
             Name = r.Field<string>("Pro_ChineseName");
-            Amount = r.Field<double>("Inventory");
-            Stock = r.Field<double>("TotalAmount");
+            Amount = r.Field<double>("TotalAmount"); 
+             Stock = r.Field<double>("Inventory");
         }
 
         public string Id { get; set; }
