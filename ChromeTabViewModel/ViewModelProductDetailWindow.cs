@@ -68,7 +68,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
         {
-            if (notificationMessage.Notification == nameof(ProductManagementView))
+            if (notificationMessage.Notification == "ShowProductDetail")
                 AddTabCommandAction(notificationMessage.Content);
         }
         private void ClearTabs(NotificationMessage notificationMessage)

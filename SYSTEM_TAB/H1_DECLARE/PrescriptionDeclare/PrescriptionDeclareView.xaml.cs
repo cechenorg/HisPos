@@ -267,7 +267,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var row = sender as DataGridRow;
             if (!(row?.Item is Medicine med)) return;
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string>(this, med.ID, nameof(PrescriptionDeclareView)));
+            Messenger.Default.Send(new NotificationMessage<string>(this, med.ID, "ShowProductDetail"));
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
