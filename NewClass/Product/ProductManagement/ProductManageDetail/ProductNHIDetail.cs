@@ -1,13 +1,17 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Product.ProductManagement
+namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
 {
-    public struct ProductManageMedicineDetail
+    public class ProductNHIDetail : ProductManageDetail
     {
-        public ProductManageMedicineDetail(DataRow row)
+        public ProductNHIDetail(DataRow row) : base(row)
         {
             NHIPrice = (double)row.Field<decimal>("Med_Price");
-            PackageAmount = row.Field<int>("SinData_PackageAmount").ToString();
             Form = row.Field<string>("Med_Form");
             ATC = row.Field<string>("Med_ATC");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
@@ -16,12 +20,11 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SC = row.Field<string>("Med_SingleCompound") + "方";
             Ingredient = row.Field<string>("Med_Ingredient");
         }
-        
+
         public bool IsFrozen { get; }
         public int? ControlLevel { get; }
         public double NHIPrice { get; }
-        public string PackageAmount { get; }
-        
+
         public string Form { get; }
         public string ATC { get; }
         public string Manufactory { get; }

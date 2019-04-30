@@ -63,18 +63,12 @@ namespace His_Pos.ChromeTabViewModel
         #region ----- Define Functions -----
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<NotificationMessage<ProductManageStruct>>(this, GetSelectedProductDetail);
-            Messenger.Default.Register<NotificationMessage<Medicine>>(this, GetSelectedProductDetail);
+            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedProductDetail);
             Messenger.Default.Register<NotificationMessage>(this, ClearTabs);
         }
-        private void GetSelectedProductDetail(NotificationMessage<ProductManageStruct> notificationMessage)
+        private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductManagementView))
-                AddTabCommandAction(notificationMessage.Content);
-        }
-        private void GetSelectedProductDetail(NotificationMessage<Medicine> notificationMessage)
-        {
-            if (notificationMessage.Notification == nameof(PrescriptionDeclareView) || notificationMessage.Notification == nameof(PrescriptionEditWindow))
                 AddTabCommandAction(notificationMessage.Content);
         }
         private void ClearTabs(NotificationMessage notificationMessage)

@@ -1,11 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.ProductManagement;
@@ -18,7 +21,7 @@ namespace His_Pos.ChromeTabViewModel
     public class ProductDetailViewModel : ViewModelBase
     {
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
-        public RelayCommand<object> AddTabCommand { get; set; }
+        public RelayCommand<string> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -54,7 +57,7 @@ namespace His_Pos.ChromeTabViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
+            this.AddTabCommand = new RelayCommand<string>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -121,53 +124,45 @@ namespace His_Pos.ChromeTabViewModel
                 
         }
         
-        public void AddTabCommandAction(object newProduct)
+        public void AddTabCommandAction(string newProductID)
         {
             TabBase newTab;
 
-            if (newProduct is Medicine)
+            foreach (TabBase tab in ItemCollection)
             {
-                Medicine tempMedicine = newProduct as Medicine;
-
-                foreach (TabBase tab in ItemCollection)
+                if (tab.TabName == newProductID)
                 {
-                    if (tab.TabName == tempMedicine.ID)
-                    {
-                        this.SelectedTab = tab;
-                        return;
-                    }
+                    SelectedTab = tab;
+                    return;
                 }
-                
-                newTab = new MedicineControlViewModel(tempMedicine.ID) { TabName = tempMedicine.ID, Icon = "/Images/BlueDot.png" };
             }
-            else
+
+            DataTable dataTable = ProductDetailDB.GetProductTypeByID(newProductID);
+
+            if (dataTable is null || dataTable.Rows.Count == 0)
             {
-                ProductManageStruct tempProduct = (ProductManageStruct)newProduct;
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
 
-                foreach (TabBase tab in ItemCollection)
-                {
-                    if (tab.TabName == tempProduct.ID)
-                    {
-                        this.SelectedTab = tab;
-                        return;
-                    }
-                }
+            ProductTypeEnum type = (ProductTypeEnum)dataTable.Rows[0].Field<int>("Pro_TypeID");
 
-                switch (tempProduct.ProductType)
-                {
-                    case ProductTypeEnum.OTC:
-                        newTab = new OtcDetailView() { TabName = tempProduct.ID, Icon = "/Images/OrangeDot.png" };
-                        break;
-                    case ProductTypeEnum.Medicine:
-                        newTab = new MedicineControlViewModel(tempProduct.ID) { TabName = tempProduct.ID, Icon = "/Images/BlueDot.png" };
-                        break;
-                    default:
-                        return;
-                }
+            switch (type)
+            {
+                case ProductTypeEnum.OTC:
+                    newTab = new OtcDetailView() { TabName = newProductID, Icon = "/Images/OrangeDot.png" };
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                case ProductTypeEnum.OTCMedicine:
+                case ProductTypeEnum.SpecialMedicine:
+                    newTab = new MedicineControlViewModel(newProductID, type) { TabName = newProductID, Icon = "/Images/BlueDot.png" };
+                    break;
+                default:
+                    return;
             }
             
-            this.ItemCollection.Add(newTab.getTab());
-            this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
+            ItemCollection.Add(newTab.getTab());
+            SelectedTab = ItemCollection[ItemCollection.Count - 1];
         }
     }
 }
