@@ -310,6 +310,12 @@ namespace His_Pos.ChromeTabViewModel
             var result = SpecialTreats.SingleOrDefault(i => i.ID.Equals(id));
             return result ?? new SpecialTreat();
         }
+
+        public static MedicalPersonnel GetMedicalPersonByID(int id)
+        {
+            var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
+            return result;
+        }
         public void StartPrintMedBag(ReportViewer r)
         {
             IsBusy = true;

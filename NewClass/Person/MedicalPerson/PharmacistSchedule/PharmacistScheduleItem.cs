@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 using GalaSoft.MvvmLight;
-using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
+namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
-    public class Appointment:ObservableObject
+    public class PharmacistScheduleItem:ObservableObject
     {
+        public PharmacistScheduleItem() { }
+        public PharmacistScheduleItem(DataRow r)
+        {
+            MedicalPersonnel = new DeclareMedicalPersonnel(r);
+            Date = r.Field<DateTime>("SchTemp_Date");
+        }
+
         private DeclareMedicalPersonnel medicalPersonnel;
         public DeclareMedicalPersonnel MedicalPersonnel
         {

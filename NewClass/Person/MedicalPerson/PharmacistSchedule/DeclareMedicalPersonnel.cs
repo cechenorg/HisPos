@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
-namespace His_Pos.NewClass.Person.MedicalPerson
+namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public class DeclareMedicalPersonnel:MedicalPersonnel
     {
@@ -13,8 +8,10 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         {
             ID = selectedMedicalPersonnel.ID;
             Name = selectedMedicalPersonnel.Name;
-            IdNumber = selectedMedicalPersonnel.IdNumber;
-            PrescriptionCount = 0;
+            IDNumber = selectedMedicalPersonnel.IDNumber;
+            PrescriptionCount = null;
+            StartDate = selectedMedicalPersonnel.StartDate;
+            LeaveDate = selectedMedicalPersonnel.LeaveDate;
             //StartDate = r.Field<DateTime>("Emp_StartDate");
             //LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             //PrescriptionCount = r.Field<int>("");
@@ -22,10 +19,10 @@ namespace His_Pos.NewClass.Person.MedicalPerson
 
         public DeclareMedicalPersonnel(DataRow r) : base(r)
         {
-            //PrescriptionCount = r.Field<int>("");
+            PrescriptionCount = r.Field<int>("Prescription_Count");
         }
-        private int prescriptionCount;
-        public int PrescriptionCount
+        private int? prescriptionCount;
+        public int? PrescriptionCount
         {
             get => prescriptionCount;
             set
@@ -35,7 +32,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         }
         public string Content
         {
-            get => Name + " 處方張數:" + PrescriptionCount;
+            get => Name + (PrescriptionCount is null?" 處方張數:" + PrescriptionCount:"");
         }
     }
 }

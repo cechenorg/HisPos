@@ -33,10 +33,10 @@ namespace His_Pos.FunctionWindow
         { 
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
-
+            CheckCsHis();
             if (!CheckSettingFileExist())
             {
-                VerifyPharmacyWindow.VerifyPharmacyWindow verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow();
+                var verifyPharmacyWindow = new VerifyPharmacyWindow.VerifyPharmacyWindow();
             }
             else { 
                     ReadSettingFile(); 
@@ -187,6 +187,14 @@ namespace His_Pos.FunctionWindow
                 }
             }
             #endregion
+        }
+        private static void CheckCsHis()
+        {
+            if (File.Exists("C:\\NHI\\VPN\\CSHIS.dll"))
+            {
+                File.Copy("C:\\NHI\\VPN\\CSHIS.dll",
+                    Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHIS.dll" : "C:\\Windows\\System32\\CSHIS.dll", true);
+            }
         }
     }
 }

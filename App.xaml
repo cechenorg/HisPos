@@ -335,24 +335,6 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Grid.Resources>
-                                                        <!--<Style x:Key="NavigationEllipseStyle" TargetType="{x:Type Ellipse}">
-                                                            <Setter Property="Width" Value="20"/>
-                                                            <Setter Property="Height" Value="20"/>
-                                                            <Setter Property="Stroke" Value="#FF8EB0DC"/>
-                                                            <Setter Property="StrokeThickness" Value="1"/>
-                                                            <Setter Property="Fill">
-                                                                <Setter.Value>
-                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                                        <GradientStop Color="#FFFAFCFF" Offset="0"/>
-                                                                        <GradientStop Color="#FFFAFCFF" Offset="0.5"/>
-                                                                        <GradientStop Color="#FFCCE2FF" Offset="0.5"/>
-                                                                        <GradientStop Color="#FFCCE2FF" Offset="1"/>
-                                                                    </LinearGradientBrush>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </Style>-->
-                                                    </Grid.Resources>
                                                     <Rectangle Fill="Transparent" Grid.ColumnSpan="4"/>
                                                     <!-- Start: Month Content Grid -->
                                                     <Grid x:Name="PART_MonthView" Grid.Row="1" Grid.ColumnSpan="4" Visibility="Visible" >
@@ -402,7 +384,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="primitives:CalendarDayButton">
                                     <ControlTemplate.Resources>
-                                        <service:AppointmentsConverter x:Key="AppointmentsConverter"/>
+                                        <service:PharmacistScheduleConverter x:Key="PharmacistScheduleConverter"/>
                                     </ControlTemplate.Resources>
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -519,20 +501,17 @@
                                         </Rectangle>
                                         <Path x:Name="Blackout" Grid.Row="1" Opacity="0" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Fill="#FF000000" Stretch="Fill" Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z"/>
                                         <Rectangle Width="0" x:Name="DayButtonFocusVisual" Grid.Row="1" Visibility="Collapsed" IsHitTestVisible="false" RadiusX="1" RadiusY="1" Stroke="#FF45D6FA"/>
-                                        <!-- Appointments -->
-                                        <ListBox x:Name="appointmentsLbx" Grid.Row="1" Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" SelectedItem="{Binding DataContext.MonthViewCalendar.SelectedAppointment,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" ItemsSource="{Binding DataContext.MonthViewCalendar.Appointments,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-                                            <!--<ListBox.ItemsSource>
-                                                <MultiBinding Converter="{StaticResource AppointmentsConverter}">
-                                                    <Binding Path="MonthViewCalendar.Appointments" UpdateSourceTrigger="PropertyChanged"/>
-                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" Path="DataContext" UpdateSourceTrigger="PropertyChanged"/>
+                                        <!-- PharmacistSchedule -->
+                                        <ListBox x:Name="appointmentsLbx" Grid.Row="1" Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" SelectedItem="{Binding DataContext.SelectedPharmacistScheduleItem,Mode=TwoWay,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" >
+                                            <ListBox.ItemsSource>
+                                                <MultiBinding Converter="{StaticResource PharmacistScheduleConverter}">
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" Path="DataContext.PharmacistSchedule" UpdateSourceTrigger="PropertyChanged"/>
+                                                    <Binding RelativeSource="{RelativeSource Mode=Self}" Path="DataContext"/>
                                                 </MultiBinding>
-                                            </ListBox.ItemsSource>-->
+                                            </ListBox.ItemsSource>
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock HorizontalAlignment="Left" Text="{Binding MedicalPersonnel.Content}"/>
-                                                    <!--<Border Background="#FFDFE8F5" BorderBrush="#FF5D8CC9" BorderThickness="1" CornerRadius="4">
-                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding MedicalPersonnel.Content}"/>
-                                                    </Border>-->
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>

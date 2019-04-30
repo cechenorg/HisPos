@@ -45,7 +45,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 if (pre.Treatment.Division != null)
                     pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
                 pre.Treatment.Pharmacist =
-                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IdNumber.Equals(pre.Treatment.Pharmacist.IdNumber));
+                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IDNumber.Equals(pre.Treatment.Pharmacist.IDNumber));
                 pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
                 pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
                 if (pre.Treatment.PrescriptionCase != null)

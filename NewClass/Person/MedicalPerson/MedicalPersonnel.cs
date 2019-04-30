@@ -6,7 +6,7 @@ using ZeroFormatter;
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
     [ZeroFormattable]
-    public class MedicalPersonnel : ObservableObject
+    public class MedicalPersonnel : Employee.Employee
     {
         public MedicalPersonnel(){}
 
@@ -14,28 +14,22 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         {
             ID = e.ID;
             Name = e.Name;
-            IdNumber = e.IDNumber;
+            IDNumber = e.IDNumber;
         }
         public MedicalPersonnel(DataRow r)
         {
             ID = r.Field<int>("Emp_ID");
-            Name = r.Field<string>("Emp_Name"); 
-            IdNumber = r.Field<string>("Emp_IDNumber");
+            Name = r.Field<string>("Emp_Name");
+            IDNumber = r.Field<string>("Emp_IDNumber");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             //StartDate = r.Field<DateTime>("Emp_StartDate");
             //LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
         }
-        [Index(0)]
-        public virtual int ID { get; set; }
-        [Index(1)]
-        public virtual string Name { get; set; }
-        [Index(2)]
-        public virtual string IdNumber { get; set; }
-        [Index(3)]
+        [Index(12)]
         public virtual bool IsEnable { get; set; }
-        [Index(4)]
+        [Index(13)]
         public virtual DateTime StartDate { get; set; }
-        [Index(5)]
+        [Index(14)]
         public virtual DateTime? LeaveDate { get; set; }
     }
 }

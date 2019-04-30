@@ -1616,7 +1616,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private int UpdatePrescriptionCount()//計算處方張數
         { 
            return SelectedPharmacist != null 
-                ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IdNumber).Rows[0].Field<int>("PrescriptionCount")
+                ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IDNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0; 
         }
 
