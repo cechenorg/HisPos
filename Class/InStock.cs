@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
-using His_Pos.Struct.Product;
 
 namespace His_Pos.Class
 {
@@ -87,13 +86,13 @@ namespace His_Pos.Class
                 : dataRow["PRO_INVENTORY"].ToString());
         }
 
-        public InStock(PurchaseProduct selectedItem)
-        {
-            BasicAmount = selectedItem.BasicAmount;
-            SafeAmount = selectedItem.SafeAmount;
-            Inventory = selectedItem.Inventory;
-            OnTheWayAmount = selectedItem.OnTheWayAmount;
-        }
+        //public InStock(PurchaseProduct selectedItem)
+        //{
+        //    BasicAmount = selectedItem.BasicAmount;
+        //    SafeAmount = selectedItem.SafeAmount;
+        //    Inventory = selectedItem.Inventory;
+        //    OnTheWayAmount = selectedItem.OnTheWayAmount;
+        //}
 
         public object Clone()
         {

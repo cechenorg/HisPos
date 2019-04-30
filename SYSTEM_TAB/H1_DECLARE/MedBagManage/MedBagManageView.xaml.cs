@@ -63,7 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
             InitializeComponent();
             Instance = this;
             DataContext = this;
-            InitializeMedManageViewControl(MedBagMode.SINGLE);
+            //InitializeMedManageViewControl(MedBagMode.SINGLE);
         }
 
         private bool singleMode;
@@ -111,21 +111,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void InitializeMedManageViewControl(MedBagMode mode)
-        {
-            SelectedMode = mode;
-            SelectedMedBag = new MedBag(SelectedMode);
-            MedBagCollection = new ObservableCollection<MedBag>();
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.GetMedBagData(this);
-            loadingWindow.Show();
-            foreach (var m in MedBagCollection)
-            {
-                var i = int.Parse(m.Id);
-                if (i > _maxMedBagId)
-                    _maxMedBagId = i;
-            }
-        }
+        //private void InitializeMedManageViewControl(MedBagMode mode)
+        //{
+        //    SelectedMode = mode;
+        //    SelectedMedBag = new MedBag(SelectedMode);
+        //    MedBagCollection = new ObservableCollection<MedBag>();
+        //    var loadingWindow = new LoadingWindow();
+        //    loadingWindow.GetMedBagData(this);
+        //    loadingWindow.Show();
+        //    foreach (var m in MedBagCollection)
+        //    {
+        //        var i = int.Parse(m.Id);
+        //        if (i > _maxMedBagId)
+        //            _maxMedBagId = i;
+        //    }
+        //}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -300,19 +300,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
            /// MedBagDb.SaveMedBagData(SelectedMedBag);
         }
 
-        private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (MedBagCollection[MedBags.SelectedIndex] == null)
-                return;
-            var ns = new XmlSerializerNamespaces();
-            ns.Add("", "");
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.SetMedBagData(this);
-            loadingWindow.Show();
+        //private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (MedBagCollection[MedBags.SelectedIndex] == null)
+        //        return;
+        //    var ns = new XmlSerializerNamespaces();
+        //    ns.Add("", "");
+        //    var loadingWindow = new LoadingWindow();
+        //    loadingWindow.SetMedBagData(this);
+        //    loadingWindow.Show();
             
-            SaveMedBagData();
-            MessageWindow.ShowMessage("藥袋儲存成功", MessageType.SUCCESS);
-        }
+        //    SaveMedBagData();
+        //    MessageWindow.ShowMessage("藥袋儲存成功", MessageType.SUCCESS);
+        //}
 
         //新增/刪除藥袋
         private void NewMedBagButtonClick(object sender, RoutedEventArgs e)

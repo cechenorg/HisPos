@@ -11,7 +11,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.FunctionWindow;
@@ -45,11 +44,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
         //public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
-        public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
+        //public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
-        public ObservableCollection<ProductDetailManufactory> OTCManufactoryCollection;
-        public HashSet<ManufactoryChanged> OTCManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
+        //public ObservableCollection<ProductDetailManufactory> OTCManufactoryCollection;
+        //public HashSet<ManufactoryChanged> OTCManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
@@ -150,8 +149,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             OTCNotes.Document.Blocks.Clear();
             OTCNotes.AppendText(InventoryOtc.Note.Trim());
 
-            CusOrderOverviewCollection = null;/// OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
-            OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
+            //CusOrderOverviewCollection = null;/// OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
+            //OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
             StoreOrderOverviewCollection = null;/// OTCDb.GetOtcStoOrderByID(InventoryOtc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
@@ -162,8 +161,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 
             OTCUnitCollection = null;/// ProductDb.GetProductUnitById(InventoryOtc.Id);
 
-            OTCManufactoryCollection = null;/// ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
-            OtcManufactory.ItemsSource = OTCManufactoryCollection;
+            //OTCManufactoryCollection = null;/// ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
+            //OtcManufactory.ItemsSource = OTCManufactoryCollection;
 
             ProductTypeCollection = null;/// ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
@@ -202,28 +201,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
         {
             var selectedItem = (sender as DataGridRow).Item;
 
-            if ( selectedItem is CusOrderOverview )
-                OtcCusOrder.SelectedItem = selectedItem;
-            else if( selectedItem is OTCStoreOrderOverview)
-                OtcStoOrder.SelectedItem = selectedItem;
-            else if (selectedItem is OTCStockOverview)
-                OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is ProductDetailManufactory)
-                OtcManufactory.SelectedItem = selectedItem;
+            //if ( selectedItem is CusOrderOverview )
+            //    OtcCusOrder.SelectedItem = selectedItem;
+            //else if( selectedItem is OTCStoreOrderOverview)
+            //    OtcStoOrder.SelectedItem = selectedItem;
+            //else if (selectedItem is OTCStockOverview)
+            //    OtcStock.SelectedItem = selectedItem;
+            //else if (selectedItem is ProductDetailManufactory)
+            //    OtcManufactory.SelectedItem = selectedItem;
 
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
-            if (leaveItem is CusOrderOverview)
-                OtcCusOrder.SelectedItem = null;
-            else if (leaveItem is OTCStoreOrderOverview)
-                OtcStoOrder.SelectedItem = null;
-            else if (leaveItem is OTCStockOverview)
-                OtcStock.SelectedItem = null;
-            else if (leaveItem is ProductDetailManufactory)
-                OtcManufactory.SelectedItem = null;
+            //if (leaveItem is CusOrderOverview)
+            //    OtcCusOrder.SelectedItem = null;
+            //else if (leaveItem is OTCStoreOrderOverview)
+            //    OtcStoOrder.SelectedItem = null;
+            //else if (leaveItem is OTCStockOverview)
+            //    OtcStock.SelectedItem = null;
+            //else if (leaveItem is ProductDetailManufactory)
+            //    OtcManufactory.SelectedItem = null;
         }
         
         private void setChangedFlag()
@@ -305,10 +304,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             InventoryOtc.Status = OtcStatus.Text =="啟用" ? true : false;
             ///ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
 
-            foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
-            {
-                ///ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
-            }
+            //foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
+            //{
+            //    ///ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
+            //}
             foreach (string index in OTCUnitChangdedCollection)
             {
                 ProductUnit prounit = new ProductUnit("s");
