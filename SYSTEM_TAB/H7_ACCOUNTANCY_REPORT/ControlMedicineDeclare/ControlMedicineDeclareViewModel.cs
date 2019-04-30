@@ -1,5 +1,7 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare;
+using His_Pos.NewClass.Product.Medicine.ControlMedicineDetail;
 using System;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
@@ -36,9 +38,60 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
                 Set(() => ControlMedicineDeclares, ref controlMedicineDeclares, value);
             }
         }
+        private NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare selectItem;
+        public NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare SelectItem
+        {
+            get { return selectItem; }
+            set
+            {
+                Set(() => SelectItem, ref selectItem, value);
+            }
+        }
+        private ControlMedicineDetails controlMedicineDetailsCollection = new ControlMedicineDetails();
+        public ControlMedicineDetails ControlMedicineDetailsCollection
+        {
+            get { return controlMedicineDetailsCollection; }
+            set
+            {
+                Set(() => ControlMedicineDetailsCollection, ref controlMedicineDetailsCollection, value);
+            }
+        }
+        private ControlMedicineDetails controlMedicineBagDetailsCollection = new ControlMedicineDetails();
+        public ControlMedicineDetails ControlMedicineBagDetailsCollection
+        {
+            get { return controlMedicineBagDetailsCollection; }
+            set
+            {
+                Set(() => ControlMedicineBagDetailsCollection, ref controlMedicineBagDetailsCollection, value);
+            }
+        }
         #endregion
+        public RelayCommand SelectionChangedCommand { get; set; }
+        public RelayCommand SearchCommand { get; set; }
         public ControlMedicineDeclareViewModel() {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
+            SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+            SearchCommand = new RelayCommand(SearchAction);
+        }
+        private void SearchAction() {
+            ControlMedicineDeclares.GetData(SDateTime, EDateTime);
+        }
+        private void SelectionChangedAction() {
+            if (SelectItem == null) return;
+            ControlMedicineDetails temp = new ControlMedicineDetails();
+            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime);
+            ControlMedicineBagDetailsCollection.Clear();
+            ControlMedicineDetailsCollection.Clear();
+            foreach (ControlMedicineDetail c in temp) {
+                switch (c.TypeName) {
+                    case "調劑耗用(未過卡)":
+                        ControlMedicineBagDetailsCollection.Add(c);
+                        break;
+                    default:
+                        ControlMedicineDetailsCollection.Add(c);
+                        break;
+                }  
+            } 
         }
     }
 }

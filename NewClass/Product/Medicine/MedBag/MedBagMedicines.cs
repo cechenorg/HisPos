@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace His_Pos.NewClass.Product.Medicine.MedBag
 {
@@ -8,8 +9,8 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         {
             if (!singleMode)
             {
-                int i = 1;
-                foreach (var m in medList)
+                var i = 1;
+                foreach (var m in medList.Where(med => !(med is MedicineVirtual)))
                 {
                     switch (m)
                     {
@@ -28,7 +29,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
-                foreach (var m in medList)
+                foreach (var m in medList.Where(med => !(med is MedicineVirtual)))
                 {
                     switch (m)
                     {

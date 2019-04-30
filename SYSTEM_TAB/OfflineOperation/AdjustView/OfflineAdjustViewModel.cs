@@ -367,7 +367,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     else
                     {
                         Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                        customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
+                        //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.IDNumber, 3);
                     }
                 }
             }
@@ -385,7 +385,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
+                    //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Name, 2);
                 }
             }
         }
@@ -402,7 +402,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+                    //customerSelectionWindow = new CusSelectWindow(DateTimeEx.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
                 }
             }
         }
@@ -419,7 +419,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 else
                 {
                     Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-                    customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
+                    //customerSelectionWindow = new CusSelectWindow(CurrentPrescription.Patient.Tel, 4);
                 }
             }
         }
@@ -627,8 +627,8 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 return;
             }
             IsAdjusting = true;
-            CurrentPrescription.CheckIsCooperativePrescribe();//檢查是否為合作診所全自費處方
-            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            CurrentPrescription.CheckIsPrescribe();//檢查是否為合作診所全自費處方
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
                 var error = CurrentPrescription.CheckPrescriptionRule(ErrorCode == null);//檢查健保規則
                 if (!string.IsNullOrEmpty(error))
@@ -683,7 +683,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
-            Prescription p = new Prescription();
+            var p = new Prescription();
             MainWindow.ServerConnection.OpenConnection();
             switch (pre.Source)
             {
@@ -699,7 +699,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             p.Patient = CurrentPrescription.Patient;
             CurrentPrescription.Patient.Check();
             CurrentPrescription = p;
-            CurrentPrescription.GetCompletePrescriptionData(true, false, false);
+            CurrentPrescription.GetCompletePrescriptionData( false, false);
             CurrentPrescription.CountPrescriptionPoint(true);
             priviousSelectedIndex = CurrentPrescription.Medicines.Count - 1;
             CanAdjust = true;
@@ -708,7 +708,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         {
             Messenger.Default.Unregister<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
             Messenger.Default.Unregister<Prescription>(this, "CooperativePrescriptionSelected", GetCooperativePrescription);
-            p.GetCompletePrescriptionData(true, true, false);
+            p.GetCompletePrescriptionData( true, false);
             MainWindow.ServerConnection.OpenConnection();
             p.Card = CurrentPrescription.Card;
             if (string.IsNullOrEmpty(CurrentPrescription.Patient.Name) && string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && CurrentPrescription.Patient.Birthday is null)
@@ -748,16 +748,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
-            if (msg.Notification == nameof(PrescriptionDeclareViewModel))
-            {
-                var selected = CurrentPrescription.Medicines.IndexOf(SelectedMedicine);
-                if (selected < 0 || selected >= CurrentPrescription.Medicines.Count) return;
-                CurrentPrescription.AddMedicineBySearch(msg.Content.ID, selected);
-                CurrentPrescription.CountPrescriptionPoint(true);
-                if (selected == CurrentPrescription.Medicines.Count - 1)
-                    CurrentPrescription.Medicines.Add(new Medicine());
-                Messenger.Default.Send(new NotificationMessage<int>(this, selected, "FocusDosage"));
-            }
+            if (msg.Notification != nameof(OfflineAdjustViewModel)) return;
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         #endregion
         #region GeneralFunctions
@@ -776,7 +772,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         private void SearchCustomer()
         {
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
-            customerSelectionWindow = new CusSelectWindow();
+            //customerSelectionWindow = new CusSelectWindow();
         }
         private void ReadCard(bool showCusWindow)
         {
@@ -793,10 +789,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 catch (Exception e)
                 {
                     NewFunction.ExceptionLog(e.Message);
-                    Application.Current.Dispatcher.Invoke((Action)(() =>
-                    {
-                        MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
-                    }));
+                    Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -807,14 +800,9 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     IsBusy = false;
                     CanAdjust = true;
                     if (isGetCard)
-                    {
                         CurrentPrescription.Treatment.GetLastMedicalNumber();
-                    }
                     else
-                    {
-                        CusSelectWindow customerSelectionWindow = null;
                         SearchCustomer();
-                    }
                 }
                 else
                 {
@@ -898,7 +886,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 switch (status)
                 {
                     case PrescriptionDeclareStatus.Adjust:
-                        if (CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+                        if (CurrentPrescription.PrescriptionStatus.IsPrescribe)
                             StartCooperativePrescribe();
                         else
                             StartNormalAdjust();
@@ -1123,7 +1111,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         private void InsertAdjustData()
         {
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.SetAdjustStatus();//設定處方狀態
+            CurrentPrescription.SetAdjustStatus(false);//設定處方狀態
             switch (CurrentPrescription.Source)
             {
                 case PrescriptionSource.Normal:
@@ -1148,7 +1136,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     CurrentPrescription.ChronicAdjust(false);
                     break;
             }
-            if (!CurrentPrescription.PrescriptionStatus.IsCooperativePrescribe)
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe)
             {
                 if (CurrentPrescription.Card.IsGetMedicalNumber)
                 {
@@ -1171,8 +1159,8 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 
         private void CheckIsCooperativeVIP()
         {
-            var isVip = new ConfirmWindow(StringRes.免收部分負擔, StringRes.免收確認);
-            CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)isVip.DialogResult;
+            var isVip = new ConfirmWindow(StringRes.收部分負擔, StringRes.免收確認);
+            CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)!isVip.DialogResult;
         }
 
         private void PrintMedBag(bool noCard, bool printMedBag, bool? printSingle, bool printReceipt)

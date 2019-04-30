@@ -95,10 +95,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             DataContext = this;
 
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.InitProductType(this);
-            loadingWindow.Show();
-            loadingWindow.Topmost = true;
+            //LoadingWindow loadingWindow = new LoadingWindow();
+            //loadingWindow.InitProductType(this);
+            //loadingWindow.Show();
+            //loadingWindow.Topmost = true;
         }
 
         public void InitMonthsAndDays()

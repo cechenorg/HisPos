@@ -5,6 +5,8 @@ using System.Data;
 using System.Threading;
 using His_Pos.Interface;
 using His_Pos.Service;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -61,7 +63,43 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
             }
         }
-    
+        public Medicine(XmlOfPrescription.Item m) {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            UsageName = m.Freq;
+            PositionID = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Divided_dose);
+            Days = Convert.ToInt32(m.Days);
+            
+            PaySelf = m.Remark == "-" || m.Remark == "*";
+            IsBuckle = false;
+            switch (m.Remark)
+            {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    break;
+                default:
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+            }
+        }
+        public Medicine(MedicineSetItem m) : base(m)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            Price = m.Price;
+            NHIPrice = m.NHIPrice;
+        }
         private double amount;//總量
         public double Amount
         {
@@ -78,16 +116,7 @@ namespace His_Pos.NewClass.Product.Medicine
         private void CountTotalPrice()
         {
             if(Amount <= 0) return;
-            if (PaySelf)
-            {
-                TotalPrice = Price > 0 ? 
-                    Math.Round(Amount * Price,MidpointRounding.AwayFromZero)
-                    : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
-            }
-            else
-            {
-                TotalPrice = Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
-            }
+            TotalPrice = PaySelf ? Math.Round(Amount * Price, MidpointRounding.AwayFromZero) : Math.Round(Amount * NHIPrice, MidpointRounding.AwayFromZero);
         }
 
         private double? dosage;//每次用量
@@ -100,7 +129,6 @@ namespace His_Pos.NewClass.Product.Medicine
                 if (ID is null) return;
                 if (ID.EndsWith("00") || ID.EndsWith("G0") && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                     CalculateAmount();
-                CheckIsAmountReadOnly();
             }
         }
         private string _usageName;
@@ -126,7 +154,6 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
-                CheckIsAmountReadOnly();
             }
         }
         private Usage.Usage usage;//用法
@@ -183,7 +210,6 @@ namespace His_Pos.NewClass.Product.Medicine
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
                         CalculateAmount();
                 }
-                CheckIsAmountReadOnly();
             }
         }
         private double price;//售價
@@ -216,13 +242,6 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 Set(() => TotalPrice, ref totalPrice, value);
             }
-        }
-
-        private void CheckPrice()
-        {
-            if(Amount <=  0 || !PaySelf)return;
-            if (Price != TotalPrice / Amount)
-                Price = Math.Round(TotalPrice / Amount,2,MidpointRounding.AwayFromZero);
         }
 
         private double inventory;//庫存
@@ -349,15 +368,11 @@ namespace His_Pos.NewClass.Product.Medicine
                 PaySelf = true;
         }
 
-        private bool isSelected;
-
+        private bool isSelected = false;
         public bool IsSelected
         {
             get => isSelected;
-            set
-            {
-                Set(() => IsSelected, ref isSelected, value);
-            }
+            set { Set(() => IsSelected, ref isSelected, value); }
         }
         private int? controlLevel;
 
@@ -382,27 +397,11 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        private bool isAmountReadOnly;
-        public bool IsAmountReadOnly
+        public void CopyPrevious(Medicine preMed)
         {
-            get => isAmountReadOnly;
-            set
-            {
-                Set(() => IsAmountReadOnly, ref isAmountReadOnly, value);
-            }
-        }
-
-        private void CheckIsAmountReadOnly()
-        {
-            if (Usage != null && !string.IsNullOrEmpty(ID))
-            {
-                if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && Days != null && Days > 0 && Dosage != null && Dosage > 0)
-                    IsAmountReadOnly = (double)Dosage * UsagesFunction.CheckUsage((int)Days, ViewModelMainWindow.GetUsage(UsageName)) > 0;
-                else
-                    IsAmountReadOnly = false;
-            }
-            else
-                IsAmountReadOnly = false;
+            Dosage = preMed.Dosage;
+            UsageName = preMed.UsageName;
+            Days = preMed.Days;
         }
     }
 }

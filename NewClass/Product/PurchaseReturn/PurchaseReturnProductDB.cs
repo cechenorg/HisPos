@@ -35,5 +35,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductByProductID]", parameters);
         }
+        
+        public static DataTable GetReturnProductBatchNumbers(string productID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", productID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductReturnBatchNumbers]", parameters);
+        }
     }
 }

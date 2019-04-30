@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Topmost="True"
         Title="MessageWindow" Width="350" Height="200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid Name="MainGrid" PreviewKeyDown="Grid_PreviewKeyDown">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
@@ -14,7 +14,7 @@
                     <TextBlock Name="Message" VerticalAlignment="Center" TextAlignment="Center" FontSize="18" FontFamily="Segoe UI Semi" TextWrapping="Wrap"/>
                 </ScrollViewer>
             </StackPanel>
-            <Button Name="OkButton" Margin="10" Content="OK" Click="ButtonBase_OnClick" Focusable="True"/>
+            <Button Name="OkButton" Margin="10" Content="OK" Click="ButtonBase_OnClick" Focusable="True" Background="DarkSlateBlue" BorderThickness="0"/>
         </StackPanel>
     </Grid>
 </Window>

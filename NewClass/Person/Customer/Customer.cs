@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
@@ -10,7 +12,7 @@ using IcCard = His_Pos.NewClass.Prescription.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
-    public class Customer:Person
+    public class Customer:Person,ICloneable
     {
         public Customer() {}
 
@@ -31,6 +33,25 @@ namespace His_Pos.NewClass.Person.Customer
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
+        private CollectionViewSource historyCollectionViewSource;
+        public CollectionViewSource HistoryCollectionViewSource
+        {
+            get => historyCollectionViewSource;
+            set
+            {
+                Set(() => HistoryCollectionViewSource, ref historyCollectionViewSource, value);
+            }
+        }
+
+        private ICollectionView historyCollectionView;
+        public ICollectionView HistoryCollectionView
+        {
+            get => historyCollectionView;
+            set
+            {
+                Set(() => HistoryCollectionView, ref historyCollectionView, value);
+            }
+        }
         #region Function
         public void Save()
         {
@@ -45,37 +66,21 @@ namespace His_Pos.NewClass.Person.Customer
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             return customer;
         }
-        public void Check() {
-            DataTable table = CustomerDb.CheckCustomer(this);
-            Customer newCustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            if (newCustomer is null)
+        public Customers Check() {
+            var table = CustomerDb.CheckCustomer(this);
+            var customers = new Customers();
+            if (table.Rows.Count == 0) return customers;
+            foreach (DataRow r in table.Rows)
             {
-                Application.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    MessageWindow.ShowMessage("取得顧客資料發生異常，請重試。", MessageType.WARNING);
-                }));
-                return;
+                customers.Add(new Customer(r));
             }
-            ID = newCustomer.ID;
-            Name = newCustomer.Name;
-            Birthday = newCustomer.Birthday;
-            IDNumber = newCustomer.IDNumber;
-            Tel = newCustomer.Tel;
-            ContactNote = newCustomer.ContactNote;
-            CellPhone = newCustomer.CellPhone;
-            Line = newCustomer.Line;
-            Note = newCustomer.Note;
-            Address = newCustomer.Address;
-            Email = newCustomer.Email;
-            Gender = newCustomer.Gender;
-            LastEdit = newCustomer.LastEdit;
+            return customers;
         }
         public void UpdateEditTime() {
             CustomerDb.UpdateEditTime(ID);
         }
 
         #endregion
-
         public int CountAge()
         {
             var today = DateTime.Today;
@@ -143,17 +148,72 @@ namespace His_Pos.NewClass.Person.Customer
             CheckIDNumber()+
             CheckName();
         }
-
-        public string CheckGender()
-        {
-            if (IDNumber is null) return " ";
-            Gender = IDNumber[1].Equals('2') ? Properties.Resources.Female : Properties.Resources.Male;
-            return Gender;
-        }
         public int Count()
         {
             var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");
             return count;
+        }
+        public bool CheckData()
+        {
+            return (!string.IsNullOrEmpty(IDNumber) && IDNumber.Trim().Length == 10) && Birthday != null && !string.IsNullOrEmpty(Name);
+        }
+        public object Clone()
+        {
+            var c = new Customer();
+            c.ContactNote = ContactNote;
+            c.LastEdit = LastEdit;
+            c.Address = Address;
+            c.Birthday = Birthday;
+            c.CellPhone = CellPhone;
+            c.Email = Email;
+            c.Gender = Gender;
+            c.ID = ID;
+            c.IDNumber = IDNumber;
+            c.Line = Line;
+            c.Name = Name;
+            c.Note = Note;
+            c.Tel = Tel;
+            c.Histories = new CustomerHistories();
+            if (Histories != null)
+            {
+                foreach (var h in Histories)
+                    c.Histories.Add(h);
+                c.HistoryCollectionViewSource = new CollectionViewSource{Source = c.Histories };
+                c.HistoryCollectionView = HistoryCollectionViewSource.View;
+            }
+            return c;
+        }
+
+        public void InsertData()
+        {
+            var table = CustomerDb.InsertCustomerData(this);
+            var c = new Customer(table.Rows[0]);
+            ID = c.ID;
+            Name = c.Name;
+            IDNumber = c.IDNumber;
+            Birthday = c.Birthday;
+            Tel = c.Tel;
+            ContactNote = c.ContactNote;
+            LastEdit = c.LastEdit;
+            Address = c.Address;
+            CellPhone = c.CellPhone;
+            Email = c.Email;
+            Gender = c.Gender;
+            Line = c.Line;
+            Note = c.Note;
+        }
+
+        public void GetHistories()
+        {
+            Histories = new CustomerHistories(ID);
+            HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
+            HistoryCollectionView =HistoryCollectionViewSource.View;
+        }
+
+        public bool CheckIDNumberExist()
+        {
+            var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
+            return table.Rows[0].Field<int>("Count") > 0;
         }
     }
 }

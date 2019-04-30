@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using GalaSoft.MvvmLight;
 using ZeroFormatter;
 
@@ -20,6 +21,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson
             ID = r.Field<int>("Emp_ID");
             Name = r.Field<string>("Emp_Name"); 
             IdNumber = r.Field<string>("Emp_IDNumber");
+            IsEnable = r.Field<bool>("Emp_IsEnable");
+            //StartDate = r.Field<DateTime>("Emp_StartDate");
+            //LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
         }
         [Index(0)]
         public virtual int ID { get; set; }
@@ -27,5 +31,11 @@ namespace His_Pos.NewClass.Person.MedicalPerson
         public virtual string Name { get; set; }
         [Index(2)]
         public virtual string IdNumber { get; set; }
+        [Index(3)]
+        public virtual bool IsEnable { get; set; }
+        [Index(4)]
+        public virtual DateTime StartDate { get; set; }
+        [Index(5)]
+        public virtual DateTime? LeaveDate { get; set; }
     }
 }

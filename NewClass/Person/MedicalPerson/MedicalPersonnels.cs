@@ -1,19 +1,30 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
     public class MedicalPersonnels:Collection<MedicalPersonnel>
     {
-        public MedicalPersonnels()
+        public MedicalPersonnels(bool init)
         {
-            Init();
+            if(init)
+                Init();
         }
 
         private void Init()
         {
-            var tabel = MedicalPersonnelDb.GetData();
-            foreach (DataRow r in tabel.Rows)
+            var table = MedicalPersonnelDb.GetData();
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new MedicalPersonnel(r));
+            }
+        }
+
+        public void GetEnablePharmacist(DateTime start,DateTime end)
+        {
+            var table = MedicalPersonnelDb.GetEnableMedicalPersonnels(start, end);
+            foreach (DataRow r in table.Rows)
             {
                 Add(new MedicalPersonnel(r));
             }

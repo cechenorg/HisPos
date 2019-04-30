@@ -15,10 +15,8 @@ namespace His_Pos.NewClass.Person
             Name = r.Field<string>("Person_Name");
             IDNumber = r.Field<string>("Person_IDNumber");
             Gender = r.Field<string>("Person_Gender");
-            if (string.IsNullOrEmpty(Gender) && !string.IsNullOrEmpty(IDNumber) && IDNumber.Length == 10)
-                Gender = IDNumber[1].Equals('2') ? "女" : "男";
-            else
-                Gender = "男";
+            if (string.IsNullOrEmpty(Gender))
+                Gender = CheckGender();
             Birthday = r.Field<DateTime?>("Person_BirthDay");
             Tel = r.Field<string>("Person_Telephone");
             CellPhone = r.Field<string>("Person_Cellphone");
@@ -38,5 +36,26 @@ namespace His_Pos.NewClass.Person
         public string Email { get; set; }//信箱
         public string Line { get; set; }
         public string Note { get; set; }//備註
+        public string CheckGender()
+        {
+            if (string.IsNullOrEmpty(IDNumber) || IDNumber.Length != 10) return Properties.Resources.Male;
+            switch (IDNumber[1])
+            {
+                case '2':
+                case 'B':
+                case 'D':
+                    Gender = Properties.Resources.Female;
+                    break;
+                case '1':
+                case 'A':
+                case 'C':
+                    Gender = Properties.Resources.Male;
+                    break;
+                default:
+                    Gender = Properties.Resources.Male;
+                    break;
+            }
+            return Gender;
+        }
     }
 }

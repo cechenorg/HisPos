@@ -9,19 +9,16 @@
     xmlns:adminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
     xmlns:prescriptionSearch="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
     xmlns:inventoryManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement"
-    xmlns:productPurchase="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase"
     xmlns:productPurchaseRecord="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
     xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
     xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
     xmlns:productTypeManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
     xmlns:locationManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
     xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
-    xmlns:pharmacyManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage"
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:customerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
     xmlns:medFrequencyManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
-    xmlns:clockIn="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn"
     xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
@@ -34,10 +31,13 @@
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
     xmlns:controlMedicineDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare"
+    xmlns:cashStockEntryReport ="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport"
+    xmlns:cooperativeEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
+    xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -83,9 +83,6 @@
         <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <manufactoryManage:ManufactoryManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type pharmacyManage:PharmacyManage}">
-            <pharmacyManage:PharmacyManageView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type employeeManage:EmployeeManage}">
             <employeeManage:EmployeeManageView />
         </DataTemplate>
@@ -97,9 +94,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
             <workScheduleManage:WorkScheduleManageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type clockIn:ClockIn}">
-            <clockIn:ClockInView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type authenticationManage:AuthenticationManage}">
             <authenticationManage:AuthenticationManageView />
@@ -116,7 +110,7 @@
         <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
             <entrySearch:EntrySearchView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReport}">
+        <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
             <purchaseReturnReport:PurchaseReturnReportView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeAdjustReport:CooperativeAdjustReport}">
@@ -125,9 +119,19 @@
         <DataTemplate DataType="{x:Type cooperativeEntry:CooperativeEntry}">
             <cooperativeEntry:CooperativeEntryView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type controlMedicineDeclare:ControlMedicineDeclareViewModel}">
+        <DataTemplate DataType="{x:Type cashStockEntryReport:CashStockEntryReportViewModel}">
+            <cashStockEntryReport:CashStockEntryReport/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cooperativeEntryReport:CooperativeEntryReportViewModel }">
+            <cooperativeEntryReport:CooperativeEntryReport/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type controlMedicineDeclare:ControlMedicineDeclareViewModel }">
             <controlMedicineDeclare:ControlMedicineDeclare/>
-        </DataTemplate> 
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type  AdditionalCashFlowManage:AdditionalCashFlowManageViewModel}">
+            <AdditionalCashFlowManage:AdditionalCashFlowManage/>
+        </DataTemplate>
+        
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>

@@ -53,6 +53,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        protected StoreOrder() { }
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
@@ -101,9 +102,11 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Abstract Function /////
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
-        public abstract void AddProductByID(string iD);
+        public abstract void AddProductByID(string iD, bool isFromAddButton);
         public abstract void DeleteSelectedProduct();
         public abstract void CalculateTotalPrice();
+        public abstract void SetProductToProcessingStatus();
+        public abstract object Clone();
         #endregion
 
         #region ///// Status Function /////
@@ -143,7 +146,12 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToNormalProcessingStatus()
         {
+            SaveOrder();
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
+            ReceiveID = ID;
+            SetProductToProcessingStatus();
+
+            StoreOrderDB.StoreOrderToNormalProcessing(ID);
         }
         private void ToSingdeProcessingStatus()
         {
@@ -159,17 +167,22 @@ namespace His_Pos.NewClass.StoreOrder
             SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
 
+            DataTable result = new DataTable();
+
             switch (OrderType)
             {
                 case OrderTypeEnum.PURCHASE:
-                    StoreOrderDB.PurchaseStoreOrderToDone(ID);
+                    result = StoreOrderDB.PurchaseStoreOrderToDone(ID);
                     break;
                 case OrderTypeEnum.RETURN:
-                    StoreOrderDB.ReturnStoreOrderToDone(ID);
+                    result = StoreOrderDB.ReturnStoreOrderToDone(ID);
                     break;
             }
 
-            MessageWindow.ShowMessage("已完成"+ (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
+            if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+            else
+                MessageWindow.ShowMessage("已完成" + (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         #endregion
 
@@ -259,11 +272,6 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
 
-        public object Clone()
-        {
-            return this;
-        }
-
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);
@@ -278,7 +286,23 @@ namespace His_Pos.NewClass.StoreOrder
                     return null;
             }
         }
+        protected void CloneBaseData(StoreOrder storeOrder)
+        {
+            ID = storeOrder.ID;
+            ReceiveID = storeOrder.ReceiveID;
+            OrderStatus = storeOrder.OrderStatus;
+            OrderType = storeOrder.OrderType;
+            OrderManufactory = storeOrder.OrderManufactory.Clone() as Manufactory.Manufactory;
+            OrderWarehouse = storeOrder.OrderWarehouse.Clone() as WareHouse.WareHouse;
+            OrderEmployeeName = storeOrder.OrderEmployeeName;
+            ReceiveEmployeeName = storeOrder.ReceiveEmployeeName;
+            CreateDateTime = storeOrder.CreateDateTime;
+            DoneDateTime = storeOrder.DoneDateTime;
+            Note = storeOrder.Note;
+            TotalPrice = storeOrder.TotalPrice;
 
+            initProductCount = storeOrder.initProductCount;
+        }
         #endregion
     }
 }

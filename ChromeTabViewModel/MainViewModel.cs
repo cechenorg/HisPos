@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
@@ -26,12 +27,12 @@ using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage;
-using His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.SYSTEM_TAB.INDEX;
@@ -158,6 +159,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.匯出申報檔):
                     break;
+                case nameof(FeatureItem.額外收入登錄):
+                    break;
                 case nameof(FeatureItem.商品查詢):
                     break;
 
@@ -217,8 +220,12 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.合作診所藥品耗用):
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
-                    break; 
+                    break;
+                case nameof(FeatureItem.每日總帳報表):
+                    break;
                 case nameof(FeatureItem.系統函式):
+                    break;
+                case nameof(FeatureItem.合作診所結帳報表):
                     break;
                 default:
                     return;
@@ -265,17 +272,21 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.匯出申報檔):
                     newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
+                case nameof(FeatureItem.額外收入登錄):
+                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[5], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                    
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
                     newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = (Application.Current.FindResource("ProductPurchaseReturnLocator") as ProductPurchaseReturnLocator).ProductPurchaseReturn;
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseReturn;
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
-                    newTab = new ProductPurchaseRecordViewModel() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseRecord;
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
@@ -300,10 +311,6 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ManufactoryManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.藥局管理):
-                    newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
-
                 case nameof(FeatureItem.員工管理):
                     newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
@@ -316,10 +323,6 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 //打卡
-                case nameof(FeatureItem.上下班打卡):
-                    newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
-                    break;
-
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
@@ -329,7 +332,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
-                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new PurchaseReturnReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
@@ -339,6 +342,12 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
                     newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[5].Functions[4], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.每日總帳報表):
+                    newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[5], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.合作診所結帳報表):
+                    newTab = new CooperativeEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[6], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;
@@ -372,7 +381,7 @@ namespace His_Pos.ChromeTabViewModel
 
                             if (InventoryManagementView.DataChanged)
                             {
-                                InventoryManagementView.Instance.MergingData();
+                                //InventoryManagementView.Instance.MergingData();
                                 InventoryManagementView.Instance.SearchData();
                             }
                             break;
@@ -400,16 +409,6 @@ namespace His_Pos.ChromeTabViewModel
                                 AuthenticationManageView.Instance.UpdateUi();
 
                                 AuthenticationManageView.DataChanged = false;
-                            }
-                            break;
-
-                        case nameof(FeatureItem.排班管理):
-                            if (WorkScheduleManageView.Instance is null) break;
-
-                            if (WorkScheduleManageView.DataChanged)
-                            {
-                                WorkScheduleManageView.Instance.InitCalendar();
-                                WorkScheduleManageView.DataChanged = false;
                             }
                             break;
                     }

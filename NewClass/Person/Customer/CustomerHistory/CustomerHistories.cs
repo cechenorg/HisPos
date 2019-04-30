@@ -1,11 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
-    public class CustomerHistories:Collection<CustomerHistoryBase>
+    public class CustomerHistories:Collection<CustomerHistory>
     {
         public CustomerHistories()
         {
@@ -17,15 +19,7 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
             var table = CustomerHistoryDb.GetData(id);
             foreach (DataRow r in table.Rows)
             {
-                switch ((HistoryType)int.Parse(r[""].ToString()))//switch by type 
-                {
-                    case HistoryType.Prescription:
-                        Add(new PrescriptionHistory(r));
-                        break;
-                    case HistoryType.Prescribe:
-                        Add(new PrescribeHistory(r));
-                        break;
-                }
+                Add(new CustomerHistory(r));
             }
         }
     }

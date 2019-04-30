@@ -7,10 +7,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public ProductManageMedicineDetail(DataRow row)
         {
             NHIPrice = (double)row.Field<decimal>("Med_Price");
-            SingdeMinOrderAmount = row.Field<int>("SinData_MinOrder").ToString();
             PackageAmount = row.Field<int>("SinData_PackageAmount").ToString();
-            SingdePackagePrice = (double)row.Field<decimal>("SinData_PackagePrice");
-            SindePrice = (double)row.Field<decimal>("SinData_SinglePrice");
             Form = row.Field<string>("Med_Form");
             ATC = row.Field<string>("Med_ATC");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
@@ -24,9 +21,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int? ControlLevel { get; }
         public double NHIPrice { get; }
         public string PackageAmount { get; }
-        public double SingdePackagePrice { get; }
-        public string SingdeMinOrderAmount { get; }
-        public double SindePrice { get; }
+        
         public string Form { get; }
         public string ATC { get; }
         public string Manufactory { get; }

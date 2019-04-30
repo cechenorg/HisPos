@@ -5,18 +5,17 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.Properties;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using MaterialDesignThemes.Wpf;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -31,63 +30,61 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             return this;
         }
-        private CollectionViewSource decFilePreViewSource;
-        private CollectionViewSource DecFilePreViewSource
-        {
-            get => decFilePreViewSource;
-            set
-            {
-                Set(() => DecFilePreViewSource, ref decFilePreViewSource, value);
-            }
-        }
-        private ICollectionView decFilePreViewCollectionView;
-        public ICollectionView DecFilePreViewCollectionView
-        {
-            get => decFilePreViewCollectionView;
-            private set
-            {
-                Set(() => DecFilePreViewCollectionView, ref decFilePreViewCollectionView, value);
-            }
-        }
+        //private CollectionViewSource decFilePreViewSource;
+        //private CollectionViewSource DecFilePreViewSource
+        //{
+        //    get => decFilePreViewSource;
+        //    set
+        //    {
+        //        Set(() => DecFilePreViewSource, ref decFilePreViewSource, value);
+        //    }
+        //}
+        //private ICollectionView decFilePreViewCollectionView;
+        //public ICollectionView DecFilePreViewCollectionView
+        //{
+        //    get => decFilePreViewCollectionView;
+        //    private set
+        //    {
+        //        Set(() => DecFilePreViewCollectionView, ref decFilePreViewCollectionView, value);
+        //    }
+        //}
 
-        private DeclareFilePreviews decFilePreViews;
+        //private DeclareFilePreviews decFilePreViews;
+        //public DeclareFilePreviews DecFilePreViews
+        //{
+        //    get => decFilePreViews;
+        //    private set
+        //    {
+        //        Set(() => DecFilePreViews, ref decFilePreViews, value);
+        //    }
+        //}
+        //private DeclareFilePreview selectedPreview;
+        //public DeclareFilePreview SelectedPreview
+        //{
+        //    get => selectedPreview;
+        //    set
+        //    {
+        //        Set(() => SelectedPreview, ref selectedPreview, value);
+        //    }
+        //}
+        private DeclarePreviewOfMonth declareFile;
+        public DeclarePreviewOfMonth DeclareFile
+        {
+            get => declareFile;
+            set
+            {
+                Set(() => DeclareFile, ref declareFile, value);
+            }
+        }
+        private DateTime? declareDate;
+        public DateTime? DeclareDate
+        {
+            get => declareDate;
+            set
+            {
+                if(value != null)
 
-        public DeclareFilePreviews DecFilePreViews
-        {
-            get => decFilePreViews;
-            private set
-            {
-                Set(() => DecFilePreViews, ref decFilePreViews, value);
-            }
-        }
-        private DeclareFilePreview selectedFile;
-        public DeclareFilePreview SelectedFile
-        {
-            get => selectedFile;
-            set
-            {
-                Set(() => SelectedFile, ref selectedFile, value);
-            }
-        }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
-        public AdjustCases AdjustCases { get; set; }
-        public Institutions Institutions { get; set; }
-        private DateTime? decStart;
-        public DateTime? DecStart
-        {
-            get => decStart;
-            set
-            {
-                Set(() => DecStart, ref decStart, value);
-            }
-        }
-        private DateTime? decEnd;
-        public DateTime? DecEnd
-        {
-            get => decEnd;
-            set
-            {
-                Set(() => DecEnd, ref decEnd, value);
+                Set(() => DeclareDate, ref declareDate, value);
             }
         }
         private bool isBusy;
@@ -103,15 +100,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public string BusyContent
         {
             get => busyContent;
-            private set
+            set
             {
                 Set(() => BusyContent, ref busyContent, value);
+            }
+        }
+        private int startDay;
+        public int StartDay
+        {
+            get => startDay;
+            set
+            {
+                Set(() => StartDay, ref startDay, value);
+            }
+        }
+        private int endDay;
+        public int EndDay
+        {
+            get => endDay;
+            set
+            {
+                Set(() => EndDay, ref endDay, value);
             }
         }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
-        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
+        public RelayCommand AdjustPharmacistSetting { get; set; }
+        public RelayCommand AdjustPharmacistOfDay { get; set; }
+        public RelayCommand AdjustPharmacistOfMonth { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
@@ -121,6 +138,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             InitialVariables();
             InitialCommands();
             RegisterMessengers();
+            GetPreviewPrescriptionsActions();
+        }
+        #region Functions
+        #region Initial
+        private void InitialVariables()
+        {
+            DeclareFile = new DeclarePreviewOfMonth();
+            //DecFilePreViews = new DeclareFilePreviews();
+            DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
+            StartDay = 1;
+            EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
+        }
+        private void InitialCommands()
+        {
+            GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
+            AdjustPharmacistSetting = new RelayCommand(AdjustPharmacistSettingAction);
+            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
+            SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
+            CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
+        }
+
+        private void GetPreviewPrescriptionsActions()
+        {
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -131,105 +171,59 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        #region Functions
-        #region Initial
-        private void InitialVariables()
+        private void AdjustPharmacistSettingAction()
         {
-            DecFilePreViews = new DeclareFilePreviews();
-            DecEnd = DateTime.Today;
-            DecStart = new DateTime(((DateTime)DecEnd).Year, ((DateTime)DecEnd).Month, 1).AddMonths(-3);
-            MedicalPersonnels = ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels;
-            AdjustCases = ViewModelMainWindow.AdjustCases;
-            Institutions = ViewModelMainWindow.Institutions;
-        }
-        private void InitialCommands()
-        {
-            ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
-            GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
-            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
-            SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
-            CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
-        }
-
-        private void GetPreviewPrescriptionsActions()
-        {
-            GetPrescriptions();
+            var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, 1));
         }
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(DeclareFileManageViewModel) + "InsSelected", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"))
                     GetPrescriptions();
             });
         }
-        private void GetSelectedInstitution(Institution receiveSelectedInstitution)
-        {
-            SelectedFile.SelectedInstitution = receiveSelectedInstitution;
-        }
         #endregion
         #region CommandActions
-        private void ShowInsSelectionWindowAction(string search)
-        {
-            if (search.Length < 4)
-            {
-                MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "4", MessageType.WARNING);
-                return;
-            }
-            var result = Institutions.Where(i => i.ID.Contains(search)).ToList();
-            switch (result.Count)
-            {
-                case 0:
-                    return;
-                case 1:
-                    SelectedFile.SelectedInstitution = result[0];
-                    break;
-                default:
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.DeclareFileManage);
-                    institutionSelectionWindow.ShowDialog();
-                    break;
-            }
-        }
         private void ShowPrescriptionEditWindowAction()
         {
-            if (SelectedFile.SelectedPrescription is null) return;
+            //if (SelectedPreview.SelectedPrescription is null) return;
             MainWindow.ServerConnection.OpenConnection();
-            Prescription selected =
-                new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedFile.SelectedPrescription.ID).Rows[0],
-                    PrescriptionSource.Normal);
+            //var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            PrescriptionEditWindow prescriptionEdit = new PrescriptionEditWindow(selected, ViewModelEnum.PrescriptionSearch);
-            prescriptionEdit.ShowDialog();
+            //var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
+            //prescriptionEdit.ShowDialog();
         }
         private void SetDecFilePreViewSummaryAction()
         {
-            var currentPosition = DecFilePreViewCollectionView.CurrentPosition;
-            DecFilePreViews[DecFilePreViewCollectionView.CurrentPosition].SetSummary();
-            DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
-            DecFilePreViewCollectionView = DecFilePreViewSource.View;
-            DecFilePreViewCollectionView.MoveCurrentToPosition(currentPosition);
+            //var currentPosition = DecFilePreViewCollectionView.CurrentPosition;
+            //DecFilePreViews[DecFilePreViewCollectionView.CurrentPosition].SetSummary();
+            //DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
+            //DecFilePreViewCollectionView = DecFilePreViewSource.View;
+            //DecFilePreViewCollectionView.MoveCurrentToPosition(currentPosition);
         }
         private void CreateDeclareFileAction()
         {
-            if(SelectedFile is null) return;
+            //if(SelectedPreview is null) return;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.產生申報資料;
-                SelectedFile.DeclarePrescriptions.SerializeFileContent();
+                MainWindow.ServerConnection.OpenConnection();
+                //SelectedPreview.DeclarePrescriptions.SerializeFileContent();
+                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                var decFile = new DeclareFile(SelectedFile);
-                if (SelectedFile.CheckFileExist())
-                {
-                    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
-                    if (!(bool)confirm.DialogResult)
-                        return;
-                }
-                SelectedFile.CreateDeclareFile(decFile);
+                //var decFile = new DeclareFile(SelectedPreview,SelectedPreview.);
+                //if (SelectedPreview.CheckFileExist())
+                //{
+                //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
+                //    if (!(bool)confirm.DialogResult)
+                //        return;
+                //}
+                //SelectedPreview.CreateDeclareFile(decFile);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -237,26 +231,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         private void GetPrescriptions()
         {
-            var prescriptions = new DeclarePrescriptions();
-            prescriptions.GetSearchPrescriptions((DateTime)DecStart, (DateTime)DecEnd);
-            DecFilePreViews.Clear();
-            foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
-            {
-                foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
-                {
-                    var decFile = new DeclareFilePreview();
-                    decFile.DeclarePrescriptions.AddPrescriptions(pres);
-                    decFile.SetSummary();
-                    DecFilePreViews.Add(decFile);
-                }
-            }
-            DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
-            DecFilePreViewCollectionView = DecFilePreViewSource.View;
-            if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
-            {
-                DecFilePreViewCollectionView.MoveCurrentToFirst();
-                SelectedFile = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
-            }
+            var end = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month+1, 1).AddDays(-1).Day;
+            if (EndDay > end)
+                EndDay = end;
+            var sDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month,StartDay);
+            var eDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, EndDay);
+            DeclareFile.GetSearchPrescriptions(sDate, eDate);
+            DeclareFile.SetSummary();
+            //DecFilePreViews.Clear();
+            //foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
+            //{
+            //    foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
+            //    {
+            //        var decFile = new DeclareFilePreview();
+            //        decFile.DeclarePrescriptions.AddPrescriptions(pres);
+            //        decFile.SetSummary();
+            //        //DecFilePreViews.Add(decFile);
+            //    }
+            //}
+            //DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
+            //DecFilePreViewCollectionView = DecFilePreViewSource.View;
+            //if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
+            //{
+            //    DecFilePreViewCollectionView.MoveCurrentToFirst();
+            //    SelectedPreview = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
+            //}
         }
 
         #endregion

@@ -13,6 +13,7 @@ namespace His_Pos.Database
     public class SQLServerConnection : DatabaseConnection
     {
         private SqlConnection connection = new SqlConnection(Properties.Settings.Default.SQL_local);
+        private bool isBusy = false;
 
         public bool CheckConnection()
         {
@@ -56,13 +57,16 @@ namespace His_Pos.Database
 
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
-            while (connection.State == ConnectionState.Executing)
-                Thread.Sleep(1000);
+            while (isBusy)
+                Thread.Sleep(500);
+
+            isBusy = true;
 
             var table = new DataTable();
             try
             {
-                var myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." +  procName, connection);
+                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+                
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;
                 if (parameterList != null)
@@ -91,6 +95,9 @@ namespace His_Pos.Database
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                 });
             }
+
+            isBusy = false;
+
             return table;
         }
         

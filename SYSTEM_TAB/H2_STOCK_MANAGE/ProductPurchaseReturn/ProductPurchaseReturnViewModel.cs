@@ -12,8 +12,10 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -33,7 +35,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand CalculateTotalPriceCommand { get; set; }
-        public RelayCommand<string> FilterOrderStatusCommand { get; set; }
+        public RelayCommand<string> FilterOrderCommand { get; set; }
+        public RelayCommand<string> SplitBatchCommand { get; set; }
+        public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
+        public RelayCommand CloseTabCommand { get; set; }
+        public RelayCommand ChooseBatchCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
 
@@ -75,6 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
+        public string SearchString { get; set; }
         #endregion
 
         public ProductPurchaseReturnViewModel()
@@ -170,7 +177,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
 
-            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+            Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProductFromAddButton);
             ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum);
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
@@ -179,10 +186,33 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.DeleteSelectedProduct();
         }
-        private void FilterOrderStatusAction(string filterCondition)
+        private void FilterOrderAction(string filterCondition)
         {
-            filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
-            StoreOrderCollectionView.Filter += OrderStatusFilter;
+            if(filterCondition != null)
+                filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
+            StoreOrderCollectionView.Filter += OrderFilter;
+        }
+        private void SplitBatchAction(string productID)
+        {
+            (CurrentStoreOrder as PurchaseOrder).SplitBatch(productID);
+        }
+        private void MergeBatchAction(PurchaseProduct product)
+        {
+            (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
+        }
+        private void CloseTabAction()
+        {
+            if(CurrentStoreOrder != null)
+                CurrentStoreOrder.SaveOrder();
+        }
+        private void ChooseBatchAction()
+        {
+            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID);
+            
+            ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
+
+            if (dataContext.IsSelected)
+                ((ReturnProduct)CurrentStoreOrder.SelectedItem).BatchNumber = dataContext.ChoosedBatchNumber;
         }
         #endregion
 
@@ -190,6 +220,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void InitVariables()
         {
             IsBusy = true;
+            SearchString = "";
             
             BackgroundWorker backgroundWorker = new BackgroundWorker();
 
@@ -239,7 +270,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
                 StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
-                StoreOrderCollectionView.Filter += OrderStatusFilter;
+                StoreOrderCollectionView.Filter += OrderFilter;
 
                 if (!StoreOrderCollectionView.IsEmpty)
                 {
@@ -262,7 +293,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             CalculateTotalPriceCommand = new RelayCommand(CalculateTotalPriceAction);
-            FilterOrderStatusCommand = new RelayCommand<string>(FilterOrderStatusAction);
+            FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
+            SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
+            MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
+            ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
+            CloseTabCommand = new RelayCommand(CloseTabAction);
         }
         
         #region ///// Messenger Functions /////
@@ -271,41 +306,97 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
             {
                 MainWindow.ServerConnection.OpenConnection();
-                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID);
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, false);
                 MainWindow.ServerConnection.CloseConnection();
-
-                Messenger.Default.Send(new NotificationMessage<string>(this, notificationMessage.Content.ID, nameof(ProductPurchaseReturnViewModel)));
+            }
+        }
+        private void GetSelectedProductFromAddButton(NotificationMessage<ProductStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, true);
+                MainWindow.ServerConnection.CloseConnection();
             }
         }
         #endregion
 
         #region ///// Filter Functions /////
-        private bool OrderStatusFilter(object order)
+        private bool OrderFilter(object order)
         {
-            StoreOrder tempOrder = order as StoreOrder;
+            bool returnValue = true;
 
+            StoreOrder tempOrder = order as StoreOrder;
+            
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                returnValue = false;
+
+                //Order ID Filter
+                if (tempOrder.ReceiveID is null && tempOrder.ID.Contains(SearchString))
+                    returnValue = true;
+                else if (tempOrder.ReceiveID != null && tempOrder.ReceiveID.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Note Filter
+                if (tempOrder.Note != null && tempOrder.Note.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Customer Filter
+                if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
+                    returnValue = true;
+
+                //Order Product ID Name Note Filter
+                if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
+                {
+                    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+                else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
+                {
+                    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
+                        if (product.Note != null && product.Note.Contains(SearchString))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                        {
+                            returnValue = true;
+                            break;
+                        }
+                }
+            }
+
+            //Order Status Filter
             switch (filterStatus)
             {
                 case OrderFilterStatusEnum.ALL:
-                    return true;
+                    break;
                 case OrderFilterStatusEnum.UNPROCESSING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                        return true;
-                    else
-                        return false;
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))
+                        returnValue = false;
+                    break;
                 case OrderFilterStatusEnum.WAITING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.WAITING)
-                        return true;
-                    else
-                        return false;
+                    if (tempOrder.OrderStatus != OrderStatusEnum.WAITING)
+                        returnValue = false;
+                    break;
                 case OrderFilterStatusEnum.PROCESSING:
-                    if (tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-                        return true;
-                    else
-                        return false;
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                        returnValue = false;
+                    break;
             }
 
-            return false;
+            return returnValue;
         }
         #endregion
 

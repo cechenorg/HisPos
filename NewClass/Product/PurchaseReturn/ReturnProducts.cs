@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class ReturnProducts : ObservableCollection<ReturnProduct>
+    public class ReturnProducts : ObservableCollection<ReturnProduct>, ICloneable
     {
+        private ReturnProducts() { }
         private ReturnProducts(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
@@ -24,6 +26,26 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         internal static ReturnProducts GetProductsByStoreOrderID(string orederID)
         {
             return new ReturnProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
+        }
+
+        public object Clone()
+        {
+            ReturnProducts products = new ReturnProducts();
+
+            foreach (var product in Items)
+                products.Add(product.Clone() as ReturnProduct);
+
+            return products;
+        }
+        internal void SetToProcessing()
+        {
+            foreach (var product in Items)
+                product.IsProcessing = true;
+        }
+        internal void SetStartEditToPrice()
+        {
+            foreach (var product in Items)
+                product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
@@ -15,7 +16,7 @@ namespace His_Pos.NewClass.Product
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
-            Common = row.Field<bool>("Pro_IsCommon");
+            IsCommon = row.Field<bool>("Pro_IsCommon");
         }
 
         public Product(ProductStruct p)
@@ -24,7 +25,12 @@ namespace His_Pos.NewClass.Product
             ChineseName = p.ChineseName;
             EnglishName = p.EnglishName;
         }
-
+        public Product(MedicineSetItem m)
+        {
+            ID = m.ID;
+            ChineseName = m.ChineseName;
+            EnglishName = m.EnglishName;
+        }
         #region ----- Define Variables -----
 
         private string id;
@@ -48,15 +54,15 @@ namespace His_Pos.NewClass.Product
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
-        private bool common;//常備品項
-        public bool Common
+        private bool isCommon;//常備品項
+        public bool IsCommon
         {
-            get => common;
+            get => isCommon;
             set
             {
-                if (common != value)
+                if (isCommon != value)
                 {
-                    Set(() => Common, ref common, value);
+                    Set(() => IsCommon, ref isCommon, value);
                 }
             }
         }

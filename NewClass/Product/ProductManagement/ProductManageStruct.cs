@@ -6,7 +6,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         public ProductManageStruct(DataRow row)
         {
-            ProductType = row.Field<string>("TYPE").Equals("M")? ProductTypeEnum.Medicine : ProductTypeEnum.OTC;
+            ProductType = (ProductTypeEnum)row.Field<int>("TYPE");
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
@@ -14,6 +14,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
+            MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
             IsCommon = row.Field<bool>("Pro_IsCommon");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
+        public double MedBagOnTheWayAmount { get; set; }
         public double StockValue { get; set; }
         public int? ControlLevel { get; set; }
         public bool IsCommon { get; set; }

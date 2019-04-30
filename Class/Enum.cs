@@ -14,7 +14,8 @@ namespace His_Pos.Class
     {
         MyPharmacy = 1,
         Printer = 2,
-        Database = 3
+        Database = 3,
+        CooperativeClinic = 4
     }
 
     public enum StoreOrderCategory
@@ -59,7 +60,10 @@ namespace His_Pos.Class
         合作診所藥品耗用 = 23,
         部分負擔自費報表 = 24,
         系統函式 = 25,
-        管制藥品簿冊申報 = 26
+        管制藥品簿冊申報 = 26,
+        每日總帳報表 = 27,
+        合作診所結帳報表 = 28,
+        額外收入登錄 = 29
     }
 
     public enum StoreOrderProductType
@@ -609,9 +613,9 @@ namespace His_Pos.Class
 
     public enum HistoryType
     {
-        Prescription = 0,
-        Prescribe = 1,
-        ALL = 2
+        AdjustRecord = 0,
+        RegisterRecord = 1,
+        ReservedPrescription = 2
     }
 
 }

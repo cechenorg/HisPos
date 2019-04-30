@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Person.Customer;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow
 {
@@ -10,10 +11,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomerSelectionWindow : Window
     {
         private CustomerSelectionViewModel customerSelection { get; set; }
-        public CustomerSelectionWindow()
+        public CustomerSelectionWindow(int condition,Customers customers)
         {
             InitializeComponent();
-            customerSelection = new CustomerSelectionViewModel("", 1);
+            customerSelection = new CustomerSelectionViewModel("", condition, customers);
             DataContext = customerSelection;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
@@ -26,10 +27,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 ShowDialog();
         }
 
-        public CustomerSelectionWindow(string condition,int option)
+        public CustomerSelectionWindow(string condition,int option,Customers customers)
         {
             InitializeComponent();
-            customerSelection = new CustomerSelectionViewModel(condition, option);
+            customerSelection = new CustomerSelectionViewModel(condition, option, customers);
             DataContext = customerSelection;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {

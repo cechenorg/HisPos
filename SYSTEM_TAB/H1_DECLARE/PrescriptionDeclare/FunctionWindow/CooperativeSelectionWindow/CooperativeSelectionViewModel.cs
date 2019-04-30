@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
@@ -183,7 +184,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void SelectionChangedAction()
         {
             if (SelectedPrescription is null) return;
-            // CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.IDNumber);
             CustomerHistories = new CooperativeViewHistories();
             CustomerHistories.Insert(0,new CooperativeViewHistory(SelectedPrescription));
             SelectedHistory = CustomerHistories[0];
@@ -191,10 +191,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void PrintAction()
         {
             if(SelectedPrescription is null) return;
-            MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription.Patient.Check();
-            MainWindow.ServerConnection.CloseConnection();
-            SelectedPrescription.GetCompletePrescriptionData(false,true,false);
+            SelectedPrescription.GetCompletePrescriptionData(true,false);
             SelectedPrescription.CountPrescriptionPoint(true);
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
             if ((bool)medBagPrint.DialogResult)
@@ -228,7 +225,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.取得合作處方;
-                CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today, DateTime.Today);
+                CooperativePrescriptions.GetCooperativePrescriptions(ViewModelMainWindow.CurrentPharmacy.ID, DateTime.Today.AddDays(-10), DateTime.Today);
+                XmlOfPrescriptions.GetFile();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -248,6 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         #region Functions
         private void GetCooperativePrescription(Prescriptions receivePrescriptions)
         {
+          
             CooperativePrescriptions = new Prescriptions();
             CooperativePrescriptions = receivePrescriptions;
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };

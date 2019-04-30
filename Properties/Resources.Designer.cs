@@ -61,6 +61,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 額外收入登錄 的當地語系化字串。
+        /// </summary>
+        internal static string AdditionalCashFlowManage {
+            get {
+                return ResourceManager.GetString("AdditionalCashFlowManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請選擇調劑案件
         /// 的當地語系化字串。
         /// </summary>
@@ -122,6 +131,15 @@ namespace His_Pos.Properties {
         internal static string CaseCategoryNull {
             get {
                 return ResourceManager.GetString("CaseCategoryNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 每日總帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string CashStockEntryReport {
+            get {
+                return ResourceManager.GetString("CashStockEntryReport", resourceCulture);
             }
         }
         
@@ -188,6 +206,15 @@ namespace His_Pos.Properties {
         internal static string CooperativeEntry {
             get {
                 return ResourceManager.GetString("CooperativeEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 合作診所結帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string CooperativeEntryReport {
+            get {
+                return ResourceManager.GetString("CooperativeEntryReport", resourceCulture);
             }
         }
         
@@ -543,7 +570,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 處方已超過可領取時限
+        ///   查詢類似 處方已超過可領取時限，如繼續調劑申報會產生錯誤，是否繼續調劑?
         /// 的當地語系化字串。
         /// </summary>
         internal static string PrescriptoinOutOfDate {
@@ -729,15 +756,6 @@ namespace His_Pos.Properties {
         internal static string 免收確認 {
             get {
                 return ResourceManager.GetString("免收確認", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 是否免收部分負擔? 的當地語系化字串。
-        /// </summary>
-        internal static string 免收部分負擔 {
-            get {
-                return ResourceManager.GetString("免收部分負擔", resourceCulture);
             }
         }
         
@@ -941,7 +959,16 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 查無顧客資料,是否新增? 的當地語系化字串。
+        ///   查詢類似 是否收部分負擔? 的當地語系化字串。
+        /// </summary>
+        internal static string 收部分負擔 {
+            get {
+                return ResourceManager.GetString("收部分負擔", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 此顧客為新客人,是否新增? 的當地語系化字串。
         /// </summary>
         internal static string 新增顧客確認 {
             get {
@@ -1275,7 +1302,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 查無資料，若要新增顧客請至少填寫姓名與身分證 的當地語系化字串。
+        ///   查詢類似 此顧客為新客人，若要新增請填寫姓名.身分證與生日 的當地語系化字串。
         /// </summary>
         internal static string 顧客資料不足 {
             get {

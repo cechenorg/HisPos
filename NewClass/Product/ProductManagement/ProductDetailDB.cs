@@ -19,6 +19,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
 
+        internal static DataTable GetMedicineHistoryPrices(string medicineID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MED_ID", medicineID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineHistoryPrices]", parameters);
+        }
+
         internal static DataTable GetInventoryRecordsByID(string id)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -40,10 +48,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productManageMedicine.ID));
-            parameters.Add(new SqlParameter("PRO_CHINAME", productManageMedicine.ChineseName));
-            parameters.Add(new SqlParameter("PRO_ENGNAME", productManageMedicine.EnglishName));
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_CHINAME", productManageMedicine.ChineseName);
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_ENGNAME", productManageMedicine.EnglishName);
             parameters.Add(new SqlParameter("PRO_ISENABLE", productManageMedicine.Status));
-            parameters.Add(new SqlParameter("PRO_BARCODE", productManageMedicine.BarCode));
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_BARCODE", productManageMedicine.BarCode);
             parameters.Add(new SqlParameter("PRO_ISCOMMON", productManageMedicine.IsCommon));
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SAFEAMOUNT", productManageMedicine.SafeAmount);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_BASICAMOUNT", productManageMedicine.BasicAmount);
@@ -77,6 +85,38 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("LAST_PRICE", price));
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductLastPrice]", parameters);
+        }
+
+        internal static DataTable GetProductTypeByID(string newProductID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", newProductID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTypeByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageOTCMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageOTCMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageNHIMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageNHIMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetProductManageSpecialMedicineDetailByID(string id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageSpecialMedicineDetailByID]", parameters);
         }
     }
 }

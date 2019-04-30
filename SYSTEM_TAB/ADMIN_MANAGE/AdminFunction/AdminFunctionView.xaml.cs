@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
@@ -14,8 +16,9 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.IcData.Upload;
+using His_Pos.NewClass.Prescription.Search;
 using His_Pos.Service;
-using Customer = His_Pos.Class.Person.Customer;
+using Prescription = His_Pos.NewClass.CooperativeInstitution.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -92,18 +95,38 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
 
         private void ChangeCus_Click(object sender, RoutedEventArgs e)
         {
-            var prescriptions = new DeclarePrescriptions();
-            prescriptions.GetSearchPrescriptions(new DateTime(2019,02,28), new DateTime(2019, 02, 28));
-            foreach (var p in prescriptions.Where(pre => pre.Patient.ID == 0))
-            {
-                Ddata d = XmlService.Deserialize<Ddata>(p.FileContentStr);
-                NewClass.Person.Customer.Customer c = new NewClass.Person.Customer.Customer();
-                c.Name = d.Dhead.D20;
-                c.IDNumber = d.Dhead.D3;
-                c.Birthday = DateTimeExtensions.TWDateStringToDateOnly(d.Dhead.D6);
-                c.Check();
-                Console.WriteLine(p.ID +":"+ c.ID);
-            }
+            //var prescriptionsPreviews = new PrescriptionSearchPreviews();
+            //var prescriptions = new Prescriptions();
+            //DataTable table = PrescriptionDb.GetSearchPrescriptionsData(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+            //    DateTime.Today, null, null, null, null, null, null, null);
+            //foreach (DataRow r in table.Rows)
+            //{
+            //    prescriptionsPreviews.Add(new PrescriptionSearchPreview(r,PrescriptionSource.Normal));
+            //}
+
+            //foreach (var p in prescriptionsPreviews)
+            //{
+            //    var pre = new NewClass.Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
+            //        PrescriptionSource.Normal);
+            //    MainWindow.ServerConnection.OpenConnection();
+            //    pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
+            //    pre.AdjustMedicinesType();
+            //    MainWindow.ServerConnection.CloseConnection();
+            //    if (pre.Treatment.Division != null)
+            //        pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
+            //    pre.Treatment.Pharmacist =
+            //        ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IdNumber.Equals(pre.Treatment.Pharmacist.IdNumber));
+            //    pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
+            //    pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
+            //    if (pre.Treatment.PrescriptionCase != null)
+            //        pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
+            //    if (pre.Treatment.SpecialTreat != null)
+            //        pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
+            //    pre.PrescriptionPoint.GetDeposit(pre.Id);
+            //    pre.CheckIsCooperative();
+            //    if(pre.PrescriptionStatus.IsDeclare)
+            //        prescriptions.Add(pre);
+            //}
         }
     }
 }

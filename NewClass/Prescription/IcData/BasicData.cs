@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Prescription.IcData
         [Index(7)]
         public string CardLogoutMark;
         [Index(8)]
-        public string EmergencyTel;
+        public string Tel;
         /*
          * 卡片號碼(1-12)
          * 姓名(13-32)
@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Prescription.IcData
          * 性別(50)
          * 發卡日期(51-57)
          * 卡片註銷註記(58)
-         * 緊急聯絡電話(59-72) 
+         * 連絡電話(59-72)
          */
         public BasicData(byte[] pBuffer)
         {
@@ -47,9 +47,9 @@ namespace His_Pos.NewClass.Prescription.IcData
             string dateString = Function.ByteArrayToString(7, pBuffer, 50);
             CardReleaseDate = DateTimeExtensions.TWDateStringToDateOnly(dateString);
             CardLogoutMark = Function.ByteArrayToString(1, pBuffer, 57);
-            EmergencyTel = Function.ByteArrayToString(14, pBuffer, 58);
+            Tel = Function.ByteArrayToString(14, pBuffer, 58);
         }
-        public BasicData(string cardNum,string name,string idNum, DateTime birthday, string birth,string gender,DateTime cardRelease,string cardLogout,string emergencyTel)
+        public BasicData(string cardNum, string name, string idNum, DateTime birthday, string birth, string gender, DateTime cardRelease, string cardLogout, string tel)
         {
             CardNumber = cardNum;
             Name = name;
@@ -59,7 +59,7 @@ namespace His_Pos.NewClass.Prescription.IcData
             Gender = gender;
             CardReleaseDate = cardRelease;
             CardLogoutMark = cardLogout;
-            EmergencyTel = emergencyTel;
+            Tel = tel;
         }
     }
 }

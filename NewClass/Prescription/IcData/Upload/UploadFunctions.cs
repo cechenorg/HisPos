@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
     {
         public static void StartDailyUpload(DataTable dailyUploadTable)
         {
-            var icDataUpload = "<?xml version=\"1.0\" encoding=\"big5\" ?><RECS>";
+            var icDataUpload = "<?xml version=\"1.0\" encoding=\"Big5\" ?><RECS>";
             foreach (DataRow row in dailyUploadTable.Rows)
             {
                 icDataUpload += row["UplData_Content"].ToString().Replace("<A18/>", "<A18></A18>");

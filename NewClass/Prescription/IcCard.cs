@@ -18,7 +18,7 @@ using StringRes = His_Pos.Properties.Resources;
 namespace His_Pos.NewClass.Prescription
 {
     [ZeroFormattable]
-    public class IcCard : ObservableObject
+    public class IcCard : ObservableObject,ICloneable
     {
         public IcCard() { }
         [Index(0)]
@@ -38,7 +38,7 @@ namespace His_Pos.NewClass.Prescription
         [Index(7)]
         public virtual int? AvailableTimes { get; set; }//就醫可用次數
         [Index(8)]
-        public virtual DateTime? NewBornBirthday { get; set; }//卡片有效期限
+        public virtual string NewBornBirthday { get; set; }//卡片有效期限
         [Index(9)]
         public virtual BasicData PatientBasicData { get; set; }
         [Index(10)]
@@ -49,6 +49,8 @@ namespace His_Pos.NewClass.Prescription
         public virtual bool IsGetMedicalNumber { get; set; }
         [Index(12)]
         public virtual string TreatDateTime { get; set; } = string.Empty;
+        [Index(13)]
+        public virtual string Tel { get; set; }
         public bool GetBasicData()
         {
             var strLength = 72;
@@ -74,6 +76,7 @@ namespace His_Pos.NewClass.Prescription
                     Gender = PatientBasicData.Gender;
                     IDNumber = PatientBasicData.IDNumber;
                     CardReleaseDate = PatientBasicData.CardReleaseDate;
+                    Tel = PatientBasicData.Tel;
                     HisApiFunction.CloseCom();
                     return true;
                 }
@@ -101,15 +104,27 @@ namespace His_Pos.NewClass.Prescription
                     MedicalNumberData = new SeqNumber(pBuffer);
                     IsGetMedicalNumber = true;
                     TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
+                    HisApiFunction.CloseCom();
+                    return;
                 }
-                else
+                if (res == 5003)
                 {
-                    var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                    Application.Current.Dispatcher.Invoke(delegate
+                    UpdateCard();
+                    res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
+                    if (res == 0)
                     {
-                        MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
-                    });
+                        MedicalNumberData = new SeqNumber(pBuffer);
+                        IsGetMedicalNumber = true;
+                        TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
+                        HisApiFunction.CloseCom();
+                        return;
+                    }
                 }
+                var description = MainWindow.GetEnumDescription((ErrorCode)res);
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
+                });
                 HisApiFunction.CloseCom();
             }
         }
@@ -179,6 +194,27 @@ namespace His_Pos.NewClass.Prescription
                 }
                 HisApiFunction.CloseCom();
             }
+        }
+
+        public object Clone()
+        {
+            var c = new IcCard();
+            c.CardNumber = CardNumber;
+            c.Name = Name;
+            c.Birthday = Birthday;
+            c.Gender = Gender;
+            c.IDNumber = IDNumber;
+            c.CardReleaseDate = CardReleaseDate;
+            c.ValidityPeriod = ValidityPeriod;
+            c.AvailableTimes = AvailableTimes;
+            c.NewBornBirthday = NewBornBirthday;
+            c.PatientBasicData = PatientBasicData.DeepCloneViaJson();
+            c.MedicalNumberData = MedicalNumberData.DeepCloneViaJson();
+            c.TreatRecords = TreatRecords?.DeepCloneViaJson();
+            c.IsGetMedicalNumber = IsGetMedicalNumber;
+            c.TreatDateTime = TreatDateTime;
+            c.Tel = Tel;
+            return c;
         }
     }
 }

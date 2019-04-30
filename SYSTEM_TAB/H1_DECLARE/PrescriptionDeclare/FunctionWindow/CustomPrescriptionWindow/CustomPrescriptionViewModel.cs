@@ -121,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePrescriptions = new Prescriptions();
             MainWindow.ServerConnection.OpenConnection();
             CooperativePrescriptions.GetCooperativePrescriptionsByCusIDNumber(PatientIDNumber);
+            CooperativePrescriptions.GetXmlOfPrescriptionsByCusIDNumber(PatientIDNumber);
             ReservedPrescriptions = new RegisterAndReservePrescriptions();
             ReservedPrescriptions.GetReservePrescriptionByCusId(PatientID);
             RegisteredPrescriptions = new RegisterAndReservePrescriptions();
@@ -148,7 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private void RegisterMessenger()
         {
             Messenger.Default.Register<NotificationMessage<int>> (this, PrescriptionSelectionChanged);
-            Messenger.Default.Register<string>(this, "CooperativePrescriptionSelectionChanged", CooperativePrescriptionSelectionChanged);
+            Messenger.Default.Register<CustomPrescriptionStruct>(this, "CooperativePrescriptionSelectionChanged", CooperativePrescriptionSelectionChanged);
             Messenger.Default.Register<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
         }
 
@@ -158,23 +159,38 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             SelectedPrescription = msg.Notification.Equals("ReserveSelectionChanged") ? 
                 new CustomPrescriptionStruct(msg.Content, PrescriptionSource.ChronicReserve,string.Empty) : new CustomPrescriptionStruct(msg.Content, PrescriptionSource.Normal, string.Empty);
         }
-        private void CooperativePrescriptionSelectionChanged(string remark)
+        private void CooperativePrescriptionSelectionChanged(CustomPrescriptionStruct cps)
         {
             isSelectCooperative = true;
-            SelectedPrescription = new CustomPrescriptionStruct(0, PrescriptionSource.Cooperative, remark);
+            SelectedPrescription = cps;
         }
 
         private void CustomPrescriptionSelected(NotificationMessage msg)
         {
-            if (!msg.Notification.Equals("CustomPrescriptionSelected")) return;
-            if (SelectedPrescription.ID is null) return;
-            Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
-            if (SelectedPrescription.Source == PrescriptionSource.Cooperative)
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
-            else
-                Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
-            Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
-            Messenger.Default.Unregister(this);
+            try
+            {
+                if (!msg.Notification.Equals("CustomPrescriptionSelected")) return;
+                if (SelectedPrescription.ID is null) return;
+                Messenger.Default.Unregister<NotificationMessage>("CustomPrescriptionSelected", CustomPrescriptionSelected);
+                switch(SelectedPrescription.Source)
+                {
+                    case PrescriptionSource.Cooperative:
+                        Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.Remark.Equals(SelectedPrescription.Remark)), "CooperativePrescriptionSelected"));
+                        break;
+                    case PrescriptionSource.XmlOfPrescription:
+                        Messenger.Default.Send(new NotificationMessage<Prescription>(this, CooperativePrescriptions.Single(p => p.SourceId == SelectedPrescription.ID.ToString() ), "CooperativePrescriptionSelected"));
+                        break;
+                    default:
+                        Messenger.Default.Send(SelectedPrescription, "PrescriptionSelected");
+                        break;
+                }
+                Messenger.Default.Send(new NotificationMessage("CloseCustomPrescription"));
+                Messenger.Default.Unregister(this);
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+            }
         }
 
         private void MakeUpCardAction()
@@ -187,7 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 foreach (var p in UngetCardPrescriptions)
                 {
                     var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0], PrescriptionSource.Normal);
-                    pre.GetCompletePrescriptionData(false, false,true);
+                    pre.GetCompletePrescriptionData( false,true);
                     deposit += pre.PrescriptionPoint.Deposit;
                     ReadCard(pre);
                 }
@@ -209,7 +225,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             isGetCard = p.GetCard();
             if (isGetCard)
             {
-                p.Treatment.GetLastMedicalNumber();
                 p.PrescriptionStatus.IsGetCard = true;
                 BusyContent = StringRes.檢查就醫次數;
                 p.Card.GetRegisterBasic();
@@ -223,6 +238,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 }
                 BusyContent = StringRes.取得就醫序號;
                 p.Card.GetMedicalNumber(2);
+                p.Treatment.GetLastMedicalNumber();
+                if (!string.IsNullOrEmpty(p.Treatment.TempMedicalNumber))
+                {
+                    if (p.Treatment.ChronicSeq is null)
+                        p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                    else
+                    {
+                        if (p.Treatment.ChronicSeq > 1)
+                        {
+                            p.Treatment.MedicalNumber = "IC0" + p.Treatment.ChronicSeq;
+                            p.Treatment.OriginalMedicalNumber = p.Treatment.TempMedicalNumber;
+                        }
+                        else
+                        {
+                            p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                            p.Treatment.OriginalMedicalNumber = null;
+                        }
+                    }
+                }
                 if (CreatePrescriptionSign(p, isGetCard))
                     HisApiFunction.CreatDailyUploadData(p, true);
             }
@@ -231,7 +265,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             p.PrescriptionStatus.IsDeclare = true;
             p.PrescriptionStatus.IsAdjust = true;
             MainWindow.ServerConnection.OpenConnection();
-            PrescriptionDb.ProcessCashFlow("退還押金", "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            //var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
+            //PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
+            p.PrescriptionPoint.Deposit = 0;
             p.PrescriptionStatus.UpdateStatus(p.Id);
             p.Treatment.CheckMedicalNumber(false);
             p.Update();
@@ -240,17 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         private bool CreatePrescriptionSign(Prescription p,bool isGetCard)
         {
             BusyContent = StringRes.寫卡;
-            if (isGetCard)
-                p.PrescriptionSign = HisApiFunction.WritePrescriptionData(p);
-            else
-            {
-                p.PrescriptionSign = new List<string>();
-            }
-            if (HisApiFunction.OpenCom())
-            {
-                HisApiBase.csSoftwareReset(3);
-                HisApiFunction.CloseCom();
-            }
+            p.PrescriptionSign = isGetCard ? HisApiFunction.WritePrescriptionData(p) : new List<string>();
             BusyContent = StringRes.產生每日上傳資料;
             if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
             {

@@ -309,7 +309,7 @@
 </value>
   </data>
   <data name="PrescriptoinOutOfDate" xml:space="preserve">
-    <value>處方已超過可領取時限
+    <value>處方已超過可領取時限，如繼續調劑申報會產生錯誤，是否繼續調劑?
 </value>
   </data>
   <data name="TreatDateError" xml:space="preserve">
@@ -501,7 +501,7 @@
     <value>申報檔資料產生中...</value>
   </data>
   <data name="新增顧客確認" xml:space="preserve">
-    <value>查無顧客資料,是否新增?</value>
+    <value>此顧客為新客人,是否新增?</value>
   </data>
   <data name="查無資料" xml:space="preserve">
     <value>查無資料</value>
@@ -510,7 +510,7 @@
     <value>身分證/居留證號長度須為10</value>
   </data>
   <data name="顧客資料不足" xml:space="preserve">
-    <value>查無資料，若要新增顧客請至少填寫姓名與身分證</value>
+    <value>此顧客為新客人，若要新增請填寫姓名.身分證與生日</value>
   </data>
   <data name="匿名自費" xml:space="preserve">
     <value>未填寫顧客資料，是否以匿名取代?</value>
@@ -533,10 +533,19 @@
   <data name="免收確認" xml:space="preserve">
     <value>免收確認</value>
   </data>
-  <data name="免收部分負擔" xml:space="preserve">
-    <value>是否免收部分負擔?</value>
+  <data name="收部分負擔" xml:space="preserve">
+    <value>是否收部分負擔?</value>
   </data>
   <data name="藥袋列印" xml:space="preserve">
     <value>藥袋列印中...</value>
+  </data>
+  <data name="CashStockEntryReport" xml:space="preserve">
+    <value>每日總帳報表</value>
+  </data>
+  <data name="CooperativeEntryReport" xml:space="preserve">
+    <value>合作診所結帳報表</value>
+  </data>
+  <data name="AdditionalCashFlowManage" xml:space="preserve">
+    <value>額外收入登錄</value>
   </data>
 </root>

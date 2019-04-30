@@ -111,10 +111,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         }
         public void InitProduct()
         {
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.MergeProductStockTaking(this);
-            loadingWindow.Topmost = true;
-            loadingWindow.Show();
+            //LoadingWindow loadingWindow = new LoadingWindow();
+            //loadingWindow.MergeProductStockTaking(this);
+            //loadingWindow.Topmost = true;
+            //loadingWindow.Show();
         }
 
         private void UpdateUi()
@@ -407,8 +407,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.Refresh();
             rptViewer.ProcessingMode = ProcessingMode.Local;
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
+            //var loadingWindow = new LoadingWindow();
+            //loadingWindow.Show();
            // loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
             NextStatus();
         }

@@ -14,7 +14,6 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
-using His_Pos.Class.Pharmacy;
 using His_Pos.Class.Product;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -24,49 +23,6 @@ namespace His_Pos.RDLC
     public static class ReportService
     {
         public const string ReportPath = @"RDLC\MedBagReport.rdlc";
-        public static Report CreatReport(MedBag selectedMedBag,Prescription p, int medicineIndex)
-        {
-            var medBagReport = new Report
-            {
-                Xmlns = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition",
-                Rd = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner",
-                Body = new Body
-                {
-                    ReportItems = new ReportItems(),
-                    Height = selectedMedBag.BagHeight + "cm",
-                    Style = new Style()
-                },
-                Page = new Page
-                {
-                    PageHeight = selectedMedBag.BagHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                    PageWidth = selectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                    Style = string.Empty,
-                    LeftMargin = "0cm",
-                    RightMargin = "0cm",
-                    TopMargin = "0cm",
-                    BottomMargin = "0cm",
-                    ColumnSpacing = "0cm"
-                },
-                Width = selectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                AutoRefresh = "0",
-                ReportUnitType = "cm",
-                ConsumeContainerWhitespace = "true",
-                ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
-            };
-            //SetReportItem(medBagReport, selectedMedBag.MedLocations,p,medicineIndex);
-            return medBagReport;
-        }
-
-        private static void SetReportItem(Report medBagReport, ObservableCollection<MedBagLocation> locations, Prescription p,int medicineIndex)
-        {
-            foreach (var m in locations)
-                if (m.Name != "MedicineList")
-                {
-                   /// var locationDictionary = CreateDictionary(p,ViewModelMainWindow.CurrentPharmacy, medicineIndex);
-                   /// var valuePair = locationDictionary.SingleOrDefault(x => x.Key.Equals(m.Name));
-                  ///  medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m,valuePair.Value));
-                }
-        }
         private static Textbox CreatTextBoxField(MedBagLocation m, string fieldContent)
         {
             return new Textbox
@@ -154,47 +110,6 @@ namespace His_Pos.RDLC
             {
                 fs.Write(bytes, 0, bytes.Length);
             }
-        }
-
-        private static Dictionary<string,string> CreateDictionary(Prescription p,Pharmacy currentPharmacy,int medicineIndex)
-        {
-            var m = p.Medicines[medicineIndex];
-            var medBagDictionary =
-                new Dictionary<string, string>
-                {
-                    {"Pharmacy", currentPharmacy.Name},
-                    {"PharmacyId", currentPharmacy.Id},
-                    {"PharmacyAddr", currentPharmacy.Address},
-                    {"PharmacyTel", currentPharmacy.Tel},
-                    {"MedicalPerson", ViewModelMainWindow.CurrentUser.Name},
-                    {"PatientName", p.Customer.Name},
-                    {"PatientId", p.Customer.IcNumber},
-                    {"PatientTel", p.Customer.ContactInfo.Tel},
-                    {"PatientGender", p.Customer.Gender ? "男" : "女"},
-                    {"PatientBirthday", DateTimeExtensions.ConvertToTaiwanCalender(p.Customer.Birthday,true)},
-                    {"MedRecNum", ""},
-                    {"AdjustDate", DateTimeExtensions.ConvertToTaiwanCalender(p.Treatment.AdjustDate,true)},
-                    {"TreatmentDate", DateTimeExtensions.ConvertToTaiwanCalender(p.Treatment.TreatmentDate,true)},
-                    {"MedicalNumber", p.Customer.IcCard.MedicalNumber},
-                    {"ReleaseHospital", p.Treatment.MedicalInfo.Hospital.Name},
-                    {"Division",p.Treatment.MedicalInfo.Hospital.Division.Name},
-                    {"NextDrugDate", ""},
-                    {"VisitBackDate", ""},
-                    {"ChronicSequence", "第 " + p.ChronicSequence + " 次，共 " + p.ChronicTotal + " 次"},
-                    {"MedicineId",m.Id},
-                    {"EngName",m.EngName},
-                    {"ChnName",m.ChiName},
-                    {"Ingredient",((DeclareMedicine)m).Ingredient},
-                    //{ "Form",m.},
-                    { "Usage",((DeclareMedicine)m).Usage.PrintName},
-                    { "Dosage",((DeclareMedicine)m).Dosage.ToString(CultureInfo.InvariantCulture)},
-                    { "Total",((DeclareMedicine)m).Amount.ToString(CultureInfo.InvariantCulture)},
-                    { "Days",((DeclareMedicine)m).Days},
-                    //{ "Indication",},
-                    //{ "SideEffect",},
-                    {"Notes","＊請依照醫師指示使用，勿自行停藥!"}
-                };
-            return medBagDictionary;
         }
 
         ///////////////////////////

@@ -28,6 +28,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             if (textBox is null) return;
 
             textBox.SelectAll();
+
+            List<TextBox> textBoxs = new List<TextBox>();
+            NewFunction.FindChildGroup(ProductDataGrid, textBox.Name, ref textBoxs);
+
+            int index = textBoxs.IndexOf(sender as TextBox);
+
+            ProductDataGrid.SelectedItem = (ProductDataGrid.Items[index] as Product);
         }
         private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

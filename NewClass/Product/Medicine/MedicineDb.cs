@@ -14,6 +14,12 @@ namespace His_Pos.NewClass.Product.Medicine
             DataBaseFunction.AddSqlParameter(parameterList, "Pro_Id", medicineID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchId]", parameterList);     
         }
+        public static DataTable GetMedicinesBySearchIds(List<string> MedicineIds)
+        { 
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(MedicineIds));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchIDs]", parameterList);
+        }
         public static void InsertCooperativeMedicineOTC(string medicineID,string medicineName)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -32,6 +38,43 @@ namespace His_Pos.NewClass.Product.Medicine
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ResMasId", resId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveDetailByResMasId]", parameterList);
-        }        
+        }
+        public static DataTable MedicineListTable()
+        {
+            DataTable masterTable = new DataTable();
+            masterTable.Columns.Add("MedicineID", typeof(string)); 
+            return masterTable;
+        }
+        public static DataTable SetPrescriptionDetail(List<string>MedicineIds)
+        { //一般藥費
+            DataTable medicineListTable = MedicineListTable();
+            foreach (string m in MedicineIds)
+            {
+                DataRow newRow = medicineListTable.NewRow(); 
+                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m);
+                medicineListTable.Rows.Add(newRow);
+            }
+            return medicineListTable;
+        }
+        public static DataTable GetPrescriptionMedicineSumById(List<int> idList) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(idList));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionMedicineSumById]", parameterList);    
+        }
+        private static DataTable IDTable() {
+            DataTable idTable = new DataTable();
+            idTable.Columns.Add("ID", typeof(int));
+            return idTable;
+        }
+        public static DataTable SetIDTable(List<int> IDList) {
+            DataTable table = IDTable();
+            foreach (int id in IDList)
+            {
+                DataRow newRow = table.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                table.Rows.Add(newRow);
+            }
+            return table;
+        }
     }
 }

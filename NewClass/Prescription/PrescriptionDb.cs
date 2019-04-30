@@ -17,8 +17,10 @@ using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using System.Linq;
+using System.Xml.Linq;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.NewClass.Prescription.Treatment.Division;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -31,19 +33,33 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
-        
-        
+        public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
+            DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
+        }  
+
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "@ecMas_Id", recMasId); 
+            DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteReserve]", parameterList);  
         }
-        public static void PredictResere(int preMasId) {
+        public static void PredictReserve(int preMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", preMasId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictResere]", parameterList);
         }
-        public static void AdjustPredictResere(string preMasId) {
+        public static void AdjustPredictReserve(string preMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", preMasId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[AdjustPredictResere]", parameterList);
@@ -127,24 +143,34 @@ namespace His_Pos.NewClass.Prescription
         }
         
         
-        public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName,Institution ins, Division div)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
-        public static DataTable GetReservePrescriptionsData(DateTime? sDate, DateTime? eDate, AdjustCase adj, Institution ins, MedicalPersonnel pharmacist)
+        public static DataTable GetReservePrescriptionsData(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustId", adj is null ? null : adj.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionId", ins is null ? null : ins.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacist is null ? null : pharmacist.IdNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
         }
       
@@ -154,7 +180,11 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionsNoGetCardByCusId]", parameterList);
         }
-
+        public static DataTable GetXmlOfPrescriptionsByCusIDNumber(string cusIdNumber) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIdNumber", cusIdNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionsByCusIDNumber]", parameterList);
+        }
         public static DataTable GetPrescriptionsByCusIdNumber(string cusIdnumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -197,6 +227,20 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
         }
+        public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
+        {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataTable prescriptionMater = SetPrescriptionMaster(prescription);
+            prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
+        } 
         public static DataTable CheckImportDeclareFileExist(string head) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Head", head);
@@ -205,17 +249,29 @@ namespace His_Pos.NewClass.Prescription
         public static void PredictThreeMonthPrescription() {
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
-        public static DataTable DeletePrescription(int preId)
+        public static DataTable DeletePrescription(Prescription prescription)
         {
+            string warID = "0";
+            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
+                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preId);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }
         public static DataTable GetStoreOrderIDByPrescriptionID(int preId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
-        } 
+        }
+        public static void UpdateXmfOfPrescriptionStatus(string sourceId,int Id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", Id);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]", parameterList);
+        }
         public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
         {
             return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
@@ -369,17 +425,25 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ResId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionByResId]", parameterList);
         }
-        public static DataTable GetSearchPrescriptionsSummary(List<int> presId)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId)); 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsSummary]", parameterList);
-        }  
-        public static DataTable GetSearchReservesSummary(List<int> presId)
+        public static DataTable GetSearchPrescriptionsSummary(List<int> presId,string MedicineID )
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId));
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", MedicineID); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsSummary]", parameterList);
+        }  
+        public static DataTable GetSearchReservesSummary(List<int> presId, string MedicineID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId));
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", MedicineID); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchReservesSummary]", parameterList);
+        }
+        public static DataTable GetXmlOfPrescriptionsByDate(DateTime sDate, DateTime eDate) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
         }
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
@@ -460,6 +524,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Treatment.Copayment?.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", p.PrescriptionPoint.Deposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Treatment.Institution.ID);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", p.Treatment.PrescriptionCase?.ID);
@@ -514,7 +580,8 @@ namespace His_Pos.NewClass.Prescription
             }
             return prescriptionDetailTable;
         }
-        public static DataTable PrescriptionMasterTable() {
+   
+    public static DataTable PrescriptionMasterTable() {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("PreMas_ID", typeof(int));
             masterTable.Columns.Add("PreMas_CustomerID", typeof(int));
@@ -533,6 +600,8 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_CopaymentID", typeof(string));
             masterTable.Columns.Add("PreMas_ApplyPoint", typeof(int));
             masterTable.Columns.Add("PreMas_CopaymentPoint", typeof(short));
+            masterTable.Columns.Add("PreMas_PaySelfPoint", typeof(int));
+            masterTable.Columns.Add("PreMas_DepositPoint", typeof(int)); 
             masterTable.Columns.Add("PreMas_TotalPoint", typeof(int));
             masterTable.Columns.Add("PreMas_InstitutionID", typeof(string));
             masterTable.Columns.Add("PreMas_PrescriptionCaseID", typeof(string));
@@ -669,6 +738,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", ViewModelMainWindow.GetCopayment(d.D15)?.Id );
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", d.D16);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint",  d.D17);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", 0);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", 0); 
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", d.D18);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", d.D21);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", d.D22);
@@ -799,5 +870,13 @@ namespace His_Pos.NewClass.Prescription
             return table;
         }
         #endregion
+
+        public static void UpdateDeclareContent(int id, XDocument declareContent)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(declareContent).InnerXml, XmlNodeType.Document, null)));
+            DataBaseFunction.AddSqlParameter(parameterList, "id", id);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
+        }
     }
 }
