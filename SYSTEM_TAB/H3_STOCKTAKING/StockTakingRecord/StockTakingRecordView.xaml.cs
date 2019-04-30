@@ -83,10 +83,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord
 
         private void InitStockTakingOrder()
         {
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetStockTakingRecord(this);
-            loadingWindow.Topmost = true;
-            loadingWindow.Show();
+            //LoadingWindow loadingWindow = new LoadingWindow();
+            //loadingWindow.GetStockTakingRecord(this);
+            //loadingWindow.Topmost = true;
+            //loadingWindow.Show();
         }
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)

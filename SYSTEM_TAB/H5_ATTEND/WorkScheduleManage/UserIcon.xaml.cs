@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
@@ -43,16 +42,16 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public UserIcon(UserIconData userIconData)
-        {
-            InitializeComponent();
-            DataContext = this;
-            Id = userIconData.Id;
-            IsMed = userIconData.IsMed;
-            Show = true;
-            UserName.Text = userIconData.Name;
-            Back.Background = userIconData.BackBrush;
-        }
+        //public UserIcon(UserIconData userIconData)
+        //{
+        //    InitializeComponent();
+        //    DataContext = this;
+        //    Id = userIconData.Id;
+        //    IsMed = userIconData.IsMed;
+        //    Show = true;
+        //    UserName.Text = userIconData.Name;
+        //    Back.Background = userIconData.BackBrush;
+        //}
 
         public void HideIcon()
         {

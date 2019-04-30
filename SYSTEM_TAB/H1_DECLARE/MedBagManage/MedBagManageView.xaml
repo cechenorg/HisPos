@@ -624,7 +624,7 @@
                 <Button
                 Width="70"
                 VerticalAlignment="Center"
-                Content="儲存" Click="MedBagSaveButtonClick" />
+                Content="儲存"/>
             </StackPanel>
         </Grid>
     </Viewbox>
