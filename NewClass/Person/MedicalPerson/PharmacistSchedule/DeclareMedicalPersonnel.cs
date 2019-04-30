@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 
         public DeclareMedicalPersonnel(DataRow r) : base(r)
         {
-            PrescriptionCount = r.Field<int>("Prescription_Count");
+            PrescriptionCount = r.Field<int?>("PrescriptionCount");
         }
         private int? prescriptionCount;
         public int? PrescriptionCount
@@ -32,7 +32,14 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
         public string Content
         {
-            get => Name + (PrescriptionCount is null?" 處方張數:" + PrescriptionCount:"");
+            get
+            {
+                if (PrescriptionCount is null)
+                {
+                    return Name;
+                }
+                return Name + " 處方張數:" + PrescriptionCount;
+            }
         }
     }
 }

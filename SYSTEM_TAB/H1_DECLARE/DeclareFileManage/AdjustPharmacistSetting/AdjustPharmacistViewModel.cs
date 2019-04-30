@@ -9,12 +9,33 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.Properties;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
-    public class AdjustPharmacistViewModel : ViewModelBase, INotifyPropertyChanged
+    public class AdjustPharmacistViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsBusy"));
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BusyContent"));
+            }
+        }
         private MonthViewCalendar monthViewCalendar;
         public MonthViewCalendar MonthViewCalendar
         {
@@ -108,11 +129,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
             last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
             MedicalPersonnels = new MedicalPersonnels(false);
-            MainWindow.ServerConnection.OpenConnection();
-            MedicalPersonnels.GetEnablePharmacist(first, last);
-            PharmacistSchedule.GetPharmacistSchedule(first,last);
-            MainWindow.ServerConnection.CloseConnection();
-            MonthViewCalendar = new MonthViewCalendar(declare);
+            MonthViewCalendar = new MonthViewCalendar(MyDisplayDate);
+            InitItemsSource(true);
+        }
+
+        private void InitItemsSource(bool initPharmacist)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "取得調整設定...";
+                MainWindow.ServerConnection.OpenConnection();
+                if(initPharmacist)
+                    MedicalPersonnels.GetEnablePharmacist(first, last);
+                PharmacistSchedule.GetPharmacistSchedule(first, last);
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                MySelectedDate = CurrentDate;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void InitialCommands()
@@ -137,7 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             if ((bool) delete.DialogResult)
             {
                 PharmacistSchedule.Remove(SelectedPharmacistScheduleItem);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
                 IsEdit = true;
             }
         }
@@ -167,7 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                     }
 
                     PharmacistSchedule.Add(pharmacistScheduleItem);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
+                    //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
                     IsEdit = true;
                 }, MySelectedDate
             );
@@ -177,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         private void SavePharmacistScheduleItemAction()
         {
             PharmacistSchedule.SaveSchedule(first,last);
+            InitItemsSource(false);
         }
 
         private void CloseAction()

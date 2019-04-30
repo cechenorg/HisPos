@@ -6,6 +6,7 @@
         xmlns:adjustPharmacistSetting="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="申報藥師調整設定" Height="920" Width="1440">
     <i:Interaction.Triggers>
@@ -13,10 +14,12 @@
             <command:EventToCommand Command="{Binding CloseCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Window.Background>
+    <Window.Background >
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
-    <Grid>
+    <xctk:BusyIndicator IsBusy="{Binding DataContext.IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        BusyContent="{Binding DataContext.BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
@@ -37,4 +40,5 @@
             <Button Command="{Binding Close}" Content="關閉" Background="DimGray" BorderBrush="DimGray" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
         </StackPanel>
     </Grid>
+    </xctk:BusyIndicator>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
@@ -22,10 +24,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         private AdjustPharmacistViewModel adjustPharmacistViewModel;
         public AdjustPharmacistWindow(DateTime declare)
         {
+            InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseAdjustPharmacistWindow"))
+                    Close();
+            });
             adjustPharmacistViewModel = new AdjustPharmacistViewModel(declare);
             this.DataContext = adjustPharmacistViewModel;
-            InitializeComponent();
             Show();
+            UpdateLayout();
         }
     }
 }
