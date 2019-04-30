@@ -133,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
             MessageWindow.ShowMessage("審核成功!", MessageType.SUCCESS);
             
 
-            WorkScheduleManageView.DataChanged = true;
+            //WorkScheduleManageView.DataChanged = true;
 
             InitAuthRecord();
             UpdateUi();

@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {

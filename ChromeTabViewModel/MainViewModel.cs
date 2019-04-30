@@ -27,8 +27,6 @@ using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage;
-using His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
@@ -313,10 +311,6 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ManufactoryManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.藥局管理):
-                    newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
-
                 case nameof(FeatureItem.員工管理):
                     newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
@@ -329,10 +323,6 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 //打卡
-                case nameof(FeatureItem.上下班打卡):
-                    newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
-                    break;
-
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
@@ -419,16 +409,6 @@ namespace His_Pos.ChromeTabViewModel
                                 AuthenticationManageView.Instance.UpdateUi();
 
                                 AuthenticationManageView.DataChanged = false;
-                            }
-                            break;
-
-                        case nameof(FeatureItem.排班管理):
-                            if (WorkScheduleManageView.Instance is null) break;
-
-                            if (WorkScheduleManageView.DataChanged)
-                            {
-                                WorkScheduleManageView.Instance.InitCalendar();
-                                WorkScheduleManageView.DataChanged = false;
                             }
                             break;
                     }

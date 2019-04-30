@@ -9,19 +9,16 @@
     xmlns:adminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
     xmlns:prescriptionSearch="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
     xmlns:inventoryManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement"
-    xmlns:productPurchase="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase"
     xmlns:productPurchaseRecord="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
     xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
     xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
     xmlns:productTypeManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
     xmlns:locationManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
     xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
-    xmlns:pharmacyManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage"
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:customerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
     xmlns:medFrequencyManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
-    xmlns:clockIn="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn"
     xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
@@ -86,9 +83,6 @@
         <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <manufactoryManage:ManufactoryManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type pharmacyManage:PharmacyManage}">
-            <pharmacyManage:PharmacyManageView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type employeeManage:EmployeeManage}">
             <employeeManage:EmployeeManageView />
         </DataTemplate>
@@ -100,9 +94,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
             <workScheduleManage:WorkScheduleManageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type clockIn:ClockIn}">
-            <clockIn:ClockInView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type authenticationManage:AuthenticationManage}">
             <authenticationManage:AuthenticationManageView />

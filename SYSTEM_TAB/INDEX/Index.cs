@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.StoreOrder;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;

@@ -14,17 +14,14 @@ using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
-using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Struct.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
 using Microsoft.Reporting.WinForms;
@@ -88,115 +85,7 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-
-        public void AddNewOrders(ProductPurchaseView productPurchaseView, StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("新增新處理單...");
-                ///ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
-
-                ChangeLoadingMessage("取得進退貨資料...");
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    ObservableCollection<StoreOrder> tempStoreOrderCollection = null;///StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
-
-                    foreach (StoreOrder stoOrd in tempStoreOrderCollection)
-                    {
-                        if (stoOrd.Type == OrderType.WAITING)
-                        {
-                            //Check Order Status
-                        }
-                    }
-
-                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
-                    productPurchaseView.StoOrderOverview.SelectedIndex = 0;
-                }));
-            };
-
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
-
-        internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
-        {
-            productPurchaseView.AllGrid.IsEnabled = false;
-
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得杏德新訂單...");
-                ///StoreOrderDb.GetNewStoreOrderBySingde();
-
-                ChangeLoadingMessage("取得廠商資料...");
-                ObservableCollection<Manufactory> tempManufactories = null;///ManufactoryDb.GetManufactoryData();
-
-                ChangeLoadingMessage("取得商品資料...");
-                Collection<PurchaseProduct> tempProduct = null;/// ProductDb.GetItemDialogProduct();
-
-                ChangeLoadingMessage("取得進退貨資料...");
-                Collection<StoreOrder> tempStoreOrderCollection = null;/// StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
-
-                foreach (StoreOrder stoOrd in tempStoreOrderCollection)
-                {
-                    if (stoOrd.Type == OrderType.WAITING)
-                    {
-                        if (stoOrd.DeclareDataCount > 0)
-                        {
-                            ///stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
-                        }
-                        else
-                        {
-                            ///stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
-                        }
-
-                        if (stoOrd.Type == OrderType.PROCESSING)
-                            productPurchaseView.CheckSindeOrderDetail(stoOrd);
-                        else if (stoOrd.Type == OrderType.SCRAP) ;
-                            ///StoreOrderDb.DeleteOrder(stoOrd.Id);
-                    }
-                }
-
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
-
-                    productPurchaseView.SetControlProduct(tempProduct);
-                    
-                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList());
-
-                    var cancelOrderList = tempStoreOrderCollection.Where(so => so.Type == OrderType.SCRAP).Select(so => so.Id).ToList();
-
-                    if (cancelOrderList.Count > 0)
-                    {
-                        string orders = cancelOrderList.Aggregate("", (i, j) => i + " " + j);
-                        
-                        MessageWindow.ShowMessage($"處理單{orders} 已被杏德取消!\r\n取消處理單可在訂退貨記錄查詢", MessageType.WARNING);
-                        
-                    }
-
-                }));
-            };
-
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    productPurchaseView.AllGrid.IsEnabled = true;
-
-                    if (productPurchaseView.StoOrderOverview.Items.Count != 0)
-                        productPurchaseView.StoOrderOverview.SelectedIndex = 0;
-
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
 
         internal void InitProductType(ProductTypeManageView productTypeManageView)
         {
