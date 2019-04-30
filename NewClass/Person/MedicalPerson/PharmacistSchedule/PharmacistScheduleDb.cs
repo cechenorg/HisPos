@@ -27,6 +27,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         public static void InsertSchedule(DateTime start, DateTime end, PharmacistSchedule schedule)
         {
             var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StartDate", start);
+            DataBaseFunction.AddSqlParameter(parameterList, "EndDate", end);
             MainWindow.ServerConnection.ExecuteProc("", parameterList);
         }
     }
