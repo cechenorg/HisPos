@@ -219,7 +219,14 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
-            TempMedicalNumber = AdjustCase.ID.Equals("2") ? OriginalMedicalNumber : MedicalNumber;
+
+            if (AdjustCase.ID.Equals("2"))
+            {
+                TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
+            }
+            else
+                TempMedicalNumber = MedicalNumber;
+
         }
 
         #region Variables

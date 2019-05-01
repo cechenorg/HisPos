@@ -22,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         public LocationManageView()
         {
             InitializeComponent();
-            InitLocation();
+            //InitLocation();
             Instance = this;
         }
 
@@ -66,13 +66,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             }
             ///LocationDb.SaveLocationData(locationCollection);
         }
-        public void InitLocation()
-        {
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetLocation(this);
-            loadingWindow.Topmost = true;
-            loadingWindow.Show();
-        }
+        //public void InitLocation()
+        //{
+        //    LoadingWindow loadingWindow = new LoadingWindow();
+        //    loadingWindow.GetLocation(this);
+        //    loadingWindow.Topmost = true;
+        //    loadingWindow.Show();
+        //}
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
             SaveLocation();

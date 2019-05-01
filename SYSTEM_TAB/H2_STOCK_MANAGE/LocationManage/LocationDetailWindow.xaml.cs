@@ -291,7 +291,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 if (reply == "")
                 {
                    /// LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
-                    LocationManageView.Instance.InitLocation();
+                    //LocationManageView.Instance.InitLocation();
                     Close();
                 }
                 else

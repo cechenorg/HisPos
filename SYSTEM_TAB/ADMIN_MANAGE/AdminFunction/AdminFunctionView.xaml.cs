@@ -18,7 +18,6 @@ using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.IcData.Upload;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.Service;
-using Customer = His_Pos.Class.Person.Customer;
 using Prescription = His_Pos.NewClass.CooperativeInstitution.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {

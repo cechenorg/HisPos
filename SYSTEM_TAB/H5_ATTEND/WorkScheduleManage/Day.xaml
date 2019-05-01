@@ -6,7 +6,7 @@
              xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d" 
              d:DesignHeight="105" d:DesignWidth="192">
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <workScheduleManage:IsEditableConverter x:Key="IsEditableConverter"/>
         <workScheduleManage:IsAllDayShowConverter x:Key="IsAllDayShowConverter"/>
         <workScheduleManage:HasMessageConverter x:Key="HasMessageConverter"/>
@@ -157,5 +157,5 @@
                 <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             </Grid>
-    </Viewbox>
+    </Viewbox>-->
 </UserControl>
