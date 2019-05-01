@@ -113,7 +113,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
                 preview.AddPresOfDay(pres);
                 DeclarePreviews.Add(preview);
             }
-
             DecPreOfDaysViewSource = new CollectionViewSource {Source = DeclarePreviews};
             DecPreOfDaysCollectionView = DecPreOfDaysViewSource.View;
         }
@@ -129,6 +128,14 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             ChronicPoint = chronic.Sum(p => p.ApplyPoint);
             TotalCount = DeclarePres.Count;
             TotalPoint = DeclarePres.Sum(p => p.ApplyPoint);
+            foreach (var d in DeclarePreviews)
+            {
+                d.NormalCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("1"));
+                d.ChronicCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("2"));
+                d.SimpleFormCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("3"));
+                d.DeclareCount = d.PresOfDay.Count(p => p.IsDeclare);
+                d.NotDeclareCount = d.PresOfDay.Count(p => !p.IsDeclare);
+            }
         }
     }
 }

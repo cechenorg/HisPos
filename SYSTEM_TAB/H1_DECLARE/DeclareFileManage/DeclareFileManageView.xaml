@@ -199,7 +199,7 @@
                                     <CheckBox x:Name="CanDeclare" HorizontalAlignment="Center"
                                                   HorizontalContentAlignment="Center"
                                                   IsChecked="{Binding IsDeclare,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                  Command="{Binding DataContext.SetDecFilePreViewSummary,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                                                  Command="{Binding DataContext.AddToEditListCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

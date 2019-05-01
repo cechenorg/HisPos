@@ -34,26 +34,26 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 
         public void SerializeFileContent()
         {
-            foreach (var p in Items/*.Where(pre => pre.IsDeclare)*/)
+            foreach (var p in Items.Where(pre => pre.IsDeclare))
             {
-                var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
-                    PrescriptionSource.Normal);
-                MainWindow.ServerConnection.OpenConnection();
-                pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
-                pre.AdjustMedicinesType();
-                MainWindow.ServerConnection.CloseConnection();
-                if (pre.Treatment.Division != null)
-                    pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
-                pre.Treatment.Pharmacist =
-                    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IDNumber.Equals(pre.Treatment.Pharmacist.IDNumber));
-                pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
-                pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
-                if (pre.Treatment.PrescriptionCase != null)
-                    pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
-                if (pre.Treatment.SpecialTreat != null)
-                    pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
-                pre.RemakeDeclareFile();
-                pre.UpdateDeclareContent();
+                //var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0],
+                //    PrescriptionSource.Normal);
+                //MainWindow.ServerConnection.OpenConnection();
+                //pre.Patient = pre.Patient.GetCustomerByCusId(pre.Patient.ID);
+                //pre.AdjustMedicinesType();
+                //MainWindow.ServerConnection.CloseConnection();
+                //if (pre.Treatment.Division != null)
+                //    pre.Treatment.Division = ViewModelMainWindow.GetDivision(pre.Treatment.Division?.ID);
+                //pre.Treatment.Pharmacist =
+                //    ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(pr => pr.IDNumber.Equals(pre.Treatment.Pharmacist.IDNumber));
+                //pre.Treatment.AdjustCase = ViewModelMainWindow.GetAdjustCase(pre.Treatment.AdjustCase.ID);
+                //pre.Treatment.Copayment = ViewModelMainWindow.GetCopayment(pre.Treatment.Copayment?.Id);
+                //if (pre.Treatment.PrescriptionCase != null)
+                //    pre.Treatment.PrescriptionCase = ViewModelMainWindow.GetPrescriptionCases(pre.Treatment.PrescriptionCase?.ID);
+                //if (pre.Treatment.SpecialTreat != null)
+                //    pre.Treatment.SpecialTreat = ViewModelMainWindow.GetSpecialTreat(pre.Treatment.SpecialTreat?.ID);
+                //pre.RemakeDeclareFile();
+                //pre.UpdateDeclareContent();
                 //p.FileContent = XmlService.Deserialize<Ddata>(pre.DeclareContent.ToString());
 
                 //p.Patient = p.Patient.GetCustomerByCusId(p.Patient.ID);

@@ -1,21 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Declare.DeclareFilePreview;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using MaterialDesignThemes.Wpf;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -30,43 +23,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             return this;
         }
-        //private CollectionViewSource decFilePreViewSource;
-        //private CollectionViewSource DecFilePreViewSource
-        //{
-        //    get => decFilePreViewSource;
-        //    set
-        //    {
-        //        Set(() => DecFilePreViewSource, ref decFilePreViewSource, value);
-        //    }
-        //}
-        //private ICollectionView decFilePreViewCollectionView;
-        //public ICollectionView DecFilePreViewCollectionView
-        //{
-        //    get => decFilePreViewCollectionView;
-        //    private set
-        //    {
-        //        Set(() => DecFilePreViewCollectionView, ref decFilePreViewCollectionView, value);
-        //    }
-        //}
-
-        //private DeclareFilePreviews decFilePreViews;
-        //public DeclareFilePreviews DecFilePreViews
-        //{
-        //    get => decFilePreViews;
-        //    private set
-        //    {
-        //        Set(() => DecFilePreViews, ref decFilePreViews, value);
-        //    }
-        //}
-        //private DeclareFilePreview selectedPreview;
-        //public DeclareFilePreview SelectedPreview
-        //{
-        //    get => selectedPreview;
-        //    set
-        //    {
-        //        Set(() => SelectedPreview, ref selectedPreview, value);
-        //    }
-        //}
         private DeclarePreviewOfMonth declareFile;
         public DeclarePreviewOfMonth DeclareFile
         {
@@ -123,6 +79,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => EndDay, ref endDay, value);
             }
         }
+        private DeclarePrescriptions editedList;
+        public DeclarePrescriptions EditedList
+        {
+            get => editedList;
+            set
+            {
+                Set(() => EditedList, ref editedList, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -132,12 +97,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
+        public RelayCommand AddToEditListCommand { get; set; }
         #endregion
         public DeclareFileManageViewModel()
         {
             InitialVariables();
             InitialCommands();
-            RegisterMessengers();
             GetPreviewPrescriptionsActions();
         }
         #region Functions
@@ -145,10 +110,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialVariables()
         {
             DeclareFile = new DeclarePreviewOfMonth();
-            //DecFilePreViews = new DeclareFilePreviews();
             DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
             StartDay = 1;
             EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
+            EditedList = new DeclarePrescriptions();
         }
         private void InitialCommands()
         {
@@ -157,6 +122,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
+            AddToEditListCommand = new RelayCommand(AddToEditListAction);
+        }
+
+        private void AddToEditListAction()
+        {
+            EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
+            Console.WriteLine(DeclareFile.DeclarePres.Single(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare);
+            SetDecFilePreViewSummaryAction();
         }
 
         private void GetPreviewPrescriptionsActions()
@@ -164,8 +137,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
+                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = StringRes.取得歷史處方;
                 GetPrescriptions();
+                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
             IsBusy = true;
@@ -175,42 +150,32 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, 1));
         }
-        private void RegisterMessengers()
-        {
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals(nameof(DeclareFileManageViewModel) + "PrescriptionEdited"))
-                    GetPrescriptions();
-            });
-        }
         #endregion
         #region CommandActions
         private void ShowPrescriptionEditWindowAction()
         {
-            //if (SelectedPreview.SelectedPrescription is null) return;
+            if (DeclareFile.SelectedDayPreview.SelectedPrescription is null) return;
             MainWindow.ServerConnection.OpenConnection();
-            //var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(SelectedPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
+            var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(DeclareFile.SelectedDayPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            //var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
-            //prescriptionEdit.ShowDialog();
+            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            prescriptionEdit.ShowDialog();
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
+
         private void SetDecFilePreViewSummaryAction()
         {
-            //var currentPosition = DecFilePreViewCollectionView.CurrentPosition;
-            //DecFilePreViews[DecFilePreViewCollectionView.CurrentPosition].SetSummary();
-            //DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
-            //DecFilePreViewCollectionView = DecFilePreViewSource.View;
-            //DecFilePreViewCollectionView.MoveCurrentToPosition(currentPosition);
+            DeclareFile.SetSummary();
         }
         private void CreateDeclareFileAction()
         {
-            //if(SelectedPreview is null) return;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = StringRes.產生申報資料;
                 MainWindow.ServerConnection.OpenConnection();
-                //SelectedPreview.DeclarePrescriptions.SerializeFileContent();
+                DeclareFile.DeclarePres.SerializeFileContent();
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -257,7 +222,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             //    SelectedPreview = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
             //}
         }
+        private void Refresh(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("PrescriptionEdited"))
+            {
+                MainWindow.ServerConnection.OpenConnection();
 
+                GetPrescriptions();
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
         #endregion
     }
 }

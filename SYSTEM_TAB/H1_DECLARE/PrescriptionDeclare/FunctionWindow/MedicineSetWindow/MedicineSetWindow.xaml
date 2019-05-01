@@ -166,7 +166,8 @@
         </declare:MedicineDataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Content="儲存" Command="{Binding Save}" Margin="0,0,10,0" Height="35" Width="80" Background="RoyalBlue" BorderBrush="RoyalBlue" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <Button Content="取消" Command="{Binding Cancel}" Margin="10,0,10,0" Height="35" Width="80" Background="DimGray" BorderBrush="DimGray" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            <Button Content="刪除" Command="{Binding Delete}" Margin="0,0,10,0" Height="35" Width="80" BorderBrush="Red" Background="Red" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            <Button Content="取消" Command="{Binding Cancel}" Margin="0,0,10,0" Height="35" Width="80" Background="DimGray" BorderBrush="DimGray" FontFamily="Segoe UI Semibold" FontSize="16"/>
         </StackPanel>
     </Grid>
 </Window>

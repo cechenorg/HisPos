@@ -365,6 +365,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacies.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacy.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
@@ -632,7 +634,6 @@
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
     <Compile Include="Class\Pharmacy\ManagePharmacy.cs" />
-    <Compile Include="Class\Pharmacy\PharmacyDb.cs" />
     <Compile Include="Class\Pharmacy\PharmacyGetOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPayOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
@@ -663,7 +664,6 @@
     <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
     <Compile Include="Class\Person\PersonDb.cs" />
-    <Compile Include="Class\Pharmacy\Pharmacy.cs" />
     <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
