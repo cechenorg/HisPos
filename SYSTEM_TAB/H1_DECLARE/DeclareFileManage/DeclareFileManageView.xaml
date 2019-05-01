@@ -29,7 +29,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
                 <Label Content="機構代碼 :" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0" />
-                <ComboBox  DisplayMemberPath="ID" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                <ComboBox ItemsSource="{Binding DeclarePharmacies,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="ID" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"
                            HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="120" />
                 <Button Margin="45,0,10,0" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
             </StackPanel>

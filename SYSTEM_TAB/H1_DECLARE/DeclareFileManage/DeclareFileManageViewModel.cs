@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
@@ -88,6 +89,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => EditedList, ref editedList, value);
             }
         }
+
+        private DeclarePharmacies declarePharmacies;
+
+        public DeclarePharmacies DeclarePharmacies
+        {
+            get => declarePharmacies;
+            set
+            {
+                Set(() => DeclarePharmacies, ref declarePharmacies, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -109,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #region Initial
         private void InitialVariables()
         {
+            DeclarePharmacies = new DeclarePharmacies();
             DeclareFile = new DeclarePreviewOfMonth();
             DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
             StartDay = 1;
