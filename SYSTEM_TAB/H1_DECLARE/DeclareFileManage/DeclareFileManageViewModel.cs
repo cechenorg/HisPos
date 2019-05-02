@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -100,6 +103,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DeclarePharmacies, ref declarePharmacies, value);
             }
         }
+        private PharmacistSchedule pharmacistSchedule;
+        public PharmacistSchedule PharmacistSchedule
+        {
+            get => pharmacistSchedule;
+            set
+            {
+                Set(() => PharmacistSchedule, ref pharmacistSchedule, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -127,24 +139,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             StartDay = 1;
             EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
             EditedList = new DeclarePrescriptions();
+            GetPharmacistSchedule();
         }
         private void InitialCommands()
         {
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
             AdjustPharmacistSetting = new RelayCommand(AdjustPharmacistSettingAction);
+            AdjustPharmacistOfDay = new RelayCommand(AdjustPharmacistOfDayAction,CheckDayIsOutOfRange);
+            AdjustPharmacistOfMonth = new RelayCommand(AdjustPharmacistOfMonthAction,CheckMonthIsOutOfRange);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
             AddToEditListCommand = new RelayCommand(AddToEditListAction);
         }
-
-        private void AddToEditListAction()
+        private bool CheckDayIsOutOfRange()
         {
-            EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
-            Console.WriteLine(DeclareFile.DeclarePres.Single(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare);
-            SetDecFilePreViewSummaryAction();
+            return DeclareFile.SelectedDayPreview != null && DeclareFile.SelectedDayPreview.IsAdjustOutOfRange;
         }
 
+        private bool CheckMonthIsOutOfRange()
+        {
+            return DeclareFile.DeclarePreviews.Count(pre => pre.IsAdjustOutOfRange) > 0;
+        }
+        #endregion
+        #region CommandActions
         private void GetPreviewPrescriptionsActions()
         {
             var worker = new BackgroundWorker();
@@ -162,9 +180,38 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void AdjustPharmacistSettingAction()
         {
             var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, 1));
+            MainWindow.ServerConnection.OpenConnection();
+            GetPharmacistSchedule();
+            MainWindow.ServerConnection.CloseConnection();
         }
-        #endregion
-        #region CommandActions
+        private void AdjustPharmacistOfDayAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DeclareFile.SelectedDayPreview.PresOfDay.AdjustPharmacist(GetAdjustPharmacist(false));
+            MainWindow.ServerConnection.CloseConnection();
+            
+        }
+
+        private void AdjustPharmacistOfMonthAction()
+        {
+            var adjustList = new DeclarePrescriptions();
+            foreach (var pre in DeclareFile.DeclarePreviews.Where(pre => pre.IsAdjustOutOfRange))
+            {
+                foreach (var dec in pre.PresOfDay)
+                {
+                    adjustList.Add(dec);
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            adjustList.AdjustPharmacist(GetAdjustPharmacist(true));
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (var pre in DeclareFile.DeclarePreviews)
+            {
+                pre.CheckAdjustOutOfRange();
+                Console.WriteLine(pre.IsAdjustOutOfRange);
+            }
+            DeclareFile.SetSummary();
+        }
         private void ShowPrescriptionEditWindowAction()
         {
             if (DeclareFile.SelectedDayPreview.SelectedPrescription is null) return;
@@ -206,14 +253,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+        private void AddToEditListAction()
+        {
+            EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
+            Console.WriteLine(DeclareFile.DeclarePres.Single(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare);
+            SetDecFilePreViewSummaryAction();
+            DeclareFile.SelectedDayPreview.CheckNotDeclareCount();
+        }
         #endregion
         private void GetPrescriptions()
         {
             var end = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month+1, 1).AddDays(-1).Day;
             if (EndDay > end)
                 EndDay = end;
-            var sDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month,StartDay);
-            var eDate = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, EndDay);
+            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, StartDay);
+            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
             DeclareFile.GetSearchPrescriptions(sDate, eDate);
             DeclareFile.SetSummary();
             //DecFilePreViews.Clear();
@@ -244,6 +298,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 GetPrescriptions();
                 MainWindow.ServerConnection.CloseConnection();
             }
+        }
+
+        private void GetPharmacistSchedule()
+        {
+            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, StartDay);
+            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate,EndDay);
+            PharmacistSchedule = new PharmacistSchedule();
+            PharmacistSchedule.GetPharmacistSchedule(start, last);
+        }
+
+        private List<PharmacistScheduleItem> GetAdjustPharmacist(bool month)
+        {
+            var pharmacistList = new List<PharmacistScheduleItem>();
+            var schedule = new List<PharmacistScheduleItem>();
+            if (month)
+            {
+                schedule = PharmacistSchedule.ToList();
+                foreach (var s in schedule)
+                {
+                    pharmacistList.Add(s);
+                }
+            }
+            else
+            {
+                schedule = PharmacistSchedule.Where(p => p.Date.Equals(DeclareFile.SelectedDayPreview.Date)).ToList();
+                foreach (var s in schedule)
+                {
+                    pharmacistList.Add(s);
+                }
+            }
+            return pharmacistList;
         }
         #endregion
     }

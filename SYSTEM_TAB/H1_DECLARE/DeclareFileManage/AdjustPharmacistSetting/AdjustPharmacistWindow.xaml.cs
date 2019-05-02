@@ -32,7 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             });
             adjustPharmacistViewModel = new AdjustPharmacistViewModel(declare);
             this.DataContext = adjustPharmacistViewModel;
-            Show();
+            ShowDialog();
             UpdateLayout();
         }
     }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
+using System.Data.SqlTypes;
+using System.Xml.Linq;
 using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -37,6 +37,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             Division.FullName = Division.ID + " " + Division.Name;
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate");
             ApplyPoint = r.Field<int>("PreMas_ApplyPoint");
+            CopaymentPoint = r.Field<short>("PreMas_CopaymentPoint");
             Pharmacist = new MedicalPersonnel();
             Pharmacist.ID = r.Field<int>("Emp_ID");
             Pharmacist.IDNumber = r.Field<string>("PreMas_PharmacistIDNumber");
@@ -50,7 +51,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             AdjustCase.Name = r.Field<string>("Adj_Name");
             AdjustCase.FullName = AdjustCase.ID + " " + AdjustCase.Name;
             IsGetCard = r.Field<bool>("PreMas_IsGetCard");
-            FileContentStr = r.Field<string>("PreMas_DeclareContent");
+            FileContent = XmlService.Deserialize<Ddata>(r.Field<string>("PreMas_DeclareContent"));
+            InsertTime = r.Field<DateTime?>("PreMas_InsertTime") is null? AdjustDate : r.Field<DateTime>("PreMas_InsertTime");
+            MedicineDays = r.Field<byte>("PreMas_MedicineDays");
+            MedicalServiceID = r.Field<string>("PreMas_MedicalServiceID");
+            SerialNumber = r.Field<int?>("PreMas_SerialNumber");
         }
         public int ID { get; }
         private bool isDeclare;
@@ -154,6 +159,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
+        private int copaymentPoint;
+
+        public int CopaymentPoint
+        {
+            get => copaymentPoint;
+            set
+            {
+                Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
         private string pharmacyID;
         public string PharmacyID
         {
@@ -173,6 +188,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             }
         }
         public Ddata FileContent { get; set; }
-        public string FileContentStr { get; set; }
+        public DateTime InsertTime { get; set; }
+        public int MedicineDays { get; set; }
+        public string MedicalServiceID { get; set; }
+        public SqlXml DeclareContent { get; set; }
+        public int? SerialNumber { get; set; }
     }
 }

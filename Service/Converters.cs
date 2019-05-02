@@ -686,4 +686,21 @@ namespace His_Pos.Service
             return dt;
         }
     }
+
+    public class BoolToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return new SolidColorBrush(Color.FromRgb(251,60,78));
+            }
+            return new SolidColorBrush(Color.FromArgb(255,66,64,64));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

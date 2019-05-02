@@ -20,6 +20,7 @@ using System.Linq;
 using System.Xml.Linq;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 
 namespace His_Pos.NewClass.Prescription
@@ -877,6 +878,23 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(declareContent).InnerXml, XmlNodeType.Document, null)));
             DataBaseFunction.AddSqlParameter(parameterList, "id", id);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
+        }
+
+        public static void UpdatePrescriptionFromDeclareAdjust(DeclarePrescriptions declarePrescriptions)
+        {
+            /*
+             * [PreMas_PharmacistIDNumber] Pharmacist.IDNumber 藥師身分證
+             * [PreMas_ApplyPoint] ApplyPoint 申請點數
+             * [PreMas_TotalPoint] TotalPoint 總點數
+             * [PreMas_MedicalServicePoint] MedicalServicePoint 藥事服務費
+             * [PreMas_MedicalServiceID] MedicalServiceID 藥事服務費支付代碼
+             * [PreMas_DeclareContent] DeclareContent 申報檔內容(已是SqlXml 不用轉type)
+             * [PreMas_SerialNumber] SerialNumber 調劑序號(可能為null 匯出申報檔才有值)
+             * [PreMas_IsDeclare] IsDeclare 是否申報
+             */
+
+            //List<SqlParameter> parameterList = new List<SqlParameter>();
+            //MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionFromDeclareAdjust]", parameterList);
         }
     }
 }

@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverterNoDate x:Key="DateConverterNoDate" />
+        <service:BoolToColorConverter x:Key="BoolToColorConverter" />
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                             BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -99,15 +100,15 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="60">
-                                        <Label Content="{Binding Day,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" Margin="5,10,0,0"/>
+                                        <Label Content="{Binding Day,UpdateSourceTrigger=PropertyChanged}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" Margin="5,10,0,0" Foreground="{Binding IsAdjustOutOfRange,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToColorConverter},FallbackValue=Black}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                                         <Label Content="申報 :" Style="{StaticResource BoldLabelContent16}" />
                                         <Label Content="{Binding DeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
                                                        HorizontalContentAlignment="Left" VerticalAlignment="Center" />
-                                        <Label Content="不申報 :" Style="{StaticResource BoldLabelContent16}" />
+                                        <Label Content="不申報 :" Style="{StaticResource BoldLabelContent16}" Foreground="{Binding HasNotDeclare,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToColorConverter},FallbackValue=Black}"/>
                                         <Label Content="{Binding NotDeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="45" FontFamily="Segoe UI Semi"  
-                                                       HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                                                       HorizontalContentAlignment="Left" VerticalAlignment="Center" Foreground="{Binding HasNotDeclare,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToColorConverter},FallbackValue=Black}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
                                         <Label Content="一般 :" Style="{StaticResource BoldLabelContent16}" />

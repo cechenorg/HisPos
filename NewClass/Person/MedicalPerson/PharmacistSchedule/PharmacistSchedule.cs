@@ -10,6 +10,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 
         public void GetPharmacistSchedule(DateTime start, DateTime end)
         {
+            Clear();
             var table = PharmacistScheduleDb.GetEmployeeSchedule(start, end);
             foreach (DataRow r in table.Rows)
             {

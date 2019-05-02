@@ -135,7 +135,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
                 d.SimpleFormCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("3"));
                 d.DeclareCount = d.PresOfDay.Count(p => p.IsDeclare);
                 d.NotDeclareCount = d.PresOfDay.Count(p => !p.IsDeclare);
+                d.CheckNotDeclareCount();
             }
+            
         }
     }
 }

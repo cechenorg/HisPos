@@ -231,5 +231,20 @@ namespace His_Pos.Service
                 return false;
             }
         }
+
+        public static DateTime GetFirstDay(DateTime? declareDate)
+        {
+            return new DateTime(((DateTime)declareDate).Year, ((DateTime)declareDate).Month, 1);
+        }
+        public static DateTime GetLastDay(DateTime? declareDate)
+        {
+            var date = (DateTime) declareDate;
+            return new DateTime(date.AddMonths(1).Year, date.AddMonths(1).Month, 1).AddDays(-1);
+        }
+        public static DateTime GetDateTimeWithDay(DateTime? declareDate,int day)
+        {
+            var date = (DateTime)declareDate;
+            return new DateTime(date.Year, date.Month, day);
+        }
     }
 }
