@@ -446,6 +446,20 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
         }
+        public static void UpdateDeclareContent(int id, XDocument declareContent)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(declareContent).InnerXml, XmlNodeType.Document, null)));
+            DataBaseFunction.AddSqlParameter(parameterList, "id", id);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
+        }
+
+        public static void UpdatePrescriptionFromDeclareAdjust(DeclarePrescriptions declarePrescriptions)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "@PointList", SetPrescriptionDeclarePointAdjust(declarePrescriptions));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionDeclarePoint]", parameterList);
+        }
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;
@@ -870,31 +884,40 @@ namespace His_Pos.NewClass.Prescription
             }
             return table;
         }
+        public static DataTable PrescriptionDeclarePointAdjustTable()
+        {
+            DataTable detailTable = new DataTable();
+            detailTable.Columns.Add("PreMas_ID", typeof(int));
+            detailTable.Columns.Add("PreMas_SerialNumber", typeof(int));
+            detailTable.Columns.Add("PreMas_PharmacistIDNumber", typeof(string));
+            detailTable.Columns.Add("PreMas_ApplyPoint", typeof(int));
+            detailTable.Columns.Add("PreMas_TotalPoint", typeof(int));
+            detailTable.Columns.Add("PreMas_MedicalServicePoint", typeof(int));
+            detailTable.Columns.Add("PreMas_DeclareContent", typeof(SqlXml));
+            detailTable.Columns.Add("PreMas_MedicalServiceID", typeof(string));
+            detailTable.Columns.Add("PreMas_IsDeclare", typeof(bool)); 
+            return detailTable;
+        }
+        public static DataTable SetPrescriptionDeclarePointAdjust(DeclarePrescriptions declarePrescriptions)
+        {
+            DataTable table = PrescriptionDeclarePointAdjustTable();
+            foreach (var d in declarePrescriptions)
+            { 
+                    DataRow newRow = table.NewRow(); 
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_ID", d.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_SerialNumber", d.SerialNumber);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_PharmacistIDNumber", d.Pharmacist.IDNumber);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", d.ApplyPoint);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint",d.TotalPoint);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", d.MedicalServicePoint);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareContent", d.DeclareContent);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", d.MedicalServiceID);
+                    DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", d.IsDeclare); 
+                    table.Rows.Add(newRow); 
+            }
+            return table;
+        }
         #endregion
-
-        public static void UpdateDeclareContent(int id, XDocument declareContent)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "DecFile_Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(declareContent).InnerXml, XmlNodeType.Document, null)));
-            DataBaseFunction.AddSqlParameter(parameterList, "id", id);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
-        }
-
-        public static void UpdatePrescriptionFromDeclareAdjust(DeclarePrescriptions declarePrescriptions)
-        {
-            /*
-             * [PreMas_PharmacistIDNumber] Pharmacist.IDNumber 藥師身分證
-             * [PreMas_ApplyPoint] ApplyPoint 申請點數
-             * [PreMas_TotalPoint] TotalPoint 總點數
-             * [PreMas_MedicalServicePoint] MedicalServicePoint 藥事服務費
-             * [PreMas_MedicalServiceID] MedicalServiceID 藥事服務費支付代碼
-             * [PreMas_DeclareContent] DeclareContent 申報檔內容(已是SqlXml 不用轉type)
-             * [PreMas_SerialNumber] SerialNumber 調劑序號(可能為null 匯出申報檔才有值)
-             * [PreMas_IsDeclare] IsDeclare 是否申報
-             */
-
-            //List<SqlParameter> parameterList = new List<SqlParameter>();
-            //MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionFromDeclareAdjust]", parameterList);
-        }
+         
     }
 }
