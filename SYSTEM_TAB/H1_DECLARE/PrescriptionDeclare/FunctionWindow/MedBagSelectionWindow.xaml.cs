@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace His_Pos.Service
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
 {
     /// <summary>
     /// MedBagSelectionWindow.xaml 的互動邏輯

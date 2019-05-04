@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 
         public DeclareMedicalPersonnel(DataRow r) : base(r)
         {
-            PrescriptionCount = r.Field<int?>("PrescriptionCount");
+            PrescriptionCount = r.Field<int?>("Prescription_Count");
         }
         private int? prescriptionCount;
         public int? PrescriptionCount

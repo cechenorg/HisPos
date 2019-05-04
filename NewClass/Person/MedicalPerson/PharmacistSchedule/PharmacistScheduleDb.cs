@@ -39,7 +39,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         public static DataTable ScheduleTable() {
             DataTable masterTable = new DataTable(); 
             masterTable.Columns.Add("Emp_ID", typeof(int));
-            masterTable.Columns.Add("Sch_Date", typeof(DateTime)); 
+            masterTable.Columns.Add("Sch_Date", typeof(DateTime));
+            masterTable.Columns.Add("Register_Time", typeof(DateTime));
             return masterTable;
         }
         public static DataTable SetScheduleTable(PharmacistSchedule schedule) {
@@ -49,6 +50,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 DataRow newRow = scheduleTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "Emp_ID", s.MedicalPersonnel.ID);
                 DataBaseFunction.AddColumnValue(newRow, "Sch_Date", s.Date);
+                DataBaseFunction.AddColumnValue(newRow, "Register_Time", s.RegisterTime);
                 scheduleTable.Rows.Add(newRow);
             } 
             return scheduleTable;

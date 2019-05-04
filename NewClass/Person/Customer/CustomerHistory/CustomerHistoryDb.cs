@@ -1,9 +1,9 @@
-﻿using His_Pos.Database;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using His_Pos.Database;
 
-namespace His_Pos.Class.CustomerHistory
+namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
     public static class CustomerHistoryDb
     {

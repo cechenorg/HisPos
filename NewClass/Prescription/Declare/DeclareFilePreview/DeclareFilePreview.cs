@@ -85,7 +85,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFilePreview
             using (var textWriter = new StringWriter())
             {
                 xmlSerializer.Serialize(textWriter, doc);
-                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
+                var document = XDocument.Parse(XmlService.PrettyXml(textWriter));
                 var root = XElement.Parse(document.ToString());
                 root.Element("ddata")?.Element("decId")?.Remove();
                 document = XDocument.Load(root.CreateReader());

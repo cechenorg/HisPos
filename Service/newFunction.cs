@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -23,18 +22,6 @@ namespace His_Pos.Service
 {
     public static class NewFunction
     {
-        public static DataTable JoinTables(DataTable dataTable1, DataTable dataTable2, string joinId)
-        {
-            DataTable resultTable = dataTable1.Copy();
-
-            resultTable.PrimaryKey = new DataColumn[] { resultTable.Columns[joinId] };
-            dataTable2.PrimaryKey = new DataColumn[] { dataTable2.Columns[joinId] };
-
-            resultTable.Merge(dataTable2, false, MissingSchemaAction.Add);
-            
-            return resultTable;
-        }
-
         public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
         {
             // Checks should be made, but preferably one time before calling.
@@ -131,22 +118,7 @@ namespace His_Pos.Service
 
             return foundChild;
         }
-        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is T)
-                    return (T)child;
-                else
-                {
-                    T childOfChild = FindVisualChild<T>(child);
-                    if (childOfChild != null)
-                        return childOfChild;
-                }
-            }
-            return null;
-        }
+
         public static int HowManyChinese(string words) {
             string TmmP;
             int count = 0;
@@ -162,166 +134,6 @@ namespace His_Pos.Service
                 }
             }
             return count;
-        }
-
-        public static string FindUsageName(string value)
-        {
-            var reg_QWxyz = new Regex(@"QW\d+");
-            var reg_QWxyzAM = new Regex(@"QW\d+AM");
-            var reg_yWzD = new Regex(@"\d+W\d+D");
-            var reg_MCDxDy = new Regex(@"MCD\d+D\d+");
-            var reg_QxD = new Regex(@"Q\d+D");
-            var reg_QxW = new Regex(@"Q\d+W[I]*");
-            var reg_QxM = new Regex(@"Q\d+M");
-            var reg_QxH = new Regex(@"Q\d+[HI]+");
-            var reg_QxMN = new Regex(@"Q\d+MN");
-
-
-            string print = string.Empty;
-            string b = string.Empty;
-
-            if (value.Equals("BID1"))
-                print = "每週2次(星期二，星期六)";
-            if (value.Equals("BID2"))
-                print = "每週2次(星期一，星期五)";
-            if (value.Equals("TIW1"))
-                print = "每星期3次(星期一、星期三、星期五)";
-            if (value.Equals("TIW2"))
-                print = "每星期3次(星期二、星期四、星期六)";
-            if (value.Equals("BIL1"))
-                print = "每天2次，每次(  )ml";
-
-            if (reg_QWxyz.IsMatch(value))
-            {
-                print = "每星期";
-                foreach (var s in b)
-                {
-                    switch (s)
-                    {
-                        case '1':
-                            print += "一,";
-                            break;
-                        case '2':
-                            print += "二,";
-                            break;
-                        case '3':
-                            print += "三,";
-                            break;
-                        case '4':
-                            print += "四,";
-                            break;
-                        case '5':
-                            print += "五,";
-                            break;
-                        case '6':
-                            print += "六,";
-                            break;
-                        case '7':
-                            print += "日,";
-                            break;
-                    }
-                }
-                var i = print.Length - 1;
-                return print.Substring(0, i) + "使用";
-            }
-
-            if (reg_yWzD.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(0, value.IndexOf('W')) + "星期使用";
-                print += value.Substring(value.IndexOf('W') + 1, value.IndexOf('Z') - value.IndexOf('W') - 1) + "天";
-                return print;
-            }
-
-            if (reg_QWxyzAM.IsMatch(value))
-            {
-                print = "每星期";
-                var daysOfWeek = string.Empty;
-                foreach (var s in b)
-                {
-                    switch (s)
-                    {
-                        case '1':
-                            daysOfWeek += "一,";
-                            break;
-                        case '2':
-                            daysOfWeek += "二,";
-                            break;
-                        case '3':
-                            daysOfWeek += "三,";
-                            break;
-                        case '4':
-                            daysOfWeek += "四,";
-                            break;
-                        case '5':
-                            daysOfWeek += "五,";
-                            break;
-                        case '6':
-                            daysOfWeek += "六,";
-                            break;
-                        case '7':
-                            daysOfWeek += "日,";
-                            break;
-                    }
-                }
-                print += daysOfWeek.Substring(0, daysOfWeek.Length - 1) + "早上使用";
-            }
-
-            if (reg_MCDxDy.IsMatch(value))
-            {
-                print = "月經第";
-                int dIndex = 0;
-                for (int i = 0; i < value.Length; i++)
-                {
-                    if (!value[i].Equals('D') || i == 2) continue;
-                    dIndex = i;
-                    break;
-                }
-                print += value.Substring(3, dIndex - 3) + "天至第";
-                print += value.Substring(dIndex + 1, value.Length - dIndex - 1) + "天使用";
-            }
-
-            if (reg_QxD.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(1, value.Length - 2) + "日 1 次";
-            }
-
-            if (reg_QxW.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(1, value.Length - 2) + "星期 1 次";
-            }
-
-            if (reg_QxM.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(1, value.Length - 2) + "月 1 次";
-            }
-
-            if (reg_QxH.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(1, value.Length - 2) + "小時使用 1 次";
-            }
-
-            if (reg_QxMN.IsMatch(value))
-            {
-                print = "每";
-                print += value.Substring(1, value.Length - 2) + "分鐘使用 1 次";
-            }
-            return print;
-        }
-
-        public static string GetUsagePrintName(string value)
-        {
-            foreach (var u in ViewModelMainWindow.Usages)
-            {
-                if (u.Reg.IsMatch(value))
-                    return u.PrintName;
-            }
-
-            return value;
         }
 
         public static T DeepCloneViaJson<T>(this T source)
@@ -424,7 +236,7 @@ namespace His_Pos.Service
                     receiptPrint = false;
                 if ((bool)printMedBag)
                 {
-                    var printBySingleMode = new MedBagSelectionWindow();
+                    var printBySingleMode = new SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedBagSelectionWindow();
                     printBySingleMode.ShowDialog();
                     printSingle = printBySingleMode.result;
                 }

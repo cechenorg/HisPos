@@ -77,19 +77,30 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         {
             foreach (var g in this.GroupBy(decPres => decPres.AdjustDate).Select(group => group.ToList()))
             {
-                var phCount = pharmacistList.Count(p => p.Date.Equals(g[0].AdjustDate));
+                var tempPharmacistList = pharmacistList.Where(p => p.Date.Equals(g[0].AdjustDate)).OrderBy(p => p.RegisterTime).ToList();
+                var phCount = tempPharmacistList.Count;
                 if (phCount > 0)
                 {
                     var partitionList = Partition(g.Where(p => p.IsDeclare).OrderByDescending(p => p.MedicalServicePoint).ThenBy(p => p.InsertTime).ToList(), phCount).ToList();
                     if (partitionList.Count > phCount)
                     {
-                        for (var i = phCount; i < partitionList.Count; i++)
+                        var partitionListCount = partitionList.Count;
+                        for (var i = partitionListCount - 1; i >= phCount; i--)
                         {
                             foreach (var p in partitionList[i])
                             {
                                 partitionList[phCount - 1].Add(p);
                             }
+                            partitionList.RemoveAt(i);
                         }
+
+                        //for (var i = phCount; i < partitionList.Count; i++)
+                        //{
+                        //    foreach (var p in partitionList[i])
+                        //    {
+                        //        partitionList[phCount - 1].Add(p);
+                        //    }
+                        //}
                     }
                     for (var i = 0; i < phCount; i++)
                     {
@@ -99,7 +110,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             var pre = partitionList[i][k];
                             pre.ApplyPoint -= pre.MedicalServicePoint;
                             pre.TotalPoint -= pre.MedicalServicePoint;
-                            pre.Pharmacist = ViewModelMainWindow.GetMedicalPersonByID(pharmacistList[i].MedicalPersonnel.ID);
+                            pre.Pharmacist = ViewModelMainWindow.GetMedicalPersonByID(tempPharmacistList[i].MedicalPersonnel.ID);
                             pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
                             int days = pre.MedicineDays;
                             if (j <= 80)

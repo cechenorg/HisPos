@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 MessageWindow.ShowMessage("請選擇新增藥師", MessageType.WARNING);
                 return;
             }
-            var item = new PharmacistScheduleItem { MedicalPersonnel = new DeclareMedicalPersonnel(SelectedMedicalPersonnel), Date = selectedDate };
+            var item = new PharmacistScheduleItem { MedicalPersonnel = new DeclareMedicalPersonnel(SelectedMedicalPersonnel), Date = selectedDate ,RegisterTime = DateTime.Now};
             saveCallback(item);
             Messenger.Default.Send(new NotificationMessage("CloseAddPharmacistScheduleItemWindow"));
         }
