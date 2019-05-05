@@ -693,6 +693,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
                 else if (EditedPrescription.PrescriptionStatus.IsCreateSign != null && !(bool)EditedPrescription.PrescriptionStatus.IsCreateSign)
                 {
+                    EditedPrescription.Treatment.TempMedicalNumber = errorCode.ID;
+                    if (EditedPrescription.Treatment.ChronicSeq is null)
+                        EditedPrescription.Treatment.MedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                    else
+                    {
+                        if (EditedPrescription.Treatment.ChronicSeq > 1)
+                        {   
+                            EditedPrescription.Treatment.MedicalNumber = "IC0" + EditedPrescription.Treatment.ChronicSeq;
+                            EditedPrescription.Treatment.OriginalMedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                        }
+                        else
+                        {
+                            EditedPrescription.Treatment.MedicalNumber = EditedPrescription.Treatment.TempMedicalNumber;
+                            EditedPrescription.Treatment.OriginalMedicalNumber = null;
+                        }
+                    }
                     HisAPI.CreatErrorDailyUploadData(EditedPrescription, false, errorCode);
                 }
                 MainWindow.ServerConnection.OpenConnection();

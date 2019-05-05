@@ -19,6 +19,7 @@ using Cus = His_Pos.NewClass.Person.Customer.Customer;
 using IcCard = His_Pos.NewClass.Prescription.IcCard;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
+using HisAPI = His_Pos.HisApi.HisApiFunction;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow
 {
@@ -29,7 +30,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public RegisterAndReservePrescriptions ReservedPrescriptions { get; set; }
         public RegisterAndReservePrescriptions RegisteredPrescriptions { get; set; }
         public CustomerPrescriptions UngetCardPrescriptions { get; set; }
-        public CustomPrescriptionStruct SelectedPrescription { get; set; }
+        private CustomPrescriptionStruct selectedPrescription;
+        public CustomPrescriptionStruct SelectedPrescription
+        {
+            get => selectedPrescription;
+            set
+            {
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
+            }
+        }
         public IcCard Card { get; set; }
         public int PatientID { get; }
         public string PatientIDNumber { get; }
@@ -225,6 +234,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             isGetCard = p.GetCard();
             if (isGetCard)
             {
+                p.Treatment.GetLastMedicalNumber();
                 p.PrescriptionStatus.IsGetCard = true;
                 BusyContent = StringRes.檢查就醫次數;
                 p.Card.GetRegisterBasic();
@@ -257,48 +267,102 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                         }
                     }
                 }
-                if (CreatePrescriptionSign(p, isGetCard))
-                    HisApiFunction.CreatDailyUploadData(p, true);
             }
-            p.PrescriptionStatus.IsGetCard = true;
-            p.PrescriptionStatus.IsDeposit = false;
-            p.PrescriptionStatus.IsDeclare = true;
-            p.PrescriptionStatus.IsAdjust = true;
-            MainWindow.ServerConnection.OpenConnection();
-            //var deposit = p.Treatment.Institution.ID == ViewModelMainWindow.CooperativeInstitutionID ? "合作退還押金" : "退還押金";
-            //PrescriptionDb.ProcessCashFlow(deposit, "PreMasId", p.Id, p.PrescriptionPoint.Deposit * -1);
-            p.PrescriptionPoint.Deposit = 0;
-            p.PrescriptionStatus.UpdateStatus(p.Id);
-            p.Treatment.CheckMedicalNumber(false);
-            p.Update();
-            MainWindow.ServerConnection.CloseConnection();
-        }
-        private bool CreatePrescriptionSign(Prescription p,bool isGetCard)
-        {
-            BusyContent = StringRes.寫卡;
-            p.PrescriptionSign = isGetCard ? HisApiFunction.WritePrescriptionData(p) : new List<string>();
-            BusyContent = StringRes.產生每日上傳資料;
-            if (p.PrescriptionSign.Count != p.Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf))
+            ErrorUploadWindowViewModel.IcErrorCode errorCode = null;
+            if (!p.Card.IsGetMedicalNumber)
             {
-                bool? isDone = null;
-                ErrorUploadWindowViewModel.IcErrorCode errorCode;
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage(StringRes.寫卡異常, MessageType.ERROR);
+                Application.Current.Dispatcher.Invoke((Action)(() =>
+                {
                     var e = new ErrorUploadWindow(p.Card.IsGetMedicalNumber); //詢問異常上傳
                     e.ShowDialog();
-                    while (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
-                    {
-                        e = new ErrorUploadWindow(p.Card.IsGetMedicalNumber);
-                        e.ShowDialog();
-                    }
                     errorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-                    if (isDone is null)
-                        HisApiFunction.CreatErrorDailyUploadData(p, true, errorCode);
-                    isDone = true;
-                });
-                return false;
+                }));
+                if (errorCode is null)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)(() =>
+                    {
+                        MessageWindow.ShowMessage("未選擇異常代碼，請重新過卡或選擇異常代碼", MessageType.WARNING);
+                    }));
+                    return;
+                }
             }
-            return true;
+            CreateDailyUploadData(p,errorCode);
+
+            if (p.PrescriptionStatus.IsCreateSign is null)
+            {
+                Application.Current.Dispatcher.Invoke((Action)(() =>
+                {
+                    MessageWindow.ShowMessage("寫卡異常，請重新讀取卡片或選擇異常代碼。", MessageType.ERROR);
+                }));
+                return;
+            }
+            p.PrescriptionStatus.SetNormalAdjustStatus();
+            if (p.Card.IsGetMedicalNumber)
+            {
+                if (p.PrescriptionStatus.IsCreateSign != null && (bool)p.PrescriptionStatus.IsCreateSign)
+                {
+                    HisAPI.CreatDailyUploadData(p, false);
+                }
+            }
+            else if (p.PrescriptionStatus.IsCreateSign != null && !(bool)p.PrescriptionStatus.IsCreateSign)
+            {
+                p.Treatment.TempMedicalNumber = errorCode.ID;
+                if (p.Treatment.ChronicSeq is null)
+                    p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                else
+                {
+                    if (p.Treatment.ChronicSeq > 1)
+                    {
+                        p.Treatment.MedicalNumber = "IC0" + p.Treatment.ChronicSeq;
+                        p.Treatment.OriginalMedicalNumber = p.Treatment.TempMedicalNumber;
+                    }
+                    else
+                    {
+                        p.Treatment.MedicalNumber = p.Treatment.TempMedicalNumber;
+                        p.Treatment.OriginalMedicalNumber = null;
+                    }
+                }
+                HisAPI.CreatErrorDailyUploadData(p, false, errorCode);
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            p.PrescriptionPoint.GetDeposit(p.Id);
+            p.PrescriptionPoint.Deposit = 0;
+            p.PrescriptionStatus.UpdateStatus(p.Id);
+            p.Update();
+            MainWindow.ServerConnection.CloseConnection();
+            IsBusy = false;
+        }
+        private void CreateDailyUploadData(Prescription p,ErrorUploadWindowViewModel.IcErrorCode error = null)
+        {
+            if (p.PrescriptionStatus.IsGetCard || error != null)
+            {
+                if (p.Card.IsGetMedicalNumber)
+                {
+                    CreatePrescriptionSign(p);
+                }
+                else
+                {
+                    p.PrescriptionStatus.IsCreateSign = false;
+                }
+            }
+        }
+        private void CreatePrescriptionSign(Prescription p)
+        {
+            BusyContent = StringRes.寫卡;
+            p.PrescriptionSign = HisAPI.WritePrescriptionData(p);
+            BusyContent = StringRes.產生每日上傳資料;
+            if (p.WriteCardSuccess != 0)
+            {
+                Application.Current.Dispatcher.Invoke(delegate {
+                    var description = MainWindow.GetEnumDescription((ErrorCode)p.WriteCardSuccess);
+                    MessageWindow.ShowMessage("寫卡異常 " + p.WriteCardSuccess + ":" + description, MessageType.WARNING);
+                });
+                p.PrescriptionStatus.IsCreateSign = null;
+            }
+            else
+            {
+                p.PrescriptionStatus.IsCreateSign = true;
+            }
         }
     }
 }

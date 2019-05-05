@@ -955,6 +955,7 @@ namespace His_Pos.NewClass.Prescription
                 case PrescriptionSource.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, details);
                     break;
+
             }
         }
         public void AdjustMedicines(Prescription originPrescription)

@@ -9,23 +9,51 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         {
             if (!singleMode)
             {
-                var i = 1;
                 foreach (var m in medList.Where(med => !(med is MedicineVirtual)))
                 {
                     switch (m)
                     {
                         case MedicineNHI medicine:
-                            Add(new MedBagMedicine(medicine, false, i));
+                            Add(new MedBagMedicine(medicine, false));
                             break;
                         case MedicineOTC otc:
-                            Add(new MedBagMedicine(otc, false, i));
+                            Add(new MedBagMedicine(otc, false));
                             break;
                         case MedicineSpecialMaterial specialMaterial:
-                            Add(new MedBagMedicine(specialMaterial, false, i));
+                            Add(new MedBagMedicine(specialMaterial, false));
                             break;
                     }
-                    i++;
                 }
+
+                var i = 1;
+                var order = 1;
+                foreach (var g in Items.GroupBy(m => m.Usage).Select(group => group.ToList()).ToList())
+                {
+                    foreach (var med in g)
+                    {
+                        med.MedNo = i.ToString();
+                        med.Order = order;
+                        i++;
+                    }
+                    order++;
+                }
+
+
+                //foreach (var m in medList.Where(med => !(med is MedicineVirtual)).GroupBy(m => m.Usage))
+                //{
+                //    switch (m)
+                //    {
+                //        case MedicineNHI medicine:
+                //            Add(new MedBagMedicine(medicine, false));
+                //            break;
+                //        case MedicineOTC otc:
+                //            Add(new MedBagMedicine(otc, false));
+                //            break;
+                //        case MedicineSpecialMaterial specialMaterial:
+                //            Add(new MedBagMedicine(specialMaterial, false));
+                //            break;
+                //    }
+                //}
             }
             else
             {

@@ -12,7 +12,7 @@
   <xs:element name="DataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet1" msprop:Generator_UserDSName="DataSet1">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="MedBagMedicine" msprop:Generator_TableClassName="MedBagMedicineDataTable" msprop:Generator_TableVarName="tableMedBagMedicine" msprop:Generator_TablePropName="MedBagMedicine" msprop:Generator_RowDeletingName="MedBagMedicineRowDeleting" msprop:Generator_RowChangingName="MedBagMedicineRowChanging" msprop:Generator_RowEvHandlerName="MedBagMedicineRowChangeEventHandler" msprop:Generator_RowDeletedName="MedBagMedicineRowDeleted" msprop:Generator_UserTableName="MedBagMedicine" msprop:Generator_RowChangedName="MedBagMedicineRowChanged" msprop:Generator_RowEvArgName="MedBagMedicineRowChangeEvent" msprop:Generator_RowClassName="MedBagMedicineRow">
+        <xs:element name="MedBagMedicine" msprop:Generator_TableClassName="MedBagMedicineDataTable" msprop:Generator_TableVarName="tableMedBagMedicine" msprop:Generator_RowChangedName="MedBagMedicineRowChanged" msprop:Generator_TablePropName="MedBagMedicine" msprop:Generator_RowDeletingName="MedBagMedicineRowDeleting" msprop:Generator_RowChangingName="MedBagMedicineRowChanging" msprop:Generator_RowEvHandlerName="MedBagMedicineRowChangeEventHandler" msprop:Generator_RowDeletedName="MedBagMedicineRowDeleted" msprop:Generator_RowClassName="MedBagMedicineRow" msprop:Generator_UserTableName="MedBagMedicine" msprop:Generator_RowEvArgName="MedBagMedicineRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Usage" msprop:Generator_ColumnVarNameInTable="columnUsage" msprop:Generator_ColumnPropNameInRow="Usage" msprop:Generator_ColumnPropNameInTable="UsageColumn" msprop:Generator_UserColumnName="Usage" type="xs:string" minOccurs="0" />
@@ -22,6 +22,7 @@
               <xs:element name="SideEffect" msprop:Generator_ColumnVarNameInTable="columnSideEffect" msprop:Generator_ColumnPropNameInRow="SideEffect" msprop:Generator_ColumnPropNameInTable="SideEffectColumn" msprop:Generator_UserColumnName="SideEffect" type="xs:string" minOccurs="0" />
               <xs:element name="Indication" msprop:Generator_ColumnVarNameInTable="columnIndication" msprop:Generator_ColumnPropNameInRow="Indication" msprop:Generator_ColumnPropNameInTable="IndicationColumn" msprop:Generator_UserColumnName="Indication" type="xs:string" minOccurs="0" />
               <xs:element name="MedNo" msprop:Generator_ColumnVarNameInTable="columnMedNo" msprop:Generator_ColumnPropNameInRow="MedNo" msprop:Generator_ColumnPropNameInTable="MedNoColumn" msprop:Generator_UserColumnName="MedNo" type="xs:string" minOccurs="0" />
+              <xs:element name="Order" msprop:Generator_ColumnVarNameInTable="columnOrder" msprop:Generator_ColumnPropNameInRow="Order" msprop:Generator_ColumnPropNameInTable="OrderColumn" msprop:Generator_UserColumnName="Order" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
