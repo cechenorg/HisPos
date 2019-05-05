@@ -5,8 +5,11 @@ using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
@@ -65,8 +68,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
-        private int startDay;
-        public int StartDay
+        private int? startDay;
+        public int? StartDay
         {
             get => startDay;
             set
@@ -74,8 +77,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => StartDay, ref startDay, value);
             }
         }
-        private int endDay;
-        public int EndDay
+        private int? endDay;
+        public int? EndDay
         {
             get => endDay;
             set
@@ -112,6 +115,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => PharmacistSchedule, ref pharmacistSchedule, value);
             }
         }
+
+        private DeclarePharmacy selectedPharmacy;
+
+        public DeclarePharmacy SelectedPharmacy
+        {
+            get => selectedPharmacy;
+            set
+            {
+                Set(() => SelectedPharmacy, ref selectedPharmacy, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -134,6 +148,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialVariables()
         {
             DeclarePharmacies = new DeclarePharmacies();
+            SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
             DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
             StartDay = 1;
@@ -165,6 +180,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #region CommandActions
         private void GetPreviewPrescriptionsActions()
         {
+            if (StartDay == null || EndDay == null)
+            {
+                MessageWindow.ShowMessage("請填寫查詢日期區間",MessageType.ERROR);
+                return;
+            }
+
+            if (DeclareDate is null)
+            {
+                MessageWindow.ShowMessage("請填寫申報年月", MessageType.ERROR);
+                return;
+            }
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -173,7 +199,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 GetPrescriptions();
                 MainWindow.ServerConnection.CloseConnection();
             };
-            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
@@ -241,14 +270,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                //var decFile = new DeclareFile(SelectedPreview,SelectedPreview.);
+                var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
                 //if (SelectedPreview.CheckFileExist())
                 //{
                 //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
                 //    if (!(bool)confirm.DialogResult)
                 //        return;
                 //}
-                //SelectedPreview.CreateDeclareFile(decFile);
+                DeclareFile.CreateDeclareFile(decFile);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -266,10 +295,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var end = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month+1, 1).AddDays(-1).Day;
             if (EndDay > end)
                 EndDay = end;
-            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, StartDay);
-            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
+            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
+            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
             DeclareFile.GetSearchPrescriptions(sDate, eDate);
             DeclareFile.SetSummary();
+            DeclareFile.DeclareDate = (DateTime)DeclareDate;
             //DecFilePreViews.Clear();
             //foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
             //{
@@ -302,8 +332,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetPharmacistSchedule()
         {
-            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, StartDay);
-            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate,EndDay);
+            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
+            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
             PharmacistSchedule = new PharmacistSchedule();
             PharmacistSchedule.GetPharmacistSchedule(start, last);
         }

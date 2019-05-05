@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 
@@ -41,6 +42,35 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
             T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
             var declareDate = selectedFile.DeclarePrescriptions[0].AdjustDate;
+            var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
+            var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
+            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
+            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay, false);
+        }
+        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        {
+            T1 = "30";
+            T2 = pharmacyID;
+            T3 = (selectedFile.DeclareDate.Year - 1911).ToString().PadLeft(3, '0') +
+                 selectedFile.DeclareDate.Month.ToString().PadLeft(2, '0');
+            T4 = "2";
+            T5 = "1";
+            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today, false);
+            var normalPres = selectedFile.DeclarePres.Where(p => p.IsDeclare &&
+                                                                          (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
+                                                                           || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D"))).ToList();
+            var chronicPres = selectedFile.DeclarePres.Where(p => p.IsDeclare && p.AdjustCase.ID.Equals("2")).ToList();
+            var normalCount = normalPres.Count;
+            var chronicCount = chronicPres.Count;
+            var normalApplyPoints = normalPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
+            var chronicApplyPoints = chronicPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
+            T7 = normalCount.ToString().PadLeft(6, '0');
+            T8 = normalApplyPoints.ToString().PadLeft(10, '0');
+            T9 = chronicCount.ToString().PadLeft(6, '0');
+            T10 = chronicApplyPoints.ToString().PadLeft(10, '0');
+            T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
+            T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
+            var declareDate = selectedFile.DeclarePres[0].AdjustDate;
             var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
             var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
             T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
@@ -113,6 +143,41 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             for (var i = 1; i <= 4; i++)
             {
                 foreach (var d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
+                {
+                    Ddata.Add(d);
+                }
+            }
+        }
+        public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        {
+            Tdata = new Tdata(selectedFile, pharmacyID);
+            var tempList = new List<Ddata>();
+            Ddata = new List<Ddata>();
+            var dd = new List<Ddata>();
+            foreach (var p in selectedFile.DeclarePres.Where(p => p.IsDeclare))
+            {
+                foreach (var pdata in p.FileContent.Dbody.Pdata)
+                {
+                    if (pdata.P1.Equals("3"))
+                        pdata.P2 = pdata.P2.Substring(0, 12);
+                }
+                tempList.Add(p.FileContent);
+            }
+
+            foreach (var g in tempList.OrderBy(d => int.Parse(d.Dhead.D1)).GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
+            {
+                var serial = 1;
+                foreach (var ddata in g)
+                {
+                    ddata.Dhead.D2 = serial.ToString().PadLeft(6, '0');
+                    dd.Add(ddata);
+                    serial++;
+                }
+            }
+
+            for (var i = 1; i <= 4; i++)
+            {
+                foreach (var d in dd.Where(d => d.Dhead.D1.Equals(i.ToString())))
                 {
                     Ddata.Add(d);
                 }

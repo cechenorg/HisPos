@@ -93,14 +93,16 @@ namespace His_Pos.Service
                 path_file +=  year + month + day;
             if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
-            xml.Declaration = new XDeclaration("1.0","Big5","no");
+            xml.Declaration = new XDeclaration("1.0", "Big5", string.Empty);
             var settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = Encoding.GetEncoding(950);
-            settings.OmitXmlDeclaration = true;
+            settings.OmitXmlDeclaration = false;
             var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();
+            string info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
+            File.WriteAllText(path_file + ".xml", info.Replace("big5", "Big5"), Encoding.GetEncoding(950));
             //壓縮XML
             if (File.Exists(path_file + ".zip")) File.Delete(path_file + ".zip");
             var psi = new Process();
