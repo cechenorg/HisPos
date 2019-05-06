@@ -318,6 +318,11 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
+        public static MedicalPersonnel GetMedicalPersonByIDNumber(string idNum)
+        {
+            var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
+            return result;
+        }
         public void StartPrintMedBag(ReportViewer r)
         {
             IsBusy = true;

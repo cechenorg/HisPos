@@ -237,7 +237,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             foreach (var pre in DeclareFile.DeclarePreviews)
             {
                 pre.CheckAdjustOutOfRange();
-                Console.WriteLine(pre.IsAdjustOutOfRange);
             }
             DeclareFile.SetSummary();
         }
@@ -264,6 +263,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             {
                 BusyContent = StringRes.產生申報資料;
                 MainWindow.ServerConnection.OpenConnection();
+                DeclareFile.DeclarePres.AdjustMedicalService();
                 DeclareFile.DeclarePres.SerializeFileContent();
                 MainWindow.ServerConnection.CloseConnection();
             };
@@ -324,7 +324,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             if (msg.Notification.Equals("PrescriptionEdited"))
             {
                 MainWindow.ServerConnection.OpenConnection();
-
                 GetPrescriptions();
                 MainWindow.ServerConnection.CloseConnection();
             }

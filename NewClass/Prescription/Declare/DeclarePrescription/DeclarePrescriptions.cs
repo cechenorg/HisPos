@@ -66,6 +66,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     p.FileContent.Dbody.Pdata[i - 1].P10 = (i.ToString()).PadLeft(3, '0');
                 }
                 p.FileContent.Dbody.D31 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("3")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(7, '0');
+                p.FileContent.Dbody.D32 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("2")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
                 p.FileContent.Dbody.D33 = p.FileContent.Dbody.Pdata.Where(pd => !pd.PaySelf && pd.P1.Equals("1")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
                 p.FileContent.Dbody.D38 = p.FileContent.Dbody.Pdata.Where(pd => pd.P1.Equals("9")).Sum(pd => int.Parse(pd.P9)).ToString().PadLeft(8, '0');
                 p.FileContent.Dhead.D18 = (int.Parse(p.FileContent.Dbody.D31) + int.Parse(p.FileContent.Dbody.D32) + int.Parse(p.FileContent.Dbody.D33) + int.Parse(p.FileContent.Dbody.D38)).ToString().PadLeft(8, '0');
@@ -75,7 +76,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 
         public void AdjustPharmacist(List<PharmacistScheduleItem> pharmacistList)
         {
-            foreach (var g in this.GroupBy(decPres => decPres.AdjustDate).Select(group => group.ToList()))
+            foreach (var g in this.Where(p => p.IsDeclare).GroupBy(decPres => decPres.AdjustDate).Select(group => group.ToList()))
             {
                 var tempPharmacistList = pharmacistList.Where(p => p.Date.Equals(g[0].AdjustDate)).OrderBy(p => p.RegisterTime).ToList();
                 var phCount = tempPharmacistList.Count;
@@ -93,14 +94,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             }
                             partitionList.RemoveAt(i);
                         }
-
-                        //for (var i = phCount; i < partitionList.Count; i++)
-                        //{
-                        //    foreach (var p in partitionList[i])
-                        //    {
-                        //        partitionList[phCount - 1].Add(p);
-                        //    }
-                        //}
                     }
                     for (var i = 0; i < phCount; i++)
                     {
@@ -135,7 +128,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                                     pre.MedicalServicePoint = 48;
                                     pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
                                 }
-                                pre.FileContent.Dbody.D38 = partitionList[i][k].MedicalServicePoint.ToString().PadLeft(8, '0');
                             }
                             else if (j > 80 && j <= 100)
                             {
@@ -153,19 +145,18 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                                     pre.MedicalServiceID = "05206B";
                                 else
                                     pre.MedicalServiceID = "05202B";
-                                pre.FileContent.Dbody.D38 = partitionList[i][k].MedicalServicePoint.ToString().PadLeft(8, '0');
                             }
+                            pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
                             pre.FileContent.Dbody.D37 = partitionList[i][k].MedicalServiceID;
-                            pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9")).P2 =
-                                pre.FileContent.Dbody.D37;
-                            pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9")).P9 =
-                                pre.FileContent.Dbody.D38;
-                            pre.ApplyPoint += partitionList[i][k].MedicalServicePoint;
-                            pre.TotalPoint += partitionList[i][k].MedicalServicePoint;
+                            var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
+                            medicalService.P2 = pre.FileContent.Dbody.D37;
+                            medicalService.P8 = pre.FileContent.Dbody.D38;
+                            medicalService.P9 = pre.FileContent.Dbody.D38;
+                            pre.ApplyPoint += pre.MedicalServicePoint;
+                            pre.TotalPoint += pre.MedicalServicePoint;
                             pre.DeclareContent = new SqlXml(new XmlTextReader(
                                 XmlService.ToXmlDocument(partitionList[i][k].FileContent.SerializeObjectToXDocument()).InnerXml,
                                 XmlNodeType.Document, null));
-                            Console.WriteLine(partitionList[i][k].MedicalServiceID + " " + partitionList[i][k].FileContent.Dbody.D37);
                         }
                     }
                 }
@@ -178,6 +169,80 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             var size = source.Count / pharmacistCount;
             for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
                 yield return new List<T>(source.Skip(size * i).Take(size));
+        }
+
+        public void AdjustMedicalService()
+        {
+            foreach (var g in this.Where(p => p.IsDeclare).GroupBy(decPres => decPres.AdjustDate).Select(group => group.ToList()))
+            {
+                foreach (var pres in g.GroupBy(pres => pres.Pharmacist.IDNumber))
+                {
+                    var pharmacist = ViewModelMainWindow.GetMedicalPersonByIDNumber(pres.Key);
+                    var pList = pres.ToList();
+                    for (var j = 1; j <= pList.Count; j++)
+                    {
+                        var k = j - 1;
+                        var pre = pList[k];
+                        pre.ApplyPoint -= pre.MedicalServicePoint;
+                        pre.TotalPoint -= pre.MedicalServicePoint;
+                        pre.Pharmacist = pharmacist;
+                        pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
+                        int days = pre.MedicineDays;
+                        if (j <= 80)
+                        {
+                            if (days >= 28)
+                            {
+                                pre.MedicalServicePoint = 69;
+                                pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                            }
+                            else if (days > 7 && days < 14)
+                            {
+                                pre.MedicalServicePoint = 48;
+                                pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+                            }
+                            else if (days >= 14 && days < 28)
+                            {
+                                pre.MedicalServicePoint = 59;
+                                pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+                            }
+                            else
+                            {
+                                pre.MedicalServicePoint = 48;
+                                pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
+                            }
+                        }
+                        else if (j > 80 && j <= 100)
+                        {
+                            pre.MedicalServicePoint = 18;
+                            pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
+                        }
+                        else
+                        {
+                            pre.MedicalServicePoint = 0;
+                            if (days >= 28)
+                                pre.MedicalServiceID = "05210B";
+                            else if (days > 7 && days < 14)
+                                pre.MedicalServiceID = "05223B";
+                            else if (days >= 14 && days < 28)
+                                pre.MedicalServiceID = "05206B";
+                            else
+                                pre.MedicalServiceID = "05202B";
+                        }
+                        pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
+                        pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
+                        var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
+                        medicalService.P2 = pre.FileContent.Dbody.D37;
+                        medicalService.P8 = pre.FileContent.Dbody.D38;
+                        medicalService.P9 = pre.FileContent.Dbody.D38;
+                        pre.ApplyPoint += pre.MedicalServicePoint;
+                        pre.TotalPoint += pre.MedicalServicePoint;
+                        pre.DeclareContent = new SqlXml(new XmlTextReader(
+                            XmlService.ToXmlDocument(pre.FileContent.SerializeObjectToXDocument()).InnerXml,
+                            XmlNodeType.Document, null));
+                    }
+                }
+            }
+            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
         }
     }
 }
