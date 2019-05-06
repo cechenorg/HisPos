@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
-    public class AppointmentViewModel : ViewModelBase
+    public class AddPharmacistScheduleItemViewModel:ViewModelBase
     {
-        private Action<Appointment> saveCallback;
+        private Action<PharmacistScheduleItem> saveCallback;
         private DateTime selectedDate;
         public MedicalPersonnels MedicalPersonnels { get; set; }
         private MedicalPersonnel selectedMedicalPersonnel;
@@ -29,7 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         }
         public RelayCommand Save { get; set; }
         public RelayCommand Cancel { get; set; }
-        public AppointmentViewModel(Action<Appointment> saveCallback, DateTime selected)
+        public AddPharmacistScheduleItemViewModel(Action<PharmacistScheduleItem> saveCallback, DateTime selected)
         {
             MedicalPersonnels = AdjustPharmacistViewModel.MedicalPersonnels;
             selectedDate = selected;
@@ -41,17 +37,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         {
             if (SelectedMedicalPersonnel is null)
             {
-                MessageWindow.ShowMessage("請選擇新增藥師",MessageType.WARNING);
+                MessageWindow.ShowMessage("請選擇新增藥師", MessageType.WARNING);
                 return;
             }
-            var appointment = new Appointment {MedicalPersonnel = new DeclareMedicalPersonnel(SelectedMedicalPersonnel), Date = selectedDate};
-            saveCallback(appointment);
-            Messenger.Default.Send(new NotificationMessage("CloseAppointmentWindow"));
+            var item = new PharmacistScheduleItem { MedicalPersonnel = new DeclareMedicalPersonnel(SelectedMedicalPersonnel), Date = selectedDate };
+            saveCallback(item);
+            Messenger.Default.Send(new NotificationMessage("CloseAddPharmacistScheduleItemWindow"));
         }
         private void CancelAction()
         {
-            Messenger.Default.Send(new NotificationMessage("CloseAppointmentWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseAddPharmacistScheduleItemWindow"));
         }
-
     }
 }

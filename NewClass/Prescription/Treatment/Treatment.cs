@@ -211,7 +211,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             {
                 SubDisease = DisCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
             }
-            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IdNumber.Equals(r.Field<string>("Emp_IDNumber")));
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
             SpecialTreat = new SpeTre();
             if (!string.IsNullOrEmpty(r.Field<string>("SpecialTreatID")))
             {
@@ -534,7 +534,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckPharmacist()
         {
-            return string.IsNullOrEmpty(Pharmacist.IdNumber) ? StringRes.PharmacistIDError : string.Empty;
+            return string.IsNullOrEmpty(Pharmacist.IDNumber) ? StringRes.PharmacistIDError : string.Empty;
         }
         private string CheckDivision()
         {
@@ -683,7 +683,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
             t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID);
             t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID);
-            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IdNumber.Equals(Pharmacist.IdNumber));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IDNumber.Equals(Pharmacist.IDNumber));
             t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;

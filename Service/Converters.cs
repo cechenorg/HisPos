@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
@@ -611,28 +613,28 @@ namespace His_Pos.Service
         }
     }
 
-    [ValueConversion(typeof(ObservableCollection<Appointment>), typeof(ObservableCollection<Appointment>))]
-    public class AppointmentsConverter : IMultiValueConverter
+    [ValueConversion(typeof(PharmacistSchedule), typeof(PharmacistSchedule))]
+    public class PharmacistScheduleConverter : IMultiValueConverter
     {
         #region IMultiValueConverter Members
 
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            DateTime date = (DateTime)values[1];
+            var date = (DateTime)values[1];
 
-            ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
-            foreach (Appointment appointment in (ObservableCollection<Appointment>)values[0])
+            var pharmacistSchedule = new PharmacistSchedule();
+            foreach (var item in (ObservableCollection<PharmacistScheduleItem>)values[0])
             {
-                if (appointment.Date.Date == date)
+                if (item.Date.Date == date)
                 {
-                    appointments.Add(appointment);
+                    pharmacistSchedule.Add(item);
                 }
             }
 
-            return appointments;
+            return pharmacistSchedule;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -679,7 +681,7 @@ namespace His_Pos.Service
                     return dtfi;
                 }
             }
-            DateTimeFormatInfo dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
+            var dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
             dt.Calendar = new GregorianCalendar();
             return dt;
         }

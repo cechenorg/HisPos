@@ -176,7 +176,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             {
                 D24 = string.Empty;
             }
-            D25 = t.Pharmacist.IdNumber;
+            D25 = t.Pharmacist.IDNumber;
         }
         [XmlElement(ElementName = "d1")]
         public string D1 { get; set; }

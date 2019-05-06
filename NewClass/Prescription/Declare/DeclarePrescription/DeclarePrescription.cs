@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             ApplyPoint = r.Field<int>("PreMas_ApplyPoint");
             Pharmacist = new MedicalPersonnel();
             Pharmacist.ID = r.Field<int>("Emp_ID");
-            Pharmacist.IdNumber = r.Field<string>("PreMas_PharmacistIDNumber");
+            Pharmacist.IDNumber = r.Field<string>("PreMas_PharmacistIDNumber");
             Pharmacist.Name = r.Field<string>("Emp_Name");
             MedicinePoint = r.Field<int>("PreMas_MedicinePoint");
             MedicalServicePoint = r.Field<int>("PreMas_MedicalServicePoint");

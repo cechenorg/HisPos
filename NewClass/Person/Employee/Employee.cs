@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.Employee
 {
-    public class Employee:Person,INotifyPropertyChanged
+    [ZeroFormattable]
+    public class Employee:Person
     {
         public Employee(){}
         public Employee(DataRow r):base(r)
@@ -22,86 +24,87 @@ namespace His_Pos.NewClass.Person.Employee
             AuthorityValue = r.Field<byte>("Aut_LevelID");
         }
         private string password;//密碼
-        public string Password
+        [Index(4)]
+        public virtual string Password
         {
             get => password;
             set
             {
-                password = value;
-                OnPropertyChanged(nameof(Password));
+                Set(() => Password, ref password, value);
             }
         }
 
         private string nickName;//暱稱
-        public string NickName
+        [Index(5)]
+        public virtual string NickName
         {
             get => nickName;
             set
             {
-                nickName = value;
-                OnPropertyChanged(nameof(NickName));
+                Set(() => NickName, ref nickName, value);
             }
         }  
         private int workPositionID;//職位ID
-        public int WorkPositionID
+        [Index(6)]
+        public virtual int WorkPositionID
         {
             get => workPositionID;
             set
             {
-                workPositionID = value;
-                OnPropertyChanged(nameof(WorkPositionID));
+                Set(() => WorkPositionID, ref workPositionID, value);
             }
         }
         private string workPositionName;//職位名稱
-        public string WorkPositionName
+        [Index(7)]
+        public virtual string WorkPositionName
         {
             get => workPositionName;
             set
             {
-                workPositionName = value;
-                OnPropertyChanged(nameof(WorkPositionName));
+                Set(() => WorkPositionName, ref workPositionName, value);
             }
         }
         private DateTime? startDate;//到職日
-        public DateTime? StartDate
+        [Index(8)]
+        public virtual DateTime? StartDate
         {
             get => startDate;
             set
             {
-                startDate = value;
-                OnPropertyChanged(nameof(StartDate));
+                Set(() => StartDate, ref startDate, value);
             }
         }
         private DateTime? leaveDate;//離職日
-        public DateTime? LeaveDate
+        [Index(9)]
+        public virtual DateTime? LeaveDate
         {
             get => leaveDate;
             set
             {
-                leaveDate = value;
-                OnPropertyChanged(nameof(LeaveDate));
+                Set(() => LeaveDate, ref leaveDate, value);
             }
         }
         private int purchaseLimit;//員購上限
-        public int PurchaseLimit
+        [Index(10)]
+        public virtual int PurchaseLimit
         {
             get => purchaseLimit;
             set
             {
-                purchaseLimit = value;
-                OnPropertyChanged(nameof(PurchaseLimit));
+                Set(() => PurchaseLimit, ref purchaseLimit, value);
             }
         }
         private bool isEnable;//備註
-        public bool IsEnable
+        [Index(11)]
+        public virtual bool IsEnable
         {
             get => isEnable;
             set
             {
-                isEnable = value;
-                OnPropertyChanged(nameof(IsEnable));
+                Set(() => IsEnable, ref isEnable, value);
             }
         }
+        [IgnoreFormat]
         public int AuthorityValue { get; set; }
         #region Function
         public Employee Save()
@@ -133,15 +136,5 @@ namespace His_Pos.NewClass.Person.Employee
         }
       
         #endregion
-
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion 
     }
 }

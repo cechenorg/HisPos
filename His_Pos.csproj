@@ -348,12 +348,13 @@
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPosition.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositionDb.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositions.cs" />
-    <Compile Include="NewClass\Person\MedicalPerson\DeclareMedicalPersonnel.cs" />
-    <Compile Include="NewClass\Person\MedicalPerson\DeclareMedicalPersonnels.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnel.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnels.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnelDb.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnels.cs" />
     <Compile Include="NewClass\Person\Gender.cs" />
     <Compile Include="NewClass\Person\Genders.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
@@ -541,15 +542,16 @@
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AddPharmacistScheduleItemViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AddPharmacistScheduleItemWindow.xaml.cs">
+      <DependentUpon>AddPharmacistScheduleItemWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AdjustPharmacistViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AdjustPharmacistWindow.xaml.cs">
       <DependentUpon>AdjustPharmacistWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\Appointment.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AppointmentViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AppointmentWindow.xaml.cs">
-      <DependentUpon>AppointmentWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistSchedule.cs" />
+    <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleItem.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\MonthViewCalendar.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageView.xaml.cs">
       <DependentUpon>DeclareFileManageView.xaml</DependentUpon>
@@ -1078,11 +1080,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AdjustPharmacistWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AddPharmacistScheduleItemWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AppointmentWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AdjustPharmacistWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
