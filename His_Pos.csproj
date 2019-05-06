@@ -356,6 +356,9 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
@@ -913,6 +916,10 @@
     <Compile Include="GeneralCustomControl\IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
+      <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
@@ -1449,6 +1456,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

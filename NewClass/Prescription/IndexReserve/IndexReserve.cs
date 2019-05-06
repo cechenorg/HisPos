@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
     {
         public IndexReserve(DataRow r) {
             Id = r.Field<int>("Id");
+            CusId = r.Field<int>("Cus_ID");
             CusName = r.Field<string>("Cus_Name");
             InsName = r.Field<string>("Ins_Name");
             DivName = r.Field<string>("Div_Name");
@@ -43,7 +44,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     break;
             } 
         }
-      
+        public int CusId { get; set; }
         public int Id { get; set; }
         public string CusName { get; set; }
         public string InsName { get; set; }

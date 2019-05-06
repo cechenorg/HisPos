@@ -1,0 +1,26 @@
+﻿using GalaSoft.MvvmLight;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace His_Pos.NewClass.Prescription.CustomerDetailPrescription {
+   public class CustomerDetailPrescription: ObservableObject {
+        public CustomerDetailPrescription(DataRow r) {
+            ID = r.Field<int>("ID");
+            InsName = r.Field<string>("Ins_Name");
+            DivName = r.Field<string>("Div_Name");
+            TreatMentDate = r.Field<DateTime>("TreatmentDate");
+            AdjustDate = r.Field<DateTime>("AdjustDate");
+            ChronicStatus = r.Field<string>("ChronicStatus");
+        }
+        public int ID { get; set; }
+        public string InsName { get; set; }
+        public string DivName { get; set; }
+        public DateTime TreatMentDate { get; set; }
+        public DateTime AdjustDate { get; set; }
+        public string ChronicStatus { get; set; }
+    }
+}
