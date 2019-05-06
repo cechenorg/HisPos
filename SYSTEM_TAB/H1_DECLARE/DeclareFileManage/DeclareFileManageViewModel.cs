@@ -263,7 +263,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             {
                 BusyContent = StringRes.產生申報資料;
                 MainWindow.ServerConnection.OpenConnection();
-                DeclareFile.DeclarePres.AdjustMedicalService();
+                DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
                 DeclareFile.DeclarePres.SerializeFileContent();
                 MainWindow.ServerConnection.CloseConnection();
             };

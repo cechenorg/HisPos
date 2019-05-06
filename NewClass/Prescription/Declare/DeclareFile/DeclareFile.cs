@@ -166,13 +166,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 
             foreach (var g in tempList.OrderBy(d => int.Parse(d.Dhead.D1)).GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
             {
-                var serial = 1;
-                foreach (var ddata in g)
-                {
-                    ddata.Dhead.D2 = serial.ToString().PadLeft(6, '0');
-                    dd.Add(ddata);
-                    serial++;
-                }
+                dd.AddRange(g.OrderBy(d => d.Dhead.D2));
             }
 
             for (var i = 1; i <= 4; i++)

@@ -171,14 +171,21 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 yield return new List<T>(source.Skip(size * i).Take(size));
         }
 
-        public void AdjustMedicalService()
+        public void AdjustMedicalServiceAndSerialNumber()
+        {
+            AdjustMedicalService();
+            AdjustSerialNumber();
+            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
+        }
+
+        private void AdjustMedicalService()
         {
             foreach (var g in this.Where(p => p.IsDeclare).GroupBy(decPres => decPres.AdjustDate).Select(group => group.ToList()))
             {
                 foreach (var pres in g.GroupBy(pres => pres.Pharmacist.IDNumber))
                 {
                     var pharmacist = ViewModelMainWindow.GetMedicalPersonByIDNumber(pres.Key);
-                    var pList = pres.ToList();
+                    var pList = pres.OrderByDescending(pre => (int)Math.Round(pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9")).P6) / 100, MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
                     for (var j = 1; j <= pList.Count; j++)
                     {
                         var k = j - 1;
@@ -188,37 +195,39 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                         pre.Pharmacist = pharmacist;
                         pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
                         int days = pre.MedicineDays;
+                        var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
+                        var servicePoint = 0;
                         if (j <= 80)
                         {
                             if (days >= 28)
                             {
-                                pre.MedicalServicePoint = 69;
+                                servicePoint = 69;
                                 pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
                             }
                             else if (days > 7 && days < 14)
                             {
-                                pre.MedicalServicePoint = 48;
+                                servicePoint = 48;
                                 pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
                             }
                             else if (days >= 14 && days < 28)
                             {
-                                pre.MedicalServicePoint = 59;
+                                servicePoint = 59;
                                 pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
                             }
                             else
                             {
-                                pre.MedicalServicePoint = 48;
+                                servicePoint = 48;
                                 pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
                             }
                         }
                         else if (j > 80 && j <= 100)
                         {
-                            pre.MedicalServicePoint = 18;
+                            servicePoint = 18;
                             pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
                         }
                         else
                         {
-                            pre.MedicalServicePoint = 0;
+                            servicePoint = 0;
                             if (days >= 28)
                                 pre.MedicalServiceID = "05210B";
                             else if (days > 7 && days < 14)
@@ -228,11 +237,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             else
                                 pre.MedicalServiceID = "05202B";
                         }
+                        pre.MedicalServicePoint  = (int)Math.Round(servicePoint * double.Parse(medicalService.P6) / 100, MidpointRounding.AwayFromZero);
                         pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
                         pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
-                        var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
                         medicalService.P2 = pre.FileContent.Dbody.D37;
-                        medicalService.P8 = pre.FileContent.Dbody.D38;
+                        medicalService.P8 = $"{servicePoint:0000000.00}";
                         medicalService.P9 = pre.FileContent.Dbody.D38;
                         pre.ApplyPoint += pre.MedicalServicePoint;
                         pre.TotalPoint += pre.MedicalServicePoint;
@@ -242,7 +251,19 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     }
                 }
             }
-            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
+        }
+        private void AdjustSerialNumber()
+        {
+            foreach (var g in this.Where(p => p.IsDeclare).OrderBy(d => int.Parse(d.AdjustCase.ID)).GroupBy(d => d.AdjustCase.ID).Select(group => group.ToList()).ToList())
+            {
+                var serial = 1;
+                foreach (var ddata in g)
+                {
+                    ddata.SerialNumber = serial;
+                    ddata.FileContent.Dhead.D2 = serial.ToString().PadLeft(6, '0');
+                    serial++;
+                }
+            }
         }
     }
 }
