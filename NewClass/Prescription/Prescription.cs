@@ -1156,7 +1156,7 @@ namespace His_Pos.NewClass.Prescription
 
         public void CooperativeAdjust(bool noCard)
         {
-            InsertPrescription();
+            InsertDb();
             UpdateCooperativePrescriptionStatus();
         }
 
@@ -1193,6 +1193,7 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckSameOrIDEmptyMedicine()
         {
+
             var sameList = new List<string>();
             var sameMed = string.Empty;
 

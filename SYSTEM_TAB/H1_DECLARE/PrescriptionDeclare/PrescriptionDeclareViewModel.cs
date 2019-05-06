@@ -951,7 +951,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckMissingCooperativeContinue()
         {
-            if (CurrentPrescription.Source == PrescriptionSource.Cooperative && string.IsNullOrEmpty(CurrentPrescription.Remark))
+            if (CurrentPrescription.Source == PrescriptionSource.Cooperative && CurrentPrescription.Treatment.AdjustCase.ID != "2" && string.IsNullOrEmpty(CurrentPrescription.Remark))
             {
                 var e = new CooperativeRemarkInsertWindow();
                 CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
@@ -1327,12 +1327,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case PrescriptionSource.Normal:
                 case PrescriptionSource.ChronicReserve:
                 case PrescriptionSource.XmlOfPrescription:
+                case PrescriptionSource.Cooperative:
                     if (!InsertRegisterData())
                         return;
                     break;
-                case PrescriptionSource.Cooperative:
-                    MessageWindow.ShowMessage(StringRes.登錄合作診所處方, MessageType.ERROR);
-                    return;
             }
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);

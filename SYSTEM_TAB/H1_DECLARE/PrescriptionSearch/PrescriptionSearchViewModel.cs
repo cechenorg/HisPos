@@ -512,29 +512,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
                 Properties.Settings.Default.Save();
-                
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+
+                using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                {
+                    file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
+                    foreach (var s in SearchPrescriptions)
                     {
-                        file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
-                        foreach (var s in SearchPrescriptions)
-                        {
-                            string insName = s.Institution is null ? "" : s.Institution.Name;
-                            string divName = s.Division is null ? "" : s.Division.Name;
-                            string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
-                            string adjDate = s.AdjustDate == null ?  ""  : ((DateTime)s.AdjustDate).AddYears(-1911).ToString("yyy/MM/dd");
+                        string insName = s.Institution is null ? "" : s.Institution.Name;
+                        string divName = s.Division is null ? "" : s.Division.Name;
+                        string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
+                        string adjDate = s.AdjustDate == null ? "" : ((DateTime)s.AdjustDate).AddYears(-1911).ToString("yyy/MM/dd");
                         string treatDate = s.TreatDate == null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
 
                         file.WriteLine($"{s_adjust},{s.StoStatus},{insName}," +
                                 $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
                                 $"{((DateTime)s.Patient.Birthday).AddYears(-1911).ToString("yyy/MM/dd")}," +
-                                $"{treatDate}," +  $"{adjDate},{s.InsertDate}");
-                        }
-                        file.Close();
-                        file.Dispose();
+                                $"{treatDate}," + $"{adjDate},{s.InsertDate}");
                     }
-                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
-                
-                
+                    file.Close();
+                    file.Dispose();
+                }
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+
+
             }
         }
         private void UpdateCollectionView()
