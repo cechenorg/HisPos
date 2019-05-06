@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
@@ -43,16 +42,16 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public UserIconPreview(UserIconData userIconData)
-        {
-            InitializeComponent();
-            DataContext = this;
-            Id = userIconData.Id;
-            IsSelected = false;
-            UserName.Text = userIconData.Name;
-            UserColor.Fill = userIconData.BackBrush;
-            IsMed = userIconData.IsMed;
-        }
+        //public UserIconPreview(UserIconData userIconData)
+        //{
+        //    InitializeComponent();
+        //    DataContext = this;
+        //    Id = userIconData.Id;
+        //    IsSelected = false;
+        //    UserName.Text = userIconData.Name;
+        //    UserColor.Fill = userIconData.BackBrush;
+        //    IsMed = userIconData.IsMed;
+        //}
         
 
         public event PropertyChangedEventHandler PropertyChanged;

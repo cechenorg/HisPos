@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using His_Pos.Class;
-using His_Pos.Class.WorkSchedule;
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
@@ -15,18 +14,18 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
     {
         public bool LeaveComplete = false;
         public string CompleteResult = "";
-        public ObservableCollection<UserIconData> UserIconDatas { get; }
-        public ObservableCollection<Class.Leave.Leave> LeaveTypes { get; }
+        ////public ObservableCollection<UserIconData> UserIconDatas { get; }
+        ////public ObservableCollection<Class.Leave.Leave> LeaveTypes { get; }
 
-        public LeaveWindow(ObservableCollection<UserIconData> users)
-        {
-            InitializeComponent();
-            DataContext = this;
+        ////public LeaveWindow(ObservableCollection<UserIconData> users)
+        ////{
+        ////    InitializeComponent();
+        ////    DataContext = this;
 
-            ///LeaveTypes = LeaveDb.GetLeaveType();
-            UserIconDatas = users;
-            UserName.SelectedIndex = 0;
-        }
+        ////    ///LeaveTypes = LeaveDb.GetLeaveType();
+        ////    UserIconDatas = users;
+        ////    UserName.SelectedIndex = 0;
+        ////}
 
         private void CloseWindow(object sender, RoutedEventArgs e)
         {

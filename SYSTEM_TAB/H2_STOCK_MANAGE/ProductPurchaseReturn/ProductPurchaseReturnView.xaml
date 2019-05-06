@@ -194,7 +194,6 @@
                         </Image.InputBindings>
                     </Image>
                     <Rectangle Width="185"/>
-                    <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Collapsed"/>
                     <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0">
                         <Image.InputBindings>
                             <MouseBinding Command="{Binding ReloadCommand}" MouseAction="LeftClick"/>

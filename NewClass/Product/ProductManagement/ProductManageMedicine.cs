@@ -35,6 +35,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public ProductManageMedicine(DataRow row) : base(row)
         {
             Status = row.Field<bool>("Pro_IsEnable");
+            IsCommon = row.Field<bool>("Pro_IsCommon");
             StockValue = row.Field<double>("STOCK_VALUE");
             Note = row.Field<string>("Pro_Note");
             Indication = row.Field<string>("Med_Indication");

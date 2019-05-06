@@ -11,7 +11,6 @@ using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.Struct.Product;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {
@@ -37,16 +36,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 NotifyPropertyChanged("_DataList");
             }
         }
-        private ObservableCollection<WareHouse> wareHouseCollection = new ObservableCollection<WareHouse>();
-        public ObservableCollection<WareHouse> WareHouseCollection
-        {
-            get { return wareHouseCollection; }
-            set
-            {
-                wareHouseCollection = value;
-                NotifyPropertyChanged("WareHouseCollection");
-            }
-        }
+        //private ObservableCollection<WareHouse> wareHouseCollection = new ObservableCollection<WareHouse>();
+        //public ObservableCollection<WareHouse> WareHouseCollection
+        //{
+        //    get { return wareHouseCollection; }
+        //    set
+        //    {
+        //        wareHouseCollection = value;
+        //        NotifyPropertyChanged("WareHouseCollection");
+        //    }
+        //}
 
         public static bool DataChanged { get; set; }
 
@@ -58,17 +57,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        public Collection<PurchaseProduct> ProductCollection { get; set; }
+        //public Collection<PurchaseProduct> ProductCollection { get; set; }
         public InventoryManagementView()
         {
             InitializeComponent();
             Instance = this;
-            MergingData();
+            //MergingData();
             DataContext = this;
             SetOtcTypeUi();
           ///  WareHouseCollection = WareHouseDb.GetWareHouseData();
             
-            WareHouse.SelectedItem = WareHouseCollection[0];
+            //WareHouse.SelectedItem = WareHouseCollection[0];
             
         }
         public void SetOtcTypeUi() {
@@ -76,17 +75,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
             OtcType.ItemsSource = ProductTypeCollection;
             OtcType.SelectedValue = "無";
         }
-        public void MergingData()
-        {
-            Search.IsEnabled = false;
+        //public void MergingData()
+        //{
+        //    Search.IsEnabled = false;
 
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.MergeProductInventory(this);
-            loadingWindow.Show();
-            loadingWindow.Topmost = true;
+        //    LoadingWindow loadingWindow = new LoadingWindow();
+        //    loadingWindow.MergeProductInventory(this);
+        //    loadingWindow.Show();
+        //    loadingWindow.Topmost = true;
 
-            DataChanged = false;
-        }
+        //    DataChanged = false;
+        //}
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {

@@ -290,7 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
                 !((Medicine)row.Item is MedicineSpecialMaterial)) return;
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<Medicine>(this, (Medicine)row.Item, nameof(PrescriptionEditWindow)));
+            Messenger.Default.Send(new NotificationMessage<string>(this, ((Medicine)row.Item).ID, "ShowProductDetail"));
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
