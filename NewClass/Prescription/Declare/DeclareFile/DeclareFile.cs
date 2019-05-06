@@ -342,7 +342,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P2 = m.ID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                //P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
                 P5 = m.PositionID;
@@ -359,7 +361,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P2 = m.ID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(m.NHIPrice * m.Amount * 1.05, 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P6 = "105";
                 P10 = serial;
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
@@ -391,7 +393,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P4 = m.UsageName;
                 P5 = m.PositionID;
                 P8 = string.Empty;
-                P9 = $"{Math.Round(m.TotalPrice, 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 = $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P10 = string.Empty;
                 var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
                 P11 = days;

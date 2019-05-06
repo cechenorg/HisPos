@@ -111,7 +111,7 @@
                     <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MedicalNumber" Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="4"
-                             Text="{Binding EditedPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray">
+                             Text="{Binding EditedPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>

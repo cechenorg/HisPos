@@ -168,8 +168,8 @@
                     <StackPanel Grid.Row="0" Grid.Column="4" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MedicalNumber" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="4"
-                              Text="{Binding CurrentPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="MedicalNumber_PreviewKeyDown"/>
+                              Text="{Binding CurrentPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"
+                              InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="MedicalNumber_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>

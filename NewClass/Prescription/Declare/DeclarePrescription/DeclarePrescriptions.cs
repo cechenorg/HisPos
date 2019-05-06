@@ -6,6 +6,8 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Xml;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.Service;
@@ -101,66 +103,73 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                         {
                             var k = j - 1;
                             var pre = partitionList[i][k];
-                            pre.ApplyPoint -= pre.MedicalServicePoint;
-                            pre.TotalPoint -= pre.MedicalServicePoint;
                             pre.Pharmacist = ViewModelMainWindow.GetMedicalPersonByID(tempPharmacistList[i].MedicalPersonnel.ID);
                             pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
-                            int days = pre.MedicineDays;
-                            if (j <= 80)
-                            {
-                                if (days >= 28)
-                                {
-                                    pre.MedicalServicePoint = 69;
-                                    pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
-                                }
-                                else if (days > 7 && days < 14)
-                                {
-                                    pre.MedicalServicePoint = 48;
-                                    pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
-                                }
-                                else if (days >= 14 && days < 28)
-                                {
-                                    pre.MedicalServicePoint = 59;
-                                    pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
-                                }
-                                else
-                                {
-                                    pre.MedicalServicePoint = 48;
-                                    pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
-                                }
-                            }
-                            else if (j > 80 && j <= 100)
-                            {
-                                pre.MedicalServicePoint = 18;
-                                pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
-                            }
-                            else
-                            {
-                                pre.MedicalServicePoint = 0;
-                                if (days >= 28)
-                                    pre.MedicalServiceID = "05210B";
-                                else if (days > 7 && days < 14)
-                                    pre.MedicalServiceID = "05223B";
-                                else if (days >= 14 && days < 28)
-                                    pre.MedicalServiceID = "05206B";
-                                else
-                                    pre.MedicalServiceID = "05202B";
-                            }
-                            pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
-                            pre.FileContent.Dbody.D37 = partitionList[i][k].MedicalServiceID;
-                            var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
-                            medicalService.P2 = pre.FileContent.Dbody.D37;
-                            medicalService.P8 = pre.FileContent.Dbody.D38;
-                            medicalService.P9 = pre.FileContent.Dbody.D38;
-                            pre.ApplyPoint += pre.MedicalServicePoint;
-                            pre.TotalPoint += pre.MedicalServicePoint;
-                            pre.DeclareContent = new SqlXml(new XmlTextReader(
-                                XmlService.ToXmlDocument(partitionList[i][k].FileContent.SerializeObjectToXDocument()).InnerXml,
-                                XmlNodeType.Document, null));
+                            //pre.ApplyPoint -= pre.MedicalServicePoint;
+                            //pre.TotalPoint -= pre.MedicalServicePoint;
+                            //pre.Pharmacist = ViewModelMainWindow.GetMedicalPersonByID(tempPharmacistList[i].MedicalPersonnel.ID);
+                            //pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
+                            //int days = pre.MedicineDays;
+                            //if (j <= 80)
+                            //{
+                            //    if (days >= 28)
+                            //    {
+                            //        pre.MedicalServicePoint = 69;
+                            //        pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                            //    }
+                            //    else if (days > 7 && days < 14)
+                            //    {
+                            //        pre.MedicalServicePoint = 48;
+                            //        pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+                            //    }
+                            //    else if (days >= 14 && days < 28)
+                            //    {
+                            //        pre.MedicalServicePoint = 59;
+                            //        pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+                            //    }
+                            //    else
+                            //    {
+                            //        pre.MedicalServicePoint = 48;
+                            //        pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
+                            //    }
+                            //}
+                            //else if (j > 80 && j <= 100)
+                            //{
+                            //    pre.MedicalServicePoint = 18;
+                            //    pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
+                            //}
+                            //else
+                            //{
+                            //    pre.MedicalServicePoint = 0;
+                            //    if (days >= 28)
+                            //        pre.MedicalServiceID = "05210B";
+                            //    else if (days > 7 && days < 14)
+                            //        pre.MedicalServiceID = "05223B";
+                            //    else if (days >= 14 && days < 28)
+                            //        pre.MedicalServiceID = "05206B";
+                            //    else
+                            //        pre.MedicalServiceID = "05202B";
+                            //}
+                            //pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
+                            //pre.FileContent.Dbody.D37 = partitionList[i][k].MedicalServiceID;
+                            //var medicalService = pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9"));
+                            //medicalService.P2 = pre.FileContent.Dbody.D37;
+                            //medicalService.P8 = pre.FileContent.Dbody.D38;
+                            //medicalService.P9 = pre.FileContent.Dbody.D38;
+                            //pre.ApplyPoint += pre.MedicalServicePoint;
+                            //pre.TotalPoint += pre.MedicalServicePoint;
+                            //pre.DeclareContent = new SqlXml(new XmlTextReader(
+                            //    XmlService.ToXmlDocument(partitionList[i][k].FileContent.SerializeObjectToXDocument()).InnerXml,
+                            //    XmlNodeType.Document, null));
                         }
                     }
                 }
+                else
+                {
+                    MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續",MessageType.WARNING);
+                }
             }
+            AdjustMedicalService();
             PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
         }
 
@@ -185,7 +194,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 foreach (var pres in g.GroupBy(pres => pres.Pharmacist.IDNumber))
                 {
                     var pharmacist = ViewModelMainWindow.GetMedicalPersonByIDNumber(pres.Key);
-                    var pList = pres.OrderByDescending(pre => (int)Math.Round(pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9")).P6) / 100, MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
+                    var pList = pres.OrderByDescending(pre => (int)Math.Round(Convert.ToDouble((pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.Single(p => p.P1.Equals("9")).P6) / 100).ToString()), MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
                     for (var j = 1; j <= pList.Count; j++)
                     {
                         var k = j - 1;
@@ -237,7 +246,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             else
                                 pre.MedicalServiceID = "05202B";
                         }
-                        pre.MedicalServicePoint  = (int)Math.Round(servicePoint * double.Parse(medicalService.P6) / 100, MidpointRounding.AwayFromZero);
+                        pre.MedicalServicePoint  = (int)Math.Round(Convert.ToDouble((servicePoint * double.Parse(medicalService.P6) / 100).ToString()), MidpointRounding.AwayFromZero);
                         pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
                         pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
                         medicalService.P2 = pre.FileContent.Dbody.D37;
