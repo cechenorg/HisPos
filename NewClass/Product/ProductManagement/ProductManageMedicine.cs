@@ -8,7 +8,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         #region ----- Define Variables -----
         public bool Status { get; set; }
-        public bool IsCommon { get; set; }
         public string Note { get; set; }
         public string Indication { get; set; }
         public string Warnings { get; set; }
@@ -35,7 +34,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public ProductManageMedicine(DataRow row) : base(row)
         {
             Status = row.Field<bool>("Pro_IsEnable");
-            IsCommon = row.Field<bool>("Pro_IsCommon");
             StockValue = row.Field<double>("STOCK_VALUE");
             Note = row.Field<string>("Pro_Note");
             Indication = row.Field<string>("Med_Indication");
