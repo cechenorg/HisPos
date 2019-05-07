@@ -53,6 +53,7 @@ using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
+using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -286,6 +287,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand SelfPayTextChanged { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
+        public RelayCommand ShowCustomerDetailCommand { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -363,6 +365,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
+            ShowCustomerDetailCommand = new RelayCommand(ShowCustomerDetailAction);
         }
         private void InitialPrescription(bool setPharmacist)
         {
@@ -484,6 +487,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         #endregion
         #region Actions
+        private void ShowCustomerDetailAction() {
+            if (CurrentPrescription.Patient.ID == -1) return;
+            CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
+        }
         private void SearchCusAction(object sender)
         {
             customPresChecked = false;

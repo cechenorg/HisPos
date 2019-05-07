@@ -84,7 +84,13 @@
                             <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Image Width="30" Height="30" Source="/Images/User_48px.png" Margin="10,0,10,0"/>
+                    <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding ShowCustomerDetailCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Image>
                     <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
                              Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Prescription.CustomerDetailPrescription {
    public class CustomerDetailPrescription: ObservableObject {
+        public CustomerDetailPrescription() { }
         public CustomerDetailPrescription(DataRow r) {
             ID = r.Field<int>("ID");
             InsName = r.Field<string>("Ins_Name");

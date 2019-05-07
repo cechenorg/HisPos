@@ -358,6 +358,9 @@
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicine.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicineDb.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicines.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
