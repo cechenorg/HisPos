@@ -284,7 +284,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
-    <Compile Include="Class\CustomerHistoryDb.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
     </Compile>
@@ -356,6 +356,12 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicine.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicineDb.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicines.cs" />
+    <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
@@ -366,6 +372,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacies.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacy.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
@@ -520,7 +528,6 @@
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="Service\FtpMethod.cs" />
-    <Compile Include="Service\ObjectCompareFunctions.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
@@ -528,13 +535,6 @@
     <Compile Include="Class\Authority\Authority.cs" />
     <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="Class\CooperativeClinicJson.cs" />
-    <Compile Include="Class\DeclareTrade.cs" />
-    <Compile Include="Class\Declare\DeclareDataXml.cs" />
-    <Compile Include="Class\Declare\oDeclareFile.cs" />
-    <Compile Include="Class\Declare\DeclareFileDB.cs" />
-    <Compile Include="Class\Declare\DeclareFileDdata.cs" />
-    <Compile Include="Class\Declare\DeclareTDataXml.cs" />
-    <Compile Include="Class\Declare\ErrorMessage.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadDb.cs" />
@@ -599,9 +599,6 @@
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
-    <Compile Include="Class\Entry\Entry.cs" />
-    <Compile Include="Class\Entry\EntryDb.cs" />
-    <Compile Include="Class\HisApiData\MedicalInformation.cs" />
     <Compile Include="Class\InStock.cs" />
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
@@ -610,10 +607,8 @@
     <Compile Include="Class\MedBagLocation\MedBagLocationDb.cs" />
     <Compile Include="Class\MedBag\MedBag.cs" />
     <Compile Include="Class\MedBag\MedBagDb.cs" />
-    <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
-    <Compile Include="Class\Person\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
@@ -622,13 +617,8 @@
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
     <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicine.cs" />
-    <Compile Include="Class\Product\MedicineDb.cs" />
-    <Compile Include="Class\Product\MedXml.cs" />
-    <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
-    <Compile Include="Class\Product\PrescriptionOTC.cs" />
-    <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\Product\ProductGroup.cs" />
     <Compile Include="Class\Product\ProductTypeMedicine.cs" />
     <Compile Include="Class\Product\ProductTypeOTC.cs" />
@@ -644,7 +634,6 @@
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
-    <Compile Include="Class\Product\OTC.cs" />
     <Compile Include="NewClass\Product\Medicine\Usage\Usage.cs" />
     <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
@@ -913,6 +902,10 @@
     <Compile Include="GeneralCustomControl\IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
+      <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
@@ -982,7 +975,6 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
     <Compile Include="GeneralCustomControl\DecimalControl.xaml.cs">
       <DependentUpon>DecimalControl.xaml</DependentUpon>
@@ -994,7 +986,7 @@
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\HttpMethod.cs" />
-    <Compile Include="Service\MedBagSelectionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedBagSelectionWindow.xaml.cs">
       <DependentUpon>MedBagSelectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Database\MySQLConnection.cs" />
@@ -1452,6 +1444,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\INDEX\IndexView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1513,7 +1509,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Service\MedBagSelectionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\MedBagSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

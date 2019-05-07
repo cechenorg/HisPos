@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.CustomerHistory;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {

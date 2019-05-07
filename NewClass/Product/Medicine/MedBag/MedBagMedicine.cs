@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Product;
 using Microsoft.VisualBasic;
@@ -9,7 +10,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
 {
     public class MedBagMedicine
     {
-        public MedBagMedicine(MedicineNHI m, bool isSingle,int? medNo = null)
+        public MedBagMedicine(MedicineNHI m, bool isSingle)
         {
             Id = m.ID;
             if (isSingle)
@@ -20,15 +21,23 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = m.Days + "天";
-                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "用量:" + m.Dosage + "(  )";
+                Total = m.Amount.ToString();
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
+                else
+                {
+                    usagePrint += "(  )";
+                }
                 Usage = usagePrint;
                 Form = m.Form;
-                Total = m.Amount.ToString();
                 Note = m.Note;
             }
             else
             {
-                MedNo = ((int)medNo).ToString();
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
@@ -36,17 +45,20 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 MedicineDays = "共" + m.Days + "天";
                 Dosage = (Convert.ToDouble(m.Dosage)).ToString(CultureInfo.InvariantCulture);
                 Total = m.Days + "天" + m.Amount;
-                if (m.ID.EndsWith("00") || m.ID.EndsWith("G0"))
-                    Total += "顆";
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
                 else
                 {
-                    Total += "個";
+                    usagePrint += "(  )";
                 }
-                var usagePrint =  GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage + "( )";
                 Usage = usagePrint;
             }
         }
-        public MedBagMedicine(MedicineOTC m, bool isSingle, int? medNo = null)
+        public MedBagMedicine(MedicineOTC m, bool isSingle)
         {
             Id = m.ID;
             if (isSingle)
@@ -77,7 +89,6 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
-                MedNo = ((int)medNo).ToString();
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + string.Empty;
                 SideEffect = "副作用:" + string.Empty;
@@ -95,13 +106,8 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 {
                     Total = m.Amount.ToString();
                 }
-                
-                if (m.ID.EndsWith("00") || m.ID.EndsWith("G0"))
-                    Total += "顆";
-                else
-                {
-                    Total += "個";
-                }
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                    Total += "粒";
                 if (!string.IsNullOrEmpty(m.PositionID) && !string.IsNullOrEmpty(m.UsageName))
                 {
                     var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim();
@@ -116,7 +122,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
                 Note = string.Empty;
             }
         }
-        public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle, int? medNo = null)
+        public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle)
         {
             Id = m.ID;
             if (isSingle)
@@ -139,7 +145,6 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
-                MedNo = ((int)medNo).ToString();
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + string.Empty;
                 SideEffect = "副作用:" + string.Empty;
@@ -173,6 +178,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
         public string Usage { get; set; }
         public string Form { get; set; }
         public string Note { get; set; }
+        public int Order { get; set; }
         private string GetPositionPrintName(string mPosition)
         {
             var positionName = ViewModelMainWindow.GetPosition(mPosition).Name;
@@ -186,19 +192,18 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             usage = ViewModelMainWindow.GetUsage(usage.Name);
             if (usage.PrintName is null || string.IsNullOrEmpty(usage.PrintName)) return string.Empty;
             if (!usage.PrintName.Contains("(0)")) return usage.PrintName;
-            var match = usage.Reg.Match(usage.Name);
+            var match = Regex.Matches(usage.Name, @"\d+");
+            var replaceMatch = Regex.Matches(usage.PrintName, @"\(\d+\)");
             var print = string.Empty;
             var tempPrint = usage.PrintName;
-            var currentIndex = 0;
-            for (var i = 1; i < match.Groups.Count; i++)
+            var index = 0;
+            foreach (Match m in replaceMatch)
             {
-                var rightParenthesisIndex = tempPrint.IndexOf(")");
-                var replace = "(" + (i - 1) + ")";
-                print += usage.PrintName.Substring(currentIndex, rightParenthesisIndex + 1).Replace(replace, match.Groups[i].Value);
-                currentIndex += rightParenthesisIndex + 1;
-                tempPrint = usage.PrintName.Substring(currentIndex, (usage.PrintName.Length - currentIndex));
+                print = tempPrint.Replace(m.Value, match[index].Value);
+                tempPrint = print;
+                index++;
             }
-            return print + tempPrint;
+            return print;
         }
     }
 }

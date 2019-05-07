@@ -4,7 +4,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
-    public class MedicalPersonnels:Collection<MedicalPersonnel>
+    public class MedicalPersonnels:ObservableCollection<MedicalPersonnel>
     {
         public MedicalPersonnels(bool init)
         {
@@ -21,9 +21,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson
             }
         }
 
-        public void GetEnablePharmacist(DateTime start,DateTime end)
+        public void GetEnablePharmacist(DateTime selectedDate)
         {
-            var table = MedicalPersonnelDb.GetEnableMedicalPersonnels(start, end);
+            var table = MedicalPersonnelDb.GetEnableMedicalPersonnels(selectedDate);
             foreach (DataRow r in table.Rows)
             {
                 Add(new MedicalPersonnel(r));

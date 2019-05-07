@@ -84,7 +84,13 @@
                             <KeyBinding Command="{Binding SearchCustomerByConditions}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Image Width="30" Height="30" Source="/Images/User_48px.png" Margin="10,0,10,0"/>
+                    <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding ShowCustomerDetailCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Image>
                     <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
                              Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
@@ -168,8 +174,8 @@
                     <StackPanel Grid.Row="0" Grid.Column="4" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MedicalNumber" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="4"
-                              Text="{Binding CurrentPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="MedicalNumber_PreviewKeyDown"/>
+                              Text="{Binding CurrentPrescription.Treatment.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"
+                              InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="MedicalNumber_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
@@ -572,9 +578,8 @@
                             <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="10,0,10,0"/>
                             <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="18" FontFamily="Segoe UI SemiBold" HorizontalContentAlignment="Center"/>
                             <Button Content="代入" BorderBrush="Transparent" Background="DarkCyan" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Get"/>
+                            <Button Content="設定" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
                             <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
-                            <Button Content="編輯" BorderBrush="Transparent" Background="IndianRed" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
-                            <Button Content="刪除" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Delete"/>
                         </StackPanel>
                         <DataGrid x:Name="CusHistoryDetail" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
                                   ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"

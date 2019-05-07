@@ -146,6 +146,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
+        public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
         #endregion
         public Index() {
             InitStatusstring();
@@ -154,9 +155,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveMedicineSendCommand = new RelayCommand(ReserveMedicineSendAction);
             CommonMedStoreOrderCommand = new RelayCommand(CommonMedStoreOrderAction);
             StatusChangedCommand = new RelayCommand(StatusChangedAction);
+            ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
             ReserveSearchAction();
         }
         #region Action
+        private void ShowCustomerDetailWindowAction() {
+            if (IndexReserveSelectedItem is null) return; 
+            CustomerDetailWindow.CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow.CustomerDetailWindow(IndexReserveSelectedItem.CusId); 
+        }
         private void InitStatusstring() {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
             MedPrepareStatusString = new List<string>() { "未處理", "已備藥", "不備藥" };

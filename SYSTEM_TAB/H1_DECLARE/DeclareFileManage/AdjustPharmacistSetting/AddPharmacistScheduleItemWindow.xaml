@@ -4,19 +4,49 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         mc:Ignorable="d"
-        Title="新增藥師" Height="140" Width="350" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="新增藥師" Width="300" Height="350" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </Window.Resources>
+            <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0">
-            <Label Height="35" Margin="10" HorizontalAlignment="Left" Width="85" FontSize="18" Content="選擇藥師:" Style="{StaticResource BoldLabelContent16}"/>
-            <ComboBox Width="120" ItemsSource="{Binding MedicalPersonnels}" SelectedItem="{Binding SelectedMedicalPersonnel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="16" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <!--<StackPanel Orientation="Vertical" VerticalAlignment="Top" Grid.Row="0">
+            --><!--<ComboBox Width="120" ItemsSource="{Binding MedicalPersonnels}" SelectedItem="{Binding SelectedMedicalPersonnel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="16" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center"/>--><!--
+        </StackPanel>-->
+        <ListView Name="PharmacistList" SelectionMode="Multiple" Grid.Row="0" ItemsSource="{Binding MedicalPersonnels,UpdateSourceTrigger=PropertyChanged}" Height="auto" Background="{StaticResource GridBackGround}" Margin="10">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment"  Value="Stretch"/>
+                    <Setter Property="Width" Value="auto"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                    <GridView.Columns>
+                        <GridViewColumn Width="258">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="DimGray" BorderThickness="0,0,0,1" Margin="-6,-3" Background="{StaticResource GridBackGround}">
+                                        <TextBlock Text="{Binding Name}" Margin="6,3" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="1" Margin="0,0,0,0" HorizontalAlignment="Right">
-            <Button Margin="0,0,10,0" Width="80" VerticalAlignment="Bottom" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding Save}" Content="新增" FontSize="16" FontFamily="Segoe UI SemiBold"/>
+            <Button Margin="0,0,10,0" Width="80" VerticalAlignment="Bottom" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding Save}" CommandParameter="{Binding SelectedItems, ElementName=PharmacistList}" Content="新增" FontSize="16" FontFamily="Segoe UI SemiBold"/>
             <Button HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" Width="75" Background="DimGray" BorderBrush="DimGray" Command="{Binding Cancel}" Content="取消" FontSize="16" FontFamily="Segoe UI SemiBold"/>
         </StackPanel>
     </Grid>

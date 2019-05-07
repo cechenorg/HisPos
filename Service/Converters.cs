@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 
 namespace His_Pos.Service
 {
@@ -29,83 +26,6 @@ namespace His_Pos.Service
             }
 
             return value;
-        }
-    }
-
-    public class TextBoxDateConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DateTime dateValue;
-            if (DateTime.TryParse(value.ToString(), out dateValue))
-            {
-                return dateValue.AddYears(-1911).ToString("yyyy/MM/dd").Substring(1, 9);
-            }
-
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            DateTime dateValue;
-            var tempvalue = value;
-            if (tempvalue.ToString().Length >= 7)
-            {
-                switch (tempvalue.ToString().Substring(0, 1))
-                {
-                    case "1":
-                        if (!tempvalue.ToString().Contains("/"))
-                            tempvalue = Int32.Parse(tempvalue.ToString()) + 19110000;
-                        break;
-
-                    case "2":
-                        break;
-
-                    default:
-                        return value;
-                }
-
-                tempvalue = tempvalue.ToString().Insert(6, "/");
-                tempvalue = tempvalue.ToString().Insert(4, "/");
-            }
-
-            if (tempvalue.ToString().Length == 10 && DateTime.TryParse(tempvalue.ToString(), out dateValue))
-            {
-                return tempvalue;
-            }
-
-            return value;
-        }
-    }
-
-    public class AutoCompleteIsEnableConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is null || value.ToString().Equals("")) return true;
-            return false;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return "";
-        }
-    }
-
-    public class TaiwanCalenderConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var result = string.Empty;
-            if (string.IsNullOrEmpty(value.ToString())) return result;
-            result = (int.Parse(value.ToString().Split('/')[0]) - 1911) + "/" + value.ToString().Split('/')[1] + "/" +
-                     value.ToString().Split('/')[2].Substring(0, 2);
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return string.Empty;
         }
     }
 
@@ -233,80 +153,6 @@ namespace His_Pos.Service
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return null;
-        }
-    }
-
-    public class NullTextBoxConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value == null ? string.Empty : String.Format(culture, "{0}", value);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return string.IsNullOrEmpty(String.Format(culture, "{0}", value)) ? null : value;
-        }
-    }
-
-    public class BrushColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if ((bool) value)
-            {
-                {
-                    return new SolidColorBrush(Colors.DarkSeaGreen);
-                    ;
-                }
-            }
-
-            return new SolidColorBrush(Colors.Transparent);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class DivisionConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string divisionName = "";
-            foreach (var d in ViewModelMainWindow.Divisions)
-            {
-                if (d.ID.Equals(value))
-                    divisionName = d.Name;
-            }
-
-            return divisionName;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ReleaseInsConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string institutionName = "";
-            foreach (var d in ViewModelMainWindow.Institutions)
-            {
-                if (d.ID.Equals(value))
-                    institutionName = d.Name;
-            }
-
-            return institutionName;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -462,21 +308,6 @@ namespace His_Pos.Service
         }
     }
 
-    [ValueConversion(typeof(bool), typeof(string))]
-    public class IsGetCardConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var isGetCard = (bool) value;
-            return isGetCard ? "已過卡" : "未過卡";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class IsMedicineEditable : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -570,29 +401,6 @@ namespace His_Pos.Service
         }
     }
 
-    [ValueConversion(typeof(bool), typeof(bool))]
-    public class InverseBooleanConverter : IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
-        {
-            if (targetType != typeof(bool))
-                throw new InvalidOperationException("The target must be a boolean");
-
-            return !(bool) value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-
-        #endregion
-    }
-
     [ValueConversion(typeof(int), typeof(string))]
     public class NullableIntConverter : IValueConverter
     {
@@ -684,6 +492,23 @@ namespace His_Pos.Service
             var dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
             dt.Calendar = new GregorianCalendar();
             return dt;
+        }
+    }
+
+    public class BoolToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return new SolidColorBrush(Color.FromRgb(251,60,78));
+            }
+            return new SolidColorBrush(Color.FromArgb(255,66,64,64));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

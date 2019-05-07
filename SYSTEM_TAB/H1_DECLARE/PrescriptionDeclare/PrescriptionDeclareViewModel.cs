@@ -53,6 +53,7 @@ using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
+using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 
 // ReSharper disable InconsistentNaming
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
@@ -286,6 +287,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand SelfPayTextChanged { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
+        public RelayCommand ShowCustomerDetailCommand { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -363,6 +365,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescribeButtonClick = new RelayCommand(PrescribeButtonClickAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
+            ShowCustomerDetailCommand = new RelayCommand(ShowCustomerDetailAction);
         }
         private void InitialPrescription(bool setPharmacist)
         {
@@ -468,22 +471,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainWindow.ServerConnection.CloseConnection();
                     CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
                     break;
-                case "Delete":
-                    var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:"+ CurrentSet.Name,"");
-                    Debug.Assert(deleteConfirm.DialogResult != null, "deleteConfirm.DialogResult != null");
-                    if ((bool)deleteConfirm.DialogResult)
-                    {
-                        MainWindow.ServerConnection.OpenConnection();
-                        MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
-                        MedicineSets = new MedicineSets();
-                        MainWindow.ServerConnection.CloseConnection();
-                        MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
-                    }
-                    break;
             }
         }
         #endregion
         #region Actions
+        private void ShowCustomerDetailAction() {
+            if (CurrentPrescription.Patient.ID == -1) return;
+            CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
+        }
         private void SearchCusAction(object sender)
         {
             customPresChecked = false;
@@ -1219,7 +1214,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CurrentPrescription.Treatment.GetLastMedicalNumber();
                         MainWindow.ServerConnection.OpenConnection();
                         CurrentPrescription.Patient.GetHistories();
                         MainWindow.ServerConnection.CloseConnection();

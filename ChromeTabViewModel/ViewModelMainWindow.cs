@@ -275,7 +275,9 @@ namespace His_Pos.ChromeTabViewModel
                 foreach (var r in resultList)
                 {
                     var re = r.DeepCloneViaJson();
-                    result.Name += re.Name; 
+                    //result.Name += re.Name; 
+                    result = re;
+                    result.Name = name;
                 }
                 if (name.Contains("AC") || name.Contains("PC"))
                 {
@@ -314,6 +316,11 @@ namespace His_Pos.ChromeTabViewModel
         public static MedicalPersonnel GetMedicalPersonByID(int id)
         {
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
+            return result;
+        }
+        public static MedicalPersonnel GetMedicalPersonByIDNumber(string idNum)
+        {
+            var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
             return result;
         }
         public void StartPrintMedBag(ReportViewer r)
