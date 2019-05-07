@@ -70,9 +70,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         }
         private void Setcps(DataGrid d) {
             if (((Prescription)d.SelectedItem).Source == PrescriptionSource.Cooperative)
-                cps = new CustomPrescriptionStruct(0, ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
+                cps = new CustomPrescriptionStruct(0, ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark, ((Prescription)d.SelectedItem).Medicines);
             else if (((Prescription)d.SelectedItem).Source == PrescriptionSource.XmlOfPrescription)
-                cps = new CustomPrescriptionStruct(int.Parse(((Prescription)d.SelectedItem).SourceId), ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark);
+                cps = new CustomPrescriptionStruct(int.Parse(((Prescription)d.SelectedItem).SourceId), ((Prescription)d.SelectedItem).Source, ((Prescription)d.SelectedItem).Remark, ((Prescription)d.SelectedItem).Medicines);
              
         }
         private void CustomPrescriptionWindow_OnClosing(object sender, CancelEventArgs e)

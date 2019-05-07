@@ -30,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand Save { get; set; }
+        public RelayCommand Delete { get; set; }
         public RelayCommand Cancel { get; set; }
         #endregion
         public MedicineSetViewModel(MedicineSetMode mode, MedicineSet selected = null)
@@ -51,8 +52,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             Save = new RelayCommand(SaveAction);
+            Delete = new RelayCommand(DeleteAction);
             Cancel = new RelayCommand(CancelAction);
         }
+
         #region CommandActions
         private void AddMedicineAction(string medicineID)
         {
@@ -105,6 +108,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (msg.Notification != nameof(MedicineSetViewModel)) return;
             Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             CurrentSet.AddMedicine(msg.Content);
+        }
+        private void DeleteAction()
+        {
+            var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:" + CurrentSet.Name, "");
+            Debug.Assert(deleteConfirm.DialogResult != null, "deleteConfirm.DialogResult != null");
+            if ((bool)deleteConfirm.DialogResult)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
+                MainWindow.ServerConnection.CloseConnection();
+                MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
+            }
         }
         #endregion
         #region Functions

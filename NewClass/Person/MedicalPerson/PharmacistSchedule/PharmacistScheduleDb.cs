@@ -9,14 +9,6 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public static class PharmacistScheduleDb
     {
-        public static DataTable InsertEmployeeSchedule(DateTime start, DateTime end,PharmacistSchedule schedule)
-        {
-            var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "START", start);
-            DataBaseFunction.AddSqlParameter(parameterList, "END", end);
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertEmployeeSchedule]", parameterList);
-        }
-
         public static DataTable GetEmployeeSchedule(DateTime start, DateTime end)
         {
             var parameterList = new List<SqlParameter>();
@@ -39,7 +31,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         public static DataTable ScheduleTable() {
             DataTable masterTable = new DataTable(); 
             masterTable.Columns.Add("Emp_ID", typeof(int));
-            masterTable.Columns.Add("Sch_Date", typeof(DateTime)); 
+            masterTable.Columns.Add("Sch_Date", typeof(DateTime));
+            masterTable.Columns.Add("Register_Time", typeof(DateTime));
             return masterTable;
         }
         public static DataTable SetScheduleTable(PharmacistSchedule schedule) {
@@ -49,6 +42,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 DataRow newRow = scheduleTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "Emp_ID", s.MedicalPersonnel.ID);
                 DataBaseFunction.AddColumnValue(newRow, "Sch_Date", s.Date);
+                DataBaseFunction.AddColumnValue(newRow, "Register_Time", s.RegisterTime);
                 scheduleTable.Rows.Add(newRow);
             } 
             return scheduleTable;

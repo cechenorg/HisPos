@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         {
             MedicalPersonnel = new DeclareMedicalPersonnel(r);
             Date = r.Field<DateTime>("SchTemp_Date");
+            RegisterTime = r.Field<DateTime>("SchTemp_RegisterTime");
         }
 
         private DeclareMedicalPersonnel medicalPersonnel;
@@ -31,6 +32,16 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             set
             {
                 Set(() => Date, ref date, value);
+            }
+        }
+
+        private DateTime registerTime;
+        public DateTime RegisterTime
+        {
+            get => registerTime;
+            set
+            {
+                Set(() => RegisterTime, ref registerTime, value);
             }
         }
     }

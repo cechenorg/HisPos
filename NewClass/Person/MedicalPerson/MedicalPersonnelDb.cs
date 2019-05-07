@@ -13,11 +13,10 @@ namespace His_Pos.NewClass.Person.MedicalPerson
            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicalPersonnels]");
         }
 
-        public static DataTable GetEnableMedicalPersonnels(DateTime start, DateTime end)
+        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "StartDate", start);
-            DataBaseFunction.AddSqlParameter(parameterList, "EndDate", end);
+            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
         }
     }

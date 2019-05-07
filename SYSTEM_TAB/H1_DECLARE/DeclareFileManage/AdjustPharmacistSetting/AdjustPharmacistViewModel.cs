@@ -9,12 +9,30 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.Properties;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
-    public class AdjustPharmacistViewModel : ViewModelBase, INotifyPropertyChanged
+    public class AdjustPharmacistViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         private MonthViewCalendar monthViewCalendar;
         public MonthViewCalendar MonthViewCalendar
         {
@@ -45,12 +63,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             }
         }
         public string DeclareMonth => (CurrentDate.Year - 1911) + "年" + CurrentDate.Month + "月";
-        public string SelectedDateStr => MySelectedDate.Month + "/" + MySelectedDate.Day;
+        public string SelectedDateStr => ((DateTime)MySelectedDate).Month + "/" + ((DateTime)MySelectedDate).Day;
         public static DateTime CurrentDate { get; set; }
         private static DateTime first { get; set; }
         private static DateTime last { get; set; }
-        private DateTime _selectedDate;
-        public DateTime MySelectedDate
+        private DateTime? _selectedDate;
+        public DateTime? MySelectedDate
         {
             get => _selectedDate;
             set
@@ -86,6 +104,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         }
         private bool IsEdit { get; set; }
         #region Commands
+        public RelayCommand AddAllPharmacists { get; set; }
         public RelayCommand DeletePharmacistScheduleItem { get; set; }
         public RelayCommand AddPharmacistScheduleItem { get; set; }
         public RelayCommand SavePharmacistScheduleItem { get; set; }
@@ -93,7 +112,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
         #endregion
 
-        public static MedicalPersonnels MedicalPersonnels { get; set; }
         public AdjustPharmacistViewModel(DateTime declare)
         {
             InitialVariables(declare);
@@ -107,20 +125,60 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             MyDisplayDate = declare;
             first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
             last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
-            MedicalPersonnels = new MedicalPersonnels(false);
-            MainWindow.ServerConnection.OpenConnection();
-            MedicalPersonnels.GetEnablePharmacist(first, last);
-            PharmacistSchedule.GetPharmacistSchedule(first,last);
-            MainWindow.ServerConnection.CloseConnection();
-            MonthViewCalendar = new MonthViewCalendar(declare);
+            MonthViewCalendar = new MonthViewCalendar(MyDisplayDate);
+            InitItemsSource();
+        }
+
+        private void InitItemsSource()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "取得調整設定...";
+                MainWindow.ServerConnection.OpenConnection();
+                PharmacistSchedule.GetPharmacistSchedule(first, last);
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void InitialCommands()
         {
+            AddAllPharmacists = new RelayCommand(AddAllPharmacistsAction);
             DeletePharmacistScheduleItem = new RelayCommand(DeletePharmacistScheduleItemAction);
             AddPharmacistScheduleItem = new RelayCommand(AddPharmacistScheduleItemAction);
             SavePharmacistScheduleItem = new RelayCommand(SavePharmacistScheduleItemAction);
             Close = new RelayCommand(CloseAction);
+        }
+
+        private void AddAllPharmacistsAction()
+        {
+            if (MySelectedDate == null)
+            {
+                MessageWindow.ShowMessage("請選擇欲新增日期",MessageType.WARNING);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var tempPharmacistList = new MedicalPersonnels(false);
+            tempPharmacistList.GetEnablePharmacist((DateTime)MySelectedDate);
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (var pharmacist in tempPharmacistList)
+            {
+                var item = new PharmacistScheduleItem
+                {
+                    Date = (DateTime)MySelectedDate,
+                    MedicalPersonnel = new DeclareMedicalPersonnel(pharmacist),
+                    RegisterTime = DateTime.Now
+                };
+                PharmacistSchedule.Add(item);
+            }
+            RaisePropertyChanged(nameof(PharmacistSchedule));
+            IsEdit = true;
         }
 
         private void DeletePharmacistScheduleItemAction()
@@ -137,7 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             if ((bool) delete.DialogResult)
             {
                 PharmacistSchedule.Remove(SelectedPharmacistScheduleItem);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
+                RaisePropertyChanged(nameof(PharmacistSchedule));
                 IsEdit = true;
             }
         }
@@ -154,22 +212,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                         return;
                     }
 
-                    if (pharmacistScheduleItem.MedicalPersonnel.StartDate != null && pharmacistScheduleItem.MedicalPersonnel.StartDate > MySelectedDate)
-                    {
-                        MessageWindow.ShowMessage("藥師 : " + pharmacistScheduleItem.MedicalPersonnel.Name + "於此日期未到職", MessageType.ERROR);
-                        return;
-                    }
-
-                    if(pharmacistScheduleItem.MedicalPersonnel.LeaveDate != null && pharmacistScheduleItem.MedicalPersonnel.LeaveDate < MySelectedDate)
-                    {
-                        MessageWindow.ShowMessage("藥師 : " + pharmacistScheduleItem.MedicalPersonnel.Name + "於此日期已離職", MessageType.ERROR);
-                        return;
-                    }
-
                     PharmacistSchedule.Add(pharmacistScheduleItem);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PharmacistSchedule"));
+                    RaisePropertyChanged(nameof(PharmacistSchedule));
                     IsEdit = true;
-                }, MySelectedDate
+                }, (DateTime)MySelectedDate
             );
             addPharmacistScheduleItemWindow.Show();
         }
@@ -177,6 +223,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         private void SavePharmacistScheduleItemAction()
         {
             PharmacistSchedule.SaveSchedule(first,last);
+            InitItemsSource();
         }
 
         private void CloseAction()

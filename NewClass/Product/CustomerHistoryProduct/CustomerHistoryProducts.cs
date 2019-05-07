@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Class;
-using His_Pos.Class.Declare;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.NewClass.Product.CustomerHistoryProduct

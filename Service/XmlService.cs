@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -38,7 +39,7 @@ namespace His_Pos.Service
                 using (var writer = XmlWriter.Create(stringWriter))
                 {
                     xmlserializer.Serialize(writer, value);
-                    var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
+                    var document = XDocument.Parse(PrettyXml(stringWriter));
                     document.Descendants()
                         .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
                         .Remove();
@@ -61,7 +62,7 @@ namespace His_Pos.Service
                 using (var writer = XmlWriter.Create(stringWriter))
                 {
                     xmlserializer.Serialize(writer, value);
-                    var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
+                    var document = XDocument.Parse(PrettyXml(stringWriter));
                     document.Descendants()
                         .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
                         .Remove();
@@ -78,7 +79,7 @@ namespace His_Pos.Service
         public static string SerializeDailyUploadObject<T>(this T value)
         {
             if (value == null)
-                return String.Empty;
+                return string.Empty;
             try
             {
                 var xmlserializer = new XmlSerializer(value.GetType());
@@ -86,7 +87,7 @@ namespace His_Pos.Service
                 using (var writer = XmlWriter.Create(stringWriter))
                 {
                     xmlserializer.Serialize(writer, value);
-                    var document = XDocument.Parse(ReportService.PrettyXml(stringWriter));
+                    var document = XDocument.Parse(PrettyXml(stringWriter));
                     document.Root?.RemoveAttributes();
                     return document.ToString().Replace("<A18/>", "<A18></A18>").Replace("<A18 />", "<A18></A18>");
                 }
@@ -105,6 +106,25 @@ namespace His_Pos.Service
                 xmlDocument.Load(xmlReader);
             }
             return xmlDocument;
+        }
+
+        public static string PrettyXml(StringWriter writer)
+        {
+            var stringBuilder = new StringBuilder();
+            var element = XElement.Parse(writer.ToString());
+
+            var settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = true
+            };
+
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            {
+                element.Save(xmlWriter);
+            }
+            return stringBuilder.ToString();
         }
     }
 }

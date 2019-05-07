@@ -72,27 +72,6 @@ namespace His_Pos.Service
             return reply;
         } //GetEnumDescription
 
-        public string dateFormatConvert(DateTime selectedDate)
-        {
-            string month;
-            if (selectedDate.Month < 10)
-                month = "0" + selectedDate.Month;
-            else
-            {
-                month = selectedDate.Month.ToString();
-            }
-            string day;
-            if (selectedDate.Day < 10)
-                day = "0" + selectedDate.Day;
-            else
-            {
-                day = selectedDate.Day.ToString();
-            }
-
-            string date = (int.Parse(selectedDate.Year.ToString()) - 1911) + month + day;
-            return date;
-        }
-        
         public static string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
@@ -114,14 +93,16 @@ namespace His_Pos.Service
                 path_file +=  year + month + day;
             if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
-            xml.Declaration = new XDeclaration("1.0","Big5","no");
+            xml.Declaration = new XDeclaration("1.0", "Big5", string.Empty);
             var settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = Encoding.GetEncoding(950);
-            settings.OmitXmlDeclaration = true;
+            settings.OmitXmlDeclaration = false;
             var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();
+            string info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
+            File.WriteAllText(path_file + ".xml", info.Replace("big5", "Big5"), Encoding.GetEncoding(950));
             //壓縮XML
             if (File.Exists(path_file + ".zip")) File.Delete(path_file + ".zip");
             var psi = new Process();
@@ -133,65 +114,7 @@ namespace His_Pos.Service
             psi.WaitForExit();
             return path_file;
         }
-
-        /*
-         * 判斷輸入是否為數字
-         */
-        public static bool IsNumeric(string input)
-        {
-            try
-            {
-                var i = Convert.ToInt32(input);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        /*
-         * 判斷輸入空值
-         */
-        public static string CheckEmptyInput(string input, string message)
-        {
-            return input == string.Empty ? message : string.Empty;
-        }
-
-        public string ToInvCulture(double value)
-        {
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public string SetStrFormat(double value, string format)
-        {
-            return string.Format(format, value);
-        }
-
-        public string SetStrFormatInt(int value, string format)
-        {
-            return string.Format(format, value);
-        }
-
-        public string XmlTagCreator(string tagName, string value)
-        {
-            return "<" + tagName + ">" + value + "</" + tagName + ">";
-        }
-        /*
-         * 取得xml node資料
-         */
-        public string GetXmlNodeData(XmlDocument xml, string node)
-        {
-            return xml.SelectSingleNode(node)?.InnerText;
-        }
-        /*
-         * 取得Procedure資料並以DataTable回傳
-         */
-        public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
-        {
-            return null;
-           ///var conn = new DatabaseConnection(Settings.Default.SQL_local);
-           ///return conn.ExecuteProc(procName, param);
-        }
+       
         public string HttpGetJson(string url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = WebRequestMethods.Http.Get;

@@ -471,18 +471,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainWindow.ServerConnection.CloseConnection();
                     CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
                     break;
-                case "Delete":
-                    var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:"+ CurrentSet.Name,"");
-                    Debug.Assert(deleteConfirm.DialogResult != null, "deleteConfirm.DialogResult != null");
-                    if ((bool)deleteConfirm.DialogResult)
-                    {
-                        MainWindow.ServerConnection.OpenConnection();
-                        MedicineSetDb.DeleteMedicineSet(CurrentSet.ID);
-                        MedicineSets = new MedicineSets();
-                        MainWindow.ServerConnection.CloseConnection();
-                        MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
-                    }
-                    break;
             }
         }
         #endregion
@@ -1226,7 +1214,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CurrentPrescription.Treatment.GetLastMedicalNumber();
                         MainWindow.ServerConnection.OpenConnection();
                         CurrentPrescription.Patient.GetHistories();
                         MainWindow.ServerConnection.CloseConnection();
