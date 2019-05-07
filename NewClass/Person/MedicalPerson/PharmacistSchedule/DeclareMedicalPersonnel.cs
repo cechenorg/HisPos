@@ -12,9 +12,6 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             PrescriptionCount = null;
             StartDate = selectedMedicalPersonnel.StartDate;
             LeaveDate = selectedMedicalPersonnel.LeaveDate;
-            //StartDate = r.Field<DateTime>("Emp_StartDate");
-            //LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
-            //PrescriptionCount = r.Field<int>("");
         }
 
         public DeclareMedicalPersonnel(DataRow r) : base(r)
@@ -28,17 +25,6 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             set
             {
                 Set(() => PrescriptionCount, ref prescriptionCount, value);
-            }
-        }
-        public string Content
-        {
-            get
-            {
-                if (PrescriptionCount is null)
-                {
-                    return Name;
-                }
-                return Name + " 處方張數:" + PrescriptionCount;
             }
         }
     }

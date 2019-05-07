@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
@@ -93,6 +96,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             }
         }
         public DeclarePrescriptions PresOfDay { get; set; }
+
+        private DeclareMedicalPersonnels declarePharmacists;
+        public DeclareMedicalPersonnels DeclarePharmacists
+        {
+            get => declarePharmacists;
+            set
+            {
+                Set(() => DeclarePharmacists, ref declarePharmacists, value);
+            }
+        }
         private bool isAdjustOutOfRange;
 
         public bool IsAdjustOutOfRange
@@ -140,6 +153,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             DeclareCount = PresOfDay.Count(p => p.IsDeclare);
             NotDeclareCount = PresOfDay.Count(p => !p.IsDeclare);
             CheckAdjustOutOfRange();
+            CountPharmacistsPrescription();
         }
 
         public void CheckNotDeclareCount()
@@ -158,6 +172,22 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
                     break;
                 }
                 IsAdjustOutOfRange = false;
+            }
+        }
+
+        public void CountPharmacistsPrescription()
+        {
+            DeclarePharmacists = new DeclareMedicalPersonnels();
+            var tempList = new DeclareMedicalPersonnels();
+            foreach (var g in PresOfDay.GroupBy(p => p.Pharmacist.ID))
+            {
+                var m = ViewModelMainWindow.GetMedicalPersonByID(g.Key);
+                var pharmacist = new DeclareMedicalPersonnel(m) {PrescriptionCount = g.Count()};
+                tempList.Add(pharmacist);
+            }
+            foreach (var pharmacist in tempList.OrderBy(p => p.Name))
+            {
+                DeclarePharmacists.Add(pharmacist);
             }
         }
     }

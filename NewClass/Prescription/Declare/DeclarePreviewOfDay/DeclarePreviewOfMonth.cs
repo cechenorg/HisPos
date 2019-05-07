@@ -108,11 +108,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
         }
         public DateTime DeclareDate { get; set; }
 
-        internal void GetSearchPrescriptions(DateTime sDate, DateTime eDate)
+        internal void GetSearchPrescriptions(DateTime sDate, DateTime eDate,string pharmacyID)
         {
             DeclarePreviews = new ObservableCollection<DeclarePreviewOfDay>();
             DeclarePres = new DeclarePrescriptions();
-            DeclarePres.GetSearchPrescriptions(sDate, eDate);
+            DeclarePres.GetSearchPrescriptions(sDate, eDate, pharmacyID);
             foreach (var pres in DeclarePres.OrderBy(p => p.AdjustDate).GroupBy(p => p.AdjustDate)
                 .Select(grp => grp.ToList()).ToList())
             {

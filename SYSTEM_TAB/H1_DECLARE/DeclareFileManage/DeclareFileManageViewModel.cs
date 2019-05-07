@@ -86,15 +86,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => EndDay, ref endDay, value);
             }
         }
-        private DeclarePrescriptions editedList;
-        public DeclarePrescriptions EditedList
-        {
-            get => editedList;
-            set
-            {
-                Set(() => EditedList, ref editedList, value);
-            }
-        }
 
         private DeclarePharmacies declarePharmacies;
 
@@ -153,7 +144,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
             StartDay = 1;
             EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
-            EditedList = new DeclarePrescriptions();
             GetPharmacistSchedule();
         }
         private void InitialCommands()
@@ -218,7 +208,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MainWindow.ServerConnection.OpenConnection();
             DeclareFile.SelectedDayPreview.PresOfDay.AdjustPharmacist(GetAdjustPharmacist(false));
             MainWindow.ServerConnection.CloseConnection();
-            
+            foreach (var pre in DeclareFile.DeclarePreviews)
+            {
+                pre.CheckAdjustOutOfRange();
+            }
+            DeclareFile.SetSummary();
         }
 
         private void AdjustPharmacistOfMonthAction()
@@ -284,8 +278,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void AddToEditListAction()
         {
-            EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
-            Console.WriteLine(DeclareFile.DeclarePres.Single(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare);
             SetDecFilePreViewSummaryAction();
             DeclareFile.SelectedDayPreview.CheckNotDeclareCount();
         }
@@ -297,7 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 EndDay = end;
             var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
             var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
-            DeclareFile.GetSearchPrescriptions(sDate, eDate);
+            DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDate;
             //DecFilePreViews.Clear();

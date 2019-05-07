@@ -13,7 +13,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
     {
         private Action<PharmacistScheduleItem> saveCallback;
         private DateTime selectedDate;
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        private MedicalPersonnels medicalPersonnels;
+        public MedicalPersonnels MedicalPersonnels
+        {
+            get => medicalPersonnels;
+            set
+            {
+                Set(() => MedicalPersonnels, ref medicalPersonnels, value);
+            }
+        }
         private MedicalPersonnel selectedMedicalPersonnel;
         public MedicalPersonnel SelectedMedicalPersonnel
         {

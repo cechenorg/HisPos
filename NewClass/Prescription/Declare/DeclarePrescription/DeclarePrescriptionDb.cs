@@ -8,11 +8,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 {
     public class DeclarePrescriptionDb
     {
-        public static DataTable GetDeclarePrescriptionsByMonthRange(DateTime start,DateTime end)
+        public static DataTable GetDeclarePrescriptionsByMonthRange(DateTime start,DateTime end, string pharmacyID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", start);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", end);
+            DataBaseFunction.AddSqlParameter(parameterList, "pharmacyID", pharmacyID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[DeclarePrescriptionsByMonthRange]", parameterList);
         }
         public static void UpdateDeclareFileID(int fileID,List<int> preIDList)

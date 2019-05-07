@@ -21,9 +21,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 
         }
 
-        public void GetSearchPrescriptions(DateTime decStart, DateTime decEnd)
+        public void GetSearchPrescriptions(DateTime decStart, DateTime decEnd, string pharmacyID)
         {
-            var table = DeclarePrescriptionDb.GetDeclarePrescriptionsByMonthRange(decStart, decEnd);
+            var table = DeclarePrescriptionDb.GetDeclarePrescriptionsByMonthRange(decStart, decEnd, pharmacyID);
             foreach (DataRow r in table.Rows)
             {
                 Add(new DeclarePrescription(r));

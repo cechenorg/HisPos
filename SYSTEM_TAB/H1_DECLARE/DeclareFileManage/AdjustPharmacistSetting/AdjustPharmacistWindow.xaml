@@ -241,7 +241,7 @@
                                     </ListBox.ItemsSource>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Left" Text="{Binding MedicalPersonnel.Content}"/>
+                                            <TextBlock HorizontalAlignment="Left" Text="{Binding MedicalPersonnel.Name}"/>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
