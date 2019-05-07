@@ -169,8 +169,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續",MessageType.WARNING);
                 }
             }
-            AdjustMedicalService();
-            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
         }
 
         public IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)

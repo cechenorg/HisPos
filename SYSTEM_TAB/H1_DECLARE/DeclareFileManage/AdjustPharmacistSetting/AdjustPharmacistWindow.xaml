@@ -304,8 +304,9 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <Button Grid.Row="0" Command="{Binding DeletePharmacistScheduleItem}" Content="刪除" HorizontalAlignment="Right" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
-        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}">
+        <Button Grid.Row="0" Command="{Binding AddAllPharmacists}" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="加入全部" HorizontalAlignment="Right" Margin="0,0,100,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="110"/>
+        <Button Grid.Row="0" Command="{Binding DeletePharmacistScheduleItem}" Content="刪除" HorizontalAlignment="Right" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80" />
+        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}" MouseLeave="MonthViewCalendar_MouseLeave">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction

@@ -918,6 +918,14 @@ namespace His_Pos.NewClass.Prescription
             return table;
         }
         #endregion
-         
+
+        public static DataTable GetNotAdjustPrescriptionCount(DateTime start, DateTime end, string pharmacyId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", start);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", end);
+            DataBaseFunction.AddSqlParameter(parameterList, "pharmacyID", pharmacyId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[NotAdjustCount]", parameterList);
+        }
     }
 }

@@ -1207,7 +1207,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CanAdjust = true;
                     if (isGetCard)
                     {
-                        CurrentPrescription.Treatment.GetLastMedicalNumber();
                         MainWindow.ServerConnection.OpenConnection();
                         CurrentPrescription.Patient.GetHistories();
                         MainWindow.ServerConnection.CloseConnection();

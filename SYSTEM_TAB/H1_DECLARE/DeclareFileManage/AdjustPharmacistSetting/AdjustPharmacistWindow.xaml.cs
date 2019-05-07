@@ -35,5 +35,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             ShowDialog();
             UpdateLayout();
         }
+
+        private void MonthViewCalendar_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
     }
 }
