@@ -1037,12 +1037,10 @@
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControl.xaml.cs">
       <DependentUpon>PrinterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindow.xaml.cs">
-      <DependentUpon>SettingWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControlViewModel.cs" />
     <Compile Include="ChromeTabViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\IChromeTabViewModel.cs" />
     <Compile Include="ChromeTabViewModel\MainViewModel.cs" />
@@ -1541,13 +1539,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControl.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\SETTINGS\SettingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingWindowView.xaml">
       <SubType>Designer</SubType>

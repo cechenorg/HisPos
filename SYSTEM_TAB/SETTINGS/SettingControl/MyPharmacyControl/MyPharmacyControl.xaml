@@ -82,7 +82,7 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <ContentControl Margin="85,0,0,0">
+                    <ContentControl Margin="70,0,0,0">
                         <ContentControl.Style>
                             <Style TargetType="{x:Type ContentControl}">
                                 <Setter Property="ContentTemplate" Value="{StaticResource DataNotChanged}" />

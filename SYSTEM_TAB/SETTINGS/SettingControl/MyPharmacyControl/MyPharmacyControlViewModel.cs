@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -79,6 +80,24 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
             Properties.Settings.Default.Save();
 
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string leftLines = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                leftLines = fileReader.ReadLine() + "\r\n";
+                leftLines += fileReader.ReadLine() + "\r\n";
+                leftLines += fileReader.ReadLine() + "\r\n";
+                leftLines += fileReader.ReadLine();
+            }
+
+            using (TextWriter fileWriter = new StreamWriter(filePath, false))
+            {
+                fileWriter.WriteLine(leftLines);
+                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
+            }
+
             IsDataChanged = false;
         }
         private void CancelChangeAction()
@@ -116,13 +135,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         #region ----- Define Functions -----
         private void RegisterCommands()
         {
-            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsMedicineDataChanged);
-            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsMedicineDataChanged);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsPharmacyDataChanged);
+            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsPharmacyDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);
             VerifyHPCPinCommand = new RelayCommand(VerifyHPCPinAction);
             VerifySAMDCCommand = new RelayCommand(VerifySAMDCAction);
         }
-        private bool IsMedicineDataChanged()
+        private bool IsPharmacyDataChanged()
         {
             return IsDataChanged;
         }

@@ -7,6 +7,7 @@
         xmlns:cooperativeClinicControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
         xmlns:settingControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl"
         xmlns:myPharmacyControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
+        xmlns:printerControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
         mc:Ignorable="d"
         Title="設定" Height="600" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
@@ -22,7 +23,7 @@
             <myPharmacyControl:MyPharmacyControl/>
         </DataTemplate>
         <DataTemplate x:Key="Printer">
-            <settingControl:PrinterControl/>
+            <printerControl:PrinterControl/>
         </DataTemplate>
         <DataTemplate x:Key="CooperativeClinic">
             <cooperativeClinicControl:CooperativeClinicControl/>

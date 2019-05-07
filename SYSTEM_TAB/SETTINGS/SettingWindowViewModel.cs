@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -30,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         public SettingWindowViewModel()
         {
             InitSettingCollections();
+            InitSettingDatas();
 
             Version = "系統版本  " + Assembly.GetExecutingAssembly().GetName().Version;
         }
@@ -47,6 +50,34 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             SettingTabCollection.Add(new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"));
 
             SelectedSettingTab = SettingTabCollection[0];
+        }
+
+        private void InitSettingDatas()
+        {
+            Regex medReg = new Regex(@"M (.*)");
+            Regex recReg = new Regex(@"Rc (.*)");
+            Regex repReg = new Regex(@"Rp (.*)");
+
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                fileReader.ReadLine();
+
+                string newLine = fileReader.ReadLine();
+                Match match = medReg.Match(newLine);
+                Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
+
+                newLine = fileReader.ReadLine();
+                match = recReg.Match(newLine);
+                Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+
+                newLine = fileReader.ReadLine();
+                match = repReg.Match(newLine);
+                Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
+
+                Properties.Settings.Default.Save();
+            }
         }
         #endregion
     }
