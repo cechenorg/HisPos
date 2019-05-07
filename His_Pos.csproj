@@ -495,6 +495,9 @@
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
+    <Compile Include="NewClass\Setting\SettingTabData.cs" />
+    <Compile Include="NewClass\Setting\SettingTabDatas.cs" />
+    <Compile Include="NewClass\Setting\SettingTabs.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
@@ -1030,9 +1033,10 @@
       <DependentUpon>CooperativeClinicControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControl.xaml.cs">
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml.cs">
       <DependentUpon>PrinterControl.xaml</DependentUpon>
     </Compile>
@@ -1048,6 +1052,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindowView.xaml.cs">
+      <DependentUpon>SettingWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindowViewModel.cs" />
     <Page Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1529,9 +1537,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControl.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -1540,6 +1548,10 @@
     <Page Include="SYSTEM_TAB\SETTINGS\SettingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -1564,6 +1576,9 @@
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
     <Content Include="CsHis.dll" />
+    <Resource Include="Images\clinic.png" />
+    <Resource Include="Images\pharmacy.png" />
+    <Resource Include="Images\Cooperate.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -34,7 +34,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         }
 
         private PrinterControl printerControl; 
-        private MyPharmacyControl myPharmacyControl;
         private CooperativeClinicControl cooperativeClinicControl;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -66,7 +65,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         private void InitControls()
         {
             printerControl = new PrinterControl(); 
-            myPharmacyControl = new MyPharmacyControl();
             cooperativeClinicControl = new CooperativeClinicControl();
         }
 
@@ -86,7 +84,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 // string newLine = fileReader.ReadLine();
                 // Match match = localReg.Match(newLine);
                 // Properties.Settings.Default.SQL_local = match.Groups[1].Value;
-                //
+
                 // newLine = fileReader.ReadLine();
                 // match = globalReg.Match(newLine);
                 // Properties.Settings.Default.SQL_global = match.Groups[1].Value;
@@ -112,23 +110,23 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         {
             SelectTab();
 
-            SettingTabs settingTab = (SettingTabs) Int16.Parse(CurrentStack.Tag.ToString());
+            //SettingTabs settingTab = (SettingTabs) Int16.Parse(CurrentStack.Tag.ToString());
 
-            switch (settingTab)
-            {
-                case SettingTabs.MyPharmacy:
-                    myPharmacyControl.ResetPharmacy();
-                    CurrentControl = myPharmacyControl;
-                    break;
-                case SettingTabs.Printer:
-                    printerControl.ResetPrinter();
-                    CurrentControl = printerControl;
-                    break; 
-                case SettingTabs.CooperativeClinic:
-                    ((CooperativeClinicControlViewModel)cooperativeClinicControl.DataContext).Init();
-                    CurrentControl = cooperativeClinicControl;
-                    break;
-            }
+            //switch (settingTab)
+            //{
+            //    case SettingTabs.MyPharmacy:
+            //        myPharmacyControl.ResetPharmacy();
+            //        CurrentControl = myPharmacyControl;
+            //        break;
+            //    case SettingTabs.Printer:
+            //        printerControl.ResetPrinter();
+            //        CurrentControl = printerControl;
+            //        break; 
+            //    case SettingTabs.CooperativeClinic:
+            //        ((CooperativeClinicControlViewModel)cooperativeClinicControl.DataContext).Init();
+            //        CurrentControl = cooperativeClinicControl;
+            //        break;
+            //}
         }
         
         private void SelectTab()
