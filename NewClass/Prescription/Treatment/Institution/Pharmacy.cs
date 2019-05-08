@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             Name = r.Field<string>("CurPha_Name");
             Address = r.Field<string>("CurPha_Address");
             Tel = r.Field<string>("CurPha_Telephone");
-            ReaderCom = r.Field<byte>("CurPha_ReaderCom");
+            ReaderCom = (Properties.Settings.Default.ReaderComPort == "")? 0 : int.Parse(Properties.Settings.Default.ReaderComPort);
             VpnIp = r.Field<string>("CurPha_VPN");
             NewReader = r.Field<bool>("CurPha_ReaderIsNew");
         }
