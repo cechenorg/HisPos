@@ -163,7 +163,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             var declareList = DeclarePres.Where(p => p.IsDeclare).Select(p => p.ID).ToList();
             //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, declareList);
             //匯出xml檔案
-            Function.ExportXml(result, "月申報檔");
+            Function.ExportXml(result, "每月申報檔");
         }
 
         public void GetNotAdjustPrescriptionCount(DateTime start, DateTime end,string pharmacyID)

@@ -80,18 +80,16 @@ namespace His_Pos.Service
         public static string ExportXml(XDocument xml, string FileTypeName) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
-            var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
-            var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
+            var month = DateTime.Now.Month;
+            var day = DateTime.Now.Day.ToString().PadLeft(2,'0');
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             path += "\\藥健康系統申報\\"+FileTypeName;
-            var path_ym = path + "\\" + year + month;
-            var path_ymd = path + "\\" + year + month + "\\" + day;
-            var path_file = path_ym + "\\" + day + "\\";
-            if (FileTypeName.Equals("月申報檔"))
+            var path_ymd = path + "\\" + year + "年" + month + "月\\" + day;
+            var path_file = path_ymd + "\\";
+            if (FileTypeName.Equals("每月申報檔"))
                 path_file += "DRUGT";
             else
                 path_file +=  year + month + day;
-            if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             xml.Declaration = new XDeclaration("1.0", "Big5", string.Empty);
             var settings = new XmlWriterSettings();
@@ -168,7 +166,7 @@ namespace His_Pos.Service
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "dailyUpload");
+                var filePath = ExportXml(dailyUpload, "每日上傳");
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
