@@ -395,7 +395,7 @@ namespace His_Pos.NewClass.Prescription
                     break;
                 case "UpdateDeclareOrder":
                     MainWindow.SingdeConnection.OpenConnection();
-                    table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrder('{Rx_id}', '{storId}','{Dtl_data}')");
+                    table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{Rx_id}', '{storId}','{Rx_order}','{Dtl_data}')");
                     if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                         result = "SUCCESS";
                     MainWindow.SingdeConnection.CloseConnection();
