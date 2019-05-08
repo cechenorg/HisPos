@@ -6,6 +6,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -23,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
+        public RelayCommand ShowProductGroupWindowCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -147,6 +149,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
+        private void ShowProductGroupWindowAction() {
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -158,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockTakingCommand = new RelayCommand(StockTakingAction, IsNewInventoryHasValue);
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+            ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
         }
         private void InitMedicineData(string id)
         {
