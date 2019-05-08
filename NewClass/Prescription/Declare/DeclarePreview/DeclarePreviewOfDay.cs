@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 
-namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
+namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
 {
     public class DeclarePreviewOfDay:ObservableObject
     {

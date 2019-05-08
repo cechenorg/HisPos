@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.Service;
 
-namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
+namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
 {
     public class DeclarePreviewOfMonth : ObservableObject
     {
@@ -167,7 +163,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             var declareList = DeclarePres.Where(p => p.IsDeclare).Select(p => p.ID).ToList();
             //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, declareList);
             //匯出xml檔案
-            Function.ExportXml(result, "匯出申報XML檔案");
+            Function.ExportXml(result, "每月申報檔");
         }
 
         public void GetNotAdjustPrescriptionCount(DateTime start, DateTime end,string pharmacyID)
@@ -176,7 +172,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             if (table.Rows.Count > 0)
             {
                 var count = table.Rows[0].Field<int>("NotAdjustCount");
-                var declareDateStr = (start.Year - 1911) + " 年 " + start.Year.ToString().PadLeft(2, '0') + " 月 ";
+                var declareDateStr = (start.Year - 1911) + " 年 " + start.Month.ToString().PadLeft(2, '0') + " 月 ";
                 if (count > 0)
                     MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案",MessageType.WARNING);
             }

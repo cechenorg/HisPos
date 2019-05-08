@@ -660,8 +660,8 @@ namespace His_Pos.NewClass.Prescription
 
         public void CountMedicineDays()
         {
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf && m.Days != null) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            if (Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf && m.Days != null) > 0)
+                MedicineDays = (int)Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
         }
 
         private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
