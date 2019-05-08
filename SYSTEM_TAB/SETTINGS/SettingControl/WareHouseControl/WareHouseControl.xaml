@@ -6,7 +6,87 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:WareHouseControlViewModel/>
+    </UserControl.DataContext>
     <Grid Background="LightGray">
-            
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <DataGrid Background="{StaticResource GridBackGround}" Margin="10,10,10,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                  ItemsSource="{Binding WareHouseCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" CanUserSortColumns="False"
+                  SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="Height" Value="41"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="倉庫名稱" Width="250" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="庫存現值" Width="150" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding StockValue, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="負庫現值(估)" Width="150" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NegativeStockValue, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="庫存總值(估)" Width="150" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TotalStockValue, StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Background="LightGray">
+            <Button  Width="120" Content="+ 新增倉庫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="15,0,0,0" Background="Gray" BorderThickness="0" Command="{Binding AddNewWareHouseCommand}"/>
+            <Button  Width="120" Content="刪除倉庫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="515,0,0,0" Background="IndianRed" BorderThickness="0" Command="{Binding DeleteWareHouseCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
