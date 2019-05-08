@@ -83,11 +83,11 @@ namespace His_Pos.Service
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\Declare\\"+FileTypeName;
+            path += "\\藥健康系統申報\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\";
-            if (FileTypeName.Equals("匯出申報XML檔案"))
+            if (FileTypeName.Equals("月申報檔"))
                 path_file += "DRUGT";
             else
                 path_file +=  year + month + day;

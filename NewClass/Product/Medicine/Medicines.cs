@@ -107,6 +107,10 @@ namespace His_Pos.NewClass.Product.Medicine
                 {
                     result += "4";
                     result += med.ID.PadLeft(12, ' ');
+                    if (med.Days != null)
+                        result += med.Days.ToString().PadLeft(2, ' ');
+                    else
+                        result += string.Empty.PadLeft(2, ' ');
                     result += string.Empty.PadLeft(6, ' ');
                     result += string.Empty.PadLeft(18, ' ');
                     if(med.Days != null)
