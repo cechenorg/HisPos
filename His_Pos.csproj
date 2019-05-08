@@ -1050,6 +1050,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\WareHouseControl\WareHouseControl.xaml.cs">
+      <DependentUpon>WareHouseControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\WareHouseControl\WareHouseControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindowView.xaml.cs">
       <DependentUpon>SettingWindowView.xaml</DependentUpon>
     </Compile>
@@ -1540,6 +1544,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\WareHouseControl\WareHouseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
