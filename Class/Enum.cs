@@ -10,13 +10,7 @@ namespace His_Pos.Class
         PurchaseReturn = 2,
         StockTaking = 3
     }
-    enum SettingTabs
-    {
-        MyPharmacy = 1,
-        Printer = 2,
-        Database = 3,
-        CooperativeClinic = 4
-    }
+    
 
     public enum StoreOrderCategory
     {

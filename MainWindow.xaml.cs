@@ -196,7 +196,7 @@ namespace His_Pos
 
         private void Settings_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            SettingWindow settingWindow = new SettingWindow();
+            SettingWindowView settingWindow = new SettingWindowView();
             settingWindow.ShowDialog();
         }
 
