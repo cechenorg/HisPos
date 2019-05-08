@@ -18,8 +18,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[IndexReserveByDate]", parameterList);
         }
-        public static DataTable Save(int Id,string PhoneCallStatus, string PrepareStatus)
+        public static DataTable Save(int Id,string PhoneCallStatus, bool IsNoPrepareMed)
         {
+            string PrepareStatus = IsNoPrepareMed ? "F" : "D";
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ID", Id);
             DataBaseFunction.AddSqlParameter(parameterList, "PhoneCallStatus", PhoneCallStatus);
