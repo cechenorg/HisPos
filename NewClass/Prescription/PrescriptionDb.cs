@@ -670,7 +670,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
             newRow["ResMas_SerialNumber"] = DBNull.Value;
             newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.ID);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory?.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalNumber", p.Treatment.MedicalNumber); 
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.ID);
