@@ -15,5 +15,52 @@
              <Label Content="群組商品" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
             <Button Width="100"  Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
         </StackPanel>
+        <DataGrid ItemsSource="{Binding ProductGroupSettingCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+                  Grid.Row="1"     CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" >
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="250" Header="商品代碼" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="200" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"   
+                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="18" FontStretch="ExtraExpanded" Content="{Binding ProID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
@@ -60,6 +61,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             {
                 Set(() => Medicine, ref medicine, value);
             }
+        }
+        private ProductGroupSettings productGroupSettingCollection = new ProductGroupSettings();
+        public ProductGroupSettings ProductGroupSettingCollection
+        {
+            get { return productGroupSettingCollection; }
+            set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
         }
         public ProductManageMedicine BackUpMedicine { get; set; }
         public ProductManageDetail MedicineDetail { get; set; }
@@ -209,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
             
             BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
+            ProductGroupSettingCollection.GetDataByID(id);
         }
         private bool IsMedicineDataChanged()
         {
