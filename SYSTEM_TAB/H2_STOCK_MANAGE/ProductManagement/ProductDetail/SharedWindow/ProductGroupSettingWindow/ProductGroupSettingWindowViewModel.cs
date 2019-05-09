@@ -49,9 +49,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
         #region Function
         private void MergeProductGroupAction() {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認"); 
-            if( ((bool)confirmWindow.DialogResult) == true)
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認");
+            if (((bool)confirmWindow.DialogResult) == true)
+            {
                 ProductGroupSettingCollection.MergeProduct();
+                MessageWindow.ShowMessage("合併成功",MessageType.SUCCESS);
+            }
         }
         private void SetIsSpiltTrueAction()  {
             IsSplit = true;
