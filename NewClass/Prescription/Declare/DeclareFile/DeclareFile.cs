@@ -130,7 +130,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             Dhead = new Dhead(p);
             Dbody = new Dbody(p, details);
-            Dhead.D18 = $"{int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33) + int.Parse(Dbody.D38):00000000}";
+            var totalPoint = int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33);
+            if (Dbody.D38 != null)
+                totalPoint += int.Parse(Dbody.D38);
+            Dhead.D18 = $"{totalPoint:00000000}";
             Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
         [XmlElement(ElementName = "dhead")]
@@ -234,8 +237,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
             D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
             D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
-            D37 = p.MedicalServiceID;
-            D38 = details.Single(pd => pd.P1.Equals("9")).P9.PadLeft(8, '0');
+            var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
+            if (medicalService != null)
+            {
+                D37 = p.MedicalServiceID;
+                D38 = medicalService.P9.PadLeft(8, '0');
+            }
             D43 = t.OriginalMedicalNumber;
             if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
@@ -281,7 +288,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
                 P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
-                //P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
                 P5 = m.PositionID;

@@ -309,12 +309,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             {
                 IsBusy = false;
                 var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
-                //if (SelectedPreview.CheckFileExist())
-                //{
-                //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
-                //    if (!(bool)confirm.DialogResult)
-                //        return;
-                //}
                 DeclareFile.CreateDeclareFile(decFile);
             };
             IsBusy = true;
@@ -322,8 +316,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
         private void AddToEditListAction()
         {
-            //EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
-            //DeclareFile.DeclarePres.SingleOrDefault(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare = DeclareFile.SelectedDayPreview.SelectedPrescription.IsDeclare;
             SetDecFilePreViewSummaryAction();
             DeclareFile.SelectedDayPreview.CheckNotDeclareCount();
         }
@@ -338,24 +330,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDate;
-            //DecFilePreViews.Clear();
-            //foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
-            //{
-            //    foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
-            //    {
-            //        var decFile = new DeclareFilePreview();
-            //        decFile.DeclarePrescriptions.AddPrescriptions(pres);
-            //        decFile.SetSummary();
-            //        //DecFilePreViews.Add(decFile);
-            //    }
-            //}
-            //DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
-            //DecFilePreViewCollectionView = DecFilePreViewSource.View;
-            //if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
-            //{
-            //    DecFilePreViewCollectionView.MoveCurrentToFirst();
-            //    SelectedPreview = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
-            //}
         }
         private void Refresh(NotificationMessage msg)
         {
