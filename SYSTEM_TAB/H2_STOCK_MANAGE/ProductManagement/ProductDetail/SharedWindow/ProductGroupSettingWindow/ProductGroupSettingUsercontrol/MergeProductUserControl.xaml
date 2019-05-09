@@ -7,17 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="450">
     <UserControl.Resources>
-        <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
-            <TextBox x:Name="ReleaseHospital" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
-                                        Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" >
+        <DataTemplate x:Key="EnableProduct" DataType="{x:Type TextBox}">
+            <TextBox x:Name="ProductSearchTextBox" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
+                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" >
                 <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
+                    <KeyBinding Command="{Binding DataContext.AddProductByInputCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text,ElementName=ProductSearchTextBox}" Key="Enter" />
                 </TextBox.InputBindings>
             </TextBox>
         </DataTemplate>
-        <DataTemplate x:Key="DisableInstitution" DataType="{x:Type Label}">
+        <DataTemplate x:Key="DisableProduct" DataType="{x:Type Label}">
             <Label x:Name="ReleaseHospital" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding CooperavieClinic.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding ProID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -25,8 +25,8 @@
             <RowDefinition />
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                  Grid.Row="0"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True" AutoGenerateColumns="False"  >
+        <DataGrid ItemsSource="{Binding ProductGroupSettingCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+                  Grid.Row="0"  SelectedItem="{Binding ProductGroupSettingSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True" AutoGenerateColumns="False"  >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -62,7 +62,7 @@
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsInstitutionEdit, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsEditable, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding DataContext.DeleteInstitutionCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                 </Image.InputBindings>
@@ -70,16 +70,16 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150" Header="商品代碼" IsReadOnly="True">
+                <DataGridTemplateColumn Width="100" Header="商品代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding}">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
-                                        <Setter Property="ContentTemplate" Value="{StaticResource EnableInstitution}" />
+                                        <Setter Property="ContentTemplate" Value="{StaticResource EnableProduct}" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsInstitutionEdit}" Value="true">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource DisableInstitution}"/>
+                                            <DataTrigger Binding="{Binding IsEditable}" Value="true">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource DisableProduct}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -88,14 +88,13 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="100" Header="商品名稱"  >
+                <DataGridTemplateColumn Width="250" Header="商品名稱" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding TypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
-                                    <ComboBoxItem>展望</ComboBoxItem>
-                                </ComboBox>
+                                <Label Width="250" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
+                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -103,8 +102,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Rectangle Width="330"/>
-            <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="0,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Rectangle Width="320"/>
+            <Button Width="120" Command="{Binding MergeProductGroupCommand}" Margin="0,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </UserControl>

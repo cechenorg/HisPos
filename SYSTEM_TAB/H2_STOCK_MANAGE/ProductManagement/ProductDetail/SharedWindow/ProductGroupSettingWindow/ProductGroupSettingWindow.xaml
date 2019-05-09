@@ -12,7 +12,7 @@
         <DataTemplate x:Key="MergeProduct" DataType="{x:Type productgroupsetting:MergeProductUserControl}">
             <productgroupsetting:MergeProductUserControl/>
         </DataTemplate>
-        <DataTemplate x:Key="SpiltProduct" DataType="{x:Type productgroupsetting:SplitProductUserControl}">
+        <DataTemplate x:Key="SplitProduct" DataType="{x:Type productgroupsetting:SplitProductUserControl}">
             <productgroupsetting:SplitProductUserControl/>
         </DataTemplate>
     </Window.Resources>
@@ -25,13 +25,13 @@
             <RadioButton Content="併庫" Command="{Binding SetIsSpiltFalseCommand}"  IsChecked="True"  Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
             <RadioButton Content="拆庫" Command="{Binding SetIsSpiltTrueCommand}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"  />
              </StackPanel>
-        <ContentControl Grid.Row="1" >
+        <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource MergeProduct}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSplit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                            <Setter Property="ContentTemplate" Value="{StaticResource SpiltProduct}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource SplitProduct}"/>
                         </DataTrigger>
                     </Style.Triggers> 
                 </Style>
