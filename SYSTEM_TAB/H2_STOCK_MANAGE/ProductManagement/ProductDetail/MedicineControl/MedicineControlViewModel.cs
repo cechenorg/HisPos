@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             IsDataChanged = true;
         }
         private void ShowProductGroupWindowAction() {
-            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow();
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID);
         }
         #endregion
 

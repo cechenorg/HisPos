@@ -17,8 +17,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     /// ProductGroupSettingWindow.xaml 的互動邏輯
     /// </summary>
     public partial class ProductGroupSettingWindow : Window {
-        public ProductGroupSettingWindow() {
+        public ProductGroupSettingWindow(string proID) {
             InitializeComponent();
+            ProductGroupSettingWindowViewModel productGroupSettingWindowViewModel = new ProductGroupSettingWindowViewModel(proID);
+            DataContext = productGroupSettingWindowViewModel;
             ShowDialog();
         }
     }
