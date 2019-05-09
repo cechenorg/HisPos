@@ -131,7 +131,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         }
         private void DeleteOrderAction()
         {
-
+            DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
+            deleteOrderWindow.ShowDialog();
         }
         #endregion
 
