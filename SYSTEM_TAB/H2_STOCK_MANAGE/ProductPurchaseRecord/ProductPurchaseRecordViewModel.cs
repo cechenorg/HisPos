@@ -20,6 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public RelayCommand SearchOrderCommand { get; set; }
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
+        public RelayCommand DeleteOrderCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -128,6 +129,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             SearchManufactoryID = "";
             SearchProductID = "";
         }
+        private void DeleteOrderAction()
+        {
+
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -136,6 +141,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             SearchOrderCommand = new RelayCommand(SearchOrderAction);
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
+            DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
         }
         private void RegisterMessengers()
         {
