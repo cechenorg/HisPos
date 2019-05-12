@@ -159,7 +159,12 @@
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding EditedPrescription.Treatment.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding EditedPrescription.Treatment.MainDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding GetMainDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=MainDiagnosis}" Key="Enter" />
                             </TextBox.InputBindings>
@@ -169,7 +174,12 @@
                         <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding EditedPrescription.Treatment.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding EditedPrescription.Treatment.SubDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding GetSubDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=SecondDiagnosis}" Key="Enter" />
                             </TextBox.InputBindings>

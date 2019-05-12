@@ -41,6 +41,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             set
             {
                 Set(() => FullName, ref fullName, value);
+                if (string.IsNullOrEmpty(value))
+                {
+                    ID = string.Empty;
+                    Name = string.Empty;
+                }
             }
         }
         [Index(3)]

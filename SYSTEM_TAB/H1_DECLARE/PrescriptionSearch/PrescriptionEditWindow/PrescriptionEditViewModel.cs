@@ -469,6 +469,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         return;
                     }
                 }
+                if (!EditedPrescription.CheckMedicalNumber())
+                    return;
                 EditedPrescription.CountPrescriptionPoint(false);
                 if(!EditedPrescription.PrescriptionStatus.IsBuckle)
                     EditedPrescription.Medicines.SetNoBuckle();

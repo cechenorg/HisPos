@@ -102,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 Set(() => DeclareStatus, ref declareStatus, value);
                 if(CurrentPrescription is null) return;
-                if ((DateTime)CurrentPrescription.Treatment.AdjustDate!=null && CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") 
+                if (CurrentPrescription.Treatment.AdjustDate!=null && CurrentPrescription.Treatment.AdjustCase.ID.Equals("2") 
                     && DateTime.Compare((DateTime)CurrentPrescription.Treatment.AdjustDate, DateTime.Today) >= 0)
                     CanSendOrder = true;
                 if (!CanSendOrder)
@@ -367,6 +367,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             ShowCustomerDetailCommand = new RelayCommand(ShowCustomerDetailAction);
         }
+
         private void InitialPrescription(bool setPharmacist)
         {
             CurrentPrescription = new Prescription();
@@ -425,6 +426,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var prescription = SelectedHistory.GetPrescriptionByID();
             prescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
+            prescription.Treatment.TreatDate = null;
+            prescription.Treatment.AdjustDate = null;
+            prescription.Treatment.TempMedicalNumber = null;
             prescription.Card = CurrentPrescription.Card;
             prescription.Patient = CurrentPrescription.Patient;
             CurrentPrescription = prescription;
@@ -784,7 +788,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!CheckMedicalNumber())
+            if (!CurrentPrescription.CheckMedicalNumber())
             {
                 IsAdjusting = false;
                 return;
@@ -881,7 +885,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!CheckMedicalNumber())
+            if (!CurrentPrescription.CheckMedicalNumber())
             {
                 IsAdjusting = false;
                 return;
@@ -995,7 +999,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 IsAdjusting = false;
                 return;
             }
-            if (!CheckMedicalNumber())
+            if (!CurrentPrescription.CheckMedicalNumber())
             {
                 IsAdjusting = false;
                 return;
@@ -1088,7 +1092,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
@@ -1682,16 +1686,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool CheckIsNoCard()
         {
             return !CurrentPrescription.PrescriptionStatus.IsGetCard && !IsAdjusting;
-        }
-        private bool CheckMedicalNumber()
-        {
-            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.TempMedicalNumber))
-            {
-                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續調劑(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
-                Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
-                return (bool) medicalNumberEmptyConfirm.DialogResult;
-            }
-            return true;
         }
         #endregion
     }

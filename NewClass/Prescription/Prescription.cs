@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -1290,6 +1291,23 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
+        }
+
+        public bool CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(Treatment.TempMedicalNumber))
+            {
+                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
+                Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
+                return (bool)medicalNumberEmptyConfirm.DialogResult;
+            }
+
+            if (Treatment.TempMedicalNumber.Length != 4)
+            {
+                MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
     }
 }
