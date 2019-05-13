@@ -4,7 +4,7 @@ using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
-    public class Product : ObservableObject
+    public abstract class Product : ObservableObject
     {
         public Product()
         {

@@ -284,6 +284,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="Interface\IPrescriptionService.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\MedicineNHI.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\MedicineOTC.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\Medicines.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\MedicineSpecialMaterial.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\MedicineVirtual.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -356,6 +363,14 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\ChronicPrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\CooperativePrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\NormalPrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\OrthopedicsPrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\PrescribePrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Prescription.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\ReservePrescriptionService.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicine.cs" />
