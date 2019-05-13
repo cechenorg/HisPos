@@ -23,7 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             get => splitProductCollection;
             set { Set(() => SplitProductCollection, ref splitProductCollection, value); }
         }
-        private RelayCommand SplitProductGroupCommand { get; set; }
+        public RelayCommand SplitProductGroupCommand { get; set; }
         #endregion
         public SplitProductWindowViewModel(string proID) {
             SplitProductCollection.GetDataByProID(proID);
