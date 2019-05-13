@@ -460,6 +460,9 @@
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProduct.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProductDb.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProducts.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
@@ -716,6 +719,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml.cs">
       <DependentUpon>SplitProductUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml.cs">
+      <DependentUpon>SplitProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingWindow.xaml.cs">
       <DependentUpon>ProductGroupSettingWindow.xaml</DependentUpon>
     </Compile>
@@ -1228,6 +1235,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

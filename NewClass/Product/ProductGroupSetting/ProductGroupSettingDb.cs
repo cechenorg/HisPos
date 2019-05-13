@@ -1,4 +1,5 @@
-﻿using His_Pos.Database;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,9 +20,10 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
         }
         public static void MergeProductGroup(ProductGroupSettings productGroupSettings) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(productGroupSettings)); 
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(productGroupSettings));
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[MergeProductInventory]", parameterList);
-        }
+        } 
         public static DataTable MedicineListTable()
         {
             DataTable masterTable = new DataTable();

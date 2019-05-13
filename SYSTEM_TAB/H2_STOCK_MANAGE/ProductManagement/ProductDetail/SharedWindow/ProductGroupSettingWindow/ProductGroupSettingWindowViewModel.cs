@@ -6,6 +6,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductGroupSetting;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol.SplitProductWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public RelayCommand SetIsSpiltFalseCommand { get; set; }
         public RelayCommand<string> AddProductByInputCommand { get; set; }
         public RelayCommand MergeProductGroupCommand { get; set; }
+        public RelayCommand SplitProductGroupCommand { get; set; }
         #endregion
 
 
@@ -45,9 +47,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             SetIsSpiltFalseCommand = new RelayCommand(SetIsSpiltFalseAction);
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
+            SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
             ProductGroupSettingCollection.GetDataByID(proID);
         }
         #region Function
+        private void SplitProductGroupAction() {
+            if(ProductGroupSettingSelectedItem is null)
+                MessageWindow.ShowMessage("請選擇欲拆出之商品", MessageType.ERROR);
+            SplitProductWindow splitProductWindow = new SplitProductWindow(ProductGroupSettingSelectedItem.ProID);
+        }
         private void MergeProductGroupAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
