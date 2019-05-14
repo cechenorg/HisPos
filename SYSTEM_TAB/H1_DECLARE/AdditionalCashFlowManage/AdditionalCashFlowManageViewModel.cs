@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.CashFlow;
 using His_Pos.NewClass.Prescription;
 using System;
 using System.Collections.Generic;

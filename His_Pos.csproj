@@ -310,9 +310,6 @@
     </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\BindingProxy.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlow.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlows.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
@@ -453,9 +450,6 @@
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDataDb.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchase.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchaseDb.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchases.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
