@@ -43,6 +43,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public PrescriptionType Type { get;private set; }
         #endregion
 
+        #region ServiceFunctions
+
         public void CheckTypeByInstitution()
         {
             if (Treatment.Institution.CheckIsOrthopedics())
@@ -80,5 +82,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     break;
             }
         }
+
+        #endregion
     }
 }

@@ -38,5 +38,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             throw new NotImplementedException();
         }
+
+        public bool Register()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

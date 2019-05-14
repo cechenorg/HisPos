@@ -14,5 +14,6 @@ namespace His_Pos.Interface
         bool ErrorAdjust();
         bool NoCardAdjust();
         List<bool> AskPrint();
+        bool Register();
     }
 }
