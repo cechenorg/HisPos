@@ -13,15 +13,6 @@ using His_Pos.NewClass.Prescription.Treatment;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
-    public enum PrescriptionType
-    {
-        Normal = 0,
-        Chronic = 1,
-        Reserve = 2,
-        Cooperative = 3,
-        Orthopedics = 4,
-        Prescribe = 5
-    }
     public class Prescription
     {
         public Prescription()
@@ -39,50 +30,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
         public Medicines Medicines { get; set; }
-        public IPrescriptionService PrescriptionService { get; set; }
-        public PrescriptionType Type { get;private set; }
-        #endregion
-
-        #region ServiceFunctions
-
-        public void CheckTypeByInstitution()
-        {
-            if (Treatment.Institution.CheckIsOrthopedics())
-            {
-                Type = PrescriptionType.Orthopedics;
-                PrescriptionStatus.IsBuckle = false;
-                PrescriptionService = new OrthopedicsPrescriptionService();
-                return;
-            }
-
-            var clinic = Treatment.Institution.IsCooperativeClinic();
-            if (clinic != null)
-            {
-                PrescriptionStatus.IsBuckle = clinic.IsBuckle;
-                PrescriptionService = new CooperativePrescriptionService();
-                return;
-            }
-
-            Type = PrescriptionType.Normal;
-            PrescriptionStatus.IsBuckle = true;
-            PrescriptionService = new NormalPrescriptionService();
-        }
-
-        public void CheckTypeByAdjustCase()
-        {
-            switch (Treatment.AdjustCase.ID)
-            {
-                case "0":
-                    Type = PrescriptionType.Prescribe;
-                    PrescriptionService = new PrescribePrescriptionService();
-                    break;
-                case "2":
-                    if (Type == PrescriptionType.Normal)
-                        PrescriptionService = new ChronicPrescriptionService();
-                    break;
-            }
-        }
-
+        
         #endregion
     }
 }

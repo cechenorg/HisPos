@@ -20,9 +20,18 @@ using SpeTre = His_Pos.NewClass.Prescription.Treatment.SpecialTreat.SpecialTreat
 using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
+    public enum PrescriptionType
+    {
+        Normal = 0,
+        Register = 1,
+        Cooperative = 2,
+        Orthopedics = 3,
+        Prescribe = 4
+    }
     public class Treatment:ObservableObject,ICloneable
     {
         public Treatment()
@@ -407,6 +416,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 }
             }
         }
+        public PrescriptionType Type { get; private set; }
         #endregion
         #region NHIRulesCheckFunctions
         private string CheckInstitution()
@@ -689,5 +699,41 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.TempMedicalNumber = TempMedicalNumber;
             return t;
         }
+        #region ServiceFunctions
+
+        public void CheckTypeByInstitution()
+        {
+            //if (Treatment.Institution.CheckIsOrthopedics())
+            //{
+            //    Type = PrescriptionType.Orthopedics;
+            //    PrescriptionStatus.IsBuckle = false;
+            //    return;
+            //}
+
+            //var clinic = Treatment.Institution.IsCooperativeClinic();
+            //if (clinic != null)
+            //{
+            //    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
+            //    return;
+            //}
+
+            //Type = PrescriptionType.Normal;
+            //PrescriptionStatus.IsBuckle = true;
+        }
+
+        public void CheckTypeByAdjustCase()
+        {
+            //switch (AdjustCase.ID)
+            //{
+            //    case "0":
+            //        Type = PrescriptionType.Prescribe;
+            //        break;
+            //    default:
+            //        if (Type != PrescriptionType.Orthopedics && Type != PrescriptionType.Cooperative)
+            //            Type = PrescriptionType.Normal;
+            //        break;
+            //}
+        }
+        #endregion
     }
 }

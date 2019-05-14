@@ -13,12 +13,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public static void CheckTypeByInstitution(Prescription p)
         {
-            p.CheckTypeByInstitution();
+            p.Treatment.CheckTypeByInstitution();
         }
 
         public static void CheckTypeByAdjustCase(Prescription p)
         {
-            p.CheckTypeByAdjustCase();
+            //p.CheckTypeByAdjustCase();
         }
     }
 }
