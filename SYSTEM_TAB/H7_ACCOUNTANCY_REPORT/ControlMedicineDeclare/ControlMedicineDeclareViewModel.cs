@@ -79,12 +79,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
         private void SelectionChangedAction() {
             if (SelectItem == null) return;
             ControlMedicineDetails temp = new ControlMedicineDetails();
-            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime);
+            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime, SelectItem.InitStock);
             ControlMedicineBagDetailsCollection.Clear();
             ControlMedicineDetailsCollection.Clear();
             foreach (ControlMedicineDetail c in temp) {
                 switch (c.TypeName) {
-                    case "調劑耗用(未過卡)":
+                    case "調劑(未過卡)":
                         ControlMedicineBagDetailsCollection.Add(c);
                         break;
                     default:
