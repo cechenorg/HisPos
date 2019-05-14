@@ -11,7 +11,6 @@ using System.Windows.Media;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -185,29 +184,29 @@ namespace His_Pos.Service
             str.Close();
         }
         public static void Uncompress(string zipFileName, string targetPath) {
-            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFileName)))
-            { 
-                DirectoryInfo di = new DirectoryInfo(targetPath); 
-                ZipEntry theEntry; 
-                // 逐一取出壓縮檔內的檔案(解壓縮)
-                while ((theEntry = s.GetNextEntry()) != null)
-                {
-                    int size = 2048;
-                    byte[] data = new byte[2048];
-                    using (FileStream fs = new FileStream(di.FullName + "\\" + GetBasename(theEntry.Name), FileMode.Create))
-                    {
-                        while (true)
-                        {
-                            size = s.Read(data, 0, data.Length);
+            //using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFileName)))
+            //{ 
+            //    DirectoryInfo di = new DirectoryInfo(targetPath); 
+            //    ZipEntry theEntry; 
+            //    // 逐一取出壓縮檔內的檔案(解壓縮)
+            //    while ((theEntry = s.GetNextEntry()) != null)
+            //    {
+            //        int size = 2048;
+            //        byte[] data = new byte[2048];
+            //        using (FileStream fs = new FileStream(di.FullName + "\\" + GetBasename(theEntry.Name), FileMode.Create))
+            //        {
+            //            while (true)
+            //            {
+            //                size = s.Read(data, 0, data.Length);
 
-                            if (size > 0)
-                                fs.Write(data, 0, size);
-                            else
-                                break;
-                        } 
-                    }
-                }
-            }
+            //                if (size > 0)
+            //                    fs.Write(data, 0, size);
+            //                else
+            //                    break;
+            //            } 
+            //        }
+            //    }
+            //}
         }
 
         // 取得檔名(去除路徑)
