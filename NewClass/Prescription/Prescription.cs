@@ -281,7 +281,7 @@ namespace His_Pos.NewClass.Prescription
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            if (!Treatment.AdjustCase.ID.Equals("0"))
+            if (!Treatment.AdjustCase.ID.Equals("0") && !CheckOnlyBloodGlucoseTestStrip())
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
@@ -305,7 +305,23 @@ namespace His_Pos.NewClass.Prescription
             }
             return details;
         }
-       
+
+        private bool CheckOnlyBloodGlucoseTestStrip()
+        {
+            if (Medicines.Count == 1)
+            {
+                var m = Medicines[0];
+                if (m is MedicineSpecialMaterial && m.ID.StartsWith("TSS01"))
+                {
+                    MedicalServiceID = null;
+                    PrescriptionPoint.MedicalServicePoint = 0;
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
         private void CheckMedicalServiceData()
         {
             if (MedicineDays >= 28)
@@ -895,7 +911,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("Hospital", Treatment.Institution.Name),
                 new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
                 new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
+                new ReportParameter("TotalDeclarePoint", PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),

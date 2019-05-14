@@ -226,10 +226,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 MainWindow.ServerConnection.OpenConnection();
                 DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
                 MainWindow.ServerConnection.CloseConnection();
-                foreach (var pre in DeclareFile.DeclarePreviews)
-                {
-                    pre.CheckAdjustOutOfRange();
-                }
+                DeclareFile.SelectedDayPreview.CheckAdjustOutOfRange();
                 DeclareFile.SetSummary();
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -285,9 +282,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(DeclareFile.SelectedDayPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
             var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
-            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            Messenger.Default.Register<NotificationMessage>(this, PrescriptionEditedRefresh);
             prescriptionEdit.ShowDialog();
-            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
+            Messenger.Default.Unregister<NotificationMessage>(this, PrescriptionEditedRefresh);
         }
 
         private void SetDecFilePreViewSummaryAction()
@@ -302,28 +299,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 BusyContent = StringRes.產生申報資料;
                 MainWindow.ServerConnection.OpenConnection();
                 DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
-                DeclareFile.DeclarePres.SerializeFileContent();
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
                 var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
-                //if (SelectedPreview.CheckFileExist())
-                //{
-                //    ConfirmWindow confirm = new ConfirmWindow("此申報年月已存在申報檔，是否覆蓋?", "檔案存在", true);
-                //    if (!(bool)confirm.DialogResult)
-                //        return;
-                //}
-                DeclareFile.CreateDeclareFile(decFile);
+                DeclareFile.CreateDeclareFile(decFile,(DateTime)DeclareDate);
+                Refresh();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
         private void AddToEditListAction()
         {
-            //EditedList.Add(DeclareFile.SelectedDayPreview.SelectedPrescription);
-            //DeclareFile.DeclarePres.SingleOrDefault(p => p.ID.Equals(DeclareFile.SelectedDayPreview.SelectedPrescription.ID)).IsDeclare = DeclareFile.SelectedDayPreview.SelectedPrescription.IsDeclare;
             SetDecFilePreViewSummaryAction();
             DeclareFile.SelectedDayPreview.CheckNotDeclareCount();
         }
@@ -338,32 +327,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDate;
-            //DecFilePreViews.Clear();
-            //foreach (var decs in prescriptions.GroupBy(p=>p.PharmacyID).Select(grp => grp.ToList()).ToList())
-            //{
-            //    foreach (var pres in decs.GroupBy(p=>p.AdjustDate.Month).Select(grp => grp.ToList()).ToList())
-            //    {
-            //        var decFile = new DeclareFilePreview();
-            //        decFile.DeclarePrescriptions.AddPrescriptions(pres);
-            //        decFile.SetSummary();
-            //        //DecFilePreViews.Add(decFile);
-            //    }
-            //}
-            //DecFilePreViewSource = new CollectionViewSource { Source = DecFilePreViews };
-            //DecFilePreViewCollectionView = DecFilePreViewSource.View;
-            //if (DecFilePreViewCollectionView.Cast<DeclareFilePreview>().ToList().Count > 0)
-            //{
-            //    DecFilePreViewCollectionView.MoveCurrentToFirst();
-            //    SelectedPreview = DecFilePreViewCollectionView.CurrentItem.Cast<DeclareFilePreview>();
-            //}
         }
-        private void Refresh(NotificationMessage msg)
+        private void PrescriptionEditedRefresh(NotificationMessage msg)
         {
             if (msg.Notification.Equals("PrescriptionEdited"))
             {
-                MainWindow.ServerConnection.OpenConnection();
-                GetPrescriptions();
-                MainWindow.ServerConnection.CloseConnection();
+                Refresh();
             }
         }
 
@@ -396,6 +365,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 }
             }
             return pharmacistList;
+        }
+
+        private void Refresh()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = StringRes.取得歷史處方;
+                GetPrescriptions();
+
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
         #endregion
     }

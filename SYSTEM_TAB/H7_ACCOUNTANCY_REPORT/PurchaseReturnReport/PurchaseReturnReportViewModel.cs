@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -51,7 +52,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         public ManufactoryOrders ManufactoryOrderCollection
         {
             get { return manufactoryOrderCollection; }
-            set { Set(() => ManufactoryOrderCollection, ref manufactoryOrderCollection, value); }
+            set
+            {
+                Set(() => ManufactoryOrderCollection, ref manufactoryOrderCollection, value);
+                RaisePropertyChanged(nameof(ManufactoryOrdersPurchaseTotal));
+                RaisePropertyChanged(nameof(ManufactoryOrdersReturnTotal));
+                RaisePropertyChanged(nameof(ManufactoryOrdersPurchaseCount));
+                RaisePropertyChanged(nameof(ManufactoryOrdersReturnCount));
+            }
         }
         public ManufactoryOrder CurrentManufactoryOrder
         {
@@ -67,6 +75,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             }
         }
         public bool HasManufactory { get { return CurrentManufactoryOrder != null; } }
+        public double ManufactoryOrdersPurchaseCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchaseCount); } }
+        public double ManufactoryOrdersPurchaseTotal { get { return (ManufactoryOrderCollection is null)? 0 : ManufactoryOrderCollection.Sum(m => m.PurchasePrice); } }
+        public double ManufactoryOrdersReturnCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.ReturnCount); } }
+        public double ManufactoryOrdersReturnTotal { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.ReturnPrice); } }
         #endregion
 
         public PurchaseReturnReportViewModel()
