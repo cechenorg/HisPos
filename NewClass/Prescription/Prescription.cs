@@ -911,7 +911,7 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("Hospital", Treatment.Institution.Name),
                 new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
                 new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalDeclarePoint", PrescriptionPoint.TotalPoint.ToString()),
+                new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
