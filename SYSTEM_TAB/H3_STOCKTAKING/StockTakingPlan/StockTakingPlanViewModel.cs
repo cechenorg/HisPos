@@ -13,5 +13,17 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         {
             return this;
         }
+
+        #region ----- Define Commands -----
+        #endregion
+
+        #region ----- Define Variables -----
+        #endregion
+
+        #region ----- Define Actions -----
+        #endregion
+
+        #region ----- Define Functions -----
+        #endregion
     }
 }
