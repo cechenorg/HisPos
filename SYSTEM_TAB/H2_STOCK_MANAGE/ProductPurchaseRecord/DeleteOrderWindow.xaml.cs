@@ -62,6 +62,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 else
                     MessageWindow.ShowMessage("網路異常 刪除失敗!", MessageType.ERROR);
             }
+
+            Close();
         }
         #endregion
 
