@@ -176,7 +176,7 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 if (value != null)
                 {
-                    Set(() => PositionID, ref positionID, value);
+                    Set(() => PositionID, ref positionID, value.ToUpper());
                     Position = ViewModelMainWindow.GetPosition(positionID);
                     if (Position != null)
                     {
