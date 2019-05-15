@@ -284,7 +284,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
-    <Compile Include="Interface\IPrescriptionService.cs" />
     <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
     <Compile Include="NewClass\MedicineRefactoring\MedicineNHI.cs" />
     <Compile Include="NewClass\MedicineRefactoring\MedicineOTC.cs" />
@@ -363,14 +362,14 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\ChronicPrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CooperativePrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\NormalPrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\OrthopedicsPrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\PrescribePrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Service\CooperativePrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionServiceProvider.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Service\NormalPrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Service\OrthopedicsPrescriptionService.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Prescription.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\ReservePrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionService.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicine.cs" />
@@ -667,6 +666,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\Refactoring\PrescriptionDeclareView.xaml.cs">
+      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\Refactoring\PrescriptionDeclareViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
@@ -1152,6 +1155,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\Refactoring\PrescriptionDeclareView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

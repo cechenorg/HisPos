@@ -164,7 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var tempPharmacistList = new MedicalPersonnels(false);
+            var tempPharmacistList = new MedicalPersonnels(MedicalPersonnelInitType.None);
             tempPharmacistList.GetEnablePharmacist((DateTime)MySelectedDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (var pharmacist in tempPharmacistList)

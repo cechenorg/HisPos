@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         public RelayCommand Cancel { get; set; }
         public AddPharmacistScheduleItemViewModel(Action<PharmacistScheduleItem> saveCallback, DateTime selected)
         {
-            MedicalPersonnels = new MedicalPersonnels(false);
+            MedicalPersonnels = new MedicalPersonnels(MedicalPersonnelInitType.None);
             MainWindow.ServerConnection.OpenConnection();
             MedicalPersonnels.GetEnablePharmacist(selected);
             MainWindow.ServerConnection.CloseConnection();

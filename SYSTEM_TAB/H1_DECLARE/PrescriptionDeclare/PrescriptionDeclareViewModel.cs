@@ -322,11 +322,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Institutions = VM.Institutions;
             Divisions = VM.Divisions;
-            MedicalPersonnels = new MedicalPersonnels(false);
-            foreach (var m in VM.CurrentPharmacy.MedicalPersonnels.Where(e => e.IsEnable))
-            {
-                MedicalPersonnels.Add(m);
-            }
+            MedicalPersonnels = new MedicalPersonnels(MedicalPersonnelInitType.Enable);
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;

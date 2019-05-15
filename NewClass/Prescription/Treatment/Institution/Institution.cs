@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using ZeroFormatter;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
@@ -54,6 +55,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public bool CheckIsOrthopedics()
         {
             return !string.IsNullOrEmpty(ViewModelMainWindow.CooperativeInstitutionID) && ID.Equals(ViewModelMainWindow.CooperativeInstitutionID);
+        }
+
+        public bool CheckCooperative()
+        {
+            return VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(ID)) > 0;
         }
     }
 }

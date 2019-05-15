@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public static Pharmacy GetCurrentPharmacy() { 
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
-            pharmacy.MedicalPersonnels = new MedicalPersonnels(true); 
+            pharmacy.MedicalPersonnels = new MedicalPersonnels(MedicalPersonnelInitType.All); 
             return pharmacy;
         }
         public MedicalPersonnel GetPharmacist()
