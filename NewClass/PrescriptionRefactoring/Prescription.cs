@@ -18,6 +18,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
+using His_Pos.NewClass.Person.Customer;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
@@ -38,18 +39,26 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
     {
         public Prescription()
         {
-
+            Institution = new Institution();
+            Division = new Division();
+            Pharmacist = new MedicalPersonnel();
+            MainDisease = new DiseaseCode();
+            SubDisease = new DiseaseCode();
+            AdjustCase = new AdjustCase();
+            PrescriptionCase = new PrescriptionCase();
+            Copayment = new Copayment();
+            PaymentCategory = new PaymentCategory();
+            SpecialTreat = new SpecialTreat();
         }
 
         public Prescription(DataRow r)
         {
-            Treatment = new Treatment(r);
             PrescriptionPoint = new PrescriptionPoint(r);
             PrescriptionStatus = new PrescriptionStatus(r);
         }
         #region Properties
+        public Customer Patient { get; set; }
         public IcCard Card { get; set; }
-        public Treatment Treatment { get; set; }//處方資料
         public int MedicineDays { get; set; } //給藥日份
         public string MedicalServiceCode { get; set; } //藥事服務代碼 
         public XDocument DeclareContent { get; set; } = new XDocument(); //申報檔內容
@@ -215,22 +224,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
         #endregion
 
-        public bool CheckDiseaseEmptyOrEquals(List<string> parameters)
+        public bool CheckDiseaseEquals(List<string> parameters)
         {
             var elementName = parameters[0];
             var diseaseID = parameters[1];
             if (elementName.Equals("MainDiagnosis"))
             {
-                return Treatment.MainDisease is null || !string.IsNullOrEmpty(Treatment.MainDisease.FullName) &&
-                       diseaseID.Equals(Treatment.MainDisease.FullName);
+                return diseaseID.Equals(MainDisease.FullName);
             }
-            return Treatment.SubDisease is null || !string.IsNullOrEmpty(Treatment.SubDisease.FullName) &&
-                   diseaseID.Equals(Treatment.SubDisease.FullName);
+            return diseaseID.Equals(SubDisease.FullName);
         }
 
         private void CheckTypeByInstitution()
         {
-            if (Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && Institution.CheckCooperative())
+            if (Institution != null && !string.IsNullOrEmpty(Institution.ID) && Institution.CheckCooperative())
             {
                 if (Institution.CheckIsOrthopedics())
                 {

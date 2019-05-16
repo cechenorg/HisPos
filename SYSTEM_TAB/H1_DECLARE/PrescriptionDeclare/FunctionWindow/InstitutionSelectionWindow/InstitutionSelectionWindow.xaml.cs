@@ -8,6 +8,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
     /// </summary>
     public partial class InstitutionSelectionWindow : Window
     {
+        private InstitutionSelectionViewModel institutionSelectionViewModel { get; set; }
         public InstitutionSelectionWindow(string searchText,ViewModelEnum vm)
         {
             InitializeComponent();
@@ -16,9 +17,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 if (notificationMessage.Notification.Equals("CloseInstitutionSelection"))
                     Close();
             });
-            this.DataContext = new InstitutionSelectionViewModel(searchText, vm);
+            institutionSelectionViewModel = new InstitutionSelectionViewModel(searchText, vm);
+            this.DataContext = institutionSelectionViewModel;
             SearchStringTextBox.Focus();
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+            if (institutionSelectionViewModel.ShowDialog)
+                ShowDialog();
         }
     }
 }

@@ -1,22 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.NewClass.Prescription.CustomerPrescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
 using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.Properties;
+using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using Xceed.Wpf.Toolkit;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
@@ -52,10 +65,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         #region Commands
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
-        public RelayCommand GetCustomers { get; set; }
-        public RelayCommand GetInstitution { get; set; }
+        public RelayCommand<string> GetCustomers { get; set; }
+        public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand<object> DiseaseCodeTextChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -93,10 +107,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction);
-            GetCustomers = new RelayCommand(GetCustomersAction);
-            GetInstitution = new RelayCommand(GetInstitutionAction);
+            GetCustomers = new RelayCommand<string>(GetCustomersAction);
+            GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            DiseaseCodeTextChanged = new RelayCommand<object>(DiseaseCodeTextChangedAction);
         }
 
         #endregion
@@ -112,19 +127,70 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             //取得病患資料(讀卡)
         }
 
-        private void GetCustomersAction()
+        private void GetCustomersAction(string condition)
         {
             //顧客查詢
+            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            var customers = CurrentPrescription.Patient.Check();
+            switch (customers.Count)
+            {
+                case 0:
+                    CustomerNotExist();
+                    break;
+                case 1:
+                    CurrentPrescription.Patient = customers[0];
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentPrescription.Patient.UpdateEditTime();
+                    CurrentPrescription.Patient.GetHistories();
+                    MainWindow.ServerConnection.CloseConnection();
+                    //CheckCustomPrescriptions();
+                    break;
+                default:
+                    switch (condition)
+                    {
+                        case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
+                            MessageWindow.ShowMessage("查詢生日不可為空",MessageType.WARNING);
+                            break;
+                        case "PatientBirthday":
+                            var c = new CustomerSelectionWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1, customers);
+                            break;
+                        case "PatientName" when string.IsNullOrEmpty(CurrentPrescription.Patient.Name):
+                            MessageWindow.ShowMessage("查詢姓名不可為空", MessageType.WARNING);
+                            break;
+                        case "PatientName":
+                            c = new CustomerSelectionWindow(CurrentPrescription.Patient.Name,2, customers);
+                            break;
+                        case "PatientIDNumber" when string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber):
+                            MessageWindow.ShowMessage("查詢身分證不可為空", MessageType.WARNING);
+                            break;
+                        case "PatientIDNumber":
+                            c = new CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber, 3, customers);
+                            break;
+                        case "PatientTel" when string.IsNullOrEmpty(CurrentPrescription.Patient.Tel):
+                            MessageWindow.ShowMessage("查詢電話不可為空", MessageType.WARNING);
+                            break;
+                        case "PatientTel":
+                            c = new CustomerSelectionWindow(CurrentPrescription.Patient.Name,4, customers);
+                            break;
+                    }
+                    break;
+            }
         }
 
-        private void GetInstitutionAction()
+        private void GetInstitutionAction(string insID)
         {
             //院所查詢
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            CurrentPrescription.Institution = new Institution();
+            var institutionSelectionWindow = new InstitutionSelectionWindow(insID, ViewModelEnum.PrescriptionDeclare);
         }
 
         private void GetCommonInstitutionAction()
         {
             //常用院所查詢
+            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            CurrentPrescription.Institution = new Institution();
+            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
         }
         private void GetDiseaseCodeAction(object o)
         {
@@ -136,20 +202,98 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             switch (elementName)
             {
                 case "MainDiagnosis":
-                    if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEmptyOrEquals(parameters))
+                    if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEquals(parameters))
+                    {
                         Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
+                        return;
+                    }
                     disease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     if (disease == null) return;
-                    CurrentPrescription.Treatment.MainDisease = disease;
+                    CurrentPrescription.MainDisease = disease;
                     break;
                 case "SecondDiagnosis":
-                    if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEmptyOrEquals(parameters))
-                        Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
+                    if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEquals(parameters))
+                    {
+                        Messenger.Default.Send(new NotificationMessage(this, "FocusChronicTotal"));
+                        return;
+                    }
                     disease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     if (disease == null) return;
-                    CurrentPrescription.Treatment.SubDisease = disease;
+                    CurrentPrescription.SubDisease = disease;
                     break;
             }
+        }
+        private void DiseaseCodeTextChangedAction(object o)
+        {
+            var parameters = o.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            //診斷碼查詢
+            switch (elementName)
+            {
+                case "MainDiagnosis":
+                    if(string.IsNullOrEmpty(diseaseID))
+                        CurrentPrescription.MainDisease = new DiseaseCode();
+                    break;
+                case "SecondDiagnosis":
+                    if (string.IsNullOrEmpty(diseaseID))
+                        CurrentPrescription.SubDisease = new DiseaseCode();
+                    break;
+            }
+        }
+        #endregion
+
+        #region MessengerFunctions
+        private void GetSelectedCustomer(Customer receiveSelectedCustomer)
+        {
+            Messenger.Default.Unregister<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            if (receiveSelectedCustomer is null) return;
+            CurrentPrescription.Patient = receiveSelectedCustomer;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.UpdateEditTime();
+            CurrentPrescription.Patient.GetHistories();
+            MainWindow.ServerConnection.CloseConnection();
+            CheckCustomPrescriptions();
+        }
+
+        private void GetSelectedInstitution(Institution receiveSelectedInstitution)
+        {
+            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            CurrentPrescription.Institution = receiveSelectedInstitution;
+        }
+        #endregion
+
+        #region Functions
+        private void CustomerNotExist()
+        {
+            if (!CurrentPrescription.Patient.CheckData())
+                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
+            else
+            {
+                var confirm = new ConfirmWindow(Resources.新增顧客確認, Resources.查無資料, true);
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                if ((bool)confirm.DialogResult)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    if (CurrentPrescription.Patient.CheckIDNumberExist())
+                    {
+                        MessageWindow.ShowMessage("此身分證已存在，請確認顧客資料", MessageType.WARNING);
+                    }
+                    else
+                    {
+                        CurrentPrescription.Patient.InsertData();
+                        CurrentPrescription.Patient.GetHistories();
+                    }
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+            }
+        }
+
+        private void CheckCustomPrescriptions()
+        {
+            //Messenger.Default.Register<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
+            //Messenger.Default.Register<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
+            //var cusPreSelectWindow = new CusPreSelectWindow(CurrentPrescription.Patient.ID, CurrentPrescription.Patient.IDNumber, CurrentPrescription.Card);
         }
         #endregion
     }

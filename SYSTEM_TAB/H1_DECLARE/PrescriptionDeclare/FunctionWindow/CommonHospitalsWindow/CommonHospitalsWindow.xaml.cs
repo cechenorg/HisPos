@@ -17,8 +17,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 if (notificationMessage.Notification.Equals("CloseCommonHospitalsWindow"))
                     Close();
             });
-            this.DataContext = new CommonHospitalsViewModel(vm);
-            this.Closing += (sender, e) => Messenger.Default.Unregister(this);
+            DataContext = new CommonHospitalsViewModel(vm);
+            Closing += (sender, e) => Messenger.Default.Unregister(this);
+            ShowDialog();
         }
     }
 }
