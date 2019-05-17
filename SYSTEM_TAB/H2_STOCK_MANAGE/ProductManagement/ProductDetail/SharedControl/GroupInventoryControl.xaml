@@ -54,7 +54,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Label Width="200" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"   
-                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="18" FontStretch="ExtraExpanded" Content="{Binding ProID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="18" FontStretch="ExtraExpanded" Content="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             </StackPanel>
                         </DataTemplate>

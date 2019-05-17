@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
-    public class ProductGroupSetting : ObservableObject
+    public class ProductGroupSetting : Product
     {
         public ProductGroupSetting() { }
 
-        public ProductGroupSetting(DataRow r) {
-            IsEditable = true;
-            ProID = r.Field<string>("Pro_ID");
-            Name = r.Field<string>("Pro_ChineseName");
+        public ProductGroupSetting(DataRow r):base(r) {
+            IsEditable = true; 
         }
         private bool isEditable = false;
         public bool IsEditable
@@ -23,17 +21,6 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
             get { return isEditable; }
             set { Set(() => IsEditable, ref isEditable, value); }
         }
-        private string proID;
-        public string ProID
-        {
-            get { return proID; }
-            set { Set(() => ProID, ref proID, value); }
-        }
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { Set(() => Name, ref name, value); }
-        }
+        
     }
 }

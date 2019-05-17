@@ -39,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public RelayCommand<string> AddProductByInputCommand { get; set; }
         public RelayCommand MergeProductGroupCommand { get; set; }
         public RelayCommand SplitProductGroupCommand { get; set; }
+        public RelayCommand RemoveMergeProductCommand { get; set; }
         #endregion
 
 
@@ -48,21 +49,41 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
             SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
+            RemoveMergeProductCommand = new RelayCommand(RemoveMergeProductAction);
             ProductGroupSettingCollection.GetDataByID(proID);
         }
         #region Function
+        private void CloseWindow() {
+            Messenger.Default.Send(new NotificationMessage(this, "CloseProductGroupSettingWindow"));
+        }
+        private void RemoveMergeProductAction() {
+            if (ProductGroupSettingSelectedItem is null) return;
+            ProductGroupSettingCollection.Remove(ProductGroupSettingSelectedItem);
+        }
         private void SplitProductGroupAction() {
             if(ProductGroupSettingSelectedItem is null)
                 MessageWindow.ShowMessage("請選擇欲拆出之商品", MessageType.ERROR);
-            SplitProductWindow splitProductWindow = new SplitProductWindow(ProductGroupSettingSelectedItem.ProID);
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否拆出此商品?", "拆庫確認");
+            if (((bool)confirmWindow.DialogResult) == true)
+            {
+                SplitProductWindow splitProductWindow = new SplitProductWindow(ProductGroupSettingSelectedItem.ID);
+                CloseWindow();
+            }
         }
         private void MergeProductGroupAction() {
+            if (ProductGroupSettingCollection.Count < 2) {
+                MessageWindow.ShowMessage("合併商品不可小於兩種", MessageType.ERROR);
+                return;
+            }
+             
             ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
             {
                 ProductGroupSettingCollection.MergeProduct();
                 MessageWindow.ShowMessage("合併成功",MessageType.SUCCESS);
+                CloseWindow();
             }
+            
         }
         private void SetIsSpiltTrueAction()  {
             IsSplit = true;
@@ -75,10 +96,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             if (notificationMessage.Notification == nameof(ProductGroupSettingWindowViewModel))
             {
+                if (ProductGroupSettingCollection.Count(p => p.ID == notificationMessage.Content.ID) > 0) {
+                    MessageWindow.ShowMessage("已輸入過此商品",MessageType.ERROR);
+                    return;
+                }
+                 
                 ProductGroupSettingSelectedItem = new ProductGroupSetting();
                 ProductGroupSettingSelectedItem.IsEditable = true;
-                ProductGroupSettingSelectedItem.ProID = notificationMessage.Content.ID;
-                ProductGroupSettingSelectedItem.Name = notificationMessage.Content.ChineseName;
+                ProductGroupSettingSelectedItem.ID = notificationMessage.Content.ID;
+                ProductGroupSettingSelectedItem.ChineseName = notificationMessage.Content.ChineseName;
+                ProductGroupSettingSelectedItem.EnglishName = notificationMessage.Content.EnglishName;
                 ProductGroupSettingCollection.Add(ProductGroupSettingSelectedItem);
             }
         }

@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
             foreach (var m in productGroupSettings)
             {
                 DataRow newRow = medicineListTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m.ProID);
+                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m.ID);
                 medicineListTable.Rows.Add(newRow);
             }
             return medicineListTable;

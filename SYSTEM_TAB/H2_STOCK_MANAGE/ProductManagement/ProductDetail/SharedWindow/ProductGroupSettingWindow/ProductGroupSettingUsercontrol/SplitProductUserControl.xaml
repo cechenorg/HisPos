@@ -17,7 +17,7 @@
         </DataTemplate>
         <DataTemplate x:Key="DisableProduct" DataType="{x:Type Label}">
             <Label x:Name="ReleaseHospital" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding ProID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                   Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -64,7 +64,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Label Width="150" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding ProID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             </StackPanel>
                         </DataTemplate>
@@ -75,7 +75,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Label Width="250" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             </StackPanel>
                         </DataTemplate>
