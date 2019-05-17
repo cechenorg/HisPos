@@ -21,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
+        public RelayCommand<string> ExportOrderDataCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -134,6 +135,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
         }
+        private void ExportOrderDataAction(string type)
+        {
+            switch (type)
+            {
+                case "S":
+                    break;
+                case "A":
+                    break;
+                default:
+                    MessageWindow.ShowMessage("資料異常 請稍後再試", MessageType.ERROR);
+                    break;
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -143,6 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
+            ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
         }
         private void RegisterMessengers()
         {

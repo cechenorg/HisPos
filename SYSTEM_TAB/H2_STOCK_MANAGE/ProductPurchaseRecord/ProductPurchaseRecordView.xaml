@@ -129,6 +129,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="70" Margin="10,0,0,0">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu TextBlock.TextAlignment="Center">
+                                                <MenuItem Header="匯出選取訂單資料" Command="{Binding ExportOrderDataCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="S"/>
+                                                <MenuItem Header="匯出查詢結果所有訂單資料" Command="{Binding ExportOrderDataCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="A"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
