@@ -479,6 +479,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ShowCustomerDetailAction() {
             if (CurrentPrescription.Patient.ID == -1) return;
             CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void SearchCusAction(object sender)
         {
