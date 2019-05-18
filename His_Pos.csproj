@@ -709,6 +709,9 @@
       <DependentUpon>ProductManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml.cs">
+      <DependentUpon>DeleteOrderWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml.cs">
       <DependentUpon>PurchaseRecordDetailControl.xaml</DependentUpon>
     </Compile>
@@ -1209,6 +1212,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1611,7 +1618,6 @@
     <Content Include="RDLC\MedBagReportSingle.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="ClassDiagram1.cd" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
