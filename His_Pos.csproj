@@ -541,6 +541,10 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="Service\ExportService\ExportExcelService.cs" />
+    <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
+    <Compile Include="Service\ExportService\ExportExcelSettings.cs" />
+    <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
@@ -1695,8 +1699,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewClass\StoreOrder\ExportOrderRecord\" />
     <Folder Include="packages\" />
-    <Folder Include="Service\ExportService\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
