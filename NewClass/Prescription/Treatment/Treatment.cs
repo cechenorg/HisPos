@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SpecialTreat = new SpeTre();
             Copayment = new Cop();
         }
-        public Treatment(CooperativePrescription c)
+        public Treatment(OrthopedicsPrescription c)
         {
             var prescription = c.DeclareXmlDocument.Prescription;
             var study = prescription.Study;
@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
         }
-        public Treatment(XmlOfPrescription.Prescription c,DateTime treatDate) {
+        public Treatment(CooperativePrescription.Prescription c,DateTime treatDate) {
             var prescription = c;
             var study = prescription.Study;
             var diseases = study.Diseases.Disease;

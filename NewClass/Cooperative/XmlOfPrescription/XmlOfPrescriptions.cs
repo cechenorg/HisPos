@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
 {
-   public class XmlOfPrescriptions : ObservableCollection<XmlOfPrescription>
+   public class XmlOfPrescriptions : ObservableCollection<CooperativePrescription>
     {
         public XmlOfPrescriptions() {
         }

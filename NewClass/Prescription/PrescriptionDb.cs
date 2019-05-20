@@ -490,12 +490,12 @@ namespace His_Pos.NewClass.Prescription
             Prescriptions prescriptions = new Prescriptions();
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByMedicalNum", keyValues);
-            XmlSerializer ser = new XmlSerializer(typeof(CooperativePrescription));
+            XmlSerializer ser = new XmlSerializer(typeof(OrthopedicsPrescription));
             foreach (XmlDocument xmlDocument in table)
             {
                 using (TextReader sr = new StringReader(xmlDocument.InnerXml))
                 {
-                    CooperativePrescription response = (CooperativePrescription)ser.Deserialize(sr);
+                    OrthopedicsPrescription response = (OrthopedicsPrescription)ser.Deserialize(sr);
                     prescriptions.Add(new Prescription(response));
                 }
             }
@@ -513,9 +513,23 @@ namespace His_Pos.NewClass.Prescription
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
             foreach (XmlDocument xmlDocument in table)
             {
-                prescriptions.Add(new Prescription(XmlService.Deserialize<CooperativePrescription>(xmlDocument.InnerXml)));
+                prescriptions.Add(new Prescription(XmlService.Deserialize<OrthopedicsPrescription>(xmlDocument.InnerXml)));
             }
             return prescriptions;
+        }
+        public static List<XmlDocument> GetOrthopedicsPrescriptions(DateTime sDate, DateTime eDate)
+        {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                {"pharmcyMedicalNum",ViewModelMainWindow.CurrentPharmacy.ID },
+                {"sDate",sDate.ToString("yyyy-MM-dd") },
+                {"eDate",eDate.ToString("yyyy-MM-dd") }
+            };
+            PrescriptionRefactoring.Prescriptions prescriptions = new PrescriptionRefactoring.Prescriptions();
+            var httpMethod = new HttpMethod();
+            var table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
+            
+            return table;
         }
         #endregion
         #region TableSet

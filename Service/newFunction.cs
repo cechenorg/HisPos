@@ -8,9 +8,12 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xml.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
@@ -245,6 +248,44 @@ namespace His_Pos.Service
             result.Add(printSingle);
             result.Add(receiptPrint);
             return result;
+        }
+
+        public static void GetXmlFiles()
+        {
+            var cooperativeClinicSettings = new CooperativeClinicSettings();
+            cooperativeClinicSettings.Init();
+            var xDocs = new List<XDocument>();
+            var cusIdNumbers = new List<string>();
+            var paths = new List<string>();
+            foreach (var c in cooperativeClinicSettings)
+            {
+                var path = c.FilePath;
+                if (string.IsNullOrEmpty(path)) continue;
+                try
+                {
+                    var fileEntries = Directory.GetFiles(path);
+                    foreach (var s in fileEntries)
+                    {
+                        try
+                        {
+                            var xDocument = XDocument.Load(s);
+                            var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                            xDocs.Add(xDocument);
+                            cusIdNumbers.Add(cusIdNumber);
+                            paths.Add(s);
+                        }
+                        catch (Exception ex)
+                        {
+                            ExceptionLog(ex.Message);
+                        }
+                    }
+                    XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLog(ex.Message);
+                }
+            }
         }
     }
 }

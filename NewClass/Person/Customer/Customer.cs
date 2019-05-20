@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using IcCard = His_Pos.NewClass.Prescription.IcCard;
@@ -44,6 +45,23 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
         private ICollectionView historyCollectionView;
+
+        public Customer(CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            Tel = customer.Phone;
+        }
+
+        public Customer(CooperativePrescription.Customer customer, int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            Tel = customer.Phone;
+        }
+
         public ICollectionView HistoryCollectionView
         {
             get => historyCollectionView;

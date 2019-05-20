@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace His_Pos.NewClass.CooperativeInstitution {
     [XmlRoot("DeclareXml")]
-    public class CooperativePrescription
+    public class OrthopedicsPrescription
     {
         [XmlElement(ElementName = "DeclareId")]
         public string CooperativePrescriptionId { get; set; }

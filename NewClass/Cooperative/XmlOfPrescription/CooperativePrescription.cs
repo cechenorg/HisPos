@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
 {
 
-    public class XmlOfPrescription
+    public class CooperativePrescription
     { 
         [XmlRoot(ElementName = "person")]
         public class Customer {

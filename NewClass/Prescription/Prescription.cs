@@ -71,7 +71,7 @@ namespace His_Pos.NewClass.Prescription
                     break;
             }
         }
-        public Prescription(CooperativePrescription c) {
+        public Prescription(OrthopedicsPrescription c) {
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
             var customer = prescription.CustomerProfile.Customer;
@@ -102,7 +102,7 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(new Medicine(m));
             }
         }
-        public Prescription(XmlOfPrescription.Prescription c,DateTime treatDate,string sourceId,bool IsRead) { 
+        public Prescription(CooperativePrescription.Prescription c,DateTime treatDate,string sourceId,bool IsRead) { 
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;

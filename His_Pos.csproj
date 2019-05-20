@@ -325,9 +325,9 @@
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSetting.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettingDb.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettings.cs" />
-    <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescription.cs" />
+    <Compile Include="NewClass\Cooperative\CooperativeInstitution\OrthopedicsPrescription.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeInstitution\CooperativePrescriptions.cs" />
-    <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescription.cs" />
+    <Compile Include="NewClass\Cooperative\XmlOfPrescription\CooperativePrescription.cs" />
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptionDb.cs" />
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\Manufactories.cs" />

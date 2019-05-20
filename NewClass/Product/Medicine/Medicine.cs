@@ -63,7 +63,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
             }
         }
-        public Medicine(XmlOfPrescription.Item m) {
+        public Medicine(CooperativePrescription.Item m) {
             Usage = new Usage.Usage();
             Position = new Position.Position();
             ID = m.Id;

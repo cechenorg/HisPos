@@ -10,7 +10,7 @@ namespace His_Pos.Class
           // sHospId = cooperativeClinics[0].Prescription.Treatment.MedicalInfo.Hospital.Id;
           // sRxId = ViewModelMainWindow.CurrentPharmacy.Id; 
           //
-          // foreach (CooperativePrescription declareData in cooperativeClinics) {
+          // foreach (OrthopedicsPrescription declareData in cooperativeClinics) {
           //     msMedList msMedList = new msMedList();
           //     msMedList.sMedDate = declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyyMMdd");
           //     msMedList.sShtId = declareData.Remark.Substring(0,16);
