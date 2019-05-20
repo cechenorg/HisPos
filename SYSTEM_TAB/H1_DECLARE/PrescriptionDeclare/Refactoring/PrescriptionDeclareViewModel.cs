@@ -120,6 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
+
         }
 
         private void GetPatientDataAction()
@@ -228,7 +229,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             var parameters = o.ConvertTo<List<string>>();
             var elementName = parameters[0];
             var diseaseID = parameters[1];
-            //診斷碼查詢
             switch (elementName)
             {
                 case "MainDiagnosis":

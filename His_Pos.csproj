@@ -362,6 +362,9 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescription.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Prescriptions.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\CooperativePrescriptionService.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionServiceProvider.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\NormalPrescriptionService.cs" />
@@ -574,6 +577,10 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedicineDataGrid.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml.cs">
+      <DependentUpon>CooperativePrescriptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsWindow.xaml.cs">
       <DependentUpon>CommonHospitalsWindow.xaml</DependentUpon>
@@ -1119,6 +1126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

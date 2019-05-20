@@ -246,7 +246,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         #region Functions
         private void GetCooperativePrescription(Prescriptions receivePrescriptions)
         {
-          
             CooperativePrescriptions = new Prescriptions();
             CooperativePrescriptions = receivePrescriptions;
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
