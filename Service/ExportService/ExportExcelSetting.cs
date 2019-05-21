@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace His_Pos.Service.ExportService
 {
-    public class ExportExcelSetting
+    public abstract class ExportExcelSetting
     {
         #region ----- Define Variables -----
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public int FontSize { get; set; }
-        public int FontColor { get; set; }
-        public int BackGroundColor { get; set; }
-        public bool IsBold { get; set; }
+        public string Data { get; set; } = "";
+        public int Row { get; set; } = 1;
+        public int Column { get; set; } = 1;
         #endregion
 
-        #region ----- Define Functions -----
-        internal void InsertDataToSheet(ExcelWorksheet worksheet)
+        protected ExportExcelSetting(string data, int row, int column)
         {
-            throw new NotImplementedException();
+            Data = data;
+            Row = row;
+            Column = column;
         }
+
+        #region ----- Define Functions -----
+        public abstract void InsertDataToSheet(ExcelWorksheet worksheet);
         #endregion
     }
 }

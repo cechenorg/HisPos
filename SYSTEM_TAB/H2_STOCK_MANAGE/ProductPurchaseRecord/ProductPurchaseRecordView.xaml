@@ -10,6 +10,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:newclass="clr-namespace:His_Pos.NewClass"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
         <i:EventTrigger EventName="Loaded">
@@ -46,7 +47,7 @@
             <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
-            <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/GreenDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="NotScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
@@ -54,6 +55,7 @@
         <DataTemplate x:Key="ScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <Label Content="處理單已作廢" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>
         </DataTemplate>
+        <newclass:BindingProxy x:Key="proxy" Data="{Binding}" />
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
@@ -131,8 +133,8 @@
                                     <Grid Height="70" Margin="10,0,0,0">
                                         <Grid.ContextMenu>
                                             <ContextMenu TextBlock.TextAlignment="Center">
-                                                <MenuItem Header="匯出選取訂單資料" Command="{Binding ExportOrderDataCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="S"/>
-                                                <MenuItem Header="匯出查詢結果所有訂單資料" Command="{Binding ExportOrderDataCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="A"/>
+                                                <MenuItem Header="匯出選取訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}"/>
+                                                <MenuItem Header="匯出查詢結果所有訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <Grid.RowDefinitions>

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,9 +11,15 @@ namespace His_Pos.Service.ExportService
     public class ExportExcelService
     {
         #region ----- Define Variables -----
-        public ICollection<object> DataSource { get; set; }
-        public ExportExcelTemplate Template { get; set; }
+        private Collection<object> DataSource { get; }
+        private ExportExcelTemplate Template { get; }
         #endregion
+
+        public ExportExcelService(Collection<object> dataSource, ExportExcelTemplate template)
+        {
+            DataSource = dataSource;
+            Template = template;
+        }
 
         #region ----- Define Functions -----
         public void Export(string exportPath)

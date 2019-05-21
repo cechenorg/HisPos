@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -6,6 +7,8 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
+using His_Pos.Service.ExportService;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -21,7 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand<string> ExportOrderDataCommand { get; set; }
+        public RelayCommand ExportOrderDataCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -135,11 +138,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
         }
-        private void ExportOrderDataAction(string type)
+        private void ExportOrderDataAction()
         {
-            switch (type)
+            switch ("S")
             {
                 case "S":
+                    Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
+
+                    ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
+                    service.Export(@"C:\Users\admin\Desktop\new.xlsx");
                     break;
                 case "A":
                     break;
@@ -157,7 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
-            ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
+            ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
         }
         private void RegisterMessengers()
         {

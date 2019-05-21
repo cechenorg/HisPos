@@ -524,6 +524,7 @@
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
+    <Compile Include="NewClass\StoreOrder\ExportOrderRecord\ExportOrderRecordTemplate.cs" />
     <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
@@ -541,10 +542,13 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelService.cs" />
     <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelSettings.cs" />
     <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
+    <Compile Include="Service\ExportService\ExportNormalExcelSetting.cs" />
+    <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
@@ -1699,7 +1703,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewClass\StoreOrder\ExportOrderRecord\" />
     <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>

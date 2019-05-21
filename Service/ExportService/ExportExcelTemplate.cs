@@ -3,24 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using OfficeOpenXml;
 
 namespace His_Pos.Service.ExportService
 {
-    public class ExportExcelTemplate
+    public abstract class ExportExcelTemplate : ObservableObject
     {
         #region ----- Define Variables -----
-        public object Source { get; set; }
-        public ExportExcelSettings Settings { get; set; }
+        private object source;
+
+        public object Source
+        {
+            get => source;
+            set
+            {
+                Set(() => Source, ref source, value);
+                CreateExcelSettings();
+            }
+        }
+        public ExportExcelSettings Settings { get; set; } = new ExportExcelSettings();
         #endregion
 
         #region ----- Define Functions -----
-        public string GetSheetName()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract string GetSheetName();
+        protected abstract void CreateExcelSettings();
 
-        internal void SetSheetData(ExcelWorksheet worksheet)
+        public void SetSheetData(ExcelWorksheet worksheet)
         {
             foreach (var setting in Settings)
                 setting.InsertDataToSheet(worksheet);
