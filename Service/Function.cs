@@ -93,7 +93,7 @@ namespace His_Pos.Service
             }
             else
             {
-                path += "\\DailyUpload";
+                path = "C:\\Program Files\\HISPOS\\DailyUpload";
                 path_ymd = path + "\\" + year + month.PadLeft(2, '0') + day;
                 path_file = path_ymd + "\\" + year + month + day;
             }
