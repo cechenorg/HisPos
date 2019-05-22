@@ -855,14 +855,8 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
-      <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
-      <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
@@ -984,7 +978,7 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
@@ -1387,15 +1381,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
