@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using His_Pos.ChromeTabViewModel;
@@ -26,6 +27,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         internal static DataTable GetSingdeProductsByStoreOrderID(string orederID)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderDetail('{orederID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
+        }
+
+        internal static DataTable GetProductsByStoreOrderIDForExport(string iD)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_ID", iD));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductByStoreOrderIDForExport]", parameters);
         }
 
         internal static DataTable GetReturnProductByProductID(string iD)

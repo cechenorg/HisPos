@@ -35,8 +35,11 @@ namespace His_Pos.Service.ExportService
             worksheet.Cells[Row, Column].Style.Font.Size = FontSize;
             worksheet.Cells[Row, Column].Style.Font.Color.SetColor(FontColor);
 
-            worksheet.Cells[Row, Column].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-            worksheet.Cells[Row, Column].Style.Fill.BackgroundColor.SetColor(BackGroundColor);
+            if (BackGroundColor != Color.Transparent)
+            {
+                worksheet.Cells[Row, Column].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[Row, Column].Style.Fill.BackgroundColor.SetColor(BackGroundColor);
+            }
 
             worksheet.Cells[Row, Column].Value = Data;
         }

@@ -17,7 +17,7 @@ namespace His_Pos.Service.ExportService
         #region ///// Header Variables /////
         public int HeaderFontSize { get; set; } = 12;
         public Color HeaderFontColor { get; set; } = Color.Black;
-        public Color HeaderBackGroundColor { get; set; } = Color.LightSkyBlue;
+        public Color HeaderBackGroundColor { get; set; } = Color.LightBlue;
         public bool HeaderIsBold { get; set; } = true;
         #endregion
 
@@ -45,7 +45,12 @@ namespace His_Pos.Service.ExportService
                 worksheet.Cells[Row, Column + col].Style.Font.Bold = HeaderIsBold;
                 worksheet.Cells[Row, Column + col].Style.Font.Size = HeaderFontSize;
                 worksheet.Cells[Row, Column + col].Style.Font.Color.SetColor(HeaderFontColor);
-                worksheet.Cells[Row, Column + col].Style.Fill.BackgroundColor.SetColor(HeaderBackGroundColor);
+
+                if (HeaderBackGroundColor != Color.Transparent)
+                {
+                    worksheet.Cells[Row, Column + col].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[Row, Column + col].Style.Fill.BackgroundColor.SetColor(HeaderBackGroundColor);
+                }
 
                 worksheet.Cells[Row, Column + col].Value = Data.Columns[col].ColumnName;
             }
@@ -57,9 +62,14 @@ namespace His_Pos.Service.ExportService
                     worksheet.Cells[Row + row + 1, Column + col].Style.Font.Bold = DataIsBold;
                     worksheet.Cells[Row + row + 1, Column + col].Style.Font.Size = DataFontSize;
                     worksheet.Cells[Row + row + 1, Column + col].Style.Font.Color.SetColor(DataFontColor);
-                    worksheet.Cells[Row + row + 1, Column + col].Style.Fill.BackgroundColor.SetColor(DataBackGroundColor);
 
-                    worksheet.Cells[Row + row + 1, Column + col].Value = Data.Rows[row][col].ToString();
+                    if (DataBackGroundColor != Color.Transparent)
+                    {
+                        worksheet.Cells[Row + row + 1, Column + col].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        worksheet.Cells[Row + row + 1, Column + col].Style.Fill.BackgroundColor.SetColor(DataBackGroundColor);
+                    }
+                    
+                    worksheet.Cells[Row + row + 1, Column + col].Value = Data.Rows[row][col];
                 }
             }
         }

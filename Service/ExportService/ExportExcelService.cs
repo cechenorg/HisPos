@@ -22,22 +22,32 @@ namespace His_Pos.Service.ExportService
         }
 
         #region ----- Define Functions -----
-        public void Export(string exportPath)
+        public bool Export(string exportPath)
         {
-            using (ExcelPackage excel = new ExcelPackage())
+            try
             {
-                foreach(var data in DataSource)
+                using (ExcelPackage excel = new ExcelPackage())
                 {
-                    Template.Source = data;
-                    excel.Workbook.Worksheets.Add(Template.GetSheetName());
+                    foreach (var data in DataSource)
+                    {
+                        Template.Source = data;
+                        excel.Workbook.Worksheets.Add(Template.GetSheetName());
 
-                    var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
-                    Template.SetSheetData(worksheet);
+                        var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
+                        Template.SetSheetData(worksheet);
+                    }
+
+                    FileInfo excelFile = new FileInfo(exportPath);
+                    excel.SaveAs(excelFile);
                 }
 
-                FileInfo excelFile = new FileInfo(exportPath);
-                excel.SaveAs(excelFile);
+                return true;
             }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
         }
         #endregion
     }

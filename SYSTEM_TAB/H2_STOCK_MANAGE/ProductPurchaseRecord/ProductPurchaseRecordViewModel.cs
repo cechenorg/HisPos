@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -24,7 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand ExportOrderDataCommand { get; set; }
+        public RelayCommand<string> ExportOrderDataCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -66,7 +68,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
         private double totalPrice;
-        
+        private bool isBusy;
+        private string busyContent;
+
+        public bool IsBusy
+        {
+            get => isBusy;
+            set { Set(() => IsBusy, ref isBusy, value); }
+        }
+        public string BusyContent
+        {
+            get => busyContent;
+            set { Set(() => BusyContent, ref busyContent, value); }
+        }
         public StoreOrders StoreOrderCollection
         {
             get { return storeOrderCollection; }
@@ -104,8 +118,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             if (!IsSearchConditionValid()) return;
 
+            MainWindow.ServerConnection.OpenConnection();
             StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID);
-
+            MainWindow.ServerConnection.CloseConnection();
+            
             if (StoreOrderCollection.Count > 0)
             {
                 CurrentStoreOrder = StoreOrderCollection[0];
@@ -138,22 +154,49 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
         }
-        private void ExportOrderDataAction()
+        private void ExportOrderDataAction(string type)
         {
-            switch ("S")
-            {
-                case "S":
-                    Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
+            IsBusy = true;
+            BusyContent = "匯出資料";
 
-                    ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
-                    service.Export(@"C:\Users\admin\Desktop\new.xlsx");
-                    break;
-                case "A":
-                    break;
-                default:
-                    MessageWindow.ShowMessage("資料異常 請稍後再試", MessageType.ERROR);
-                    break;
-            }
+            bool isSuccess = false;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                Collection<object> tempCollection;
+
+                switch (type)
+                {
+                    case "S":
+                        tempCollection = new Collection<object>() { CurrentStoreOrder };
+                        break;
+                    case "A":
+                        tempCollection = new Collection<object>(StoreOrderCollection.ToArray());
+                        break;
+                    default:
+                        MessageWindow.ShowMessage("資料異常 請稍後再試", MessageType.ERROR);
+                        return;
+                }
+
+                MainWindow.ServerConnection.OpenConnection();
+                ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
+                isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\進退貨紀錄{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isSuccess)
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                else
+                    MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
         #endregion
 
@@ -164,7 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
-            ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
+            ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
         }
         private void RegisterMessengers()
         {
