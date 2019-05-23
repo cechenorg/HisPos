@@ -29,6 +29,7 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
 using Xceed.Wpf.Toolkit;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
@@ -61,7 +62,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         #region Variables
         public Prescription CurrentPrescription { get; set; }
         #endregion
-
         #region Commands
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
@@ -120,7 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
-
+            var cooPresWindow = new CooperativePrescriptionWindow();
         }
 
         private void GetPatientDataAction()

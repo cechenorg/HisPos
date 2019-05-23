@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Interface;
+using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
+using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public abstract class Medicine:Product.Product
+    public class Medicine:Product.Product
     {
         public Medicine() : base()
         {
@@ -21,6 +17,65 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public Medicine(DataRow r) : base(r)
         {
 
+        }
+
+        public Medicine(CooperativeMedicine m)
+        {
+            Usage = new Usage();
+            Position = new Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            UsageName = m.Freq;
+            PositionID = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Divided_dose);
+            Days = Convert.ToInt32(m.Days);
+            PaySelf = !string.IsNullOrEmpty(m.Remark);
+            IsBuckle = false;
+            switch (m.Remark)
+            {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    break;
+            }
+        }
+
+        public Medicine(OrthopedicsMedicine m)
+        {
+            Usage = new Usage();
+            Position = new Position();
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+            UsageName = m.Freq;
+            PositionID = m.Way;
+            Amount = Convert.ToDouble(m.Total_dose);
+            Dosage = Convert.ToDouble(m.Divided_dose);
+            Days = Convert.ToInt32(m.Days);
+            PaySelf = m.Remark == "-" || m.Remark == "*";
+            IsBuckle = false;
+            switch (m.Remark)
+            {
+                case "":
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Convert.ToDouble(m.Price);
+                    break;
+                default:
+                    TotalPrice = Amount * Convert.ToDouble(m.Price);
+                    break;
+            }
         }
 
         #region Properties
@@ -236,6 +291,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
 
         private double buckleAmount;
+
         public double BuckleAmount
         {
             get => buckleAmount;

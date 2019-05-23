@@ -156,32 +156,103 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             foreach (var m in prescription.MedicineOrder.Item)
             {
-                //Medicines.Add(new Medicine(m));
+                Medicines.Add(new Medicine(m));
             }
         }
 
-        public Prescription(CooperativePrescription.Prescription c, DateTime dateTime, string sourceId, bool IsRead)
+        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool IsRead)
         {
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
+            var study = prescription.Study;
+            var diseases = study.Diseases.Disease;
+            var insurance = prescription.Insurance;
+            var chronic = prescription.Continous_prescription;
             var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
             var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
             #endregion
             Type = PrescriptionType.Cooperative;
             SourceId = sourceId;
-
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
-            //Treatment = new Treatment.Treatment(c, treatDate);
             Patient = new Customer(customer, birthYear, birthMonth, birthDay);
             Card = new IcCard();
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
+            MainDisease = new DiseaseCode();
+            SubDisease = new DiseaseCode();
+            for (var i = 0; i < diseaseCount; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        MainDisease.ID = diseases[i].Code;
+                        break;
+                    case 1:
+                        SubDisease.ID = diseases[i].Code;
+                        break;
+                }
+            }
+            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
+            Copayment = new Copayment();
+            if (!string.IsNullOrEmpty(insurance.CopaymentCode))
+            {
+                switch (insurance.CopaymentCode)
+                {
+                    case "003":
+                    case "004":
+                    case "007":
+                    case "009":
+                    case "I22":
+                    case "001":
+                    case "002":
+                    case "005":
+                    case "006":
+                    case "008":
+                    case "902":
+                    case "903":
+                    case "906":
+                    case "907":
+                        Copayment = VM.GetCopayment(insurance.CopaymentCode);
+                        break;
+                }
+            }
+            int.TryParse(chronic.Count, out var seq);
+            if (seq != 0)
+                ChronicSeq = seq;
+            int.TryParse(chronic.Total, out var total);
+            if (total != 0)
+                ChronicTotal = total;
+            if (ChronicSeq != null && ChronicTotal != null)
+            {
+                OriginalMedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = "IC0" + ChronicSeq;
+                AdjustCase = VM.GetAdjustCase("2");
+                TempMedicalNumber = OriginalMedicalNumber;
+            }
+            else
+            {
+                MedicalNumber = insurance.MedicalNumber;
+                AdjustCase = VM.GetAdjustCase("1");
+                TempMedicalNumber = MedicalNumber;
+            }
+            if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
+                TempMedicalNumber = c.Insurance.IcErrorCode;
+
+            TreatDate = treatDate.Date;
+            AdjustDate = DateTime.Today;
+            PaymentCategory = VM.GetPaymentCategory("4");
+            SpecialTreat = new SpecialTreat();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = IsRead;
             foreach (var m in prescription.MedicineOrder.Item)
             {
-                //Medicines.Add(new Medicine(m));
+                Medicines.Add(new Medicine(m));
             }
         }
         #region Properties
@@ -387,6 +458,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Type = PrescriptionType.Normal;
                 PrescriptionStatus.IsBuckle = true;
             }
+        }
+
+        public void GetMedicines()
+        {
+            throw new NotImplementedException();
         }
     }
 }

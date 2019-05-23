@@ -362,6 +362,10 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Cooperative\CooperativePreBases.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Cooperative\CooperativePreview.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Cooperative\CooperativePreBase.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\Cooperative\OrthopedicsPreview.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescription.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Prescriptions.cs" />
@@ -458,6 +462,8 @@
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreatDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreats.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
+    <Compile Include="NewClass\Product\Medicine\PreviewMedicine\PreviewMedicine.cs" />
+    <Compile Include="NewClass\Product\Medicine\PreviewMedicine\PreviewMedicines.cs" />
     <Compile Include="NewClass\Product\Medicine\Usage\Usages.cs" />
     <Compile Include="NewClass\Product\Medicine\Medicine.cs" />
     <Compile Include="NewClass\Product\Medicine\MedicineNHI.cs" />

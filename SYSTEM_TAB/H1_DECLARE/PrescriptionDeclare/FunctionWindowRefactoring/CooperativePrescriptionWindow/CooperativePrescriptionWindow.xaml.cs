@@ -7,9 +7,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     /// </summary>
     public partial class CooperativePrescriptionWindow : Window
     {
+
         public CooperativePrescriptionWindow()
         {
             InitializeComponent();
+            DataContext = new CooperativePrescriptionViewModel();
+            ShowDialog();
         }
     }
 }
