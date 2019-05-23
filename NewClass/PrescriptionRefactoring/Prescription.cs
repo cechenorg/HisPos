@@ -473,8 +473,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             if (!AdjustCase.ID.Equals("0"))
             {
-                PrescriptionPoint.MedicinePoint = Medicines.Count(m => !m.PaySelf) <= 0 ? 0 : Medicines.CountMedicinePoint();
-                PrescriptionPoint.SpecialMaterialPoint = Medicines.Count(m => !m.PaySelf && m is MedicineSpecialMaterial) <= 0 ? 0 : Medicines.CountSpecialMedicinePoint();
+                PrescriptionPoint.MedicinePoint = Medicines.CountMedicinePoint();
+                PrescriptionPoint.SpecialMaterialPoint = Medicines.CountSpecialMedicinePoint();
                 if (AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0) || (ChronicTotal != null && ChronicTotal > 0))
                 {
                     Copayment = VM.GetCopayment("I22");

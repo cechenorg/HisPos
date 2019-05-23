@@ -127,12 +127,14 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public int CountMedicinePoint()
         {
+            if (this.Count(m => !m.PaySelf) <= 0) return 0;
             var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount);
             return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString()), 0, MidpointRounding.AwayFromZero);
         }
 
         public int CountSpecialMedicinePoint()
         {
+            if (this.Count(m => !m.PaySelf && m is MedicineSpecialMaterial) <= 0) return 0;
             var specialMaterial = this.Where(m => m is MedicineSpecialMaterial && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount * 1.05);
             return (int)Math.Round(Convert.ToDouble(specialMaterial.ToString()), 0, MidpointRounding.AwayFromZero);
         }
