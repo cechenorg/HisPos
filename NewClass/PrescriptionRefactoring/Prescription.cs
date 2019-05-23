@@ -640,8 +640,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             if (Medicines.Count == 1)
             {
-                var m = Medicines[0];
-                if (m is MedicineSpecialMaterial && m.ID.StartsWith("TSS01"))
+                if (Medicines[0].CheckIsBloodGlucoseTestStrip())
                 {
                     MedicalServiceCode = null;
                     PrescriptionPoint.MedicalServicePoint = 0;
