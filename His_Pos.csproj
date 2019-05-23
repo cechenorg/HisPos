@@ -395,6 +395,11 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\ProductType\ProductType.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageDetail.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageDetails.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageMaster.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageMasters.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
@@ -633,8 +638,6 @@
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
-    <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
-    <Compile Include="Class\ProductType\ProductTypeManageMaster.cs" />
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
@@ -646,7 +649,6 @@
     <Compile Include="Class\Product\ProductTypeOTC.cs" />
     <Compile Include="Class\Product\StockTakingMedicine.cs" />
     <Compile Include="Class\Product\StockTakingOTC.cs" />
-    <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
     <Compile Include="Class\ReportClass\MedBagReport.cs" />
     <Compile Include="Class\ReportClass\MedBagItem.cs" />

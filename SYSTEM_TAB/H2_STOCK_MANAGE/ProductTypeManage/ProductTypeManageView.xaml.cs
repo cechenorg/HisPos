@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
-using His_Pos.Class.ProductType;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;

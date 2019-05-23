@@ -166,8 +166,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 
             ProductTypeCollection = null;/// ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
-            if(OtcType.Items.Contains(InventoryOtc.ProductType.Name))
-                 OtcType.SelectedValue = InventoryOtc.ProductType.Name;
 
             StockTakingOverviewCollection = null;/// ProductDb.GetProductStockTakingDate(InventoryOtc.Id);
             if (StockTakingOverviewCollection.Count != 0)
