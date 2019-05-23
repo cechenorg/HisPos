@@ -14,5 +14,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
             Content = c;
         }
         public OrthopedicsPrescription Content { get;}
+        public override void Print()
+        {
+            var printPre = new Prescription(Content);
+        }
     }
 }

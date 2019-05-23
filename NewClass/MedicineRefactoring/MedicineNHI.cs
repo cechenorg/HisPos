@@ -11,17 +11,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
     {
         public MedicineNHI(DataRow r) : base(r)
         {
-            NHIPrice = (double)r.Field<decimal>("Med_Price");
-        }
-
-        private double nhiPrice;//健保價
-        public double NHIPrice
-        {
-            get => nhiPrice;
-            set
-            {
-                Set(() => NHIPrice, ref nhiPrice, value);
-            }
+            
         }
 
         private string atcCode;

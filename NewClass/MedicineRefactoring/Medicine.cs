@@ -7,7 +7,7 @@ using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public class Medicine:Product.Product
+    public abstract class Medicine:Product.Product
     {
         public Medicine() : base()
         {
@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public Medicine(DataRow r) : base(r)
         {
-
+            NHIPrice = (double)r.Field<decimal>("Med_Price");
         }
 
         public Medicine(CooperativeMedicine m)
@@ -298,6 +298,16 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => BuckleAmount, ref buckleAmount, value);
+            }
+        }
+
+        private double nhiPrice;//健保價
+        public double NHIPrice
+        {
+            get => nhiPrice;
+            set
+            {
+                Set(() => NHIPrice, ref nhiPrice, value);
             }
         }
         #endregion

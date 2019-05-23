@@ -1128,8 +1128,8 @@ namespace His_Pos.NewClass.Prescription
         public void GetCompletePrescriptionData(bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
-            Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
-            Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
+            Treatment.MainDisease.GetData();
+            Treatment.SubDisease.GetData();
             AdjustMedicinesType();
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();

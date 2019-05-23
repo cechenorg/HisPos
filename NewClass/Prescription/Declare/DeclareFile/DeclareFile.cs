@@ -353,6 +353,80 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             BuckleAmount = m.BuckleAmount;
         }
 
+        public Pdata(MedicineRefactoring.Medicine m, string serial)
+        {
+            if (m is MedicineRefactoring.MedicineNHI && !m.PaySelf)
+            {
+                P1 = "1";
+                P2 = m.ID;
+                P7 = $"{m.Amount:00000.0}";
+                P8 = $"{m.NHIPrice:0000000.00}";
+                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P3 = $"{m.Dosage:0000.00}";
+                P4 = m.UsageName;
+                P5 = m.PositionID;
+                P10 = serial;
+                P11 = $"{m.Days:00}";
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P13 = P12;
+                PaySelf = false;
+                IsBuckle = m.IsBuckle;
+            }
+            else if (m is MedicineRefactoring.MedicineSpecialMaterial && !m.PaySelf)
+            {
+                P1 = "3";
+                P2 = m.ID;
+                P3 = $"{m.Dosage:0000.00}";
+                P4 = m.UsageName;
+                P5 = m.PositionID;
+                P7 = $"{m.Amount:00000.0}";
+                P8 = $"{m.NHIPrice:0000000.00}";
+                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P6 = "105";
+                P10 = serial;
+                P11 = $"{m.Days:00}";
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P13 = P12;
+                PaySelf = false;
+                IsBuckle = m.IsBuckle;
+            }
+            else if (m is MedicineRefactoring.MedicineVirtual)
+            {
+                P1 = "G";
+                P2 = m.ID;
+                P7 = $"{0.00:00000.0}";
+                P8 = $"{0.00:0000000.00}";
+                P9 = $"{0.00:0000000}";
+                P10 = serial;
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P13 = P12;
+                PaySelf = false;
+                IsBuckle = false;
+                BuckleAmount = 0;
+            }
+            else
+            {
+                P1 = "0";
+                P2 = m.ID;
+                P7 = m.Amount.ToString();
+                var dosage = m.Dosage is null ? string.Empty : m.Dosage.ToString();
+                P3 = dosage;
+                P4 = m.UsageName;
+                P5 = m.PositionID;
+                P8 = string.Empty;
+                P9 = $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P10 = string.Empty;
+                var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
+                P11 = days;
+                P12 = string.Empty;
+                P13 = P12;
+                PaySelf = m.PaySelf;
+                IsBuckle = m.IsBuckle;
+            }
+            PaySelfValue = m.Price;
+            BuckleAmount = m.BuckleAmount;
+        }
+
         public Pdata(PDataType type,string code,int percentage,int amount)
         {
             switch (type)

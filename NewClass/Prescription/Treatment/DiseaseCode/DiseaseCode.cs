@@ -51,10 +51,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         [Index(3)]
         public virtual string ICD9_ID { get; set; }
 
-        public void GetDataByCodeId(string id) {
-            if (!string.IsNullOrEmpty(id))
+        public void GetData() {
+            if (!string.IsNullOrEmpty(ID))
             {
-                DataTable table = DiseaseCodeDb.GetDataByCodeId(id);
+                DataTable table = DiseaseCodeDb.GetDataByCodeId(ID);
                 if (table.Rows.Count > 0)
                 {
                     var diseaseCode = new DiseaseCode(table.Rows[0],false);
@@ -66,9 +66,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         }
         public static DiseaseCode GetDiseaseCodeByID(string id)
         {
-            var d = new DiseaseCode();
+            var d = new DiseaseCode {ID = id};
             MainWindow.ServerConnection.OpenConnection();
-            d.GetDataByCodeId(id);
+            d.GetData();
             MainWindow.ServerConnection.CloseConnection();
             if (!string.IsNullOrEmpty(d.ID)) return d;
             MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);

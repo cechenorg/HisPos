@@ -26,7 +26,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
             var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
             var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
-            #endregion 
+            #endregion
             Patient = new Customer(customer, birthYear, birthMonth, birthDay);
             Institution = VM.GetInstitution(prescription.From);
             Division = VM.GetDivision(study.Subject);
@@ -60,5 +60,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
         public PreviewMedicines Medicines { get; set; }
         public DateTime TreatDate { get; }
         public bool IsRead { get; set; }
+        public abstract void Print();
     }
 }

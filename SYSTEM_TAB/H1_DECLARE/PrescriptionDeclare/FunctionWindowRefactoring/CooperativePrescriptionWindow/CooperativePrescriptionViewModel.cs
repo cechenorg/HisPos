@@ -169,27 +169,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         #region Actions
         private void PrintAction()
         {
-            if (SelectedPrescription is null) return;
-            var printPre = SelectedPrescription is OrthopedicsPreview preview ? new Prescription(((OrthopedicsPreview)SelectedPrescription).Content) 
-                : new Prescription(((CooperativePreview)SelectedPrescription).Content, SelectedPrescription.TreatDate, ((CooperativePreview)SelectedPrescription).SourceID, SelectedPrescription.IsRead);
-            //printPre.GetCompletePrescriptionData(true, false);
-            //printPre.CountPrescriptionPoint(true);
-            //var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
-            //if ((bool)medBagPrint.DialogResult)
-            //{
-            //    var printBySingleMode = new MedBagSelectionWindow();
-            //    var singleMode = (bool)printBySingleMode.ShowDialog();
-            //    var receiptPrint = false;
-            //    if (SelectedPrescription.PrescriptionPoint.AmountsPay > 0)
-            //    {
-            //        var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
-            //        if (receiptResult.DialogResult != null)
-            //            receiptPrint = (bool)receiptResult.DialogResult;
-            //    }
-            //    SelectedPrescription.PrintMedBag(singleMode);
-            //    if (receiptPrint)
-            //        SelectedPrescription.PrintReceipt();
-            //}
+            MainWindow.ServerConnection.OpenConnection();
+            SelectedPrescription?.Print();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void PrescriptionSelectedAction()

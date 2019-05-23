@@ -18,10 +18,16 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using MedicineNHI = His_Pos.NewClass.MedicineRefactoring.MedicineNHI;
+using MedicineVirtual = His_Pos.NewClass.MedicineRefactoring.MedicineVirtual;
+using Resources = His_Pos.Properties.Resources;
+
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
@@ -78,50 +84,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Remark = customer.Remark;
             PrescriptionStatus.IsVIP = Remark.EndsWith("Y");
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
+            Patient = new Customer(customer, birthYear, birthMonth, birthDay);
             #region InitTreatment
+            Card = new IcCard();
+            SpecialTreat = new SpecialTreat();
+            AdjustDate = DateTime.Today;
+            TreatDate = Convert.ToDateTime(c.InsertDate);
             Institution = VM.GetInstitution(prescription.From);
             Division = VM.GetDivision(study.Subject);
-            var diseaseCount = diseases.Count;
-            if (diseaseCount > 2)
-                diseaseCount = 2;
-            MainDisease = new DiseaseCode();
-            SubDisease = new DiseaseCode();
-            for (int i = 0; i < diseaseCount; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        MainDisease.ID = diseases[i].Code;
-                        break;
-                    case 1:
-                        SubDisease.ID = diseases[i].Code;
-                        break;
-                }
-            }
+            PaymentCategory = VM.GetPaymentCategory("4");
             PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
-            Copayment = new Copayment();
-            if (!string.IsNullOrEmpty(insurance.CopaymentCode))
-            {
-                switch (insurance.CopaymentCode)
-                {
-                    case "003":
-                    case "004":
-                    case "007":
-                    case "009":
-                    case "I22":
-                    case "001":
-                    case "002":
-                    case "005":
-                    case "006":
-                    case "008":
-                    case "902":
-                    case "903":
-                    case "906":
-                    case "907":
-                        Copayment = VM.GetCopayment(insurance.CopaymentCode);
-                        break;
-                }
-            }
+            OrthopedicsGetDisease(diseases);
+            GetCopayment(insurance.CopaymentCode);
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -143,21 +117,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
-
-            TreatDate = Convert.ToDateTime(c.InsertDate);
-            AdjustDate = DateTime.Today;
-            PaymentCategory = VM.GetPaymentCategory("4");
-            SpecialTreat = new SpecialTreat();
             #endregion
-            Patient = new Customer(customer,birthYear,birthMonth,birthDay);
-            Card = new IcCard();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
-            foreach (var m in prescription.MedicineOrder.Item)
-            {
-                Medicines.Add(new Medicine(m));
-            }
+            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item);
         }
 
         public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool IsRead)
@@ -180,47 +144,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Card = new IcCard();
             Institution = VM.GetInstitution(prescription.From);
             Division = VM.GetDivision(study.Subject);
-            var diseaseCount = diseases.Count;
-            if (diseaseCount > 2)
-                diseaseCount = 2;
-            MainDisease = new DiseaseCode();
-            SubDisease = new DiseaseCode();
-            for (var i = 0; i < diseaseCount; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        MainDisease.ID = diseases[i].Code;
-                        break;
-                    case 1:
-                        SubDisease.ID = diseases[i].Code;
-                        break;
-                }
-            }
+            PaymentCategory = VM.GetPaymentCategory("4");
             PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
-            Copayment = new Copayment();
-            if (!string.IsNullOrEmpty(insurance.CopaymentCode))
-            {
-                switch (insurance.CopaymentCode)
-                {
-                    case "003":
-                    case "004":
-                    case "007":
-                    case "009":
-                    case "I22":
-                    case "001":
-                    case "002":
-                    case "005":
-                    case "006":
-                    case "008":
-                    case "902":
-                    case "903":
-                    case "906":
-                    case "907":
-                        Copayment = VM.GetCopayment(insurance.CopaymentCode);
-                        break;
-                }
-            }
+            TreatDate = treatDate.Date;
+            AdjustDate = DateTime.Today;
+            SpecialTreat = new SpecialTreat();
+            CooperativeGetDisease(diseases);
+            GetCopayment(insurance.CopaymentCode);
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -242,20 +172,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
-
-            TreatDate = treatDate.Date;
-            AdjustDate = DateTime.Today;
-            PaymentCategory = VM.GetPaymentCategory("4");
-            SpecialTreat = new SpecialTreat();
+            var cooperativeSetting = VM.CooperativeClinicSettings.Single(s => s.CooperavieClinic.ID.Equals(Institution.ID));
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = IsRead;
-            foreach (var m in prescription.MedicineOrder.Item)
-            {
-                Medicines.Add(new Medicine(m));
-            }
+            PrescriptionStatus.IsBuckle = cooperativeSetting.IsBuckle;
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, cooperativeSetting.IsBuckle);
         }
         #region Properties
+        public int ID { get; set; }
         public string SourceId { get; set; }
         public string Remark { get; set; }
         public Customer Patient { get; set; }
@@ -460,9 +385,303 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        public void GetMedicines()
+        public void GetCompletePrescriptionData(bool getDeposit)
         {
-            throw new NotImplementedException();
+            MainDisease.GetData();
+            SubDisease.GetData();
+            if (getDeposit)
+                PrescriptionPoint.GetDeposit(ID);
+        }
+
+        public void UpdateCooperativePrescriptionIsRead()
+        {
+            PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
+        }
+
+        private void GetCopayment(string copID)
+        {
+            Copayment = new Copayment();
+            if (!string.IsNullOrEmpty(copID))
+            {
+                switch (copID)
+                {
+                    case "003":
+                    case "004":
+                    case "007":
+                    case "009":
+                    case "I22":
+                    case "001":
+                    case "002":
+                    case "005":
+                    case "006":
+                    case "008":
+                    case "902":
+                    case "903":
+                    case "906":
+                    case "907":
+                        Copayment = VM.GetCopayment(copID);
+                        break;
+                }
+            }
+        }
+        private void OrthopedicsGetDisease(IReadOnlyList<Item> diseases)
+        {
+            MainDisease = new DiseaseCode();
+            SubDisease = new DiseaseCode();
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
+            for (var i = 0; i < diseaseCount; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        MainDisease.ID = diseases[i].Code;
+                        MainDisease.GetData();
+                        break;
+                    case 1:
+                        SubDisease.ID = diseases[i].Code;
+                        SubDisease.GetData();
+                        break;
+                }
+            }
+        }
+        private void CooperativeGetDisease(IReadOnlyList<CooperativePrescription.Item> diseases)
+        {
+            MainDisease = new DiseaseCode();
+            SubDisease = new DiseaseCode();
+            var diseaseCount = diseases.Count;
+            if (diseaseCount > 2)
+                diseaseCount = 2;
+            for (var i = 0; i < diseaseCount; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        MainDisease.ID = diseases[i].Code;
+                        MainDisease.GetData();
+                        break;
+                    case 1:
+                        SubDisease.ID = diseases[i].Code;
+                        SubDisease.GetData();
+                        break;
+                }
+            }
+        }
+
+        public void CountPrescriptionPoint(bool countSelfPay)
+        {
+            if (!AdjustCase.ID.Equals("0"))
+            {
+                PrescriptionPoint.MedicinePoint = Medicines.Count(m => !m.PaySelf) <= 0 ? 0 : Medicines.CountMedicinePoint();
+                PrescriptionPoint.SpecialMaterialPoint = Medicines.Count(m => !m.PaySelf && m is MedicineSpecialMaterial) <= 0 ? 0 : Medicines.CountSpecialMedicinePoint();
+                if (AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0) || (ChronicTotal != null && ChronicTotal > 0))
+                {
+                    Copayment = VM.GetCopayment("I22");
+                }
+                if (!CheckFreeCopayment())
+                {
+                    Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                }
+                else
+                {
+                    if (Copayment != null && Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
+                        Copayment = VM.GetCopayment("I20");
+                }
+                if (Copayment != null && !CheckFreeCopayment())
+                    PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
+                else
+                {
+                    PrescriptionPoint.CopaymentPoint = 0;
+                }
+                if (Patient.Birthday != null)
+                {
+                    CheckMedicalServiceData();//確認藥事服務資料
+                    var details = SetPrescriptionDetail();//產生藥品資料
+                    PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                }
+                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
+                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
+                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+            }
+            if (countSelfPay)
+                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+            PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
+            PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+        }
+
+        public bool CheckFreeCopayment()
+        {
+            if (Copayment is null) return false;
+            if (AdjustCase.ID.Equals("2"))
+                Copayment = VM.GetCopayment("I22");
+            if (AdjustCase.ID.Equals("4") || AdjustCase.ID.Equals("0"))
+                Copayment = VM.GetCopayment("009");
+            //、006，001~009(除006)，801，802，901，902，903，904
+            switch (Copayment.Id)
+            {
+                case "006"://勞保被人因職業傷害或疾病門診者
+                case "001"://重大傷病
+                case "002"://分娩
+                case "003"://低收入戶
+                case "004"://榮民
+                case "005"://結核病患至指定之醫療院所就醫者
+                case "007"://山地離島就醫/戒菸免收
+                case "008"://經離島醫院診所轉至台灣本門及急救者
+                case "009"://其他免負擔
+                case "I22"://免收
+                    return true;
+            }
+            switch (PrescriptionCase.ID)
+            {
+                case "007"://山地離島就醫/戒菸免收
+                case "11"://牙醫一般
+                case "12"://牙醫急診
+                case "13"://牙醫門診
+                case "14"://牙醫資源不足方案
+                case "15"://牙周統合照護
+                case "16"://牙醫特殊專案
+                case "19"://牙醫其他專案
+                case "C1"://論病計酬
+                    Copayment = VM.GetCopayment("I22");
+                    return true;
+            }
+            return false;
+        }
+
+        public int CountCopaymentPoint()
+        {
+            if (CheckFreeCopayment())
+                return 0;
+            var point = PrescriptionPoint.MedicinePoint;
+            if (point <= 100)
+                return 0;
+            if (point > 100 && point <= 200)
+                return 20;
+            if (point >= 201 && point <= 300)
+                return 40;
+            if (point >= 301 && point <= 400)
+                return 60;
+            if (point >= 401 && point <= 500)
+                return 80;
+            if (point >= 501 && point <= 600)
+                return 100;
+            if (point >= 601 && point <= 700)
+                return 120;
+            if (point >= 701 && point <= 800)
+                return 140;
+            if (point >= 801 && point <= 900)
+                return 160;
+            if (point >= 901 && point <= 1000)
+                return 180;
+            return 200;
+        }
+
+        private void CheckMedicalServiceData()
+        {
+            if (MedicineDays >= 28)
+            {
+                MedicalServiceCode = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 69;
+            }
+            else if (MedicineDays > 7 && MedicineDays < 14)
+            {
+                MedicalServiceCode = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+            else if (MedicineDays >= 14 && MedicineDays < 28)
+            {
+                MedicalServiceCode = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 59;
+            }
+            else
+            {
+                MedicalServiceCode = "05202B";//一般處方給付(7天以內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+        }
+
+        public List<Pdata> SetPrescriptionDetail()
+        {
+            var details = new List<Pdata>();
+            var serialNumber = 1;
+            foreach (var med in Medicines.GetDeclare())
+            {
+                details.Add(new Pdata(med, serialNumber.ToString()));
+                serialNumber++;
+            }
+            details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
+            if (!AdjustCase.ID.Equals("0") && !CheckOnlyBloodGlucoseTestStrip())
+            {
+                var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
+                details.Add(medicalService);
+                MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
+                if (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))
+                {
+                    var dailyPrice = CheckIfSimpleFormDeclare();
+                    if (dailyPrice > 0)
+                    {
+                        foreach (var d in details)
+                        {
+                            if (!d.P1.Equals("1")) continue;
+                            d.P1 = "4";
+                            d.P8 = $"{0.00:0000000.00}";
+                            d.P9 = "00000000";
+                        }
+                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
+                        details.Add(simpleForm);
+                    }
+                }
+            }
+            return details;
+        }
+
+        private bool CheckOnlyBloodGlucoseTestStrip()
+        {
+            if (Medicines.Count == 1)
+            {
+                var m = Medicines[0];
+                if (m is MedicineSpecialMaterial && m.ID.StartsWith("TSS01"))
+                {
+                    MedicalServiceCode = null;
+                    PrescriptionPoint.MedicalServicePoint = 0;
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public int CheckIfSimpleFormDeclare()
+        {
+            if (Patient.Birthday is null) return 0;
+            if (MedicineDays > 3)
+            {
+                if (AdjustCase.ID.Equals("3"))
+                    AdjustCase = VM.GetAdjustCase("1");
+                return 0;
+            }
+            var medicinePoint = Medicines.Where(m => !m.PaySelf).Sum(med => med.NHIPrice * med.Amount);
+            var medFormCount = Medicines.CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
+            var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
+            if (dailyPrice * MedicineDays < medicinePoint)
+            {
+                if (AdjustCase.ID.Equals("3"))
+                    AdjustCase = VM.GetAdjustCase("1");
+                return 0;
+            }
+            AdjustCase = VM.GetAdjustCase("3");
+            PrescriptionPoint.MedicinePoint = dailyPrice * MedicineDays;
+            return dailyPrice;
+        }
+
+        private int CountDayPayAmount(int cusAge, int medFormCount)
+        {
+            const int ma1 = 22, ma2 = 31, ma3 = 37, ma4 = 41;
+            if (cusAge <= 12 && medFormCount == 1) return ma2;
+            if (cusAge <= 12 && medFormCount == 2) return ma3;
+            if (cusAge <= 12 && medFormCount >= 3) return ma4;
+            return ma1;
         }
     }
 }
