@@ -165,7 +165,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand StatusChangedCommand { get; set; }
         public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
         public RelayCommand CustomerDataSaveCommand { get; set; }
-        
+        public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
+
         #endregion
         public Index() {
             InitStatusstring();
@@ -176,9 +177,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             StatusChangedCommand = new RelayCommand(StatusChangedAction);
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
+            ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveSearchAction();
         }
         #region Action
+        private void ShowCustomerPrescriptionChangedAction() {
+            if (IndexReserveSelectedItem is null) return;
+            CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow customerPrescriptionChangedWindow = new CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow(IndexReserveSelectedItem.CusId); 
+        }
         private void CustomerDataSaveAction() {
             CustomerData.Save();
         }
