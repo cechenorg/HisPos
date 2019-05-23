@@ -177,9 +177,9 @@
                 </Grid.RowDefinitions>
                 <Rectangle Fill="{StaticResource Shadow}" Grid.RowSpan="3" Margin="10,0,10,0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <Label Content="NAMEEEEE" Width="150" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Label Content="{Binding CustomerData.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="150" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="20,0,0,0"/>
                     <Button Content="顧客資料" Background="Transparent" BorderBrush="DimGray" Foreground="DimGray" BorderThickness="1" Margin="385,0,0,0" Command="{Binding ShowCustomerDetailWindowCommand}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="檢視修改紀錄" Background="Transparent" Width="130" FontSize="15" BorderBrush="DimGray" Foreground="DimGray" BorderThickness="1" Margin="10,0,0,0" Command="{Binding ShowCustomerPrescriptionChangedCommand}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="檢視修改紀錄" Background="Transparent" Width="130"  BorderBrush="DimGray" Foreground="DimGray" BorderThickness="1" Margin="10,0,0,0" Command="{Binding ShowCustomerPrescriptionChangedCommand}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <Label Content="家電" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="20,0,0,0"/>
