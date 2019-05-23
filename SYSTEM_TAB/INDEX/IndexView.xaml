@@ -250,8 +250,8 @@
                         <TextBox Height="150" Grid.Column="1" Grid.Row="2"  VerticalContentAlignment="Top"  Text="{Binding CustomerData.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource LightForeGround}" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
                       
                     </Grid>
-                  
-                    <Button Width="120" Command="{Binding CustomerDataSaveCommand}" HorizontalAlignment="Right" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Content="存檔" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                    <Button Width="120" Command="{Binding ShowCustomerPrescriptionChangedCommand}" HorizontalAlignment="Right" Margin="10,0,110,0" Grid.Column="1" Grid.Row="2" Content="修改紀錄" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderThickness="0" />
+                    <Button Width="100" Command="{Binding CustomerDataSaveCommand}" HorizontalAlignment="Right" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Content="存檔" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
                 </Grid>
             </Grid>
            

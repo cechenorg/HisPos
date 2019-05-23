@@ -342,6 +342,9 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistory.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChanged.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangedDb.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangeds.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
@@ -905,6 +908,10 @@
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedWindow.xaml.cs">
+      <DependentUpon>CustomerPrescriptionChangedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
@@ -1454,6 +1461,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
