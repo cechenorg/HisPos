@@ -498,9 +498,6 @@
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
@@ -889,10 +886,6 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml.cs">
-      <DependentUpon>PrescriptionPointDetail.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetailViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1425,10 +1418,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
