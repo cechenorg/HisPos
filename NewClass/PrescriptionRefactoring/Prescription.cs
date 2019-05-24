@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Treatment;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
@@ -18,15 +16,10 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
-using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
-using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
-using MedicineNHI = His_Pos.NewClass.MedicineRefactoring.MedicineNHI;
-using MedicineVirtual = His_Pos.NewClass.MedicineRefactoring.MedicineVirtual;
-using Resources = His_Pos.Properties.Resources;
 
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
@@ -355,11 +348,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var elementName = parameters[0];
             var diseaseID = parameters[1];
-            if (elementName.Equals("MainDiagnosis"))
-            {
-                return diseaseID.Equals(MainDisease.FullName);
-            }
-            return diseaseID.Equals(SubDisease.FullName);
+            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease.FullName : SubDisease.FullName);
         }
 
         private void CheckTypeByInstitution()
@@ -401,27 +390,25 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private void GetCopayment(string copID)
         {
             Copayment = new Copayment();
-            if (!string.IsNullOrEmpty(copID))
+            if (string.IsNullOrEmpty(copID)) return;
+            switch (copID)
             {
-                switch (copID)
-                {
-                    case "003":
-                    case "004":
-                    case "007":
-                    case "009":
-                    case "I22":
-                    case "001":
-                    case "002":
-                    case "005":
-                    case "006":
-                    case "008":
-                    case "902":
-                    case "903":
-                    case "906":
-                    case "907":
-                        Copayment = VM.GetCopayment(copID);
-                        break;
-                }
+                case "003":
+                case "004":
+                case "007":
+                case "009":
+                case "I22":
+                case "001":
+                case "002":
+                case "005":
+                case "006":
+                case "008":
+                case "902":
+                case "903":
+                case "906":
+                case "907":
+                    Copayment = VM.GetCopayment(copID);
+                    break;
             }
         }
         private void OrthopedicsGetDisease(IReadOnlyList<Item> diseases)
