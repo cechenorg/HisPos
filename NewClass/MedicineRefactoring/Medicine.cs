@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 using His_Pos.NewClass.Product.Medicine.Position;
@@ -316,5 +317,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             return this is MedicineSpecialMaterial && ID.StartsWith("TSS01");
         }
+
+        public abstract MedBagMedicine CreateMedBagMedicine(bool isSingle);
     }
 }

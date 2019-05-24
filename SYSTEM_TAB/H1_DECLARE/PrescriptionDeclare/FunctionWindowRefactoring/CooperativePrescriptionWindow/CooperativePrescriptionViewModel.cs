@@ -4,11 +4,13 @@ using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.Cooperative;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
@@ -121,7 +123,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             }
         }
         #endregion
-
         #region Commands
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
@@ -129,8 +130,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         #endregion
         public CooperativePrescriptionViewModel()
         {
+            InitVariables();
             InitPrescriptions();
             InitCommands();
+        }
+
+        private void InitVariables()
+        {
+            IsRead = false;
+            IsNotRead = true;
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
         }
 
         private void InitPrescriptions()
@@ -150,10 +160,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
                 CooPreCollectionView = CooPreCollectionViewSource.View;
                 cooPreCollectionViewSource.Filter += Filter;
-                IsRead = false;
-                IsNotRead = true;
-                StartDate = DateTime.Today;
-                EndDate = DateTime.Today;
             };
             IsBusy = true;
             getCooperativePresWorker.RunWorkerAsync();
@@ -163,7 +169,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             PrintMedBag = new RelayCommand(PrintAction);
             PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
-            Refresh = new RelayCommand(RefreshAction);
+            Refresh = new RelayCommand(InitPrescriptions);
         }
 
         #region Actions
@@ -176,12 +182,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void PrescriptionSelectedAction()
         {
-            throw new NotImplementedException();
-        }
-
-        private void RefreshAction()
-        {
-            throw new NotImplementedException();
+            if (SelectedPrescription is null) return;
+            Messenger.Default.Send(new NotificationMessage<NewClass.PrescriptionRefactoring.Prescription>(this, SelectedPrescription.CreatePrescription(), "CooperativePrescriptionSelected"));
+            Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
         #endregion
 

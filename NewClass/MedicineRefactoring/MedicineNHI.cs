@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -61,6 +62,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
             {
                 Set(() => Warning, ref warning, value);
             }
+        }
+
+        public override MedBagMedicine CreateMedBagMedicine(bool isSingle)
+        {
+            return new MedBagMedicine(this, isSingle);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -59,6 +60,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Price = 0.00;
             PaySelf = false;
             IsBuckle = false;
+        }
+
+        public override MedBagMedicine CreateMedBagMedicine(bool isSingle)
+        {
+            return null;
         }
     }
 }

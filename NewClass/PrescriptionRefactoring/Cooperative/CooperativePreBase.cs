@@ -61,5 +61,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
         public DateTime TreatDate { get; }
         public bool IsRead { get; set; }
         public abstract void Print();
+        public abstract Prescription CreatePrescription();
     }
 }

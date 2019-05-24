@@ -16,7 +16,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
         public OrthopedicsPrescription Content { get;}
         public override void Print()
         {
-            var printPre = new Prescription(Content);
+            var printPre = CreatePrescription();
+        }
+        public override Prescription CreatePrescription()
+        {
+            var pre = new Prescription(Content);
+            pre.GetCompletePrescriptionData(false);
+            pre.UpdateCooperativePrescriptionIsRead();
+            pre.CountPrescriptionPoint(true);
+            return pre;
         }
     }
 }

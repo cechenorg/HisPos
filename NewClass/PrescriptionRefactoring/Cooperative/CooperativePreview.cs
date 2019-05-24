@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,28 +22,31 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
         public string SourceID { get; }
         public override void Print()
         {
-            var printPre = new Prescription(Content,TreatDate,SourceID,IsRead);
-            MainWindow.ServerConnection.OpenConnection();
-            printPre.GetCompletePrescriptionData(false);
-            printPre.UpdateCooperativePrescriptionIsRead();
-            MainWindow.ServerConnection.CloseConnection();
-            printPre.CountPrescriptionPoint(true);
+            var printPre = CreatePrescription();
             var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認", true);
-            if ((bool)medBagPrint.DialogResult)
+            Debug.Assert(medBagPrint.DialogResult != null, "medBagPrint.DialogResult != null");
+            if (!(bool) medBagPrint.DialogResult) return;
+            var printBySingleMode = new MedBagSelectionWindow();
+            var singleMode = (bool)printBySingleMode.ShowDialog();
+            var receiptPrint = false;
+            if (printPre.PrescriptionPoint.AmountsPay > 0)
             {
-                var printBySingleMode = new MedBagSelectionWindow();
-                var singleMode = (bool)printBySingleMode.ShowDialog();
-                var receiptPrint = false;
-                if (printPre.PrescriptionPoint.AmountsPay > 0)
-                {
-                    var receiptResult = new ConfirmWindow(Resource.PrintReceipt, Resource.PrintConfirm, true);
-                    if (receiptResult.DialogResult != null)
-                        receiptPrint = (bool)receiptResult.DialogResult;
-                }
-                //printPre.PrintMedBag(singleMode);
-                //if (receiptPrint)
-                //    printPre.PrintReceipt();
+                var receiptResult = new ConfirmWindow(Resource.PrintReceipt, Resource.PrintConfirm, true);
+                if (receiptResult.DialogResult != null)
+                    receiptPrint = (bool)receiptResult.DialogResult;
             }
+            printPre.PrintMedBag(singleMode);
+            if (receiptPrint)
+                printPre.PrintReceipt();
+        }
+
+        public override Prescription CreatePrescription()
+        {
+            var pre = new Prescription(Content, TreatDate, SourceID, IsRead);
+            pre.GetCompletePrescriptionData(false);
+            pre.UpdateCooperativePrescriptionIsRead();
+            pre.CountPrescriptionPoint(true);
+            return pre;
         }
     }
 }

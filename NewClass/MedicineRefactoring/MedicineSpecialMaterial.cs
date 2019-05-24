@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Product.Medicine.MedBag;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -33,5 +34,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public string LicenseID { get; set; }//許可證字號
         public string SelfPayItemName { get; set; }//自付差額品名
         public string LinkID { get; set; }//整組組件特材關聯代碼表
+
+        public override MedBagMedicine CreateMedBagMedicine(bool isSingle)
+        {
+            return new MedBagMedicine(this,isSingle);
+        }
     }
 }
