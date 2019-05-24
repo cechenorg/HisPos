@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Documents;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.Product.Medicine
 {
@@ -160,6 +161,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 medicineIDList.Add(item.ID);
             }
             var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList);
+            var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 var medicine = new Medicine();
@@ -175,15 +177,20 @@ namespace His_Pos.NewClass.Product.Medicine
                         medicine = new MedicineSpecialMaterial(table.Rows[i]);
                         break;
                 }
-                medicine.Dosage = currentSet.MedicineSetItems[i].Dosage;
-                medicine.UsageName = currentSet.MedicineSetItems[i].UsageName;
-                medicine.PositionID = currentSet.MedicineSetItems[i].PositionID;
-                medicine.Days = currentSet.MedicineSetItems[i].Days;
-                medicine.Amount = currentSet.MedicineSetItems[i].Amount;
-                medicine.PaySelf = currentSet.MedicineSetItems[i].PaySelf;
+                var tempMed = currentSet.MedicineSetItems.Single(m => m.ID.Equals(medicine.ID));
+                medicine.Dosage = tempMed.Dosage;
+                medicine.UsageName = tempMed.UsageName;
+                medicine.PositionID = tempMed.PositionID;
+                medicine.Days = tempMed.Days;
+                medicine.Amount = tempMed.Amount;
+                medicine.PaySelf = tempMed.PaySelf;
                 if (medicine.PaySelf)
-                    medicine.Price = currentSet.MedicineSetItems[i].Price;
-                Add(medicine);
+                    medicine.Price = tempMed.Price;
+                tempList.Add(medicine);
+            }
+            foreach (var item in currentSet.MedicineSetItems)
+            {
+                Add(tempList.Single(m => m.ID.Equals(item.ID)));
             }
         }
 

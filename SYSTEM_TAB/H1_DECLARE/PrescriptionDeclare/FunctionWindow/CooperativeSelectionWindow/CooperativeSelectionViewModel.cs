@@ -18,6 +18,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
     public class CooperativeSelectionViewModel : ViewModelBase
     {
         #region Property
+        private int prescriptionCount;
+        public int PrescriptionCount
+        {
+            get => prescriptionCount;
+            set
+            {
+                Set(() => PrescriptionCount, ref prescriptionCount, value);
+            }
+        }
         private CollectionViewSource cooPreCollectionViewSource;
         private CollectionViewSource CooPreCollectionViewSource
         {
@@ -25,6 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             set
             {
                 Set(() => CooPreCollectionViewSource, ref cooPreCollectionViewSource, value);
+                SetCount();
             }
         }
 
@@ -120,6 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             {
                 Set(() => IsRead, ref isRead, value);
                 CooPreCollectionViewSource.Filter += Filter;
+                SetCount();
             }
         }
 
@@ -131,6 +142,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             {
                 Set(() => IsNotRead, ref isNotRead, value);
                 CooPreCollectionViewSource.Filter += Filter;
+                SetCount();
             }
         }
         private bool isBusy;
@@ -244,6 +256,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
         #endregion
         #region Functions
+        private void SetCount()
+        {
+            int filteredCount = 0;
+            foreach (var item in CooPreCollectionViewSource.View)
+            {
+                filteredCount++;
+            }
+            PrescriptionCount = filteredCount;
+        }
         private void GetCooperativePrescription(Prescriptions receivePrescriptions)
         {
             CooperativePrescriptions = new Prescriptions();

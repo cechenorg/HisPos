@@ -20,8 +20,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             ID = r.Field<string>("Ins_ID");
             Name = r.Field<string>("Ins_Name");
             FullName = r.Field<string>("Ins_FullName");
-            Common = r.Field<bool>("Ins_IsCommon");
-            IsCooperative = r.Field<bool>("Ins_IsCooperate");
         }
         [Index(0)]
         public virtual string ID { get; set; } = string.Empty;

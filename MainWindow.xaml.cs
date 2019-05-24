@@ -53,7 +53,7 @@ namespace His_Pos
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
-            StratClock();
+            StartClock();
             
             AddNewTab("每日作業");
         }
@@ -145,7 +145,7 @@ namespace His_Pos
         /*
          *啟動處方登錄時間Timer
          */
-        private void StratClock()
+        private void StartClock()
         {
             var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             timer.Tick += TickEvent;

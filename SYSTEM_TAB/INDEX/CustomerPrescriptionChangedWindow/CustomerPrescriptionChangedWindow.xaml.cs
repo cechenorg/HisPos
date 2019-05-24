@@ -12,19 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry.PrescriptionPointDetail
+namespace His_Pos.SYSTEM_TAB.INDEX.CustomerPrescriptionChangedWindow
 {
     /// <summary>
-    /// PrescriptionPointDetail.xaml 的互動邏輯
+    /// CustomerPrescriptionChangedWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionPointDetail : Window
+    public partial class CustomerPrescriptionChangedWindow : Window
     {
-
-        public PrescriptionPointDetail(DateTime date)
+        public CustomerPrescriptionChangedWindow(int cusID)
         {
             InitializeComponent();
-            PrescriptionPointDetailViewModel prescriptionPointDetailViewModel = new PrescriptionPointDetailViewModel(date);
-            DataContext = prescriptionPointDetailViewModel;
+            CustomerPrescriptionChangedViewModel customerPrescriptionChangedViewModel = new CustomerPrescriptionChangedViewModel(cusID);
+            DataContext = customerPrescriptionChangedViewModel;
             ShowDialog();
         }
     }

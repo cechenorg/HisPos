@@ -214,6 +214,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     var pre = new Prescription(PrescriptionDb.GetPrescriptionByID(p.ID).Rows[0], PrescriptionSource.Normal);
                     pre.GetCompletePrescriptionData( false,true);
                     deposit += pre.PrescriptionPoint.Deposit;
+                    pre.PrescriptionPoint.GetAmountPaySelf(p.ID);
                     ReadCard(pre);
                 }
             };

@@ -643,5 +643,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
         }
+        internal static DataTable DeleteDoneOrder(string orderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_ID", orderID));
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
+        }
+
     }
 }

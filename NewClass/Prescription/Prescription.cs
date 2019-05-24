@@ -855,7 +855,16 @@ namespace His_Pos.NewClass.Prescription
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
-            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
+            string patientTel;
+            if (!string.IsNullOrEmpty(Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
+                else
+                    patientTel = Patient.ContactNote;
+            }
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
@@ -898,7 +907,16 @@ namespace His_Pos.NewClass.Prescription
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
-            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
+            string patientTel;
+            if (!string.IsNullOrEmpty(Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
+                else
+                    patientTel = Patient.ContactNote;
+            }
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",

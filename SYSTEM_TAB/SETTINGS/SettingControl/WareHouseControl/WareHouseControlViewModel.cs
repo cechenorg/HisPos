@@ -20,8 +20,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
         #endregion
 
         #region ----- Define Variables -----
+        private WareHouseSettings wareHouseCollection;
 
-        public WareHouseSettings wareHouseCollection;
         public WareHouseSettings WareHouseCollection
         {
             get => wareHouseCollection;

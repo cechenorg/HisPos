@@ -60,6 +60,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 }
                 p.FileContent.Dhead.D18 = totalPoint.ToString().PadLeft(8, '0');
                 p.FileContent.Dhead.D16 = (int.Parse(p.FileContent.Dhead.D18) - int.Parse(p.FileContent.Dhead.D17)).ToString().PadLeft(8, '0');
+                p.ApplyPoint = int.Parse(p.FileContent.Dhead.D16);
+                p.TotalPoint = int.Parse(p.FileContent.Dhead.D18);
             }
         }
 
@@ -113,6 +115,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
         {
             AdjustMedicalService();
             AdjustSerialNumber();
+            SerializeFileContent();
             PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
         }
 
@@ -128,8 +131,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     {
                         var k = j - 1;
                         var pre = pList[k];
-                        pre.ApplyPoint -= pre.MedicalServicePoint;
-                        pre.TotalPoint -= pre.MedicalServicePoint;
+                        pre.ApplyPoint = 0;
+                        pre.TotalPoint = 0;
                         pre.Pharmacist = pharmacist;
                         pre.FileContent.Dhead.D25 = pre.Pharmacist.IDNumber;
                         int days = pre.MedicineDays;
@@ -189,8 +192,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             pre.FileContent.Dbody.D38 = null;
                             pre.FileContent.Dbody.D37 = null;
                         }
-                        pre.ApplyPoint += pre.MedicalServicePoint;
-                        pre.TotalPoint += pre.MedicalServicePoint;
                         pre.DeclareContent = new SqlXml(new XmlTextReader(
                             XmlService.ToXmlDocument(pre.FileContent.SerializeObjectToXDocument()).InnerXml,
                             XmlNodeType.Document, null));
@@ -210,6 +211,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     serial++;
                 }
             }
+
         }
     }
 }

@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "ID", Id);
             DataBaseFunction.AddSqlParameter(parameterList, "PhoneCallStatus", PhoneCallStatus);
             DataBaseFunction.AddSqlParameter(parameterList, "PrepareStatus", PrepareStatus);
+            DataBaseFunction.AddSqlParameter(parameterList, "userID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
             
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIndexReserveStatus]", parameterList);
         } 
