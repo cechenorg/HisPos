@@ -195,7 +195,6 @@ namespace His_Pos.ChromeTabViewModel
                 StockValue.UpdateDailyStockValue(); //做每日帳
                 BusyContent = "回傳合作診所處方";
                 WebApi.SendToCooperClinic(); //骨科上傳
-                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
                 //File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());

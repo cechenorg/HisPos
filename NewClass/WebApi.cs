@@ -1,5 +1,6 @@
 ﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.Service;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -20,12 +21,16 @@ namespace His_Pos.NewClass
                      {"json",json }
                 };
             if (json.Equals(@"{""sHospId"":null,""sRxId"":null,""sMedList"":[]}"))
-                return;
+               return;
             HttpMethod httpMethod = new HttpMethod();
             if (httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues))
-                CooperativeClinicJson.CooperativeClinicJsonDb.InsertCooperJson(json);
+            {
+                CooperativeClinicJsonDb.InsertCooperJson(json);
+                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+            }
             else
                 MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員",Class.MessageType.ERROR);
+            
         } 
         internal static string GetCooperativeClinicId(string medicalNum) {
             Dictionary<string, string> keyValues;
