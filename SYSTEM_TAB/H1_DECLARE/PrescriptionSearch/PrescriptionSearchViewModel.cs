@@ -482,11 +482,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 {
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
-                        file.WriteLine("日期,藥品名稱,數量");
+                        file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,調劑量,扣庫量");
                         foreach (DataRow s in table.Rows)
                         {
 
-                            file.WriteLine($"{s.Field<string>("ID")},{s.Field<string>("Name")},{s.Field<int>("TotalAmount")}");
+                            file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
                         }
                         file.Close();
                         file.Dispose();
