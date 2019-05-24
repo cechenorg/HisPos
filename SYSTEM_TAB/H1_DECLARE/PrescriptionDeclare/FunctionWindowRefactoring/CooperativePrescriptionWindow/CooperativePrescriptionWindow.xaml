@@ -89,9 +89,6 @@
                                 <i:EventTrigger EventName="MouseDoubleClick">
                                     <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectionChanged}"/>
-                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">

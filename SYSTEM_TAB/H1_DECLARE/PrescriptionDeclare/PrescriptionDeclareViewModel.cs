@@ -40,7 +40,7 @@ using InsSelectWindow = His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Functi
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
-using StringRes = His_Pos.Properties.Resources;
+using Resources = His_Pos.Properties.Resources;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
@@ -556,7 +556,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var getCooperativePresWorker = new BackgroundWorker();
             getCooperativePresWorker.DoWork += (o, ea) =>
             {
-                BusyContent = StringRes.取得合作處方;
+                BusyContent = Resources.取得合作處方;
                 XmlOfPrescriptions.GetFile();
                 cooperative.GetCooperativePrescriptions(VM.CurrentPharmacy.ID, DateTime.Today.AddDays(-10), DateTime.Today); 
                 cooperative.GetXmlOfPrescriptions(DateTime.Today.AddDays(-10), DateTime.Today);
@@ -620,7 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             PrescriptionCount = UpdatePrescriptionCount();
             if (PrescriptionCount >= 80)
-                MessageWindow.ShowMessage(StringRes.調劑張數提醒 + prescriptionCount + "張", MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.調劑張數提醒 + prescriptionCount + "張", MessageType.WARNING);
         }
         private void GetMainDiseaseCodeByIdAction(string ID)
         {
@@ -712,7 +712,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         CurrentPrescription.Medicines.Add(m);
                         return;
                     default:
-                        MessageWindow.ShowMessage(StringRes.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "5", MessageType.WARNING);
                         return;
                 }
             }
@@ -720,7 +720,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
             MainWindow.ServerConnection.CloseConnection();
             if(productCount == 0)
-                MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
@@ -820,7 +820,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void NoCardAdjustAction()
         {
-            var noCard = new ConfirmWindow(StringRes.欠卡確認, StringRes.欠卡調劑, true);
+            var noCard = new ConfirmWindow(Resources.欠卡確認, Resources.欠卡調劑, true);
             Debug.Assert(noCard.DialogResult != null, "noCard.DialogResult != null");
             if (!(bool)noCard.DialogResult) return;
             if (CheckEmptyCustomer()) return;
@@ -932,7 +932,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (PrescriptionCount >= 80)
             {
-                var confirm = new ConfirmWindow(StringRes.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?","調劑張數提醒",true);
+                var confirm = new ConfirmWindow(Resources.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?","調劑張數提醒",true);
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 return (bool)confirm.DialogResult;
             }
@@ -1094,7 +1094,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             catch (Exception e)
             {
-                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.代入處方錯誤, MessageType.WARNING);
             }
         }
         private void GetCooperativePrescription(NotificationMessage<Prescription> msg)
@@ -1162,10 +1162,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AskAddCustomerData()
         {
             if (!CurrentPrescription.Patient.CheckData())
-                MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
             else
             {
-                var confirm = new ConfirmWindow(StringRes.新增顧客確認, StringRes.查無資料, true);
+                var confirm = new ConfirmWindow(Resources.新增顧客確認, Resources.查無資料, true);
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool) confirm.DialogResult)
                 {
@@ -1198,7 +1198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 try
                 {
-                    BusyContent = StringRes.讀取健保卡;
+                    BusyContent = Resources.讀取健保卡;
                     MainWindow.ServerConnection.OpenConnection();
                     isGetCard = CurrentPrescription.GetCard();
                     MainWindow.ServerConnection.CloseConnection();
@@ -1343,7 +1343,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
         private bool InsertRegisterData() {
@@ -1381,7 +1381,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Prescribe();//自費調劑金流
             MainWindow.ServerConnection.CloseConnection();
             StartPrint(false);
-            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
 
@@ -1401,7 +1401,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CreatePrescriptionSign()
         {
             CurrentPrescription.PrescriptionSign = HisAPI.WritePrescriptionData(CurrentPrescription);
-            BusyContent = StringRes.產生每日上傳資料;
+            BusyContent = Resources.產生每日上傳資料;
             if (CurrentPrescription.WriteCardSuccess != 0)
             {
                 Application.Current.Dispatcher.Invoke(delegate {
@@ -1430,14 +1430,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 CurrentPrescription.PrescriptionStatus.IsGetCard = true;
-                BusyContent = StringRes.檢查就醫次數;
+                BusyContent = Resources.檢查就醫次數;
                 CurrentPrescription.Card.GetRegisterBasic();
                 if ((CurrentPrescription.Card.AvailableTimes != null && CurrentPrescription.Card.AvailableTimes == 0) || DateTime.Compare(CurrentPrescription.Card.ValidityPeriod,DateTime.Today) < 0)
                 {
-                    BusyContent = StringRes.更新卡片;
+                    BusyContent = Resources.更新卡片;
                     CurrentPrescription.Card.UpdateCard();
                 }
-                BusyContent = StringRes.取得就醫序號;
+                BusyContent = Resources.取得就醫序號;
                 CurrentPrescription.Card.GetMedicalNumber(1);
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -1460,7 +1460,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = StringRes.寫卡;
+                BusyContent = Resources.寫卡;
                 CreateDailyUploadData(ErrorCode);
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -1485,7 +1485,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             e.ShowDialog();
             if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
             {
-                MessageWindow.ShowMessage(StringRes.重新過卡或押金, MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.重新過卡或押金, MessageType.WARNING);
                 IsAdjusting = false;
                 IsCardReading = false;
                 return false;
@@ -1523,7 +1523,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CheckDailyUpload();
             MainWindow.ServerConnection.CloseConnection();
             StartPrint(false);
-            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
 
@@ -1556,7 +1556,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CheckIsCooperativeVIP()
         {
-            var isVip = new ConfirmWindow(StringRes.收部分負擔, StringRes.免收確認);
+            var isVip = new ConfirmWindow(Resources.收部分負擔, Resources.免收確認);
             Debug.Assert(isVip.DialogResult != null, "isVip.DialogResult != null");
             CurrentPrescription.PrescriptionStatus.IsCooperativeVIP = (bool)!isVip.DialogResult;
         }
@@ -1565,18 +1565,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (printMedBag)
             {
-                BusyContent = StringRes.藥袋列印;
+                BusyContent = Resources.藥袋列印;
                 Debug.Assert(printSingle != null, nameof(printSingle) + " != null");
                 TempPre.PrintMedBag((bool)printSingle);
             }
             if (printReceipt)
             {
-                BusyContent = StringRes.收據列印;
+                BusyContent = Resources.收據列印;
                 TempPre.PrintReceipt();
             }
             if (noCard)
             {
-                BusyContent = StringRes.押金單據列印;
+                BusyContent = Resources.押金單據列印;
                 TempPre.PrintDepositSheet();
             }
         }
@@ -1607,7 +1607,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             MainWindow.ServerConnection.CloseConnection();
             StartPrint(true);
-            MessageWindow.ShowMessage(StringRes.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             ClearPrescription();
         }
         private int UpdatePrescriptionCount()//計算處方張數
@@ -1621,7 +1621,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!CurrentPrescription.Patient.CheckData())
             {
-                MessageWindow.ShowMessage(StringRes.顧客資料不足, MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
                 return false;
             }
             if (CurrentPrescription.Patient.ID == -1 || (CurrentPrescription.Patient.ID == 0 && !CurrentPrescription.Patient.Name.Equals("匿名")))//新顧客

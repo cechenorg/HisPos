@@ -224,7 +224,7 @@ namespace His_Pos.Service
         public static List<bool?> CheckPrint(Prescription p)
         {
             var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm, true);
+            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
             var printMedBag = medBagPrint.DialogResult;
             bool? printSingle = null;
             bool? receiptPrint = null;
@@ -232,7 +232,7 @@ namespace His_Pos.Service
             {
                 if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+                    var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
                     receiptPrint = receiptResult.DialogResult;
                 }
                 else

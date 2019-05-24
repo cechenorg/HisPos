@@ -17,11 +17,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
         public override void Print()
         {
             var printPre = CreatePrescription();
+            printPre.PrintMedBagAndReceipt();
         }
         public override Prescription CreatePrescription()
         {
             var pre = new Prescription(Content);
-            pre.GetCompletePrescriptionData(false);
             pre.UpdateCooperativePrescriptionIsRead();
             pre.CountPrescriptionPoint(true);
             return pre;

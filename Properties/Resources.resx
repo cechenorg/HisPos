@@ -324,13 +324,13 @@
   <data name="查無藥品" xml:space="preserve">
     <value>查無藥品</value>
   </data>
-  <data name="PrintConfirm" xml:space="preserve">
+  <data name="列印確認" xml:space="preserve">
     <value>列印確認</value>
   </data>
-  <data name="PrintMedBag" xml:space="preserve">
+  <data name="藥袋列印確認" xml:space="preserve">
     <value>是否列印藥袋</value>
   </data>
-  <data name="PrintReceipt" xml:space="preserve">
+  <data name="收據列印確認" xml:space="preserve">
     <value>是否列印收據</value>
   </data>
   <data name="搜尋字串長度不足" xml:space="preserve">
@@ -547,5 +547,11 @@
   </data>
   <data name="AdditionalCashFlowManage" xml:space="preserve">
     <value>額外收入登錄</value>
+  </data>
+  <data name="代入處方錯誤" xml:space="preserve">
+    <value>代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。</value>
+  </data>
+  <data name="列印錯誤" xml:space="preserve">
+    <value>列印報表發生問題，請重試</value>
   </data>
 </root>

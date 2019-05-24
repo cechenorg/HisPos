@@ -213,7 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 var receiptPrint = false;
                 if (SelectedPrescription.PrescriptionPoint.AmountsPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+                    var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
                     if (receiptResult.DialogResult != null)
                         receiptPrint = (bool)receiptResult.DialogResult;
                 }

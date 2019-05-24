@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription;
+// ReSharper disable InconsistentNaming
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
@@ -17,7 +18,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public PrescriptionPoint(DataRow r)
         {
-
+            ApplyPoint = r.Field<int>("ApplyPoint");
+            TotalPoint = r.Field<int>("TotalPoint");
+            CopaymentPoint = r.Field<short>("CopaymentPoint");
+            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
+            TreatmentPoint = r.Field<int>("TreatmentPoint");
+            MedicinePoint = r.Field<int>("MedicinePoint");
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            AmountSelfPay = r.Field<int>("AmountPaySelf");
+            Deposit = r.Field<int>("Deposit");
         }
 
         public int ApplyPoint { get; set; }//申請點數 
@@ -119,18 +128,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Deposit = MedicalServicePoint + MedicinePoint - CopaymentPoint;
         }
 
-        public void GetDeposit(int id)
-        {
-            Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
-        }
-
         public void CountAmountsPay()
         {
             AmountsPay = AmountSelfPay + CopaymentPoint;
-        }
-        public void GetAmountPaySelf(int id)
-        {
-            AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
         }
     }
 }

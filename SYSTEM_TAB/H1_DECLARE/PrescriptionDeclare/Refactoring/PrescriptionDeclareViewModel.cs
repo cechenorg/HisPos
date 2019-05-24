@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -13,7 +8,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.MedicalPerson;
-using His_Pos.NewClass.Prescription.CustomerPrescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
@@ -30,8 +24,8 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHos
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
-using Xceed.Wpf.Toolkit;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+// ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 {
@@ -60,7 +54,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #endregion
         #region Variables
-        public Prescription CurrentPrescription { get; set; }
+        private Prescription currentPrescription;
+        public Prescription CurrentPrescription
+        {
+            get => currentPrescription;
+            set
+            {
+                Set(() => CurrentPrescription, ref currentPrescription, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand GetCooperativePres { get; set; }
@@ -120,7 +122,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
+            Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var cooPresWindow = new CooperativePrescriptionWindow();
+        }
+
+        private void GetCustomerPrescription(NotificationMessage<Prescription> receiveMsg)
+        {
+            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            CurrentPrescription = (Prescription)receiveMsg.Content.Clone();
         }
 
         private void GetPatientDataAction()

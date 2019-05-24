@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
+using System.Diagnostics;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.MedicineRefactoring;
@@ -23,10 +23,13 @@ using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using Resources = His_Pos.Properties.Resources; 
 
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
@@ -38,13 +41,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         Orthopedics = 2
     }
 
-    public enum PrescriptionSource
-    {
-        Normal = 0,
-        Register = 1
-    }
-
-    public class Prescription : ObservableObject
+    public class Prescription : ObservableObject,ICloneable
     {
         public Prescription()
         {
@@ -121,6 +118,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
+            Medicines = new Medicines();
             Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item);
         }
 
@@ -177,6 +175,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = IsRead;
             PrescriptionStatus.IsBuckle = cooperativeSetting.IsBuckle;
+            Medicines = new Medicines();
             Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, cooperativeSetting.IsBuckle);
         }
         #region Properties
@@ -379,14 +378,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Type = PrescriptionType.Normal;
                 PrescriptionStatus.IsBuckle = true;
             }
-        }
-
-        public void GetCompletePrescriptionData(bool getDeposit)
-        {
-            MainDisease.GetData();
-            SubDisease.GetData();
-            if (getDeposit)
-                PrescriptionPoint.GetDeposit(ID);
         }
 
         public void UpdateCooperativePrescriptionIsRead()
@@ -678,7 +669,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 {
                     rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
                     rptViewer.ProcessingMode = ProcessingMode.Local;
-                    var parameters = CreateSingleMedBagParameter(m);
+                    var parameters = PrescriptionService.CreateSingleMedBagParameter(m,this);
                     rptViewer.LocalReport.SetParameters(parameters);
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
@@ -694,7 +685,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
                 rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";
                 rptViewer.ProcessingMode = ProcessingMode.Local;
-                var parameters = CreateMultiMedBagParameter();
+                var parameters = PrescriptionService.CreateMultiMedBagParameter(this);
                 rptViewer.LocalReport.SetParameters(parameters);
                 rptViewer.LocalReport.DataSources.Clear();
                 var rd = new ReportDataSource("DataSet1", dataTable);
@@ -714,78 +705,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 rptViewer.LocalReport.DataSources.Clear();
                 rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
                 rptViewer.ProcessingMode = ProcessingMode.Local;
-                var adjustDate =
-                    DateTimeExtensions.NullableDateToTWCalender(AdjustDate, true);
-                var cusGender = Patient.CheckGender();
-                int copaymentPoint = PrescriptionPoint.CopaymentPoint;
-                int actualReceive = PrescriptionPoint.ActualReceive;
-                if (PrescriptionStatus.IsVIP)
-                {
-                    copaymentPoint = 0;
-                    actualReceive = PrescriptionPoint.ActualReceive - PrescriptionPoint.CopaymentPoint;
-                }
-
-                if (AdjustCase.ID.Equals("0"))
-                {
-                    var birth = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true);
-                    string patientName;
-                    if (string.IsNullOrEmpty(Patient.Name) || Patient.Name.Equals("匿名"))
-                    {
-                        patientName = " ";
-                        birth = "  /  /  ";
-                    }
-                    else
-                        patientName = Patient.Name;
-                    var parameters = new List<ReportParameter>
-                    {
-                        new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                        new ReportParameter("PatientName", patientName),
-                        new ReportParameter("Gender", cusGender),
-                        new ReportParameter("Birthday",string.IsNullOrEmpty(birth)?"  /  /  ":birth),
-                        new ReportParameter("AdjustDate", adjustDate),
-                        new ReportParameter("Hospital", Institution.Name),
-                        new ReportParameter("Doctor", " "), //病歷號
-                        new ReportParameter("MedicalNumber"," "),
-                        new ReportParameter("MedicineCost", PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("MedicalServiceCost", (PrescriptionPoint.AmountsPay - PrescriptionPoint.AmountSelfPay).ToString()),
-                        new ReportParameter("TotalMedicalCost","0"),
-                        new ReportParameter("CopaymentCost", "0"),
-                        new ReportParameter("HcPay", "0"),
-                        new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("ActualReceive", PrescriptionPoint.ActualReceive.ToString()),
-                        new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.ActualReceive))
-                    };
-                    rptViewer.LocalReport.SetParameters(parameters);
-                }
-                else
-                {
-                    var birth = DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true);
-                    string patientName;
-                    if (string.IsNullOrEmpty(Patient.Name) || Patient.Name.Equals("匿名"))
-                        patientName = " ";
-                    else
-                        patientName = Patient.Name;
-                    var parameters = new List<ReportParameter>
-                    {
-                        new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                        new ReportParameter("PatientName", patientName),
-                        new ReportParameter("Gender", cusGender),
-                        new ReportParameter("Birthday",string.IsNullOrEmpty(birth)?"  /  /  ":birth),
-                        new ReportParameter("AdjustDate", adjustDate),
-                        new ReportParameter("Hospital", string.IsNullOrEmpty(Institution.Name)?" ":Institution.Name),
-                        new ReportParameter("Doctor", " "), //病歷號
-                        new ReportParameter("MedicalNumber", string.IsNullOrEmpty(TempMedicalNumber)?" ":TempMedicalNumber),
-                        new ReportParameter("MedicineCost", PrescriptionPoint.MedicinePoint.ToString()),
-                        new ReportParameter("MedicalServiceCost", PrescriptionPoint.MedicalServicePoint.ToString()),
-                        new ReportParameter("TotalMedicalCost",PrescriptionPoint.TotalPoint.ToString()),
-                        new ReportParameter("CopaymentCost", copaymentPoint.ToString()),
-                        new ReportParameter("HcPay", PrescriptionPoint.ApplyPoint.ToString()),
-                        new ReportParameter("SelfCost", PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("ActualReceive", actualReceive.ToString()),
-                        new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(actualReceive))
-                    };
-                    rptViewer.LocalReport.SetParameters(parameters);
-                }
+                var parameters = PrescriptionService.CreateReceiptParameters(this);
+                rptViewer.LocalReport.SetParameters(parameters);
                 rptViewer.LocalReport.DataSources.Clear();
                 rptViewer.LocalReport.Refresh();
                 MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
@@ -795,7 +716,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             catch (Exception e)
             {
-                MessageWindow.ShowMessage("列印報表發生問題，請重試", MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.列印錯誤 + e.Message, MessageType.WARNING);
             }
         }
         public void PrintDepositSheet()
@@ -804,20 +725,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
-            var adjustDate =
-                DateTimeExtensions.NullableDateToTWCalender(AdjustDate, true);
-            var dateString = DateTimeExtensions.ConvertDateStringSplitToChinese(adjustDate);
-            var printTime = adjustDate + "(" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ")";
-
-            var parameters = new List<ReportParameter>
-            {
-                new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),
-                new ReportParameter("PatientName", Patient.Name),
-                new ReportParameter("AdjustDate", dateString),
-                new ReportParameter("Deposit", PrescriptionPoint.Deposit.ToString()),
-                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(PrescriptionPoint.Deposit)),
-                new ReportParameter("PrintTime", printTime)
-            };
+            var parameters = PrescriptionService.CreateDepositSheetParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
@@ -826,95 +734,52 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
             }));
         }
-        private IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m)
-        {
-            var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(AdjustDate, true);
-            var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                   treatmentDate.Split('/')[2] + "日";
-            var cusGender = Patient.CheckGender();
-            string patientTel;
-            if (!string.IsNullOrEmpty(Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
-                else
-                    patientTel = Patient.ContactNote;
-            }
-            return new List<ReportParameter>
-                    {
-                        new ReportParameter("PharmacyName_Id",
-                            VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
-                        new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
-                        new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                        new ReportParameter("MedicalPerson",VM.CurrentPharmacy.GetPharmacist().Name),
-                        new ReportParameter("PatientName", Patient.Name),
-                        new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
-                        new ReportParameter("TreatmentDate", treatmentDateChi),
-                        new ReportParameter("RecId", " "), //病歷號
-                        new ReportParameter("Division",Division is null ?string.Empty:Division.Name),
-                        new ReportParameter("Hospital", Institution.Name),
-                        new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
-                        new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
-                        new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
-                        new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
-                        new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString(CultureInfo.InvariantCulture)),
-                        new ReportParameter("MedicineId", m.Id),
-                        new ReportParameter("MedicineName", m.Name),
-                        new ReportParameter("MedicineChineseName", m.ChiName),
-                        new ReportParameter("Ingredient", m.Ingredient),
-                        new ReportParameter("Indication", m.Indication),
-                        new ReportParameter("SideEffect", m.SideEffect),
-                        new ReportParameter("Note", m.Note),
-                        new ReportParameter("Usage", m.Usage),
-                        new ReportParameter("MedicineDay", m.MedicineDays),
-                        new ReportParameter("Amount", m.Total),
-                        new ReportParameter("Form", m.Form),
-                        new ReportParameter("PatientTel", patientTel)
-                    };
-        }
-        private IEnumerable<ReportParameter> CreateMultiMedBagParameter()
-        {
-            var treatmentDate =
-                DateTimeExtensions.NullableDateToTWCalender(AdjustDate, true);
-            var treatmentDateChi = string.Empty;
-            if (!string.IsNullOrEmpty(treatmentDate))
-                treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                      treatmentDate.Split('/')[2] + "日";
-            var cusGender = Patient.CheckGender();
-            string patientTel;
-            if (!string.IsNullOrEmpty(Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
-                else
-                    patientTel = Patient.ContactNote;
-            }
-            return new List<ReportParameter>
-            {
-                new ReportParameter("PharmacyName_Id",
-                    VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
-                new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
-                new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                new ReportParameter("MedicalPerson", VM.CurrentPharmacy.GetPharmacist().Name),
-                new ReportParameter("PatientName", Patient.Name),
-                new ReportParameter("PatientGender_Birthday",cusGender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
-                new ReportParameter("TreatmentDate", treatmentDateChi),
-                new ReportParameter("Hospital", Institution.Name),
-                new ReportParameter("PaySelf", PrescriptionPoint.AmountSelfPay.ToString()),
-                new ReportParameter("ServicePoint", PrescriptionPoint.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalPoint", PrescriptionPoint.TotalPoint.ToString()),
-                new ReportParameter("CopaymentPoint", PrescriptionPoint.CopaymentPoint.ToString()),
-                new ReportParameter("HcPoint", PrescriptionPoint.ApplyPoint.ToString()),
-                new ReportParameter("MedicinePoint", PrescriptionPoint.MedicinePoint.ToString()),
-                new ReportParameter("Division", Division is null ?string.Empty:Division.Name),
-                new ReportParameter("PatientTel", patientTel)
-            };
-        }
+        
         #endregion
+
+        public void PrintMedBagAndReceipt()
+        {
+            var medBagPrint = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
+            Debug.Assert(medBagPrint.DialogResult != null, "medBagPrint.DialogResult != null");
+            if (!(bool)medBagPrint.DialogResult) return;
+            var printBySingleMode = new MedBagSelectionWindow();
+            var singleMode = (bool)printBySingleMode.ShowDialog();
+            var receiptPrint = false;
+            if (PrescriptionPoint.AmountsPay > 0)
+            {
+                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
+                if (receiptResult.DialogResult != null)
+                    receiptPrint = (bool)receiptResult.DialogResult;
+            }
+            PrintMedBag(singleMode);
+            if (receiptPrint)
+                PrintReceipt();
+        }
+
+        public object Clone()
+        {
+            var clone = new Prescription
+            {
+                Type = Type,
+                Patient = Patient.DeepCloneViaJson(),
+                Institution = Institution.DeepCloneViaJson(),
+                Division = Division.DeepCloneViaJson(),
+                Pharmacist = Pharmacist.DeepCloneViaJson(),
+                TempMedicalNumber = TempMedicalNumber,
+                TreatDate = TreatDate,
+                AdjustDate = AdjustDate,
+                MainDisease = MainDisease.DeepCloneViaJson(),
+                SubDisease = SubDisease.DeepCloneViaJson(),
+                ChronicSeq = ChronicSeq,
+                ChronicTotal = ChronicTotal,
+                AdjustCase = AdjustCase.DeepCloneViaJson(),
+                PrescriptionCase = PrescriptionCase.DeepCloneViaJson(),
+                Copayment = Copayment.DeepCloneViaJson(),
+                PaymentCategory = PaymentCategory.DeepCloneViaJson(),
+                SpecialTreat = SpecialTreat.DeepCloneViaJson(),
+                Medicines = Medicines
+            };
+            return clone;
+        }
     }
 }

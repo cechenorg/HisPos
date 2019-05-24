@@ -10,24 +10,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
     [ZeroFormattable]
     public class DiseaseCode : ObservableObject
     {
-        public DiseaseCode() {
-            ID = string.Empty;
-            Name = string.Empty;
-            FullName = string.Empty;
-        }
-        public DiseaseCode(DataRow r,bool offLine) {
-            if (!offLine)
-            {
-                ID = r.Field<string>("DisCode_ID");
-                Name = r.Field<string>("DisCode_ChiName");
-                FullName = r.Field<string>("DisCode_FullName");
-            }
-            else
-            {
-                ID = r.Field<string>("DisCode_ID");
-                Name = r.Field<string>("DisCode_ChiName");
-                FullName = Name;
-            }
+        public DiseaseCode() {}
+        public DiseaseCode(DataRow r) {
+            ID = r.Field<string>("DisCode_ID");
+            Name = r.Field<string>("DisCode_ChiName");
+            FullName = ID + " " + Name;
         }
         [Index(0)]
         public virtual string ID { get; set; }
@@ -38,31 +25,22 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         public virtual string FullName
         {
             get => fullName;
-            set
+            protected set
             {
                 Set(() => FullName, ref fullName, value);
-                if (string.IsNullOrEmpty(value))
-                {
-                    ID = string.Empty;
-                    Name = string.Empty;
-                }
             }
         }
         [Index(3)]
         public virtual string ICD9_ID { get; set; }
 
         public void GetData() {
-            if (!string.IsNullOrEmpty(ID))
-            {
-                DataTable table = DiseaseCodeDb.GetDataByCodeId(ID);
-                if (table.Rows.Count > 0)
-                {
-                    var diseaseCode = new DiseaseCode(table.Rows[0],false);
-                    ID = diseaseCode.ID;
-                    Name = diseaseCode.Name;
-                    FullName = ID + " " + Name;
-                }
-            }
+            if (string.IsNullOrEmpty(ID)) return;
+            var table = DiseaseCodeDb.GetDataByCodeId(ID);
+            if (table.Rows.Count <= 0) return;
+            var diseaseCode = new DiseaseCode(table.Rows[0]);
+            ID = diseaseCode.ID;
+            Name = diseaseCode.Name;
+            FullName = ID + " " + Name;
         }
         public static DiseaseCode GetDiseaseCodeByID(string id)
         {

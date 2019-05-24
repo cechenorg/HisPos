@@ -10,7 +10,7 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.Cooperative;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
+using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
@@ -74,7 +74,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => StartDate, ref startDate, value);
-                CooPreCollectionViewSource.Filter += Filter;
+                if (CooPreCollectionViewSource != null)
+                    CooPreCollectionViewSource.Filter += Filter;
             }
         }
 
@@ -85,7 +86,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => EndDate, ref endDate, value);
-                CooPreCollectionViewSource.Filter += Filter;
+                if (CooPreCollectionViewSource != null)
+                    CooPreCollectionViewSource.Filter += Filter;
             }
         }
 
@@ -97,7 +99,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => IDNumber, ref idNumber, value);
-                CooPreCollectionViewSource.Filter += Filter;
+                if (CooPreCollectionViewSource != null)
+                    CooPreCollectionViewSource.Filter += Filter;
             }
         }
 
@@ -108,7 +111,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => IsRead, ref isRead, value);
-                CooPreCollectionViewSource.Filter += Filter;
+                if(CooPreCollectionViewSource != null)
+                    CooPreCollectionViewSource.Filter += Filter;
             }
         }
 
@@ -119,7 +123,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => IsNotRead, ref isNotRead, value);
-                CooPreCollectionViewSource.Filter += Filter;
+                if (CooPreCollectionViewSource != null)
+                    CooPreCollectionViewSource.Filter += Filter;
             }
         }
         #endregion
@@ -183,7 +188,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         private void PrescriptionSelectedAction()
         {
             if (SelectedPrescription is null) return;
-            Messenger.Default.Send(new NotificationMessage<NewClass.PrescriptionRefactoring.Prescription>(this, SelectedPrescription.CreatePrescription(), "CooperativePrescriptionSelected"));
+            Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
             Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
         #endregion

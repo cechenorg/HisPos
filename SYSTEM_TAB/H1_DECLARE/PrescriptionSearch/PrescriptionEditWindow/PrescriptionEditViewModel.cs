@@ -533,7 +533,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void PrintReceiptAction()
         {
-            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+            var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
             var printReceipt = receiptResult.DialogResult;
             if (!(bool)printReceipt)
                 return;
