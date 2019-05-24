@@ -4,6 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
+            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+        </DataTemplate>
+        <DataTemplate x:Key="DataChanged" DataType="UserControl">
+            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid Width="1365" Height="839" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="400"/>
@@ -20,8 +28,8 @@
                 <RowDefinition/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <DataGrid Grid.Column="0" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding TypeManageMasters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Column="0" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" SelectedItem="{Binding CurrentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding TypeManageCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -53,8 +61,8 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Column="1" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkestBackGround}" AutoGenerateColumns="False"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding TypeManageDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Column="1" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkestBackGround}" AutoGenerateColumns="False" SelectedItem="{Binding CurrentType.CurrentDetailType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding CurrentType.ProductTypeDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -106,7 +114,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
+            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ProductCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -139,7 +147,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="110" MaxWidth="170" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                    <DataGridTextColumn Width="170" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -147,7 +155,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="210" MaxWidth="300" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn Width="300" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -157,23 +165,32 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Background="{StaticResource GridBackGround}">
-                <Button Margin="10,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0"/>
-                <Rectangle Width="260"/>
-                <Button Margin="10,0,0,0" Width="120" Content="新增類別" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0"/>
-                <Button Margin="10,0,0,0" Width="120" Content="刪除類別" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0"/>
+                <Button Margin="10,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0" IsEnabled="False"/>
+                <Rectangle Width="300"/>
+                <Button Margin="10,0,0,0" Width="120" Content="新增類別" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0" Command="{Binding AddTypeCommand}"/>
+                <Button Margin="10,0,0,0" Width="120" Content="刪除類別" FontFamily="Segoe UI Semibold" FontSize="16" Background="{StaticResource Shadow}" BorderThickness="0" Command="{Binding DeleteTypeCommand}"/>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-            <StackPanel Orientation="Horizontal" Width="950">
+            <StackPanel Orientation="Horizontal" Width="990">
                 <TextBox FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <TextBox FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
                 <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,10,0"/>
                 <TextBox FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                <TextBox FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
             </StackPanel>
-            <Label Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <Button Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
-            <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0"/>
+            <ContentControl>
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource DataNotChanged}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDataChanged, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DataChanged}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+            <Button Margin="10,0,0,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Command="{Binding CancelChangeCommand}"/>
+            <Button Margin="10,0,0,0" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding ConfirmChangeCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

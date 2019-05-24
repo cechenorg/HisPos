@@ -10,8 +10,15 @@ namespace His_Pos.NewClass.ProductType
     public class ProductTypeManageMaster : ProductType
     {
         #region ----- Define Variables -----
+
+        private ProductTypeManageDetail currentDetailType;
         private ProductTypeManageDetails productTypeDetails;
 
+        public ProductTypeManageDetail CurrentDetailType
+        {
+            get { return currentDetailType; }
+            set { Set(() => CurrentDetailType, ref currentDetailType, value); }
+        }
         public ProductTypeManageDetails ProductTypeDetails
         {
             get => productTypeDetails;

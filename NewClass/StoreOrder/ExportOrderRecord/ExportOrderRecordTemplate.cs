@@ -14,8 +14,6 @@ namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
     {
         protected override void CreateExcelSettings()
         {
-            Settings.Clear();
-
             if((Source as StoreOrder).OrderStatus == OrderStatusEnum.SCRAP)
                 Settings.Add(new ExportSpecialExcelSetting("已作廢", 1, 1, Color.Transparent, Color.Red, true, 15));
 

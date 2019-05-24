@@ -496,6 +496,8 @@
     <Compile Include="NewClass\Product\StockTaking\StockTakingOTC.cs" />
     <Compile Include="NewClass\Product\StockTaking\StockTakingProduct.cs" />
     <Compile Include="NewClass\Product\StockTaking\StockTakingProducts.cs" />
+    <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
+    <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReports.cs" />

@@ -19,6 +19,8 @@ namespace His_Pos.Service.ExportService
             set
             {
                 Set(() => Source, ref source, value);
+
+                Settings.Clear();
                 CreateExcelSettings();
             }
         }
