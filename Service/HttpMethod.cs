@@ -110,7 +110,7 @@ namespace His_Pos.Service
             }
             return xmlDocuments;
         }
-        public void NonQueryPost(string url, Dictionary<string, string> parameterList) {
+        public bool NonQueryPost(string url, Dictionary<string, string> parameterList) {
             ServicePointManager.Expect100Continue = false;
             string paramString = string.Empty;
             int count = 0;
@@ -133,14 +133,14 @@ namespace His_Pos.Service
             {
                 reqStream.Write(bs, 0, bs.Length);
             }
-            string requeststring = string.Empty;
+            bool requeststring = false;
             List<XmlDocument> xmlDocuments = new List<XmlDocument>();
             try
             {
                 using (WebResponse response = request.GetResponse())
-                {
-                   
+                { 
                 }
+                requeststring = true;
             }
             catch (Exception ex)
             {
@@ -154,7 +154,8 @@ namespace His_Pos.Service
                         MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
-            } 
+            }
+            return requeststring;
         }
 
     }

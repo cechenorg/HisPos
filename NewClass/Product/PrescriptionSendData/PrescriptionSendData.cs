@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Product
         }
         public PrescriptionSendData(Medicine.Medicine m) {
             MedId = m.ID;
-            MedName = m.ChineseName;
+            MedName = m.FullName;
             Stock = m.Inventory;
             TreatAmount = m.Amount;
             SendAmount = TreatAmount;

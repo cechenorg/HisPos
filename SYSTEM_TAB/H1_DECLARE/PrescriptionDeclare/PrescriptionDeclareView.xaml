@@ -687,8 +687,11 @@
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource SendToSingde}" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CurrentPrescription.PrescriptionStatus.IsSendToSingde}" Value="true">
+                                            <DataTrigger Binding="{Binding CurrentPrescription.PrescriptionStatus.IsSendToSingde,UpdateSourceTrigger=PropertyChanged}" Value="true">
                                                 <Setter Property="ContentTemplate" Value="{StaticResource UpdateSendToSingde}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CurrentPrescription.PrescriptionStatus.IsSendToSingde,UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource SendToSingde}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
