@@ -25,9 +25,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         public virtual string FullName
         {
             get => fullName;
-            protected set
+            set
             {
                 Set(() => FullName, ref fullName, value);
+                if (string.IsNullOrEmpty(fullName))
+                {
+                    ID = string.Empty;
+                    Name = string.Empty;
+                }
             }
         }
         [Index(3)]

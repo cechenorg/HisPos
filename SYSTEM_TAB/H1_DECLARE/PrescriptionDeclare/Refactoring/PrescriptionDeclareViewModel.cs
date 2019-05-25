@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -63,11 +64,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 Set(() => CurrentPrescription, ref currentPrescription, value);
             }
         }
+        private bool canEditDisease { get; set; } = true;
         #endregion
         #region Commands
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
-        public RelayCommand<string> GetCustomers { get; set; }
+        public RelayCommand<TextBox> GetCustomers { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
@@ -109,11 +111,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction);
-            GetCustomers = new RelayCommand<string>(GetCustomersAction);
+            GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
-            DiseaseCodeTextChanged = new RelayCommand<object>(DiseaseCodeTextChangedAction);
         }
 
         #endregion
@@ -128,8 +129,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void GetCustomerPrescription(NotificationMessage<Prescription> receiveMsg)
         {
+            canEditDisease = false;
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            CurrentPrescription = (Prescription)receiveMsg.Content.Clone();
+            CurrentPrescription = receiveMsg.Content;
         }
 
         private void GetPatientDataAction()
@@ -137,7 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             //取得病患資料(讀卡)
         }
 
-        private void GetCustomersAction(string condition)
+        private void GetCustomersAction(TextBox condition)
         {
             //顧客查詢
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
@@ -156,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     //CheckCustomPrescriptions();
                     break;
                 default:
-                    switch (condition)
+                    switch (condition.Name)
                     {
                         case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
                             MessageWindow.ShowMessage("查詢生日不可為空",MessageType.WARNING);
@@ -230,23 +232,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     disease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     if (disease == null) return;
                     CurrentPrescription.SubDisease = disease;
-                    break;
-            }
-        }
-        private void DiseaseCodeTextChangedAction(object o)
-        {
-            var parameters = o.ConvertTo<List<string>>();
-            var elementName = parameters[0];
-            var diseaseID = parameters[1];
-            switch (elementName)
-            {
-                case "MainDiagnosis":
-                    if(string.IsNullOrEmpty(diseaseID))
-                        CurrentPrescription.MainDisease = new DiseaseCode();
-                    break;
-                case "SecondDiagnosis":
-                    if (string.IsNullOrEmpty(diseaseID))
-                        CurrentPrescription.SubDisease = new DiseaseCode();
                     break;
             }
         }

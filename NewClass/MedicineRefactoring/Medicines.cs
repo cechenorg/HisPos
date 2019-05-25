@@ -42,35 +42,63 @@ namespace His_Pos.NewClass.MedicineRefactoring
                         break;
                 }
             }
-
             foreach (var item in medicineOrderItem)
             {
-                var med = medicines.Single(m => m.ID.Equals(item.Id));
-                med.Usage = new Usage();
-                med.Position = new Position();
-                med.UsageName = item.Freq;
-                med.PositionID = item.Way;
-                med.Amount = Convert.ToDouble(item.Total_dose);
-                med.Dosage = Convert.ToDouble(item.Divided_dose);
-                med.Days = Convert.ToInt32(item.Days);
-                med.PaySelf = item.Remark == "-" || item.Remark == "*";
-                med.IsBuckle = false;
-                switch (item.Remark)
+                if (string.IsNullOrEmpty(item.Id))
                 {
-                    case "":
-                        med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
-                        break;
-                    case "-":
-                        med.TotalPrice = 0;
-                        break;
-                    case "*":
-                        med.TotalPrice = Convert.ToDouble(item.Price);
-                        break;
-                    default:
-                        med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
-                        break;
+                    var med = new MedicineOTC(item);
+                    med.Usage = new Usage();
+                    med.Position = new Position();
+                    med.UsageName = item.Freq;
+                    med.PositionID = item.Way;
+                    med.Amount = Convert.ToDouble(item.Total_dose);
+                    med.Dosage = Convert.ToDouble(item.Divided_dose);
+                    med.Days = Convert.ToInt32(item.Days);
+                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
+                    med.IsBuckle = false;
+                    switch (item.Remark)
+                    {
+                        case "":
+                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                            break;
+                        case "-":
+                            med.TotalPrice = 0;
+                            break;
+                        case "*":
+                            med.TotalPrice = Convert.ToDouble(item.Price);
+                            break;
+                    }
+                    Add(med);
                 }
-                Add(med);
+                else
+                {
+                    var med = medicines.Single(m => m.ID.Equals(item.Id));
+                    med.Usage = new Usage();
+                    med.Position = new Position();
+                    med.UsageName = item.Freq;
+                    med.PositionID = item.Way;
+                    med.Amount = Convert.ToDouble(item.Total_dose);
+                    med.Dosage = Convert.ToDouble(item.Divided_dose);
+                    med.Days = Convert.ToInt32(item.Days);
+                    med.PaySelf = item.Remark == "-" || item.Remark == "*";
+                    med.IsBuckle = false;
+                    switch (item.Remark)
+                    {
+                        case "":
+                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                            break;
+                        case "-":
+                            med.TotalPrice = 0;
+                            break;
+                        case "*":
+                            med.TotalPrice = Convert.ToDouble(item.Price);
+                            break;
+                        default:
+                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                            break;
+                    }
+                    Add(med);
+                }
             }
         }
         public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,bool isBuckle)
@@ -99,29 +127,60 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
             foreach (var item in medicineOrderItem)
             {
-                var med = medicines.Single(m => m.ID.Equals(item.Id));
-                med.Usage = new Usage();
-                med.Position = new Position();
-                med.UsageName = item.Freq;
-                med.PositionID = item.Way;
-                med.Amount = Convert.ToDouble(item.Total_dose);
-                med.Dosage = Convert.ToDouble(item.Divided_dose);
-                med.Days = Convert.ToInt32(item.Days);
-                med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                med.IsBuckle = isBuckle;
-                switch (item.Remark)
+                if (string.IsNullOrEmpty(item.Id))
                 {
-                    case "":
-                        med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
-                        break;
-                    case "-":
-                        med.TotalPrice = 0;
-                        break;
-                    case "*":
-                        med.TotalPrice = Convert.ToDouble(item.Price);
-                        break;
+                    var med = new MedicineOTC(item);
+                    med.Usage = new Usage();
+                    med.Position = new Position();
+                    med.UsageName = item.Freq;
+                    med.PositionID = item.Way;
+                    med.Amount = Convert.ToDouble(item.Total_dose);
+                    med.Dosage = Convert.ToDouble(item.Divided_dose);
+                    med.Days = Convert.ToInt32(item.Days);
+                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
+                    med.IsBuckle = isBuckle;
+                    switch (item.Remark)
+                    {
+                        case "":
+                            var price = Convert.ToDouble(item.Price);
+                            med.TotalPrice = med.Amount * (price < 0 ? price * -1 : price);
+                            break;
+                        case "-":
+                            med.TotalPrice = 0;
+                            break;
+                        case "*":
+                            price = Convert.ToDouble(item.Price);
+                            med.TotalPrice = price < 0 ? price * -1 : price;
+                            break;
+                    }
+                    Add(med);
                 }
-                Add(med);
+                else
+                {
+                    var med = medicines.Single(m => m.ID.Equals(item.Id));
+                    med.Usage = new Usage();
+                    med.Position = new Position();
+                    med.UsageName = item.Freq;
+                    med.PositionID = item.Way;
+                    med.Amount = Convert.ToDouble(item.Total_dose);
+                    med.Dosage = Convert.ToDouble(item.Divided_dose);
+                    med.Days = Convert.ToInt32(item.Days);
+                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
+                    med.IsBuckle = isBuckle;
+                    switch (item.Remark)
+                    {
+                        case "":
+                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                            break;
+                        case "-":
+                            med.TotalPrice = 0;
+                            break;
+                        case "*":
+                            med.TotalPrice = Convert.ToDouble(item.Price);
+                            break;
+                    }
+                    Add(med);
+                }
             }
         }
 

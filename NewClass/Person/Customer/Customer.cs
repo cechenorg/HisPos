@@ -58,7 +58,10 @@ namespace His_Pos.NewClass.Person.Customer
         {
             IDNumber = customer.IdNumber;
             Name = customer.Name;
-            Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            if (birthYear >= 1911)
+            {
+                Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            }
             Tel = customer.Phone;
         }
 

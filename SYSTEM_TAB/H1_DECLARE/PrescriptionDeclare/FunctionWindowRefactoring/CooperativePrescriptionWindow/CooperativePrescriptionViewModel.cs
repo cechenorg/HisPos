@@ -189,7 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             if (SelectedPrescription is null) return;
             Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
-            Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
+            Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
         }
         #endregion
 

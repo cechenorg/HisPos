@@ -26,7 +26,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Position = new Position();
             ID = m.Id;
             ChineseName = m.Desc;
-            EnglishName = m.Desc;
             UsageName = m.Freq;
             PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
@@ -229,16 +228,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 {
                     Set(() => Enable, ref enable, value);
                 }
-            }
-        }
-
-        private bool isPriceReadOnly;
-        public bool IsPriceReadOnly
-        {
-            get => isPriceReadOnly;
-            set
-            {
-                Set(() => IsPriceReadOnly, ref isPriceReadOnly, value);
             }
         }
 

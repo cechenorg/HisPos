@@ -55,6 +55,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Copayment = new Copayment();
             PaymentCategory = new PaymentCategory();
             SpecialTreat = new SpecialTreat();
+            Patient = new Customer();
         }
 
         public Prescription(DataRow r)
@@ -131,9 +132,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var diseases = study.Diseases.Disease;
             var insurance = prescription.Insurance;
             var chronic = prescription.Continous_prescription;
-            var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
-            var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
-            var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            var cusBirth = customer.Birth.Trim();
+            int birthYear = 0, birthMonth = 0, birthDay = 0;
+            if (cusBirth.Length >= 7)
+            {
+                birthYear = string.IsNullOrEmpty(cusBirth) ? 1911 : int.Parse(cusBirth.Substring(0, 3)) + 1911;
+                birthMonth = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(3, 2));
+                birthDay = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(5, 2));
+            }
             #endregion
             Type = PrescriptionType.Cooperative;
             SourceId = sourceId;

@@ -74,7 +74,6 @@ namespace His_Pos.NewClass.Product.Medicine
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days.Split('.')[0]);
-            
             PaySelf = m.Remark == "-" || m.Remark == "*";
             IsBuckle = false;
             switch (m.Remark)
