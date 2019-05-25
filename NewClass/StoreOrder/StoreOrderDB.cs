@@ -399,7 +399,7 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
-        internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
+        internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameters, "START_DATE", searchStartDate);
@@ -407,6 +407,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("ORDER_ID", searchOrderID));
             parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
             parameters.Add(new SqlParameter("PRODUCT", searchProductID));
+            parameters.Add(new SqlParameter("WAREHOUSE", searchWareName));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }

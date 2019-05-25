@@ -37,6 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         private string searchOrderID = "";
         private string searchProductID = "";
         private string searchManufactoryID = "";
+        private string searchWareName = "";
 
         public DateTime? SearchStartDate
         {
@@ -62,6 +63,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             get { return searchManufactoryID; }
             set { Set(() => SearchManufactoryID, ref searchManufactoryID, value); }
+        }
+        public string SearchWareName
+        {
+            get { return searchWareName; }
+            set { Set(() => SearchWareName, ref searchWareName, value); }
         }
         #endregion
 
@@ -119,7 +125,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID);
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
             MainWindow.ServerConnection.CloseConnection();
             
             if (StoreOrderCollection.Count > 0)
