@@ -388,12 +388,13 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
-        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID)
+        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", orderType.ToString()));
             parameters.Add(new SqlParameter("MANUFACTORY", orderManufactory.ID));
             parameters.Add(new SqlParameter("EMPLOYEE", employeeID));
+            parameters.Add(new SqlParameter("WARE_ID", wareHouseID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
