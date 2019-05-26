@@ -25,6 +25,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHos
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 // ReSharper disable InconsistentNaming
 
@@ -141,31 +142,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             //顧客查詢
             Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            CustomerSearchWindow customerSearch;
             switch (condition.Name)
             {
-                case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
-                    MessageWindow.ShowMessage("查詢生日不可為空", MessageType.WARNING);
+                
+                case "PatientIDNumber" when string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber):
+                    MessageWindow.ShowMessage("查詢身分證不可為空", MessageType.WARNING);
                     break;
-                case "PatientBirthday":
-                    //var c = new CustomerSelectionWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), 1);
+                case "PatientIDNumber":
+                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.IDNumber, CustomerSearchCondition.IDNumber);
                     break;
                 case "PatientName" when string.IsNullOrEmpty(CurrentPrescription.Patient.Name):
                     MessageWindow.ShowMessage("查詢姓名不可為空", MessageType.WARNING);
                     break;
                 case "PatientName":
-                    //c = new CustomerSelectionWindow(CurrentPrescription.Patient.Name, 2);
+                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
                     break;
-                case "PatientIDNumber" when string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber):
-                    MessageWindow.ShowMessage("查詢身分證不可為空", MessageType.WARNING);
+                case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
+                    MessageWindow.ShowMessage("查詢生日不可為空", MessageType.WARNING);
                     break;
-                case "PatientIDNumber":
-                    //c = new CustomerSelectionWindow(CurrentPrescription.Patient.IDNumber, 3);
+                case "PatientBirthday":
+                    customerSearch = new CustomerSearchWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), CustomerSearchCondition.Birthday);
                     break;
                 case "PatientTel" when string.IsNullOrEmpty(CurrentPrescription.Patient.Tel):
                     MessageWindow.ShowMessage("查詢電話不可為空", MessageType.WARNING);
                     break;
                 case "PatientTel":
-                    //c = new CustomerSelectionWindow(CurrentPrescription.Patient.Name, 4);
+                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Tel, CustomerSearchCondition.Tel);
                     break;
             }
         }

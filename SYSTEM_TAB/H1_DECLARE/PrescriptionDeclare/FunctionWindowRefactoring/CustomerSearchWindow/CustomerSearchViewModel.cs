@@ -183,7 +183,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             if (IsEditing)
             {
                 IsEditing = false;
-                CustomerCollectionViewSource.Filter += Filter;
+                //CustomerCollectionViewSource.Filter += Filter;
                 switch (Customers.Count)
                 {
                     case 0:
