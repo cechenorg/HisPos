@@ -16,6 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
         #region ----- Define Command -----
         public RelayCommand SearchCommand { get; set; }
+        public RelayCommand<string> ChangeSearchTypeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -30,6 +31,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private ProductManageStructs searchProductCollection;
         private double totalStockValue;
         private double negtiveStockValue;
+        private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
+        private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
         public ProductManageStructs SearchProductCollection
         {
@@ -45,6 +48,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             get { return negtiveStockValue; }
             set { Set(() => NegtiveStockValue, ref negtiveStockValue, value); }
+        }
+        public ProductSearchTypeEnum SearchType
+        {
+            get { return searchType; }
+            set { Set(() => SearchType, ref searchType, value); }
+        }
+        public ProductSearchTypeEnum SearchConditionType
+        {
+            get { return searchConditionType; }
+            set { Set(() => SearchConditionType, ref searchConditionType, value); }
         }
         #endregion
 
@@ -70,12 +83,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             if (SearchProductCollection.Count == 0)
                 MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
         }
+        private void ChangeSearchTypeAction(string type)
+        {
+            switch (type)
+            {
+                case "A":
+                    SearchType = ProductSearchTypeEnum.ALL;
+                    break;
+                case "O":
+                    SearchType = ProductSearchTypeEnum.OTC;
+                    break;
+                case "M":
+                    SearchType = ProductSearchTypeEnum.Medicine;
+                    break;
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
         private void RegisterCommand()
         {
             SearchCommand = new RelayCommand(SearchAction);
+            ChangeSearchTypeCommand = new RelayCommand<string>(ChangeSearchTypeAction);
         }
         private bool IsSearchConditionValid()
         {
