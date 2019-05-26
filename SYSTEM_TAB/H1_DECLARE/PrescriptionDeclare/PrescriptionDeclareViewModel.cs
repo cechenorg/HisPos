@@ -580,6 +580,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsReadCard = true;
             IsCardReading = true;
         }
+
         private void ShowInsSelectionWindowAction(string search)
         {
             if (CurrentPrescription.Treatment.Institution != null && !string.IsNullOrEmpty(CurrentPrescription.Treatment.Institution.FullName) && search.Equals(CurrentPrescription.Treatment.Institution.FullName))

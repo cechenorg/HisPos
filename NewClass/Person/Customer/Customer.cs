@@ -2,10 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;

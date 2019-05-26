@@ -139,5 +139,15 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", DBNull.Value);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
         }
+
+        public static DataTable GetCustomers(string idNumber,string name,string tel,DateTime? birth)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", name);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", birth);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", tel);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomer]", parameterList);
+        }
     }
 }
