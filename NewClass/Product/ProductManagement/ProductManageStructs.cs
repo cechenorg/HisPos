@@ -19,9 +19,9 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
         }
 
-        internal static ProductManageStructs SearchProductByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero)
+        internal static ProductManageStructs SearchProductByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID)
         {
-            DataTable dataTable = ProductDetailDB.GetProductManageStructsByConditions(searchID, searchName, searchIsEnable, searchIsInventoryZero);
+            DataTable dataTable = ProductDetailDB.GetProductManageStructsByConditions(searchID, searchName, searchIsEnable, searchIsInventoryZero, wareID);
 
             return new ProductManageStructs(dataTable);
         }

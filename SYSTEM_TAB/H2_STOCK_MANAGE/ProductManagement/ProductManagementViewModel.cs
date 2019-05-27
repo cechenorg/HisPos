@@ -1,9 +1,11 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 {
@@ -31,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private ProductManageStructs searchProductCollection;
         private double totalStockValue;
         private double negtiveStockValue;
+        private WareHouse selectedWareHouse;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
@@ -59,22 +62,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             get { return searchConditionType; }
             set { Set(() => SearchConditionType, ref searchConditionType, value); }
         }
+        public WareHouse SelectedWareHouse
+        {
+            get { return selectedWareHouse; }
+            set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
+        }
+        public WareHouses WareHouseCollection { get; set; }
         #endregion
 
         public ProductManagementViewModel()
         {
+            InitData();
             RegisterCommand();
             SearchAction();
         }
-
+        
         #region ----- Define Actions -----
         private void SearchAction()
         {
             if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero);
-            DataTable dataTable = ProductDetailDB.GetTotalStockValue();
+            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID);
+            DataTable dataTable = ProductDetailDB.GetTotalStockValue(SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
@@ -82,19 +92,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             if (SearchProductCollection.Count == 0)
                 MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
+
+            SearchType = SearchConditionType;
         }
         private void ChangeSearchTypeAction(string type)
         {
             switch (type)
             {
                 case "A":
-                    SearchType = ProductSearchTypeEnum.ALL;
+                    SearchConditionType = ProductSearchTypeEnum.ALL;
                     break;
                 case "O":
-                    SearchType = ProductSearchTypeEnum.OTC;
+                    SearchConditionType = ProductSearchTypeEnum.OTC;
                     break;
                 case "M":
-                    SearchType = ProductSearchTypeEnum.Medicine;
+                    SearchConditionType = ProductSearchTypeEnum.Medicine;
                     break;
             }
         }
@@ -109,6 +121,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private bool IsSearchConditionValid()
         {
             return true;
+        }
+        private void InitData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            WareHouseCollection = WareHouses.GetWareHouses();
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (WareHouseCollection is null || WareHouseCollection.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            SelectedWareHouse = WareHouseCollection[0];
         }
         #endregion
     }

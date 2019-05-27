@@ -10,6 +10,28 @@
              xmlns:productTypeResultControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductTypeResultControl"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <DataTemplate x:Key="MixedCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+        </DataTemplate>
+        <DataTemplate x:Key="OTCCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50">
+                <Label Content="進階搜尋條件" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <Label Content="大類別" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID"
+                          IsEditable="False" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}"
+                          SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Content="小類別" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID"
+                          IsEditable="False" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}"
+                          SelectedItem="{Binding CurrentPrescription.Treatment.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="MedicineCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50">
+                <Label Content="進階搜尋條件" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <Label Content="成分" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="10,0,0,0" Width="200" FontSize="16" InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate x:Key="MixedResult" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
             <productTypeResultControl:MixedResultControl/> 
         </DataTemplate>
@@ -23,6 +45,7 @@
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -31,16 +54,33 @@
             <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <TextBox Text="{Binding SearchName, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
-            <CheckBox Content="顯示無庫存" IsChecked="{Binding SearchIsInventoryZero, Mode=TwoWay}" Background="RoyalBlue" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="倉庫" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="16" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="顯示無庫存" IsChecked="{Binding SearchIsInventoryZero, Mode=TwoWay}" Background="RoyalBlue" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <CheckBox Content="顯示已停用" IsChecked="{Binding SearchIsEnable, Mode=TwoWay}" Margin="10,0,20,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <RadioButton Content="全部" GroupName="OrderType" Margin="200,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="A"/>
-            <RadioButton Content="OTC商品" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="O"/>
-            <Image Source="/Images/OrangeDot.png" Width="15"/>
-            <RadioButton Content="藥品" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="M"/>
-            <Image Source="/Images/BlueDot.png" Width="15"/>
+            <RadioButton Content="全部" GroupName="OrderType" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="A" Visibility="Hidden"/>
+            <RadioButton Content="OTC商品" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="O" Visibility="Hidden"/>
+            <Image Source="/Images/OrangeDot.png" Width="15" Visibility="Hidden"/>
+            <RadioButton Content="藥品" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ChangeSearchTypeCommand}" CommandParameter="M" Visibility="Hidden"/>
+            <Image Source="/Images/BlueDot.png" Width="15" Visibility="Hidden"/>
             <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Command="{Binding SearchCommand}" Margin="35,0,0,0"/>
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource MixedCondition}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SearchConditionType, UpdateSourceTrigger=PropertyChanged}" Value="Medicine">
+                            <Setter Property="ContentTemplate" Value="{StaticResource MedicineCondition}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SearchConditionType, UpdateSourceTrigger=PropertyChanged}" Value="OTC">
+                            <Setter Property="ContentTemplate" Value="{StaticResource OTCCondition}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <ContentControl Grid.Row="2" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource MixedResult}"/>
@@ -55,7 +95,7 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
             <!--<Button Content="+ 新增產品" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="AddNewProduct"/>-->
             <Label Content="查詢結果  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Label Content="{Binding SearchProductCollection.Count, FallbackValue=0}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>

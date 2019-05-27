@@ -8,13 +8,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductDetailDB
     {
-        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero)
+        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", searchID));
             parameters.Add(new SqlParameter("PRO_NAME", searchName));
             parameters.Add(new SqlParameter("SHOW_DISABLE", searchIsEnable));
             parameters.Add(new SqlParameter("SHOW_INV_ZERO", searchIsInventoryZero));
+            parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
@@ -64,9 +65,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
 
-        internal static DataTable GetTotalStockValue()
+        internal static DataTable GetTotalStockValue(string wareID)
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]", parameters);
         }
 
         internal static void StockTakingProductManageMedicineByID(string productID, string newInventory)
