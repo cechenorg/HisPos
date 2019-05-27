@@ -37,8 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeDb.ChangePassword(EmpId, EmpNewPassword);
             MainWindow.ServerConnection.CloseConnection(); 
             MessageWindow.ShowMessage("更新密碼成功!", MessageType.SUCCESS);
-            
-
+             
             Close();
         }
 

@@ -46,7 +46,12 @@ namespace His_Pos.NewClass.Person.Employee
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "EmpId", empid); 
             DataBaseFunction.AddSqlParameter(parameterList, "Password", password);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[ChangeEmployeePassword]", parameterList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ChangeEmployeePassword]", parameterList); 
+        }
+        public static DataTable SaveServer(Employee e) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+            return MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName,"[Set].[SaveEmployee]", parameterList);
         }
         public static DataTable SetCustomer(Employee e)
         {
@@ -56,6 +61,9 @@ namespace His_Pos.NewClass.Person.Employee
                 newRow["Emp_ID"] = DBNull.Value;
             else
                 newRow["Emp_ID"] = e.ID;
+            DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue); 
             DataBaseFunction.AddColumnValue(newRow,"Emp_Name",e.Name);
             DataBaseFunction.AddColumnValue(newRow,"Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Gender", e.Gender);
@@ -73,11 +81,14 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow,"Emp_Note", e.Note);
             DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable); 
             employeeTable.Rows.Add(newRow);
-            return employeeTable;
+            return employeeTable; 
         }
         public static DataTable EmployeeTable() {
             DataTable employeeTable = new DataTable();
             employeeTable.Columns.Add("Emp_ID", typeof(int));
+            employeeTable.Columns.Add("Emp_Account", typeof(string));
+            employeeTable.Columns.Add("Emp_Password", typeof(string));
+            employeeTable.Columns.Add("Emp_AuthorityLevel", typeof(int));
             employeeTable.Columns.Add("Emp_Name", typeof(String));
             employeeTable.Columns.Add("Emp_NickName", typeof(String));
             employeeTable.Columns.Add("Emp_Gender", typeof(String));

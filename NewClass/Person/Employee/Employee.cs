@@ -14,6 +14,7 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee(){}
         public Employee(DataRow r):base(r)
         {
+            Account = r.Field<string>("Emp_Account");
             Password = r.Field<string>("Aut_Password");
             NickName = r.Field<string>("Emp_NickName");
             WorkPositionName = r.Field<string>("Emp_WorkPositionName");
@@ -106,10 +107,21 @@ namespace His_Pos.NewClass.Person.Employee
         }
         [IgnoreFormat]
         public int AuthorityValue { get; set; }
+        private string account;//帳號
+        [IgnoreFormat]
+        public virtual string Account
+        {
+            get => account;
+            set
+            {
+                Set(() => Account, ref account, value);
+            }
+        }
         #region Function
         public Employee Save()
         {
             DataTable table = EmployeeDb.Save(this);
+            SaveServer();
             return new Employee(table.Rows[0]);
         }
         public void Delete()
@@ -134,7 +146,9 @@ namespace His_Pos.NewClass.Person.Employee
           DataTable table =  EmployeeDb.GetPassword(ID);
             return table.Rows[0]["Aut_Password"].ToString();
         }
-      
+        public void SaveServer() {
+           EmployeeDb.SaveServer(this);
+        }
         #endregion
     }
 }
