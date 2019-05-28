@@ -57,7 +57,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
-        private ViewModelEnum viewModel { get; set; }
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
@@ -93,24 +92,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         }
         private void ExecuteInstitutionSelected()
         {
-            switch (viewModel)
-            {
-                case ViewModelEnum.PrescriptionDeclare:
-                    Messenger.Default.Send(SelectedInstitution,nameof(Refactoring.PrescriptionDeclareViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.PrescriptionSearch:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionSearchViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.PrescriptionEdit:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionEditViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.DeclareFileManage:
-                    Messenger.Default.Send(SelectedInstitution, nameof(DeclareFileManageViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.CooperativeClinicControl:
-                    Messenger.Default.Send(SelectedInstitution, nameof(CooperativeClinicControlViewModel) + "InsSelected");
-                    break;
-            }
+            Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");
             Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));
         }
         private void FilterBySearchText(object sender, FilterEventArgs e)
@@ -124,9 +106,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 e.Accepted = false;
             }
         }
-        public InstitutionSelectionViewModel(string searchText,ViewModelEnum vm)
+        public InstitutionSelectionViewModel(string searchText)
         {
-            viewModel = vm;
             Institutions = ViewModelMainWindow.Institutions;
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             InstitutionSelected = new RelayCommand(ExecuteInstitutionSelected);

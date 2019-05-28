@@ -66,7 +66,8 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="生日" Width="120" MaxWidth="120" Binding="{Binding Birthday,Converter={StaticResource BirthDayConverter}}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="身分證" Width="150" MaxWidth="120" Binding="{Binding IDNumber}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="電話" Width="150" MaxWidth="120" Binding="{Binding Tel}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="手機" Width="150" MaxWidth="120" Binding="{Binding CellPhone}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="家電" Width="150" MaxWidth="120" Binding="{Binding Tel}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="編輯時間" Width="150" MaxWidth="120" Binding="{Binding LastEdit ,StringFormat='{}{0:MM/dd hh:mm}'}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
@@ -96,10 +97,11 @@
                 </TextBox.InputBindings>
             </TextBox>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
-                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
-                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
-                <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
+                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
+                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
+                <RadioButton Content="手機" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+                <RadioButton Content="家電" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option5}"/>
             </StackPanel>
              <ContentControl Name="ResultGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding}" Margin="10,10,10,0">
                 <ContentControl.Style>

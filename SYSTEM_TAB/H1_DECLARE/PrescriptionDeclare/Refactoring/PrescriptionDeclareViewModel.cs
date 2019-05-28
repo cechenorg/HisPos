@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -19,13 +21,13 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
-using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
@@ -55,6 +57,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #endregion
         #region Variables
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            private set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         private Prescription currentPrescription;
         public Prescription CurrentPrescription
         {
@@ -66,9 +86,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #endregion
         #region Commands
+        public RelayCommand<TextBox> GetCustomers { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
-        public RelayCommand<TextBox> GetCustomers { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
@@ -134,6 +154,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetPatientDataAction()
         {
             //取得病患資料(讀卡)
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                try
+                {
+                    BusyContent = Resources.讀取健保卡;
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentPrescription.ReadCard();
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+                catch (Exception e)
+                {
+                    NewFunction.ExceptionLog(e.Message);
+                    Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void GetCustomersAction(TextBox condition)
@@ -143,52 +185,54 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CustomerSearchWindow customerSearch;
             switch (condition.Name)
             {
-                
                 case "PatientIDNumber" when string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber):
-                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
-                    MessageWindow.ShowMessage("查詢身分證不可為空", MessageType.WARNING);
+                    MessageWindow.ShowMessage(Resources.身分證空值, MessageType.WARNING);
                     break;
                 case "PatientIDNumber":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.IDNumber, CustomerSearchCondition.IDNumber);
                     break;
                 case "PatientName" when string.IsNullOrEmpty(CurrentPrescription.Patient.Name):
-                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
-                    MessageWindow.ShowMessage("查詢姓名不可為空", MessageType.WARNING);
+                    MessageWindow.ShowMessage(Resources.姓名空值, MessageType.WARNING);
                     break;
                 case "PatientName":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
                     break;
                 case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
-                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
-                    MessageWindow.ShowMessage("查詢生日不可為空", MessageType.WARNING);
+                    MessageWindow.ShowMessage(Resources.生日空值, MessageType.WARNING);
                     break;
                 case "PatientBirthday":
                     customerSearch = new CustomerSearchWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), CustomerSearchCondition.Birthday);
                     break;
                 case "PatientTel" when string.IsNullOrEmpty(CurrentPrescription.Patient.Tel):
-                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
-                    MessageWindow.ShowMessage("查詢電話不可為空", MessageType.WARNING);
+                    MessageWindow.ShowMessage(Resources.電話空值, MessageType.WARNING);
                     break;
                 case "PatientTel":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Tel, CustomerSearchCondition.Tel);
                     break;
+                case "PatientCellPhone" when string.IsNullOrEmpty(CurrentPrescription.Patient.CellPhone):
+                    MessageWindow.ShowMessage(Resources.電話空值, MessageType.WARNING);
+                    break;
+                case "PatientCellPhone":
+                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.CellPhone, CustomerSearchCondition.Tel);
+                    break;
             }
+            Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
         }
 
         private void GetInstitutionAction(string insID)
         {
             //院所查詢
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
-            var institutionSelectionWindow = new InstitutionSelectionWindow(insID, ViewModelEnum.PrescriptionDeclare);
+            var institutionSelectionWindow = new InstitutionSelectionWindow(insID);
         }
 
         private void GetCommonInstitutionAction()
         {
             //常用院所查詢
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
-            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
+            var commonInsSelectionWindow = new CommonHospitalsWindow();
         }
         private void GetDiseaseCodeAction(object o)
         {
@@ -238,11 +282,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = receiveSelectedInstitution;
         }
         #endregion
-
         #region Functions
         private void CustomerNotExist()
         {

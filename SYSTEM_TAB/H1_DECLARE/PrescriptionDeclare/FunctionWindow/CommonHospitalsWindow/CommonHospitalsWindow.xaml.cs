@@ -9,7 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
     /// </summary>
     public partial class CommonHospitalsWindow : Window
     {
-        public CommonHospitalsWindow(ViewModelEnum vm)
+        public CommonHospitalsWindow()
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 if (notificationMessage.Notification.Equals("CloseCommonHospitalsWindow"))
                     Close();
             });
-            DataContext = new CommonHospitalsViewModel(vm);
+            DataContext = new CommonHospitalsViewModel();
             Closing += (sender, e) => Messenger.Default.Unregister(this);
             ShowDialog();
         }

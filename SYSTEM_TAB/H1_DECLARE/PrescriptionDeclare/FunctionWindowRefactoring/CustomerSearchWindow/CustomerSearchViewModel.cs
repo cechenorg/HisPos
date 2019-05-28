@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -11,13 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow
 {
@@ -26,7 +16,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         IDNumber = 0,
         Name = 1,
         Birthday = 2,
-        Tel = 3
+        CellPhone = 3,
+        Tel = 4
     }
     public class CustomerSearchViewModel : ViewModelBase
     {
@@ -50,6 +41,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                         SearchCondition = CustomerSearchCondition.Birthday;
                         break;
                     case "Option4":
+                        SearchCondition = CustomerSearchCondition.CellPhone;
+                        break;
+                    case "Option5":
                         SearchCondition = CustomerSearchCondition.Tel;
                         break;
                 }
@@ -72,11 +66,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             private set
             {
                 Set(() => CustomerCollectionView, ref customerCollectionView, value);
-                if (!customerCollectionView.IsEmpty)
-                {
-                    CustomerCollectionViewSource.View.MoveCurrentToFirst();
-                    SelectedCustomer = (Customer)CustomerCollectionViewSource.View.CurrentItem;
-                }
+                if (customerCollectionView.IsEmpty) return;
+                CustomerCollectionViewSource.View.MoveCurrentToFirst();
+                SelectedCustomer = (Customer)CustomerCollectionViewSource.View.CurrentItem;
             }
         }
         private string search;
@@ -116,15 +108,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             {
                 case CustomerSearchCondition.IDNumber:
                     SelectedRadioButton = "Option1";
-                    Customers.SearchCustomers(search,null,null,null);
+                    Customers.SearchCustomers(search,null,null,null,null);
                     break;
                 case CustomerSearchCondition.Name:
                     SelectedRadioButton = "Option2";
-                    Customers.SearchCustomers(null, search, null, null);
+                    Customers.SearchCustomers(null, search, null, null,null);
+                    break;
+                case CustomerSearchCondition.CellPhone:
+                    SelectedRadioButton = "Option4";
+                    Customers.SearchCustomers(null, null, search, null,null);
                     break;
                 case CustomerSearchCondition.Tel:
-                    SelectedRadioButton = "Option3";
-                    Customers.SearchCustomers(null, null, search, null);
+                    SelectedRadioButton = "Option5";
+                    Customers.SearchCustomers(null, null,  null,search, null);
                     break;
             }
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
@@ -155,9 +151,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         public CustomerSearchViewModel(DateTime birth)
         {
             SearchCondition = CustomerSearchCondition.Birthday;
-            SelectedRadioButton = "Option4";
+            SelectedRadioButton = "Option3";
             Customers = new Customers();
-            Customers.SearchCustomers(null, null, null, birth);
+            Customers.SearchCustomers(null, null, null,null, birth);
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
@@ -215,18 +211,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 switch (SearchCondition)
                 {
                     case CustomerSearchCondition.IDNumber:
-                        Customers.SearchCustomers(search, null, null, null);
+                        Customers.SearchCustomers(search, null, null, null, null);
                         break;
                     case CustomerSearchCondition.Name:
-                        Customers.SearchCustomers(null, search, null, null);
+                        Customers.SearchCustomers(null, search, null, null,null);
                         break;
                     case CustomerSearchCondition.Birthday:
                         var searchDate = DateTimeExtensions.TWDateStringToDateOnly(Search);
                         if(searchDate is null) return;
-                        Customers.SearchCustomers(null, null, null, searchDate);
+                        Customers.SearchCustomers(null, null, null,null, searchDate);
+                        break;
+                    case CustomerSearchCondition.CellPhone:
+                        Customers.SearchCustomers(null, null, search, null,null);
                         break;
                     case CustomerSearchCondition.Tel:
-                        Customers.SearchCustomers(null, null, search, null);
+                        Customers.SearchCustomers(null, null,null, search, null);
                         break;
                 }
                 CustomerCollectionViewSource.Filter += Filter;
@@ -271,6 +270,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                         e.Accepted = FilterByBirthDay(src);
                         break;
                     case "Option4":
+                        e.Accepted = FilterByCellPhone(src);
+                        break;
+                    case "Option5":
                         e.Accepted = FilterByTel(src);
                         break;
                 }
@@ -286,21 +288,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         }
         private bool FilterByName(Customer c)
         {
-            if (!string.IsNullOrEmpty(c.Name))
-                return c.Name.Contains(Search);
-            return c.Name.Contains(Search);
+            return !string.IsNullOrEmpty(c.Name) ? c.Name.Contains(Search) : c.Name.Contains(Search);
         }
         private bool FilterByIDNumber(Customer c)
         {
-            if (!string.IsNullOrEmpty(c.IDNumber))
-                return c.IDNumber.Contains(Search);
-            return false;
+            return !string.IsNullOrEmpty(c.IDNumber) && c.IDNumber.Contains(Search);
+        }
+        private bool FilterByCellPhone(Customer c)
+        {
+            return !string.IsNullOrEmpty(c.CellPhone) && c.CellPhone.Contains(Search);
         }
         private bool FilterByTel(Customer c)
         {
-            if (!string.IsNullOrEmpty(c.Tel))
-                return c.Tel.Contains(Search);
-            return false;
+            return !string.IsNullOrEmpty(c.Tel) && c.Tel.Contains(Search);
         }
         #endregion
     }

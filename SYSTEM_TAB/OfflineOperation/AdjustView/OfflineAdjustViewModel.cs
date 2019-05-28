@@ -319,7 +319,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         }
         private void RegisterMessengers()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             Messenger.Default.Register<NotificationMessage>("AdjustDateChanged", AdjustDateChanged);
             Messenger.Default.Register<NotificationMessage>("CustomPresChecked", (notificationMessage) =>
             {
@@ -476,14 +476,14 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                     CurrentPrescription.Treatment.Institution = result[0];
                     break;
                 default:
-                    var institutionSelectionWindow = new InsSelectWindow(search, ViewModelEnum.PrescriptionDeclare);
+                    var institutionSelectionWindow = new InsSelectWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
         }
         private void ShowCommonInsSelectionWindowAction()
         {
-            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
+            var commonInsSelectionWindow = new CommonHospitalsWindow();
             commonInsSelectionWindow.ShowDialog();
         }
         private void CheckPrescriptionCase()

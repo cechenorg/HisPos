@@ -57,6 +57,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PaymentCategory = new PaymentCategory();
             SpecialTreat = new SpecialTreat();
             Patient = new Customer();
+            Card = new IcCard();
         }
 
         public Prescription(DataRow r)
@@ -224,30 +225,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
-                if ((AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+                if ((!AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3"))) return;
+                switch (division.ID)
                 {
-                    switch (division.ID)
-                    {
-                        case "40":
-                            PrescriptionCase = VM.GetPrescriptionCases("19");
-                            break;
-                        default:
-                            PrescriptionCase = VM.GetPrescriptionCases("09");
-                            break;
-                    }
-                }
-                else if (AdjustCase.ID.Equals("2"))
-                {
-                    
-                }
-                else if (AdjustCase.ID.Equals("5"))
-                {
-
-                }
-                else if (AdjustCase.ID.Equals("D"))
-                {
-                    PrescriptionCase = null;
-                    PaymentCategory = null;
+                    case "40":
+                        PrescriptionCase = VM.GetPrescriptionCases("19");
+                        break;
+                    default:
+                        PrescriptionCase = VM.GetPrescriptionCases("09");
+                        break;
                 }
             }
         }
@@ -331,29 +317,27 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => AdjustCase, ref adjustCase, value);
-                if (adjustCase != null)
+                if (adjustCase == null) return;
+                switch (adjustCase.ID)
                 {
-                    switch (adjustCase.ID)
-                    {
-                        case "1":
-                        case "3":
-                            PrescriptionCase = VM.GetPrescriptionCases("09");
-                            PaymentCategory = VM.GetPaymentCategory("04");
-                            break;
-                        case "2":
-                            PrescriptionCase = VM.GetPrescriptionCases("04");
-                            PaymentCategory = null;
-                            break;
-                        case "5":
-                            PrescriptionCase = VM.GetPrescriptionCases("B7");
-                            TempMedicalNumber = "IC07";
-                            Copayment = VM.GetCopayment("Z00");
-                            MainWindow.ServerConnection.OpenConnection();
-                            MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
-                            MainWindow.ServerConnection.CloseConnection();
-                            break;
+                    case "1":
+                    case "3":
+                        PrescriptionCase = VM.GetPrescriptionCases("09");
+                        PaymentCategory = VM.GetPaymentCategory("04");
+                        break;
+                    case "2":
+                        PrescriptionCase = VM.GetPrescriptionCases("04");
+                        PaymentCategory = null;
+                        break;
+                    case "5":
+                        PrescriptionCase = VM.GetPrescriptionCases("B7");
+                        TempMedicalNumber = "IC07";
+                        Copayment = VM.GetCopayment("Z00");
+                        MainWindow.ServerConnection.OpenConnection();
+                        MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
+                        MainWindow.ServerConnection.CloseConnection();
+                        break;
 
-                    }
                 }
             }
         }
@@ -864,6 +848,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Medicines = Medicines
             };
             return clone;
+        }
+
+        public void ReadCard()
+        {
+            var success = Card.GetBasicData();
+            if (success)
+            {
+                var cus = new Customer(Card);
+                Patient = cus;
+                var customers = Patient.Check();
+                if (customers.Count == 0)
+                    Patient.InsertData();
+                else
+                    Patient = customers[0];
+            }
         }
     }
 }

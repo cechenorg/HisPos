@@ -286,8 +286,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void ShowCommonInsSelectionWindowAction()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
-            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionEdit);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+            var commonInsSelectionWindow = new CommonHospitalsWindow();
             commonInsSelectionWindow.ShowDialog();
         }
         private void ShowInsSelectionWindowAction(string search)
@@ -312,8 +312,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.Treatment.Institution = result[0];
                     break;
                 default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionEdit);
+                    Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
@@ -552,7 +552,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region MessengerReceive
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
             EditedPrescription.CheckIsCooperative();
             CheckEditStatus();

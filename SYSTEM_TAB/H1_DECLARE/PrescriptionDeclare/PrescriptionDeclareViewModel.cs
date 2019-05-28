@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -47,7 +46,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Cooperati
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeSelectionWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
@@ -599,16 +597,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.CheckIsCooperative();
                     break;
                 default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InsSelectWindow(search, ViewModelEnum.PrescriptionDeclare);
+                    Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InsSelectWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
         }
         private void ShowCommonInsSelectionWindowAction()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
-            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionDeclare);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+            var commonInsSelectionWindow = new CommonHospitalsWindow();
             commonInsSelectionWindow.ShowDialog();
         }
         private void CheckPrescriptionCase()
@@ -1144,7 +1142,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionDeclareViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Unregister<Institution>(this,"GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Treatment.Institution = receiveSelectedInstitution;
             CurrentPrescription.CheckIsCooperative();
         }

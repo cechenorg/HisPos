@@ -554,4 +554,16 @@
   <data name="列印錯誤" xml:space="preserve">
     <value>列印報表發生問題，請重試</value>
   </data>
+  <data name="姓名空值" xml:space="preserve">
+    <value>查詢姓名不可為空</value>
+  </data>
+  <data name="生日空值" xml:space="preserve">
+    <value>查詢生日不可為空</value>
+  </data>
+  <data name="身分證空值" xml:space="preserve">
+    <value>查詢身分證不可為空</value>
+  </data>
+  <data name="電話空值" xml:space="preserve">
+    <value>查詢電話不可為空</value>
+  </data>
 </root>

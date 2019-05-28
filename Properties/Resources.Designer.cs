@@ -887,6 +887,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢姓名不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 姓名空值 {
+            get {
+                return ResourceManager.GetString("姓名空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 卡片資料寫入中... 的當地語系化字串。
         /// </summary>
         internal static string 寫卡 {
@@ -1094,6 +1103,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢生日不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 生日空值 {
+            get {
+                return ResourceManager.GetString("生日空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 產生每日上傳資料中... 的當地語系化字串。
         /// </summary>
         internal static string 產生每日上傳資料 {
@@ -1275,6 +1293,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢身分證不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 身分證空值 {
+            get {
+                return ResourceManager.GetString("身分證空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 讀卡機連接開啟失敗 的當地語系化字串。
         /// </summary>
         internal static string 連接失敗 {
@@ -1316,6 +1343,15 @@ namespace His_Pos.Properties {
         internal static string 開啟讀卡機 {
             get {
                 return ResourceManager.GetString("開啟讀卡機", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 查詢電話不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 電話空值 {
+            get {
+                return ResourceManager.GetString("電話空值", resourceCulture);
             }
         }
         
