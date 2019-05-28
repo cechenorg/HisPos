@@ -28,11 +28,13 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineHistoryPrices]", parameters);
         }
 
-        internal static DataTable GetInventoryRecordsByID(string id)
+        internal static DataTable GetInventoryRecordsByID(string proID, string wareID, DateTime startDate, DateTime endDate)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", id));
-            parameters.Add(new SqlParameter("WARE_ID", "0"));
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+            parameters.Add(new SqlParameter("SDATE", startDate));
+            parameters.Add(new SqlParameter("EDATE", endDate));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductInventoryRecordByID]", parameters);
         }
@@ -121,6 +123,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("PRO_ID", id));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageSpecialMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetMedicineStockDetailByID(string id, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[GetMedicineStockDetailByID]", parameters);
         }
     }
 }
