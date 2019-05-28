@@ -10,13 +10,17 @@ namespace His_Pos.NewClass.WareHouse
 {
    public class WareHouses : ObservableCollection<WareHouse>
     {
-        public WareHouses() { }
-
-        public void Init() {
-            DataTable table = WareHouseDb.Init();
-            foreach (DataRow r in table.Rows) {
-                Add(new WareHouse(r));
+        private WareHouses(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Add(new WareHouse(row));
             }
+        }
+
+        internal static WareHouses GetWareHouses()
+        {
+            return new WareHouses(WareHouseDb.Init());
         }
     }
 }

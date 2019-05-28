@@ -149,6 +149,9 @@
     <Reference Include="EastAsiaNumericFormatter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e1e67937c016e5b2, processorArchitecture=MSIL">
       <HintPath>packages\EastAsiaNumericFormatter.1.0.0\lib\net40\EastAsiaNumericFormatter.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -214,10 +217,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -393,6 +398,11 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\ProductType\ProductType.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageDetail.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageDetails.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageMaster.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeManageMasters.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
@@ -468,9 +478,11 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHIDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHISpecialDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
-    <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicineDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductSearchTypeEnum.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\MedicineStockDetail.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\ProductStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
@@ -485,6 +497,12 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
+    <Compile Include="NewClass\Product\StockTaking\StockTakingMedicine.cs" />
+    <Compile Include="NewClass\Product\StockTaking\StockTakingOTC.cs" />
+    <Compile Include="NewClass\Product\StockTaking\StockTakingProduct.cs" />
+    <Compile Include="NewClass\Product\StockTaking\StockTakingProducts.cs" />
+    <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
+    <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReports.cs" />
@@ -507,12 +525,15 @@
     <Compile Include="NewClass\Setting\SettingTabData.cs" />
     <Compile Include="NewClass\Setting\SettingTabDatas.cs" />
     <Compile Include="NewClass\Setting\SettingTabs.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlan.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlans.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
     <Compile Include="NewClass\StockValue\StockValue.cs" />
     <Compile Include="NewClass\StockValue\StockValueDb.cs" />
     <Compile Include="NewClass\StockValue\StockValues.cs" />
+    <Compile Include="NewClass\StoreOrder\ExportOrderRecord\ExportOrderRecordTemplate.cs" />
     <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
@@ -530,6 +551,13 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
+    <Compile Include="Service\ExportService\ExportExcelService.cs" />
+    <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
+    <Compile Include="Service\ExportService\ExportExcelSettings.cs" />
+    <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
+    <Compile Include="Service\ExportService\ExportNormalExcelSetting.cs" />
+    <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
@@ -614,8 +642,6 @@
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
-    <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
-    <Compile Include="Class\ProductType\ProductTypeManageMaster.cs" />
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
@@ -627,7 +653,6 @@
     <Compile Include="Class\Product\ProductTypeOTC.cs" />
     <Compile Include="Class\Product\StockTakingMedicine.cs" />
     <Compile Include="Class\Product\StockTakingOTC.cs" />
-    <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
     <Compile Include="Class\ReportClass\MedBagReport.cs" />
     <Compile Include="Class\ReportClass\MedBagItem.cs" />
@@ -709,6 +734,15 @@
       <DependentUpon>ProductManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\MedicineResultControl.xaml.cs">
+      <DependentUpon>MedicineResultControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\MixedResultControl.xaml.cs">
+      <DependentUpon>MixedResultControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\OTCResultControl.xaml.cs">
+      <DependentUpon>OTCResultControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml.cs">
       <DependentUpon>DeleteOrderWindow.xaml</DependentUpon>
     </Compile>
@@ -775,6 +809,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml.cs">
       <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanView.xaml.cs">
+      <DependentUpon>StockTakingPlanView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
@@ -832,14 +870,8 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
-      <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
-      <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
@@ -961,7 +993,7 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
@@ -1212,6 +1244,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\MedicineResultControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\MixedResultControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductTypeResultControl\OTCResultControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1296,6 +1340,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1360,15 +1408,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

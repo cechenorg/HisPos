@@ -107,15 +107,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 case SearchType.OTC:
                     if (item is InventoryOtc)
                     {
-                        if (
-                            (((InventoryOtc)item).Id.Contains(ID.Text.ToUpper()) || ID.Text == string.Empty) //ID filter
-                        && (((InventoryOtc)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((InventoryOtc)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
-                       && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
-                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
-                        && (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
-                        && ((((InventoryOtc)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((InventoryOtc)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
-                        && (((InventoryOtc)item).WareHouse == WareHouse.Text || WareHouse.Text == "全部")
-                        ) reply = true;
+                       
                     }
                     if (reply) {
                         searchCount++;

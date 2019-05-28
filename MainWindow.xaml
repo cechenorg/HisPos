@@ -74,7 +74,7 @@
         <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">
             <stockTakingRecord:StockTakingRecordView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManage}">
+        <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManageViewModel}">
             <productTypeManage:ProductTypeManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type locationManage:LocationManage}">

@@ -290,7 +290,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
-                    newTab = new ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.櫃位管理):

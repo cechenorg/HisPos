@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using His_Pos.Class.ProductType;
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
@@ -10,20 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     /// </summary>
     public partial class AddTypeWindow : Window
     {
-        public ObservableCollection<ProductTypeManageMaster> TypeManageMasters { get; set; }
-
-        public ProductType newProductType;
-
-        public AddTypeWindow(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ProductTypeManageMaster selected)
-        {
-            InitializeComponent();
-
-            DataContext = this;
-
-            TypeManageMasters = typeManageMasters;
-            UpdateUi();
-            BigTypeCombo.SelectedItem = selected;
-        }
+        
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -50,18 +36,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             if(CheckEmptyData())
             {
-                if ((bool)BigTypeRadioButton.IsChecked)
-                {
-                    ProductTypeManageMaster productTypeManageMaster = new ProductTypeManageMaster(ChiName.Text, EngName.Text);
-
-                    newProductType = productTypeManageMaster;
-                }
-                else
-                {
-                    ProductTypeManageDetail productTypeManageDetail = new ProductTypeManageDetail(BigTypeCombo.SelectedValue.ToString(), ChiName.Text, EngName.Text);
-
-                    newProductType = productTypeManageDetail;
-                }
 
                 Close();
             }

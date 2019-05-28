@@ -8,13 +8,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductDetailDB
     {
-        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero)
+        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", searchID));
             parameters.Add(new SqlParameter("PRO_NAME", searchName));
             parameters.Add(new SqlParameter("SHOW_DISABLE", searchIsEnable));
             parameters.Add(new SqlParameter("SHOW_INV_ZERO", searchIsInventoryZero));
+            parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
@@ -27,11 +28,13 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineHistoryPrices]", parameters);
         }
 
-        internal static DataTable GetInventoryRecordsByID(string id)
+        internal static DataTable GetInventoryRecordsByID(string proID, string wareID, DateTime startDate, DateTime endDate)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", id));
-            parameters.Add(new SqlParameter("WARE_ID", "0"));
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+            parameters.Add(new SqlParameter("SDATE", startDate));
+            parameters.Add(new SqlParameter("EDATE", endDate));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductInventoryRecordByID]", parameters);
         }
@@ -64,9 +67,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
 
-        internal static DataTable GetTotalStockValue()
+        internal static DataTable GetTotalStockValue(string wareID)
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]", parameters);
         }
 
         internal static void StockTakingProductManageMedicineByID(string productID, string newInventory)
@@ -117,6 +123,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("PRO_ID", id));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageSpecialMedicineDetailByID]", parameters);
+        }
+
+        internal static DataTable GetMedicineStockDetailByID(string id, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[GetMedicineStockDetailByID]", parameters);
         }
     }
 }
