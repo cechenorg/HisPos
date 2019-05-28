@@ -4,9 +4,12 @@ using His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare;
 using His_Pos.NewClass.Product.Medicine.ControlMedicineDetail;
 using System;
 
-namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
-    public class ControlMedicineDeclareViewModel : TabBase {
-        public override TabBase getTab() {
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
+{
+    public class ControlMedicineDeclareViewModel : TabBase
+    {
+        public override TabBase getTab()
+        {
             return this;
         }
 
@@ -68,30 +71,35 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
         #endregion
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
-        public ControlMedicineDeclareViewModel() {
+        public ControlMedicineDeclareViewModel()
+        {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
             SearchCommand = new RelayCommand(SearchAction);
         }
-        private void SearchAction() {
+        private void SearchAction()
+        {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
         }
-        private void SelectionChangedAction() {
+        private void SelectionChangedAction()
+        {
             if (SelectItem == null) return;
             ControlMedicineDetails temp = new ControlMedicineDetails();
-            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime);
+            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime, SelectItem.InitStock);
             ControlMedicineBagDetailsCollection.Clear();
             ControlMedicineDetailsCollection.Clear();
-            foreach (ControlMedicineDetail c in temp) {
-                switch (c.TypeName) {
-                    case "調劑耗用(未過卡)":
+            foreach (ControlMedicineDetail c in temp)
+            {
+                switch (c.TypeName)
+                {
+                    case "調劑(未過卡)":
                         ControlMedicineBagDetailsCollection.Add(c);
                         break;
                     default:
                         ControlMedicineDetailsCollection.Add(c);
                         break;
-                }  
-            } 
+                }
+            }
         }
     }
 }
