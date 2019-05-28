@@ -588,6 +588,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml.cs">
       <DependentUpon>CooperativePrescriptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CustomerPrescriptionWindow\CustomerPrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CustomerPrescriptionWindow\CustomerPrescriptionWindow.xaml.cs">
+      <DependentUpon>CustomerPrescriptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CustomerSearchWindow\CustomerSearchViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CustomerSearchWindow\CustomerSearchWindow.xaml.cs">
       <DependentUpon>CustomerSearchWindow.xaml</DependentUpon>
@@ -1144,6 +1148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CustomerPrescriptionWindow\CustomerPrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
