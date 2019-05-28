@@ -162,7 +162,7 @@ namespace His_Pos.NewClass.Prescription
                 var res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
                 if (res == 0)
                 {
-                    ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
+                    ValidityPeriod = (DateTime)DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
                     AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 7));
                 }
                 else

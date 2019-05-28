@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.Service
 {
@@ -84,11 +86,22 @@ namespace His_Pos.Service
             return year + month + day;
         }
 
-        public static DateTime TWDateStringToDateOnly(string date)
+        public static DateTime? TWDateStringToDateOnly(string date)
         {
-            var year = int.Parse(date.Substring(0, 3)) + 1911;
-            var month = int.Parse(date.Substring(3, 2));
-            var day = int.Parse(date.Substring(5, 2));
+            var dateStr = date.Replace("/","");
+            if (dateStr.Length < 6 || dateStr.Length > 7)
+            {
+                MessageWindow.ShowMessage("日期格式錯誤，請確認資料",MessageType.ERROR);
+                return null;
+            }
+
+            if (dateStr.Length == 6)
+            {
+                dateStr = "0" + dateStr;
+            }
+            var year = int.Parse(dateStr.Substring(0, 3)) + 1911;
+            var month = int.Parse(dateStr.Substring(3, 2));
+            var day = int.Parse(dateStr.Substring(5, 2));
             return new DateTime(year,month,day);
         }
 

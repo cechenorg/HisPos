@@ -39,6 +39,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => TotalPoint, ref totalPoint, value);
             }
         }
+        private int administrativeAssistanceCopaymentPoint;//行政協助部分負擔點數
+        public int AdministrativeAssistanceCopaymentPoint
+        {
+            get => administrativeAssistanceCopaymentPoint;
+            set
+            {
+                Set(() => AdministrativeAssistanceCopaymentPoint, ref administrativeAssistanceCopaymentPoint, value);
+            }
+        }
         private int copaymentPoint;//部分負擔點數
         public int CopaymentPoint
         {

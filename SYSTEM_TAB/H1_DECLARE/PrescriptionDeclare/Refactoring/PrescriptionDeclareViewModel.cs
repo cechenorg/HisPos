@@ -22,7 +22,6 @@ using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow;
@@ -73,7 +72,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
-        public RelayCommand<object> DiseaseCodeTextChanged { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -141,30 +139,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetCustomersAction(TextBox condition)
         {
             //顧客查詢
-            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Register<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
             CustomerSearchWindow customerSearch;
             switch (condition.Name)
             {
                 
                 case "PatientIDNumber" when string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber):
+                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
                     MessageWindow.ShowMessage("查詢身分證不可為空", MessageType.WARNING);
                     break;
                 case "PatientIDNumber":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.IDNumber, CustomerSearchCondition.IDNumber);
                     break;
                 case "PatientName" when string.IsNullOrEmpty(CurrentPrescription.Patient.Name):
+                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
                     MessageWindow.ShowMessage("查詢姓名不可為空", MessageType.WARNING);
                     break;
                 case "PatientName":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
                     break;
                 case "PatientBirthday" when CurrentPrescription.Patient.Birthday is null:
+                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
                     MessageWindow.ShowMessage("查詢生日不可為空", MessageType.WARNING);
                     break;
                 case "PatientBirthday":
                     customerSearch = new CustomerSearchWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), CustomerSearchCondition.Birthday);
                     break;
                 case "PatientTel" when string.IsNullOrEmpty(CurrentPrescription.Patient.Tel):
+                    Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
                     MessageWindow.ShowMessage("查詢電話不可為空", MessageType.WARNING);
                     break;
                 case "PatientTel":
@@ -224,7 +226,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         #region MessengerFunctions
         private void GetSelectedCustomer(Customer receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
             if (receiveSelectedCustomer is null) return;
             CurrentPrescription.Patient = receiveSelectedCustomer;
             MainWindow.ServerConnection.OpenConnection();

@@ -9,12 +9,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Title="顧客查詢" Height="450" Width="800">
+        Title="顧客查詢" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
-            <Setter Property="HorizontalAlignment"  Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
         <service:NullableDateConverter x:Key="BirthDayConverter"/>
         <DataTemplate x:Key="EditingDataGrid" DataType="{x:Type local:CustomerSearchViewModel}">
@@ -83,14 +79,29 @@
                 <RowDefinition Height="270"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <TextBox Name="SearchStringTextBox" Grid.Row="0" Width="300" Text="{Binding Search, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="10,5,0,5" HorizontalAlignment="Left">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding StartEditingCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding SearchTextChanged}" Key="Enter" />
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}" Margin="10,10,10,0">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
+                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
+                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
+                <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+            </StackPanel>
+             <ContentControl Name="ResultGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding}" Margin="10,10,10,0">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
@@ -109,7 +120,7 @@
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
                 </ContentControl.InputBindings>
             </ContentControl>
-            <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding CustomerSelected}"/>
+            <Button Content="確認" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding CustomerSelected}"/>
         </Grid>
     </Viewbox>
 </Window>

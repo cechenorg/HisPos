@@ -31,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             });
             customerSearchViewModel = new CustomerSearchViewModel(search, condition);
             DataContext = customerSearchViewModel;
+            SearchStringTextBox.Focus();
             if (customerSearchViewModel.ShowDialog)
                 ShowDialog();
         }

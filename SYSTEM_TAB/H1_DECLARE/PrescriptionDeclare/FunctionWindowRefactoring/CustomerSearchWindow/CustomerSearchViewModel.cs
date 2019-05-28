@@ -12,6 +12,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
@@ -29,6 +30,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     }
     public class CustomerSearchViewModel : ViewModelBase
     {
+        private string selectedRadioButton;
+        public string SelectedRadioButton
+        {
+            get => selectedRadioButton;
+            set
+            {
+                Set(() => SelectedRadioButton, ref selectedRadioButton, value);
+                if (string.IsNullOrEmpty(selectedRadioButton)) return;
+                switch (selectedRadioButton)
+                {
+                    case "Option1":
+                        SearchCondition = CustomerSearchCondition.IDNumber;
+                        break;
+                    case "Option2":
+                        SearchCondition = CustomerSearchCondition.Name;
+                        break;
+                    case "Option3":
+                        SearchCondition = CustomerSearchCondition.Birthday;
+                        break;
+                    case "Option4":
+                        SearchCondition = CustomerSearchCondition.Tel;
+                        break;
+                }
+            }
+        }
         private Customers Customers { get; set; }
         private CollectionViewSource customerCollectionViewSource;
         private CollectionViewSource CustomerCollectionViewSource
@@ -73,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand CustomerSelected { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
-
+        public RelayCommand StartEditingCommand { get; set; }
         private Customer selectedCustomer;
         public Customer SelectedCustomer
         {
@@ -89,18 +115,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             switch (SearchCondition)
             {
                 case CustomerSearchCondition.IDNumber:
+                    SelectedRadioButton = "Option1";
                     Customers.SearchCustomers(search,null,null,null);
                     break;
                 case CustomerSearchCondition.Name:
+                    SelectedRadioButton = "Option2";
                     Customers.SearchCustomers(null, search, null, null);
                     break;
                 case CustomerSearchCondition.Tel:
+                    SelectedRadioButton = "Option3";
                     Customers.SearchCustomers(null, null, search, null);
                     break;
             }
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
+            StartEditingCommand = new RelayCommand(StartEditingAction);
             switch (Customers.Count)
             {
                 case 0:
@@ -125,6 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         public CustomerSearchViewModel(DateTime birth)
         {
             SearchCondition = CustomerSearchCondition.Birthday;
+            SelectedRadioButton = "Option4";
             Customers = new Customers();
             Customers.SearchCustomers(null, null, null, birth);
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
@@ -159,23 +190,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void FocusUpDownAction(string direction)
         {
-            if (!IsEditing && Customers.Count > 0)
-            {
-                var maxIndex = Customers.Count - 1;
+            if (IsEditing || Customers.Count <= 0) return;
 
-                switch (direction)
-                {
-                    case "UP":
-                        if (CustomerCollectionView.CurrentPosition > 0)
-                            CustomerCollectionView.MoveCurrentToPrevious();
-                        break;
-                    case "DOWN":
-                        if (CustomerCollectionView.CurrentPosition < maxIndex)
-                            CustomerCollectionView.MoveCurrentToNext();
-                        break;
-                }
-                SelectedCustomer = (Customer)CustomerCollectionView.CurrentItem;
+            var maxIndex = Customers.Count - 1;
+            switch (direction)
+            {
+                case "UP":
+                    if (CustomerCollectionView.CurrentPosition > 0)
+                        CustomerCollectionView.MoveCurrentToPrevious();
+                    break;
+                case "DOWN":
+                    if (CustomerCollectionView.CurrentPosition < maxIndex)
+                        CustomerCollectionView.MoveCurrentToNext();
+                    break;
             }
+            SelectedCustomer = (Customer)CustomerCollectionView.CurrentItem;
         }
 
         private void ExecuteSearchTextChanged()
@@ -183,7 +212,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             if (IsEditing)
             {
                 IsEditing = false;
-                //CustomerCollectionViewSource.Filter += Filter;
+                switch (SearchCondition)
+                {
+                    case CustomerSearchCondition.IDNumber:
+                        Customers.SearchCustomers(search, null, null, null);
+                        break;
+                    case CustomerSearchCondition.Name:
+                        Customers.SearchCustomers(null, search, null, null);
+                        break;
+                    case CustomerSearchCondition.Birthday:
+                        var searchDate = DateTimeExtensions.TWDateStringToDateOnly(Search);
+                        if(searchDate is null) return;
+                        Customers.SearchCustomers(null, null, null, searchDate);
+                        break;
+                    case CustomerSearchCondition.Tel:
+                        Customers.SearchCustomers(null, null, search, null);
+                        break;
+                }
+                CustomerCollectionViewSource.Filter += Filter;
                 switch (Customers.Count)
                 {
                     case 0:
@@ -200,10 +246,62 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 ExecuteCustomerSelected();
             }
         }
-
+        private void StartEditingAction()
+        {
+            IsEditing = true;
+        }
+        #region FilterFunctions
         private void Filter(object sender, FilterEventArgs e)
         {
-            throw new NotImplementedException();
+            if (!(e.Item is Customer src))
+                e.Accepted = false;
+            else if (string.IsNullOrEmpty(Search))
+                e.Accepted = true;
+            else
+            {
+                switch (SelectedRadioButton)
+                {
+                    case "Option1":
+                        e.Accepted = FilterByIDNumber(src);
+                        break;
+                    case "Option2":
+                        e.Accepted = FilterByName(src);
+                        break;
+                    case "Option3":
+                        e.Accepted = FilterByBirthDay(src);
+                        break;
+                    case "Option4":
+                        e.Accepted = FilterByTel(src);
+                        break;
+                }
+            }
         }
+        private bool FilterByBirthDay(Customer c)
+        {
+            var birth = DateTimeExtensions.TWDateStringToDateOnly(Search);
+            if (birth is null) return false;
+            if (c.Birthday is null)
+                return false;
+            return DateTime.Compare((DateTime)birth, (DateTime)c.Birthday) == 0;
+        }
+        private bool FilterByName(Customer c)
+        {
+            if (!string.IsNullOrEmpty(c.Name))
+                return c.Name.Contains(Search);
+            return c.Name.Contains(Search);
+        }
+        private bool FilterByIDNumber(Customer c)
+        {
+            if (!string.IsNullOrEmpty(c.IDNumber))
+                return c.IDNumber.Contains(Search);
+            return false;
+        }
+        private bool FilterByTel(Customer c)
+        {
+            if (!string.IsNullOrEmpty(c.Tel))
+                return c.Tel.Contains(Search);
+            return false;
+        }
+        #endregion
     }
 }

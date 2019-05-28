@@ -45,6 +45,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
     {
         public Prescription()
         {
+            Medicines = new Medicines();
             Institution = new Institution();
             Division = new Division();
             Pharmacist = new MedicalPersonnel();
@@ -188,18 +189,22 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public int ID { get; set; }
         public string SourceId { get; set; }
         public string Remark { get; set; }
-        public Customer Patient { get; set; }
         public IcCard Card { get; set; }
         public int MedicineDays { get; set; } //給藥日份
         public string MedicalServiceCode { get; set; } //藥事服務代碼 
         public XDocument DeclareContent { get; set; } = new XDocument(); //申報檔內容
-        public int? DeclareFileID { get; set; } //申報檔ID
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
         public Medicines Medicines { get; set; }
         public PrescriptionType Type { get; set; }
-        public PrescriptionSource Source { get; set; }
+
+        private Customer patient;
+        public Customer Patient
+        {
+            get => patient;
+            set { Set(() => Patient, ref patient, value); }
+        }
         private Institution institution;//釋出院所 D21
         public Institution Institution
         {
@@ -207,7 +212,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Institution, ref institution, value);
-                CheckTypeByInstitution();
+                if (institution != null)
+                    CheckTypeByInstitution();
             }
         }
 
@@ -218,6 +224,31 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
+                if ((AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+                {
+                    switch (division.ID)
+                    {
+                        case "40":
+                            PrescriptionCase = VM.GetPrescriptionCases("19");
+                            break;
+                        default:
+                            PrescriptionCase = VM.GetPrescriptionCases("09");
+                            break;
+                    }
+                }
+                else if (AdjustCase.ID.Equals("2"))
+                {
+                    
+                }
+                else if (AdjustCase.ID.Equals("5"))
+                {
+
+                }
+                else if (AdjustCase.ID.Equals("D"))
+                {
+                    PrescriptionCase = null;
+                    PaymentCategory = null;
+                }
             }
         }
 
@@ -300,6 +331,30 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => AdjustCase, ref adjustCase, value);
+                if (adjustCase != null)
+                {
+                    switch (adjustCase.ID)
+                    {
+                        case "1":
+                        case "3":
+                            PrescriptionCase = VM.GetPrescriptionCases("09");
+                            PaymentCategory = VM.GetPaymentCategory("04");
+                            break;
+                        case "2":
+                            PrescriptionCase = VM.GetPrescriptionCases("04");
+                            PaymentCategory = null;
+                            break;
+                        case "5":
+                            PrescriptionCase = VM.GetPrescriptionCases("B7");
+                            TempMedicalNumber = "IC07";
+                            Copayment = VM.GetCopayment("Z00");
+                            MainWindow.ServerConnection.OpenConnection();
+                            MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
+                            MainWindow.ServerConnection.CloseConnection();
+                            break;
+
+                    }
+                }
             }
         }
 
@@ -320,6 +375,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Copayment, ref copayment, value);
+                if (Copayment != null)
+                {
+                    CountCopaymentPoint();
+                }
             }
         }
 
@@ -383,6 +442,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 Type = PrescriptionType.Normal;
                 PrescriptionStatus.IsBuckle = true;
+            }
+
+            foreach (var m in Medicines)
+            {
+                m.IsBuckle = PrescriptionStatus.IsBuckle;
             }
         }
 
@@ -541,30 +605,44 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private int CountCopaymentPoint()
         {
-            if (CheckFreeCopayment())
-                return 0;
             var point = PrescriptionPoint.MedicinePoint;
+            var copPoint = 0;
             if (point <= 100)
-                return 0;
+                copPoint = 0;
             if (point > 100 && point <= 200)
-                return 20;
+                copPoint = 20;
             if (point >= 201 && point <= 300)
-                return 40;
+                copPoint = 40;
             if (point >= 301 && point <= 400)
-                return 60;
+                copPoint = 60;
             if (point >= 401 && point <= 500)
-                return 80;
+                copPoint = 80;
             if (point >= 501 && point <= 600)
-                return 100;
+                copPoint = 100;
             if (point >= 601 && point <= 700)
-                return 120;
+                copPoint = 120;
             if (point >= 701 && point <= 800)
-                return 140;
+                copPoint = 140;
             if (point >= 801 && point <= 900)
-                return 160;
+                copPoint = 160;
             if (point >= 901 && point <= 1000)
-                return 180;
-            return 200;
+                copPoint = 180;
+            else
+                copPoint = 200;
+            if (!CheckFreeCopayment())
+                return copPoint;
+            if (AdjustCase.ID.Equals("5") && (Copayment.Id.Equals("003") || Copayment.Id.Equals("007") ||  Copayment.Id.Equals("907")))
+            {
+                if(copPoint > 0)
+                    PrescriptionPoint.AdministrativeAssistanceCopaymentPoint = copPoint;
+            }
+            //003、004、005、006、901、902、903、904、906、907
+            else if (Copayment.Id.Equals("003") || Copayment.Id.Equals("004") || Copayment.Id.Equals("005") || Copayment.Id.Equals("006") || Copayment.Id.Equals("901") || Copayment.Id.Equals("902") || Copayment.Id.Equals("903") || Copayment.Id.Equals("904") || Copayment.Id.Equals("906") || Copayment.Id.Equals("907"))
+            {
+                if (copPoint > 0)
+                    PrescriptionPoint.AdministrativeAssistanceCopaymentPoint = copPoint;
+            }
+            return 0;
         }
 
         private void CheckMedicalServiceData()
