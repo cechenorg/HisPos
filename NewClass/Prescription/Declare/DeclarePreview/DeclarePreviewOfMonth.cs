@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.Service;
 
-namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
+namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
 {
     public class DeclarePreviewOfMonth : ObservableObject
     {
@@ -93,20 +90,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             set { Set(() => ChronicPoint, ref chronicPoint, value); }
         }
 
-        private int totalCount;
+        private int declareCount;
 
-        public int TotalCount
+        public int DeclareCount
         {
-            get => totalCount;
-            set { Set(() => TotalCount, ref totalCount, value); }
+            get => declareCount;
+            set { Set(() => DeclareCount, ref declareCount, value); }
         }
 
-        private int totalPoint;
+        private int totalDeclarePoint;
 
-        public int TotalPoint
+        public int TotalDeclarePoint
         {
-            get => totalPoint;
-            set { Set(() => TotalPoint, ref totalPoint, value); }
+            get => totalDeclarePoint;
+            set { Set(() => TotalDeclarePoint, ref totalDeclarePoint, value); }
         }
         public DateTime DeclareDate { get; set; }
 
@@ -128,27 +125,29 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
 
         internal void SetSummary()
         {
-            var normal = DeclarePres.Where(p => p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3"));
-            var chronic = DeclarePres.Where(p => p.AdjustCase.ID.Equals("2"));
+            var declareList = DeclarePres.Where(p => p.IsDeclare).ToList();
+            var normal = declareList.Where(p => p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3")).ToList();
+            var chronic = declareList.Where(p => p.AdjustCase.ID.Equals("2")).ToList();
             NotDeclareCount = DeclarePres.Count(p => !p.IsDeclare);
-            NormalCount = normal.Count();
+            NormalCount = normal.Count;
             NormalPoint = normal.Sum(p => p.ApplyPoint);
-            ChronicCount = chronic.Count();
+            ChronicCount = chronic.Count;
             ChronicPoint = chronic.Sum(p => p.ApplyPoint);
-            TotalCount = DeclarePres.Count;
-            TotalPoint = DeclarePres.Sum(p => p.ApplyPoint);
+            DeclareCount = declareList.Count;
+            TotalDeclarePoint = declareList.Sum(p => p.ApplyPoint);
             foreach (var d in DeclarePreviews)
             {
-                d.NormalCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("1"));
-                d.ChronicCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("2"));
-                d.SimpleFormCount = d.PresOfDay.Count(p => p.AdjustCase.ID.Equals("3"));
-                d.DeclareCount = d.PresOfDay.Count(p => p.IsDeclare);
+                var presOfDayDeclareList = d.PresOfDay.Where(p => p.IsDeclare).ToList();
+                d.NormalCount = presOfDayDeclareList.Count(p => p.AdjustCase.ID.Equals("1"));
+                d.ChronicCount = presOfDayDeclareList.Count(p => p.AdjustCase.ID.Equals("2"));
+                d.SimpleFormCount = presOfDayDeclareList.Count(p => p.AdjustCase.ID.Equals("3"));
+                d.DeclareCount = presOfDayDeclareList.Count;
                 d.NotDeclareCount = d.PresOfDay.Count(p => !p.IsDeclare);
                 d.CheckNotDeclareCount();
             }
             
         }
-        public void CreateDeclareFile(DeclareFile.DeclareFile doc)
+        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declare)
         {
             XDocument result;
             var xmlSerializer = new XmlSerializer(doc.GetType());
@@ -167,7 +166,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             var declareList = DeclarePres.Where(p => p.IsDeclare).Select(p => p.ID).ToList();
             //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, declareList);
             //匯出xml檔案
-            Function.ExportXml(result, "匯出申報XML檔案");
+            var fileName = ViewModelMainWindow.CurrentPharmacy.Name + declare.Date.Month + "月申報檔";
+            Function.ExportXml(result, "每月申報檔", fileName);
         }
 
         public void GetNotAdjustPrescriptionCount(DateTime start, DateTime end,string pharmacyID)
@@ -176,7 +176,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay
             if (table.Rows.Count > 0)
             {
                 var count = table.Rows[0].Field<int>("NotAdjustCount");
-                var declareDateStr = (start.Year - 1911) + " 年 " + start.Year.ToString().PadLeft(2, '0') + " 月 ";
+                var declareDateStr = (start.Year - 1911) + " 年 " + start.Month.ToString().PadLeft(2, '0') + " 月 ";
                 if (count > 0)
                     MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案",MessageType.WARNING);
             }

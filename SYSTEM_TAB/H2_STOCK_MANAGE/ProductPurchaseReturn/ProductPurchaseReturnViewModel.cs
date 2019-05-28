@@ -189,7 +189,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void FilterOrderAction(string filterCondition)
         {
             if(filterCondition != null)
-                filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
+                filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition); 
             StoreOrderCollectionView.Filter += OrderFilter;
         }
         private void SplitBatchAction(string productID)

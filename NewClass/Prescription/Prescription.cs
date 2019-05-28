@@ -282,7 +282,7 @@ namespace His_Pos.NewClass.Prescription
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            if (!Treatment.AdjustCase.ID.Equals("0"))
+            if (!Treatment.AdjustCase.ID.Equals("0") && !CheckOnlyBloodGlucoseTestStrip())
             {
                 var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
                 details.Add(medicalService);
@@ -306,7 +306,23 @@ namespace His_Pos.NewClass.Prescription
             }
             return details;
         }
-       
+
+        private bool CheckOnlyBloodGlucoseTestStrip()
+        {
+            if (Medicines.Count == 1)
+            {
+                var m = Medicines[0];
+                if (m is MedicineSpecialMaterial && m.ID.StartsWith("TSS01"))
+                {
+                    MedicalServiceID = null;
+                    PrescriptionPoint.MedicalServicePoint = 0;
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
         private void CheckMedicalServiceData()
         {
             if (MedicineDays >= 28)
@@ -661,8 +677,8 @@ namespace His_Pos.NewClass.Prescription
 
         public void CountMedicineDays()
         {
-            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf && m.Days != null) > 0)
-                MedicineDays = (int)Medicines.Where(m => m is MedicineNHI && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            if (Medicines.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf && m.Days != null) > 0)
+                MedicineDays = (int)Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
         }
 
         private void CreateDeclareFileContent(List<Pdata> details)//產生申報檔內容
@@ -839,7 +855,16 @@ namespace His_Pos.NewClass.Prescription
             var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                    treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
-            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
+            string patientTel;
+            if (!string.IsNullOrEmpty(Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
+                else
+                    patientTel = Patient.ContactNote;
+            }
             return  new List<ReportParameter>
                     {
                         new ReportParameter("PharmacyName_Id",
@@ -882,7 +907,16 @@ namespace His_Pos.NewClass.Prescription
                 treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
                                       treatmentDate.Split('/')[2] + "日";
             var cusGender = Patient.CheckGender();
-            var patientTel = string.IsNullOrEmpty(Patient.Tel) ? Patient.ContactNote : Patient.Tel;
+            string patientTel;
+            if (!string.IsNullOrEmpty(Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.CellPhone : Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(Patient.ContactNote) ? Patient.Tel : Patient.Tel + "(註)";
+                else
+                    patientTel = Patient.ContactNote;
+            }
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",

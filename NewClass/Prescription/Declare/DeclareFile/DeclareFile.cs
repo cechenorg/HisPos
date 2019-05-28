@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using His_Pos.NewClass.Prescription.Declare.DeclarePreviewOfDay;
+using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 
@@ -18,35 +18,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     public class Tdata
     {
         public Tdata() { }
-        public Tdata(DeclareFilePreview.DeclareFilePreview selectedFile,string pharmacyID)
-        {
-            T1 = "30";
-            T2 = pharmacyID;
-            T3 = (selectedFile.Date.Year-1911).ToString().PadLeft(3, '0') +
-                 selectedFile.Date.Month.ToString().PadLeft(2, '0');
-            T4 = "2";
-            T5 = "1";
-            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today,false);
-            var normalPres = selectedFile.DeclarePrescriptions.Where(p => p.IsDeclare &&
-                (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
-                || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D"))).ToList();
-            var chronicPres = selectedFile.DeclarePrescriptions.Where(p => p.IsDeclare && p.AdjustCase.ID.Equals("2")).ToList();
-            var normalCount = normalPres.Count;
-            var chronicCount = chronicPres.Count;
-            var normalApplyPoints = normalPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
-            var chronicApplyPoints = chronicPres.Sum(p => int.Parse(p.FileContent.Dhead.D16));
-            T7 = normalCount.ToString().PadLeft(6,'0');
-            T8 = normalApplyPoints.ToString().PadLeft(10, '0');
-            T9 = chronicCount.ToString().PadLeft(6, '0');
-            T10 = chronicApplyPoints.ToString().PadLeft(10, '0');
-            T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
-            T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
-            var declareDate = selectedFile.DeclarePrescriptions[0].AdjustDate;
-            var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
-            var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
-            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
-            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay, false);
-        }
+        
         public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID)
         {
             T1 = "30";
@@ -113,41 +85,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public DeclareFile()
         {
         }
-        public DeclareFile(DeclareFilePreview.DeclareFilePreview selectedFile, string pharmacyID)
-        {
-            Tdata = new Tdata(selectedFile, pharmacyID);
-            var tempList = new List<Ddata>();
-            Ddata = new List<Ddata>();
-            var dd = new List<Ddata>();
-            foreach (var p in selectedFile.DeclarePrescriptions.Where(p=>p.IsDeclare))
-            {
-                foreach (var pdata in p.FileContent.Dbody.Pdata)
-                {
-                    if (pdata.P1.Equals("3"))
-                        pdata.P2 = pdata.P2.Substring(0, 12);
-                }
-                tempList.Add(p.FileContent);
-            }
-
-            foreach (var g in tempList.OrderBy(d => int.Parse(d.Dhead.D1)).GroupBy(d => d.Dhead.D1).Select(group => group.ToList()).ToList())
-            {
-                var serial = 1;
-                foreach (var ddata in g)
-                {
-                    ddata.Dhead.D2 = serial.ToString().PadLeft(6,'0');
-                    dd.Add(ddata);
-                    serial++;
-                }
-            }
-
-            for (var i = 1; i <= 4; i++)
-            {
-                foreach (var d in dd.Where(d =>d.Dhead.D1.Equals(i.ToString())))
-                {
-                    Ddata.Add(d);
-                }
-            }
-        }
+        
         public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID)
         {
             Tdata = new Tdata(selectedFile, pharmacyID);
@@ -192,7 +130,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
             Dhead = new Dhead(p);
             Dbody = new Dbody(p, details);
-            Dhead.D18 = $"{int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33) + int.Parse(Dbody.D38):00000000}";
+            var totalPoint = int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33);
+            if (Dbody.D38 != null)
+                totalPoint += int.Parse(Dbody.D38);
+            Dhead.D18 = $"{totalPoint:00000000}";
             Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
         [XmlElement(ElementName = "dhead")]
@@ -296,8 +237,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
             D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
             D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
-            D37 = p.MedicalServiceID;
-            D38 = details.Single(pd => pd.P1.Equals("9")).P9.PadLeft(8, '0');
+            var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
+            if (medicalService != null)
+            {
+                D37 = p.MedicalServiceID;
+                D38 = medicalService.P9.PadLeft(8, '0');
+            }
             D43 = t.OriginalMedicalNumber;
             if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
@@ -342,9 +287,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P2 = m.ID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 =
-                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
-                //P9 = $"{Math.Round(m.NHIPrice * m.Amount, 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
                 P5 = m.PositionID;
@@ -359,11 +302,15 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             {
                 P1 = "3";
                 P2 = m.ID;
+                P3 = $"{m.Dosage:0000.00}";
+                P4 = m.UsageName;
+                P5 = m.PositionID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
                 P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P6 = "105";
                 P10 = serial;
+                P11 = $"{m.Days:00}";
                 P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
                 P13 = P12;
                 PaySelf = false;

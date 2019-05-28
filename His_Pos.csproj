@@ -25,11 +25,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
+    <InstallUrl>http://kaokaodepon.singde.com.tw:60001/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>21</ApplicationRevision>
-    <ApplicationVersion>2.0.5.%2a</ApplicationVersion>
+    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationVersion>2.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -217,6 +217,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -338,6 +339,9 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistory.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChanged.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangedDb.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangeds.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
@@ -364,18 +368,15 @@
     <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreview.cs" />
-    <Compile Include="NewClass\Prescription\Declare\DeclareFilePreview\DeclareFilePreviews.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
-    <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacies.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacy.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescription.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\Declare\DeclarePreviewOfDay\DeclarePreviewOfDay.cs" />
-    <Compile Include="NewClass\Prescription\Declare\DeclarePreviewOfDay\DeclarePreviewOfMonth.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfDay.cs" />
+    <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfMonth.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
@@ -500,9 +501,6 @@
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetail.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetailDb.cs" />
-    <Compile Include="NewClass\Report\PrescriptionPointDetail\PrescriptionPointDetails.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
@@ -728,6 +726,9 @@
       <DependentUpon>ProductManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductManagementViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml.cs">
+      <DependentUpon>DeleteOrderWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml.cs">
       <DependentUpon>PurchaseRecordDetailControl.xaml</DependentUpon>
     </Compile>
@@ -901,10 +902,6 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml.cs">
-      <DependentUpon>PrescriptionPointDetail.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetailViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -924,6 +921,10 @@
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedWindow.xaml.cs">
+      <DependentUpon>CustomerPrescriptionChangedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
@@ -1244,6 +1245,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\DeleteOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\OrderRecordDetailControl\PurchaseRecordDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1452,10 +1457,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\PrescriptionPointDetail\PrescriptionPointDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1489,6 +1490,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\INDEX\CustomerPrescriptionChangedWindow\CustomerPrescriptionChangedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1642,7 +1647,6 @@
     <Content Include="RDLC\MedBagReportSingle.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="ClassDiagram1.cd" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

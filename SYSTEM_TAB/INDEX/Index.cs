@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.StoreOrder;
@@ -24,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => ReserveCollectionViewSource, ref reserveCollectionViewSource, value);
+                SetPhoneCount();
             }
         }
 
@@ -33,10 +35,19 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             get => reserveCollectionView;
             private set
             {
-                Set(() => ReserveCollectionView, ref reserveCollectionView, value);
+                Set(() => ReserveCollectionView, ref reserveCollectionView, value); 
             }
         }
-
+       
+        private int indexReserveCount;  
+        public int IndexReserveCount
+        {
+            get => indexReserveCount;
+            set
+            {
+                Set(() => IndexReserveCount, ref indexReserveCount, value); 
+            }
+        }
         private bool isShowUnPrepareReserve = false;
         public bool IsShowUnPrepareReserve
         {
@@ -45,6 +56,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => IsShowUnPrepareReserve, ref isShowUnPrepareReserve, value);
                 ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
             }
         }
         private bool isShowUnPhoneCall = false;
@@ -55,8 +67,21 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             { 
                 Set(() => IsShowUnPhoneCall, ref isShowUnPhoneCall, value);
                 ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
             }
         }
+        private bool isShowUnPhoneProcess = false;
+        public bool IsShowUnPhoneProcess
+        {
+            get => isShowUnPhoneProcess;
+            set
+            {
+                Set(() => IsShowUnPhoneProcess, ref isShowUnPhoneProcess, value);
+                ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
+            }
+        }
+        
         private DateTime startDate = DateTime.Today;
         public DateTime StartDate
         {
@@ -120,7 +145,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => PhoneCallStatusStringSelectedItem, ref phoneCallStatusStringSelectedItem, value);
             }
-        } 
+        }
+        private Customer customerData = new Customer();
+        public Customer CustomerData
+        {
+            get => customerData;
+            set
+            {
+                Set(() => CustomerData, ref customerData, value);
+            }
+        }
         #endregion
         #region Command
         public RelayCommand ReserveSearchCommand { get; set; }
@@ -129,6 +163,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
         public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
+        public RelayCommand CustomerDataSaveCommand { get; set; }
+        public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
+
         #endregion
         public Index() {
             InitStatusstring();
@@ -138,9 +175,26 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CommonMedStoreOrderCommand = new RelayCommand(CommonMedStoreOrderAction);
             StatusChangedCommand = new RelayCommand(StatusChangedAction);
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
+            CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
+            ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveSearchAction();
         }
         #region Action
+        private void ShowCustomerPrescriptionChangedAction() {
+            if (IndexReserveSelectedItem is null) return;
+            CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow customerPrescriptionChangedWindow = new CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow(IndexReserveSelectedItem.CusId); 
+        }
+        private void CustomerDataSaveAction() {
+            CustomerData.Save();
+        }
+        private void SetPhoneCount() {
+            int filteredCount = 0;
+            foreach (var item in ReserveCollectionViewSource.View)
+            {
+                filteredCount++;
+            }
+            IndexReserveCount = filteredCount;
+        }
         private void ShowCustomerDetailWindowAction() {
             if (IndexReserveSelectedItem is null) return; 
             CustomerDetailWindow.CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow.CustomerDetailWindow(IndexReserveSelectedItem.CusId); 
@@ -151,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveSelectedItem.SaveStatus();
-            //ReserveCollectionViewSource.Filter += Filter;
+            CustomerData = CustomerData.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
         private void CommonMedStoreOrderAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
@@ -170,7 +224,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
           
         private void IndexReserveSelectionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
-            IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id); 
+            IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
+            CustomerData = CustomerData.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
         private void ReserveSearchAction() {
             IndexReserveCollection.GetDataByDate(StartDate, EndDate);
@@ -183,22 +238,18 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             if (!(e.Item is IndexReserve src))
                 e.Accepted = false;
 
-            if (IsShowUnPrepareReserve || IsShowUnPhoneCall)
-            {
-                if (IsShowUnPrepareReserve && IsShowUnPhoneCall) 
-                    e.Accepted = ((IndexReserve)e.Item).IsNoPrepareMed  || ((IndexReserve)e.Item).PhoneCallStatus == "F";
-                else if (IsShowUnPrepareReserve && !IsShowUnPhoneCall)
-                    e.Accepted = ((IndexReserve)e.Item).IsNoPrepareMed;
-                else if (!IsShowUnPrepareReserve && IsShowUnPhoneCall)
-                    e.Accepted = ((IndexReserve)e.Item).PhoneCallStatus == "F";
-            }
-            else {
-                if (((IndexReserve)e.Item).IsNoPrepareMed || ((IndexReserve)e.Item).PhoneCallStatus == "F")
-                    e.Accepted = false;
-                else
-                    e.Accepted = true;
+            e.Accepted = false;
 
-            }  
+           IndexReserve indexitem = ((IndexReserve)e.Item);
+            if (indexitem.IsNoPrepareMed && IsShowUnPrepareReserve)
+                e.Accepted = true;
+            else if (indexitem.PhoneCallStatus == "F" && IsShowUnPhoneCall)
+                e.Accepted = true;
+            else if (indexitem.PhoneCallStatus == "N" && IsShowUnPhoneProcess)
+                e.Accepted = true;
+            else if(!IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess)
+                e.Accepted = true;
+            
         }
         #endregion
     }

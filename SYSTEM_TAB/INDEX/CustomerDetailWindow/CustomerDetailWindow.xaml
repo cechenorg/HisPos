@@ -44,7 +44,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="3"  DataContext="{Binding CustomerData}"> 
                 <Label Content="聯絡備註"  VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-                <TextBox  Height="180" Width="450"  VerticalContentAlignment="Top"  Text="{Binding ContactNote}" Background="{StaticResource LightForeGround}" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+                <TextBox  Height="180" Width="450"  VerticalContentAlignment="Top"  Text="{Binding ContactNote}" Background="{StaticResource LightForeGround}" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="Black" FontSize="24" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="4"  DataContext="{Binding CustomerData}">
                 <Label Content="備註" Width="130" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>

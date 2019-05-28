@@ -73,7 +73,7 @@ namespace His_Pos.NewClass.Product.Medicine
             PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
-            Days = Convert.ToInt32(m.Days);
+            Days = Convert.ToInt32(m.Days.Split('.')[0]);
             
             PaySelf = m.Remark == "-" || m.Remark == "*";
             IsBuckle = false;
@@ -176,7 +176,7 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 if (value != null)
                 {
-                    Set(() => PositionID, ref positionID, value);
+                    Set(() => PositionID, ref positionID, value.ToUpper());
                     Position = ViewModelMainWindow.GetPosition(positionID);
                     if (Position != null)
                     {

@@ -152,8 +152,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
             DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
-            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
-            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", string.IsNullOrEmpty(medID) ? null : medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", string.IsNullOrEmpty(medName) ? null : medName);
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID); 
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
@@ -167,8 +167,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
             DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
-            DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
-            DataBaseFunction.AddSqlParameter(parameterList, "MedName", medName);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", string.IsNullOrEmpty(medID) ? null : medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", string.IsNullOrEmpty(medName) ? null : medName);
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
@@ -670,7 +670,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
             newRow["ResMas_SerialNumber"] = DBNull.Value;
             newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory.ID);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory?.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalNumber", p.Treatment.MedicalNumber); 
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.ID);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.ID);

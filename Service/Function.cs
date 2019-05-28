@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -20,6 +17,8 @@ using His_Pos.NewClass.Prescription.IcData.Upload;
 using NChinese.Phonetic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ICSharpCode.SharpZipLib.Zip;
+using ZipFile = System.IO.Compression.ZipFile;
 
 namespace His_Pos.Service
 {
@@ -77,21 +76,27 @@ namespace His_Pos.Service
             return date;
         }
 
-        public static string ExportXml(XDocument xml, string FileTypeName) {
+        public static string ExportXml(XDocument xml, string FileTypeName,string fileName = null) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
-            var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
-            var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
+            var month = DateTime.Now.Month.ToString();
+            var day = DateTime.Now.Day.ToString().PadLeft(2,'0');
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\Declare\\"+FileTypeName;
-            var path_ym = path + "\\" + year + month;
-            var path_ymd = path + "\\" + year + month + "\\" + day;
-            var path_file = path_ym + "\\" + day + "\\";
-            if (FileTypeName.Equals("匯出申報XML檔案"))
+            string path_ymd;
+            string path_file;
+            if (FileTypeName.Equals("每月申報檔"))
+            {
+                path += "\\藥健康系統申報";
+                path_ymd = path + "\\" + year + "年" + month + "月\\" + day;
+                path_file = path_ymd + "\\";
                 path_file += "DRUGT";
+            }
             else
-                path_file +=  year + month + day;
-            if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
+            {
+                path = "C:\\Program Files\\HISPOS\\DailyUpload";
+                path_ymd = path + "\\" + year + month.PadLeft(2, '0') + day;
+                path_file = path_ymd + "\\" + year + month + day;
+            }
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             xml.Declaration = new XDeclaration("1.0", "Big5", string.Empty);
             var settings = new XmlWriterSettings();
@@ -103,15 +108,11 @@ namespace His_Pos.Service
             writer.Close();
             string info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
             File.WriteAllText(path_file + ".xml", info.Replace("big5", "Big5"), Encoding.GetEncoding(950));
+            var input = path_file + ".xml";
+            var output =  (string.IsNullOrEmpty(fileName) ? path_file : path_ymd + "\\" + fileName) + ".zip";
             //壓縮XML
-            if (File.Exists(path_file + ".zip")) File.Delete(path_file + ".zip");
-            var psi = new Process();
-            psi.StartInfo.FileName = "makecab.exe";
-            psi.StartInfo.Arguments = path_file + ".xml " + path_file + ".zip";
-            psi.Start();
-            //psi.WaitForInputIdle();
-            //設定要等待相關的處理序結束的時間 
-            psi.WaitForExit();
+            if (File.Exists(output)) File.Delete(output);
+            ZipFiles(new[] {input}, output);
             return path_file;
         }
        
@@ -168,7 +169,7 @@ namespace His_Pos.Service
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "dailyUpload");
+                var filePath = ExportXml(dailyUpload, "DailyUpload");
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
@@ -198,6 +199,27 @@ namespace His_Pos.Service
             {
                 MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
             }
+        }
+
+        private static void ZipFiles(string[] SourceFiles, string TargetFile)
+        {
+            var zs = new ZipOutputStream(File.Create(TargetFile));
+            zs.SetLevel(9); //壓縮比
+
+            for (int i = 0; i < SourceFiles.Length; i++)
+            {
+                FileStream s = File.OpenRead(SourceFiles[i]);
+                byte[] buffer = new byte[s.Length];
+                s.Read(buffer, 0, buffer.Length);
+                ZipEntry Entry = new ZipEntry(Path.GetFileName(SourceFiles[i]));
+                Entry.DateTime = DateTime.Now;
+                Entry.Size = s.Length;
+                s.Close();
+                zs.PutNextEntry(Entry);
+                zs.Write(buffer, 0, buffer.Length);
+            }
+            zs.Finish();
+            zs.Close();
         }
     }
 }

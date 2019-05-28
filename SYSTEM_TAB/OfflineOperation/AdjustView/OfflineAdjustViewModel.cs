@@ -977,14 +977,13 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
 
             if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false
                        && !CurrentPrescription.PrescriptionStatus.IsSendToSingde)
-                PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
+                CurrentPrescription.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
             //紀錄訂單and送單
             else if (CurrentPrescription.PrescriptionStatus.IsSendOrder && ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn == false
                 && CurrentPrescription.PrescriptionStatus.IsSendToSingde)
             {
                 PurchaseOrder.UpdatePrescriptionOrder(CurrentPrescription, ((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).PrescriptionSendData);
-            } //更新傳送藥健康
-            CurrentPrescription.PrescriptionStatus.IsSendToSingde = true;
+            } //更新傳送藥健康 
             CurrentPrescription.PrescriptionStatus.UpdateStatus(CurrentPrescription.Id);
             return true;
         }

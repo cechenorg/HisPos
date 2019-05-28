@@ -275,12 +275,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 {
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
-                        file.WriteLine("日期,金額");
+                        file.WriteLine("日期,部分負擔,自費,自費調劑,押金,其他,總計");
+                        int cCopayMentPrice = 0;
+                        int cPaySelfPrice = 0;
+                        int cAllPaySelfPrice = 0;
+                        int cDepositPrice = 0;
+                        int cOtherPrice = 0;
+                        int cTotalPrice = 0;
                         foreach (DataRow s in table.Rows)
                         {
-                            
-                            file.WriteLine($"{s.Field<DateTime>("CashFlow_Time").AddYears(-1911).ToString("yyy/MM/dd")},{s.Field<int>("CashFlow_Value")}");
+                            file.WriteLine($"{s.Field<DateTime>("date").AddYears(-1911).ToString("yyy/MM/dd")}," +
+                                $"{s.Field<int>("CopayMentPrice")},{s.Field<int>("PaySelfPrice")},{s.Field<int>("AllPaySelfPrice")}" +
+                                $",{s.Field<int>("DepositPrice")},{s.Field<int>("OtherPrice")},{s.Field<int>("TotalPrice")}");
+
+                            cCopayMentPrice += s.Field<int>("CopayMentPrice");
+                            cPaySelfPrice += s.Field<int>("PaySelfPrice");
+                            cAllPaySelfPrice += s.Field<int>("AllPaySelfPrice");
+                            cDepositPrice += s.Field<int>("DepositPrice");
+                            cOtherPrice += s.Field<int>("OtherPrice");
+                            cTotalPrice += s.Field<int>("TotalPrice");
                         }
+                        file.WriteLine($"總計,{cCopayMentPrice},{cPaySelfPrice},{cAllPaySelfPrice},{cDepositPrice},{cOtherPrice},{cTotalPrice}");
                         file.Close();
                         file.Dispose();
                     }

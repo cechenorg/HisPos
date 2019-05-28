@@ -11,11 +11,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         {
             return this;
         }
+   
+       
         public CooperativeEntry() {
-          
         }
-        #region Action
-        
-        #endregion
+     
     }
 }
