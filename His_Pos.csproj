@@ -803,10 +803,6 @@
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml.cs">
-      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
     </Compile>
@@ -1340,10 +1336,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1710,6 +1702,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

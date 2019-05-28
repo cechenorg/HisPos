@@ -118,14 +118,17 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         #region Function
-        public Employee Save()
-        {
-            DataTable table = EmployeeDb.Save(this);
-            SaveServer();
-            return new Employee(table.Rows[0]);
+        public void Insert() {
+            EmployeeDb.SyncData();
+            EmployeeDb.Insert(this);
         }
+        public void Update() {
+            EmployeeDb.SyncData();
+            EmployeeDb.Update(this);
+        } 
         public void Delete()
         {
+            EmployeeDb.SyncData();
             EmployeeDb.Delete(ID); 
         }
         public static Employee Login(string Account,string Password) {
@@ -142,13 +145,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return tabAuths;
         }
-        public string GetPassword() {
-          DataTable table =  EmployeeDb.GetPassword(ID);
-            return table.Rows[0]["Aut_Password"].ToString();
-        }
-        public void SaveServer() {
-           EmployeeDb.SaveServer(this);
-        }
+       
         #endregion
     }
 }

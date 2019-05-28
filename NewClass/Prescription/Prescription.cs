@@ -71,6 +71,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
         public Prescription(CooperativePrescription c) {
+             
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
             var customer = prescription.CustomerProfile.Customer;
