@@ -105,22 +105,28 @@ namespace His_Pos.NewClass.Prescription
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
-            var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
-            var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
-            var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            int birthYear = 0, birthMonth = 0, birthDay = 0;
+            if (customer.Birth.Length == 7)
+            {
+                birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
+                birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
+                birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            }
             #endregion
             Source = PrescriptionSource.XmlOfPrescription;
             SourceId = sourceId; 
-             
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Treatment = new Treatment.Treatment(c, treatDate);
             Patient = new Customer
             {
                 IDNumber = customer.IdNumber,
                 Name = customer.Name,
-                Birthday = new DateTime(birthYear, birthMonth, birthDay),
                 Tel = customer.Phone
             };
+            if (birthYear >= 1911)
+            {
+                Patient.Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            }
             Card = new IcCard();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
