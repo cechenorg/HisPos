@@ -525,10 +525,20 @@ namespace His_Pos.NewClass.Prescription
                 {"sDate",sDate.ToString("yyyy-MM-dd") },
                 {"eDate",eDate.ToString("yyyy-MM-dd") }
             };
-            PrescriptionRefactoring.Prescriptions prescriptions = new PrescriptionRefactoring.Prescriptions();
             var httpMethod = new HttpMethod();
             var table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
-            
+            return table;
+        }
+        public static List<XmlDocument> GetOrthopedicsPrescriptionsByCusIdNumber(string idNumber)
+        {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                {"pharmcyMedicalNum",ViewModelMainWindow.CurrentPharmacy.ID },
+                {"cusIdnum",idNumber }
+            };
+            Prescriptions prescriptions = new Prescriptions();
+            HttpMethod httpMethod = new HttpMethod();
+            List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByMedicalNum", keyValues);
             return table;
         }
         #endregion

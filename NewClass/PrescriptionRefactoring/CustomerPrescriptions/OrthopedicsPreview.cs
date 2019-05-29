@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.CooperativeInstitution;
+﻿using His_Pos.NewClass.CooperativeInstitution;
 
-namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
+namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
-    public class OrthopedicsPreview : CooperativePreBase
+    public class OrthopedicsPreview : CusPrePreviewBase
     {
         public OrthopedicsPreview(OrthopedicsPrescription c) :base(c)
         {

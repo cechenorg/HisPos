@@ -1,23 +1,23 @@
 ﻿using System;
+using System.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.PreviewMedicine;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
-namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
+namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
-    public abstract class CooperativePreBase
+    public abstract class CusPrePreviewBase
     {
-        public CooperativePreBase()
+        public CusPrePreviewBase()
         {
 
         }
 
-        protected CooperativePreBase(OrthopedicsPrescription c)
+        protected CusPrePreviewBase(OrthopedicsPrescription c)
         {
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
             Medicines.AddItemsFromOrthopedics(prescription.MedicineOrder.Item);
         }
 
-        protected CooperativePreBase(CooperativePrescription.Prescription c, DateTime treatDate, bool isRead)
+        protected CusPrePreviewBase(CooperativePrescription.Prescription c, DateTime treatDate, bool isRead)
         {
             #region CooPreVariable
             var prescription = c;
@@ -59,6 +59,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
             Medicines = new PreviewMedicines();
             Medicines.AddItemsFromCooperative(prescription.MedicineOrder.Item);
         }
+
+        protected CusPrePreviewBase(DataRow r)
+        {
+            Institution = VM.GetInstitution(r.Field<string>(""));
+            Division = VM.GetDivision(r.Field<string>(""));
+            TreatDate = r.Field<DateTime>("");
+        }
+
         public Institution Institution { get; }
         public Division Division { get; }
         public Customer Patient { get; }

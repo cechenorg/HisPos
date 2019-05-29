@@ -8,7 +8,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.PrescriptionRefactoring;
-using His_Pos.NewClass.PrescriptionRefactoring.Cooperative;
+using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -19,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     public class CooperativePrescriptionViewModel : ViewModelBase
     {
         #region Variables
-        private CooperativePreBases cooperativePres { get; set; }
+        private CusPrePreviewBases cooperativePres { get; set; }
         private CollectionViewSource cooPreCollectionViewSource;
         private CollectionViewSource CooPreCollectionViewSource
         {
@@ -57,8 +57,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
-        private CooperativePreBase selectedPrescription;
-        public CooperativePreBase SelectedPrescription
+        private CusPrePreviewBase selectedPrescription;
+        public CusPrePreviewBase SelectedPrescription
         {
             get => selectedPrescription;
             set
@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void InitPrescriptions()
         {
-            cooperativePres = new CooperativePreBases();
+            cooperativePres = new CusPrePreviewBases();
             var getCooperativePresWorker = new BackgroundWorker();
             getCooperativePresWorker.DoWork += (o, ea) =>
             {
@@ -195,7 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void Filter(object sender, FilterEventArgs e)
         {
-            if (!(e.Item is CooperativePreBase src))
+            if (!(e.Item is CusPrePreviewBase src))
                 e.Accepted = false;
             else if (StartDate is null || DateTime.Compare(src.TreatDate, (DateTime)StartDate) >= 0)
             {

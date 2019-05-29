@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
-using Resources = His_Pos.Properties.Resources;
 
-namespace His_Pos.NewClass.PrescriptionRefactoring.Cooperative
+namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
-    public class CooperativePreview : CooperativePreBase
+    public class CooperativePreview : CusPrePreviewBase
     {
         public CooperativePreview(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead) : base(c, treatDate, isRead)
         {
