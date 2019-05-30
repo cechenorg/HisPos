@@ -29,15 +29,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #endregion
 
         #region ----- Define Variables -----
+
+        #region ///// DataChanged Variables /////
         private bool isDataChanged;
-        private string newInventory = "";
-        private ProductManageMedicine medicine;
-        private WareHouse selectedWareHouse;
-        private ProductInventoryRecords inventoryRecordCollection;
-        private ProductTypeEnum productType;
-        private DateTime? startDate = DateTime.Today.AddMonths(-3);
-        private DateTime? endDate = DateTime.Today;
-        private MedicineStockDetail stockDetail;
 
         public bool IsDataChanged
         {
@@ -49,6 +43,42 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
+        #endregion
+
+        #region ///// Medicine Variables /////
+        private ProductManageMedicine medicine;
+        private MedicineStockDetail stockDetail;
+        private ProductInventoryRecords inventoryRecordCollection;
+        private ProductTypeEnum productType;
+
+        public ProductManageMedicine Medicine
+        {
+            get { return medicine; }
+            set { Set(() => Medicine, ref medicine, value); }
+        }
+        public MedicineStockDetail StockDetail
+        {
+            get { return stockDetail; }
+            set { Set(() => StockDetail, ref stockDetail, value); }
+        }
+        public ProductInventoryRecords InventoryRecordCollection
+        {
+            get { return inventoryRecordCollection; }
+            set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
+        }
+        public ProductTypeEnum ProductType
+        {
+            get { return productType; }
+            set { Set(() => ProductType, ref productType, value); }
+        }
+        public ProductManageDetail MedicineDetail { get; set; }
+        #endregion
+
+        private string newInventory = "";
+        private WareHouse selectedWareHouse;
+        private DateTime? startDate = DateTime.Today.AddMonths(-3);
+        private DateTime? endDate = DateTime.Today;
+        
         public string NewInventory
         {
             get { return newInventory; }
@@ -57,21 +87,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Set(() => NewInventory, ref newInventory, value);
                 StockTakingCommand.RaiseCanExecuteChanged();
             }
-        }
-        public ProductManageMedicine Medicine
-        {
-            get { return medicine; }
-            set
-            {
-                Set(() => Medicine, ref medicine, value);
-            }
-        }
-        public ProductManageMedicine BackUpMedicine { get; set; }
-        public ProductManageDetail MedicineDetail { get; set; }
-        public MedicineStockDetail StockDetail
-        {
-            get { return stockDetail; }
-            set { Set(() => StockDetail, ref stockDetail, value); }
         }
         public WareHouses WareHouseCollection { get; set; }
         public WareHouse SelectedWareHouse
@@ -83,16 +98,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 ReloadStockDetail();
                 SearchProductRecordAction();
             }
-        }
-        public ProductInventoryRecords InventoryRecordCollection
-        {
-            get { return inventoryRecordCollection; }
-            set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
-        }
-        public ProductTypeEnum ProductType
-        {
-            get { return productType; }
-            set { Set(() => ProductType, ref productType, value); }
         }
         public DateTime? StartDate
         {
@@ -123,13 +128,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             MainWindow.ServerConnection.OpenConnection();
             Medicine.Save();
             MainWindow.ServerConnection.CloseConnection();
-
-            BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
+            
             IsDataChanged = false;
         }
         private void CancelChangeAction()
         {
-            Medicine = BackUpMedicine.Clone() as ProductManageMedicine;
+            InitMedicineData(Medicine.ID);
             IsDataChanged = false;
         }
         private void SyncDataAction()
@@ -249,8 +253,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
-            
-            BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
 
             ReloadStockDetail();
         }
@@ -295,7 +297,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
             MainWindow.ServerConnection.CloseConnection();
         }
-        
         #endregion
     }
 }
