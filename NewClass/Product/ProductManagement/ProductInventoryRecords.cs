@@ -18,9 +18,9 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
         }
 
-        internal static ProductInventoryRecords GetInventoryRecordsByID(string id)
+        internal static ProductInventoryRecords GetInventoryRecordsByID(string proID, string wareID, DateTime startDate, DateTime endDate)
         {
-            return new ProductInventoryRecords(ProductDetailDB.GetInventoryRecordsByID(id));
+            return new ProductInventoryRecords(ProductDetailDB.GetInventoryRecordsByID(proID, wareID, startDate, endDate));
         }
     }
 }

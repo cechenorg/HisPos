@@ -388,17 +388,18 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
-        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID)
+        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", orderType.ToString()));
             parameters.Add(new SqlParameter("MANUFACTORY", orderManufactory.ID));
             parameters.Add(new SqlParameter("EMPLOYEE", employeeID));
+            parameters.Add(new SqlParameter("WARE_ID", wareHouseID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
-        internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
+        internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameters, "START_DATE", searchStartDate);
@@ -406,6 +407,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("ORDER_ID", searchOrderID));
             parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
             parameters.Add(new SqlParameter("PRODUCT", searchProductID));
+            parameters.Add(new SqlParameter("WAREHOUSE", searchWareName));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }

@@ -272,9 +272,9 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
 
-        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
+        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID)
         {
-            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID);
 
             switch (orderType)
             {

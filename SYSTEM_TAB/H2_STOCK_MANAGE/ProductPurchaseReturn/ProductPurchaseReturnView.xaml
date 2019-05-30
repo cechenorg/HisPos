@@ -82,7 +82,7 @@
                     <Image Source="/Images/BlueDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}" Margin="0,2,0,0">
-                    <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="260" Margin="5" materialDesign:HintAssist.Hint="篩選條件 (單號 處方 藥品 備註)">
+                    <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="260" Margin="5" materialDesign:HintAssist.Hint="篩選條件 (單號 處方 備註)">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding FilterOrderCommand}"/>

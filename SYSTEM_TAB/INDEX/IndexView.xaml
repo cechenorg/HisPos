@@ -187,7 +187,7 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridBackGround}">
                 <Label Content="處方" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <Label Content="{Binding IndexReserveCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                <Label Content="{Binding IndexReserveCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
                 <Label Content="張" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <Button Width="130" Command="{Binding CommonMedStoreOrderCommand}" Margin="365,0,0,0" Content="常備藥採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
                 <Button Width="150" Command="{Binding ReserveMedicineSendCommand}" Margin="10,0,0,0" Content="慢箋預約採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />

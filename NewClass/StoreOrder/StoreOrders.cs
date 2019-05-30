@@ -34,9 +34,9 @@ namespace His_Pos.NewClass.StoreOrder
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
         }
 
-        public static StoreOrders GetOrdersDone(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID)
+        public static StoreOrders GetOrdersDone(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)
         {
-            return new StoreOrders(StoreOrderDB.GetDoneStoreOrders(searchStartDate, searchEndDate, searchOrderID, searchManufactoryID, searchProductID));
+            return new StoreOrders(StoreOrderDB.GetDoneStoreOrders(searchStartDate, searchEndDate, searchOrderID, searchManufactoryID, searchProductID, searchWareName));
         }
 
         public void ReloadCollection()

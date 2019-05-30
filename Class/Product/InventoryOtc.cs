@@ -16,12 +16,10 @@ namespace His_Pos.Class.Product
             Location = dataRow["PRO_LOCATION"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             Stock = new InStock(dataRow);
-            ProductType = new ProductType.ProductType(dataRow);
             WareHouseId = dataRow["PROWAR_ID"].ToString();
             WareHouse = dataRow["PROWAR_NAME"].ToString();
             BarCode = dataRow["PRO_BARCODE"].ToString();
         }
-        public ProductType.ProductType ProductType { get; set; }
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }

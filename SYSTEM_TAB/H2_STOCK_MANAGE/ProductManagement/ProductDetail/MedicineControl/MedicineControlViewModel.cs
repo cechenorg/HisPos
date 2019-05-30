@@ -8,6 +8,8 @@ using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
+using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -26,14 +28,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
+        public RelayCommand SearchProductRecordCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private bool isDataChanged;
         private string newInventory = "";
         private ProductManageMedicine medicine;
+        private WareHouse selectedWareHouse;
         private ProductInventoryRecords inventoryRecordCollection;
         private ProductTypeEnum productType;
+        private DateTime? startDate = DateTime.Today.AddMonths(-3);
+        private DateTime? endDate = DateTime.Today;
+        private MedicineStockDetail stockDetail;
 
         public bool IsDataChanged
         {
@@ -70,6 +77,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         public ProductManageMedicine BackUpMedicine { get; set; }
         public ProductManageDetail MedicineDetail { get; set; }
+        public MedicineStockDetail StockDetail
+        {
+            get { return stockDetail; }
+            set { Set(() => StockDetail, ref stockDetail, value); }
+        }
+        public WareHouses WareHouseCollection { get; set; }
+        public WareHouse SelectedWareHouse
+        {
+            get { return selectedWareHouse; }
+            set
+            {
+                Set(() => SelectedWareHouse, ref selectedWareHouse, value); 
+                ReloadStockDetail();
+                SearchProductRecordAction();
+            }
+        }
         public ProductInventoryRecords InventoryRecordCollection
         {
             get { return inventoryRecordCollection; }
@@ -79,6 +102,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
+        }
+        public DateTime? StartDate
+        {
+            get { return startDate; }
+            set { Set(() => StartDate, ref startDate, value); }
+        }
+        public DateTime? EndDate
+        {
+            get { return endDate; }
+            set { Set(() => EndDate, ref endDate, value); }
         }
         #endregion
 
@@ -120,7 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             if(!IsNewInventoryValid()) return;
 
-            if (Medicine.LastPrice == 0.0)
+            if (StockDetail.LastPrice == 0.0)
             {
                 StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
                 stockTakingNoLastPriceWindow.ShowDialog();
@@ -159,6 +192,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void ShowProductGroupWindowAction() {
             ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID);
         }
+        private void SearchProductRecordAction()
+        {
+            if (StartDate is null || EndDate is null)
+            {
+                MessageWindow.ShowMessage("日期格式錯誤", MessageType.ERROR);
+                return;
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
+            MainWindow.ServerConnection.CloseConnection();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -171,10 +216,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             DataChangedCommand = new RelayCommand(DataChangedAction);
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
+            SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
         }
         private void InitMedicineData(string id)
         {
             MainWindow.ServerConnection.OpenConnection();
+            WareHouseCollection = WareHouses.GetWareHouses();
+
             DataTable manageMedicineDetailDataTable = null;
             
             switch (ProductType)
@@ -191,16 +239,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(id);
-            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(id);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (manageMedicineDataTable is null || manageMedicineDetailDataTable is null || manageMedicineDataTable.Rows.Count == 0 || manageMedicineDetailDataTable.Rows.Count == 0)
+            if (manageMedicineDataTable is null || manageMedicineDetailDataTable is null || manageMedicineDataTable.Rows.Count == 0 || manageMedicineDetailDataTable.Rows.Count == 0 || WareHouseCollection is null || WareHouseCollection.Count == 0)
             {
                 MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
                 return;
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
+            SelectedWareHouse = WareHouseCollection[0];
 
             switch (ProductType)
             {
@@ -217,6 +265,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             
             BackUpMedicine = Medicine.Clone() as ProductManageMedicine;
             ProductGroupSettingCollection.GetDataByID(id);
+
+            ReloadStockDetail();
         }
         private bool IsMedicineDataChanged()
         {
@@ -245,6 +295,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             return true;
         }
+        private void ReloadStockDetail()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable stockDataTable = ProductDetailDB.GetMedicineStockDetailByID(Medicine.ID, SelectedWareHouse.ID);
+
+            if (stockDataTable is null || stockDataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
+            MainWindow.ServerConnection.CloseConnection();
+        }
+        
         #endregion
     }
 }
