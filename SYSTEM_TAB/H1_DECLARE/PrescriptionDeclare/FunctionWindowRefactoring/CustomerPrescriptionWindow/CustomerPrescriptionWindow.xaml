@@ -215,33 +215,33 @@
                     <ColumnDefinition Width="380"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Grid.Column="0" Content="{Binding OrthopedicsPrescription,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
-                    <RadioButton Grid.Column="1" Content="{Binding CooperativePrescription,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
-                    <RadioButton Grid.Column="2" Content="{Binding RegisterPrescription,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
-                    <RadioButton Grid.Column="3" Content="{Binding ReservePrescription,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+                    <RadioButton Grid.Column="0" Content="{Binding OrthopedicsContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
+                    <RadioButton Grid.Column="1" Content="{Binding CooperativeContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
+                    <RadioButton Grid.Column="2" Content="{Binding RegisterContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
+                    <RadioButton Grid.Column="3" Content="{Binding ReserveContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
                 </Grid>
                 <ContentControl Name="PrescriptionGrid" Grid.Row="1" Grid.Column="0" Content="{Binding}" Margin="10,0,10,0">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource OrthopedicsGrid}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Orthopedics">
+                                <DataTrigger Binding="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" Value="Orthopedics">
                                     <Setter Property="ContentTemplate" Value="{StaticResource OrthopedicsGrid}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Cooperative">
+                                <DataTrigger Binding="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" Value="Cooperative">
                                     <Setter Property="ContentTemplate" Value="{StaticResource CooperativeGrid}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Register">
+                                <DataTrigger Binding="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" Value="Register">
                                     <Setter Property="ContentTemplate" Value="{StaticResource RegisterGrid}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Reserve">
+                                <DataTrigger Binding="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" Value="Reserve">
                                     <Setter Property="ContentTemplate" Value="{StaticResource ReserveGrid}" />
                                 </DataTrigger>
                             </Style.Triggers>

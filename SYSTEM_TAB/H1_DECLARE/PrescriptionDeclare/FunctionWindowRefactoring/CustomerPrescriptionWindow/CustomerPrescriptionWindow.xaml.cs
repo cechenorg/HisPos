@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 
@@ -24,7 +25,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         public CustomerPrescriptionWindow(Customer customer,IcCard card)
         {
             InitializeComponent();
-            DataContext = new CustomerPrescriptionViewModel(customer.ID, customer.IDNumber, card);
+            DataContext = new CustomerPrescriptionViewModel(customer, card);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCustomerPrescriptionWindow"))
+                    Close();
+            });
+            this.Closing += (sender, e) => Messenger.Default.Unregister(this);
             ShowDialog();
         }
     }

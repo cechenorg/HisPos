@@ -1,14 +1,47 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow
 {
+    public enum CustomerPrescriptionType
+    {
+        Orthopedics = 0,
+        Cooperative = 1,
+        Register = 2,
+        Reserve = 3
+    }
     public class CustomerPrescriptionViewModel : ViewModelBase
     {
         #region Variable
+        private string selectedRadioButton;
+        public string SelectedRadioButton
+        {
+            get => selectedRadioButton;
+            set
+            {
+                Set(() => SelectedRadioButton, ref selectedRadioButton, value);
+                if (string.IsNullOrEmpty(selectedRadioButton)) return;
+                switch (selectedRadioButton)
+                {
+                    case "Option1":
+                        SelectedType = CustomerPrescriptionType.Orthopedics;
+                        break;
+                    case "Option2":
+                        SelectedType = CustomerPrescriptionType.Cooperative;
+                        break;
+                    case "Option3":
+                        SelectedType = CustomerPrescriptionType.Register;
+                        break;
+                    case "Option4":
+                        SelectedType = CustomerPrescriptionType.Reserve;
+                        break;
+                }
+            }
+        }
         private bool isBusy;
         public bool IsBusy
         {
@@ -27,18 +60,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
-        private bool showDialog;
-        public bool ShowDialog
+        public IcCard Card { get; set; }
+        private Customer patient;
+
+        public Customer Patient
         {
-            get => showDialog;
+            get => patient;
             set
             {
-                Set(() => ShowDialog, ref showDialog, value);
+                Set(() => Patient, ref patient, value);
             }
         }
-        public IcCard Card { get; set; }
-        public int PatientID { get; }
-        public string PatientIDNumber { get; }
+
         private string orthopedicsContent;
         public string OrthopedicsContent
         {
@@ -75,6 +108,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => ReserveContent, ref reserveContent, value);
             }
         }
+
+        private CustomerPrescriptionType selectedType;
+
+        public CustomerPrescriptionType SelectedType
+        {
+            get => selectedType;
+            set
+            {
+                Set(() => SelectedType, ref selectedType, value);
+            }
+        }
         public CusPrePreviewBases OrthopedicsPres { get; set; }
         public CusPrePreviewBases CooperativePres { get; set; }
         public CusPrePreviewBases ChronicRegisterPres { get; set; }
@@ -83,31 +127,53 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         #endregion
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
-        public CustomerPrescriptionViewModel(int cusID, string cusIDNumber, IcCard card)
+        public CustomerPrescriptionViewModel(Customer customer, IcCard card)
         {
-            PatientID = cusID;
-            PatientIDNumber = cusIDNumber;
+            Patient = customer;
             Card = card.DeepCloneViaJson();
-            InitializePrescription();
+            InitializeVariable();
         }
-        private void InitializePrescription()
+        private void InitializeVariable()
         {
             OrthopedicsPres = new CusPrePreviewBases();
             CooperativePres = new CusPrePreviewBases();
             ChronicRegisterPres = new CusPrePreviewBases();
             ChronicReservePres = new CusPrePreviewBases();
             MainWindow.ServerConnection.OpenConnection();
-            OrthopedicsPres.GetOrthopedicsByCustomerIDNumber(PatientIDNumber);
-            CooperativePres.GetCooperativeByCusIDNumber(PatientIDNumber);
-            ChronicRegisterPres.GetRegisterByCusId(PatientID);
-            ChronicReservePres.GetReserveByCusId(PatientID);
+            OrthopedicsPres.GetOrthopedicsByCustomerIDNumber(Patient.IDNumber);
+            CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
+            ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
+            ChronicReservePres.GetReserveByCusId(Patient.ID);
             if(!string.IsNullOrEmpty(Card.CardNumber))
-                UngetCardPres.GetUngetCardByCusId(PatientID);
+                UngetCardPres.GetUngetCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
             CooperativeContent = "合作 " + CooperativePres.Count + " 張";
             RegisterContent = "登錄 " + ChronicRegisterPres.Count + " 張";
             ReserveContent = "預約 " + ChronicReservePres.Count + " 張";
+            if (ChronicReservePres.Count > 0)
+            {
+                SelectedType = CustomerPrescriptionType.Reserve;
+                SelectedRadioButton = "Option4";
+            }
+
+            if (ChronicRegisterPres.Count > 0)
+            {
+                SelectedType = CustomerPrescriptionType.Register;
+                SelectedRadioButton = "Option3";
+            }
+
+            if (CooperativePres.Count > 0)
+            {
+                SelectedType = CustomerPrescriptionType.Cooperative;
+                SelectedRadioButton = "Option2";
+            }
+
+            if (OrthopedicsPres.Count > 0 || (CooperativePres.Count == 0 && ChronicRegisterPres.Count == 0 && ChronicReservePres.Count == 0))
+            {
+                SelectedType = CustomerPrescriptionType.Orthopedics;
+                SelectedRadioButton = "Option1";
+            }
         }
     }
 }

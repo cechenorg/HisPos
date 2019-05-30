@@ -225,6 +225,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
+                if(AdjustCase is null) return;
                 if ((!AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3"))) return;
                 switch (division.ID)
                 {
