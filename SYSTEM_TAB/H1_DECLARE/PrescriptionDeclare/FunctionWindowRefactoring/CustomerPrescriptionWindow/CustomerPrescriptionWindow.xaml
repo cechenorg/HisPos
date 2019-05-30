@@ -49,14 +49,14 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                        <Label Content="{Binding Patient.Name}" Width="130" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Patient.IDNumber}" FontSize="20" VerticalAlignment="Center"/>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                                         <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="15" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                        <Label Content="診治醫師 :" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Doctor}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -99,10 +99,6 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                        <Label Content="{Binding Patient.Name}" Width="130" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Patient.IDNumber}" FontSize="20" VerticalAlignment="Center"/>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                                         <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
@@ -149,10 +145,6 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                        <Label Content="{Binding Patient.Name}" Width="130" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Patient.IDNumber}" FontSize="20" VerticalAlignment="Center"/>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                                         <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
@@ -199,10 +191,6 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                        <Label Content="{Binding Patient.Name}" Width="130" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Patient.IDNumber}" FontSize="20" VerticalAlignment="Center"/>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                                         <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
@@ -251,10 +239,10 @@
                                     <Setter Property="ContentTemplate" Value="{StaticResource CooperativeGrid}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Register">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource ChronicGrid}" />
+                                    <Setter Property="ContentTemplate" Value="{StaticResource RegisterGrid}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding PrescriptionType, UpdateSourceTrigger=PropertyChanged}" Value="Reserve">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource ChronicGrid}" />
+                                    <Setter Property="ContentTemplate" Value="{StaticResource ReserveGrid}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
