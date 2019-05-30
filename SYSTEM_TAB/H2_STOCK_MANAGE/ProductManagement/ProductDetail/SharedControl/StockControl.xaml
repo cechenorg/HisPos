@@ -14,27 +14,27 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="0">
             <Label Content="庫存總量" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <TextBlock Text="{Binding Medicine.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="( 架上" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Medicine.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Medicine.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content=")" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="1">
             <Label Content="載途量" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="25,0,0,0"/>
-            <TextBlock Text="{Binding Medicine.TotalOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.TotalOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="( 採購" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Medicine.OnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.OnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Medicine.MedBagOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.MedBagOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="70" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
             <Label Content=")" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkestBackGround}" Grid.Row="2">
             <Label Content="庫存現值 $" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="35,0,0,0"/>
-            <TextBlock Text="{Binding Medicine.StockValue, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.StockValue, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Left" VerticalAlignment="Center"/>
             <Label Content="上次進價 $" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Medicine.LastPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding StockDetail.LastPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Left" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="3">
             <Label Content="快速盤點" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="150,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>

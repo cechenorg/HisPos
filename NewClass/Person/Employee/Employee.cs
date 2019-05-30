@@ -14,14 +14,15 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee(){}
         public Employee(DataRow r):base(r)
         {
+            Account = r.Field<string>("Emp_Account");
             Password = r.Field<string>("Aut_Password");
-            NickName = r.Field<string>("Emp_NickName");
-            WorkPositionName = r.Field<string>("Emp_WorkPositionName");
+            NickName = r.Field<string>("Emp_NickName"); 
             StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
+            WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
         [Index(7)]
@@ -43,27 +44,17 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 Set(() => NickName, ref nickName, value);
             }
-        }  
-        private int workPositionID;//職位ID
-        [Index(8)]
-        public virtual int WorkPositionID
+        }
+        private WorkPosition.WorkPosition workPosition;
+        [IgnoreFormat]
+        public virtual WorkPosition.WorkPosition WorkPosition
         {
-            get => workPositionID;
+            get => workPosition;
             set
             {
-                Set(() => WorkPositionID, ref workPositionID, value);
+                Set(() => WorkPosition, ref workPosition, value);
             }
-        }
-        private string workPositionName;//職位名稱
-        [Index(9)]
-        public virtual string WorkPositionName
-        {
-            get => workPositionName;
-            set
-            {
-                Set(() => WorkPositionName, ref workPositionName, value);
-            }
-        }
+        } 
         private DateTime? startDate;//到職日
         [IgnoreFormat]
         public virtual DateTime? StartDate
@@ -106,12 +97,27 @@ namespace His_Pos.NewClass.Person.Employee
         }
         [IgnoreFormat]
         public int AuthorityValue { get; set; }
-        #region Function
-        public Employee Save()
+        private string account;//帳號
+        [IgnoreFormat]
+        public virtual string Account
         {
-            DataTable table = EmployeeDb.Save(this);
-            return new Employee(table.Rows[0]);
+            get => account;
+            set
+            {
+                Set(() => Account, ref account, value);
+            }
         }
+        #region Function
+        public Employee GetDataByID(int id) {
+            DataTable table = EmployeeDb.GetDataByID(id);
+            return new Employee(table.Rows[0]); 
+        }
+        public void Insert() {
+            EmployeeDb.Insert(this);
+        }
+        public void Update() {
+            EmployeeDb.Update(this);
+        } 
         public void Delete()
         {
             EmployeeDb.Delete(ID); 
@@ -130,11 +136,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return tabAuths;
         }
-        public string GetPassword() {
-          DataTable table =  EmployeeDb.GetPassword(ID);
-            return table.Rows[0]["Aut_Password"].ToString();
-        }
-      
+       
         #endregion
     }
 }

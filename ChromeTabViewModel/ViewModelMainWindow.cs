@@ -168,8 +168,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MainWindow.ServerConnection.OpenConnection(); 
                 BusyContent = "取得倉庫名";
-                WareHouses = new WareHouses();
-                WareHouses.Init();
+                WareHouses = WareHouses.GetWareHouses();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
                 BusyContent = "取得合作院所設定";
@@ -193,9 +192,10 @@ namespace His_Pos.ChromeTabViewModel
                 Positions = new Positions();
                 BusyContent = "更新庫存現值變化";
                 StockValue.UpdateDailyStockValue(); //做每日帳
+                BusyContent = "同步員工資料";
+                EmployeeDb.SyncData();  
                 BusyContent = "回傳合作診所處方";
                 WebApi.SendToCooperClinic(); //骨科上傳
-                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
                 //File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());

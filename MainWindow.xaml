@@ -74,7 +74,7 @@
         <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">
             <stockTakingRecord:StockTakingRecordView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManage}">
+        <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManageViewModel}">
             <productTypeManage:ProductTypeManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type locationManage:LocationManage}">
@@ -83,7 +83,7 @@
         <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <manufactoryManage:ManufactoryManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type employeeManage:EmployeeManage}">
+        <DataTemplate DataType="{x:Type employeeManage:EmployeeManageViewModel}">
             <employeeManage:EmployeeManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type customerManage:CustomerManageViewModel}">
