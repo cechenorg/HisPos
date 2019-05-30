@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow
 {
@@ -19,9 +21,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     /// </summary>
     public partial class CustomerPrescriptionWindow : Window
     {
-        public CustomerPrescriptionWindow()
+        public CustomerPrescriptionWindow(Customer customer,IcCard card)
         {
             InitializeComponent();
+            DataContext = new CustomerPrescriptionViewModel(customer.ID, customer.IDNumber, card);
+            ShowDialog();
         }
     }
 }

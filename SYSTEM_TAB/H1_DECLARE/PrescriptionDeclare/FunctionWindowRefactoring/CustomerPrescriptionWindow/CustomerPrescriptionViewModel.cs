@@ -101,7 +101,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             CooperativePres.GetCooperativeByCusIDNumber(PatientIDNumber);
             ChronicRegisterPres.GetRegisterByCusId(PatientID);
             ChronicReservePres.GetReserveByCusId(PatientID);
-            UngetCardPres.GetUngetCardByCusId(PatientID);
+            if(!string.IsNullOrEmpty(Card.CardNumber))
+                UngetCardPres.GetUngetCardByCusId(PatientID);
             MainWindow.ServerConnection.CloseConnection();
             OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
             CooperativeContent = "合作 " + CooperativePres.Count + " 張";
