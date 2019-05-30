@@ -42,13 +42,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         public ProductTypeManageMaster CurrentType
         {
             get { return currentType; }
-            set { Set(() => CurrentType, ref currentType, value); }
+            set
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                value?.GetTypeDetails();
+                MainWindow.ServerConnection.CloseConnection();
+                Set(() => CurrentType, ref currentType, value);
+            }
         }
         #endregion
 
         public ProductTypeManageViewModel()
         {
             RegisterCommand();
+            InitData();
         }
 
         #region ----- Define Actions -----
@@ -72,6 +79,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsTypeDataChanged);
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsTypeDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+        }
+        private void InitData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            TypeManageCollection = ProductTypeManageMasters.GetProductTypeMasters();
+            MainWindow.ServerConnection.CloseConnection();
+
+            CurrentType = TypeManageCollection[0];
         }
         private bool IsTypeDataChanged()
         {

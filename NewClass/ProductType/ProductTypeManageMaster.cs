@@ -35,5 +35,10 @@ namespace His_Pos.NewClass.ProductType
         public ProductTypeManageMaster(DataRow row) : base(row)
         {
         }
+
+        internal void GetTypeDetails()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

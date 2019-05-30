@@ -9,5 +9,9 @@ namespace His_Pos.NewClass.ProductType
 {
     public class ProductTypeManageMasters : Collection<ProductTypeManageMaster>
     {
+        internal static ProductTypeManageMasters GetProductTypeMasters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
