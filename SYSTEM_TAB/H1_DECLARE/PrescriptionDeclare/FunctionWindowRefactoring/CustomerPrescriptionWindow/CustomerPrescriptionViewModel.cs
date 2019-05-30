@@ -17,6 +17,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     public class CustomerPrescriptionViewModel : ViewModelBase
     {
         #region Variable
+        private string windowTitle;
+        public string WindowTitle
+        {
+            get => windowTitle;
+            set
+            {
+                Set(() => WindowTitle, ref windowTitle, value);
+            }
+        }
         private string selectedRadioButton;
         public string SelectedRadioButton
         {
@@ -124,6 +133,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         public CusPrePreviewBases ChronicRegisterPres { get; set; }
         public CusPrePreviewBases ChronicReservePres { get; set; }
         public CusPrePreviewBases UngetCardPres { get; set; }
+        private CusPrePreviewBase selectedPrescription;
+        public CusPrePreviewBase SelectedPrescription
+        {
+            get => selectedPrescription;
+            set
+            {
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
+            }
+        }
+        private CusPrePreviewBase makeUpPrescription;
+        public CusPrePreviewBase MakeUpPrescription
+        {
+            get => makeUpPrescription;
+            set
+            {
+                Set(() => MakeUpPrescription, ref makeUpPrescription, value);
+            }
+        }
         #endregion
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
@@ -135,6 +162,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         }
         private void InitializeVariable()
         {
+            WindowTitle = Patient.Name + " 可調劑處方";
             OrthopedicsPres = new CusPrePreviewBases();
             CooperativePres = new CusPrePreviewBases();
             ChronicRegisterPres = new CusPrePreviewBases();

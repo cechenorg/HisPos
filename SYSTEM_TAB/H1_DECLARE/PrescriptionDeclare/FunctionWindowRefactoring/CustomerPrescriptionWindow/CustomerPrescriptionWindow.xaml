@@ -9,15 +9,18 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d" Height="630" Width="1000"
-        FontFamily="Segoe UI Semibold">
+        mc:Ignorable="d" Height="630" Width="1000" WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI Semibold" Title="{Binding WindowTitle,UpdateSourceTrigger=PropertyChanged}">
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
+    </Window.Background>
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter" />
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="OrthopedicsGrid">
             <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding OrthopedicsPres,UpdateSourceTrigger=PropertyChanged}"
-                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
@@ -67,7 +70,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="CooperativeGrid">
             <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding CooperativePres,UpdateSourceTrigger=PropertyChanged}"
-                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
@@ -113,7 +116,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="RegisterGrid">
             <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicRegisterPres,UpdateSourceTrigger=PropertyChanged}"
-                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
@@ -159,7 +162,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="ReserveGrid">
             <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicReservePres,UpdateSourceTrigger=PropertyChanged}"
-                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                           AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
@@ -215,7 +218,7 @@
                     <ColumnDefinition Width="380"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0">
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -248,14 +251,14 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
-                    <StackPanel Orientation="Vertical" Margin="0,0,10,10">
-                        <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,10">
+                <DockPanel Grid.Row="1" Grid.Column="1">
+                    <StackPanel Orientation="Vertical" Margin="0,0,10,10" DockPanel.Dock="Top">
+                        <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,10" >
                             <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
                             <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="450,0,0,0" VerticalAlignment="Center" Command="{Binding MakeUpCard}"/>
                         </StackPanel>
                         <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" CanUserResizeColumns="False" CanUserResizeRows="False"
-                                  GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" >
+                                  GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding MakeUpPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type ScrollBar}">
                                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -325,7 +328,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
-                    <DataGrid AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" Margin="0,0,10,10" DataContext="{Binding SelectedPrescription,UpdateSourceTrigger=PropertyChanged}"
+                    <DataGrid DockPanel.Dock="Top" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" Margin="0,0,10,10" DataContext="{Binding SelectedPrescription,UpdateSourceTrigger=PropertyChanged}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" GridLinesVisibility="Horizontal" ItemsSource="{Binding Medicines,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
@@ -386,7 +389,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </DockPanel>
             </Grid>
         </xctk:BusyIndicator>
     </Viewbox>
