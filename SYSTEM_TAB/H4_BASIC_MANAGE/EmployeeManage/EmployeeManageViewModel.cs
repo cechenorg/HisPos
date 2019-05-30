@@ -54,21 +54,46 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => WorkPositions, ref workPositions, value);
             }
         }
-        
+        private bool localCheck = true;
+        public bool LocalCheck
+        {
+            get { return localCheck; }
+            set
+            {
+                Set(() => LocalCheck, ref localCheck, value);
+            }
+        }
+        private bool globalCheck = false;
+        public bool GlobalCheck
+        {
+            get { return globalCheck; }
+            set
+            {
+                Set(() => GlobalCheck, ref globalCheck, value);
+            }
+        }
+
         #endregion
 
         public EmployeeManageViewModel() {
 
             Init();
-           //DataChangeCommand = new RelayCommand(DataChangeAction);
-           //CancelCommand = new RelayCommand(CancelAction);
-           //SubmitCommand = new RelayCommand(SubmitAction);
-           //SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
-           //DeleteCommand = new RelayCommand(DeleteAction);
+            CancelCommand = new RelayCommand(CancelAction);
+            SubmitCommand = new RelayCommand(SubmitAction); 
+            DeleteCommand = new RelayCommand(DeleteAction);
             NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
         }
         #region Action
+        private void CancelAction() {
+            Employee = Employee.GetDataByID(Employee.ID);
+        }
+        private void SubmitAction() {
+            Employee.Update();
+        }
+        private void DeleteAction() {
+            Employee.Delete();
+        }
         public void ChangePassWordAction() {
            
         }
@@ -77,8 +102,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             Employee newEmployee = new Employee();
             newEmployee.Name = "新人";
             newEmployee.Gender = "男";
-            newEmployee.WorkPositionID = 2;
-            newEmployee.WorkPositionName = "藥師";
+            newEmployee.WorkPosition.WorkPositionId = 2;
+            newEmployee.WorkPosition.WorkPositionName = "藥師";
             newEmployee.StartDate = DateTime.Today;
             newEmployee.Birthday = DateTime.Today;
             newEmployee.IDNumber = DateTime.Now.ToString("yyyyMMddhhss");

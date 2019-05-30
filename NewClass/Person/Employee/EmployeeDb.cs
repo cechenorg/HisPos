@@ -12,23 +12,43 @@ namespace His_Pos.NewClass.Person.Employee
         {
            return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]"); 
         }
-        public static void SyncData() {
-          MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
+        public static DataTable GetDataByID(int ID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@EmpID",ID));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]",parameterList);  
         }
         public static void Insert(Employee e) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertEmployee]", parameterList);
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[InsertEmployee]", parameterList);
+            else {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertEmployee]", parameterList);
+                SyncData();
+            } 
         }
         public static void Update(Employee e) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                SyncData();
+            } 
         }
         public static void Delete(int empId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("EmpId", empId));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteEmployee]", parameterList); 
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteEmployee]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[DeleteEmployee]", parameterList);
+                SyncData();
+            } 
         }
         public static DataTable EmployeeLogin(string account,string password) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -43,7 +63,10 @@ namespace His_Pos.NewClass.Person.Employee
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList);
             return table;
         }
-    
+        public static void SyncData( )
+        { 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
+        }
         public static DataTable SetCustomers(Employees es) {
             DataTable employeeTable = EmployeeTable();
 
@@ -66,7 +89,7 @@ namespace His_Pos.NewClass.Person.Employee
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPositionID);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
@@ -98,7 +121,7 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow,"Emp_Cellphone", e.CellPhone);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Email", e.Email);
             DataBaseFunction.AddColumnValue(newRow,"Emp_LINE", e.Line);
-            DataBaseFunction.AddColumnValue(newRow,"Emp_WorkPositionID", e.WorkPositionID);
+            DataBaseFunction.AddColumnValue(newRow,"Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
             DataBaseFunction.AddColumnValue(newRow,"Emp_StartDate", e.StartDate);
             DataBaseFunction.AddColumnValue(newRow,"Emp_LeaveDate", e.LeaveDate);
             DataBaseFunction.AddColumnValue(newRow,"Emp_PurchaseLimit", e.PurchaseLimit);

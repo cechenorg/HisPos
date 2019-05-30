@@ -57,7 +57,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         }
         public MedicalPersonnel GetPharmacist()
         {
-            if (ViewModelMainWindow.CurrentUser.WorkPositionName.Equals("藥師"))
+            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Equals("藥師"))
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));
             var medicalPersonnels = MedicalPersonnels.Where(m => m.IsEnable).ToList();
                 return medicalPersonnels.Count > 0 ? medicalPersonnels[0] : null;

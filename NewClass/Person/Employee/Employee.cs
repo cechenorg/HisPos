@@ -16,13 +16,13 @@ namespace His_Pos.NewClass.Person.Employee
         {
             Account = r.Field<string>("Emp_Account");
             Password = r.Field<string>("Aut_Password");
-            NickName = r.Field<string>("Emp_NickName");
-            WorkPositionName = r.Field<string>("Emp_WorkPositionName");
+            NickName = r.Field<string>("Emp_NickName"); 
             StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
+            WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
         [Index(4)]
@@ -44,27 +44,17 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 Set(() => NickName, ref nickName, value);
             }
-        }  
-        private int workPositionID;//職位ID
-        [Index(6)]
-        public virtual int WorkPositionID
+        }
+        private WorkPosition.WorkPosition workPosition;
+        [IgnoreFormat]
+        public virtual WorkPosition.WorkPosition WorkPosition
         {
-            get => workPositionID;
+            get => workPosition;
             set
             {
-                Set(() => WorkPositionID, ref workPositionID, value);
+                Set(() => WorkPosition, ref workPosition, value);
             }
-        }
-        private string workPositionName;//職位名稱
-        [Index(7)]
-        public virtual string WorkPositionName
-        {
-            get => workPositionName;
-            set
-            {
-                Set(() => WorkPositionName, ref workPositionName, value);
-            }
-        }
+        } 
         private DateTime? startDate;//到職日
         [Index(8)]
         public virtual DateTime? StartDate
@@ -118,17 +108,18 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         #region Function
+        public Employee GetDataByID(int id) {
+            DataTable table = EmployeeDb.GetDataByID(id);
+            return new Employee(table.Rows[0]); 
+        }
         public void Insert() {
-            EmployeeDb.SyncData();
             EmployeeDb.Insert(this);
         }
         public void Update() {
-            EmployeeDb.SyncData();
             EmployeeDb.Update(this);
         } 
         public void Delete()
         {
-            EmployeeDb.SyncData();
             EmployeeDb.Delete(ID); 
         }
         public static Employee Login(string Account,string Password) {

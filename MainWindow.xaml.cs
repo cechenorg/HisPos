@@ -47,7 +47,7 @@ namespace His_Pos
             FeatureFactory();
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
-            if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
+            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName == "藥師")
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
 
             Instance = this;
