@@ -4,8 +4,10 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.WareHouse;
 
@@ -25,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
+        public RelayCommand ShowProductGroupWindowCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
         #endregion
 
@@ -88,6 +91,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 StockTakingCommand.RaiseCanExecuteChanged();
             }
         }
+        
+        private ProductGroupSettings productGroupSettingCollection = new ProductGroupSettings();
+        public ProductGroupSettings ProductGroupSettingCollection
+        {
+            get { return productGroupSettingCollection; }
+            set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
+        }
+        
         public WareHouses WareHouseCollection { get; set; }
         public WareHouse SelectedWareHouse
         {
@@ -184,6 +195,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
+        private void ShowProductGroupWindowAction() {
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID);
+        }
         private void SearchProductRecordAction()
         {
             if (StartDate is null || EndDate is null)
@@ -207,6 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockTakingCommand = new RelayCommand(StockTakingAction, IsNewInventoryHasValue);
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+            ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
         }
         private void InitMedicineData(string id)
@@ -253,6 +268,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
+            
+            ProductGroupSettingCollection.GetDataByID(id);
 
             ReloadStockDetail();
         }

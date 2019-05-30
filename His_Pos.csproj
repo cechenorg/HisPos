@@ -25,10 +25,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
+    <InstallUrl>http://kaokaodepon.singde.com.tw:60001/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>2.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -316,9 +316,6 @@
     </Compile>
     <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\BindingProxy.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlow.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlowDb.cs" />
-    <Compile Include="NewClass\CashFlow\CashFlows.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
@@ -464,10 +461,13 @@
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDataDb.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchase.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchaseDb.cs" />
-    <Compile Include="NewClass\Product\ProductDaliyPurchase\ProductDailyPurchases.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProduct.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProductDb.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProducts.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
@@ -718,6 +718,9 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml.cs">
       <DependentUpon>ProductDetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\GroupInventoryControl.xaml.cs">
+      <DependentUpon>GroupInventoryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\ProductRecordDetailControl.xaml.cs">
       <DependentUpon>ProductRecordDetailControl.xaml</DependentUpon>
     </Compile>
@@ -727,6 +730,20 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\StockControl.xaml.cs">
       <DependentUpon>StockControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\MergeProductUserControl.xaml.cs">
+      <DependentUpon>MergeProductUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml.cs">
+      <DependentUpon>SplitProductUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml.cs">
+      <DependentUpon>SplitProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingWindow.xaml.cs">
+      <DependentUpon>ProductGroupSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\StockTakingNoLastPriceWindow.xaml.cs">
       <DependentUpon>StockTakingNoLastPriceWindow.xaml</DependentUpon>
     </Compile>
@@ -825,10 +842,10 @@
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml.cs">
-      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindow.xaml.cs">
+      <DependentUpon>EmployeeInsertWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
     </Compile>
@@ -1224,6 +1241,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\GroupInventoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\ProductRecordDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1233,6 +1254,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\StockControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\MergeProductUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1356,7 +1393,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

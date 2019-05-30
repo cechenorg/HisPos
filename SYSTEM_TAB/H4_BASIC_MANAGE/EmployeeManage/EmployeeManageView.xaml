@@ -35,10 +35,15 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
                         <RowDefinition />
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="DataGridEmployee" Grid.Row="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <RadioButton Content="本店"  Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <RadioButton Content="全部"   Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <DataGrid Name="DataGridEmployee" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
                           ItemsSource="{Binding EmployeeCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Employee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="250">
@@ -70,7 +75,7 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}">
                         <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" > 
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -95,7 +100,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                        <Label Content="{Binding Employee.ID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+                        <TextBox Text="{Binding Employee.Account,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="帳號" Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                         <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名"  VerticalAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
@@ -137,9 +142,11 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
-                            <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox Width="145" SelectedValue="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
-                                   ItemsSource="{Binding Genders}"  SelectedValuePath="GenderName" DisplayMemberPath="GenderName"   HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                            <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/> 
+                            <ComboBox Width="145" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
+                                     SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                                <ComboBoxItem>男</ComboBoxItem>
+                                <ComboBoxItem>女</ComboBoxItem>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
                                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
@@ -168,7 +175,8 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                             <Label  Content="職位" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox  Width="145" ItemsSource="{Binding WorkPositions,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="WorkPositionName" SelectedValuePath="WorkPositionName" SelectedValue="{Binding Employee.WorkPositionName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+                            <ComboBox  Width="145" ItemsSource="{Binding WorkPositions,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="WorkPositionName" Text="{Binding Employee.WorkPosition.WorkPositionName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                       SelectedItem="{Binding Employee.WorkPosition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
                                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
@@ -176,12 +184,29 @@
                                 </i:Interaction.Triggers>
                             </ComboBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="8">
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
                             <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <xctk:MaskedTextBox Width="130" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="Employee.StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </xctk:MaskedTextBox>
+                            <Label  Content="離職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+                            <xctk:MaskedTextBox Width="130" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding Path="Employee.LeaveDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>

@@ -18,5 +18,6 @@ namespace His_Pos.NewClass.Person.Employee
                 Add(new Employee(row));
             }
         }
+       
     }
 }

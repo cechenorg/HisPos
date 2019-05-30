@@ -5,7 +5,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
-using His_Pos.NewClass.Product.ProductDaliyPurchase;
 using His_Pos.NewClass.StoreOrder;
 using System;
 using System.Collections.Generic;

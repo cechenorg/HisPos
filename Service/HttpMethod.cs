@@ -134,13 +134,17 @@ namespace His_Pos.Service
                 reqStream.Write(bs, 0, bs.Length);
             }
             bool requeststring = false;
+            string stemp = string.Empty;
             List<XmlDocument> xmlDocuments = new List<XmlDocument>();
             try
             {
                 using (WebResponse response = request.GetResponse())
-                { 
+                {
+                    StreamReader sr = new StreamReader(response.GetResponseStream());
+                    stemp = sr.ReadToEnd();
                 }
-                requeststring = true;
+               
+                requeststring = stemp.Contains("Success");
             }
             catch (Exception ex)
             {
