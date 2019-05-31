@@ -156,6 +156,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
         public int WriteCardSuccess { get; set; }
+        public WareHouse.WareHouse WareHouse { get; set; }
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         private Medicine selectedMedicine;
         public Medicine SelectedMedicine
@@ -1226,26 +1227,11 @@ namespace His_Pos.NewClass.Prescription
             Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
-        public string CheckSameOrIDEmptyMedicine()
+        public string CheckMedicinesIdEmpty()
         {
-
-            var sameList = new List<string>();
-            var sameMed = string.Empty;
-
-            foreach (var m in Medicines.Where(m => !(m is MedicineVirtual)))
-            {
-                var compareList = new List<Medicine>(Medicines.Where(med => !(med is MedicineVirtual)));
-                compareList.Remove(m);
-                if (compareList.Count(med => med.ID.Equals(m.ID) && (!string.IsNullOrEmpty(m.UsageName) && !string.IsNullOrEmpty(med.UsageName) && med.UsageName.Equals(m.UsageName)) && (m.Days!=null && med.Days != null && med.Days.Equals(m.Days)) ) > 0)
-                {
-                    sameList.Add("藥品:" + m.ID + "重複。\n");
-                }
-                if (string.IsNullOrEmpty(m.ID))
-                {
-                    sameList.Add("藥品:" + m.FullName + "代碼不得為空。\n");
-                }
-            }
-            return sameList.Count <= 0 ? sameMed : sameList.Distinct().Aggregate(sameMed, (current, s) => current + s);
+            var emptyMedicine = string.Empty;
+            var sameList = (from m in Medicines.Where(m => !(m is MedicineVirtual)) where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\n").ToList();
+            return sameList.Count <= 0 ? emptyMedicine : sameList.Distinct().Aggregate(emptyMedicine, (current, s) => current + s);
         }
 
         public void RemakeDeclareFile()
@@ -1293,7 +1279,9 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
                 if (PrescriptionStatus.IsCooperative)
                 {
-                    PrescriptionStatus.IsBuckle = false;
+                    PrescriptionStatus.IsBuckle = true;
+                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
+                    WareHouse = clinic.WareHouse;
                     Source = PrescriptionSource.Cooperative;//來源骨科
                 }
                 else

@@ -661,6 +661,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 NotPrescribe = true;
             CheckPrescriptionVariable();
+            CurrentPrescription.CheckIsCooperative();
         }
         private void CopaymentSelectionChangedAction()
         {
@@ -1505,7 +1506,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
@@ -1668,7 +1668,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = CurrentPrescription.CheckSameOrIDEmptyMedicine();
+            var medicinesSame = CurrentPrescription.CheckMedicinesIdEmpty();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

@@ -585,7 +585,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = EditedPrescription.CheckSameOrIDEmptyMedicine();
+            var medicinesSame = EditedPrescription.CheckMedicinesIdEmpty();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

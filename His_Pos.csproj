@@ -588,6 +588,10 @@
       <DependentUpon>DeclareFileManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml.cs">
+      <DependentUpon>DuplicatePrescriptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedicineDataGrid.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsWindow.xaml.cs">
@@ -1146,6 +1150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
