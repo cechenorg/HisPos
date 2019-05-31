@@ -1,0 +1,84 @@
+﻿using System;
+using System.Data;
+using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+// ReSharper disable All
+
+namespace His_Pos.NewClass.Prescription.DuplicatePrescription
+{
+    public class DuplicatePrescription : ObservableObject
+    {
+        private int id;
+        public int ID
+        {
+            get => id;
+            set
+            {
+                Set(() => ID, ref id, value);
+            }
+        }
+
+        private Customer patient;
+        public Customer Patient
+        {
+            get => patient;
+            set
+            {
+                Set(() => Patient, ref patient, value);
+            }
+        }
+
+        private Institution institution;
+        public Institution Institution
+        {
+            get => institution;
+            set
+            {
+                Set(() => Institution, ref institution, value);
+            }
+        }
+
+        private Division division;
+        public Division Division
+        {
+            get => division;
+            set
+            {
+                Set(() => Division, ref division, value);
+            }
+        }
+
+        private DateTime treatDate;
+        public DateTime TreatDate
+        {
+            get => treatDate;
+            set
+            {
+                Set(() => TreatDate, ref treatDate, value);
+            }
+        }
+
+        private DateTime adjustDate;
+        public DateTime AdjustDate
+        {
+            get => adjustDate;
+            set
+            {
+                Set(() => AdjustDate, ref adjustDate, value);
+            }
+        }
+        
+        public DuplicatePrescription(DataRow r)
+        {
+            ID = r.Field<int>("PreMas_ID");
+            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
+            Division = VM.GetDivision(r.Field<string>("DivisionID"));
+            TreatDate = r.Field<DateTime>("TreatmentDate");
+            AdjustDate = r.Field<DateTime>("AdjustDate");
+        }
+    }
+}

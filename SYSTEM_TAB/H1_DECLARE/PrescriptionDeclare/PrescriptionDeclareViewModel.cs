@@ -480,7 +480,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Patient.ID == -1) return;
             CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
         private void SearchCusAction(object sender)
@@ -774,7 +774,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
-                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                        CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                     else
                         return;
                 }
@@ -871,7 +871,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
-                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                        CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                     else
                         return;
                 }
@@ -1018,7 +1018,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool)confirm.DialogResult)
-                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                 else
                     return;
             }

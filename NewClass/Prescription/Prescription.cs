@@ -44,7 +44,7 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(DataRow r,PrescriptionSource prescriptionSource)
         { 
             Patient = new Customer();
-            Patient = Patient.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Card = new IcCard();
             Treatment = new Treatment.Treatment(r);
             Medicines = new Medicines();

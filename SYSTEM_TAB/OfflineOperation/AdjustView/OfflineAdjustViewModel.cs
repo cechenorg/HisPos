@@ -532,7 +532,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             {
                 NotPrescribe = false;
                 if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                 CurrentPrescription.Treatment.Clear();
                 SetMedicinesPaySelf();
             }

@@ -205,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveSelectedItem.SaveStatus();
-            CustomerData = CustomerData.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
+            CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
         private void CommonMedStoreOrderAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
@@ -225,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void IndexReserveSelectionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
-            CustomerData = CustomerData.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
+            CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
         private void ReserveSearchAction() {
             IndexReserveCollection.GetDataByDate(StartDate, EndDate);
