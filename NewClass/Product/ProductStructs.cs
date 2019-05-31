@@ -13,19 +13,19 @@ namespace His_Pos.NewClass.Product
                 Add(new ProductStruct(row));
             }
         }
-        internal static ProductStructs GetProductStructsBySearchString(string searchString)
+        internal static ProductStructs GetProductStructsBySearchString(string searchString, string wareID)
         {
-            DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString.Trim());
+            DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString.Trim(), wareID);
             return new ProductStructs(dataTable);
         }
 
-        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum)
+        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum, string wareID = "0")
         {
             DataTable dataTable;
             switch (addProductEnum)
             {
                 case AddProductEnum.ProductReturn:
-                    dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim());
+                    dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim(), wareID);
                     break;
                 default:
                     dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim());
