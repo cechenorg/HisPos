@@ -405,6 +405,8 @@ namespace His_Pos.NewClass.Prescription
                     table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{Rx_id}', '{storId}','{Rx_order}','{Dtl_data}')");
                     if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                         result = "SUCCESS";
+                    else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
+                        result = "DONE";
                     MainWindow.SingdeConnection.CloseConnection();
                     break;
             }
