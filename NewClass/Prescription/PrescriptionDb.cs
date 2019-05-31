@@ -35,13 +35,10 @@ namespace His_Pos.NewClass.Prescription
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
         public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        {
-            string warID = "0";
-            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
-                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+        { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID); 
             DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
@@ -229,15 +226,12 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
         }
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        {
-            string warID = "0";
-            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
-                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+        { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable prescriptionMater = SetPrescriptionMaster(prescription);
             prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
@@ -251,13 +245,10 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
         public static DataTable DeletePrescription(Prescription prescription)
-        {
-            string warID = "0";
-            if (ViewModelMainWindow.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID) > 0)
-                warID = ViewModelMainWindow.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID == prescription.Treatment.Institution.ID).WareHouse.ID;
+        { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }

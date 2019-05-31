@@ -8,6 +8,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.FunctionWindow;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -16,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public override TabBase getTab() { 
         return this;
         }
-        #region -----Define Command----- 
+        #region -----Define Command-----  
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
@@ -26,7 +29,25 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public RelayCommand ChangePassWordCommand { get; set; }
         #endregion
         #region ----- Define Variables -----
-         
+        private CollectionViewSource employeeCollectionViewSource;
+        private CollectionViewSource EmployeeCollectionViewSource
+        {
+            get => employeeCollectionViewSource;
+            set
+            {
+                Set(() => EmployeeCollectionViewSource, ref employeeCollectionViewSource, value); 
+            }
+        }
+
+        private ICollectionView employeeCollectionView;
+        public ICollectionView EmployeeCollectionView
+        {
+            get => employeeCollectionView;
+            private set
+            {
+                Set(() => EmployeeCollectionView, ref employeeCollectionView, value);
+            }
+        }
         public Employee employee;
         public Employee Employee
         {
@@ -61,6 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => LocalCheck, ref localCheck, value);
+                EmployeeCollectionViewSource.Filter += Filter;
             }
         }
         private bool globalCheck = false;
@@ -70,6 +92,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => GlobalCheck, ref globalCheck, value);
+                EmployeeCollectionViewSource.Filter += Filter;
             }
         }
 
@@ -85,33 +108,29 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
         }
         #region Action
+  
         private void CancelAction() {
             Employee = Employee.GetDataByID(Employee.ID);
         }
         private void SubmitAction() {
             Employee.Update();
+            MessageWindow.ShowMessage("修改成功",Class.MessageType.SUCCESS);
         }
         private void DeleteAction() {
-            Employee.Delete();
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認","員工刪除");
+            if ((bool)confirmWindow.DialogResult) {
+                Employee.Delete();
+                MessageWindow.ShowMessage("刪除成功!",Class.MessageType.SUCCESS);
+                Init();
+            }
+               
         }
         public void ChangePassWordAction() {
            
         }
         public void NewEmployeeAction() {
-            
-            Employee newEmployee = new Employee();
-            newEmployee.Name = "新人";
-            newEmployee.Gender = "男";
-            newEmployee.WorkPosition.WorkPositionId = 2;
-            newEmployee.WorkPosition.WorkPositionName = "藥師";
-            newEmployee.StartDate = DateTime.Today;
-            newEmployee.Birthday = DateTime.Today;
-            newEmployee.IDNumber = DateTime.Now.ToString("yyyyMMddhhss");
-            MainWindow.ServerConnection.OpenConnection();
-            //newEmployee = newEmployee.Save();
-            MainWindow.ServerConnection.CloseConnection();
-            EmployeeCollection.Add(newEmployee);
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection[EmployeeCollection.Count - 1]);
+            EmployeeInsertWindow.EmployeeInsertWindow employeeInsertWindow = new EmployeeInsertWindow.EmployeeInsertWindow();
+            Init();
         }
          
         #endregion
@@ -122,8 +141,24 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollection = new Employees();
             EmployeeCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
-             
-        } 
+
+            EmployeeCollectionViewSource = new CollectionViewSource { Source = EmployeeCollection };
+            EmployeeCollectionView = EmployeeCollectionViewSource.View;
+            EmployeeCollectionViewSource.Filter += Filter;
+        }
+        private void Filter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is Employee))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            if (GlobalCheck)
+                e.Accepted = true;
+            else if(LocalCheck && ((Employee)e.Item).IsCommon)
+                e.Accepted = true; 
+        }
         #endregion
 
     }

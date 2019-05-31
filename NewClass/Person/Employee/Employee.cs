@@ -11,7 +11,19 @@ namespace His_Pos.NewClass.Person.Employee
     [ZeroFormattable]
     public class Employee:Person
     {
-        public Employee(){}
+        public Employee(){
+            string acc = GetEmployeeNewAccount(); 
+            Account = acc;
+            Password = acc;
+            Gender = "男";
+            WorkPosition = new WorkPosition.WorkPosition();
+            WorkPosition.WorkPositionId = 2;
+            StartDate = DateTime.Today;
+            Birthday = DateTime.Today;
+            IsEnable = true;
+            AuthorityValue = 4;
+
+        }
         public Employee(DataRow r):base(r)
         {
             Account = r.Field<string>("Emp_Account");
@@ -22,6 +34,7 @@ namespace His_Pos.NewClass.Person.Employee
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
+            IsCommon = r.Field<bool>("Emp_IsCommon");
             WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
@@ -107,11 +120,32 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => Account, ref account, value);
             }
         }
+        private bool isCommon;//是否為本店新增
+        [IgnoreFormat]
+        public virtual bool IsCommon
+        {
+            get => isCommon;
+            set
+            {
+                Set(() => IsCommon, ref isCommon, value);
+            }
+        }
         #region Function
         public Employee GetDataByID(int id) {
             DataTable table = EmployeeDb.GetDataByID(id);
             return new Employee(table.Rows[0]); 
         }
+        public bool CheckIdNumber() {
+            if (string.IsNullOrEmpty(IDNumber)) return false;
+            var table = EmployeeDb.CheckIdNumber(IDNumber);
+            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
+        }
+        public bool CheckEmployeeAccountSame()
+        {
+            var table = EmployeeDb.CheckEmployeeAccountSame(Account);
+            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
+        }
+        
         public void Insert() {
             EmployeeDb.Insert(this);
         }
@@ -122,6 +156,12 @@ namespace His_Pos.NewClass.Person.Employee
         {
             EmployeeDb.Delete(ID); 
         }
+        public string GetEmployeeNewAccount()
+        {
+           DataTable table = EmployeeDb.GetEmployeeNewAccount();
+            return table.Rows[0].Field<string>("Account");
+        }
+        
         public static Employee Login(string Account,string Password) {
             MainWindow.ServerConnection.OpenConnection();
             DataTable table = EmployeeDb.EmployeeLogin(Account, Password);

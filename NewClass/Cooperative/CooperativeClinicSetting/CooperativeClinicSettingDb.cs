@@ -30,8 +30,10 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 DataRow newRow = cooperativeClinicTable.NewRow(); 
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_ID",c.CooperavieClinic.ID);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_Type", c.TypeName);
-                DataBaseFunction.AddColumnValue(newRow, "CooCli_WareHouseID", c.WareHouse.ID);
-                DataBaseFunction.AddColumnValue(newRow, "CooCli_IsBuckle", c.IsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_NorIsBuckle", c.NormalIsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_NorWareHouseID", c.NormalWareHouse.ID);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_ChiIsBuckle", c.ChronicIsBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_ChiWareHouseID", c.ChronicWareHouse.ID);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_IsPurge", c.IsPurge); 
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_FolderPath", c.FilePath);
                 cooperativeClinicTable.Rows.Add(newRow);
@@ -42,12 +44,15 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("CooCli_ID", typeof(string)); 
             masterTable.Columns.Add("CooCli_Type", typeof(string));
-            masterTable.Columns.Add("CooCli_WareHouseID", typeof(int));
-            masterTable.Columns.Add("CooCli_IsBuckle", typeof(bool));
+            masterTable.Columns.Add("CooCli_NorIsBuckle", typeof(bool));
+            masterTable.Columns.Add("CooCli_NorWareHouseID", typeof(int));
+            masterTable.Columns.Add("CooCli_ChiIsBuckle", typeof(bool));
+            masterTable.Columns.Add("CooCli_ChiWareHouseID", typeof(int));
             masterTable.Columns.Add("CooCli_IsPurge", typeof(bool));
             masterTable.Columns.Add("CooCli_FolderPath", typeof(string)); 
-            return masterTable;  
-        }
+            return masterTable;
+            
+    }
         #endregion
 
     }
