@@ -247,7 +247,14 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
             Pdata = new List<Pdata>();
-            Pdata = details;
+            foreach (var d in details)
+            {
+                var pdata = new Pdata();
+                pdata = d.DeepCloneViaJson();
+                if (pdata.P1.Equals("3") && pdata.P2.Length > 12)
+                    pdata.P2 = pdata.P2.Substring(0, 12);
+                Pdata.Add(pdata);
+            }
         }
         [XmlElement(ElementName = "d26")]
         public string D26 { get; set; }
