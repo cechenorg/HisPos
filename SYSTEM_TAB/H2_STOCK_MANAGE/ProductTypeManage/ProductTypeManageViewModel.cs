@@ -59,6 +59,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         }
 
         #region ----- Define Actions -----
+        private void AddTypeAction()
+        {
+            AddTypeWindow addTypeWindow = new AddTypeWindow();
+            addTypeWindow.ShowDialog();
+
+            InitData();
+        }
+        private void DeleteTypeAction()
+        {
+            DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow();
+            deleteTypeWindow.ShowDialog();
+
+            InitData();
+        }
         private void ConfirmChangeAction()
         {
             IsDataChanged = false;
@@ -76,6 +90,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         #region ----- Define Functions -----
         private void RegisterCommand()
         {
+            AddTypeCommand = new RelayCommand(AddTypeAction);
+            DeleteTypeCommand = new RelayCommand(DeleteTypeAction);
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsTypeDataChanged);
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsTypeDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);

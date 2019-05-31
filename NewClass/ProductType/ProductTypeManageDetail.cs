@@ -21,11 +21,13 @@ namespace His_Pos.NewClass.ProductType
             get => productCollection;
             set { Set(() => ProductCollection, ref productCollection, value); }
         }
+        #endregion
+
+
 
         internal void GetTypeDetailProducts()
         {
             throw new NotImplementedException();
         }
-        #endregion
     }
 }

@@ -114,7 +114,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ProductCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
+            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding CurrentType.CurrentDetailType.ProductCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">

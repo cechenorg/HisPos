@@ -9,8 +9,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     /// </summary>
     public partial class AddTypeWindow : Window
     {
-        
-
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             UpdateUi();
@@ -36,7 +34,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             if(CheckEmptyData())
             {
-
                 Close();
             }
         }
