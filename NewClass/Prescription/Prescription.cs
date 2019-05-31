@@ -1287,7 +1287,7 @@ namespace His_Pos.NewClass.Prescription
                 else
                 {
                     var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
-                    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
+                  //  PrescriptionStatus.IsBuckle = clinic.IsBuckle;
                     Source = PrescriptionSource.XmlOfPrescription;//來源其他合作診所
                 }
             }

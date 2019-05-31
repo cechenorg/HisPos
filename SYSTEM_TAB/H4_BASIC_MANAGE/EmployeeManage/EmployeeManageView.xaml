@@ -13,7 +13,7 @@
               xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="839" d:DesignWidth="1365" >
     <UserControl.Resources>
-        <service:DateConverter x:Key="DateConverter"/>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <UserControl.DataContext>
         <local:EmployeeManageViewModel/>
@@ -44,7 +44,7 @@
                         <RadioButton Content="全部"   Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <DataGrid Name="DataGridEmployee" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
-                          ItemsSource="{Binding EmployeeCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Employee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                          ItemsSource="{Binding EmployeeCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Employee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="250">
                                 <DataGridTemplateColumn.CellStyle>
@@ -160,7 +160,7 @@
                                   Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text >
                                     <Binding Path="Employee.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>
@@ -190,7 +190,7 @@
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="Employee.StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>
@@ -207,7 +207,7 @@
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" >
                                 <xctk:MaskedTextBox.Text>
                                     <Binding Path="Employee.LeaveDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>

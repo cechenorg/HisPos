@@ -554,14 +554,16 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
+            var clinic = VM.CooperativeClinicSettings.SingleOrDefault(s =>
+                s.CooperavieClinic.ID.Equals(CurrentPrescription.Treatment.Institution.ID));
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, clinic is null ? "0" : clinic.WareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount == 0)
                 MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare);
+                MedicineWindow = clinic is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, "0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, clinic.WareHouse.ID);
                 if (productCount > 1)
                     MedicineWindow.ShowDialog();
             }

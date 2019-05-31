@@ -419,18 +419,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit);
+            var clinic = VM.CooperativeClinicSettings.SingleOrDefault(s =>
+                s.CooperavieClinic.ID.Equals(EditedPrescription.Treatment.Institution.ID));
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, clinic is null ? "0" : clinic.WareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
+                MedicineWindow = clinic is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit,"0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, clinic.WareHouse.ID);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
+                MedicineWindow = clinic is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, "0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, clinic.WareHouse.ID);
             }
             else
             {

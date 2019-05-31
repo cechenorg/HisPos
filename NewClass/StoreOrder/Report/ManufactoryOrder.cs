@@ -37,9 +37,9 @@ namespace His_Pos.NewClass.StoreOrder.Report
         }
 
         #region ----- Define Functions -----
-        public void GetOrderDetails(DateTime searchStartDate, DateTime searchEndDate)
+        public void GetOrderDetails(DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
-            OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate);
+            OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate, wareID);
         }
         public void ExportToCSV(DateTime searchStartDate, DateTime searchEndDate)
         {

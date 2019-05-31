@@ -18,9 +18,9 @@ namespace His_Pos.NewClass.StoreOrder.Report
             }
         }
 
-        internal static ManufactoryOrderDetails GetOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate)
+        internal static ManufactoryOrderDetails GetOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
-            return new ManufactoryOrderDetails(StoreOrderDB.GetManufactoryOrderDetails(manufactoryID, searchStartDate, searchEndDate));
+            return new ManufactoryOrderDetails(StoreOrderDB.GetManufactoryOrderDetails(manufactoryID, searchStartDate, searchEndDate, wareID));
         }
     }
 }

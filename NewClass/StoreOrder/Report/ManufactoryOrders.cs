@@ -18,9 +18,9 @@ namespace His_Pos.NewClass.StoreOrder.Report
             }
         }
 
-        internal static ManufactoryOrders GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName)
+        internal static ManufactoryOrders GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName, string wareID)
         {
-            return new ManufactoryOrders(StoreOrderDB.GetManufactoryOrdersBySearchCondition(startDate, endDate, manufactoryName));
+            return new ManufactoryOrders(StoreOrderDB.GetManufactoryOrdersBySearchCondition(startDate, endDate, manufactoryName, wareID));
         }
     }
 }

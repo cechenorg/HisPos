@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public void Init()
         {
+            Clear();
             var table = EmployeeDb.GetData();
             foreach (DataRow row in table.Rows)
             {
