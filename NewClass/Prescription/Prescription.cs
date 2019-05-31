@@ -1274,26 +1274,16 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CheckIsBuckleAndSource()
         {
+            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
+            WareHouse = wareHouse;
+            PrescriptionStatus.IsBuckle = WareHouse != null;
             if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
             {
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
-                if (PrescriptionStatus.IsCooperative)
-                {
-                    PrescriptionStatus.IsBuckle = true;
-                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
-                    WareHouse = clinic.WareHouse;
-                    Source = PrescriptionSource.Cooperative;//來源骨科
-                }
-                else
-                {
-                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID));
-                  //  PrescriptionStatus.IsBuckle = clinic.IsBuckle;
-                    Source = PrescriptionSource.XmlOfPrescription;//來源其他合作診所
-                }
+                Source = PrescriptionStatus.IsCooperative ? PrescriptionSource.Cooperative : PrescriptionSource.XmlOfPrescription;
             }
             else//非合作診所
             {
-                PrescriptionStatus.IsBuckle = true;
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }

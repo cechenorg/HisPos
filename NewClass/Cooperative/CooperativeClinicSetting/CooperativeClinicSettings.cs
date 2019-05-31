@@ -25,7 +25,8 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             CooperativeClinicSettingDb.Update(this);
         } 
         public WareHouse.WareHouse GetWareHouseByPrescription(Institution ins, string adjcaseID) {
-            var temp =  (CooperativeClinicSetting)Items.Where(w => w.CooperavieClinic.ID == ins.ID);
+            if(ins is null) return ChromeTabViewModel.ViewModelMainWindow.GetWareHouse("0");
+            var temp =  Items.SingleOrDefault(w => w.CooperavieClinic.ID == ins.ID);
             if (temp is null)
                 return ChromeTabViewModel.ViewModelMainWindow.GetWareHouse("0");
 
