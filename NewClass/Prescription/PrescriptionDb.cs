@@ -277,8 +277,15 @@ namespace His_Pos.NewClass.Prescription
         {
             return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
         }
-        public static bool UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
-            return sendOrderAction(storId,p, PrescriptionSendData, "UpdateDeclareOrder") == "SUCCESS" ? true : false;
+        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
+            switch (sendOrderAction(storId, p, PrescriptionSendData, "UpdateDeclareOrder")) {
+                case "SUCCESS":
+                    return 1;
+                case "DONE":
+                    return 2;
+                default:
+                    return 0;
+            } 
         }
         public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData,string sql) {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
