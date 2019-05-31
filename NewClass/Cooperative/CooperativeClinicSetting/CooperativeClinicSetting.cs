@@ -14,12 +14,15 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
     {
         public CooperativeClinicSetting(DataRow r)
         {
-            CooperavieClinic = VM.GetInstitution(r.Field<string>("CooCli_ID"));
-            WareHouse = VM.GetWareHouse(r.Field<int>("War_ID").ToString());
+            CooperavieClinic = VM.GetInstitution(r.Field<string>("CooCli_ID")); 
             TypeName = r.Field<string>("CooCli_Type");
-            IsPurge = r.Field<bool>("CooCli_IsPurge");
-            IsBuckle = r.Field<bool>("CooCli_IsBuckle");
+            IsPurge = r.Field<bool>("CooCli_IsPurge"); 
             FilePath = r.Field<string>("CooCli_FolderPath");
+            NormalIsBuckle = r.Field<bool>("CooCli_NorIsBuckle");
+            NormalWareHouse = VM.GetWareHouse(r.Field<int>("CooCli_NorWareHouseID").ToString());
+            ChronicIsBuckle = r.Field<bool>("CooCli_ChiIsBuckle");
+            ChronicWareHouse = VM.GetWareHouse(r.Field<int>("CooCli_ChiWareHouseID").ToString());
+     
             if (!(FilePath is null)) {
                 var tempsplit = FilePath.Split('\\');
                 DisplayFilePath = tempsplit[tempsplit.Length - 1];
@@ -27,9 +30,10 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             IsInstitutionEdit = true;
         }
         public CooperativeClinicSetting() {
-            WareHouse = VM.GetWareHouse("0");
+            NormalWareHouse = VM.GetWareHouse("0");
+            ChronicWareHouse = VM.GetWareHouse("0");
         }
-         
+        
         private Institution cooperavieClinic;
         public Institution CooperavieClinic {
             get { return cooperavieClinic; }
@@ -46,13 +50,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         {
             get { return isPurge; }
             set { Set(() => IsPurge, ref isPurge, value); }
-        }
-        private bool isBuckle;
-        public bool IsBuckle
-        {
-            get { return isBuckle; }
-            set { Set(() => IsBuckle, ref isBuckle, value); }
-        }
+        } 
         private string typeName;
         public string TypeName
         {
@@ -71,12 +69,30 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return displayFilePath; }
             set { Set(() => DisplayFilePath, ref displayFilePath, value); }
         }
-        private WareHouse.WareHouse wareHouse;
-        public WareHouse.WareHouse WareHouse
+        private bool normalIsBuckle;
+        public bool NormalIsBuckle
         {
-            get { return wareHouse; }
-            set { Set(() => WareHouse, ref wareHouse, value); }
+            get { return normalIsBuckle; }
+            set { Set(() => NormalIsBuckle, ref normalIsBuckle, value); }
         }
-         
+        private WareHouse.WareHouse normalWareHouse;
+        public WareHouse.WareHouse NormalWareHouse
+        {
+            get { return normalWareHouse; }
+            set { Set(() => NormalWareHouse, ref normalWareHouse, value); }
+        }
+        private bool chronicIsBuckle;
+        public bool ChronicIsBuckle
+        {
+            get { return chronicIsBuckle; }
+            set { Set(() => ChronicIsBuckle, ref chronicIsBuckle, value); }
+        }
+        private WareHouse.WareHouse chronicWareHouse;
+        public WareHouse.WareHouse ChronicWareHouse
+        {
+            get { return chronicWareHouse; }
+            set { Set(() => ChronicWareHouse, ref chronicWareHouse, value); }
+        }
+      
     }
 }
