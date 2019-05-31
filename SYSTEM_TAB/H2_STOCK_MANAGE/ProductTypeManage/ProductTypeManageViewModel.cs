@@ -13,27 +13,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
         #region ----- Define Commands -----
         public RelayCommand AddTypeCommand { get; set; }
+        public RelayCommand EditTypeCommand { get; set; }
         public RelayCommand DeleteTypeCommand { get; set; }
-        public RelayCommand ConfirmChangeCommand { get; set; }
-        public RelayCommand CancelChangeCommand { get; set; }
-        public RelayCommand DataChangedCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private ProductTypeManageMasters typeManageCollection;
         private ProductTypeManageMaster currentType;
-        private bool isDataChanged;
-
-        public bool IsDataChanged
-        {
-            get { return isDataChanged; }
-            set
-            {
-                Set(() => IsDataChanged, ref isDataChanged, value);
-                CancelChangeCommand.RaiseCanExecuteChanged();
-                ConfirmChangeCommand.RaiseCanExecuteChanged();
-            }
-        }
         public ProductTypeManageMasters TypeManageCollection
         {
             get { return typeManageCollection; }
@@ -66,6 +52,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             InitData();
         }
+        private void EditTypeAction()
+        {
+            InitData();
+        }
         private void DeleteTypeAction()
         {
             DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow();
@@ -73,28 +63,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             InitData();
         }
-        private void ConfirmChangeAction()
-        {
-            IsDataChanged = false;
-        }
-        private void CancelChangeAction()
-        {
-            IsDataChanged = false;
-        }
-        private void DataChangedAction()
-        {
-            IsDataChanged = true;
-        }
         #endregion
 
         #region ----- Define Functions -----
         private void RegisterCommand()
         {
             AddTypeCommand = new RelayCommand(AddTypeAction);
+            EditTypeCommand = new RelayCommand(EditTypeAction);
             DeleteTypeCommand = new RelayCommand(DeleteTypeAction);
-            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsTypeDataChanged);
-            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsTypeDataChanged);
-            DataChangedCommand = new RelayCommand(DataChangedAction);
         }
         private void InitData()
         {
@@ -103,10 +79,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             MainWindow.ServerConnection.CloseConnection();
 
             CurrentType = TypeManageCollection[0];
-        }
-        private bool IsTypeDataChanged()
-        {
-            return IsDataChanged;
         }
         #endregion
     }
