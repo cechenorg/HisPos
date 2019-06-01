@@ -30,6 +30,15 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
                 Set(() => Patient, ref patient, value);
             }
         }
+        private string patientData;
+        public string PatientData
+        {
+            get => patientData;
+            set
+            {
+                Set(() => PatientData, ref patientData, value);
+            }
+        }
 
         private Institution institution;
         public Institution Institution
@@ -75,6 +84,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         {
             ID = r.Field<int>("PreMas_ID");
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            PatientData = "姓名:" + r.Field<string>("CustomerName") + " 身分證:" + r.Field<string>("CustomerIdNumber");
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             TreatDate = r.Field<DateTime>("TreatmentDate");

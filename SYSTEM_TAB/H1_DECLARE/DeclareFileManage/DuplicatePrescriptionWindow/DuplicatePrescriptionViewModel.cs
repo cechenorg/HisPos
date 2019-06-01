@@ -13,8 +13,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
 {
     public class DuplicatePrescriptionViewModel : ViewModelBase
     {
-
-        private DuplicatePrescriptions Prescriptions { get; set; }
+        private DuplicatePrescriptions prescriptions;
+        public DuplicatePrescriptions Prescriptions
+        {
+            get => prescriptions; set
+            {
+                Set(() => Prescriptions, ref prescriptions, value);
+            }
+        }
         private CollectionViewSource presCollectionViewSource;
         public CollectionViewSource PresCollectionViewSource
         {
@@ -65,6 +71,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
             ShowDialog = Prescriptions.Count > 0;
             PresCollectionViewSource = new CollectionViewSource { Source = Prescriptions };
             PresCollectionView = PresCollectionViewSource.View;
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("PatientData");
+            PresCollectionView.GroupDescriptions.Add(groupDescription);
         }
     }
 }

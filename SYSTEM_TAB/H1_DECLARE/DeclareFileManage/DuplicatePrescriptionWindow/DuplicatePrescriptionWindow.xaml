@@ -5,21 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionWindow"
         xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:duplicatePrescription="clr-namespace:His_Pos.NewClass.Prescription.DuplicatePrescription"
         mc:Ignorable="d"
-        Title="{Binding Title,UpdateSourceTrigger=PropertyChanged}" Height="450" Width="800">
+        Title="{Binding Title,UpdateSourceTrigger=PropertyChanged}" Height="650" Width="800"
+        Topmost="True">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <CollectionViewSource x:Key="Prescriptions" Source="{Binding PresCollectionViewSource}" >
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Patient.ID"/>
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
     </Window.Resources>
-    <Window.DataContext>
-        <local:DuplicatePrescriptionViewModel/>
-    </Window.DataContext>
     <Viewbox Stretch="Fill">
-        <DataGrid x:Name="DuplicatePrescriptionsGrid" ItemsSource="{Binding Source={StaticResource Prescriptions}}" CanUserAddRows="False">
+        <DataGrid x:Name="DuplicatePrescriptionsGrid" ItemsSource="{Binding PresCollectionView}" CanUserAddRows="False" Width="800" Height="650" AutoGenerateColumns="False"
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGrid.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.ContainerStyle>
@@ -28,11 +23,11 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
+                                        <Expander IsExpanded="True" Background="{StaticResource GridBackGround}">
                                             <Expander.Header>
-                                                <DockPanel>
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Patient.Name}" Margin="5,0,0,0" Width="100"/>
-                                                </DockPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}" Foreground="#FF424040" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold"/>
+                                                </StackPanel>
                                             </Expander.Header>
                                             <Expander.Content>
                                                 <ItemsPresenter />
@@ -45,6 +40,57 @@
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>
             </DataGrid.GroupStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Height" Value="50" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn MinWidth="300" MaxWidth="300" Header="釋出院所" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content="{Binding Institution.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="科別" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content="{Binding Division.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="就醫日" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content="{Binding TreatDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="調劑日" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content="{Binding AdjustDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
     </Viewbox>
 </Window>

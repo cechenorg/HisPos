@@ -157,6 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             GetPharmacistSchedule();
             DeclareFile.GetNotAdjustPrescriptionCount((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay), SelectedPharmacy.ID);
             var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay));
+            duplicatePrescriptionWindow.Show();
             EditedList = new DeclarePrescriptions();
         }
         private void InitialCommands()
