@@ -532,7 +532,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             {
                 NotPrescribe = false;
                 if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber) && string.IsNullOrEmpty(CurrentPrescription.Patient.Name))
-                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                 CurrentPrescription.Treatment.Clear();
                 SetMedicinesPaySelf();
             }
@@ -554,14 +554,15 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
+            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(CurrentPrescription.Treatment.Institution, CurrentPrescription.Treatment.AdjustCase.ID);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount == 0)
                 MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare);
+                MedicineWindow = wareHouse is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, "0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, wareHouse.ID);
                 if (productCount > 1)
                     MedicineWindow.ShowDialog();
             }

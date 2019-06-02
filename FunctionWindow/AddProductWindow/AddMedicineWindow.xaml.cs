@@ -8,7 +8,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class AddMedicineWindow : Window
     {
-        public AddMedicineWindow(string search, AddProductEnum addView)
+        public AddMedicineWindow(string search, AddProductEnum addView,string wareHouseID)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -16,7 +16,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 if (notificationMessage.Notification.Equals("CloseAddProductView"))
                     Close();
             });
-            DataContext = new AddProductViewModel(search, addView);
+            DataContext = new AddProductViewModel(search, addView, wareHouseID);
             SearchStringTextBox.Focus();
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
         }

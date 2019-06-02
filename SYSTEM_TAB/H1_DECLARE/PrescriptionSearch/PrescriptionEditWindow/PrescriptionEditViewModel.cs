@@ -32,6 +32,7 @@ using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -208,7 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void InitPrescription(Prescription selected)
         {
             MainWindow.ServerConnection.OpenConnection();
-            selected.Patient = selected.Patient.GetCustomerByCusId(selected.Patient.ID);
+            selected.Patient = Customer.GetCustomerByCusId(selected.Patient.ID);
             EditedPrescription = selected;
             EditedPrescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
@@ -419,18 +420,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 }
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit);
+            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(EditedPrescription.Treatment.Institution, EditedPrescription.Treatment.AdjustCase.ID);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
+                MedicineWindow = wareHouse is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit,"0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, wareHouse.ID);
                 MedicineWindow.ShowDialog();
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit);
+                MedicineWindow = wareHouse is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, "0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionEdit, wareHouse.ID);
             }
             else
             {
@@ -587,7 +589,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = EditedPrescription.CheckSameOrIDEmptyMedicine();
+            var medicinesSame = EditedPrescription.CheckMedicinesIdEmpty();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

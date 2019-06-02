@@ -96,11 +96,11 @@ namespace His_Pos.NewClass.OfflineDataSet
             Positions = new List<Position>();
             Positions = positions.ToList();
             Products = new List<Product>();
-            var productStructs = new ProductStructs(ProductDB.GetProductStructsBySearchString(""));
-            foreach (var p in productStructs)
-            {
-                Products.Add(new Product(p));
-            }
+            //var productStructs = new ProductStructs(ProductDB.GetProductStructsBySearchString(""));
+            //foreach (var p in productStructs)
+            //{
+            //    Products.Add(new Product(p));
+            //}
             ReaderCom = ViewModelMainWindow.CurrentPharmacy.ReaderCom;
             IsNewReader = ViewModelMainWindow.CurrentPharmacy.NewReader;
         }

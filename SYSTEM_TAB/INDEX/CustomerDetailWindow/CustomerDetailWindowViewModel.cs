@@ -53,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
         #endregion
         public CustomerDetailWindowViewModel(int cusID) { 
-            CustomerData = CustomerData.GetCustomerByCusId(cusID);
+            CustomerData = Customer.GetCustomerByCusId(cusID);
             CustomerDetailPrescriptionCollection.GetDataByID(cusID);
             if (CustomerDetailPrescriptionCollection.Count > 0)
             {

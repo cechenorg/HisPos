@@ -114,7 +114,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ProductCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
+            <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0,0,10" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding CurrentType.CurrentDetailType.ProductCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="False"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -173,9 +173,9 @@
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <StackPanel Orientation="Horizontal" Width="990">
-                <TextBox FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <TextBox Text="{Binding CurrentType.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0"/>
                 <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                <TextBox FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CurrentType.CurrentDetailType.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
             </StackPanel>
             <ContentControl>
                 <ContentControl.Style>

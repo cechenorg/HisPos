@@ -1,5 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Person.Employee.WorkPosition;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +14,60 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 {
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
-
+        public WorkPositions workPositions = new WorkPositions();
+        public WorkPositions WorkPositions
+        {
+            get { return workPositions; }
+            set
+            {
+                Set(() => WorkPositions, ref workPositions, value);
+            }
+        }
+        public Employee employee = new Employee();
+        public Employee Employee
+        {
+            get { return employee; }
+            set
+            {
+                Set(() => Employee, ref employee, value);
+            }
+        }
+        public Employees employeeCollection;
+        public Employees EmployeeCollection
+        {
+            get { return employeeCollection; }
+            set
+            {
+                Set(() => EmployeeCollection, ref employeeCollection, value);
+            }
+        }
+        public RelayCommand SubbmitCommand { get; set; }
+        public RelayCommand CheckIdNumberCommand { get; set; }
         public EmployeeInsertWindowViewModel() {
+            SubbmitCommand = new RelayCommand(SubbmitAction);
+            CheckIdNumberCommand = new RelayCommand(CheckIdNumberAction); 
+        }
+        private void CheckIdNumberAction() {
+            if (!Employee.CheckIdNumber())
+                MessageWindow.ShowMessage("此身分證已經存在!",Class.MessageType.ERROR);
+            else
+                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+        }
+        private void SubbmitAction() {
+            if (!Employee.CheckIdNumber()) {
+                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
+                return;
+            } 
+            if(!Employee.CheckEmployeeAccountSame())
+            {
+                MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
+                return;
+            } 
+            Employee.Insert();
+             
+            MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
+
         }
     }
 }

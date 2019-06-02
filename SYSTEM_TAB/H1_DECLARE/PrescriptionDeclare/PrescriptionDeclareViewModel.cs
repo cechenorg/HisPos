@@ -478,7 +478,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Patient.ID == -1) return;
             CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
         private void SearchCusAction(object sender)
@@ -660,6 +660,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 NotPrescribe = true;
             CheckPrescriptionVariable();
+            CurrentPrescription.CheckIsCooperative();
         }
         private void CopaymentSelectionChangedAction()
         {
@@ -716,14 +717,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
+            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(CurrentPrescription.Treatment.Institution, CurrentPrescription.Treatment.AdjustCase.ID);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if(productCount == 0)
                 MessageWindow.ShowMessage(Resources.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare);
+                MedicineWindow = wareHouse is null ? new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare,"0") : new MedSelectWindow(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse.ID);
                 if (productCount > 1)
                     MedicineWindow.ShowDialog();
             }
@@ -771,7 +773,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
-                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                        CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                     else
                         return;
                 }
@@ -868,7 +870,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
-                        CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                        CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                     else
                         return;
                 }
@@ -1015,7 +1017,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool)confirm.DialogResult)
-                    CurrentPrescription.Patient = CurrentPrescription.Patient.GetCustomerByCusId(0);
+                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
                 else
                     return;
             }
@@ -1504,7 +1506,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
@@ -1667,7 +1668,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = CurrentPrescription.CheckSameOrIDEmptyMedicine();
+            var medicinesSame = CurrentPrescription.CheckMedicinesIdEmpty();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
              mc:Ignorable="d" 
-              d:DesignHeight="500" d:DesignWidth="840">
+              d:DesignHeight="500" d:DesignWidth="920">
     <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
@@ -95,7 +95,18 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox  IsChecked="{Binding IsBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="扣庫" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                                <CheckBox  IsChecked="{Binding NormalIsBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="一般扣庫" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="倉庫"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding NormalWareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding DataContext.WareHouses,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                </ComboBox>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -104,11 +115,31 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox  IsChecked="{Binding IsPurge,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="檔案移除" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                                <CheckBox  IsChecked="{Binding ChronicIsBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="慢箋扣庫" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="倉庫"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding ChronicWareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding DataContext.WareHouses,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                </ComboBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTemplateColumn   IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox  IsChecked="{Binding IsPurge,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="檔案移除" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn Width="100" Header="類別"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -120,18 +151,7 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="100" Header="倉庫"  >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding WareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding DataContext.WareHouses,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
-                                 </ComboBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn> 
                 <DataGridTemplateColumn Width="190" Header="處方路徑">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

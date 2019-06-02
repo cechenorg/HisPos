@@ -175,7 +175,9 @@
             </xctk:MaskedTextBox>
             <Label Content="供應商" FontSize="25" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="20,0,0,0"/>
             <TextBox Text="{Binding ManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" FontSize="25" FontFamily="Segoe UI Semi" Margin="10,0,0,5"/>
-            <Button Width="120" Command="{Binding SearchCommand}" Margin="590,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Label Content="倉庫" FontSize="25" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="20,0,0,0"/>
+            <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="25" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120" Command="{Binding SearchCommand}" Margin="390,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
         <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding ManufactoryOrderCollection}"

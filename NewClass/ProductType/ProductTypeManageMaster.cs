@@ -17,7 +17,13 @@ namespace His_Pos.NewClass.ProductType
         public ProductTypeManageDetail CurrentDetailType
         {
             get { return currentDetailType; }
-            set { Set(() => CurrentDetailType, ref currentDetailType, value); }
+            set
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                value?.GetTypeDetailProducts();
+                MainWindow.ServerConnection.CloseConnection();
+                Set(() => CurrentDetailType, ref currentDetailType, value);
+            }
         }
         public ProductTypeManageDetails ProductTypeDetails
         {
@@ -34,6 +40,11 @@ namespace His_Pos.NewClass.ProductType
 
         public ProductTypeManageMaster(DataRow row) : base(row)
         {
+        }
+
+        internal void GetTypeDetails()
+        {
+            throw new NotImplementedException();
         }
     }
 }

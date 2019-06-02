@@ -403,6 +403,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfDay.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfMonth.cs" />
+    <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescription.cs" />
+    <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
@@ -611,6 +613,10 @@
       <DependentUpon>DeclareFileManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml.cs">
+      <DependentUpon>DuplicatePrescriptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\MedicineDataGrid.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml.cs">
@@ -1185,6 +1191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DeclareFileManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

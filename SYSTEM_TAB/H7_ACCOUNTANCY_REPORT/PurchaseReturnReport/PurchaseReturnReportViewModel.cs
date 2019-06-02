@@ -5,6 +5,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder.Report;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 {
@@ -26,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         private DateTime? startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         private DateTime? endDate = DateTime.Today;
         private string manufactoryName = "";
+        private WareHouse selectedWareHouse;
 
         public DateTime? StartDate
         {
@@ -41,6 +43,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         {
             get { return manufactoryName; }
             set { Set(() => ManufactoryName, ref manufactoryName, value); }
+        }
+        public WareHouse SelectedWareHouse
+        {
+            get { return selectedWareHouse; }
+            set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
         #endregion
 
@@ -67,13 +74,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             set
             {
                 MainWindow.ServerConnection.OpenConnection();
-                value?.GetOrderDetails(SearchStartDate, SearchEndDate);
+                value?.GetOrderDetails(SearchStartDate, SearchEndDate, SelectedWareHouse.ID);
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentManufactoryOrder, ref currentManufactoryOrder, value);
 
                 RaisePropertyChanged("HasManufactory");
             }
         }
+        public WareHouses WareHouseCollection { get; set; }
         public bool HasManufactory { get { return CurrentManufactoryOrder != null; } }
         public double ManufactoryOrdersPurchaseCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchaseCount); } }
         public double ManufactoryOrdersPurchaseTotal { get { return (ManufactoryOrderCollection is null)? 0 : ManufactoryOrderCollection.Sum(m => m.PurchasePrice); } }
@@ -84,6 +92,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         public PurchaseReturnReportViewModel()
         {
             RegisterCommands();
+
+            WareHouseCollection = WareHouses.GetWareHouses();
+            SelectedWareHouse = WareHouseCollection[0];
         }
 
         #region ----- Define Actions -----
@@ -92,7 +103,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             if(!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, ManufactoryName);
+            ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, ManufactoryName, SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             SearchStartDate = (DateTime)StartDate;

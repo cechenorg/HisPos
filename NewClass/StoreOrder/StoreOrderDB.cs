@@ -605,21 +605,23 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnByDailyCondition]", parameters);
         }
-        internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName)
+        internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", startDate));
             parameters.Add(new SqlParameter("EDATE", endDate));
             parameters.Add(new SqlParameter("MAN_NAME", manufactoryName));
+            parameters.Add(new SqlParameter("WAREID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
         }
-        internal static DataTable GetManufactoryOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate)
+        internal static DataTable GetManufactoryOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", searchStartDate));
             parameters.Add(new SqlParameter("EDATE", searchEndDate));
             parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+            parameters.Add(new SqlParameter("WAREID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
         }

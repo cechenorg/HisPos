@@ -8,7 +8,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class ProductPurchaseReturnAddProductWindow : Window
     {
-        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum)
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum, string wareID = "0")
         {
             InitializeComponent();
 
@@ -19,9 +19,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
 
             if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(addProductEnum);
+                DataContext = new AddProductViewModel(addProductEnum, wareID);
             else
-                DataContext = new AddProductViewModel(searchString, addProductEnum);
+                DataContext = new AddProductViewModel(searchString, addProductEnum, wareID);
 
             SearchStringTextBox.Focus();
 
