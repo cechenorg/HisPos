@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 Add(med);
             }
         }
-        public void GetDataByReserveId(string resId)
+        public void GetDataByReserveId(int resId)
         {
             DataTable table = MedicineDb.GetDataByReserveId(resId);
             foreach (DataRow r in table.Rows)

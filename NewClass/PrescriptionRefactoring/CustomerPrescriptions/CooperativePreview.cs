@@ -25,5 +25,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             pre.CountPrescriptionPoint(true);
             return pre;
         }
+
+        public override void GetMedicines()
+        {
+            
+        }
     }
 }

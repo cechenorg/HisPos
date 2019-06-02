@@ -132,6 +132,8 @@ namespace His_Pos.NewClass.CooperativeInstitution {
             public string Doctor_id { get; set; }
             [XmlAttribute(AttributeName = "subject")]
             public string Subject { get; set; }
+            [XmlAttribute(AttributeName = "doctor_na")]
+            public string Doctor_Name { get; set; }
         }
 
         [XmlRoot(ElementName = "continous_prescription")]

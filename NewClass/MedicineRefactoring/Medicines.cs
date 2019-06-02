@@ -8,6 +8,7 @@ using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -181,6 +182,68 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     }
                     Add(med);
                 }
+            }
+        }
+
+        public void GetDataByPrescriptionId(int id)
+        {
+            var table = MedicineDb.GetDataByPrescriptionId(id);
+            CreateMedicines(table);
+        }
+
+        public void GetDataByReserveId(int id)
+        {
+            var table = MedicineDb.GetDataByReserveId(id);
+            CreateMedicines(table);
+        }
+
+        private void CreateMedicines(DataTable table)
+        {
+            var idList = new List<string>();
+            foreach (DataRow r in table.Rows)
+            {
+                idList.Add(r.Field<string>("Pro_ID"));
+            }
+            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList);
+            var medicines = new Medicines();
+            for (var i = 0; i < medicinesTable.Rows.Count; i++)
+            {
+                Medicine medicine;
+                switch (medicinesTable.Rows[i].Field<int>("DataType"))
+                {
+                    case 1:
+                        medicine = new MedicineNHI(table.Rows[i]);
+                        medicines.Add(medicine);
+                        break;
+                    case 2:
+                        medicine = new MedicineOTC(table.Rows[i]);
+                        medicines.Add(medicine);
+                        break;
+                    case 3:
+                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
+                        medicines.Add(medicine);
+                        break;
+                }
+            }
+            foreach (DataRow r in table.Rows)
+            {
+                var med = medicines.Single(m => m.ID.Equals(r.Field<string>("Pro_ID")));
+                med.Usage = new Usage();
+                med.Position = new Position();
+                med.Dosage = r.Field<double?>("Dosage");
+                med.UsageName = r.Field<string>("Usage");
+                med.PositionID = r.Field<string>("Position");
+                med.Days = r.Field<int?>("MedicineDays");
+                med.PaySelf = r.Field<bool>("PaySelf");
+                med.IsBuckle = r.Field<bool>("IsBuckle");
+                med.Amount = r.Field<double>("TotalAmount");
+                med.BuckleAmount = NewFunction.CheckDataRowContainsColumn(r, "BuckleAmount") ? r.Field<double>("BuckleAmount") : med.Amount;
+                med.Price = NewFunction.CheckDataRowContainsColumn(r, "PaySelfValue") ? (double)r.Field<decimal>("PaySelfValue") : 0;
+                if (med.PaySelf)
+                {
+                    med.TotalPrice = r.Field<int>("Point");
+                }
+                Add(med);
             }
         }
 

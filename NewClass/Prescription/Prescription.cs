@@ -65,7 +65,7 @@ namespace His_Pos.NewClass.Prescription
                     Source = PrescriptionSource.ChronicReserve;
                     SourceId = r.Field<int>("ID").ToString();
                     MainWindow.ServerConnection.OpenConnection();
-                    Medicines.GetDataByReserveId(SourceId);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     MainWindow.ServerConnection.CloseConnection();
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
                     break;

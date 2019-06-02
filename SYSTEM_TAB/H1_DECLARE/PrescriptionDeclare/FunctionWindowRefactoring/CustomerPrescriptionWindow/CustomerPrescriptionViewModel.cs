@@ -1,9 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.Service;
+using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow
 {
@@ -128,6 +130,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => SelectedType, ref selectedType, value);
             }
         }
+        public bool UngetCardGridVisible => UngetCardPres != null && UngetCardPres.Count > 0;
+        public bool OrthopedicsRadioBtnEnable => OrthopedicsPres != null && OrthopedicsPres.Count > 0;
+        public bool CooperativeRadioBtnEnable => CooperativePres != null && CooperativePres.Count > 0;
+        public bool RegisterRadioBtnEnable => ChronicRegisterPres != null && ChronicRegisterPres.Count > 0;
+        public bool ReserveRadioBtnEnable => ChronicReservePres != null && ChronicReservePres.Count > 0;
         public CusPrePreviewBases OrthopedicsPres { get; set; }
         public CusPrePreviewBases CooperativePres { get; set; }
         public CusPrePreviewBases ChronicRegisterPres { get; set; }
@@ -140,6 +147,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             set
             {
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
+                if (SelectedPrescription != null)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    SelectedPrescription.GetMedicines();
+                    MainWindow.ServerConnection.CloseConnection();
+                }
             }
         }
         private CusPrePreviewBase makeUpPrescription;
@@ -158,9 +171,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             Patient = customer;
             Card = card.DeepCloneViaJson();
-            InitializeVariable();
+            InitCommands();
+            InitVariable();
         }
-        private void InitializeVariable()
+
+        private void InitCommands()
+        {
+            PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
+        }
+
+        private void InitVariable()
         {
             WindowTitle = Patient.Name + " 可調劑處方";
             OrthopedicsPres = new CusPrePreviewBases();
@@ -172,7 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            if(!string.IsNullOrEmpty(Card.CardNumber))
+            if(Card != null && !string.IsNullOrEmpty(Card.CardNumber))
                 UngetCardPres.GetUngetCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
@@ -202,6 +222,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 SelectedType = CustomerPrescriptionType.Orthopedics;
                 SelectedRadioButton = "Option1";
             }
+        }
+
+        private void PrescriptionSelectedAction()
+        {
+            if(SelectedPrescription is null) return;
+            Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+            Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
         }
     }
 }

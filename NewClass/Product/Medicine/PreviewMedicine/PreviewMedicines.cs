@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
 
@@ -22,6 +23,23 @@ namespace His_Pos.NewClass.Product.Medicine.PreviewMedicine
             foreach (var m in medicineOrderItem)
             {
                 Add(new PreviewMedicine(m));
+            }
+        }
+
+        public void GetDataByPrescriptionId(int id)
+        {
+            var table = MedicineDb.GetDataByPrescriptionId(id);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new PreviewMedicine(r));
+            }
+        }
+        public void GetDataByReserveId(int id)
+        {
+            var table = MedicineDb.GetDataByReserveId(id);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new PreviewMedicine(r));
             }
         }
     }

@@ -62,9 +62,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         protected CusPrePreviewBase(DataRow r)
         {
-            Institution = VM.GetInstitution(r.Field<string>(""));
-            Division = VM.GetDivision(r.Field<string>(""));
-            TreatDate = r.Field<DateTime>("");
+            Institution = VM.GetInstitution(r.Field<string>("Ins_ID"));
+            Division = VM.GetDivision(r.Field<string>("Div_ID"));
+            TreatDate = r.Field<DateTime>("Tre_Date");
+            Medicines = new PreviewMedicines();
         }
 
         public Institution Institution { get; }
@@ -75,5 +76,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         public bool IsRead { get; set; }
         public abstract void Print();
         public abstract Prescription CreatePrescription();
+        public abstract void GetMedicines();
     }
 }

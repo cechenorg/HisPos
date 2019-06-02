@@ -23,6 +23,7 @@ using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Service;
@@ -60,10 +61,39 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Card = new IcCard();
         }
 
-        public Prescription(DataRow r)
+        public Prescription(DataRow r,ChronicType type)
         {
-            PrescriptionPoint = new PrescriptionPoint(r);
+            ID = r.Field<int>("ID");
+            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
+            Division = VM.GetDivision(r.Field<string>("DivisionID"));
+            AdjustDate = r.Field<DateTime>("AdjustDate");
+            TreatDate = r.Field<DateTime?>("TreatmentDate");
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
+                ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
+            if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
+                ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString());
+            if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
+                MainDisease = DiseaseCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
+            if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
+                SubDisease = DiseaseCode.GetDiseaseCodeByID(r.Field<string>("SecondDiseaseID"));
+            AdjustCase = VM.GetAdjustCase(r.Field<string>("AdjustCaseID"));
+            Copayment = VM.GetCopayment(r.Field<string>("CopaymentID"));
+            PrescriptionCase = VM.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID"));
+            PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
+            PrescriptionPoint = new PrescriptionPoint(r,type);
             PrescriptionStatus = new PrescriptionStatus(r);
+            switch (type)
+            {
+                case ChronicType.Register:
+                    Medicines = new Medicines();
+                    Medicines.GetDataByPrescriptionId(ID);
+                    break;
+                case ChronicType.Reserve:
+                    Medicines = new Medicines();
+                    Medicines.GetDataByReserveId(ID);
+                    break;
+            }
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -182,9 +212,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = IsRead;
-            PrescriptionStatus.IsBuckle = cooperativeSetting.IsBuckle;
+            PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, cooperativeSetting.IsBuckle);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, PrescriptionStatus.IsBuckle);
         }
         #region Properties
         public int ID { get; set; }
@@ -321,12 +351,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 if (adjustCase == null) return;
                 switch (adjustCase.ID)
                 {
+                    case "4":
+                        Copayment = VM.GetCopayment("009");
+                        break;
                     case "1":
                     case "3":
                         PrescriptionCase = VM.GetPrescriptionCases("09");
                         PaymentCategory = VM.GetPaymentCategory("04");
                         break;
                     case "2":
+                        Copayment = VM.GetCopayment("I22");
                         PrescriptionCase = VM.GetPrescriptionCases("04");
                         PaymentCategory = null;
                         break;
@@ -350,6 +384,23 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => PrescriptionCase, ref prescriptionCase, value);
+                if (PrescriptionCase != null)
+                {
+                    switch (PrescriptionCase.ID)
+                    {
+                        case "007"://山地離島就醫/戒菸免收
+                        case "11"://牙醫一般
+                        case "12"://牙醫急診
+                        case "13"://牙醫門診
+                        case "14"://牙醫資源不足方案
+                        case "15"://牙周統合照護
+                        case "16"://牙醫特殊專案
+                        case "19"://牙醫其他專案
+                        case "C1"://論病計酬
+                            Copayment = VM.GetCopayment("I22");
+                            break;
+                    }
+                }
             }
         }
 
@@ -420,7 +471,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 {
                     Type = PrescriptionType.Cooperative;
                     var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Institution.ID));
-                    PrescriptionStatus.IsBuckle = clinic.IsBuckle;
+                    PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
                 }
             }
             else//非合作診所
@@ -429,9 +480,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PrescriptionStatus.IsBuckle = true;
             }
 
-            foreach (var m in Medicines)
+            if (Medicines != null)
             {
-                m.IsBuckle = PrescriptionStatus.IsBuckle;
+                foreach (var m in Medicines)
+                {
+                    m.IsBuckle = PrescriptionStatus.IsBuckle;
+                }
             }
         }
 
@@ -552,10 +606,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private bool CheckFreeCopayment()
         {
             if (Copayment is null) return false;
-            if (AdjustCase.ID.Equals("2"))
-                Copayment = VM.GetCopayment("I22");
-            if (AdjustCase.ID.Equals("4") || AdjustCase.ID.Equals("0"))
-                Copayment = VM.GetCopayment("009");
             //006.001~009(除006).801.802.901.902.903.904
             switch (Copayment.Id)
             {
@@ -569,20 +619,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 case "008"://經離島醫院診所轉至台灣本門及急救者
                 case "009"://其他免負擔
                 case "I22"://免收
-                    return true;
-            }
-            switch (PrescriptionCase.ID)
-            {
-                case "007"://山地離島就醫/戒菸免收
-                case "11"://牙醫一般
-                case "12"://牙醫急診
-                case "13"://牙醫門診
-                case "14"://牙醫資源不足方案
-                case "15"://牙周統合照護
-                case "16"://牙醫特殊專案
-                case "19"://牙醫其他專案
-                case "C1"://論病計酬
-                    Copayment = VM.GetCopayment("I22");
                     return true;
             }
             return false;

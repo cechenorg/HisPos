@@ -19,7 +19,7 @@
         <service:DateConverter x:Key="DateConverter" />
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="OrthopedicsGrid">
-            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding OrthopedicsPres,UpdateSourceTrigger=PropertyChanged}"
+            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="0,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding OrthopedicsPres,UpdateSourceTrigger=PropertyChanged}"
                            AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -52,14 +52,17 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="15" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                        <Label Content="就醫日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                        <Label Content="診治醫師:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding DoctorName}" FontSize="16" VerticalAlignment="Center" Width="85"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Label Content="診治醫師 :" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Doctor.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,0">
+                                        <Label Content="院所:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Institution.Name}" Width="250" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Content="科別:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                        <Label Content="{Binding Division.Name}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -69,7 +72,7 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="CooperativeGrid">
-            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding CooperativePres,UpdateSourceTrigger=PropertyChanged}"
+            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="0,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding CooperativePres,UpdateSourceTrigger=PropertyChanged}"
                            AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -102,10 +105,15 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="15" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,5">
+                                        <Label Content="就醫日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                        <Label Content="院所:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Institution.Name}" Width="250" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Content="科別:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                        <Label Content="{Binding Division.Name}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -115,7 +123,7 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="RegisterGrid">
-            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicRegisterPres,UpdateSourceTrigger=PropertyChanged}"
+            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="0,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicRegisterPres,UpdateSourceTrigger=PropertyChanged}"
                            AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -148,10 +156,21 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="15" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,0">
+                                        <Label Content="院所:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Institution.Name}" Width="250" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Content="科別:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                        <Label Content="{Binding Division.Name}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                        <Label Content="就醫日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                        <Label Content="調劑日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding AdjustDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                        <Label Content="調劑次數:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="7,0,0,0"/>
+                                        <Label Content="{Binding ChronicTotal}" FontSize="16" VerticalAlignment="Center"/>
+                                        <Label Content="-" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding ChronicSeq}" FontSize="16" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -161,7 +180,7 @@
             </DataGrid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:CustomerPrescriptionViewModel}" x:Key="ReserveGrid">
-            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="10,0,10,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicReservePres,UpdateSourceTrigger=PropertyChanged}"
+            <DataGrid HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Margin="0,0,0,10"  Background="{StaticResource GridBackGround}" ItemsSource="{Binding ChronicReservePres,UpdateSourceTrigger=PropertyChanged}"
                            AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -194,10 +213,21 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                        <Label Content="{Binding Institution.Name}" Width="130" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Division.Name}" Width="100" FontSize="15" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="15" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,0">
+                                        <Label Content="院所:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Institution.Name}" Width="250" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Content="科別:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                        <Label Content="{Binding Division.Name}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                        <Label Content="就醫日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                        <Label Content="調劑日:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding AdjustDate,Converter={StaticResource DateConverter}}" FontSize="16" VerticalAlignment="Center" Width="85"/>
+                                        <Label Content="調劑次數:" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="7,0,0,0"/>
+                                        <Label Content="{Binding ChronicTotal}" FontSize="16" VerticalAlignment="Center"/>
+                                        <Label Content="-" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding ChronicSeq}" FontSize="16" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -215,7 +245,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="380"/>
+                    <ColumnDefinition Width="500"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
@@ -225,10 +255,18 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Grid.Column="0" Content="{Binding OrthopedicsContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
-                    <RadioButton Grid.Column="1" Content="{Binding CooperativeContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
-                    <RadioButton Grid.Column="2" Content="{Binding RegisterContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
-                    <RadioButton Grid.Column="3" Content="{Binding ReserveContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+                    <RadioButton Grid.Column="0" Content="{Binding OrthopedicsContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                                 Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" 
+                                 Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding OrthopedicsRadioBtnEnable}"/>
+                    <RadioButton Grid.Column="1" Content="{Binding CooperativeContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                                 Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" 
+                                 Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding CooperativeRadioBtnEnable}"/>
+                    <RadioButton Grid.Column="2" Content="{Binding RegisterContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                                 Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}" 
+                                 Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding RegisterRadioBtnEnable}"/>
+                    <RadioButton Grid.Column="3" Content="{Binding ReserveContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                                 Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}" 
+                                 Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding ReserveRadioBtnEnable}"/>
                 </Grid>
                 <ContentControl Name="PrescriptionGrid" Grid.Row="1" Grid.Column="0" Content="{Binding}" Margin="10,0,10,0">
                     <ContentControl.Style>
@@ -252,7 +290,7 @@
                     </ContentControl.Style>
                 </ContentControl>
                 <DockPanel Grid.Row="1" Grid.Column="1">
-                    <StackPanel Orientation="Vertical" Margin="0,0,10,10" DockPanel.Dock="Top">
+                    <StackPanel Orientation="Vertical" Margin="0,0,10,10" DockPanel.Dock="Top" Visibility="{Binding UngetCardGridVisible,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,10" >
                             <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
                             <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="450,0,0,0" VerticalAlignment="Center" Command="{Binding MakeUpCard}"/>
@@ -301,7 +339,7 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="院所" Width="300" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ReleaseIns.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn Header="院所" Width="250" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ReleaseIns.Name, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -317,7 +355,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="調劑日期" Width="150" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding AdjustDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                                <DataGridTextColumn Header="調劑日期" Width="100" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding AdjustDate, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -361,7 +399,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="100" Binding="{Binding Dosage,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15" FontWeight="Bold"  Header="用量" IsReadOnly="True">
+                            <DataGridTextColumn Width="60" Binding="{Binding Dosage,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15" FontWeight="Bold"  Header="用量" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -369,7 +407,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="100" Binding="{Binding Usage,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            <DataGridTextColumn Width="60" Binding="{Binding Usage,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                 FontSize="15" FontWeight="Bold"  Header="用法" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -378,7 +416,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="100" Binding="{Binding Amount,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            <DataGridTextColumn Width="60" Binding="{Binding Amount,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                                 FontSize="15" FontWeight="Bold"  Header="總量" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">

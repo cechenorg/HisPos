@@ -24,6 +24,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             throw new NotImplementedException();
         }
 
+        public override void GetMedicines()
+        {
+            throw new NotImplementedException();
+        }
+
         public void MakeUp()
         {
 

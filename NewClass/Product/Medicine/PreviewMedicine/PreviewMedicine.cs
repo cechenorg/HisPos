@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
 
@@ -29,9 +30,18 @@ namespace His_Pos.NewClass.Product.Medicine.PreviewMedicine
             Days = (int)Convert.ToDouble(m.Days);
         }
 
-        public double Dosage { get; }
+        public PreviewMedicine(DataRow r) : base(r)
+        {
+            Dosage = r.Field<double?>("Dosage");
+            Usage = r.Field<string>("Usage");
+            Days = r.Field<int?>("MedicineDays");
+            Position = r.Field<string>("Position");
+            Amount = r.Field<double>("TotalAmount");
+        }
+
+        public double? Dosage { get; }
         public string Usage { get;}
-        public int Days { get; }
+        public int? Days { get; }
         public string Position { get; }
         public double Amount { get; }
     }
