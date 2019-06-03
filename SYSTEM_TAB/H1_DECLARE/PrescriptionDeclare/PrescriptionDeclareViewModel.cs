@@ -51,6 +51,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Xceed.Wpf.Toolkit;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
@@ -78,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region ItemsSources
         public Institutions Institutions { get; set; }
         public Divisions Divisions { get; set; }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public PaymentCategories PaymentCategories { get; set; }
         public PrescriptionCases PrescriptionCases { get; set; }
@@ -238,8 +239,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 
             }
         }
-        private MedicalPersonnel selectedPharmacist;
-        public MedicalPersonnel SelectedPharmacist
+        private Employee selectedPharmacist;
+        public Employee SelectedPharmacist
         {
             get => selectedPharmacist;
             set

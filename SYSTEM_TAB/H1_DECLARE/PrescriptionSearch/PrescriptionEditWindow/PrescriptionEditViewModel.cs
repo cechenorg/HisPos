@@ -33,6 +33,7 @@ using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindo
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -173,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region ItemsSources
         public Institutions Institutions { get; set; }
         public Divisions Divisions { get; set; }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public PaymentCategories PaymentCategories { get; set; }
         public PrescriptionCases PrescriptionCases { get; set; }

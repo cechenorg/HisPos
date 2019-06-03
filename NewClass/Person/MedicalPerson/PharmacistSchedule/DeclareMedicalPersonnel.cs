@@ -2,9 +2,9 @@
 
 namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
-    public class DeclareMedicalPersonnel:MedicalPersonnel
+    public class DeclareMedicalPersonnel: Employee.Employee
     {
-        public DeclareMedicalPersonnel(MedicalPersonnel selectedMedicalPersonnel) : base()
+        public DeclareMedicalPersonnel(Employee.Employee selectedMedicalPersonnel) : base()
         {
             if(selectedMedicalPersonnel is null) return;
             ID = selectedMedicalPersonnel.ID;

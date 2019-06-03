@@ -90,6 +90,14 @@ namespace His_Pos.NewClass.Person.Employee
         { 
             MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
         }
+
+        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
+        }
+
         public static DataTable SetCustomers(Employees es) {
             DataTable employeeTable = EmployeeTable();
 

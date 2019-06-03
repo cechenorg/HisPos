@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.Properties;
@@ -164,7 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var tempPharmacistList = new MedicalPersonnels(false);
+            var tempPharmacistList = new Employees();
             tempPharmacistList.GetEnablePharmacist((DateTime)MySelectedDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (var pharmacist in tempPharmacistList)
