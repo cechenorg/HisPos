@@ -386,7 +386,8 @@ namespace His_Pos.NewClass.Prescription
         }
 
         public void AddMedicineBySearch(string proId) {
-            DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
+            CheckWareHouse();
+            DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
             {
@@ -434,8 +435,9 @@ namespace His_Pos.NewClass.Prescription
         
         #endregion
         public void AdjustMedicinesType() {
+            CheckWareHouse();
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
-                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID);
                 var temp = new Medicine();
                 if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
                     Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
@@ -1224,6 +1226,7 @@ namespace His_Pos.NewClass.Prescription
         public void CheckIsCooperative()
         {
             CheckIsBuckleAndSource();
+            Medicines.GetDataByWareHouse(WareHouse);
             Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
@@ -1274,9 +1277,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CheckIsBuckleAndSource()
         {
-            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
-            WareHouse = wareHouse;
-            PrescriptionStatus.IsBuckle = WareHouse != null;
+            CheckWareHouse();
             if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
             {
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
@@ -1287,6 +1288,12 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
+        }
+
+        public void CheckWareHouse()
+        {
+            WareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
+            PrescriptionStatus.IsBuckle = WareHouse != null;
         }
     }
 }

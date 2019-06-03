@@ -152,7 +152,7 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet)
+        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet, string wareHouseID)
         {
             Clear();
             var medicineIDList = new List<string>();
@@ -160,7 +160,7 @@ namespace His_Pos.NewClass.Product.Medicine
             {
                 medicineIDList.Add(item.ID);
             }
-            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList);
+            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID);
             var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -213,6 +213,18 @@ namespace His_Pos.NewClass.Product.Medicine
                         m.IsBuckle = false;
                         break;
                 }
+            }
+        }
+
+        public void GetDataByWareHouse(WareHouse.WareHouse wareHouse)
+        {
+            var medIDList = Items.Select(m => m.ID).ToList();
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MedicineDb.GetMedicinesBySearchIds(medIDList, wareHouse is null ? "0" : wareHouse.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (DataRow r in table.Rows)
+            {
+                Items.Single(m => m.ID.Equals(r.Field<string>("Pro_ID"))).Inventory = r.Field<double>("Inv_Inventory");
             }
         }
     }
