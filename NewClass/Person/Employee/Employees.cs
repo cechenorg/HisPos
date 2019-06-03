@@ -54,5 +54,16 @@ namespace His_Pos.NewClass.Person.Employee
                 Add(emp);
             }
         }
+
+        public Employees GetLocalPharmacist()
+        {
+            var localPharmacists = new Employees();
+            foreach (var e in Items)
+            {
+                if(e.IsLocal || e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber))
+                    localPharmacists.Add(e);
+            }
+            return localPharmacists;
+        }
     }
 }

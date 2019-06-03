@@ -8,16 +8,10 @@
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Title="新增藥師" Width="650" Height="350" WindowStartupLocation="CenterScreen">
+        Title="新增藥師" Width="500" Height="500" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="{StaticResource GridBackGround}" />
-            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="BorderBrush" Value="Transparent"/>
-                <!--<Setter Property="Visibility" Value="Collapsed" />-->
+            <Setter Property="Visibility" Value="Collapsed" />
         </Style>
         <service:PharmacistIsLocalConverter x:Key="PharmacistIsLocalConverter"/>
         <service:NullableDateConverter x:Key="NullableDateConverter"/>
@@ -66,24 +60,17 @@
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}" >
                     <GridView.Columns>
-                        <GridViewColumn Width="150" Header="姓名">
+                        <GridViewColumn Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" Margin="6,3" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="200" Header="身分證">
+                        <GridViewColumn Width="200">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding IDNumber}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="150" Header="生日">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Birthday,Converter={StaticResource NullableDateConverter}}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
