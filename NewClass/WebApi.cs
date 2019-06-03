@@ -3,6 +3,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.Service;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -29,7 +30,10 @@ namespace His_Pos.NewClass
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
             }
             else
-                MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員",Class.MessageType.ERROR);
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員", Class.MessageType.ERROR);
+                }); 
             
         } 
         internal static string GetCooperativeClinicId(string medicalNum) {
