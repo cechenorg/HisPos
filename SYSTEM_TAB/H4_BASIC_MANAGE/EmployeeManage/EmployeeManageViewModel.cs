@@ -55,6 +55,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => Employee, ref employee, value);
+                if (Employee.ID != ViewModelMainWindow.CurrentUser.ID)
+                    IsEnable = false;
             }
         }
         public Employees employeeCollection;
@@ -95,7 +97,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 EmployeeCollectionViewSource.Filter += Filter;
             }
         }
-
+        private bool isEnable = true;
+        public bool IsEnable
+        {
+            get { return isEnable; }
+            set
+            {
+                Set(() => IsEnable, ref isEnable, value); 
+            }
+        }
         #endregion
 
         public EmployeeManageViewModel() {

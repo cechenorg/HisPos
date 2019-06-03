@@ -170,6 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             MainWindow.ServerConnection.CloseConnection();
             foreach (var pharmacist in tempPharmacistList)
             {
+                if(!pharmacist.IsLocal) continue;
                 var item = new PharmacistScheduleItem
                 {
                     Date = (DateTime)MySelectedDate,
@@ -225,6 +226,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
         {
             PharmacistSchedule.SaveSchedule(first,last);
             InitItemsSource();
+            IsEdit = false;
         }
 
         private void CloseAction()

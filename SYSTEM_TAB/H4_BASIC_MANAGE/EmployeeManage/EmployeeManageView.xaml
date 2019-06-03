@@ -116,7 +116,7 @@
                             </i:Interaction.Triggers>
                         </TextBox>
                     </StackPanel>
-                    <Button Content="更改密碼" Grid.Row="0" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
+                    <Button Content="更改密碼" Grid.Row="0" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
                     <!--<StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="478,10,376.698,10" Width="150">
                         <Label Content="本月銷售金額" Width="150" VerticalAlignment="Center" Height="25" Foreground="Black" FontSize="12" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="555" Width="100" VerticalAlignment="Top" Height="35" Foreground="Black" FontSize="15" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,20,0"/>
