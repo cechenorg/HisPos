@@ -8,13 +8,12 @@
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Title="新增藥師" Width="500" Height="500" WindowStartupLocation="CenterScreen">
+        Title="新增藥師" Width="600" Height="500" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+        <Style x:Key="MyHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed" />
         </Style>
         <service:PharmacistIsLocalConverter x:Key="PharmacistIsLocalConverter"/>
-        <service:NullableDateConverter x:Key="NullableDateConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -58,7 +57,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}" >
+                <GridView ColumnHeaderContainerStyle="{StaticResource MyHeaderStyle}" >
                     <GridView.Columns>
                         <GridViewColumn Width="150">
                             <GridViewColumn.CellTemplate>
