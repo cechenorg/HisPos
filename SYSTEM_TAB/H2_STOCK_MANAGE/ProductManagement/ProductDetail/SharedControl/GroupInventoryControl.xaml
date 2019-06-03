@@ -14,7 +14,7 @@
              <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="75,0,0,0"/>
             <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
         </StackPanel>
-        <DataGrid ItemsSource="{Binding ProductGroupSettingCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+        <DataGrid ItemsSource="{Binding ProductGroupSettingCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                   Grid.Row="1"     CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
