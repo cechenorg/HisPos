@@ -275,7 +275,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
-                (DataContext as PrescriptionDeclare.PrescriptionDeclareViewModel)?.AddMedicine.Execute(textBox.Text);
+                (DataContext as PrescriptionDeclareViewModel)?.AddMedicine.Execute(textBox.Text);
                 textBox.Text = string.Empty;
 
                 if (PrescriptionMedicines.Items.Count != itemsCount)

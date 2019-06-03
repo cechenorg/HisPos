@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
@@ -282,6 +284,49 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public int CountOralLiquidAgent()
         {
             return this.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
+        }
+
+        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex)
+        {
+            var table = MedicineDb.GetMedicinesBySearchId(medicineId);
+            Medicine medicine = null;
+            foreach (DataRow r in table.Rows)
+            {
+                switch (r.Field<int>("DataType"))
+                {
+                    case 1:
+                        medicine = new MedicineNHI(r);
+                        break;
+                    case 2:
+                        medicine = new MedicineOTC(r);
+                        break;
+                    case 3:
+                        medicine = new MedicineSpecialMaterial(r);
+                        break;
+                }
+            }
+            Debug.Assert(medicine != null, nameof(medicine) + " != null");
+            medicine.PaySelf = paySelf;
+            if (medicine.ID.EndsWith("00") ||
+                medicine.ID.EndsWith("G0"))
+                medicine.PositionID = "PO";
+            if (selectedMedicinesIndex != null)
+            {
+                if (selectedMedicinesIndex > 0)
+                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
+                Items[(int)selectedMedicinesIndex] = medicine;
+            }
+            else
+            {
+                if (Count > 0)
+                    medicine.CopyPrevious(Items[Count - 1]);
+                Add(medicine);
+            }
+        }
+
+        public void CheckWareHouse(Institution institution)
+        {
+
         }
     }
 }

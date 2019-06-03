@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
@@ -8,7 +9,7 @@ using His_Pos.NewClass.Product.Medicine.Usage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public abstract class Medicine:Product.Product
+    public abstract class Medicine:Product.Product,IDeletableProduct
     {
         public Medicine() : base()
         {
@@ -300,6 +301,13 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 Set(() => NHIPrice, ref nhiPrice, value);
             }
         }
+
+        private bool isSelected = false;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set { Set(() => IsSelected, ref isSelected, value); }
+        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()
@@ -308,5 +316,12 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
 
         public abstract MedBagMedicine CreateMedBagMedicine(bool isSingle);
+
+        public void CopyPrevious(Medicine previous)
+        {
+            Dosage = previous.Dosage;
+            UsageName = previous.UsageName;
+            Days = previous.Days;
+        }
     }
 }
