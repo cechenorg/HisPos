@@ -6,6 +6,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
     {
         public DeclareMedicalPersonnel(MedicalPersonnel selectedMedicalPersonnel) : base()
         {
+            if(selectedMedicalPersonnel is null) return;
             ID = selectedMedicalPersonnel.ID;
             Name = selectedMedicalPersonnel.Name;
             IDNumber = selectedMedicalPersonnel.IDNumber;

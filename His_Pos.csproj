@@ -382,6 +382,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclarePrescription\DeclarePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfDay.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfMonth.cs" />
+    <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescription.cs" />
+    <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
     <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />

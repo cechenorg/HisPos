@@ -60,7 +60,7 @@ namespace His_Pos.NewClass.Person.Customer
         public void Delete()
         {
         }
-        public Customer GetCustomerByCusId(int cusId)
+        public static Customer GetCustomerByCusId(int cusId)
         {
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);

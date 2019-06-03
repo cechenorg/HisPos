@@ -918,5 +918,13 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "pharmacyID", pharmacyId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[NotAdjustCount]", parameterList);
         }
+
+        public static DataTable DuplicatePrescriptions(DateTime startDate, DateTime endDate)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionSameDeclare]", parameterList);
+        }
     }
 }
