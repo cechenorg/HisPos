@@ -30,5 +30,22 @@ namespace His_Pos.NewClass.ProductType
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTypeProducts]", parameters);
         }
+
+        internal static DataTable AddNewProductType(string name, int parentID)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("NAME", name));
+            parameters.Add(new SqlParameter("PARENT", parentID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductTypeAddType]", parameters);
+        }
+
+        internal static DataTable DeleteType(int typeID)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE_ID", typeID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductTypeDeleteType]", parameters);
+        }
     }
 }

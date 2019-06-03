@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
@@ -47,18 +49,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         #region ----- Define Actions -----
         private void AddTypeAction()
         {
-            AddTypeWindow addTypeWindow = new AddTypeWindow();
+            AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageCollection);
             addTypeWindow.ShowDialog();
 
             InitData();
         }
         private void EditTypeAction()
         {
+            EditTypeWindow addTypeWindow = new EditTypeWindow();
+            addTypeWindow.ShowDialog();
+
             InitData();
         }
         private void DeleteTypeAction()
         {
-            DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow();
+            if (CurrentType.ID == 0)
+            {
+                MessageWindow.ShowMessage("藥品無法被刪除", MessageType.ERROR);
+                return;
+            }
+
+            DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow(CurrentType);
             deleteTypeWindow.ShowDialog();
 
             InitData();

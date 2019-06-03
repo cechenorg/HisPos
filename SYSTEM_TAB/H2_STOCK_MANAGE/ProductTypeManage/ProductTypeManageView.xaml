@@ -168,7 +168,7 @@
                 <Button Margin="390,0,0,0" Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding DeleteTypeCommand}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="1" Margin="10,0,0,10" Background="{StaticResource GridBackGround}">
-                <Button Margin="505,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Command="{Binding AddTypeCommand}"/>
+                <Button Margin="505,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Command="{Binding AddTypeCommand}" Visibility="Hidden"/>
             </StackPanel>
         </Grid>
     </Grid>
