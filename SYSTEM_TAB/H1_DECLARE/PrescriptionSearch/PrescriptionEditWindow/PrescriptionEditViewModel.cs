@@ -232,7 +232,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             Institutions = VM.Institutions;
             Divisions = VM.Divisions;
-            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels;
+            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels.GetLocalPharmacist();
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;
