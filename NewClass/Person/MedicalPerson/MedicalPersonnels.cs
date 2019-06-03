@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson
             foreach (DataRow r in table.Rows)
             {
                 var pharmacist = new MedicalPersonnel(r);
-                if(pharmacist.IsEnable && pharmacist.IsCommon)
+                if(pharmacist.IsEnable && pharmacist.IsLocal)
                     Add(pharmacist);
             }
             if (!ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Equals("藥師") ||
