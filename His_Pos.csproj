@@ -702,6 +702,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml.cs">
+      <DependentUpon>InsertProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlView.xaml.cs">
       <DependentUpon>MedicineControlView.xaml</DependentUpon>
     </Compile>
@@ -1226,6 +1230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

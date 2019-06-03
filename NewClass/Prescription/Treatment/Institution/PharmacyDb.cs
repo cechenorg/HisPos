@@ -34,5 +34,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CurrentPharmacyRecord]");
         }
+        public static DataTable GroupPharmacySchemaList() {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[GroupPharmacySchemaList]");
+        }
+        
     }
 }
