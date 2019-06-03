@@ -156,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
             if (GlobalCheck)
                 e.Accepted = true;
-            else if(LocalCheck && ((Employee)e.Item).IsCommon)
+            else if(LocalCheck && ((Employee)e.Item).IsLocal)
                 e.Accepted = true; 
         }
         #endregion
