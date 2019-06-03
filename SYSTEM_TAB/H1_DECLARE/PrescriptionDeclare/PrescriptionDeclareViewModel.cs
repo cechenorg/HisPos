@@ -445,9 +445,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case "Get":
                     MainWindow.ServerConnection.OpenConnection();
+                    CurrentPrescription.CheckWareHouse();
                     CurrentSet.MedicineSetItems = new MedicineSetItems();
                     CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
-                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet);
+                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet, CurrentPrescription.WareHouse is null ? "0" : CurrentPrescription.WareHouse.ID);
                     CurrentPrescription.CountPrescriptionPoint(true);
                     CurrentPrescription.CheckIsCooperative();
                     MainWindow.ServerConnection.CloseConnection();
@@ -1136,7 +1137,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CanAdjust = true;
                 if (CurrentPrescription.PrescriptionStatus.IsCooperativeVIP)
                     MessageWindow.ShowMessage("病患為合作診所VIP，請藥師免收部分負擔。", MessageType.WARNING);
-                CurrentPrescription.CheckIsBuckleAndSource();
+                CurrentPrescription.CheckIsCooperative();
             }
             catch (Exception)
             {
