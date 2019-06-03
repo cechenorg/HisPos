@@ -19,6 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         #region ----- Define Command -----
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand<string> ChangeSearchTypeCommand { get; set; }
+        public RelayCommand InsertProductCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -117,6 +118,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             SearchCommand = new RelayCommand(SearchAction);
             ChangeSearchTypeCommand = new RelayCommand<string>(ChangeSearchTypeAction);
+            InsertProductCommand = new RelayCommand(InsertProductAction);
+        }
+        private void InsertProductAction() {
+            InsertProductWindow.InsertProductWindow insertProductWindow = new InsertProductWindow.InsertProductWindow();
         }
         private bool IsSearchConditionValid()
         {
