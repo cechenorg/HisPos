@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Person.MedicalPerson
 {
@@ -17,8 +19,14 @@ namespace His_Pos.NewClass.Person.MedicalPerson
             var table = MedicalPersonnelDb.GetData();
             foreach (DataRow r in table.Rows)
             {
-                Add(new MedicalPersonnel(r));
+                var pharmacist = new MedicalPersonnel(r);
+                if(pharmacist.IsEnable && pharmacist.IsCommon)
+                    Add(pharmacist);
             }
+            if (!ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Equals("藥師") ||
+                Items.Count(m => m.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) != 0) return;
+            var medicalPerson = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
+            Add(medicalPerson);
         }
 
         public void GetEnablePharmacist(DateTime selectedDate)

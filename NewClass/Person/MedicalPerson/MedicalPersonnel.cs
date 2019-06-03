@@ -22,8 +22,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson
             Name = r.Field<string>("Emp_Name");
             IDNumber = r.Field<string>("Emp_IDNumber");
             IsEnable = r.Field<bool>("Emp_IsEnable");
-            //StartDate = r.Field<DateTime>("Emp_StartDate");
-            //LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
+            StartDate = r.Field<DateTime>("Emp_StartDate");
+            LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
         }
         [Index(12)]
         public virtual bool IsEnable { get; set; }
