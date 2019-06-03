@@ -124,7 +124,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return;
             }
 
-            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD);
+            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD, OrderWarehouse.ID);
 
             ReturnProduct returnProduct;
 
