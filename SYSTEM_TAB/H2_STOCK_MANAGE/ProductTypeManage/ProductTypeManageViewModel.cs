@@ -56,8 +56,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         }
         private void EditTypeAction()
         {
-            EditTypeWindow addTypeWindow = new EditTypeWindow();
-            addTypeWindow.ShowDialog();
+            if (CurrentType.ID == 0)
+            {
+                MessageWindow.ShowMessage("藥品類別無法編輯", MessageType.ERROR);
+                return;
+            }
+
+            EditTypeWindow editTypeWindow = new EditTypeWindow(CurrentType);
+            editTypeWindow.ShowDialog();
 
             InitData();
         }
