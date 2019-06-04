@@ -532,4 +532,19 @@ namespace His_Pos.Service
 
         #endregion
     }
+
+    [ValueConversion(typeof(bool), typeof(string))]
+    public class PharmacistIsLocalConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null) return string.Empty;
+            return (bool)value ? "本店藥師" : "非本店藥師";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

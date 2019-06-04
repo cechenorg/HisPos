@@ -10,10 +10,12 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
 {
     public class ControlMedicineDetails : ObservableCollection<ControlMedicineDetail>
     {
-        public ControlMedicineDetails( ) {
-          
+        public ControlMedicineDetails()
+        {
+
         }
-        public void GetDataById(string medId,DateTime sDate,DateTime eDate,double stock) {
+        public void GetDataById(string medId, DateTime sDate, DateTime eDate, double stock)
+        {
             double tempstock = stock;
             Clear();
             ControlMedicineDetail rowOne = new ControlMedicineDetail();
@@ -21,8 +23,9 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
             rowOne.FinalStock = tempstock;
             rowOne.TypeName = "上次結存";
             Add(rowOne);
-            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate,eDate);
-            foreach (DataRow r in table.Rows) {
+            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
                 ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock);
                 tempstock = controlMedicineDetail.FinalStock;
                 Add(controlMedicineDetail);

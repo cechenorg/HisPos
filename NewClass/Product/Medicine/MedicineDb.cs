@@ -7,17 +7,19 @@ namespace His_Pos.NewClass.Product.Medicine
 {
     public static class MedicineDb
     {
-        public static DataTable GetMedicinesBySearchId(string medicineID)
+        public static DataTable GetMedicinesBySearchId(string medicineID, string wareHouseID)
         {
             if (string.IsNullOrEmpty(medicineID)) return new DataTable();
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
             DataBaseFunction.AddSqlParameter(parameterList, "Pro_Id", medicineID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", wareHouseID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchId]", parameterList);     
         }
-        public static DataTable GetMedicinesBySearchIds(List<string> MedicineIds)
+        public static DataTable GetMedicinesBySearchIds(List<string> MedicineIds,string wareHouseID)
         { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(MedicineIds));
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", wareHouseID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchIDs]", parameterList);
         }
         public static void InsertCooperativeMedicineOTC(string medicineID,string medicineName)

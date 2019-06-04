@@ -168,7 +168,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return;
             }
 
-            DataTable dataTable = PurchaseReturnProductDB.GetPurchaseProductByProductID(iD);
+            DataTable dataTable = PurchaseReturnProductDB.GetPurchaseProductByProductID(iD, OrderWarehouse.ID);
 
             PurchaseProduct purchaseProduct;
 
@@ -342,8 +342,11 @@ namespace His_Pos.NewClass.StoreOrder
             string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.Id).Rows[0][0].ToString();
             try
             {
-                if (!PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData))
+                int result = PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData);
+                if(result == 0)
                     MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+                else if(result == 2)
+                    MessageWindow.ShowMessage("藥健康已出貨 不可修改傳送藥袋 (若已修改處方 需注意處方與藥袋藥品差異)", MessageType.WARNING);
             }
             catch (Exception ex)
             {

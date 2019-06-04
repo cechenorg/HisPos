@@ -80,13 +80,24 @@ namespace His_Pos.NewClass.Person.Employee
         public static DataTable GetTabAuth(int AuthValue) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("AuthValue", AuthValue)); 
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList);
+
+            var table = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
+                 ? MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Get].[TabAuth]", parameterList)
+                 : MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[TabAuth]", parameterList);
             return table;
         }
         public static void SyncData( )
         { 
             MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
         }
+
+        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
+        }
+
         public static DataTable SetCustomers(Employees es) {
             DataTable employeeTable = EmployeeTable();
 

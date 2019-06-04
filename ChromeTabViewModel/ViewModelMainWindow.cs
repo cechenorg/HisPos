@@ -138,7 +138,7 @@ namespace His_Pos.ChromeTabViewModel
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels(MedicalPersonnelInitType.All);
+            CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
@@ -306,12 +306,12 @@ namespace His_Pos.ChromeTabViewModel
             return result ?? new SpecialTreat();
         }
 
-        public static MedicalPersonnel GetMedicalPersonByID(int id)
+        public static Employee GetMedicalPersonByID(int id)
         {
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-        public static MedicalPersonnel GetMedicalPersonByIDNumber(string idNum)
+        public static Employee GetMedicalPersonByIDNumber(string idNum)
         {
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
             return result;

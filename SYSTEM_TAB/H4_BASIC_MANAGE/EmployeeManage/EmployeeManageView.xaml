@@ -116,7 +116,7 @@
                             </i:Interaction.Triggers>
                         </TextBox>
                     </StackPanel>
-                    <Button Content="更改密碼" Grid.Row="0" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
+                    <Button Content="更改密碼" Grid.Row="0" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
                     <!--<StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="478,10,376.698,10" Width="150">
                         <Label Content="本月銷售金額" Width="150" VerticalAlignment="Center" Height="25" Foreground="Black" FontSize="12" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="555" Width="100" VerticalAlignment="Top" Height="35" Foreground="Black" FontSize="15" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,20,0"/>
@@ -222,13 +222,8 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="120" Text="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="TextChanged">
-                                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </TextBox>
+                            <Label Width="120" Content="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                             <Label  Content="手機" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
