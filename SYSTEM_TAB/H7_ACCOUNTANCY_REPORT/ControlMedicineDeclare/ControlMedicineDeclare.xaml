@@ -12,7 +12,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.Resources> 
+    <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -38,7 +38,7 @@
             </xctk:MaskedTextBox>
             <Label Content="~"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             <Label Content="{Binding EDateTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
-            
+
             <Rectangle Width="870"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
@@ -353,6 +353,6 @@
                 </DataGrid>
 
             </Grid>
-          </Grid>
+        </Grid>
     </Grid>
 </UserControl>

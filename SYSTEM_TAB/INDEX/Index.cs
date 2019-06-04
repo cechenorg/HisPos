@@ -177,7 +177,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
-            ReserveSearchAction();
+            ReserveSearchAction(); 
         }
         #region Action
         private void ShowCustomerPrescriptionChangedAction() {

@@ -25,10 +25,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:60001/</InstallUrl>
+    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>2.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -356,8 +356,6 @@
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositions.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnel.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnels.cs" />
-    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnelDb.cs" />
-    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnels.cs" />
     <Compile Include="NewClass\Person\Gender.cs" />
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
@@ -444,7 +442,6 @@
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Pharmacy.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\PharmacyDb.cs" />
-    <Compile Include="NewClass\Person\MedicalPerson\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategoryDb.cs" />
@@ -705,6 +702,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml.cs">
+      <DependentUpon>InsertProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlView.xaml.cs">
       <DependentUpon>MedicineControlView.xaml</DependentUpon>
     </Compile>
@@ -852,6 +853,10 @@
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindow.xaml.cs">
+      <DependentUpon>EmployeeChangePasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindow.xaml.cs">
       <DependentUpon>EmployeeInsertWindow.xaml</DependentUpon>
     </Compile>
@@ -1231,6 +1236,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1408,6 +1417,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

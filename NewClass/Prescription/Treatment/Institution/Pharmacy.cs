@@ -3,6 +3,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using ZeroFormatter;
 
@@ -42,9 +43,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         [Index(6)]
         public virtual bool NewReader { get; set; }
         [IgnoreFormat]
-        public MedicalPersonnel MedicalPersonnel { get; set; }
+        public Employee MedicalPersonnel { get; set; }
         [IgnoreFormat]
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }
         [IgnoreFormat]
         public string GroupServerName { get; set; }
 
@@ -52,10 +53,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public static Pharmacy GetCurrentPharmacy() { 
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
-            pharmacy.MedicalPersonnels = new MedicalPersonnels(true); 
+            pharmacy.MedicalPersonnels = new Employees(); 
             return pharmacy;
         }
-        public MedicalPersonnel GetPharmacist()
+        public Employee GetPharmacist()
         {
             if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Equals("藥師"))
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));

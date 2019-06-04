@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -32,7 +33,7 @@ namespace His_Pos.NewClass.OfflineDataSet
         [Index(1)]
         public virtual IList<Division> Divisions { get; set; }
         [Index(2)]
-        public virtual IList<MedicalPersonnel> MedicalPersonnels { get; set; }
+        public virtual IList<Employee> MedicalPersonnels { get; set; }
         [Index(3)]
         public virtual IList<DiseaseCode> DiseaseCodes { get; set; }
         [Index(4)]
@@ -60,13 +61,13 @@ namespace His_Pos.NewClass.OfflineDataSet
 
         }
 
-        public OfflineDataSet(Institutions institutions,Divisions divisions,MedicalPersonnels medicalPersonnels,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats,Usages usages,Positions positions)
+        public OfflineDataSet(Institutions institutions,Divisions divisions, Employees medicalPersonnels,AdjustCases adjustCases,PrescriptionCases prescriptionCases,Copayments copayments,PaymentCategories paymentCategories ,SpecialTreats specialTreats,Usages usages,Positions positions)
         {
             Institutions = new List<Institution>();
             Institutions = institutions.ToList();
             Divisions = new List<Division>();
             Divisions = divisions.ToList();
-            MedicalPersonnels = new List<MedicalPersonnel>();
+            MedicalPersonnels = new List<Employee>();
             MedicalPersonnels = medicalPersonnels.ToList();
             DiseaseCodes = new List<DiseaseCode>();
             var diseaseTable = DiseaseCodeDb.GetDiseaseCodes();

@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -38,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             AdjustDate = r.Field<DateTime>("PreMas_AdjustDate");
             ApplyPoint = r.Field<int>("PreMas_ApplyPoint");
             CopaymentPoint = r.Field<short>("PreMas_CopaymentPoint");
-            Pharmacist = new MedicalPersonnel();
+            Pharmacist = new Employee();
             Pharmacist.ID = r.Field<int>("Emp_ID");
             Pharmacist.IDNumber = r.Field<string>("PreMas_PharmacistIDNumber");
             Pharmacist.Name = r.Field<string>("Emp_Name");
@@ -109,9 +110,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => AdjustDate, ref adjustDate, value);
             }
         }
-        private MedicalPersonnel pharmacist;
+        private Employee pharmacist;
 
-        public MedicalPersonnel Pharmacist
+        public Employee Pharmacist
         {
             get => pharmacist;
             set
