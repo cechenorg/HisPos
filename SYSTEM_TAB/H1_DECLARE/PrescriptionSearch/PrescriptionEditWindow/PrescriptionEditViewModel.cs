@@ -32,6 +32,7 @@ using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -208,7 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void InitPrescription(Prescription selected)
         {
             MainWindow.ServerConnection.OpenConnection();
-            selected.Patient = selected.Patient.GetCustomerByCusId(selected.Patient.ID);
+            selected.Patient = Customer.GetCustomerByCusId(selected.Patient.ID);
             EditedPrescription = selected;
             EditedPrescription.AdjustMedicinesType();
             MainWindow.ServerConnection.CloseConnection();
