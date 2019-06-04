@@ -11,6 +11,7 @@ using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
 using His_Pos.Service;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -21,10 +22,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         }
 
-        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem)
+        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseId,bool isBuckle)
         {
+            Clear();
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
             var medicines = new Medicines();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -58,7 +60,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     med.Dosage = Convert.ToDouble(item.Divided_dose);
                     med.Days = Convert.ToInt32(item.Days);
                     med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                    med.IsBuckle = false;
+                    med.IsBuckle = isBuckle;
                     switch (item.Remark)
                     {
                         case "":
@@ -104,10 +106,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 }
             }
         }
-        public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,bool isBuckle)
+        public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,string wareHouseId,bool isBuckle)
         {
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
             var medicines = new Medicines();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -187,26 +189,26 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
         }
 
-        public void GetDataByPrescriptionId(int id)
+        public void GetDataByPrescriptionId(int id,string wareHouseId)
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
-            CreateMedicines(table);
+            CreateMedicines(table, wareHouseId);
         }
 
-        public void GetDataByReserveId(int id)
+        public void GetDataByReserveId(int id, string wareHouseId)
         {
             var table = MedicineDb.GetDataByReserveId(id);
-            CreateMedicines(table);
+            CreateMedicines(table, wareHouseId);
         }
 
-        private void CreateMedicines(DataTable table)
+        private void CreateMedicines(DataTable table,string wareHouseId)
         {
             var idList = new List<string>();
             foreach (DataRow r in table.Rows)
             {
                 idList.Add(r.Field<string>("Pro_ID"));
             }
-            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList);
+            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
             var medicines = new Medicines();
             for (var i = 0; i < medicinesTable.Rows.Count; i++)
             {
@@ -286,9 +288,9 @@ namespace His_Pos.NewClass.MedicineRefactoring
             return this.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
         }
 
-        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex)
+        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId)
         {
-            var table = MedicineDb.GetMedicinesBySearchId(medicineId);
+            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId);
             Medicine medicine = null;
             foreach (DataRow r in table.Rows)
             {

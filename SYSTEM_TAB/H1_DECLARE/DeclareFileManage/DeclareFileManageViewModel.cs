@@ -346,7 +346,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
             var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
             PharmacistSchedule = new PharmacistSchedule();
-            PharmacistSchedule.GetPharmacistSchedule(start, last);
+            PharmacistSchedule.GetPharmacistScheduleWithCount(start, last);
         }
 
         private List<PharmacistScheduleItem> GetAdjustPharmacist(bool month)

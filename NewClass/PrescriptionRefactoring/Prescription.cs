@@ -22,6 +22,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
@@ -51,7 +52,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Medicines = new Medicines();
             Institution = new Institution();
             Division = new Division();
-            Pharmacist = new MedicalPersonnel();
+            Pharmacist = new Employee();
             MainDisease = new DiseaseCode();
             SubDisease = new DiseaseCode();
             AdjustCase = new AdjustCase();
@@ -89,11 +90,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case ChronicType.Register:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID);
+                    Medicines.GetDataByPrescriptionId(ID,WareHouse?.ID);
                     break;
                 case ChronicType.Reserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID);
+                    Medicines.GetDataByReserveId(ID, WareHouse?.ID);
                     break;
             }
         }
@@ -153,8 +154,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
+            PrescriptionStatus.IsBuckle = !(WareHouse is null);
             Medicines = new Medicines();
-            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item);
+            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, PrescriptionStatus.IsBuckle);
         }
 
         public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
@@ -212,13 +214,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
-            var cooperativeSetting = VM.CooperativeClinicSettings.Single(s => s.CooperavieClinic.ID.Equals(Institution.ID));
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
-            PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
+            PrescriptionStatus.IsBuckle = !(WareHouse is null);
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, PrescriptionStatus.IsBuckle);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID , PrescriptionStatus.IsBuckle);
         }
         #region Properties
         public int ID { get; set; }
@@ -274,8 +275,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private MedicalPersonnel pharmacist;//醫事人員代號 D25
-        public MedicalPersonnel Pharmacist
+        private Employee pharmacist;//醫事人員代號 D25
+        public Employee Pharmacist
         {
             get => pharmacist;
             set
@@ -472,6 +473,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     ((IDeletableProduct)selectedMedicine).IsSelected = true;
             }
         }
+
+        public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
+
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -483,26 +487,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckTypeByInstitution()
         {
+            PrescriptionStatus.IsBuckle = !(WareHouse is null);
             if (Institution != null && !string.IsNullOrEmpty(Institution.ID) && Institution.CheckCooperative())
             {
-                if (Institution.CheckIsOrthopedics())
-                {
-                    Type = PrescriptionType.Orthopedics;
-                    PrescriptionStatus.IsBuckle = false;
-                }
-                else
-                {
-                    Type = PrescriptionType.Cooperative;
-                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Institution.ID));
-                    PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
-                }
+                Type = Institution.CheckIsOrthopedics() ? PrescriptionType.Orthopedics : PrescriptionType.Cooperative;
             }
             else//非合作診所
             {
                 Type = PrescriptionType.Normal;
-                PrescriptionStatus.IsBuckle = true;
             }
-
             if (Medicines == null) return;
             foreach (var m in Medicines)
             {
@@ -927,7 +920,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             int? selectedMedicinesIndex = null;
             if (SelectedMedicine != null)
                 selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
-            Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex);
+            
+            Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID);
         }
     }
 }

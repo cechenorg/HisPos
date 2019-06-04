@@ -12,6 +12,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -44,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #region ItemsSource
         public Divisions Divisions { get; set; }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public PaymentCategories PaymentCategories { get; set; }
         public PrescriptionCases PrescriptionCases { get; set; }
@@ -114,7 +115,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void InitItemsSource()
         {
             Divisions = VM.Divisions;
-            MedicalPersonnels = new MedicalPersonnels(MedicalPersonnelInitType.Enable);
+            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels.GetLocalPharmacist();
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;
