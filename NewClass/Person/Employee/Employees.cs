@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
             foreach (var emp in tempEmpList)
             {
-                if(emp.StartDate <= selectedDate && (emp.LeaveDate is null || selectedDate <= emp.LeaveDate))
+                if(emp.StartDate <= selectedDate && (emp.LeaveDate is null || selectedDate <= emp.LeaveDate) && emp.WorkPosition.WorkPositionName.Equals("藥師") && emp.IsLocal)
                     Add(emp);
             }
             //var table = EmployeeDb.GetEnableMedicalPersonnels(selectedDate);
@@ -51,7 +51,8 @@ namespace His_Pos.NewClass.Person.Employee
             foreach (DataRow row in table.Rows)
             {
                 var emp = new Employee(row);
-                Add(emp);
+                if (emp.WorkPosition.WorkPositionName.Equals("藥師") /*&& emp.IsLocal*/)
+                    Add(emp);
             }
         }
 
