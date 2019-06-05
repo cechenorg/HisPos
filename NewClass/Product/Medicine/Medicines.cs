@@ -158,39 +158,48 @@ namespace His_Pos.NewClass.Product.Medicine
             var medicineIDList = new List<string>();
             foreach (var item in currentSet.MedicineSetItems)
             {
-                medicineIDList.Add(item.ID);
+                if(!medicineIDList.Contains(item.ID))
+                 medicineIDList.Add(item.ID);
             }
             var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID);
             var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                var medicine = new Medicine();
-                switch (table.Rows[i].Field<int>("DataType"))
+                var tempMedList = currentSet.MedicineSetItems.Where(m => m.ID.Equals(table.Rows[i].Field<string>("Pro_ID")));
+                foreach (var setItem in tempMedList)
                 {
-                    case 1:
-                        medicine = new MedicineNHI(table.Rows[i]);
-                        break;
-                    case 2:
-                        medicine = new MedicineOTC(table.Rows[i]);
-                        break;
-                    case 3:
-                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
-                        break;
+                    var medicine = new Medicine();
+                    switch (table.Rows[i].Field<int>("DataType"))
+                    {
+                        case 1:
+                            medicine = new MedicineNHI(table.Rows[i]);
+                            break;
+                        case 2:
+                            medicine = new MedicineOTC(table.Rows[i]);
+                            break;
+                        case 3:
+                            medicine = new MedicineSpecialMaterial(table.Rows[i]);
+                            break;
+                    }
+                    medicine.Dosage = setItem.Dosage;
+                    medicine.UsageName = setItem.UsageName;
+                    medicine.PositionID = setItem.PositionID;
+                    medicine.Days = setItem.Days;
+                    medicine.Amount = setItem.Amount;
+                    medicine.PaySelf = setItem.PaySelf;
+                    if (medicine.PaySelf)
+                        medicine.Price = setItem.Price;
+                    tempList.Add(medicine);
                 }
-                var tempMed = currentSet.MedicineSetItems.Single(m => m.ID.Equals(medicine.ID));
-                medicine.Dosage = tempMed.Dosage;
-                medicine.UsageName = tempMed.UsageName;
-                medicine.PositionID = tempMed.PositionID;
-                medicine.Days = tempMed.Days;
-                medicine.Amount = tempMed.Amount;
-                medicine.PaySelf = tempMed.PaySelf;
-                if (medicine.PaySelf)
-                    medicine.Price = tempMed.Price;
-                tempList.Add(medicine);
             }
-            foreach (var item in currentSet.MedicineSetItems)
+            foreach (var setItem in currentSet.MedicineSetItems)
             {
-                Add(tempList.Single(m => m.ID.Equals(item.ID)));
+                if (Items.Count(m => m.ID.Equals(setItem.ID)) > 0) continue;
+                var medList = tempList.Where(m => m.ID.Equals(setItem.ID));
+                foreach (var item in medList)
+                {
+                    Add(item);
+                }
             }
         }
 
@@ -224,7 +233,11 @@ namespace His_Pos.NewClass.Product.Medicine
             MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {
-                Items.Single(m => m.ID.Equals(r.Field<string>("Pro_ID"))).Inventory = r.Field<double>("Inv_Inventory");
+                var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
+                foreach (var m in medList)
+                {
+                    m.Inventory = r.Field<double>("Inv_Inventory");
+                }
             }
         }
     }

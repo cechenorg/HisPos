@@ -285,9 +285,9 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Usage FindUsageByQuickName(string quickName)
         {
-            if (Usages.Count(u => u.QuickName.Equals(quickName)) == 1)
+            if (Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).Count(u => u.QuickName.Equals(quickName)) == 1)
             {
-                return Usages.SingleOrDefault(u => u.QuickName.Equals(quickName));
+                return Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName));
             }
             return null;
         }

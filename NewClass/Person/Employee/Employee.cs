@@ -12,9 +12,7 @@ namespace His_Pos.NewClass.Person.Employee
     public class Employee:Person
     {
         public Employee(){
-            string acc = GetEmployeeNewAccount(); 
-            Account = acc;
-            Password = acc;
+            
             Gender = "男";
             WorkPosition = new WorkPosition.WorkPosition();
             WorkPosition.WorkPositionId = 2;
