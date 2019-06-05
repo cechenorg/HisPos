@@ -79,7 +79,16 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
                 Set(() => AdjustDate, ref adjustDate, value);
             }
         }
-        
+
+        private int? chronicTotal;
+
+        private int? chronicSequence;
+
+        public string ChronicContent
+        {
+            get => chronicTotal is null ? string.Empty : chronicTotal + " - " + chronicSequence;
+        }
+
         public DuplicatePrescription(DataRow r)
         {
             ID = r.Field<int>("PreMas_ID");
@@ -89,6 +98,8 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             TreatDate = r.Field<DateTime>("TreatmentDate");
             AdjustDate = r.Field<DateTime>("AdjustDate");
+            chronicTotal = r.Field<byte?>("ChronicTotal");
+            chronicSequence = r.Field<byte?>("ChronicSequence");
         }
     }
 }
