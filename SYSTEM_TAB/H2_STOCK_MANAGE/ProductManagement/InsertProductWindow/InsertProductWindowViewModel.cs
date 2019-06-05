@@ -53,15 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 Set(() => ProEnglishName, ref proEnglishName, value);
             }
         }
-        private int proPrice;
-        public int ProPrice
-        {
-            get => proPrice;
-            set
-            {
-                Set(() => ProPrice, ref proPrice, value);
-            }
-        }
+       
         public RelayCommand InsertProductCommand { get; set; }
         #endregion
         public InsertProductWindowViewModel() {
@@ -77,7 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                     break;
             }
             if (!string.IsNullOrEmpty(typeID)) {
-                ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName, ProPrice);
+                ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName);
                 MessageWindow.ShowMessage("新增成功",Class.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
             } 

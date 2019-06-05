@@ -5,13 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow"
         mc:Ignorable="d"
-        Title="新增商品" Height="330" Width="300" WindowStartupLocation="CenterScreen">
+        Title="新增商品" Height="280" Width="300" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <local:InsertProductWindowViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
@@ -40,10 +39,6 @@
             <TextBox Width="150"  Text="{Binding ProEnglishName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </StackPanel> 
         <StackPanel Orientation="Horizontal" Grid.Row="4">
-            <Label Content="商品售價" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox Width="150"  Text="{Binding ProPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="5">
             <Button Width="100"  Content="新增" Background="RoyalBlue" Margin="150,0,0,0" Height="30" FontSize="18" FontWeight="Bold"   BorderThickness="0" Command="{Binding InsertProductCommand}" />
         </StackPanel>
     </Grid>

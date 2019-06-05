@@ -55,8 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => Employee, ref employee, value);
-                if (Employee.ID != ViewModelMainWindow.CurrentUser.ID)
-                    IsEnable = false;
+                IsEnable = Employee.ID == ViewModelMainWindow.CurrentUser.ID; 
             }
         }
         public Employees employeeCollection;

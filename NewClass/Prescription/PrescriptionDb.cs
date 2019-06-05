@@ -308,7 +308,20 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false)); //出生年月日
             string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-            Dtl_data.Append(p.Patient.Tel == null ? empty.PadRight(20, ' ') : p.Patient.Tel.PadRight(20, ' ')); //電話
+
+            string patientTel;
+            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(p.Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                else
+                    patientTel = p.Patient.ContactNote;
+            }
+
+
+            Dtl_data.Append( string.IsNullOrEmpty(patientTel)  ? empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
             Dtl_data.AppendLine();
             //第二行   
             Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //院所代號
