@@ -26,6 +26,7 @@ namespace His_Pos.NewClass.Person.Employee
             else {
                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertEmployee]", parameterList);
                 SyncData();
+                UpdateIsLocal(e.IDNumber, true);
             } 
         }
         public static void Update(Employee e) {
@@ -89,6 +90,12 @@ namespace His_Pos.NewClass.Person.Employee
         public static void SyncData( )
         { 
             MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
+        }
+        public static void UpdateIsLocal(string idNumber,bool isLocal) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IdNumber", idNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "isLocal", isLocal); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIsLocal]", parameterList); 
         }
 
         public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
