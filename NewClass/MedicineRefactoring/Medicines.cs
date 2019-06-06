@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
 using His_Pos.Service;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -21,6 +24,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseID)
         {
+            Clear();
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
             var medicines = new Medicines();
@@ -56,7 +60,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     med.Dosage = Convert.ToDouble(item.Divided_dose);
                     med.Days = Convert.ToInt32(item.Days);
                     med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                    med.IsBuckle = false;
+                    med.IsBuckle = isBuckle;
                     switch (item.Remark)
                     {
                         case "":
@@ -282,6 +286,49 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public int CountOralLiquidAgent()
         {
             return this.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
+        }
+
+        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId)
+        {
+            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId);
+            Medicine medicine = null;
+            foreach (DataRow r in table.Rows)
+            {
+                switch (r.Field<int>("DataType"))
+                {
+                    case 1:
+                        medicine = new MedicineNHI(r);
+                        break;
+                    case 2:
+                        medicine = new MedicineOTC(r);
+                        break;
+                    case 3:
+                        medicine = new MedicineSpecialMaterial(r);
+                        break;
+                }
+            }
+            Debug.Assert(medicine != null, nameof(medicine) + " != null");
+            medicine.PaySelf = paySelf;
+            if (medicine.ID.EndsWith("00") ||
+                medicine.ID.EndsWith("G0"))
+                medicine.PositionID = "PO";
+            if (selectedMedicinesIndex != null)
+            {
+                if (selectedMedicinesIndex > 0)
+                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
+                Items[(int)selectedMedicinesIndex] = medicine;
+            }
+            else
+            {
+                if (Count > 0)
+                    medicine.CopyPrevious(Items[Count - 1]);
+                Add(medicine);
+            }
+        }
+
+        public void CheckWareHouse(Institution institution)
+        {
+
         }
     }
 }

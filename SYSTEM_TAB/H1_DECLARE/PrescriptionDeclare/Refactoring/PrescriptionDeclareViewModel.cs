@@ -10,6 +10,8 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
@@ -22,6 +24,7 @@ using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
@@ -95,6 +98,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand<string> AddMedicine { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -136,8 +140,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            AddMedicine = new RelayCommand<string>(AddMedicineAction);
         }
-
         #endregion
 
         #region CommandAction
@@ -268,6 +272,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     break;
             }
         }
+
+        private void AddMedicineAction(string medicineID)
+        {
+            if (string.IsNullOrEmpty(medicineID)) return;
+            if (medicineID.Length < 5)
+            {
+                switch (medicineID)
+                {
+                    case "R001":
+                    case "R002":
+                    case "R003":
+                    case "R004":
+                        CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
+                        return;
+                    default:
+                        MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        return;
+                }
+            }
+            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(CurrentPrescription.Institution, CurrentPrescription.AdjustCase.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            if (productCount == 0)
+                MessageWindow.ShowMessage(Resources.查無藥品, MessageType.WARNING);
+            else
+            {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedMedicine);
+                var addMedicineWindow = wareHouse is null ? new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionDeclare, "0") : new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse.ID);
+                if (productCount > 1)
+                    addMedicineWindow.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region MessengerFunctions
@@ -287,6 +325,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = receiveSelectedInstitution;
+        }
+
+        private void GetSelectedMedicine(NotificationMessage<ProductStruct> msg)
+        {
+            if (msg.Notification != nameof(PrescriptionDeclareViewModel)) return;
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedMedicine);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.AddMedicine(msg.Content.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentPrescription.CountPrescriptionPoint(true);
         }
         #endregion
         #region Functions

@@ -2,12 +2,13 @@
 using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Service;
+using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public class DeclareMedicalPersonnel : ObservableObject
     {
-        public DeclareMedicalPersonnel(Employee.Employee selectedMedicalPersonnel)
+        public DeclareMedicalPersonnel(Employee.Employee selectedMedicalPersonnel) 
         {
             if(selectedMedicalPersonnel is null) return;
             ID = selectedMedicalPersonnel.ID;
@@ -23,16 +24,55 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             ID = r.Field<int>("Emp_ID");
             Name = r.Field<string>("Emp_Name");
             IDNumber = r.Field<string>("Emp_IDNumber");
-            StartDate = r.Field<DateTime>("Emp_StartDate");
+            StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             IsLocal = r.Field<bool>("Emp_IsLocal");
-            if(NewFunction.CheckDataRowContainsColumn(r,"Prescription_Count"))
+            if(NewFunction.CheckDataRowContainsColumn(r, "PrescriptionCount"))
                 PrescriptionCount = r.Field<int?>("Prescription_Count");
         }
-        public virtual int ID { get; set; }
-        public virtual string Name { get; set; }//姓名
-        public virtual string IDNumber { get; set; }//身分證字號
+
+        private int id;
+        public int ID
+        {
+            get => id;
+            set
+            {
+                Set(() => ID, ref id, value);
+            }
+        }
+
+
+        private int? prescriptionCount;
+        public int? PrescriptionCount
+        {
+            get => prescriptionCount;
+            set
+            {
+                Set(() => PrescriptionCount, ref prescriptionCount, value);
+            }
+        }
+
+        private string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                Set(() => Name, ref name, value);
+            }
+        }
+
+        private string idNumber;
+        public string IDNumber
+        {
+            get => idNumber;
+            set
+            {
+                Set(() => IDNumber, ref idNumber, value);
+            }
+        }
+
         private DateTime? startDate;//到職日
         public virtual DateTime? StartDate
         {
@@ -51,7 +91,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 Set(() => LeaveDate, ref leaveDate, value);
             }
         }
+
         private bool isEnable;//備註
+        [IgnoreFormat]
         public virtual bool IsEnable
         {
             get => isEnable;
@@ -60,22 +102,15 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 Set(() => IsEnable, ref isEnable, value);
             }
         }
+
         private bool isLocal;//是否為本店新增
+        [IgnoreFormat]
         public virtual bool IsLocal
         {
             get => isLocal;
             set
             {
                 Set(() => IsLocal, ref isLocal, value);
-            }
-        }
-        private int? prescriptionCount;
-        public int? PrescriptionCount
-        {
-            get => prescriptionCount;
-            set
-            {
-                Set(() => PrescriptionCount, ref prescriptionCount, value);
             }
         }
     }

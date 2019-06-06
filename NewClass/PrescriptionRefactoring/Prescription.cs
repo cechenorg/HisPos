@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -19,9 +20,11 @@ using System.Linq;
 using His_Pos.Class;
 using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
@@ -30,6 +33,8 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
+using Medicines = His_Pos.NewClass.MedicineRefactoring.Medicines;
 using Resources = His_Pos.Properties.Resources; 
 
 
@@ -87,11 +92,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case ChronicType.Register:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse.ID);
+                    Medicines.GetDataByPrescriptionId(ID,WareHouse?.ID);
                     break;
                 case ChronicType.Reserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID, WareHouse.ID);
+                    Medicines.GetDataByReserveId(ID, WareHouse?.ID);
                     break;
             }
         }
@@ -151,8 +156,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
+            PrescriptionStatus.IsBuckle = !(WareHouse is null);
             Medicines = new Medicines();
-            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse.ID);
+            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, PrescriptionStatus.IsBuckle);
         }
 
         public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
@@ -196,12 +202,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (ChronicSeq != null)
             {
                 OriginalMedicalNumber = insurance.MedicalNumber;
+                TempMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
+                TempMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = insurance.MedicalNumber;
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
@@ -211,9 +219,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
-            PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
+            PrescriptionStatus.IsBuckle = !(WareHouse is null);
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, PrescriptionStatus.IsBuckle, WareHouse.ID);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID , PrescriptionStatus.IsBuckle);
         }
         #region Properties
         public int ID { get; set; }
@@ -242,8 +250,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Institution, ref institution, value);
-                if (institution != null)
-                    CheckTypeByInstitution();
+                if (institution == null) return;
+                CheckTypeByInstitution();
+                Medicines.CheckWareHouse(institution);
             }
         }
 
@@ -336,7 +345,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => ChronicSeq, ref chronicSeq, value);
-
+                if (chronicSeq == null || !(chronicSeq > 0)) return;
+                AdjustCase = VM.GetAdjustCase("2");
+                if (ChronicSeq >= 2)
+                {
+                    MedicalNumber = "IC0" + chronicSeq;
+                }
             }
         }//連續處方箋調劑序號 D35
 
@@ -371,7 +385,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                         MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
                         MainWindow.ServerConnection.CloseConnection();
                         break;
-
                 }
             }
         }
@@ -383,22 +396,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => PrescriptionCase, ref prescriptionCase, value);
-                if (PrescriptionCase != null)
+                if (PrescriptionCase == null) return;
+                switch (PrescriptionCase.ID)
                 {
-                    switch (PrescriptionCase.ID)
-                    {
-                        case "007"://山地離島就醫/戒菸免收
-                        case "11"://牙醫一般
-                        case "12"://牙醫急診
-                        case "13"://牙醫門診
-                        case "14"://牙醫資源不足方案
-                        case "15"://牙周統合照護
-                        case "16"://牙醫特殊專案
-                        case "19"://牙醫其他專案
-                        case "C1"://論病計酬
-                            Copayment = VM.GetCopayment("I22");
-                            break;
-                    }
+                    case "007"://山地離島就醫/戒菸免收
+                    case "11"://牙醫一般
+                    case "12"://牙醫急診
+                    case "13"://牙醫門診
+                    case "14"://牙醫資源不足方案
+                    case "15"://牙周統合照護
+                    case "16"://牙醫特殊專案
+                    case "19"://牙醫其他專案
+                    case "C1"://論病計酬
+                        Copayment = VM.GetCopayment("I22");
+                        break;
                 }
             }
         }
@@ -451,7 +462,23 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID);
+        private Medicine selectedMedicine;
+        public Medicine SelectedMedicine
+        {
+            get => selectedMedicine;
+            set
+            {
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+
+                Set(() => SelectedMedicine, ref selectedMedicine, value);
+
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
+            }
+        }
+
+        public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
 
         #endregion
 
@@ -702,24 +729,22 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            if (!AdjustCase.ID.Equals("0") && !CheckOnlyBloodGlucoseTestStrip())
+            if (AdjustCase.ID.Equals("0") || CheckOnlyBloodGlucoseTestStrip()) return details;
+            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
+            details.Add(medicalService);
+            MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
+            if (!AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3")) return details;
+            var dailyPrice = CheckIfSimpleFormDeclare();
+            if (dailyPrice <= 0) return details;
+            foreach (var d in details)
             {
-                var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
-                details.Add(medicalService);
-                MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
-                if (!AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3")) return details;
-                var dailyPrice = CheckIfSimpleFormDeclare();
-                if (dailyPrice <= 0) return details;
-                foreach (var d in details)
-                {
-                    if (!d.P1.Equals("1")) continue;
-                    d.P1 = "4";
-                    d.P8 = $"{0.00:0000000.00}";
-                    d.P9 = "00000000";
-                }
-                var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
-                details.Add(simpleForm);
+                if (!d.P1.Equals("1")) continue;
+                d.P1 = "4";
+                d.P8 = $"{0.00:0000000.00}";
+                d.P9 = "00000000";
             }
+            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
+            details.Add(simpleForm);
             return details;
         }
 
@@ -902,6 +927,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 else
                     Patient = customers[0];
             }
+        }
+
+        public void AddMedicine(string medicineID)
+        {
+            var paySelf = AdjustCase.ID.Equals("0");
+            int? selectedMedicinesIndex = null;
+            if (SelectedMedicine != null)
+                selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
+            
+            Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID);
         }
     }
 }
