@@ -57,7 +57,7 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Button Content="查詢" BorderThickness="0" FontSize="18" Width="80" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="12,0,0,0" Command="{Binding SearchProductRecordCommand}"/>
-            <Button Content="匯出結果" BorderThickness="0" FontSize="18" Width="120" FontFamily="Segoe UI Semibold" Background="DimGray" Margin="10,0,0,0" Command="{Binding SearchProductRecordCommand}"/>
+            <Button Content="匯出結果" BorderThickness="0" FontSize="18" Width="120" FontFamily="Segoe UI Semibold" Background="DimGray" Margin="10,0,0,0" Command="{Binding ExportRecordCommand}"/>
         </StackPanel>
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollection, UpdateSourceTrigger=PropertyChanged}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"

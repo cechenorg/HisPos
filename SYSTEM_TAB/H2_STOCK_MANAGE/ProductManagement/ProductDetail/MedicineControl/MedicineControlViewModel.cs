@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.ExportProductRecord;
 using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.WareHouse;
+using His_Pos.Service.ExportService;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -29,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
+        public RelayCommand ExportRecordCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -210,6 +215,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
             MainWindow.ServerConnection.CloseConnection();
         }
+        private void ExportRecordAction()
+        {
+            Collection<object> tempCollection = new Collection<object>() { new List<object>{Medicine.ID, StartDate, EndDate, SelectedWareHouse.ID} };
+
+            MainWindow.ServerConnection.OpenConnection();
+            ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductRecordTemplate());
+            bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{Medicine.ID}商品歷程{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (isSuccess)
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+            else
+                MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -223,6 +242,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             DataChangedCommand = new RelayCommand(DataChangedAction);
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
+            ExportRecordCommand = new RelayCommand(ExportRecordAction);
         }
         private void InitMedicineData(string id)
         {
