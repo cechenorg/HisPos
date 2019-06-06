@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -244,6 +245,11 @@ namespace His_Pos.Service
             result.Add(printSingle);
             result.Add(receiptPrint);
             return result;
+        }
+
+        public static bool CheckDataRowContainsColumn(DataRow row, string column)
+        {
+            return row.Table.Columns.Contains(column);
         }
     }
 }

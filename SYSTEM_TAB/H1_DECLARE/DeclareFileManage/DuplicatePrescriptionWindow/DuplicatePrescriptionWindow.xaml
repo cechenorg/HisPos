@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionWindow"
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:duplicatePrescription="clr-namespace:His_Pos.NewClass.Prescription.DuplicatePrescription"
-        mc:Ignorable="d"
-        Title="{Binding Title,UpdateSourceTrigger=PropertyChanged}" Height="650" Width="800"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="{Binding Title,UpdateSourceTrigger=PropertyChanged}" Height="650" Width="850"
         Topmost="True">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Viewbox Stretch="Fill">
-        <DataGrid x:Name="DuplicatePrescriptionsGrid" ItemsSource="{Binding PresCollectionView}" CanUserAddRows="False" Width="800" Height="650" AutoGenerateColumns="False"
+        <DataGrid x:Name="DuplicatePrescriptionsGrid" ItemsSource="{Binding PresCollectionView}" CanUserAddRows="False" Width="850" Height="650" AutoGenerateColumns="False"
                   ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGrid.GroupStyle>
                 <GroupStyle>
@@ -58,7 +58,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content="{Binding Institution.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                                <Label Content="{Binding Institution.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -66,8 +66,8 @@
                 <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="科別" IsReadOnly="True" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content="{Binding Division.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
+                                <Label Content="{Binding Division.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -75,8 +75,8 @@
                 <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="就醫日" IsReadOnly="True" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content="{Binding TreatDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
+                                <Label Content="{Binding TreatDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -84,8 +84,17 @@
                 <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="調劑日" IsReadOnly="True" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content="{Binding AdjustDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
+                                <Label Content="{Binding AdjustDate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="120" MaxWidth="120" Header="調劑次數" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
+                                <Label Content="{Binding ChronicContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
