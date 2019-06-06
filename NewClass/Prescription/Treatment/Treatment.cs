@@ -21,6 +21,7 @@ using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {

@@ -51,7 +51,7 @@ namespace His_Pos.NewClass.Person.Employee
             foreach (DataRow row in table.Rows)
             {
                 var emp = new Employee(row);
-                if (emp.WorkPosition.WorkPositionName.Equals("藥師") /*&& emp.IsLocal*/)
+                if (emp.WorkPosition.WorkPositionName.Equals("藥師"))
                     Add(emp);
             }
         }

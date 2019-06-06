@@ -19,10 +19,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         }
 
-        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem)
+        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseID)
         {
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
             var medicines = new Medicines();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -102,10 +102,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 }
             }
         }
-        public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,bool isBuckle)
+        public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,bool isBuckle,string wareHouseID)
         {
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
             var medicines = new Medicines();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -185,26 +185,26 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
         }
 
-        public void GetDataByPrescriptionId(int id)
+        public void GetDataByPrescriptionId(int id,string wareHouseID)
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
-            CreateMedicines(table);
+            CreateMedicines(table,wareHouseID);
         }
 
-        public void GetDataByReserveId(int id)
+        public void GetDataByReserveId(int id,string wareHouseID)
         {
             var table = MedicineDb.GetDataByReserveId(id);
-            CreateMedicines(table);
+            CreateMedicines(table,wareHouseID);
         }
 
-        private void CreateMedicines(DataTable table)
+        private void CreateMedicines(DataTable table,string wareHouseID)
         {
             var idList = new List<string>();
             foreach (DataRow r in table.Rows)
             {
                 idList.Add(r.Field<string>("Pro_ID"));
             }
-            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList);
+            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
             var medicines = new Medicines();
             for (var i = 0; i < medicinesTable.Rows.Count; i++)
             {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 
 // ReSharper disable InconsistentNaming
@@ -145,6 +146,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void CountAmountsPay()
         {
             AmountsPay = AmountSelfPay + CopaymentPoint;
+            ActualReceive = AmountsPay;
         }
 
         public void GetDeposit(int id)
@@ -155,6 +157,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void GetAmountPaySelf(int id)
         {
             AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
+        }
+
+        public void CountTotal()
+        {
+            TotalPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint + CopaymentPoint;
+        }
+
+        public void CountApply()
+        {
+            ApplyPoint = TotalPoint - CopaymentPoint;//計算申請點數
+        }
+
+        public void CountSpecialMaterial(List<Pdata> details)
+        {
+            SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
         }
     }
 }

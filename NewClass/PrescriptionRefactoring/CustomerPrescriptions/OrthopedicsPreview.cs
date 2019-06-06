@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         {
             var pre = new Prescription(Content);
             pre.UpdateCooperativePrescriptionIsRead();
-            pre.CountPrescriptionPoint(true);
+            pre.CountPrescriptionPoint();
             return pre;
         }
 

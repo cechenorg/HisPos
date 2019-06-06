@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.MedicineRefactoring;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -18,6 +17,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
 using His_Pos.Class;
+using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Medicines = new Medicines();
             Institution = new Institution();
             Division = new Division();
-            Pharmacist = new MedicalPersonnel();
+            Pharmacist = new Employee();
             MainDisease = new DiseaseCode();
             SubDisease = new DiseaseCode();
             AdjustCase = new AdjustCase();
@@ -87,11 +87,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case ChronicType.Register:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID);
+                    Medicines.GetDataByPrescriptionId(ID, WareHouse.ID);
                     break;
                 case ChronicType.Reserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID);
+                    Medicines.GetDataByReserveId(ID, WareHouse.ID);
                     break;
             }
         }
@@ -132,7 +132,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             int.TryParse(chronic.Total, out var total);
             if (total != 0)
                 ChronicTotal = total;
-            if (ChronicSeq != null && ChronicTotal != null)
+            if (ChronicSeq != null)
             {
                 OriginalMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = "IC0" + ChronicSeq;
@@ -152,10 +152,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             Medicines = new Medicines();
-            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item);
+            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse.ID);
         }
 
-        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool IsRead)
+        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
         {
             #region CooPreVariable
             var prescription = c;
@@ -193,7 +193,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             int.TryParse(chronic.Total, out var total);
             if (total != 0)
                 ChronicTotal = total;
-            if (ChronicSeq != null && ChronicTotal != null)
+            if (ChronicSeq != null)
             {
                 OriginalMedicalNumber = insurance.MedicalNumber;
                 MedicalNumber = "IC0" + ChronicSeq;
@@ -208,13 +208,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
-            var cooperativeSetting = VM.CooperativeClinicSettings.Single(s => s.CooperavieClinic.ID.Equals(Institution.ID));
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
-            PrescriptionStatus.IsRead = IsRead;
+            PrescriptionStatus.IsRead = isRead;
             PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, PrescriptionStatus.IsBuckle);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, PrescriptionStatus.IsBuckle, WareHouse.ID);
         }
         #region Properties
         public int ID { get; set; }
@@ -256,7 +255,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 Set(() => Division, ref division, value);
                 if(AdjustCase is null) return;
-                if ((!AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3"))) return;
+                if (!(AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))) return;
                 switch (division.ID)
                 {
                     case "40":
@@ -269,8 +268,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private MedicalPersonnel pharmacist;//醫事人員代號 D25
-        public MedicalPersonnel Pharmacist
+        private Employee pharmacist;//醫事人員代號 D25
+        public Employee Pharmacist
         {
             get => pharmacist;
             set
@@ -410,6 +409,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             get => copayment;
             set
             {
+                if (value.Id.Equals("I21") && PrescriptionPoint?.MedicinePoint > 100)
+                    value = VM.GetCopayment("I20");
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {
@@ -449,6 +450,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => TempMedicalNumber, ref tempMedicalNumber, value);
             }
         }
+
+        public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID);
+
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -460,32 +464,33 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckTypeByInstitution()
         {
-            if (Institution != null && !string.IsNullOrEmpty(Institution.ID) && Institution.CheckCooperative())
-            {
-                if (Institution.CheckIsOrthopedics())
-                {
-                    Type = PrescriptionType.Orthopedics;
-                    PrescriptionStatus.IsBuckle = false;
-                }
-                else
-                {
-                    Type = PrescriptionType.Cooperative;
-                    var clinic = VM.CooperativeClinicSettings.Single(c => c.CooperavieClinic.ID.Equals(Institution.ID));
-                    PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
-                }
-            }
-            else//非合作診所
+            if (Institution != null && Institution.CheckCooperative())
+                CheckIsOrthopedics();
+            else
             {
                 Type = PrescriptionType.Normal;
                 PrescriptionStatus.IsBuckle = true;
             }
 
-            if (Medicines != null)
+            if (Medicines is null) return;
+
+            foreach (var m in Medicines)
             {
-                foreach (var m in Medicines)
-                {
-                    m.IsBuckle = PrescriptionStatus.IsBuckle;
-                }
+                m.IsBuckle = PrescriptionStatus.IsBuckle;
+            }
+        }
+
+        private void CheckIsOrthopedics()
+        {
+            if (Institution.CheckIsOrthopedics())
+            {
+                Type = PrescriptionType.Orthopedics;
+                PrescriptionStatus.IsBuckle = false;
+            }
+            else
+            {
+                Type = PrescriptionType.Cooperative;
+                PrescriptionStatus.IsBuckle = !(VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID) is null);
             }
         }
 
@@ -563,44 +568,41 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        public void CountPrescriptionPoint(bool countSelfPay)
+        public void CountPrescriptionPoint()
         {
             if (!AdjustCase.ID.Equals("0"))
             {
-                PrescriptionPoint.MedicinePoint = Medicines.CountMedicinePoint();
-                PrescriptionPoint.SpecialMaterialPoint = Medicines.CountSpecialMedicinePoint();
                 CheckCopayment();
                 if (Patient.Birthday != null)
                 {
                     CheckMedicalServiceData();//確認藥事服務資料
                     var details = SetPrescriptionDetail();//產生藥品資料
-                    PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+                    PrescriptionPoint.CountSpecialMaterial(details);
                 }
-                PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
-                                               PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
-                PrescriptionPoint.ApplyPoint = PrescriptionPoint.TotalPoint - PrescriptionPoint.CopaymentPoint;//計算申請點數
+                PrescriptionPoint.CountTotal();
+                PrescriptionPoint.CountApply();
             }
-            if (countSelfPay)
-                PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
-            PrescriptionPoint.AmountsPay = PrescriptionPoint.CopaymentPoint + PrescriptionPoint.AmountSelfPay;
-            PrescriptionPoint.ActualReceive = PrescriptionPoint.AmountsPay;
+            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
+            PrescriptionPoint.CountAmountsPay();
         }
 
         private void CheckCopayment()
         {
-            if (AdjustCase.ID.Equals("2") || ChronicSeq != null && ChronicSeq > 0 || ChronicTotal != null && ChronicTotal > 0)
+            if (CheckIsChronic())
                 Copayment = VM.GetCopayment("I22");
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
-            else
-            {
-                if (Copayment != null && Copayment.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100)
-                    Copayment = VM.GetCopayment("I20");
-            }
-            if (Copayment != null && !CheckFreeCopayment())
-                PrescriptionPoint.CopaymentPoint = CountCopaymentPoint();
-            else
-                PrescriptionPoint.CopaymentPoint = 0;
+            PrescriptionPoint.CopaymentPoint = CheckNotFreeCopayment() ? CountCopaymentPoint() : 0;
+        }
+        private bool CheckIsChronic()
+        {
+            return AdjustCase.ID.Equals("2") || ChronicSeq != null && ChronicSeq > 0 ||
+                   ChronicTotal != null && ChronicTotal > 0;
+        }
+
+        private bool CheckNotFreeCopayment()
+        {
+            return Copayment != null && !CheckFreeCopayment();
         }
 
         private bool CheckFreeCopayment()

@@ -116,6 +116,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         public int CheckAgePercentage()
         {
+            if (Birthday is null) return 100;
             var cusAge = CountAgeToMonth();
             if (cusAge.Years == 0 && cusAge.Months < 6)
             {
