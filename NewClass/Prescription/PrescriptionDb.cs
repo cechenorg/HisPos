@@ -35,10 +35,13 @@ namespace His_Pos.NewClass.Prescription
             return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
         }
         public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        { 
+        {
+            int warID = 0; 
+            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
+                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
             DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
             DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
             DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
@@ -226,12 +229,15 @@ namespace His_Pos.NewClass.Prescription
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
         }
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        { 
+        {
+            int warID = 0;
+            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
+                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable prescriptionMater = SetPrescriptionMaster(prescription);
             prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
@@ -245,10 +251,13 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
         public static DataTable DeletePrescription(Prescription prescription)
-        { 
+        {
+            int warID = 0;
+            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
+                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID",warID);
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }
@@ -268,8 +277,15 @@ namespace His_Pos.NewClass.Prescription
         {
             return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
         }
-        public static bool UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
-            return sendOrderAction(storId,p, PrescriptionSendData, "UpdateDeclareOrder") == "SUCCESS" ? true : false;
+        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData) {
+            switch (sendOrderAction(storId, p, PrescriptionSendData, "UpdateDeclareOrder")) {
+                case "SUCCESS":
+                    return 1;
+                case "DONE":
+                    return 2;
+                default:
+                    return 0;
+            } 
         }
         public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData,string sql) {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
@@ -292,7 +308,20 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false)); //出生年月日
             string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-            Dtl_data.Append(p.Patient.Tel == null ? empty.PadRight(20, ' ') : p.Patient.Tel.PadRight(20, ' ')); //電話
+
+            string patientTel;
+            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            else
+            {
+                if (!string.IsNullOrEmpty(p.Patient.Tel))
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                else
+                    patientTel = p.Patient.ContactNote;
+            }
+
+
+            Dtl_data.Append( string.IsNullOrEmpty(patientTel)  ? empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
             Dtl_data.AppendLine();
             //第二行   
             Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //院所代號
@@ -389,6 +418,8 @@ namespace His_Pos.NewClass.Prescription
                     table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{Rx_id}', '{storId}','{Rx_order}','{Dtl_data}')");
                     if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                         result = "SUCCESS";
+                    else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
+                        result = "DONE";
                     MainWindow.SingdeConnection.CloseConnection();
                     break;
             }

@@ -20,7 +20,7 @@ using SpeTre = His_Pos.NewClass.Prescription.Treatment.SpecialTreat.SpecialTreat
 using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
@@ -30,7 +30,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         {
             Institution = new Ins();
             Division = new Div();
-            Pharmacist = new MedicalPersonnel();
+            Pharmacist = new Employee();
             MainDisease = new DisCode();
             SubDisease = new DisCode();
             AdjustCase = new AdjCase();
@@ -251,8 +251,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private MedicalPersonnel pharmacist;//醫事人員代號 D25
-        public MedicalPersonnel Pharmacist
+        private Employee pharmacist;//醫事人員代號 D25
+        public Employee Pharmacist
         {
             get => pharmacist;
             set

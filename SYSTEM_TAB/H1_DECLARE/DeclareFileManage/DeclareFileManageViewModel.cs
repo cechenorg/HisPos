@@ -157,7 +157,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             GetPharmacistSchedule();
             DeclareFile.GetNotAdjustPrescriptionCount((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay), SelectedPharmacy.ID);
             var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay));
-            duplicatePrescriptionWindow.Show();
+            if (duplicatePrescriptionWindow.ShowDialog)
+            {
+                duplicatePrescriptionWindow.Show();
+            }
             EditedList = new DeclarePrescriptions();
         }
         private void InitialCommands()
@@ -343,7 +346,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
             var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
             PharmacistSchedule = new PharmacistSchedule();
-            PharmacistSchedule.GetPharmacistSchedule(start, last);
+            PharmacistSchedule.GetPharmacistScheduleWithCount(start, last);
         }
 
         private List<PharmacistScheduleItem> GetAdjustPharmacist(bool month)

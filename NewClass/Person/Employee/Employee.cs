@@ -12,9 +12,7 @@ namespace His_Pos.NewClass.Person.Employee
     public class Employee:Person
     {
         public Employee(){
-            string acc = GetEmployeeNewAccount(); 
-            Account = acc;
-            Password = acc;
+            
             Gender = "男";
             WorkPosition = new WorkPosition.WorkPosition();
             WorkPosition.WorkPositionId = 2;
@@ -34,7 +32,7 @@ namespace His_Pos.NewClass.Person.Employee
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
-            IsCommon = r.Field<bool>("Emp_IsCommon");
+            IsLocal = r.Field<bool>("Emp_IsLocal");
             WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
@@ -120,14 +118,14 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => Account, ref account, value);
             }
         }
-        private bool isCommon;//是否為本店新增
+        private bool isLocal;//是否為本店新增
         [IgnoreFormat]
-        public virtual bool IsCommon
+        public virtual bool IsLocal
         {
-            get => isCommon;
+            get => isLocal;
             set
             {
-                Set(() => IsCommon, ref isCommon, value);
+                Set(() => IsLocal, ref isLocal, value);
             }
         }
         #region Function

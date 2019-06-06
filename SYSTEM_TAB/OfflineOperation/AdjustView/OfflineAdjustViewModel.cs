@@ -12,6 +12,7 @@ using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescription;
@@ -58,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
         #region ItemsSources
         public Institutions Institutions { get; set; }
         public Divisions Divisions { get; set; }
-        public MedicalPersonnels MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public PaymentCategories PaymentCategories { get; set; }
         public PrescriptionCases PrescriptionCases { get; set; }

@@ -9,12 +9,20 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public static class PharmacistScheduleDb
     {
-        public static DataTable GetEmployeeSchedule(DateTime start, DateTime end)
+        public static DataTable GetEmployeeScheduleWithCount(DateTime start, DateTime end)
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StartDate", start);
             DataBaseFunction.AddSqlParameter(parameterList, "EndDate", end);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeScheduleWithPrescriptionCount]", parameterList);
+        }
+
+        public static DataTable GetEmployeeSchedule(DateTime start, DateTime end)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StartDate", start);
+            DataBaseFunction.AddSqlParameter(parameterList, "EndDate", end);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeSchedule]", parameterList);
         }
 
         public static void InsertSchedule(DateTime start, DateTime end, PharmacistSchedule schedule)

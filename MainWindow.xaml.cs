@@ -44,13 +44,16 @@ namespace His_Pos
         public MainWindow(Employee user)
         {
             InitializeComponent();
+            Instance = this;
             FeatureFactory();
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
-            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName == "藥師")
-                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
-
-            Instance = this;
+            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.InitPharmacists();
+            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName == "藥師" && ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count(e => e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) == 0)
+            {
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = ViewModelMainWindow.CurrentUser;
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Add(ViewModelMainWindow.CurrentUser);
+            }
             InitializeMenu();
             InitialUserBlock();
             StartClock();

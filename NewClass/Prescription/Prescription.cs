@@ -106,22 +106,28 @@ namespace His_Pos.NewClass.Prescription
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
-            var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
-            var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
-            var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            int birthYear = 0, birthMonth = 0, birthDay = 0;
+            if (customer.Birth.Length == 7)
+            {
+                birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
+                birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
+                birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
+            }
             #endregion
             Source = PrescriptionSource.XmlOfPrescription;
             SourceId = sourceId; 
-             
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Treatment = new Treatment.Treatment(c, treatDate);
             Patient = new Customer
             {
                 IDNumber = customer.IdNumber,
                 Name = customer.Name,
-                Birthday = new DateTime(birthYear, birthMonth, birthDay),
                 Tel = customer.Phone
             };
+            if (birthYear >= 1911)
+            {
+                Patient.Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            }
             Card = new IcCard();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
@@ -386,7 +392,8 @@ namespace His_Pos.NewClass.Prescription
         }
 
         public void AddMedicineBySearch(string proId) {
-            DataTable table = MedicineDb.GetMedicinesBySearchId(proId);
+            CheckWareHouse();
+            DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
             {
@@ -434,8 +441,9 @@ namespace His_Pos.NewClass.Prescription
         
         #endregion
         public void AdjustMedicinesType() {
+            CheckWareHouse();
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
-                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID);
+                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID);
                 var temp = new Medicine();
                 if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
                     Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
@@ -1224,6 +1232,7 @@ namespace His_Pos.NewClass.Prescription
         public void CheckIsCooperative()
         {
             CheckIsBuckleAndSource();
+            Medicines.GetDataByWareHouse(WareHouse);
             Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
         }
 
@@ -1274,9 +1283,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CheckIsBuckleAndSource()
         {
-            var wareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
-            WareHouse = wareHouse;
-            PrescriptionStatus.IsBuckle = WareHouse != null;
+            CheckWareHouse();
             if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
             {
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
@@ -1304,6 +1311,12 @@ namespace His_Pos.NewClass.Prescription
                 return false;
             }
             return true;
+        }
+
+        public void CheckWareHouse()
+        {
+            WareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
+            PrescriptionStatus.IsBuckle = WareHouse != null;
         }
     }
 }

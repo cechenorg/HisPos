@@ -147,7 +147,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     }
                     else
                     {
-                        UsageName = Usage.Name;
+                        _usageName = Usage.Name;
                     }
                     if (ID is null) return;
                     if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))

@@ -55,6 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => Employee, ref employee, value);
+                IsEnable = Employee.ID == ViewModelMainWindow.CurrentUser.ID; 
             }
         }
         public Employees employeeCollection;
@@ -95,7 +96,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 EmployeeCollectionViewSource.Filter += Filter;
             }
         }
-
+        private bool isEnable = true;
+        public bool IsEnable
+        {
+            get { return isEnable; }
+            set
+            {
+                Set(() => IsEnable, ref isEnable, value); 
+            }
+        }
         #endregion
 
         public EmployeeManageViewModel() {
@@ -126,7 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                
         }
         public void ChangePassWordAction() {
-           
+            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(Employee); 
         }
         public void NewEmployeeAction() {
             EmployeeInsertWindow.EmployeeInsertWindow employeeInsertWindow = new EmployeeInsertWindow.EmployeeInsertWindow();
@@ -156,7 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
             if (GlobalCheck)
                 e.Accepted = true;
-            else if(LocalCheck && ((Employee)e.Item).IsCommon)
+            else if(LocalCheck && ((Employee)e.Item).IsLocal)
                 e.Accepted = true; 
         }
         #endregion

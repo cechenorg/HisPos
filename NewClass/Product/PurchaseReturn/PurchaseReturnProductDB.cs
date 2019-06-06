@@ -16,10 +16,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductByStoreOrderID]", parameters);
         }
 
-        internal static DataTable GetPurchaseProductByProductID(string iD)
+        internal static DataTable GetPurchaseProductByProductID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", iD));
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductByProductID]", parameters);
         }
@@ -37,10 +38,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductByStoreOrderIDForExport]", parameters);
         }
 
-        internal static DataTable GetReturnProductByProductID(string iD)
+        internal static DataTable GetReturnProductByProductID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", iD));
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductByProductID]", parameters);
         }

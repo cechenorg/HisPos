@@ -23,7 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
                 Set(() => WorkPositions, ref workPositions, value);
             }
         }
-        public Employee employee = new Employee();
+        public Employee employee ;
         public Employee Employee
         {
             get { return employee; }
@@ -44,6 +44,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
         public RelayCommand SubbmitCommand { get; set; }
         public RelayCommand CheckIdNumberCommand { get; set; }
         public EmployeeInsertWindowViewModel() {
+            Employee = new Employee();
+            string acc = Employee.GetEmployeeNewAccount();
+            Employee.Account = acc;
+            Employee.Password = acc;
             SubbmitCommand = new RelayCommand(SubbmitAction);
             CheckIdNumberCommand = new RelayCommand(CheckIdNumberAction); 
         }
