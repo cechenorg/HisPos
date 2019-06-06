@@ -58,9 +58,10 @@ namespace His_Pos.NewClass.Product.Medicine
             }
             return medicineListTable;
         }
-        public static DataTable GetPrescriptionMedicineSumById(List<int> idList) {
+        public static DataTable GetPrescriptionMedicineSumById(List<int> idList,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(idList));
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionMedicineSumById]", parameterList);    
         }
         private static DataTable IDTable() {

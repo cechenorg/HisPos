@@ -20,6 +20,7 @@ using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
@@ -466,7 +467,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             foreach (var a in SearchPrescriptions) {
                 idList.Add(a.ID);
             }
-            DataTable table = MedicineDb.GetPrescriptionMedicineSumById(idList); 
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "藥品統計存檔";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
@@ -482,12 +482,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 {
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
-                        file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,庫存,調劑量,扣庫量");
-                        foreach (DataRow s in table.Rows)
-                        {
-
-                            file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
-                        }
+                        
+                        WareHouses WareHouses = WareHouses.GetWareHouses();
+                        foreach (WareHouse w in WareHouses) {
+                            file.WriteLine("庫名," + w.Name);
+                            file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,庫存,調劑量,扣庫量");
+                            DataTable table = MedicineDb.GetPrescriptionMedicineSumById(idList, w.ID);
+                            foreach (DataRow s in table.Rows)
+                            { 
+                                file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
+                            }
+                            file.WriteLine();
+                            file.WriteLine();
+                            file.WriteLine();
+                        } 
                         file.Close();
                         file.Dispose();
                     }
