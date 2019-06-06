@@ -14,6 +14,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedW
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -34,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
         public RelayCommand ExportRecordCommand { get; set; }
+        public RelayCommand ShowConsumeRecordCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -229,6 +231,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             else
                 MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
         }
+        private void ShowConsumeRecordAction()
+        {
+            ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse.ID);
+            productConsumeRecordWindow.ShowDialog();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -243,6 +250,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
+            ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
         }
         private void InitMedicineData(string id)
         {
