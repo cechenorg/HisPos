@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
@@ -22,7 +21,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         }
 
-        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseID)
+        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseID,bool isBuckle)
         {
             Clear();
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
@@ -253,16 +252,28 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public int CountMedicinePoint()
         {
-            if (this.Count(m => !m.PaySelf) <= 0) return 0;
-            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount);
+            var notPaySelfNhiMedicines = GetNotPaySelfNhiMedicines();
+            if (!notPaySelfNhiMedicines.Any()) return 0;
+            var medicinePoint = notPaySelfNhiMedicines.Sum(m => m.NHIPrice * m.Amount);
             return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString()), 0, MidpointRounding.AwayFromZero);
+        }
+
+        private List<Medicine> GetNotPaySelfNhiMedicines()
+        {
+            return this.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
         }
 
         public int CountSpecialMedicinePoint()
         {
-            if (this.Count(m => !m.PaySelf && m is MedicineSpecialMaterial) <= 0) return 0;
-            var specialMaterial = this.Where(m => m is MedicineSpecialMaterial && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount * 1.05);
+            var notPaySelfSpecialMaterials = GetNotPaySelfSpecialMaterials();
+            if (!notPaySelfSpecialMaterials.Any()) return 0;
+            var specialMaterial = notPaySelfSpecialMaterials.Sum(m => m.NHIPrice * m.Amount) * 1.05;
             return (int)Math.Round(Convert.ToDouble(specialMaterial.ToString()), 0, MidpointRounding.AwayFromZero);
+        }
+
+        private List<Medicine> GetNotPaySelfSpecialMaterials()
+        {
+            return this.Where(m => !m.PaySelf && m is MedicineSpecialMaterial).ToList();
         }
 
         public int CountSelfPay()
@@ -324,11 +335,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     medicine.CopyPrevious(Items[Count - 1]);
                 Add(medicine);
             }
-        }
-
-        public void CheckWareHouse(Institution institution)
-        {
-
         }
     }
 }

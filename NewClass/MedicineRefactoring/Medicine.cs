@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Data;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -60,7 +62,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
-            PaySelf = m.Remark == "-" || m.Remark == "*";
+            PaySelf = m.Remark.Equals("-") || m.Remark.Equals("*");
             IsBuckle = false;
             switch (m.Remark)
             {
@@ -86,7 +88,9 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => dosage;
             set
             {
+
                 Set(() => Dosage, ref dosage, value);
+                CalculateAmount();
             }
         }
 
@@ -97,6 +101,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => UsageName, ref usageName, value);
+                Usage = ViewModelMainWindow.FindUsageByQuickName(value);
+                if (Usage is null)
+                {
+                    Usage = ViewModelMainWindow.GetUsage(value);
+                    Usage.Name = UsageName;
+                }
+                else
+                    usageName = Usage.Name;
+                CalculateAmount();
             }
         }
 
@@ -137,6 +150,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => Days, ref days, value);
+                CalculateAmount();
             }
         }
 
@@ -147,6 +161,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => Price, ref price, value);
+                CountTotalPrice();
             }
         }
 
@@ -166,10 +181,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => inventory;
             set
             {
-                if (inventory != value)
-                {
-                    Set(() => Inventory, ref inventory, value);
-                }
+                Set(() => Inventory, ref inventory, value);
             }
         }
 
@@ -179,10 +191,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => costPrice;
             set
             {
-                if (costPrice != value)
-                {
-                    Set(() => CostPrice, ref costPrice, value);
-                }
+                Set(() => CostPrice, ref costPrice, value);
             }
         }
 
@@ -193,6 +202,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => PaySelf, ref paySelf, value);
+                CountTotalPrice();
             }
         }
 
@@ -278,6 +288,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set
             {
                 Set(() => Amount, ref amount, value);
+                CountTotalPrice();
             }
         }
 
@@ -302,7 +313,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
         }
 
-        private bool isSelected = false;
+        private bool isSelected;
         public bool IsSelected
         {
             get => isSelected;
@@ -322,6 +333,25 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Dosage = previous.Dosage;
             UsageName = previous.UsageName;
             Days = previous.Days;
+        }
+
+        private void CalculateAmount()
+        {
+            if(string.IsNullOrEmpty(ID)) return;
+            if (Dosage is null || Days is null) return;
+            if (Usage is null || string.IsNullOrEmpty(Usage.Name)) return;
+            if (ID.EndsWith("00") || ID.EndsWith("G0"))
+            {
+                var countByUsage = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
+                Amount = countByUsage == 0 ? Amount : countByUsage;
+            }
+        }
+
+        private void CountTotalPrice()
+        {
+            if (Amount <= 0) return;
+            var tempPrice = (PaySelf ? Price : NHIPrice) * Amount;
+            TotalPrice = Math.Round(Convert.ToDouble(tempPrice.ToString()), 0, MidpointRounding.AwayFromZero);
         }
     }
 }

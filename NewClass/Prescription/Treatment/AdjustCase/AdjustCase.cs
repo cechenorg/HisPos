@@ -32,5 +32,15 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
                 Set(() => FullName, ref fullName, value);
             }
         }
+
+        public bool CheckIsPrescribe()
+        {
+            return ID.Equals("0");
+        }
+
+        public bool CheckIsSimpleForm()
+        {
+            return ID.Equals("3");
+        }
     }
 }

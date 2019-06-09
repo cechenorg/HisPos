@@ -176,5 +176,10 @@ namespace His_Pos.NewClass.Person.Employee
         }
        
         #endregion
+
+        public bool CheckLeave(DateTime date)
+        {
+            return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         #region Properties
-        public bool IsBuckle { get; set; }
         public bool IsSendToSingde { get; set; }
         public bool IsAdjust { get; set; }
         public bool IsRead { get; set; }

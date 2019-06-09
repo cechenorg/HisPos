@@ -216,5 +216,10 @@ namespace His_Pos.NewClass.Prescription
             c.Tel = Tel;
             return c;
         }
+
+        public bool Read()
+        {
+            return GetBasicData();
+        }
     }
 }
