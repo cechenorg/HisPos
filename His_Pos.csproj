@@ -1717,6 +1717,7 @@
     <Resource Include="Images\clinic.png" />
     <Resource Include="Images\pharmacy.png" />
     <Resource Include="Images\Cooperate.png" />
+    <Resource Include="Images\chart.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
