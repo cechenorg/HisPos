@@ -914,6 +914,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 尚未選擇異常代碼，請重新過卡後再次按下調劑按鈕 的當地語系化字串。
+        /// </summary>
+        internal static string 尚未選擇異常代碼 {
+            get {
+                return ResourceManager.GetString("尚未選擇異常代碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 所置入非安全模組卡(檔) 的當地語系化字串。
         /// </summary>
         internal static string 所置入非安全模組 {
@@ -1316,15 +1325,6 @@ namespace His_Pos.Properties {
         internal static string 連接成功 {
             get {
                 return ResourceManager.GetString("連接成功", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 尚未選擇異常代碼，請以欠卡調劑或重新過卡後再次按下調劑按鈕 的當地語系化字串。
-        /// </summary>
-        internal static string 重新過卡或押金 {
-            get {
-                return ResourceManager.GetString("重新過卡或押金", resourceCulture);
             }
         }
         

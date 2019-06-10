@@ -964,19 +964,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        public void CheckPatientWithCard(Customer patientFromCard)
+        public bool CheckPatientWithCard(Customer patientFromCard)
         {
             if (!string.IsNullOrEmpty(Patient.IDNumber))
             {
                 if (Patient.IDNumber.Equals(patientFromCard.IDNumber))
+                {
                     Patient = patientFromCard;
-                else
-                    MessageWindow.ShowMessage("卡片讀取結果與目前處方病患不符，請確認卡片或病患資料",MessageType.ERROR);
+                    return true;
+                }
+                MessageWindow.ShowMessage("卡片讀取結果與目前處方病患不符，請確認卡片或病患資料",MessageType.ERROR);
+                return false;
             }
-            else
-            {
-                Patient = patientFromCard;
-            }
+            Patient = patientFromCard;
+            return true;
         }
     }
 }

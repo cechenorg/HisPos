@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Person.MedicalPerson;
 
 namespace His_Pos.NewClass.Person.Employee
 { 
@@ -34,7 +32,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
             foreach (var emp in tempEmpList)
             {
-                if(emp.StartDate <= selectedDate && (emp.LeaveDate is null || selectedDate <= emp.LeaveDate) && emp.WorkPosition.WorkPositionName.Equals("藥師") && emp.IsLocal)
+                if(emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Equals("藥師") && emp.IsLocal)
                     Add(emp);
             }
             //var table = EmployeeDb.GetEnableMedicalPersonnels(selectedDate);

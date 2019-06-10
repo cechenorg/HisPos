@@ -1487,7 +1487,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             e.ShowDialog();
             if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
             {
-                MessageWindow.ShowMessage(Resources.重新過卡或押金, MessageType.WARNING);
+                MessageWindow.ShowMessage(Resources.尚未選擇異常代碼, MessageType.WARNING);
                 IsAdjusting = false;
                 IsCardReading = false;
                 return false;

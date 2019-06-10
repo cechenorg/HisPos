@@ -10,6 +10,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
@@ -98,7 +99,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             }
         }
         private IcCard currentCard;
-        private bool setBuckleAmount { get; set; }
+        private bool setBuckleAmount;
+        private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
+        private bool isAdjusting;
+        private bool isCardReading;
         #endregion
         #region Commands
         public RelayCommand<TextBox> GetCustomers { get; set; }
@@ -175,42 +179,55 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = Resources.讀取健保卡;
-                try
-                {
-                    readSuccess = currentCard.Read();
-                }
-                catch (Exception e)
-                {
-                    NewFunction.ExceptionLog(e.Message);
-                    Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
-                }
+                readSuccess = ReadCard();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                CheckReadCardResult(readSuccess);
+                if (readSuccess)
+                    ReadCardSuccess();
+                else
+                    ReadCardFail();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
 
-        private void CheckReadCardResult(bool result)
+        private bool ReadCard()
         {
-            if (result)
+            BusyContent = Resources.讀取健保卡;
+            try
             {
-                var patient = new Customer(currentCard);
-                MainWindow.ServerConnection.OpenConnection();
-                patient.Check();
-                MainWindow.ServerConnection.CloseConnection();
-                CurrentPrescription.CheckPatientWithCard(patient);
+                var readSuccess = currentCard.Read();
+                return readSuccess;
             }
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常" + e.Message, MessageType.WARNING));
+                return false;
+            }
+        }
 
+        private void ReadCardSuccess()
+        {
+            var patient = new Customer(currentCard);
+            MainWindow.ServerConnection.OpenConnection();
+            patient.Check();
+            MainWindow.ServerConnection.CloseConnection();
+            var checkPatient = CurrentPrescription.CheckPatientWithCard(patient);
+            if (checkPatient)
+                GetSelectedCustomer(patient);
+        }
+
+        private void ReadCardFail()
+        {
+            AskErrorUpload();
         }
 
         private void GetCustomersAction(TextBox condition)
         {
             //顧客查詢
+            // ReSharper disable RedundantAssignment
             Messenger.Default.Register<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
             CustomerSearchWindow customerSearch;
             switch (condition.Name)
@@ -252,6 +269,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetInstitutionAction(string insID)
         {
             //院所查詢
+            // ReSharper disable RedundantAssignment
+            // ReSharper disable once UnusedVariable
             Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
             var institutionSelectionWindow = new InstitutionSelectionWindow(insID);
@@ -260,6 +279,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetCommonInstitutionAction()
         {
             //常用院所查詢
+            // ReSharper disable RedundantAssignment
+            // ReSharper disable once UnusedVariable
             Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
             var commonHospitalsWindow = new CommonHospitalsWindow();
@@ -280,10 +301,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             switch (elementName)
             {
                 case "MainDiagnosis":
-                    CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID); ;
+                    CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
                 case "SecondDiagnosis":
-                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID); ;
+                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
             }
         }
@@ -426,6 +447,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             return productCount;
+        }
+        private bool AskErrorUpload()
+        {
+            var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber); //詢問異常上傳
+            e.ShowDialog();
+            if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
+            {
+                MessageWindow.ShowMessage(Resources.尚未選擇異常代碼, MessageType.WARNING);
+                isAdjusting = false;
+                isCardReading = false;
+                return false;
+            }
+            ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+            return true;
         }
         #endregion
     }
