@@ -6,7 +6,7 @@
         xmlns:productgroupsetting="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow"
         mc:Ignorable="d"
-        Title="商品群組設定" Height="400" Width="450" >
+        Title="商品群組設定" Height="400" Width="450" WindowStartupLocation="CenterScreen" >
     
     <Window.Resources>
         <DataTemplate x:Key="MergeProduct" DataType="{x:Type productgroupsetting:MergeProductUserControl}">

@@ -17,8 +17,8 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting.SplitProduct {
                 Add(new SplitProduct(r));
             }
         }
-        public void SplitProductInventory(string proID) {
-           SplitProductDb.SplitProductInventory(proID,this);
+        public void SplitProductInventory(string proID,int amount,string warID) {
+           SplitProductDb.SplitProductInventory(proID,amount,warID);
           
         }
         

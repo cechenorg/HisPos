@@ -12,15 +12,15 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
     {
         public ProductGroupSettings() { }
 
-        public void GetDataByID(string proID) {
+        public void GetDataByID(string proID,string warID) {
             Clear();
-            DataTable table = ProductGroupSettingDb.GetDataByID(proID);
+            DataTable table = ProductGroupSettingDb.GetDataByID(proID,warID);
             foreach (DataRow r in table.Rows) {
                 Add(new ProductGroupSetting(r));
             }
         }
-        public void MergeProduct() {
-            ProductGroupSettingDb.MergeProductGroup(this);
+        public void MergeProduct(string warID) {
+            ProductGroupSettingDb.MergeProductGroup(this,warID);
         }
     }
 }

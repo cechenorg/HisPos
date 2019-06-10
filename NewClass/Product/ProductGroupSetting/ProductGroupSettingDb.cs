@@ -12,16 +12,18 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
     public static class ProductGroupSettingDb
     {
-        public static DataTable GetDataByID(string proID)
+        public static DataTable GetDataByID(string proID,string warID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "proID", proID);  
-           return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductGroupSettingByProID]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "proID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductGroupSettingByProID]", parameterList);
         }
-        public static void MergeProductGroup(ProductGroupSettings productGroupSettings) {
+        public static void MergeProductGroup(ProductGroupSettings productGroupSettings, string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(productGroupSettings));
             DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[MergeProductInventory]", parameterList);
         } 
         public static DataTable MedicineListTable()
