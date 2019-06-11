@@ -13,13 +13,14 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare
         public ControlMedicineDeclare() { }
         public ControlMedicineDeclare(DataRow r) : base(r)
         {
+            WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("Inv_WarehouseID").ToString());
             InitStock = r.Field<double>("InvRec_OldStock");
             PayValue = r.Field<double>("PayAmount");
             GetValue = r.Field<double>("GetAmount");
             FinalValue = r.Field<double>("InvRec_NewStock");
             IsControl = r.Field<byte?>("Med_Control");
         }
-
+        public WareHouse.WareHouse WareHouse { get; set; } 
         public double InitStock { get; set; }
         public double GetValue { get; set; }
         public double PayValue { get; set; }

@@ -12,11 +12,12 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
     public static class ControlMedicineDetailDb
     {
 
-        public static DataTable GetDataById(string medId, DateTime sDate, DateTime eDate) {
+        public static DataTable GetDataById(string medId, DateTime sDate, DateTime eDate,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "MedID", medId);
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineDetailByMedId]", parameterList);
         }
     }
