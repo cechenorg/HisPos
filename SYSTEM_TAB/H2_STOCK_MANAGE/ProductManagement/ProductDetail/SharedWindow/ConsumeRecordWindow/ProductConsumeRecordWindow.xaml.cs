@@ -47,9 +47,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             DataTable dataTable = ProductDB.GetProductConsumeRecordByID(productID, wareID, DateTime.Today.AddDays(-90), DateTime.Today.AddDays(90));
             MainWindow.ServerConnection.CloseConnection();
 
-            SeriesCollection.Add(new LineSeries { Title = "耗用", Values = new ChartValues<double>(), LineSmoothness = 0 });
-            SeriesCollection.Add(new LineSeries { Title = "預估耗用", Values = new ChartValues<double>(), LineSmoothness = 0, StrokeDashArray = new DoubleCollection {2} });
-            SeriesCollection.Add(new LineSeries { Title = "平均耗用", Values = new ChartValues<double>(), PointGeometry = null });
+            SeriesCollection.Add(new LineSeries { Title = "月耗用", Values = new ChartValues<double>(), LineSmoothness = 0 });
+            SeriesCollection.Add(new LineSeries { Title = "預估月耗用", Values = new ChartValues<double>(), LineSmoothness = 0, StrokeDashArray = new DoubleCollection {2} });
+            SeriesCollection.Add(new LineSeries { Title = "平均月耗用", Values = new ChartValues<double>(), PointGeometry = null, Fill = Brushes.Transparent });
 
             double totalAmount = 0;
 
@@ -63,22 +63,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 {
                     SeriesCollection[0].Values.Add(row.Field<double>("AMOUNT"));
                     SeriesCollection[1].Values.Add(0.0);
+
+                    totalAmount += row.Field<double>("AMOUNT");
                 }
                 else if (int.Parse(day.Substring(5, 2)) == DateTime.Today.Month)
                 {
                     SeriesCollection[0].Values.Add(row.Field<double>("AMOUNT"));
                     SeriesCollection[1].Values.Add(row.Field<double>("AMOUNT"));
+
+                    totalAmount += row.Field<double>("AMOUNT");
                 }
                 else
                 {
                     SeriesCollection[1].Values.Add(row.Field<double>("AMOUNT"));
                 }
-
-                totalAmount += row.Field<double>("AMOUNT");
             }
 
             for (int x = 0; x < dataTable.Rows.Count; x++)
-                SeriesCollection[2].Values.Add(totalAmount / dataTable.Rows.Count); 
+                SeriesCollection[2].Values.Add(totalAmount / (dataTable.Rows.Count / 2 + 1)); 
+
         }
         #endregion
 
