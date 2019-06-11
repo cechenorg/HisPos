@@ -54,6 +54,6 @@
                 </Image.InputBindings>
             </Image>
         </StackPanel>
-        <TextBlock Text="{Binding StockDetail.LastPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged, StringFormat=0}" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" FontSize="25" TextAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding StockDetail.ConsumeIn90Days, FallbackValue=0, UpdateSourceTrigger=PropertyChanged, StringFormat=0}" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" FontSize="25" TextAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

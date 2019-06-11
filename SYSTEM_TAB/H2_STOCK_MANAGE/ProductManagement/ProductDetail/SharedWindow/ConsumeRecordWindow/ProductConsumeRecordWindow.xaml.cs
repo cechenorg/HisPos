@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.WareHouse;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -21,54 +26,62 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     /// </summary>
     public partial class ProductConsumeRecordWindow : Window
     {
-        public ProductConsumeRecordWindow(string productID, string wareHouseID)
+        #region ----- Define Variables -----
+        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
+        public Collection<string> Days { get; set; } = new Collection<string>();
+        #endregion
+
+        public ProductConsumeRecordWindow(string productID, WareHouse selectedWareHouse)
         {
             InitializeComponent();
-
-            SeriesCollection = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = "Series 1",
-                    Values = new ChartValues<double> { 4, 6, 5, 2 ,4 }
-                },
-                new LineSeries
-                {
-                    Title = "Series 2",
-                    Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
-                    PointGeometry = null
-                },
-                new LineSeries
-                {
-                    Title = "Series 3",
-                    Values = new ChartValues<double> { 4,2,7,2,7 },
-                    PointGeometry = DefaultGeometries.Square,
-                    PointGeometrySize = 15
-                }
-            };
-
-            Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" };
-            YFormatter = value => value.ToString("C");
-
-            //modifying the series collection will animate and update the chart
-            SeriesCollection.Add(new LineSeries
-            {
-                Title = "Series 4",
-                Values = new ChartValues<double> { 5, 3, 2, 4 },
-                LineSmoothness = 0, //0: straight lines, 1: really smooth lines
-                PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
-                PointGeometrySize = 50,
-                PointForeground = Brushes.Gray
-            });
-
-            //modifying any series values will also animate and update the chart
-            SeriesCollection[3].Values.Add(5d);
-
             DataContext = this;
+            Title = $"{productID} 耗用折線圖({selectedWareHouse.Name})";
+            
+            InitChart(productID, selectedWareHouse.ID);
         }
 
-        public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> YFormatter { get; set; }
+        #region ----- Define Functions -----
+        private void InitChart(string productID, string wareID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductDB.GetProductConsumeRecordByID(productID, wareID, DateTime.Today.AddDays(-90), DateTime.Today.AddDays(90));
+            MainWindow.ServerConnection.CloseConnection();
+
+            SeriesCollection.Add(new LineSeries { Title = "耗用", Values = new ChartValues<double>(), LineSmoothness = 0 });
+            SeriesCollection.Add(new LineSeries { Title = "預估耗用", Values = new ChartValues<double>(), LineSmoothness = 0, StrokeDashArray = new DoubleCollection {2} });
+            SeriesCollection.Add(new LineSeries { Title = "平均耗用", Values = new ChartValues<double>(), PointGeometry = null });
+
+            double totalAmount = 0;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                string day = row.Field<string>("DAYS");
+
+                Days.Add(day);
+
+                if (int.Parse(day.Substring(5, 2)) < DateTime.Today.Month)
+                {
+                    SeriesCollection[0].Values.Add(row.Field<double>("AMOUNT"));
+                    SeriesCollection[1].Values.Add(0.0);
+                }
+                else if (int.Parse(day.Substring(5, 2)) == DateTime.Today.Month)
+                {
+                    SeriesCollection[0].Values.Add(row.Field<double>("AMOUNT"));
+                    SeriesCollection[1].Values.Add(row.Field<double>("AMOUNT"));
+                }
+                else
+                {
+                    SeriesCollection[1].Values.Add(row.Field<double>("AMOUNT"));
+                }
+
+                totalAmount += row.Field<double>("AMOUNT");
+            }
+
+            for (int x = 0; x < dataTable.Rows.Count; x++)
+                SeriesCollection[2].Values.Add(totalAmount / dataTable.Rows.Count); 
+        }
+        #endregion
+
+        
     }
 }

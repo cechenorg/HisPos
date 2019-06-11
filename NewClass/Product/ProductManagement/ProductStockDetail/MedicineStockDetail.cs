@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         }
         public double ShelfInventory { get; set; }
         public double MedBagInventory { get; set; }
+        public double ConsumeIn90Days { get; set; }
         #endregion
 
         public MedicineStockDetail(DataRow row) : base(row)
@@ -24,6 +25,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             ShelfInventory = row.Field<double>("SHELF_INV");
             MedBagInventory = row.Field<double>("MEDBAG_INV");
             MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
+            ConsumeIn90Days = row.Field<double>("CONSUME_AMOUNT");
         }
     }
 }

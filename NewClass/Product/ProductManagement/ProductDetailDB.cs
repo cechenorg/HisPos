@@ -131,7 +131,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("PRO_ID", id));
             parameters.Add(new SqlParameter("WARE_ID", wareID));
 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[GetMedicineStockDetailByID]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineStockDetailByID]", parameters);
         }
     }
 }
