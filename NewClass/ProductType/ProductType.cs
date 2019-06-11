@@ -24,7 +24,9 @@ namespace His_Pos.NewClass.ProductType
 
         public ProductType(DataRow row)
         {
-
+            ID = row.Field<int>("Type_ID");
+            ParentID = row.Field<int>("Type_Parent");
+            Name = row.Field<string>("Type_Name");
         }
     }
 }

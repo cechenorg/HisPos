@@ -179,10 +179,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                                     pre.MedicalServiceID = "05206B";
                                 else
                                     pre.MedicalServiceID = "05202B";
-                                pre.MedicalServicePoint = (int)Math.Round(Convert.ToDouble((servicePoint * double.Parse(medicalService.P6) / 100).ToString()), MidpointRounding.AwayFromZero);
-                                pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
-                                pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
                             }
+                            pre.MedicalServicePoint = (int)Math.Round(Convert.ToDouble((servicePoint * double.Parse(medicalService.P6) / 100).ToString()), MidpointRounding.AwayFromZero);
+                            pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
+                            pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
                             medicalService.P2 = pre.FileContent.Dbody.D37;
                             medicalService.P8 = $"{servicePoint:0000000.00}";
                             medicalService.P9 = pre.FileContent.Dbody.D38;
