@@ -33,6 +33,7 @@ using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 using Medicines = His_Pos.NewClass.MedicineRefactoring.Medicines;
 using Resources = His_Pos.Properties.Resources;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
+// ReSharper disable ClassTooBig
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
@@ -252,18 +253,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
-                if(AdjustCase is null) return;
-                if (!(AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))) return;
-                switch (division.ID)
-                {
-                    case "40":
-                        PrescriptionCase = VM.GetPrescriptionCases("19");
-                        Copayment = VM.GetCopayment("I22");
-                        break;
-                    default:
-                        PrescriptionCase = VM.GetPrescriptionCases("09");
-                        break;
-                }
+                CheckDivisionValid();
+                CheckVariableByDivision();
             }
         }
 
@@ -335,12 +326,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => ChronicSeq, ref chronicSeq, value);
-                if (chronicSeq == null || !(chronicSeq > 0)) return;
-                AdjustCase = VM.GetAdjustCase("2");
-                if (ChronicSeq >= 2)
-                {
-                    MedicalNumber = "IC0" + chronicSeq;
-                }
+                CheckVariableByChronicSequence();
             }
         }//連續處方箋調劑序號 D35
 
@@ -795,10 +781,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     rptViewer.LocalReport.SetParameters(parameters);
                     rptViewer.LocalReport.DataSources.Clear();
                     rptViewer.LocalReport.Refresh();
-                    MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+                    MainWindow.Instance.Dispatcher.Invoke(() =>
                     {
                         ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
-                    }));
+                    });
                 }
             }
             else
@@ -813,10 +799,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 var rd = new ReportDataSource("DataSet1", dataTable);
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
-                MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+                MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
-                }));
+                });
             }
         }
         public void PrintReceipt()
@@ -831,10 +817,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 rptViewer.LocalReport.SetParameters(parameters);
                 rptViewer.LocalReport.DataSources.Clear();
                 rptViewer.LocalReport.Refresh();
-                MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+                MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
-                }));
+                });
             }
             catch (Exception e)
             {
@@ -851,10 +837,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+            MainWindow.Instance.Dispatcher.Invoke(() =>
             {
                 ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
-            }));
+            });
         }
         
         #endregion
@@ -978,6 +964,42 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             Patient = patientFromCard;
             return true;
+        }
+
+        private void CheckDivisionValid()
+        {
+            if (string.IsNullOrEmpty(Institution.ID) || string.IsNullOrEmpty(Division.ID)) return;
+            var table = InstitutionDb.CheckDivisionValid(Institution.ID, Division.ID);
+            if (table.Rows.Count <= 0) return;
+            var result = table.Rows[0].Field<bool>("Result");
+            if (!result)
+                MessageWindow.ShowMessage("該院所登記之診療科別不包含目前選取科別。", MessageType.WARNING);
+        }
+
+        private void CheckVariableByDivision()
+        {
+            if (AdjustCase is null) return;
+            if (!(AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))) return;
+            switch (division.ID)
+            {
+                case "40":
+                    PrescriptionCase = VM.GetPrescriptionCases("19");
+                    Copayment = VM.GetCopayment("I22");
+                    break;
+                default:
+                    PrescriptionCase = VM.GetPrescriptionCases("09");
+                    break;
+            }
+        }
+
+        private void CheckVariableByChronicSequence()
+        {
+            if (chronicSeq == null || !(chronicSeq > 0)) return;
+            AdjustCase = VM.GetAdjustCase("2");
+            if (ChronicSeq >= 2)
+            {
+                MedicalNumber = "IC0" + chronicSeq;
+            }
         }
     }
 }
