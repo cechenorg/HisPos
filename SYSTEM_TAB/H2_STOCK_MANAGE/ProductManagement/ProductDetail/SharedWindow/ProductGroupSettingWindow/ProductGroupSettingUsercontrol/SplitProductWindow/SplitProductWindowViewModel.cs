@@ -36,7 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             ConfirmWindow confirmWindow = new ConfirmWindow("是否拆出此商品庫存?", "拆庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
             {
-                SplitProductCollection.SplitProductInventory(proID); 
+                //SplitProductCollection.SplitProductInventory(proID); 
                 MessageWindow.ShowMessage(proID + "拆庫成功", MessageType.SUCCESS);
             }
         }
