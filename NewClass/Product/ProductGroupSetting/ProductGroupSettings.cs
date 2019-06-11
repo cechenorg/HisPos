@@ -22,5 +22,8 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
         public void MergeProduct(string warID) {
             ProductGroupSettingDb.MergeProductGroup(this,warID);
         }
+        public void SplitProduct(string proID, int amount, string warID) {
+            ProductGroupSettingDb.SplitProductInventory(proID,amount,warID);
+        } 
     }
 }

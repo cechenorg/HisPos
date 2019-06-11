@@ -13,7 +13,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-             <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="75,0,0,0"/>
+             <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="55,0,0,0"/>
             <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
         </StackPanel>
         <Label Content="倉庫" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
@@ -59,7 +59,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="250" Header="商品代碼" Binding="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="220" Header="商品代碼" Binding="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

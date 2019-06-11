@@ -25,7 +25,16 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
             DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[MergeProductInventory]", parameterList);
-        } 
+        }
+        public static void SplitProductInventory(string proID, int amount, string warID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ProID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Amount", amount);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SplitProductInventory]", parameterList);
+        }
         public static DataTable MedicineListTable()
         {
             DataTable masterTable = new DataTable();

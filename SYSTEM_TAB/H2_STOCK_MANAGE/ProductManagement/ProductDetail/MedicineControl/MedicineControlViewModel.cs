@@ -196,7 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory);
+            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID);

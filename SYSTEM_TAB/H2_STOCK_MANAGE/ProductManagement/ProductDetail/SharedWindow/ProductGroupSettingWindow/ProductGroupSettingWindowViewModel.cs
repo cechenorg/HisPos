@@ -7,7 +7,6 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.WareHouse;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol.SplitProductWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +18,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public class ProductGroupSettingWindowViewModel : ObservableObject {
         #region Var
         public string WarID { get; set; }
+        public int Stock { get; set; }
         private bool isSplit = false;
         public bool IsSplit {
             get { return isSplit; }
             set { Set(() => IsSplit, ref isSplit, value); }
+        }
+        private int splitAmount = 0;
+        public int SplitAmount
+        {
+            get { return splitAmount; }
+            set { Set(() => SplitAmount, ref splitAmount, value); }
         }
         private ProductGroupSetting productGroupSettingSelectedItem;
         public ProductGroupSetting ProductGroupSettingSelectedItem
@@ -54,6 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
             RemoveMergeProductCommand = new RelayCommand(RemoveMergeProductAction);
             ProductGroupSettingCollection.GetDataByID(proID, warID);
+            Stock = ProductGroupSettingCollection.Sum(pro => pro.Stock);
             WarID = warID; 
         }
         #region Function
@@ -72,11 +79,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("商品不可小於兩種", MessageType.ERROR);
                 return;
             }
-
+            if (SplitAmount > Stock) {
+                MessageWindow.ShowMessage("拆出量不可大於庫存", MessageType.ERROR);
+                return;
+            }
+            if (SplitAmount < 0)
+            {
+                MessageWindow.ShowMessage("拆出量不可小於0", MessageType.ERROR);
+                return;
+            }
             ConfirmWindow confirmWindow = new ConfirmWindow("是否拆出此商品?", "拆庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
             {
-                SplitProductWindow splitProductWindow = new SplitProductWindow(ProductGroupSettingSelectedItem.ID);
+                ProductGroupSettingCollection.SplitProduct(ProductGroupSettingSelectedItem.ID,SplitAmount,WarID);
                 CloseWindow();
             }
         }

@@ -84,8 +84,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Rectangle Width="320"/>
-            <Button Width="120" Command="{Binding SplitProductGroupCommand}" Margin="0,0,0,0" Content="拆庫" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Label Content="庫存" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0" Padding="0"/>
+            <Label Content="{Binding Stock}" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0" Padding="0"/>
+            <Label Content="拆出量" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0" Padding="0"/>
+            <TextBox Text="{Binding SplitAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0" Padding="0"/>
+            <Button Width="120" Command="{Binding SplitProductGroupCommand}" Margin="25,0,0,0" Content="拆庫" Height="35" FontSize="20"  FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </UserControl>

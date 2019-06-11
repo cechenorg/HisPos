@@ -75,12 +75,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]", parameters);
         }
 
-        internal static void StockTakingProductManageMedicineByID(string productID, string newInventory)
+        internal static void StockTakingProductManageMedicineByID(string productID, string newInventory,string warID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ProID", productID));
             parameters.Add(new SqlParameter("Inventory", newInventory));
-
+            parameters.Add(new SqlParameter("warID", warID)); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[ProductStockCheck]", parameters);
         }
 
