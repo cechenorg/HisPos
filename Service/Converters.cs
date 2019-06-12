@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -8,13 +7,12 @@ using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.Service
 {
     public class SentinelConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
         }
@@ -38,7 +36,7 @@ namespace His_Pos.Service
             if (string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>())
                 : string.Empty;
             return result;
         }
@@ -61,7 +59,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true) + " " +
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()) + " " +
                   value.ConvertTo<DateTime>().ToLongTimeString()
                 : string.Empty;
             return result;
@@ -85,7 +83,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return "---/--/--";
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>())
                 : "---/--/--";
             return result;
         }
@@ -370,7 +368,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true).Substring(0, 6)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()).Substring(0, 6)
                 : string.Empty;
             return result;
         }

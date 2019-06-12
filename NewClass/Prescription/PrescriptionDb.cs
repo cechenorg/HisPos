@@ -305,7 +305,7 @@ namespace His_Pos.NewClass.Prescription
             Dtl_data.Append(p.Id.ToString().PadLeft(8, '0')); //藥局病歷號
             Dtl_data.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名 
             Dtl_data.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
-            Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false)); //出生年月日
+            Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
             string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
 

@@ -171,28 +171,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetPatientDataAction()
         {
             //取得病患資料(讀卡)
-            var readSuccess = false;
+            var result = false;
             var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = Resources.讀取健保卡;
-                try
-                {
-                    readSuccess = currentCard.Read();
-                }
-                catch (Exception e)
-                {
-                    NewFunction.ExceptionLog(e.Message);
-                    Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
-                }
-            };
+            worker.DoWork += (o, ea) => { ReadCard(ref result); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                CheckReadCardResult(readSuccess);
+                CheckReadCardResult(result);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void ReadCard(ref bool result)
+        {
+            BusyContent = Resources.讀取健保卡;
+            try
+            {
+                result = currentCard.Read();
+            }
+            catch (Exception e)
+            {
+                NewFunction.ExceptionLog(e.Message);
+                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+            }
         }
 
         private void CheckReadCardResult(bool result)

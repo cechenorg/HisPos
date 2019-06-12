@@ -27,7 +27,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                  selectedFile.DeclareDate.Month.ToString().PadLeft(2, '0');
             T4 = "2";
             T5 = "1";
-            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today, false);
+            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today);
             var normalPres = selectedFile.DeclarePres.Where(p => p.IsDeclare &&
                                                                           (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
                                                                            || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D"))).ToList();
@@ -45,8 +45,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             var declareDate = selectedFile.DeclarePres[0].AdjustDate;
             var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
             var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
-            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
-            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay, false);
+            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay);
+            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay);
         }
 
         [XmlElement(ElementName = "t1")]
@@ -161,7 +161,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             D8 = t.MainDisease.ID;
             D9 = t.SubDisease?.ID;
             D13 = t.Division?.ID;
-            D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate, false);
+            D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate);
             D15 = t.Copayment.Id;
             D17 = $"{point.CopaymentPoint:0000}";
             D20 = p.Patient.Name;

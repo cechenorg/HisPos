@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 
@@ -8,14 +7,24 @@ namespace His_Pos.Service
     public static class DateTimeExtensions
     {
 
-        public static string ConvertToTaiwanCalender(DateTime d,bool needSplit)
+        public static string ConvertToTaiwanCalender(DateTime d)
+        {
+            var dateStringArr = CreateDateStringFromDateTime(d);
+            return dateStringArr[0] + dateStringArr[1] + dateStringArr[2];
+        }
+
+        public static string ConvertToTaiwanCalenderWithSplit(DateTime d)
+        {
+            var dateStringArr = CreateDateStringFromDateTime(d);
+            return dateStringArr[0] + "/" + dateStringArr[1] + "/" + dateStringArr[2];
+        }
+
+        private static string[] CreateDateStringFromDateTime(DateTime d)
         {
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
             var month = (d.Month).ToString().PadLeft(2, '0');
             var day = (d.Day).ToString().PadLeft(2, '0');
-            if (needSplit)
-                return year + "/" + month + "/" + day;
-            return year + month + day;
+            return new[] {year, month, day};
         }
 
         public static string ConvertToTaiwanCalenderWithTime(DateTime d)

@@ -950,7 +950,7 @@ namespace His_Pos.NewClass.Prescription
         #endregion
         public bool GetCard()
         {
-            var success = Card.GetBasicData();
+            var success = Card.Read();
             if (success)
             {
                 var cus = new Customer(Card);

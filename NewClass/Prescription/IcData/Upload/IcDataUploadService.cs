@@ -142,14 +142,14 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                 SamCode = seq.SamId;
                 SecuritySignature = seq.SecuritySignature;
                 IDNumber = p.Card.IDNumber;
-                BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday, false);
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday);
                 MedicalNumber = string.Empty;
                 PharmacyId = seq.InstitutionId;
             }
             else
             {
                 IDNumber = p.Patient.IDNumber;
-                BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday, false);
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday);
                 MedicalNumber = e.ID;
                 PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
             }
@@ -163,7 +163,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                              p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
             CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
             if (makeUp)
-                ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Treatment.AdjustDate, false);
+                ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Treatment.AdjustDate);
         }
         
         //1,3 V  2,4 ~
