@@ -83,8 +83,8 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers> 
                         </Image>
-                        <Rectangle Width="155"/> 
-                        <Image Source="/Images/Delete.png" Width="30" Name="ButtonDelete" >
+                        <Rectangle Width="155"/>
+                        <Image Source="/Images/Delete.png" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="30" Name="ButtonDelete" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction Command="{Binding DeleteCommand}"/>

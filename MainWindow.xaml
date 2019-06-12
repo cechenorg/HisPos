@@ -38,6 +38,7 @@
     xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
+    xmlns:InstitutionDeclarePointReport ="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -131,7 +132,9 @@
         <DataTemplate DataType="{x:Type  AdditionalCashFlowManage:AdditionalCashFlowManageViewModel}">
             <AdditionalCashFlowManage:AdditionalCashFlowManage/>
         </DataTemplate>
-        
+        <DataTemplate DataType="{x:Type  InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
+            <InstitutionDeclarePointReport:InstitutionDeclarePointReport/>
+        </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -231,7 +234,8 @@
                         <generalCustomControl:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                    </StackPanel>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        </StackPanel>
                 </ScrollViewer>
             </StackPanel>
                 <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Bottom" Background="#FF333337" Orientation="Vertical">

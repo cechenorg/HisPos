@@ -548,4 +548,10 @@
   <data name="AdditionalCashFlowManage" xml:space="preserve">
     <value>額外收入登錄</value>
   </data>
+  <data name="AccountReportSystem" xml:space="preserve">
+    <value>會計報表系統</value>
+  </data>
+  <data name="InstitutionDeclarePointReport" xml:space="preserve">
+    <value>申報院所點數總表</value>
+  </data>
 </root>

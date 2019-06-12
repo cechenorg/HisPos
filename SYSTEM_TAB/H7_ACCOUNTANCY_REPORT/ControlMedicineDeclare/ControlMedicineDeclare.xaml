@@ -21,6 +21,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition  />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
@@ -42,12 +43,23 @@
             <Rectangle Width="870"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
-        <Grid Grid.Row="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="倉庫" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
+            <ComboBox Width="100" Grid.Row="1" FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding SelectedWareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding WareHouseSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+        </StackPanel>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="610"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ControlMedicineDeclares, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+            <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ControlCollectionView, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                    SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">

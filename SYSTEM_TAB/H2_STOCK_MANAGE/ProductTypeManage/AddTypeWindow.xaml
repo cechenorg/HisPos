@@ -5,29 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="新增類別" MinHeight="250" Height="250" MaxHeight="250" MinWidth="400" Width="400" MaxWidth="400" WindowStartupLocation="CenterScreen">
-    <Viewbox Stretch="Fill">
-        <Grid Width="400" Height="250">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition Height="60"/>
-            </Grid.RowDefinitions>
-            <RadioButton Name="BigTypeRadioButton" Grid.Row="0" Grid.Column="0" Content="大類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
-            <RadioButton Name="SmallTypeRadioButton" Grid.Row="0" Grid.Column="1" Content="小類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
-            <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" VerticalAlignment="Center">
-                <Label Name="SelectionHint" FontFamily="Segoe UI Semibold" FontSize="18" Margin="20,0,0,0" Foreground="DimGray"/>
-                <ComboBox Name="BigTypeCombo" Width="150" Height="50" ItemsSource="{Binding TypeManageMasters}" DisplayMemberPath="Name" SelectedValuePath="Id" FontFamily="Segoe UI Semi" FontSize="25"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
-            </StackPanel>
-            <TextBox Name="ChiName" Grid.Row="1" Grid.Column="1" Width="170" Height="50" materialDesign:HintAssist.Hint="中文名稱" FontFamily="Segoe UI Semi" FontSize="20"/>
-            <TextBox Name="EngName" Grid.Row="2" Grid.Column="1" Width="170" Height="50" materialDesign:HintAssist.Hint="英文簡碼" FontFamily="Segoe UI Semi" FontSize="20"/>
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="新增" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" Click="ConfrimClick"/>
-        </Grid>
-    </Viewbox>
+        Title="新增類別" Height="250" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <RadioButton Name="BigTypeRadioButton" Grid.Row="0" Grid.Column="0" Content="大類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
+        <RadioButton Name="SmallTypeRadioButton" Grid.Row="0" Grid.Column="1" Content="小類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+            <Label Name="SelectionHint" FontFamily="Segoe UI Semibold" FontSize="18" Margin="20,0,0,0" Foreground="DimGray"/>
+            <ComboBox Name="BigTypeCombo" Width="150" Height="50" ItemsSource="{Binding TypeManageCollection, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontFamily="Segoe UI Semi" FontSize="25"
+                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <TextBox Name="ChiName" Grid.Row="1" Grid.Column="1" Width="170" Height="35" materialDesign:HintAssist.Hint="中文名稱" FontFamily="Segoe UI Semi" FontSize="20"/>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="45" Content="新增" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" Click="ConfrimClick"/>
+    </Grid>
 </Window>

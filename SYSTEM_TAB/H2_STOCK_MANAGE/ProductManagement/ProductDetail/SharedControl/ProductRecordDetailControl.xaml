@@ -12,26 +12,26 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter"/>
         <DataTemplate x:Key="PruchaseReturnIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/BlueDot.png" Width="18" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="PrescriptionIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/OrangeDot.png" Width="18" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="StockTakingIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Image Source="/Images/GreenDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/GreenDot.png" Width="18" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="ErrorIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Image Source="/Images/DeleteDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/DeleteDot.png" Width="18" Margin="10,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-            <xctk:MaskedTextBox Width="120" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="25" Style="{StaticResource MaterialDesignTextBox}"
+            <Label Content="商品歷程" FontSize="25" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <xctk:MaskedTextBox Width="100" Margin="15,0,5,9" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
@@ -43,8 +43,8 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Label Content="~" FontSize="25" VerticalAlignment="Center"/>
-            <xctk:MaskedTextBox Width="120" Margin="10,0,0,5" HorizontalContentAlignment="Center" FontSize="25" Style="{StaticResource MaterialDesignTextBox}"
+            <Label Content="~" FontSize="18" VerticalAlignment="Center"/>
+            <xctk:MaskedTextBox Width="100" Margin="5,0,0,9" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 InsertKeyMode="Overwrite" >
                 <xctk:MaskedTextBox.Text>
@@ -56,17 +56,10 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Button Content="查詢" BorderThickness="0" FontSize="20" Width="100" FontFamily="Segoe UI Semi" Height="40" Background="RoyalBlue" Margin="25,0,0,0" Command="{Binding SearchProductRecordCommand}"/>
+            <Button Content="查詢" BorderThickness="0" FontSize="18" Width="80" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="12,0,0,0" Command="{Binding SearchProductRecordCommand}"/>
+            <Button Content="匯出結果" BorderThickness="0" FontSize="18" Width="120" FontFamily="Segoe UI Semibold" Background="DimGray" Margin="10,0,0,0" Command="{Binding ExportRecordCommand}"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-            <CheckBox Content="訂退貨" Name="PurchaseCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True"/>
-            <Image Source="/Images/BlueDot.png" Width="20" Margin="5,0,0,0"/>
-            <CheckBox Content="調劑" Name="TreatmentCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True" />
-            <Image Source="/Images/OrangeDot.png" Width="20" Margin="5,0,0,0"/>
-            <CheckBox Content="盤點" Name="StockTakingCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
-            <Image Source="/Images/GreenDot.png" Width="20" Margin="5,0,0,0"/>
-        </StackPanel>
-        <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollection, UpdateSourceTrigger=PropertyChanged}"
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollection, UpdateSourceTrigger=PropertyChanged}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGrid.Resources>
@@ -102,7 +95,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn IsReadOnly="True" Width="50">
+                <DataGridTemplateColumn IsReadOnly="True" Width="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding}">
@@ -154,6 +147,14 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="備註" Width="150" Binding="{Binding Note}" FontFamily="Segoe UI Semibold" FontSize="20" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Left"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>

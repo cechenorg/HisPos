@@ -170,6 +170,12 @@
     <Reference Include="JetBrains.Annotations, Version=2018.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.2018.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -290,6 +296,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoint.cs" />
+    <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
+    <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -396,12 +405,14 @@
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
     <Compile Include="NewClass\ProductType\ProductType.cs" />
+    <Compile Include="NewClass\ProductType\ProductTypeDB.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageDetail.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageDetails.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageMaster.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageMasters.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
+    <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
@@ -464,9 +475,6 @@
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
-    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProduct.cs" />
-    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProductDb.cs" />
-    <Compile Include="NewClass\Product\ProductGroupSetting\SplitProduct\SplitProducts.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
@@ -737,16 +745,15 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\StockControl.xaml.cs">
       <DependentUpon>StockControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ConsumeRecordWindow\ProductConsumeRecordWindow.xaml.cs">
+      <DependentUpon>ProductConsumeRecordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\MergeProductUserControl.xaml.cs">
       <DependentUpon>MergeProductUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml.cs">
       <DependentUpon>SplitProductUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml.cs">
-      <DependentUpon>SplitProductWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingWindow.xaml.cs">
       <DependentUpon>ProductGroupSettingWindow.xaml</DependentUpon>
     </Compile>
@@ -832,6 +839,9 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml.cs">
       <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\EditTypeWindow.xaml.cs">
+      <DependentUpon>EditTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanView.xaml.cs">
       <DependentUpon>StockTakingPlanView.xaml</DependentUpon>
@@ -964,6 +974,10 @@
     <Compile Include="GeneralCustomControl\IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReport.xaml.cs">
+      <DependentUpon>InstitutionDeclarePointReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1276,15 +1290,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ConsumeRecordWindow\ProductConsumeRecordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\MergeProductUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductGroupSettingWindow\ProductGroupSettingUsercontrol\SplitProductWindow\SplitProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1393,6 +1407,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\EditTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1560,6 +1578,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1695,6 +1717,7 @@
     <Resource Include="Images\clinic.png" />
     <Resource Include="Images\pharmacy.png" />
     <Resource Include="Images\Cooperate.png" />
+    <Resource Include="Images\chart.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -6,22 +6,30 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductGroupSetting;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol.SplitProductWindow;
+using His_Pos.NewClass.WareHouse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow {
     public class ProductGroupSettingWindowViewModel : ObservableObject {
         #region Var
+        public string WarID { get; set; }
+        public int Stock { get; set; }
         private bool isSplit = false;
         public bool IsSplit {
             get { return isSplit; }
             set { Set(() => IsSplit, ref isSplit, value); }
         }
-       
+        private int splitAmount = 0;
+        public int SplitAmount
+        {
+            get { return splitAmount; }
+            set { Set(() => SplitAmount, ref splitAmount, value); }
+        }
         private ProductGroupSetting productGroupSettingSelectedItem;
         public ProductGroupSetting ProductGroupSettingSelectedItem
         {
@@ -43,14 +51,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #endregion
 
 
-        public ProductGroupSettingWindowViewModel(string proID) {
+        public ProductGroupSettingWindowViewModel(string proID,string warID) {
+            
             SetIsSpiltTrueCommand = new RelayCommand(SetIsSpiltTrueAction);
             SetIsSpiltFalseCommand = new RelayCommand(SetIsSpiltFalseAction);
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
             SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
             RemoveMergeProductCommand = new RelayCommand(RemoveMergeProductAction);
-            ProductGroupSettingCollection.GetDataByID(proID);
+            ProductGroupSettingCollection.GetDataByID(proID, warID);
+            Stock = ProductGroupSettingCollection.Sum(pro => pro.Stock);
+            WarID = warID; 
         }
         #region Function
         private void CloseWindow() {
@@ -63,10 +74,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private void SplitProductGroupAction() {
             if(ProductGroupSettingSelectedItem is null)
                 MessageWindow.ShowMessage("請選擇欲拆出之商品", MessageType.ERROR);
+            if (ProductGroupSettingCollection.Count < 2)
+            {
+                MessageWindow.ShowMessage("商品不可小於兩種", MessageType.ERROR);
+                return;
+            }
+            if (SplitAmount > Stock) {
+                MessageWindow.ShowMessage("拆出量不可大於庫存", MessageType.ERROR);
+                return;
+            }
+            if (SplitAmount < 0)
+            {
+                MessageWindow.ShowMessage("拆出量不可小於0", MessageType.ERROR);
+                return;
+            }
             ConfirmWindow confirmWindow = new ConfirmWindow("是否拆出此商品?", "拆庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
             {
-                SplitProductWindow splitProductWindow = new SplitProductWindow(ProductGroupSettingSelectedItem.ID);
+                ProductGroupSettingCollection.SplitProduct(ProductGroupSettingSelectedItem.ID,SplitAmount,WarID);
                 CloseWindow();
             }
         }
@@ -79,7 +104,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認");
             if (((bool)confirmWindow.DialogResult) == true)
             {
-                ProductGroupSettingCollection.MergeProduct();
+                ProductGroupSettingCollection.MergeProduct(WarID);
                 MessageWindow.ShowMessage("合併成功",MessageType.SUCCESS);
                 CloseWindow();
             }
