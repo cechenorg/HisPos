@@ -117,15 +117,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Patient = new Customer(customer, birthYear, birthMonth, birthDay);
             #region InitTreatment
-            SpecialTreat = new SpecialTreat();
-            AdjustDate = DateTime.Today;
-            TreatDate = Convert.ToDateTime(c.InsertDate);
-            Institution = VM.GetInstitution(prescription.From);
-            Division = VM.GetDivision(study.Subject);
-            PaymentCategory = VM.GetPaymentCategory("4");
-            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
-            OrthopedicsGetDisease(diseases);
-            GetCopayment(insurance.CopaymentCode);
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -145,6 +136,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
+            SpecialTreat = new SpecialTreat();
+            AdjustDate = DateTime.Today;
+            TreatDate = Convert.ToDateTime(c.InsertDate);
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            PaymentCategory = VM.GetPaymentCategory("4");
+            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
+            OrthopedicsGetDisease(diseases);
+            GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
             #endregion
@@ -243,6 +243,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => Institution, ref institution, value);
                 if (institution == null) return;
                 CheckTypeByInstitution();
+                CheckDivisions();
             }
         }
 
@@ -480,6 +481,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 m.IsBuckle = IsBuckle;
             }
+        }
+        private void CheckDivisions()
+        {
+            if (string.IsNullOrEmpty(Institution.ID)) return;
+            var table = InstitutionDb.GetEnableDivisions(Institution.ID);
+            if (table.Rows.Count <= 0) return;
+            var divListString = table.Rows[0].Field<string>("Divisions");
+            if(string.IsNullOrEmpty(divListString)) return;
+            var divisions = new List<string>();
+            if(divListString.Contains(','))
+                divisions = divListString.Split(',').ToList();
+            else
+                divisions.Add(divListString);
+            if (divisions.Count == 1)
+                Division = VM.GetDivision(divisions[0]);
         }
 
         private void CheckIsOrthopedics()

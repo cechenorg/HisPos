@@ -183,52 +183,61 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         private void InitVariable()
         {
             WindowTitle = Patient.Name + " 可調劑處方";
+            GetPrescriptions();
+            OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
+            CooperativeContent = "合作 " + CooperativePres.Count + " 張";
+            RegisterContent = "登錄 " + ChronicRegisterPres.Count + " 張";
+            ReserveContent = "預約 " + ChronicReservePres.Count + " 張";
+            SetCondition();
+        }
+
+        private void GetPrescriptions()
+        {
             OrthopedicsPres = new CusPrePreviewBases();
             CooperativePres = new CusPrePreviewBases();
             ChronicRegisterPres = new CusPrePreviewBases();
             ChronicReservePres = new CusPrePreviewBases();
+            UngetCardPres = new CusPrePreviewBases();
             MainWindow.ServerConnection.OpenConnection();
             OrthopedicsPres.GetOrthopedicsByCustomerIDNumber(Patient.IDNumber);
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            if(Card != null && !string.IsNullOrEmpty(Card.CardNumber))
+            if (CheckCardNotNull())
                 UngetCardPres.GetUngetCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
-            OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
-            CooperativeContent = "合作 " + CooperativePres.Count + " 張";
-            RegisterContent = "登錄 " + ChronicRegisterPres.Count + " 張";
-            ReserveContent = "預約 " + ChronicReservePres.Count + " 張";
+        }
+
+        private bool CheckCardNotNull()
+        {
+            return Card != null && !string.IsNullOrEmpty(Card.CardNumber);
+        }
+
+        private void SetCondition()
+        {
             if (ChronicReservePres.Count > 0)
-            {
-                SelectedType = CustomerPrescriptionType.Reserve;
                 SelectedRadioButton = "Option4";
-            }
 
             if (ChronicRegisterPres.Count > 0)
-            {
-                SelectedType = CustomerPrescriptionType.Register;
                 SelectedRadioButton = "Option3";
-            }
 
             if (CooperativePres.Count > 0)
-            {
-                SelectedType = CustomerPrescriptionType.Cooperative;
                 SelectedRadioButton = "Option2";
-            }
 
-            if (OrthopedicsPres.Count > 0 || (CooperativePres.Count == 0 && ChronicRegisterPres.Count == 0 && ChronicReservePres.Count == 0))
-            {
-                SelectedType = CustomerPrescriptionType.Orthopedics;
+            if (OrthopedicsPres.Count > 0 || CheckNoOtherPrescriptions())
                 SelectedRadioButton = "Option1";
-            }
+        }
+
+        private bool CheckNoOtherPrescriptions()
+        {
+            return CooperativePres.Count == 0 && ChronicRegisterPres.Count == 0 && ChronicReservePres.Count == 0;
         }
 
         private void PrescriptionSelectedAction()
         {
             if(SelectedPrescription is null) return;
             Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
-            Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseCustomerPrescriptionWindow"));
         }
     }
 }

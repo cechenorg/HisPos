@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,8 @@ using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 {
@@ -98,9 +101,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 Set(() => CurrentPrescription, ref currentPrescription, value);
             }
         }
+        private int prescriptionCount;
+        public int PrescriptionCount
+        {
+            get => prescriptionCount;
+            set
+            {
+                if (prescriptionCount != value)
+                    Set(() => PrescriptionCount, ref prescriptionCount, value);
+            }
+        }
+        private Employee selectedPharmacist;
+        public Employee SelectedPharmacist
+        {
+            get => selectedPharmacist;
+            set
+            {
+                Set(() => SelectedPharmacist, ref selectedPharmacist, value);
+            }
+        }
         private IcCard currentCard;
         private bool setBuckleAmount;
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
+        private bool isNotInit;
         private bool isAdjusting;
         private bool isCardReading;
         #endregion
@@ -110,6 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand GetPatientData { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
+        public RelayCommand PharmacistChanged { get; set; }
         public RelayCommand AdjustDateChanged { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
@@ -131,6 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void InitVariables()
         {
+            isNotInit = false;
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(DateTime.Today);
             CurrentPrescription = new Prescription();
             CurrentPrescription.Init();
@@ -138,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
             MainWindow.ServerConnection.CloseConnection();
+            isNotInit = true;
         }
 
         private void InitCommands()
@@ -147,6 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
+            PharmacistChanged = new RelayCommand(PharmacistChangedAction);
             AdjustDateChanged = new RelayCommand(AdjustDateChangedAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
@@ -154,8 +181,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
         }
-        #endregion
 
+        #endregion
         #region CommandAction
         private void GetCooperativePresAction()
         {
@@ -166,10 +193,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void GetCustomerPrescription(NotificationMessage<Prescription> receiveMsg)
         {
+            isNotInit = false;
             setBuckleAmount = false;
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             CurrentPrescription = receiveMsg.Content;
             setBuckleAmount = true;
+            isNotInit = true;
         }
 
         private void GetPatientDataAction()
@@ -181,7 +210,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                CheckReadCardResult(result);
+                if(result)
+                    GetPatientFromIcCard();
+                else
+                    AskErrorUpload();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -201,23 +233,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             }
         }
 
-        private void CheckReadCardResult(bool result)
+        private void GetPatientFromIcCard()
         {
-            if (result)
-            {
-                var patient = new Customer(currentCard);
-                MainWindow.ServerConnection.OpenConnection();
-                patient.Check();
-                MainWindow.ServerConnection.CloseConnection();
-                CurrentPrescription.CheckPatientWithCard(patient);
-            }
-
+            var patient = new Customer(currentCard);
+            MainWindow.ServerConnection.OpenConnection();
+            patient.Check();
+            MainWindow.ServerConnection.CloseConnection();
+            var checkPatient = CurrentPrescription.CheckPatientWithCard(patient);
+            if (checkPatient)
+                GetSelectedCustomer(patient);
         }
 
+        //顧客查詢
         private void GetCustomersAction(TextBox condition)
         {
-            //顧客查詢
-            // ReSharper disable RedundantAssignment
+            #region ReSharperDisable
+            //ReSharper disable RedundantAssignment
+            //ReSharper disable once UnusedVariable
+            #endregion
             Messenger.Default.Register<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
             CustomerSearchWindow customerSearch;
             switch (condition.Name)
@@ -255,25 +288,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             }
             Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
         }
-
+        //院所查詢
         private void GetInstitutionAction(string insID)
         {
-            //院所查詢
+            #region ReSharperDisable
             // ReSharper disable RedundantAssignment
             // ReSharper disable once UnusedVariable
+            #endregion
+            if (CheckFocusDivision(insID))
+            {
+                Messenger.Default.Send(new NotificationMessage(this, "FocusDivision"));
+                return;
+            }
             Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
             var institutionSelectionWindow = new InstitutionSelectionWindow(insID);
         }
 
+        //常用院所查詢
         private void GetCommonInstitutionAction()
         {
-            //常用院所查詢
+            #region ReSharperDisable
             // ReSharper disable RedundantAssignment
             // ReSharper disable once UnusedVariable
+            #endregion
             Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
             var commonHospitalsWindow = new CommonHospitalsWindow();
+        }
+
+        private void PharmacistChangedAction()
+        {
+            PrescriptionCount = UpdatePrescriptionCount();
+            if (PrescriptionCount >= 80) MessageWindow.ShowMessage(Resources.調劑張數提醒 + prescriptionCount + "張", MessageType.WARNING);
+            if(isNotInit && SelectedPharmacist != null)
+                Messenger.Default.Send(new NotificationMessage(this, "FocusMedicalNumber"));
         }
 
         private void AdjustDateChangedAction()
@@ -384,6 +433,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = receiveSelectedInstitution;
+            var notification = string.IsNullOrEmpty(CurrentPrescription.Division.ID) ? "FocusDivision" : "FocusMedicalNumber";
+            Messenger.Default.Send(new NotificationMessage(this, notification));
         }
 
         private void GetSelectedMedicine(NotificationMessage<ProductStruct> msg)
@@ -397,6 +448,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #endregion
         #region Functions
+        private bool CheckFocusDivision(string insID)
+        {
+            return CurrentPrescription.Institution != null &&
+                   !string.IsNullOrEmpty(CurrentPrescription.Institution.FullName) &&
+                   insID.Equals(CurrentPrescription.Institution.FullName);
+        }
+        private int UpdatePrescriptionCount()//計算處方張數
+        {
+            return SelectedPharmacist != null
+                ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IDNumber).Rows[0].Field<int>("PrescriptionCount")
+                : 0;
+        }
         private void CustomerNotExist()
         {
             if (!CurrentPrescription.Patient.CheckData())
@@ -426,9 +489,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var cusPreWindow = new CustomerPrescriptionWindow(CurrentPrescription.Patient, currentCard);
-            //Messenger.Default.Register<CustomPrescriptionStruct>(this, "PrescriptionSelected", GetSelectedPrescription);
-            //Messenger.Default.Register<NotificationMessage<Prescription>>("CooperativePrescriptionSelected", GetCooperativePrescription);
-            //var cusPreSelectWindow = new CusPreSelectWindow(CurrentPrescription.Patient.ID, CurrentPrescription.Patient.IDNumber, CurrentPrescription.Card);
         }
         private int GetProductCount(string medicineID)
         {
@@ -438,19 +498,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MainWindow.ServerConnection.CloseConnection();
             return productCount;
         }
-        private bool AskErrorUpload()
+        private void AskErrorUpload()
         {
-            var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber); //詢問異常上傳
+            var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber);
             e.ShowDialog();
             if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
             {
                 MessageWindow.ShowMessage(Resources.尚未選擇異常代碼, MessageType.WARNING);
                 isAdjusting = false;
                 isCardReading = false;
-                return false;
             }
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-            return true;
         }
         #endregion
     }

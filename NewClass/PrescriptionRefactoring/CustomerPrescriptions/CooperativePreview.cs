@@ -1,5 +1,6 @@
 ﻿using System;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Product.Medicine.PreviewMedicine;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
@@ -28,7 +29,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public override void GetMedicines()
         {
-            
+            Medicines.Clear();
+            foreach (var med in Content.MedicineOrder.Item)
+            {
+                Medicines.Add(new PreviewMedicine(med));
+            }
         }
     }
 }

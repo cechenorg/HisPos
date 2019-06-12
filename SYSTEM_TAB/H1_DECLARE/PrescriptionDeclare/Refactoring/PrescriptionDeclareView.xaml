@@ -152,23 +152,17 @@
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="2" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
-                        <ComboBox x:Name="DivisionCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth" 
+                        <ComboBox x:Name="DivisionCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding CurrentPrescription.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Division_PreviewKeyDown">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding DivisionSelectionChanged}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
+                              SelectedItem="{Binding CurrentPrescription.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Division_PreviewKeyDown" SelectionChanged="Division_SelectionChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="3" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}"/>
-                        <ComboBox x:Name="HisPerson"  Margin="0,0,10,0" Width="170" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels,UpdateSourceTrigger=PropertyChanged}"
+                        <ComboBox x:Name="PharmacistCombo"  Margin="0,0,10,0" Width="170" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels,UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding SelectedPharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding PharmacistSelectionChanged}"/>
+                                    <i:InvokeCommandAction Command="{Binding PharmacistChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -262,13 +256,7 @@
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="AdjustCombo"  Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding AdjustCaseSelectionChanged}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
+                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown" SelectionChanged="AdjustCombo_SelectionChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}"/>

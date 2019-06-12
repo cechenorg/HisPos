@@ -22,15 +22,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             InitializeComponent();
             DataContext = new PrescriptionDeclareViewModel();
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
+            Messenger.Default.Register<NotificationMessage>("FocusMedicalNumber", FocusMedicalNumber);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
+
         private void FocusDivision(NotificationMessage msg)
         {
             if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusDivision"))
                 DivisionCombo.Focus();
         }
+
+        private void FocusMedicalNumber(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("FocusMedicalNumber"))
+            {
+                CheckPharmacistSelected();
+            }
+        }
+
+        private void CheckPharmacistSelected()
+        {
+            if(DivisionCombo.SelectedIndex == 0 || DivisionCombo.SelectionBoxItem is null) return;
+            if (PharmacistCombo.SelectedIndex < 0)
+                PharmacistCombo.Focus();
+            else
+                MedicalNumber.Focus();
+        }
+
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
@@ -318,6 +338,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             if (row?.Item is null) return;
             if (!(row.Item is CustomerHistory)) return;
             Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclare.PrescriptionDeclareView) + "ShowPrescriptionEditWindow"));
+        }
+
+        private void Division_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckPharmacistSelected();
+        }
+
+        private void AdjustCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -73,12 +73,12 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
         }
 
         public RelayCommand ConfirmClick { get; set; }
-        public RelayCommand CancleClick { get; set; }
+        public RelayCommand CancelClick { get; set; }
         public ErrorUploadWindowViewModel(bool isGetMedicalNumber)
         {
             IcErrorCodeList = new IcErrorCodes(isGetMedicalNumber);
             ConfirmClick = new RelayCommand(ConfirmClickAction);
-            CancleClick = new RelayCommand(CancleClickAction);
+            CancelClick = new RelayCommand(CancelClickAction);
         }
 
         private void ConfirmClickAction()
@@ -91,8 +91,9 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
             Messenger.Default.Send(SelectedIcErrorCode, "SelectedIcErrorCode");
             Messenger.Default.Send(new NotificationMessage("CloseErrorUploadWindow"));
         }
-        private void CancleClickAction()
+        private void CancelClickAction()
         {
+            SelectedIcErrorCode = null;
             Messenger.Default.Send(new NotificationMessage("CloseErrorUploadWindow"));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Product.Medicine.PreviewMedicine;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
@@ -26,7 +27,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public override void GetMedicines()
         {
-            throw new System.NotImplementedException();
+            Medicines.Clear();
+            var prescription = Content.DeclareXmlDocument.Prescription;
+            foreach (var med in prescription.MedicineOrder.Item)
+            {
+                Medicines.Add(new PreviewMedicine(med));
+            }
         }
     }
 }
