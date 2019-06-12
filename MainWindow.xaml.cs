@@ -89,6 +89,9 @@ namespace His_Pos
                   StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport,StringRes.CooperativeEntryReport }));
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
               new[] { StringRes.AdminFunction }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AccountReportSystem,
+             new[] { StringRes.InstitutionDeclarePointReport }));
+            
         }
         
         private void InitializeMenu()
