@@ -1100,7 +1100,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             e.ShowDialog();
             if (((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode is null)
             {
-                MessageWindow.ShowMessage(StringRes.重新過卡或押金, MessageType.WARNING);
+                MessageWindow.ShowMessage(StringRes.尚未選擇異常代碼, MessageType.WARNING);
                 IsAdjusting = false;
                 IsCardReading = false;
                 return false;
