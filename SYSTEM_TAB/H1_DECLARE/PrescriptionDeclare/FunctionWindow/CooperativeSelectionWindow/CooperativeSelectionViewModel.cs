@@ -197,7 +197,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         {
             if (SelectedPrescription is null) return;
             CustomerHistories = new CooperativeViewHistories();
+            MainWindow.ServerConnection.OpenConnection();
             CustomerHistories.Insert(0,new CooperativeViewHistory(SelectedPrescription));
+            MainWindow.ServerConnection.CloseConnection();
             SelectedHistory = CustomerHistories[0];
         }
         private void PrintAction()

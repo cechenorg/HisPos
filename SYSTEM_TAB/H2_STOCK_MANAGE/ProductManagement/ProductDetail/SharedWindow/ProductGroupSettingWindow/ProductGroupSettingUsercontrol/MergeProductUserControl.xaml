@@ -102,8 +102,9 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Rectangle Width="320"/>
-            <Button Width="120" Command="{Binding MergeProductGroupCommand}" Margin="0,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Rectangle Width="310"/>
+          
+            <Button Width="120" Command="{Binding MergeProductGroupCommand}" Margin="10,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </UserControl>

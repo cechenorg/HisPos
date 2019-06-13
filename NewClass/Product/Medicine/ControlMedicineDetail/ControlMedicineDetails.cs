@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
         {
 
         }
-        public void GetDataById(string medId, DateTime sDate, DateTime eDate, double stock)
+        public void GetDataById(string medId, DateTime sDate, DateTime eDate, double stock,string warID)
         {
             double tempstock = stock;
             Clear();
@@ -23,7 +23,7 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
             rowOne.FinalStock = tempstock;
             rowOne.TypeName = "上次結存";
             Add(rowOne);
-            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate);
+            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate,  warID);
             foreach (DataRow r in table.Rows)
             {
                 ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock);

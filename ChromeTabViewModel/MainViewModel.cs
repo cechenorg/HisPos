@@ -35,6 +35,7 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
 using His_Pos.SYSTEM_TAB.INDEX;
 
 namespace His_Pos.ChromeTabViewModel
@@ -227,6 +228,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.合作診所結帳報表):
                     break;
+                case nameof(FeatureItem.申報院所點數總表):
+                    break;
                 default:
                     return;
             }
@@ -348,6 +351,10 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.合作診所結帳報表):
                     newTab = new CooperativeEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[6], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                //會計報表
+                case nameof(FeatureItem.申報院所點數總表):
+                    newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

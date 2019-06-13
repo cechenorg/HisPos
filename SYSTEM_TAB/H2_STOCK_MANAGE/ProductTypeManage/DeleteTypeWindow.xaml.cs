@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System.Data;
+using System.Windows;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
@@ -7,9 +11,41 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     /// </summary>
     public partial class DeleteTypeWindow : Window
     {
-        public DeleteTypeWindow()
+        #region ----- Define Variables -----
+        public ProductTypeManageMaster SelectedType { get; set; }
+        #endregion
+
+        public DeleteTypeWindow(ProductTypeManageMaster currentType)
         {
+            SelectedType = currentType;
             InitializeComponent();
+            DataContext = this;
+        }
+
+        private void Confirm_OnClick(object sender, RoutedEventArgs e)
+        {
+            if ((bool) SmallCategoryRadioButton.IsChecked && SelectedType.CurrentDetailType.ProductCollection.Count > 0)
+            {
+                MessageWindow.ShowMessage("小類別中還有商品 無法刪除", MessageType.ERROR);
+                return;
+            }
+            else if(!(bool)SmallCategoryRadioButton.IsChecked && SelectedType.TypeDetailCount > 0)
+            {
+                MessageWindow.ShowMessage("大類別中還有小類別 無法刪除", MessageType.ERROR);
+                return;
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductTypeDB.DeleteType(((bool)SmallCategoryRadioButton.IsChecked)? SelectedType.CurrentDetailType.ID : SelectedType.ID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable is null || dataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                return;
+            }
+
+            Close();
         }
     }
 }

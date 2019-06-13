@@ -75,7 +75,6 @@ namespace His_Pos.NewClass.Prescription
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
             var customer = prescription.CustomerProfile.Customer;
-
             var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
             var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
@@ -83,7 +82,6 @@ namespace His_Pos.NewClass.Prescription
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
-          
             PrescriptionStatus.IsCooperativeVIP = Remark.EndsWith("Y");
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Treatment = new Treatment.Treatment(c);
@@ -97,7 +95,7 @@ namespace His_Pos.NewClass.Prescription
             Card = new IcCard(); 
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
-            PrescriptionStatus.IsRead = c.IsRead is null ? false : c.IsRead.Equals("D");
+            PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             foreach (var m in prescription.MedicineOrder.Item) {
                 Medicines.Add(new Medicine(m));
             }
@@ -880,7 +878,7 @@ namespace His_Pos.NewClass.Prescription
                             VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                        new ReportParameter("MedicalPerson",VM.CurrentPharmacy.GetPharmacist().Name),
+                        new ReportParameter("MedicalPerson",Treatment.Pharmacist.Name),
                         new ReportParameter("PatientName", Patient.Name),
                         new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                         new ReportParameter("TreatmentDate", treatmentDateChi),
@@ -932,7 +930,7 @@ namespace His_Pos.NewClass.Prescription
                     VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
                 new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                new ReportParameter("MedicalPerson", VM.CurrentPharmacy.GetPharmacist().Name),
+                new ReportParameter("MedicalPerson", CheckPharmacistEmpty() ? VM.CurrentPharmacy.GetPharmacist().Name : Treatment.Pharmacist.Name),
                 new ReportParameter("PatientName", Patient.Name),
                 new ReportParameter("PatientGender_Birthday",cusGender + "/" +DateTimeExtensions.NullableDateToTWCalender(Patient.Birthday, true)),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
@@ -947,6 +945,12 @@ namespace His_Pos.NewClass.Prescription
                 new ReportParameter("PatientTel", patientTel)
             };
         }
+
+        private bool CheckPharmacistEmpty()
+        {
+            return Treatment.Pharmacist is null || string.IsNullOrEmpty(Treatment.Pharmacist.Name);
+        }
+
         #endregion
         public bool GetCard()
         {

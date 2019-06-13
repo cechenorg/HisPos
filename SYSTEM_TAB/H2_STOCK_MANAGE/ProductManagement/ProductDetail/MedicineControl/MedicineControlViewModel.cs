@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.ExportProductRecord;
 using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.WareHouse;
+using His_Pos.Service.ExportService;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -29,6 +34,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
+        public RelayCommand GroupSettingSelectionChangedCommand { get; set; }
+        public RelayCommand ExportRecordCommand { get; set; }
+        public RelayCommand ShowConsumeRecordCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -110,6 +118,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 SearchProductRecordAction();
             }
         }
+        private WareHouse groupSettingWareHouseSelected = ViewModelMainWindow.GetWareHouse("0");
+        public WareHouse GroupSettingWareHouseSelected
+        {
+            get { return groupSettingWareHouseSelected; }
+            set
+            {
+                Set(() => GroupSettingWareHouseSelected, ref groupSettingWareHouseSelected, value); 
+            }
+        }
         public DateTime? StartDate
         {
             get { return startDate; }
@@ -179,7 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory);
+            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID);
@@ -196,7 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             IsDataChanged = true;
         }
         private void ShowProductGroupWindowAction() {
-            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID);
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID, GroupSettingWareHouseSelected.ID);
         }
         private void SearchProductRecordAction()
         {
@@ -209,6 +226,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             MainWindow.ServerConnection.OpenConnection();
             InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
             MainWindow.ServerConnection.CloseConnection();
+        }
+        private void ExportRecordAction()
+        {
+            Collection<object> tempCollection = new Collection<object>() { new List<object>{Medicine.ID, StartDate, EndDate, SelectedWareHouse.ID} };
+
+            MainWindow.ServerConnection.OpenConnection();
+            ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductRecordTemplate());
+            bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{Medicine.ID}商品歷程{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (isSuccess)
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+            else
+                MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+        }
+        private void GroupSettingSelectionChangedAction() {
+            ProductGroupSettingCollection.GetDataByID(Medicine.ID, GroupSettingWareHouseSelected.ID);
+        }
+        private void ShowConsumeRecordAction()
+        {
+            ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);
+            productConsumeRecordWindow.ShowDialog();
         }
         #endregion
 
@@ -223,6 +262,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             DataChangedCommand = new RelayCommand(DataChangedAction);
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
+            GroupSettingSelectionChangedCommand = new RelayCommand(GroupSettingSelectionChangedAction);
+
+            ExportRecordCommand = new RelayCommand(ExportRecordAction);
+            ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
         }
         private void InitMedicineData(string id)
         {
@@ -268,8 +311,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
-            
-            ProductGroupSettingCollection.GetDataByID(id);
+            GroupSettingWareHouseSelected = WareHouseCollection[0];
+            ProductGroupSettingCollection.GetDataByID(id, GroupSettingWareHouseSelected.ID);
 
             ReloadStockDetail();
         }

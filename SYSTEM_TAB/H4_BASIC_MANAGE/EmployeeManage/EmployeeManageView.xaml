@@ -83,8 +83,8 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers> 
                         </Image>
-                        <Rectangle Width="155"/> 
-                        <Image Source="/Images/Delete.png" Width="30" Name="ButtonDelete" >
+                        <Rectangle Width="155"/>
+                        <Image Source="/Images/Delete.png" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="30" Name="ButtonDelete" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction Command="{Binding DeleteCommand}"/>
@@ -108,7 +108,9 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>
-                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱"  VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0">
+                        <Label Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Content="身分證:" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" Margin="10,10,0,0" Foreground="Black"/>
+                        <Label Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Width="125" Content="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="25" VerticalAlignment="Center" Margin="0,10,0,0" Foreground="Black"/>
+                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱"  VerticalAlignment="Center" Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
@@ -221,11 +223,6 @@
                             </xctk:MaskedTextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
-                            <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <Label Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}" Width="120" Content="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
-
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                             <Label  Content="手機" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <TextBox  Width="150" Text="{Binding Employee.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                                 <i:Interaction.Triggers>
@@ -235,9 +232,19 @@
                                 </i:Interaction.Triggers>
                             </TextBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                             <Label  Content="家電" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <TextBox  Width="150" Text="{Binding Employee.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
+                            <Label  Content="員購上限" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                            <TextBox Width="105" Text="{Binding Employee.PurchaseLimit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
@@ -258,16 +265,6 @@
                         <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="2" Grid.Column="0" Margin="8">
                             <Label  Content="住址" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <TextBox Width="590" Text="{Binding Employee.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="TextChanged">
-                                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </TextBox>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="3" Margin="8">
-                            <Label  Content="員購上限" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <TextBox Width="105" Text="{Binding Employee.PurchaseLimit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>

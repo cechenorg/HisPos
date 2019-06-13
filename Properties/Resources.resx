@@ -566,4 +566,10 @@
   <data name="電話空值" xml:space="preserve">
     <value>查詢電話不可為空</value>
   </data>
+  <data name="AccountReportSystem" xml:space="preserve">
+    <value>會計報表系統</value>
+  </data>
+  <data name="InstitutionDeclarePointReport" xml:space="preserve">
+    <value>申報院所點數總表</value>
+  </data>
 </root>

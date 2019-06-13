@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Data;
 using System.Windows;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
@@ -9,16 +11,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     /// </summary>
     public partial class AddTypeWindow : Window
     {
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        #region ----- Define Variables -----
+        public ProductTypeManageMasters TypeManageCollection { get; set; }
+        public ProductTypeManageMaster SelectedType { get; set; }
+        #endregion
+
+        public AddTypeWindow(ProductTypeManageMasters typeManageCollection)
         {
+            TypeManageCollection = typeManageCollection;
+            InitializeComponent();
             UpdateUi();
+
+            DataContext = this;
         }
 
+        #region ----- Define Functions -----
         private void UpdateUi()
         {
-            if (SelectionHint is null || SelectionHint is null) return;
+            if (SelectionHint is null) return;
 
-            if( (bool)SmallTypeRadioButton.IsChecked)
+            if ((bool)SmallTypeRadioButton.IsChecked)
             {
                 SelectionHint.Content = "選擇所屬大類別";
                 BigTypeCombo.Visibility = Visibility.Visible;
@@ -29,36 +41,51 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 BigTypeCombo.Visibility = Visibility.Collapsed;
             }
         }
-
-        private void ConfrimClick(object sender, RoutedEventArgs e)
-        {
-            if(CheckEmptyData())
-            {
-                Close();
-            }
-        }
-
         private bool CheckEmptyData()
         {
             string error = "";
 
+            if ((bool)SmallTypeRadioButton.IsChecked && SelectedType is null)
+                error += "未選擇所屬大類別!\n";
+            else if((bool)SmallTypeRadioButton.IsChecked && SelectedType.ID == 0)
+                error += "藥品無法新增小類別!\n";
+
             if (ChiName.Text.Equals(""))
                 error += "未填寫中文名稱!\n";
 
-            if(EngName.Text.Equals(""))
-                error += "未填寫英文簡碼!\n";
-
-            if( EngName.Text.Length != 2 )
-                error += "英文簡碼須為兩碼!\n";
-
-            if( error.Length != 0 )
+            if (error.Length != 0)
             {
                 MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
-                
+
                 return false;
             }
 
             return true;
         }
+        #endregion
+
+        #region ----- Define Events -----
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateUi();
+        }
+        private void ConfrimClick(object sender, RoutedEventArgs e)
+        {
+            if (CheckEmptyData())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                DataTable dataTable = ProductTypeDB.AddNewProductType(ChiName.Text, (SelectedType is null)? -1 : SelectedType.ID);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (dataTable is null || dataTable.Rows.Count == 0)
+                {
+                    MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                    return;
+                }
+
+                Close();
+            }
+        }
+        #endregion
     }
 }

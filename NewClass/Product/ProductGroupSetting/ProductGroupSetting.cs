@@ -13,8 +13,10 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
         public ProductGroupSetting() { }
 
         public ProductGroupSetting(DataRow r):base(r) {
-            IsEditable = true; 
+            IsEditable = true;
+            Stock = r.Field<int>("Inv_Inventory");
         }
+        public int Stock { get; set; }
         private bool isEditable = false;
         public bool IsEditable
         {
