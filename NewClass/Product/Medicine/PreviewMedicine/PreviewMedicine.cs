@@ -2,6 +2,7 @@
 using System.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.MedicineRefactoring;
 
 namespace His_Pos.NewClass.Product.Medicine.PreviewMedicine
 {
@@ -39,10 +40,20 @@ namespace His_Pos.NewClass.Product.Medicine.PreviewMedicine
             Amount = r.Field<double>("TotalAmount");
         }
 
-        public double? Dosage { get; }
-        public string Usage { get;}
-        public int? Days { get; }
-        public string Position { get; }
-        public double Amount { get; }
+        public PreviewMedicine(DataRow r, PreviewMedicine item)
+        {
+            ID = r.Field<string>("Pro_ID");
+            ChineseName = r.Field<string>("Pro_ChineseName");
+            EnglishName = r.Field<string>("Pro_EnglishName");
+            Dosage = item.Dosage;
+            Usage = item.Usage;
+            Amount = item.Amount;
+        }
+
+        public double? Dosage { get; set; }
+        public string Usage { get; set; }
+        public int? Days { get; set; }
+        public string Position { get; set; }
+        public double Amount { get; set; }
     }
 }

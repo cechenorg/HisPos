@@ -213,7 +213,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, IsBuckle, WareHouse?.ID);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle);
         }
         #region Properties
         public int ID { get; set; }
@@ -904,21 +904,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Medicines = Medicines
             };
             return clone;
-        }
-
-        public void ReadCard()
-        {
-            //var success = Card.GetBasicData();
-            //if (success)
-            //{
-            //    var cus = new Customer(Card);
-            //    Patient = cus;
-            //    var customers = Patient.Check();
-            //    if (customers.Count == 0)
-            //        Patient.InsertData();
-            //    else
-            //        Patient = customers[0];
-            //}
         }
 
         public void AddMedicine(string medicineID)

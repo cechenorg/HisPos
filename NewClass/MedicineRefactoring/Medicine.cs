@@ -353,5 +353,45 @@ namespace His_Pos.NewClass.MedicineRefactoring
             var tempPrice = (PaySelf ? Price : NHIPrice) * Amount;
             TotalPrice = Math.Round(Convert.ToDouble(tempPrice.ToString()), 0, MidpointRounding.AwayFromZero);
         }
+
+        public void SetValueByOrthopedicsMedicine(OrthopedicsMedicine setItem)
+        {
+            Dosage = Convert.ToDouble(setItem.Divided_dose);
+            UsageName = setItem.Freq;
+            PositionID = setItem.Way;
+            Days = Convert.ToInt32(setItem.Days);
+            Amount = Convert.ToDouble(setItem.Total_dose);
+            PaySelf = !string.IsNullOrEmpty(setItem.Remark);
+            SetPriceByRemark(setItem.Remark, setItem.Price);
+        }
+
+        public void SetValueByCooperativeMedicine(CooperativeMedicine setItem)
+        {
+            Dosage = Convert.ToDouble(setItem.Divided_dose);
+            UsageName = setItem.Freq;
+            PositionID = setItem.Way;
+            Days = Convert.ToInt32(setItem.Days);
+            Amount = Convert.ToDouble(setItem.Total_dose);
+            PaySelf = !string.IsNullOrEmpty(setItem.Remark);
+            SetPriceByRemark(setItem.Remark, setItem.Price);
+        }
+
+        private void SetPriceByRemark(string remark, string itemPrice)
+        {
+            var priceValue = Convert.ToDouble(itemPrice);
+            if (priceValue < 0) priceValue *= -1;
+            switch (remark)
+            {
+                case "":
+                    TotalPrice = Amount * priceValue;
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = priceValue;
+                    break;
+            }
+        }
     }
 }

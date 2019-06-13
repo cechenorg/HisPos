@@ -146,13 +146,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             get => selectedPrescription;
             set
             {
-                Set(() => SelectedPrescription, ref selectedPrescription, value);
-                if (SelectedPrescription != null)
+                if (value != null)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    SelectedPrescription.GetMedicines();
+                    value.GetMedicines();
                     MainWindow.ServerConnection.CloseConnection();
                 }
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
         private CusPrePreviewBase makeUpPrescription;

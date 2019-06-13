@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -10,7 +11,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
-    public abstract class CusPrePreviewBase
+    public abstract class CusPrePreviewBase : ObservableObject
     {
         public CusPrePreviewBase()
         {

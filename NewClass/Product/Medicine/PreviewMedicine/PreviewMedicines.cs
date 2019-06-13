@@ -10,6 +10,14 @@ namespace His_Pos.NewClass.Product.Medicine.PreviewMedicine
     {
         public PreviewMedicines() { }
 
+        public PreviewMedicines(PreviewMedicines medicines)
+        {
+            foreach (var m in medicines)
+            {
+                Add(m);
+            }
+        }
+
         public void AddItemsFromCooperative(IEnumerable<CooperativePrescription.Item> medicineOrderItem)
         {
             foreach (var m in medicineOrderItem)

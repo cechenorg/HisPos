@@ -10,7 +10,8 @@ using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
 using His_Pos.Service;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
+using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -21,170 +22,155 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         }
 
-        public void GetDataByOrthopedicsPrescription(IEnumerable<Item> medicineOrderItem,string wareHouseID,bool isBuckle)
+        #region OrthopedicsFunctions
+        public void GetDataByOrthopedicsPrescription(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, bool isBuckle)
         {
             Clear();
-            var idList = medicineOrderItem.Select(m => m.Id).ToList();
+            var tempList = CreateTempMedicinesByOrthopedics(medicineOrderItem, wareHouseID);
+            foreach (var order in medicineOrderItem)
+            {
+                if (Items.Count(m => m.ID.Equals(order.Id)) > 0) continue;
+                foreach (var item in tempList.Where(m => m.ID.Equals(order.Id)))
+                    Items.Add(item);
+            }
+            SetBuckle(isBuckle);
+        }
+        private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID)
+        {
+            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
-            var medicines = new Medicines();
+            var tempList = new Medicines();
+            AddOrthopedicsMedicineByDataTable(tempList, table, medicineOrderItem);
+            AddOrthopedicsMedicineNotFound(tempList, medicineOrderItem);
+            AddOrthopedicsIDEmptyMedicine(tempList, medicineOrderItem);
+            return tempList;
+        }
+        private void AddOrthopedicsMedicineByDataTable(Medicines tempList, DataTable table, List<OrthopedicsMedicine> medicineOrderItem)
+        {
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                Medicine medicine;
-                switch (table.Rows[i].Field<int>("DataType"))
+                foreach (var item in medicineOrderItem.Where(m => m.Id.Equals(table.Rows[i].Field<string>("Pro_ID"))))
                 {
-                    case 1:
-                        medicine = new MedicineNHI(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 2:
-                        medicine = new MedicineOTC(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 3:
-                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                }
-            }
-            foreach (var item in medicineOrderItem)
-            {
-                if (string.IsNullOrEmpty(item.Id))
-                {
-                    var med = new MedicineOTC(item);
-                    med.Usage = new Usage();
-                    med.Position = new Position();
-                    med.UsageName = item.Freq;
-                    med.PositionID = item.Way;
-                    med.Amount = Convert.ToDouble(item.Total_dose);
-                    med.Dosage = Convert.ToDouble(item.Divided_dose);
-                    med.Days = Convert.ToInt32(item.Days);
-                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                    med.IsBuckle = isBuckle;
-                    switch (item.Remark)
+                    Medicine medicine;
+                    switch (table.Rows[i].Field<int>("DataType"))
                     {
-                        case "":
-                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                        case 1:
+                            medicine = new MedicineNHI(table.Rows[i]);
                             break;
-                        case "-":
-                            med.TotalPrice = 0;
-                            break;
-                        case "*":
-                            med.TotalPrice = Convert.ToDouble(item.Price);
-                            break;
-                    }
-                    Add(med);
-                }
-                else
-                {
-                    var med = medicines.Single(m => m.ID.Equals(item.Id));
-                    med.Usage = new Usage();
-                    med.Position = new Position();
-                    med.UsageName = item.Freq;
-                    med.PositionID = item.Way;
-                    med.Amount = Convert.ToDouble(item.Total_dose);
-                    med.Dosage = Convert.ToDouble(item.Divided_dose);
-                    med.Days = Convert.ToInt32(item.Days);
-                    med.PaySelf = item.Remark == "-" || item.Remark == "*";
-                    med.IsBuckle = false;
-                    switch (item.Remark)
-                    {
-                        case "":
-                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
-                            break;
-                        case "-":
-                            med.TotalPrice = 0;
-                            break;
-                        case "*":
-                            med.TotalPrice = Convert.ToDouble(item.Price);
+                        case 3:
+                            medicine = new MedicineSpecialMaterial(table.Rows[i]);
                             break;
                         default:
-                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
+                            medicine = new MedicineOTC(table.Rows[i]);
                             break;
                     }
-                    Add(med);
+                    medicine.SetValueByOrthopedicsMedicine(item);
+                    tempList.Add(medicine);
                 }
             }
         }
-        public void GetDataByCooperativePrescription(List<Cooperative.XmlOfPrescription.CooperativePrescription.Item> medicineOrderItem,bool isBuckle,string wareHouseID)
+        private void AddOrthopedicsMedicineNotFound(Medicines tempList, List<OrthopedicsMedicine> medicineOrderItem)
         {
-            var idList = medicineOrderItem.Select(m => m.Id).ToList();
+            foreach (var order in medicineOrderItem)
+            {
+                if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
+                var medicine = new MedicineOTC
+                {
+                    ID = order.Id,
+                    ChineseName = order.Desc
+                };
+                MedicineDb.InsertCooperativeMedicineOTC(medicine.ID, medicine.ChineseName);//新增合作診所MedicineOtc
+                tempList.Add(medicine);
+            }
+        }
+        private void AddOrthopedicsIDEmptyMedicine(Medicines tempList, List<OrthopedicsMedicine> medicineOrderItem)
+        {
+            foreach (var order in medicineOrderItem.Where(m => string.IsNullOrEmpty(m.Id)))
+            {
+                var medicine = new MedicineOTC(order);
+                tempList.Add(medicine);
+            }
+        }
+        #endregion
+
+        #region CooperativeFunctions
+        public void GetDataByCooperativePrescription(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, bool isBuckle)
+        {
+            Clear();
+            var tempList = CreateTempMedicinesByCooperative(medicineOrderItem, wareHouseID);
+            foreach (var order in medicineOrderItem)
+            {
+                if (Items.Count(m => m.ID.Equals(order.Id)) > 0) continue;
+                foreach (var item in tempList.Where(m => m.ID.Equals(order.Id)))
+                    Items.Add(item);
+            }
+            SetBuckle(isBuckle);
+        }
+        private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID)
+        {
+            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
-            var medicines = new Medicines();
+            var tempList = new Medicines();
+            AddCooperativeMedicineByDataTable(tempList, table, medicineOrderItem);
+            AddCooperativeMedicineNotFound(tempList, medicineOrderItem);
+            AddCooperativeIDEmptyMedicine(tempList, medicineOrderItem);
+            return tempList;
+        }
+        private void AddCooperativeMedicineByDataTable(Medicines tempList, DataTable table, List<CooperativeMedicine> medicineOrderItem)
+        {
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                Medicine medicine;
-                switch (table.Rows[i].Field<int>("DataType"))
+                foreach (var item in medicineOrderItem.Where(m => m.Id.Equals(table.Rows[i].Field<string>("Pro_ID"))))
                 {
-                    case 1:
-                        medicine = new MedicineNHI(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 2:
-                        medicine = new MedicineOTC(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 3:
-                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
+                    Medicine medicine;
+                    switch (table.Rows[i].Field<int>("DataType"))
+                    {
+                        case 1:
+                            medicine = new MedicineNHI(table.Rows[i]);
+                            break;
+                        case 3:
+                            medicine = new MedicineSpecialMaterial(table.Rows[i]);
+                            break;
+                        default:
+                            medicine = new MedicineOTC(table.Rows[i]);
+                            break;
+                    }
+                    medicine.SetValueByCooperativeMedicine(item);
+                    tempList.Add(medicine);
                 }
             }
-            foreach (var item in medicineOrderItem)
+        }
+        private void AddCooperativeMedicineNotFound(Medicines tempList, List<CooperativeMedicine> medicineOrderItem)
+        {
+            foreach (var order in medicineOrderItem)
             {
-                if (string.IsNullOrEmpty(item.Id))
+                if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
+                var medicine = new MedicineOTC
                 {
-                    var med = new MedicineOTC(item);
-                    med.Usage = new Usage();
-                    med.Position = new Position();
-                    med.UsageName = item.Freq;
-                    med.PositionID = item.Way;
-                    med.Amount = Convert.ToDouble(item.Total_dose);
-                    med.Dosage = Convert.ToDouble(item.Divided_dose);
-                    med.Days = Convert.ToInt32(item.Days);
-                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                    med.IsBuckle = isBuckle;
-                    switch (item.Remark)
-                    {
-                        case "":
-                            var price = Convert.ToDouble(item.Price);
-                            med.TotalPrice = med.Amount * (price < 0 ? price * -1 : price);
-                            break;
-                        case "-":
-                            med.TotalPrice = 0;
-                            break;
-                        case "*":
-                            price = Convert.ToDouble(item.Price);
-                            med.TotalPrice = price < 0 ? price * -1 : price;
-                            break;
-                    }
-                    Add(med);
-                }
-                else
-                {
-                    var med = medicines.Single(m => m.ID.Equals(item.Id));
-                    med.Usage = new Usage();
-                    med.Position = new Position();
-                    med.UsageName = item.Freq;
-                    med.PositionID = item.Way;
-                    med.Amount = Convert.ToDouble(item.Total_dose);
-                    med.Dosage = Convert.ToDouble(item.Divided_dose);
-                    med.Days = Convert.ToInt32(item.Days);
-                    med.PaySelf = !string.IsNullOrEmpty(item.Remark);
-                    med.IsBuckle = isBuckle;
-                    switch (item.Remark)
-                    {
-                        case "":
-                            med.TotalPrice = med.Amount * Convert.ToDouble(item.Price);
-                            break;
-                        case "-":
-                            med.TotalPrice = 0;
-                            break;
-                        case "*":
-                            med.TotalPrice = Convert.ToDouble(item.Price);
-                            break;
-                    }
-                    Add(med);
-                }
+                    ID = order.Id,
+                    ChineseName = order.Desc
+                };
+                MedicineDb.InsertCooperativeMedicineOTC(medicine.ID, medicine.ChineseName);//新增合作診所MedicineOtc
+                tempList.Add(medicine);
+            }
+        }
+        private void AddCooperativeIDEmptyMedicine(Medicines tempList, List<CooperativeMedicine> medicineOrderItem)
+        {
+            foreach (var order in medicineOrderItem.Where(m => string.IsNullOrEmpty(m.Id)))
+            {
+                var medicine = new MedicineOTC(order);
+                tempList.Add(medicine);
+            }
+        }
+
+        #endregion
+
+        private void SetBuckle(bool isBuckle)
+        {
+            foreach (var m in Items)
+            {
+                m.IsBuckle = isBuckle;
+                m.BuckleAmount = isBuckle ? m.Amount : 0;
             }
         }
 
