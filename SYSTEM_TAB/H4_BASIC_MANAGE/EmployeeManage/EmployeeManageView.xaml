@@ -221,8 +221,8 @@
                             </xctk:MaskedTextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
-                            <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <Label Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}" Width="120" Content="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <Label  Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+                            <Label Visibility="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}" Width="120" Content="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
