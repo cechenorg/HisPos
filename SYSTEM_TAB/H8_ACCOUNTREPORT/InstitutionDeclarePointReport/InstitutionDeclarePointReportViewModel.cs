@@ -74,7 +74,17 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport
                             {
                             file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
                             }
-                            file.Close();
+                            InstitutionDeclarePoint sum = new InstitutionDeclarePoint();
+                            sum.InsName = "總計";
+                            sum.MedicinePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicinePoint);
+                            sum.SpecialMedPoint = InstitutionDeclarePointCollection.Sum(ins => ins.SpecialMedPoint);
+                            sum.MedicalServicePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicalServicePoint);
+                            sum.SubTotal = InstitutionDeclarePointCollection.Sum(ins => ins.SubTotal);
+                            sum.CopayMentPoint = InstitutionDeclarePointCollection.Sum(ins => ins.CopayMentPoint);
+                            sum.DeclarePoint = InstitutionDeclarePointCollection.Sum(ins => ins.DeclarePoint);
+                            sum.PrescriptionCount = InstitutionDeclarePointCollection.Sum(ins => ins.PrescriptionCount);
+                        file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
+                        file.Close();
                             file.Dispose();
                         }
                         MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);

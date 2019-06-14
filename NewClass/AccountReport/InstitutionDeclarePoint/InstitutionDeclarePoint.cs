@@ -10,6 +10,7 @@ namespace His_Pos.NewClass.AccountReport.InstitutionDeclarePoint
 {
     public class InstitutionDeclarePoint : ObservableObject
     {
+        public InstitutionDeclarePoint() { }
         public InstitutionDeclarePoint(DataRow r) {
             InsName = r.Field<string>("Ins_Name");
             MedicinePoint = r.Field<int>("MedicinePoint");
