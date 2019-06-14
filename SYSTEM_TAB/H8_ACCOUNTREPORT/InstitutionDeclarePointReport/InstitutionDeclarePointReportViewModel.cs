@@ -1,11 +1,15 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport
 {
@@ -36,16 +40,51 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport
             }
         }
         public RelayCommand SearchCommand { get; set; }
+        public RelayCommand ExportExcelCommand { get; set; }
         #endregion
         public InstitutionDeclarePointReportViewModel() {
             SearchDate = DateTime.Today.AddMonths(-1);
             InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
             SearchCommand = new RelayCommand(SearchAction);
+            ExportExcelCommand = new RelayCommand(ExportExcelAction);
         }
         #region Function
         private void SearchAction() { 
             InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
         }
+        private void ExportExcelAction() {  
+                SaveFileDialog fdlg = new SaveFileDialog();
+                fdlg.Title = "院所申報點數統計表";
+                fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+                fdlg.Filter = "Csv檔案|*.csv";
+                fdlg.FileName = SearchDate.Month.ToString() + "月" + ViewModelMainWindow.CurrentPharmacy.Name + "院所申報統計表";
+                fdlg.FilterIndex = 2;
+                fdlg.RestoreDirectory = true;
+                if (fdlg.ShowDialog() == DialogResult.OK)
+                {
+                    Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                        {
+
+                            file.WriteLine("醫療院所,藥品費,材料費,藥服費,小價,部分負擔,申報額,筆數");
+                            foreach (InstitutionDeclarePoint ins in InstitutionDeclarePointCollection)
+                            {
+                            file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
+                            }
+                            file.Close();
+                            file.Dispose();
+                        }
+                        MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                    } 
+                }
+            }  
         #endregion
     }
 }

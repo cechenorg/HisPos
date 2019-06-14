@@ -85,6 +85,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left" />
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="15,0,0,0"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -93,7 +94,6 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left" />
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="10,0,0,0"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -148,7 +148,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="1240,0,0,0" Content="匯出Excel" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Button Width="120" Command="{Binding ExportExcelCommand}" Margin="1240,0,0,0" Content="匯出Excel" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </UserControl>
