@@ -563,7 +563,6 @@
     <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelSettings.cs" />
     <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
-    <Compile Include="Service\ExportService\ExportNormalExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
