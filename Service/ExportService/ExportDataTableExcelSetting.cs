@@ -15,7 +15,7 @@ namespace His_Pos.Service.ExportService
         private new DataTable Data;
 
         #region ///// Header Variables /////
-        private string[] headers;
+        private string[] headers = new string[0];
         private int headerFontSize = 12;
         private Color headerFontColor = Color.Black;
         private Color headerBackGroundColor = Color.LightBlue;
