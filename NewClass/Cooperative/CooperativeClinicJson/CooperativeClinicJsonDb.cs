@@ -8,8 +8,16 @@ namespace His_Pos.NewClass.CooperativeClinicJson {
         public static void UpdateCooperAdjustMedcinesStatus() {
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCooperAdjustStatus]");
         }
+        public static void UpdateCooperAdjustMedcinesStatusTop100()
+        {
+            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCooperAdjustStatusTop100]");
+        }
         public static DataTable GetCooperAdjust() {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CooperAdjust]");
+        }
+        public static DataTable GetCooperAdjustTop100()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CooperAdjustTop100]");
         }
         public static DataTable GetCooperAdjustMedicines(string preId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
