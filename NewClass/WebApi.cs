@@ -65,5 +65,29 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdatePharmacyMedicalNum", keyValues);
         }
+        internal static bool SendToCooperClinicLoop100()
+        {
+            CooperativeClinicJson.CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson.CooperativeClinicJson("Loop");
+            string json = JsonConvert.SerializeObject(cooperativeClinicJson);
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                    {"pharmacyMedicalNum",ViewModelMainWindow.CurrentPharmacy.ID },
+                     {"json",json }
+                };
+            if (json.Equals(@"{""sHospId"":null,""sRxId"":null,""sMedList"":[]}"))
+                return false;
+            HttpMethod httpMethod = new HttpMethod();
+            if (httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues))
+            {
+                CooperativeClinicJsonDb.InsertCooperJson(json);
+                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatusTop100();
+            }
+            else
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員", Class.MessageType.ERROR);
+                });
+            return true;
+        }
     }
 }
