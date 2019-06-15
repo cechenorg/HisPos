@@ -473,7 +473,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                 }
                 EditedPrescription.CountPrescriptionPoint(false);
-                if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+                if(!EditedPrescription.IsBuckle)
                     EditedPrescription.Medicines.SetNoBuckle();
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Update();
@@ -578,12 +578,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void SetBuckleAmount()
         {
-            if (!string.IsNullOrEmpty(VM.CooperativeInstitutionID) && EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                EditedPrescription.SelectedMedicine.BuckleAmount = 0;
-            else
-            {
+            if (EditedPrescription.IsBuckle)
                 EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
-            }
+            else
+                EditedPrescription.SelectedMedicine.BuckleAmount = 0;
             CheckEditStatus();
         }
         private bool CheckSameOrIDEmptyMedicine()
