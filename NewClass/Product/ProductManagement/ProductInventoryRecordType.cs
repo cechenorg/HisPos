@@ -11,6 +11,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         Error = 0,
         PurchaseReturn = 1,
         StockTaking = 2,
-        Prescription = 3
+        Prescription = 3,
+        Transaction = 4,
+        All = 5
     }
 }
