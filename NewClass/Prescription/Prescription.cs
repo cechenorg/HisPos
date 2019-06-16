@@ -160,7 +160,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
         public List<string> PrescriptionSign { get; set; }
         public int WriteCardSuccess { get; set; }
-        public WareHouse.WareHouse WareHouse { get; set; }
+        public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment?.AdjustCase?.ID);
         public Medicines Medicines { get; set; } = new Medicines();//調劑用藥 
         private Medicine selectedMedicine;
         public Medicine SelectedMedicine
@@ -177,6 +177,7 @@ namespace His_Pos.NewClass.Prescription
                     ((IDeletableProduct)selectedMedicine).IsSelected = true;
             }
         }
+        public bool IsBuckle => WareHouse != null;
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
@@ -390,7 +391,6 @@ namespace His_Pos.NewClass.Prescription
         }
 
         public void AddMedicineBySearch(string proId) {
-            CheckWareHouse();
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
@@ -439,7 +439,6 @@ namespace His_Pos.NewClass.Prescription
         
         #endregion
         public void AdjustMedicinesType() {
-            CheckWareHouse();
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
                 var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID);
                 var temp = new Medicine();
@@ -1237,7 +1236,7 @@ namespace His_Pos.NewClass.Prescription
         {
             CheckIsBuckleAndSource();
             Medicines.GetDataByWareHouse(WareHouse);
-            Medicines.SetBuckle(PrescriptionStatus.IsBuckle);
+            Medicines.SetBuckle(IsBuckle);
         }
 
         public string CheckMedicinesIdEmpty()
@@ -1287,7 +1286,6 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CheckIsBuckleAndSource()
         {
-            CheckWareHouse();
             if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
             {
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
@@ -1298,12 +1296,6 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
-        }
-
-        public void CheckWareHouse()
-        {
-            WareHouse = VM.CooperativeClinicSettings.GetWareHouseByPrescription(Treatment.Institution, Treatment.AdjustCase.ID);
-            PrescriptionStatus.IsBuckle = WareHouse != null;
         }
     }
 }
