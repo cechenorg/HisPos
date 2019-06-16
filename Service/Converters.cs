@@ -164,6 +164,7 @@ namespace His_Pos.Service
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
+            if(((string)value).Equals("---/--/--")) return new ValidationResult(true, null);
             var valueStr = value.ToString().Replace("/", "").Replace("-", "");
             bool validDate = false;
             int year = 0, month = 0, date = 0;

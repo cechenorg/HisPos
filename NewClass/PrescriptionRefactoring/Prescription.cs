@@ -46,6 +46,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
     public class Prescription : ObservableObject,ICloneable
     {
+        #region Constructors
+
         public Prescription()
         {
             Medicines = new Medicines();
@@ -215,6 +217,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Medicines = new Medicines();
             Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle);
         }
+
+        #endregion
         #region Properties
         public int ID { get; set; }
         public string SourceId { get; set; }
@@ -458,9 +462,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
-        public bool IsBuckle { get => WareHouse != null; }
+        public bool IsPrescribe => AdjustCase.ID.Equals("0") || Medicines.Count(m => !m.PaySelf) == 0;
+        public bool IsBuckle => WareHouse != null;
         #endregion
-
         public bool CheckDiseaseEquals(List<string> parameters)
         {
             var elementName = parameters[0];
@@ -696,7 +700,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var details = new List<Pdata>();
             CreateMedicinesDetail(details);
-            if (CheckIsPrescribe() || CheckOnlyBloodGlucoseTestStrip()) return details;
+            if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return details;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
             var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
             details.Add(medicalService);
@@ -731,11 +735,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
         }
 
-        private bool CheckIsPrescribe()
-        {
-            return AdjustCase.ID.Equals("0");
-        }
-
         private bool CheckNotNormalPrescription()
         {
             return !AdjustCase.ID.Equals("1") && !AdjustCase.ID.Equals("3");
@@ -753,14 +752,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private int CheckIfSimpleFormDeclare()
         {
             if (Patient.Birthday is null) return 0;
-            if (MedicineDays > 3)
-            {
-                if (AdjustCase.CheckIsSimpleForm())
-                    AdjustCase = VM.GetAdjustCase("1");
-                return 0;
-            }
-            var medFormCount = Medicines.CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
-            var dailyPrice = CountDayPayAmount(Patient.CountAge(), medFormCount);//計算日劑藥費金額
+            if (MedicineDays <= 3) return CountDailyPrice();
+            if (AdjustCase.CheckIsSimpleForm())
+                AdjustCase = VM.GetAdjustCase("1");
+            return 0;
+        }
+
+        private int CountDailyPrice()
+        {
+            var dailyPrice = CountDayPayAmount();//計算日劑藥費金額
             if (dailyPrice * MedicineDays < PrescriptionPoint.MedicinePoint)
             {
                 if (AdjustCase.CheckIsSimpleForm())
@@ -772,67 +772,86 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             return dailyPrice;
         }
 
-        private int CountDayPayAmount(int cusAge, int medFormCount)
+        private int CountDayPayAmount()
         {
             const int ma1 = 22, ma2 = 31, ma3 = 37, ma4 = 41;
-            if (cusAge <= 12 && medFormCount == 1) return ma2;
-            if (cusAge <= 12 && medFormCount == 2) return ma3;
-            if (cusAge <= 12 && medFormCount >= 3) return ma4;
+            var oralLiquidCount = Medicines.CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
+            var age = Patient.CountAge();
+            if (IsChild(age) && oralLiquidCount == 1) return ma2;
+            if (IsChild(age) && oralLiquidCount == 2) return ma3;
+            if (IsChild(age) && oralLiquidCount >= 3) return ma4;
             return ma1;
         }
 
+        private bool IsChild(int age)
+        {
+            return age <= 12;
+        }
+
         #region PrintFunctions
-        public void PrintMedBag(bool singleMode)
+        public void PrintMedBagAndReceipt()
+        {
+            PrintMedBagConfirm();
+            var receiptPrint = false;
+            if (PrescriptionPoint.AmountsPay > 0)
+            {
+                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
+                if (receiptResult.DialogResult != null)
+                    receiptPrint = (bool)receiptResult.DialogResult;
+            }
+            if (receiptPrint)
+                PrintReceipt();
+        }
+
+        private void PrintMedBagConfirm()
+        {
+            var medBagPrint = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
+            Debug.Assert(medBagPrint.DialogResult != null, "medBagPrint.DialogResult != null");
+            if (!(bool)medBagPrint.DialogResult) return;
+            var printBySingleMode = new MedBagSelectionWindow();
+            // ReSharper disable once PossibleInvalidOperationException
+            var singleMode = (bool)printBySingleMode.ShowDialog();
+            if (singleMode)
+                PrintMedBagSingleMode();
+            else
+            {
+                PrintMedBagMultiMode();
+            }
+        }
+
+        private void PrintMedBagSingleMode()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
-            var medBagMedicines = new MedBagMedicines(Medicines, singleMode);
-            if (singleMode)
+            var medBagMedicines = new MedBagMedicines(Medicines, true);
+            foreach (var m in medBagMedicines)
             {
-                foreach (var m in medBagMedicines)
-                {
-                    rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
-                    rptViewer.ProcessingMode = ProcessingMode.Local;
-                    var parameters = PrescriptionService.CreateSingleMedBagParameter(m,this);
-                    rptViewer.LocalReport.SetParameters(parameters);
-                    rptViewer.LocalReport.DataSources.Clear();
-                    rptViewer.LocalReport.Refresh();
-                    MainWindow.Instance.Dispatcher.Invoke(() =>
-                    {
-                        ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
-                    });
-                }
-            }
-            else
-            {
-                var json = JsonConvert.SerializeObject(medBagMedicines);
-                var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-                rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";
-                rptViewer.ProcessingMode = ProcessingMode.Local;
-                var parameters = PrescriptionService.CreateMultiMedBagParameter(this);
-                rptViewer.LocalReport.SetParameters(parameters);
-                rptViewer.LocalReport.DataSources.Clear();
-                var rd = new ReportDataSource("DataSet1", dataTable);
-                rptViewer.LocalReport.DataSources.Add(rd);
-                rptViewer.LocalReport.Refresh();
+                SetSingleModeReportViewer(rptViewer,m);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
                 });
             }
         }
-        public void PrintReceipt()
+
+        private void PrintMedBagMultiMode()
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            SetMultiModeReportViewer(rptViewer);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+            });
+        }
+
+        private void PrintReceipt()
         {
             try
             {
                 var rptViewer = new ReportViewer();
                 rptViewer.LocalReport.DataSources.Clear();
-                rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
-                rptViewer.ProcessingMode = ProcessingMode.Local;
-                var parameters = PrescriptionService.CreateReceiptParameters(this);
-                rptViewer.LocalReport.SetParameters(parameters);
-                rptViewer.LocalReport.DataSources.Clear();
-                rptViewer.LocalReport.Refresh();
+                SetReceiptReportViewer(rptViewer);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReceipt(rptViewer);
@@ -843,68 +862,61 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 MessageWindow.ShowMessage(Resources.列印錯誤 + e.Message, MessageType.WARNING);
             }
         }
+
         public void PrintDepositSheet()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
+            SetDepositReportViewer(rptViewer);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
+            });
+        }
+        #region ReportViewerSettingFunctions
+        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m)
+        {
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this);
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+        }
+        private void SetMultiModeReportViewer(ReportViewer rptViewer)
+        {
+            var medBagMedicines = new MedBagMedicines(Medicines, false);
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = PrescriptionService.CreateMultiMedBagParameter(this);
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("DataSet1", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
+        private void SetReceiptReportViewer(ReportViewer rptViewer)
+        {
+            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = PrescriptionService.CreateReceiptParameters(this);
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+        }
+        private void SetDepositReportViewer(ReportViewer rptViewer)
+        {
             rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateDepositSheetParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
-            MainWindow.Instance.Dispatcher.Invoke(() =>
-            {
-                ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
-            });
         }
-        
         #endregion
-
-        public void PrintMedBagAndReceipt()
-        {
-            var medBagPrint = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
-            Debug.Assert(medBagPrint.DialogResult != null, "medBagPrint.DialogResult != null");
-            if (!(bool)medBagPrint.DialogResult) return;
-            var printBySingleMode = new MedBagSelectionWindow();
-            var singleMode = (bool)printBySingleMode.ShowDialog();
-            var receiptPrint = false;
-            if (PrescriptionPoint.AmountsPay > 0)
-            {
-                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
-                if (receiptResult.DialogResult != null)
-                    receiptPrint = (bool)receiptResult.DialogResult;
-            }
-            PrintMedBag(singleMode);
-            if (receiptPrint)
-                PrintReceipt();
-        }
-
-        public object Clone()
-        {
-            var clone = new Prescription
-            {
-                Type = Type,
-                Patient = Patient.DeepCloneViaJson(),
-                Institution = Institution.DeepCloneViaJson(),
-                Division = Division.DeepCloneViaJson(),
-                Pharmacist = Pharmacist.DeepCloneViaJson(),
-                TempMedicalNumber = TempMedicalNumber,
-                TreatDate = TreatDate,
-                AdjustDate = AdjustDate,
-                MainDisease = MainDisease.DeepCloneViaJson(),
-                SubDisease = SubDisease.DeepCloneViaJson(),
-                ChronicSeq = ChronicSeq,
-                ChronicTotal = ChronicTotal,
-                AdjustCase = AdjustCase.DeepCloneViaJson(),
-                PrescriptionCase = PrescriptionCase.DeepCloneViaJson(),
-                Copayment = Copayment.DeepCloneViaJson(),
-                PaymentCategory = PaymentCategory.DeepCloneViaJson(),
-                SpecialTreat = SpecialTreat.DeepCloneViaJson(),
-                Medicines = Medicines
-            };
-            return clone;
-        }
+        #endregion
 
         public void AddMedicine(string medicineID)
         {
@@ -995,12 +1007,46 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckVariableByChronicSequence()
         {
-            if (chronicSeq == null || !(chronicSeq > 0)) return;
+            if (!IsChronicSeqValid()) return;
             AdjustCase = VM.GetAdjustCase("2");
             if (ChronicSeq >= 2)
-            {
                 MedicalNumber = "IC0" + chronicSeq;
-            }
+        }
+
+        private bool IsChronicSeqValid()
+        {
+            return ChronicSeq != null && ChronicSeq > 0;
+        }
+
+        public object Clone()
+        {
+            var clone = new Prescription
+            {
+                Type = Type,
+                Patient = Patient.DeepCloneViaJson(),
+                Institution = Institution.DeepCloneViaJson(),
+                Division = Division.DeepCloneViaJson(),
+                Pharmacist = Pharmacist.DeepCloneViaJson(),
+                TempMedicalNumber = TempMedicalNumber,
+                TreatDate = TreatDate,
+                AdjustDate = AdjustDate,
+                MainDisease = MainDisease.DeepCloneViaJson(),
+                SubDisease = SubDisease.DeepCloneViaJson(),
+                ChronicSeq = ChronicSeq,
+                ChronicTotal = ChronicTotal,
+                AdjustCase = AdjustCase.DeepCloneViaJson(),
+                PrescriptionCase = PrescriptionCase.DeepCloneViaJson(),
+                Copayment = Copayment.DeepCloneViaJson(),
+                PaymentCategory = PaymentCategory.DeepCloneViaJson(),
+                SpecialTreat = SpecialTreat.DeepCloneViaJson(),
+                Medicines = Medicines
+            };
+            return clone;
+        }
+
+        public void SetPrescribeAdjustCase()
+        {
+            AdjustCase = VM.GetAdjustCase("0");
         }
     }
 }

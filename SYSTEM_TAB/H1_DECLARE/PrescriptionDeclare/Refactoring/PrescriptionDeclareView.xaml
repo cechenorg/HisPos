@@ -30,16 +30,17 @@
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
         <service:MultiCommandParametersConverter x:Key="MultiCommandParametersConverter"/>
         <service:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="PrescriptionHistory" Source="/Images/medical-history.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
-            <Button Content="調劑" Command="{Binding DataContext.AdjustButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonRegister" DataType="{x:Type Button}">
-            <Button Content="登錄" Command="{Binding DataContext.RegisterButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="登錄" Command="{Binding DataContext.Register, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonPrescribe" DataType="{x:Type Button}">
-            <Button Content="自費調劑" Command="{Binding DataContext.PrescribeButtonClick, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="自費調劑" Command="{Binding DataContext.Prescribe, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="UpdateSendToSingde" DataType="{x:Type CheckBox}">
             <CheckBox Width="133" Height="35" Content="修改傳送杏德"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="IndianRed" Margin="10,0,0,0"
@@ -76,10 +77,10 @@
                 </Grid.RowDefinitions>
                 <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                     <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientIDNumber" Width="150" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
+                    <TextBox Name="PatientIdNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
+                            <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIdNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
@@ -109,14 +110,14 @@
                         </Binding>
                     </xctk:MaskedTextBox>
                     <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientCellPhone" Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Image Width="30" Height="30" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientTel" Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientTel" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientTel}"/>
@@ -124,8 +125,9 @@
                     </TextBox>
                     <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Content="合作診所處方" Background="DarkCyan" BorderThickness="0" Margin="20,0,0,0" Command="{Binding GetCooperativePres}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="取得病患資料" Background="RoyalBlue" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
+                    <Button Command="{Binding ScanPrescriptionQRCode}" Background="Transparent" Content="{StaticResource QrCode}" Margin="20,0,0,0" BorderBrush="Transparent" Height="35" Width="35" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="合作診所處方" Background="DarkCyan" Height="35" BorderThickness="0" Margin="10,0,0,0" Command="{Binding GetCooperativePres}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="取得病患資料" Background="RoyalBlue" Height="35" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
                     <Grid.ColumnDefinitions>
@@ -700,7 +702,7 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                            <Button Width="145" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding ClearButtonClick}" Margin="50,0,0,0"/>
+                            <Button Width="145" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding Clear}" Margin="50,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">
                             <Button Width="95" Height="30" Background="DimGray" BorderThickness="0" Content="異常結案" FontSize="16" Command="{Binding ErrorAdjust}" />

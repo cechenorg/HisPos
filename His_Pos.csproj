@@ -1774,6 +1774,7 @@
     <Resource Include="Images\Cooperate.png" />
     <Resource Include="Images\Telephone.png" />
     <Resource Include="Images\chart.png" />
+    <Resource Include="Images\qr-code.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

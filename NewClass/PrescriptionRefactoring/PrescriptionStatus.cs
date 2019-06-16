@@ -25,6 +25,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsAdjust { get; set; }
         public bool IsRead { get; set; }
         public bool IsVIP { get; set; }
+        public bool IsPrescribe { get; set; }
+
         #endregion
     }
 }

@@ -142,15 +142,11 @@ namespace His_Pos.Service
         }
         public static bool ValidateDateTime(string datetime, string format)
         {
-            if (datetime == null || datetime.Length == 0)
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(datetime)) return false;
             try
             {
-                System.Globalization.DateTimeFormatInfo dtfi = new System.Globalization.DateTimeFormatInfo();
-                dtfi.FullDateTimePattern = format;
-                DateTime dt = DateTime.ParseExact(datetime, "F", dtfi);
+                var dateTimeFormatInfo = new System.Globalization.DateTimeFormatInfo {FullDateTimePattern = format};
+                var dt = DateTime.ParseExact(datetime, "F", dateTimeFormatInfo);
                 return true;
             }
             catch (Exception)

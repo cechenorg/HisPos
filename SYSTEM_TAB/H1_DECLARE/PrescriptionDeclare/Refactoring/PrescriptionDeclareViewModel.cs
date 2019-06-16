@@ -128,6 +128,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private bool isCardReading;
         #endregion
         #region Commands
+        public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
@@ -140,6 +141,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand Clear { get; set; }
+        public RelayCommand Adjust { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -149,25 +152,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         #region InitFunctions
         private void Init()
         {
-            InitVariables();
-            InitCommands();
-        }
-
-        private void InitVariables()
-        {
-            isNotInit = false;
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(DateTime.Today);
-            CurrentPrescription = new Prescription();
-            CurrentPrescription.Init();
-            currentCard = new IcCard();
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
             MainWindow.ServerConnection.CloseConnection();
+            InitPrescriptionAndCard();
+            InitCommands();
+        }
+
+        private void InitPrescriptionAndCard()
+        {
+            isNotInit = false;
+            CurrentPrescription = new Prescription();
+            CurrentPrescription.Init();
+            currentCard = new IcCard();
             isNotInit = true;
         }
 
         private void InitCommands()
         {
+            ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
@@ -180,10 +184,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
+            Clear = new RelayCommand(InitPrescriptionAndCard);
+            Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
         }
 
+        private bool CheckIsAdjusting()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
         #region CommandAction
+        private void ScanPrescriptionQRCodeAction()
+        {
+
+        }
+
         private void GetCooperativePresAction()
         {
             //查詢合作診所處方
@@ -196,6 +211,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             isNotInit = false;
             setBuckleAmount = false;
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            if(!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
             setBuckleAmount = true;
             isNotInit = true;
@@ -414,6 +430,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             CurrentPrescription.SetBuckleAmount();
         }
+        private void AdjustAction()
+        {
+            if(!CheckValidCustomer()) return;
+            CheckIsPrescribe();
+        }
         #endregion
 
         #region MessengerFunctions
@@ -490,6 +511,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var cusPreWindow = new CustomerPrescriptionWindow(CurrentPrescription.Patient, currentCard);
         }
+
+        private bool CheckPatientEqual(Prescription receive)
+        {
+            if (string.IsNullOrEmpty(CurrentPrescription.Patient.IDNumber)) return true;
+            if (CurrentPrescription.Patient.IDNumber.Equals(receive.Patient.IDNumber))
+                return true;
+            MessageWindow.ShowMessage("代入處方病患資料與目前病患資料不符，請確認。",MessageType.ERROR);
+            return false;
+        }
+
         private int GetProductCount(string medicineID)
         {
             var wareHouse = CurrentPrescription.WareHouse;
@@ -509,6 +540,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 isCardReading = false;
             }
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+        }
+
+        private void CheckIsPrescribe()
+        {
+            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe) return;
+            if (!CurrentPrescription.Patient.CheckData())
+            {
+                var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                if ((bool)confirm.DialogResult)
+                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
+                CurrentPrescription.SetPrescribeAdjustCase();
+            }
+            CurrentPrescription.SetPrescribeAdjustCase();
+        }
+        private bool CheckValidCustomer()
+        {
+            if (CurrentPrescription.Patient.CheckData()) return false;
+            MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
+            return true;
         }
         #endregion
     }
