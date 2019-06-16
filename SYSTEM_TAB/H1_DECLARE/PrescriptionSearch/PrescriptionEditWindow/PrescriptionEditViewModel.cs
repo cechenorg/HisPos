@@ -312,6 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 case 1:
                     EditedPrescription.Treatment.Institution = result[0];
+                    EditedPrescription.CheckIsCooperative();
                     break;
                 default:
                     Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
@@ -578,6 +579,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void SetBuckleAmount()
         {
+            EditedPrescription.CheckIsBuckle();
             if (EditedPrescription.IsBuckle)
                 EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
             else

@@ -743,7 +743,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetBuckleAmount()
         {
-            if(CurrentPrescription.IsBuckle)
+            CurrentPrescription.CheckIsBuckle();
+            if (CurrentPrescription.IsBuckle)
                 CurrentPrescription.SelectedMedicine.BuckleAmount = CurrentPrescription.SelectedMedicine.Amount;
             else
                 CurrentPrescription.SelectedMedicine.BuckleAmount = 0;

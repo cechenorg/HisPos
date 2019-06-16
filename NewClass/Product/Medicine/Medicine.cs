@@ -106,7 +106,6 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
-                BuckleAmount = amount;
                 CheckIsPriceReadOnly();
                 CountTotalPrice();
             }

@@ -177,7 +177,16 @@ namespace His_Pos.NewClass.Prescription
                     ((IDeletableProduct)selectedMedicine).IsSelected = true;
             }
         }
-        public bool IsBuckle => WareHouse != null;
+
+        private bool isBuckle;
+        public bool IsBuckle
+        {
+            get => isBuckle;
+            set
+            {
+                Set(() => IsBuckle, ref isBuckle, value);
+            }
+        }
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
@@ -390,7 +399,9 @@ namespace His_Pos.NewClass.Prescription
             return ma1;
         }
 
-        public void AddMedicineBySearch(string proId) {
+        public void AddMedicineBySearch(string proId)
+        {
+            IsBuckle = WareHouse != null;
             DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
@@ -416,17 +427,20 @@ namespace His_Pos.NewClass.Prescription
                 medicine.PositionID = "PO";
             //if(Medicines[selectedMedicinesIndex].Amount > 0 && !Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
             //    Medicines[selectedMedicinesIndex].BuckleAmount = Medicines[selectedMedicinesIndex - 1].BuckleAmount;
+            
             var selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
             if (SelectedMedicine != null)
             {
                 if(selectedMedicinesIndex > 0)
                     medicine.CopyPrevious(Medicines[selectedMedicinesIndex-1]);
+                medicine.BuckleAmount = IsBuckle ? medicine.Amount : 0;
                 Medicines[selectedMedicinesIndex] = medicine;
             }
             else
             {
                 if(Medicines.Count > 0)
                     medicine.CopyPrevious(Medicines[Medicines.Count-1]);
+                medicine.BuckleAmount = IsBuckle ? medicine.Amount : 0;
                 Medicines.Add(medicine);
             } 
         }
@@ -1234,9 +1248,10 @@ namespace His_Pos.NewClass.Prescription
 
         public void CheckIsCooperative()
         {
+            IsBuckle = WareHouse != null;
             CheckIsBuckleAndSource();
             Medicines.GetDataByWareHouse(WareHouse);
-            Medicines.SetBuckle(IsBuckle);
+            Medicines.SetBuckleAndUpdateInventory(IsBuckle,WareHouse?.ID);
         }
 
         public string CheckMedicinesIdEmpty()
@@ -1286,6 +1301,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void CheckIsBuckleAndSource()
         {
+            CheckIsBuckle();
             if (Treatment.Institution != null && !string.IsNullOrEmpty(Treatment.Institution.ID) && VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(Treatment.Institution.ID)) > 0)
             {
                 PrescriptionStatus.IsCooperative = Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID);//檢查骨科
@@ -1296,6 +1312,11 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
+        }
+
+        public void CheckIsBuckle()
+        {
+            IsBuckle = WareHouse != null;
         }
     }
 }

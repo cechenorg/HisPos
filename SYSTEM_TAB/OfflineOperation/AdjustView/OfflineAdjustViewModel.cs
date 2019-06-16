@@ -1125,12 +1125,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
                         CheckIsCooperativeVIP();
-                        CurrentPrescription.Medicines.SetBuckle(false);
+                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
                         CurrentPrescription.CooperativeAdjust(false);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckle(false);
+                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
@@ -1215,12 +1215,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                         CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
-                        CurrentPrescription.Medicines.SetBuckle(false);
+                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
                         CurrentPrescription.CooperativeAdjust(true);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckle(false);
+                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
                     CurrentPrescription.CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:

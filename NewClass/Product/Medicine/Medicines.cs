@@ -125,8 +125,9 @@ namespace His_Pos.NewClass.Product.Medicine
             return result;
         }
 
-        public void SetBuckle(bool b)
+        public void SetBuckleAndUpdateInventory(bool b,string wareHouseId)
         {
+            var idList = new List<string>();
             foreach (var m in Items)
             {
                 switch (m)
@@ -142,12 +143,25 @@ namespace His_Pos.NewClass.Product.Medicine
                             m.BuckleAmount = m.Amount;
                         }
                         m.IsBuckle = b;
+                        if(!idList.Contains(m.ID))
+                            idList.Add(m.ID);
                         break;
                     }
                     case MedicineVirtual _:
                         m.BuckleAmount = 0;
                         m.IsBuckle = false;
                         break;
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (DataRow r in table.Rows)
+            {
+                var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
+                foreach (var m in medList)
+                {
+                    m.Inventory = r.Field<double>("Inv_Inventory");
                 }
             }
         }
