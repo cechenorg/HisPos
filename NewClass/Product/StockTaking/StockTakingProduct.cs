@@ -10,7 +10,9 @@ namespace His_Pos.NewClass.Product.StockTaking
     public class StockTakingProduct : Product
     {
         #region ----- Define Variables -----
-
+        public double Inventory { get; set; }
+        public double NewInventory { get; set; }
+        public double Note { get; set; }
         #endregion
 
         public StockTakingProduct(DataRow row) : base(row)

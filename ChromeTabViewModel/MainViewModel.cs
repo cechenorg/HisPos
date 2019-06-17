@@ -22,6 +22,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
@@ -230,6 +231,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.申報院所點數總表):
                     break;
+                case nameof(FeatureItem.盤點計畫):
+                    break;
                 default:
                     return;
             }
@@ -307,6 +310,10 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.庫存盤點紀錄):
                     newTab = new StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
+                    break;
+
+                case nameof(FeatureItem.盤點計畫):
+                    newTab = new StockTakingPlanViewModel() { TabName = MainWindow.HisFeatures[2].Functions[2], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 //基本資料管理

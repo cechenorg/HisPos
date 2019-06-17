@@ -11,16 +11,24 @@
                 <Label Content="無計畫資料" Style="{StaticResource BoldLabelHeader30}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="DataDetailControl" DataType="UserControl">
+            <local:StockTakingPlanControl/>
+        </DataTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="870" Margin="10">
+    <Grid Width="1345" Height="850" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Column="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StockTakingPlanCollection, UpdateSourceTrigger=PropertyChanged}"
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
+        <DataGrid Grid.Column="0" Grid.Row="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StockTakingPlanCollection, UpdateSourceTrigger=PropertyChanged}"
                   ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" SelectedItem="{Binding CurrentPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="280">
+                <DataGridTemplateColumn Width="300">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -41,10 +49,11 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <Label Content="{Binding }" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                    <Label Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="280" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <Label Content="{Binding }" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
+                                    <Label Content="{Binding WareHouse.Name}" Foreground="RoyalBlue" Width="45" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                    <Label Content="{Binding StockTakingProductCollection.Count}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="130,0,0,0"/>
                                     <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
@@ -53,13 +62,26 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <ContentControl Grid.Column="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
+            <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0">
+                <Image.InputBindings>
+                    <MouseBinding Command="{Binding AddPlanCommand}" MouseAction="LeftClick"/>
+                </Image.InputBindings>
+            </Image>
+            <Rectangle Width="210"/>
+            <Image Source="/Images/Delete.png" Width="30" Margin="5,0,0,0">
+                <Image.InputBindings>
+                    <MouseBinding Command="{Binding DeletePlanCommand}" MouseAction="LeftClick"/>
+                </Image.InputBindings>
+            </Image>
+        </StackPanel>
+        <ContentControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource DataDetailControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType, UpdateSourceTrigger=PropertyChanged}" Value="RETURN">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnRecordOrderDetail}" />
+                        <DataTrigger Binding="{Binding CurrentPlan, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DataDetailControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

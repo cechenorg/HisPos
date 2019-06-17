@@ -30,7 +30,18 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         #region ----- Define Variables -----
         private StockTakingPlans stockTakingPlanCollection;
         private NewClass.StockTaking.StockTakingPlan.StockTakingPlan currentPlan;
+        private bool isDataChanged;
 
+        public bool IsDataChanged
+        {
+            get { return isDataChanged; }
+            set
+            {
+                Set(() => IsDataChanged, ref isDataChanged, value);
+                CancelChangeCommand.RaiseCanExecuteChanged();
+                ConfirmChangeCommand.RaiseCanExecuteChanged();
+            }
+        }
         public StockTakingPlans StockTakingPlanCollection
         {
             get { return stockTakingPlanCollection; }
@@ -52,11 +63,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         #region ----- Define Actions -----
         private void AddPlanAction()
         {
-
+            AddNewPlanWindow addNewPlanWindow = new AddNewPlanWindow();
+            addNewPlanWindow.ShowDialog();
         }
         private void DeletePlanAction()
         {
-
+            CurrentPlan.Delete();
         }
         private void AddProductAction()
         {
@@ -64,18 +76,15 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         }
         private void DataChangedAction()
         {
-            CancelChangeCommand.RaiseCanExecuteChanged();
-            ConfirmChangeCommand.RaiseCanExecuteChanged();
+            IsDataChanged = true;
         }
         private void ConfirmChangeAction()
         {
-            CancelChangeCommand.RaiseCanExecuteChanged();
-            ConfirmChangeCommand.RaiseCanExecuteChanged();
+            IsDataChanged = false;
         }
         private void CancelChangeAction()
         {
-            CancelChangeCommand.RaiseCanExecuteChanged();
-            ConfirmChangeCommand.RaiseCanExecuteChanged();
+            IsDataChanged = false;
         }
         #endregion
 
@@ -91,13 +100,16 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         }
         private bool IsPlanDataChanged()
         {
-            return false;
+            return IsDataChanged;
         }
         private void InitPlans()
         {
             MainWindow.ServerConnection.OpenConnection();
             StockTakingPlanCollection = StockTakingPlans.GetStockTakingPlans();
             MainWindow.ServerConnection.CloseConnection();
+
+            if (StockTakingPlanCollection != null && StockTakingPlanCollection.Count > 0)
+                CurrentPlan = StockTakingPlanCollection[0];
         }
         #endregion
     }
