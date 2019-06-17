@@ -9,6 +9,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             
         }
 
+        public override bool CheckPrescription()
+        {
+            throw new NotImplementedException();
+        }
+
         public override bool NormalAdjust()
         {
             throw new NotImplementedException();

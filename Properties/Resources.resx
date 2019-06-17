@@ -301,7 +301,7 @@
     <value>請填寫給付類別
 </value>
   </data>
-  <data name="PharmacistIDError" xml:space="preserve">
+  <data name="尚未選擇藥師" xml:space="preserve">
     <value>未選擇調劑藥師或調劑藥師身分證未填寫\n</value>
   </data>
   <data name="PrescriptionCaseError" xml:space="preserve">

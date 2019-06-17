@@ -537,7 +537,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckPharmacist()
         {
-            return string.IsNullOrEmpty(Pharmacist.IDNumber) ? StringRes.PharmacistIDError : string.Empty;
+            return string.IsNullOrEmpty(Pharmacist.IDNumber) ? StringRes.尚未選擇藥師 : string.Empty;
         }
         private string CheckDivision()
         {

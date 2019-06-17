@@ -24,6 +24,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Service;
@@ -190,7 +191,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private bool CheckIsAdjusting()
         {
-            throw new NotImplementedException();
+            return isAdjusting;
         }
         #endregion
         #region CommandAction
@@ -432,8 +433,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         private void AdjustAction()
         {
-            if(!CheckValidCustomer()) return;
-            CheckIsPrescribe();
+            isAdjusting = true;
+            var service = PrescriptionService.CreateService(CurrentPrescription);
+            if (!service.SetPharmacist(SelectedPharmacist, PrescriptionCount))
+            {
+                isAdjusting = false;
+                return;
+            }
+            if (!service.CheckPrescription())
+            {
+                isAdjusting = false;
+                return;
+            }
+            service.StartNormalAdjust();
         }
         #endregion
 
@@ -540,26 +552,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 isCardReading = false;
             }
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
-        }
-
-        private void CheckIsPrescribe()
-        {
-            if (!CurrentPrescription.PrescriptionStatus.IsPrescribe) return;
-            if (!CurrentPrescription.Patient.CheckData())
-            {
-                var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
-                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool)confirm.DialogResult)
-                    CurrentPrescription.Patient = Customer.GetCustomerByCusId(0);
-                CurrentPrescription.SetPrescribeAdjustCase();
-            }
-            CurrentPrescription.SetPrescribeAdjustCase();
-        }
-        private bool CheckValidCustomer()
-        {
-            if (CurrentPrescription.Patient.CheckData()) return false;
-            MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
-            return true;
         }
         #endregion
     }

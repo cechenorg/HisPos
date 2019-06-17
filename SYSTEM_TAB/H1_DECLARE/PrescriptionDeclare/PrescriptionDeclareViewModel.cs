@@ -1669,7 +1669,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private bool CheckSameOrIDEmptyMedicine()
         {
-            var medicinesSame = CurrentPrescription.CheckMedicinesIdEmpty();
+            var medicinesSame = CurrentPrescription.CheckMedicines();
             if (string.IsNullOrEmpty(medicinesSame)) return true;
             MessageWindow.ShowMessage(medicinesSame, MessageType.WARNING);
             return false;

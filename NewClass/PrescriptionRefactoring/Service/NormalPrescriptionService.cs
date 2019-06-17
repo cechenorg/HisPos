@@ -9,6 +9,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             
         }
 
+        public override bool CheckPrescription()
+        {
+            CheckAnonymousPatient();
+            if (!CheckValidCustomer()) return false;
+            if (!CheckMedicines()) return false;
+            if (!CheckMedicalNumber()) return false;
+            //自費不檢查健保規則
+            return true;
+        }
+
         public override bool NormalAdjust()
         {
             throw new NotImplementedException();

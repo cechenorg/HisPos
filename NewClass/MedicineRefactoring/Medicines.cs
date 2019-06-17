@@ -322,5 +322,28 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 Add(medicine);
             }
         }
+
+        public string Check()
+        {
+            var errorMsg = string.Empty;
+            errorMsg += CheckIDEmpty();
+            errorMsg += CheckAmountZero();
+            return errorMsg;
+        }
+        private string CheckIDEmpty()
+        {
+            var emptyMedicine = string.Empty;
+            var emptyList = (from m in Items where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\r\n").ToList();
+            //var sameList = (from m in Items where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\n").ToList();
+            return emptyList.Count <= 0 ? emptyMedicine : emptyList.Aggregate(emptyMedicine, (current, s) => current + s);
+        }
+
+        private string CheckAmountZero()
+        {
+            if (!Items.Any())
+                return Resources.MedicineEmpty;
+            return Items.Count(m => m.Amount == 0) == 0 ? string.Empty : 
+                Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+        }
     }
 }

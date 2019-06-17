@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.Class.Employee;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine.MedBag;
+using His_Pos.Properties;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
+using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
@@ -14,6 +21,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
     public abstract class PrescriptionService:ObservableObject
     {
         #region AbstractFunctions
+        public abstract bool CheckPrescription();
         public abstract bool NormalAdjust();
         public abstract bool ErrorAdjust();
         public abstract bool DepositAdjust();
@@ -31,7 +39,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected Prescription current { get; set; }
         #region Functions
-        public PrescriptionService CreateService(Prescription p)
+        public static PrescriptionService CreateService(Prescription p)
         {
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.current = p;
@@ -52,6 +60,70 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public bool StartRegister()
         {
             return Register();
+        }
+
+        public bool SetPharmacist(Employee selectedPharmacist,int prescriptionCount)
+        {
+            if (selectedPharmacist is null || string.IsNullOrEmpty(selectedPharmacist.IDNumber))
+            {
+                MessageWindow.ShowMessage(Resources.尚未選擇藥師, MessageType.ERROR);
+                return false;
+            }
+            if (prescriptionCount >= 80)
+            {
+                var confirm = new ConfirmWindow(Resources.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?", "調劑張數提醒", true);
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                var result = (bool)confirm.DialogResult;
+                if (!result) return false;
+            }
+            current.Pharmacist = selectedPharmacist;
+            return true;
+        }
+
+        protected void CheckAnonymousPatient()
+        {
+            if (!current.IsPrescribe) return;
+            if (!current.Patient.CheckData())
+            {
+                var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                if ((bool)confirm.DialogResult)
+                    current.Patient = Customer.GetCustomerByCusId(0);
+                current.SetPrescribeAdjustCase();
+            }
+            current.SetPrescribeAdjustCase();
+        }
+
+        protected bool CheckValidCustomer()
+        {
+            if (current.Patient.CheckData()) return false;
+            MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
+            return true;
+        }
+
+        protected bool CheckMedicines()
+        {
+            var errorMsg = current.Medicines.Check();
+            if (string.IsNullOrEmpty(errorMsg)) return true;
+            MessageWindow.ShowMessage(errorMsg, MessageType.WARNING);
+            return false;
+        }
+
+        public bool CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(current.TempMedicalNumber))
+            {
+                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
+                Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
+                return (bool)medicalNumberEmptyConfirm.DialogResult;
+            }
+
+            if (current.TempMedicalNumber.Length != 4)
+            {
+                MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
