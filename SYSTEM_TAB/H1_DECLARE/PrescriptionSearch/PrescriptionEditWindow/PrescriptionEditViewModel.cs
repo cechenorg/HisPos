@@ -312,6 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 case 1:
                     EditedPrescription.Treatment.Institution = result[0];
+                    EditedPrescription.CheckIsCooperative();
                     break;
                 default:
                     Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
@@ -473,7 +474,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
                 }
                 EditedPrescription.CountPrescriptionPoint(false);
-                if(!EditedPrescription.PrescriptionStatus.IsBuckle)
+                if(!EditedPrescription.IsBuckle)
                     EditedPrescription.Medicines.SetNoBuckle();
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Update();
@@ -578,12 +579,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void SetBuckleAmount()
         {
-            if (!string.IsNullOrEmpty(VM.CooperativeInstitutionID) && EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                EditedPrescription.SelectedMedicine.BuckleAmount = 0;
-            else
-            {
+            EditedPrescription.CheckIsBuckle();
+            if (EditedPrescription.IsBuckle)
                 EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
-            }
+            else
+                EditedPrescription.SelectedMedicine.BuckleAmount = 0;
             CheckEditStatus();
         }
         private bool CheckSameOrIDEmptyMedicine()

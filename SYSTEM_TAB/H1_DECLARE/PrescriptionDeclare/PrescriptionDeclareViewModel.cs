@@ -442,7 +442,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case "Get":
                     MainWindow.ServerConnection.OpenConnection();
-                    CurrentPrescription.CheckWareHouse();
                     CurrentSet.MedicineSetItems = new MedicineSetItems();
                     CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
                     CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet, CurrentPrescription.WareHouse is null ? "0" : CurrentPrescription.WareHouse.ID);
@@ -744,12 +743,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetBuckleAmount()
         {
-            if (!string.IsNullOrEmpty(VM.CooperativeInstitutionID) && CurrentPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-                CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
-            else
-            {
+            CurrentPrescription.CheckIsBuckle();
+            if (CurrentPrescription.IsBuckle)
                 CurrentPrescription.SelectedMedicine.BuckleAmount = CurrentPrescription.SelectedMedicine.Amount;
-            }
+            else
+                CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
         }
         private void SelfPayTextChangedAction()
         {
@@ -1505,15 +1503,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.NormalAdjust(false);
                     break;
                 case PrescriptionSource.Cooperative:
+                    if (!CurrentPrescription.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
-                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                    if (!CurrentPrescription.IsBuckle)
                         CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.ChronicAdjust(false);
                     break;
                 case PrescriptionSource.XmlOfPrescription:
-                    if(!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                    if(!CurrentPrescription.IsBuckle)
                         CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.XmlOfPrescriptionAdjust(false);
                     break;
@@ -1590,16 +1590,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.NormalAdjust(true);
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetNoBuckle();
+                    if (!CurrentPrescription.IsBuckle)
+                        CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:
-                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                    if (!CurrentPrescription.IsBuckle)
                         CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.ChronicAdjust(true);
                     break;
                 case PrescriptionSource.XmlOfPrescription:
-                    if (!CurrentPrescription.PrescriptionStatus.IsBuckle)
+                    if (!CurrentPrescription.IsBuckle)
                         CurrentPrescription.Medicines.SetNoBuckle();
                     CurrentPrescription.XmlOfPrescriptionAdjust(true);
                     break;
