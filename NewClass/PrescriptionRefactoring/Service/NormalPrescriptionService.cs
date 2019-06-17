@@ -15,7 +15,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckValidCustomer()) return false;
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
-            //自費不檢查健保規則
+            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckNhiRules()) return false;
+            //列印確認
             return true;
         }
 

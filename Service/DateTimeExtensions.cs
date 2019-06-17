@@ -159,5 +159,28 @@ namespace His_Pos.Service
             var date = (DateTime)declareDate;
             return new DateTime(date.Year, date.Month, day);
         }
+
+        public static bool CheckIsWeekend(DateTime start)
+        {
+            return (int)start.DayOfWeek == 0 || (int)start.DayOfWeek == 6;
+        }
+
+        public static int CountTimeDifferenceWithoutHoliday(DateTime startDate, DateTime endDate)
+        {
+            return new TimeSpan(endDate.Ticks - startDate.Ticks).Days - CountHoliday(startDate, endDate);
+        }
+
+        private static int CountHoliday(DateTime start, DateTime end)
+        {
+            var tmpStartDate = start.DeepCloneViaJson();
+            var holiday = 0;
+            while (start < end)
+            {
+                if (CheckIsWeekend(tmpStartDate))
+                    holiday += 1;
+                tmpStartDate = tmpStartDate.AddDays(1);
+            }
+            return holiday;
+        }
     }
 }

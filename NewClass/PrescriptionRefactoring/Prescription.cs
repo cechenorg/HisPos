@@ -1048,5 +1048,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             AdjustCase = VM.GetAdjustCase("0");
         }
+
+        public string CheckPrescriptionRule(bool noCard)
+        {
+            var errorMsg = string.Empty;
+            if (IsPrescribe) return errorMsg;
+            //檢查健保規則
+            return errorMsg;
+        }
     }
 }

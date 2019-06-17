@@ -109,7 +109,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return false;
         }
 
-        public bool CheckMedicalNumber()
+        protected bool CheckMedicalNumber()
         {
             if (string.IsNullOrEmpty(current.TempMedicalNumber))
             {
@@ -124,6 +124,47 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 return false;
             }
             return true;
+        }
+
+        protected bool CheckAdjustAndTreatDate()
+        {
+            return CheckTreatDate() && CheckAdjustDate();
+        }
+
+        private bool CheckTreatDate()
+        {
+            if (current.TreatDate is null && !current.AdjustCase.ID.Equals("D"))
+            {
+                MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckAdjustDate()
+        {
+            if (current.AdjustDate is null)
+            {
+                MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
+                return false;
+            }
+            var startDate = (DateTime)current.TreatDate;
+            var endDate = (DateTime)current.AdjustDate;
+            if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(startDate, endDate) > 3)
+            {
+                var adjustDateOutOfRange = new ConfirmWindow(Resources.PrescriptoinOutOfDate, "");
+                Debug.Assert(adjustDateOutOfRange.DialogResult != null, "adjustDateOutOfRange.DialogResult != null");
+                return (bool)adjustDateOutOfRange.DialogResult;
+            }
+            return true;
+        }
+
+        protected bool CheckNhiRules()
+        {
+            var error = current.CheckPrescriptionRule(false);//檢查健保規則
+            if(string.IsNullOrEmpty(error)) return true;
+            MessageWindow.ShowMessage(error, MessageType.ERROR);
+            return false;
         }
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
