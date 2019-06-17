@@ -50,7 +50,13 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         public NewClass.StockTaking.StockTakingPlan.StockTakingPlan CurrentPlan
         {
             get { return currentPlan; }
-            set { Set(() => CurrentPlan, ref currentPlan, value); }
+            set
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                value?.GetPlanProducts();
+                MainWindow.ServerConnection.CloseConnection();
+                Set(() => CurrentPlan, ref currentPlan, value);
+            }
         }
         #endregion
 

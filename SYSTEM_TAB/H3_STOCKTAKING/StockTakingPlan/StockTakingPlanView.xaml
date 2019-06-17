@@ -81,7 +81,7 @@
                     <Setter Property="ContentTemplate" Value="{StaticResource DataDetailControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding CurrentPlan, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                            <Setter Property="ContentTemplate" Value="{StaticResource DataDetailControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

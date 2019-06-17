@@ -31,6 +31,10 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlan
         {
             throw new NotImplementedException();
         }
+        internal void GetPlanProducts()
+        {
+            StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProductsByID(ID);
+        }
         #endregion
     }
 }
