@@ -995,6 +995,7 @@ namespace His_Pos.NewClass.Prescription
             }
             else
             {
+                PrescriptionPoint.MedicinePoint = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9));
                 PrescriptionPoint.SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
                 PrescriptionPoint.TotalPoint = PrescriptionPoint.MedicinePoint + PrescriptionPoint.MedicalServicePoint +
                                                PrescriptionPoint.SpecialMaterialPoint + PrescriptionPoint.CopaymentPoint;
