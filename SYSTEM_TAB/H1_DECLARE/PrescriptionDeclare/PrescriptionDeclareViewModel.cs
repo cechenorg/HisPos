@@ -286,6 +286,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
         public RelayCommand ShowCustomerDetailCommand { get; set; }
+        public RelayCommand AdjustDateLostFocus { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -360,6 +361,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             ShowCustomerDetailCommand = new RelayCommand(ShowCustomerDetailAction);
+            AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
         }
 
         private void InitialPrescription(bool setPharmacist)
@@ -481,6 +483,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
+
+        private void AdjustDateLostFocusAction()
+        {
+            if (CurrentPrescription.Treatment.AdjustDate is null) return;
+            CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(CurrentPrescription.IsBuckle, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
+        }
+
         private void SearchCusAction(object sender)
         {
             customPresChecked = false;

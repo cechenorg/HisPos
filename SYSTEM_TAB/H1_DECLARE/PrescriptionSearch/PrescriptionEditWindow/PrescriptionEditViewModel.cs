@@ -170,6 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintReceiptCmd { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand AdjustDateLostFocus { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -259,6 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrintReceiptCmd = new RelayCommand(PrintReceiptAction);
             Delete = new RelayCommand(DeleteAction);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
+            AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
         }
         #endregion
         #region CommandActions
@@ -588,6 +590,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 EditedPrescription.SelectedMedicine.BuckleAmount = 0;
             CheckEditStatus();
         }
+        private void AdjustDateLostFocusAction()
+        {
+            if (EditedPrescription.Treatment.AdjustDate is null) return;
+            EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
+        }
+
         private bool CheckSameOrIDEmptyMedicine()
         {
             var medicinesSame = EditedPrescription.CheckMedicinesIdEmpty();

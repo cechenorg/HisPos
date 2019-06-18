@@ -161,6 +161,9 @@ namespace His_Pos.NewClass.Product.Medicine
                 var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
                 foreach (var m in medList)
                 {
+                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    if(!m.PaySelf)
+                        m.CountTotalPrice();
                     m.Inventory = r.Field<double>("Inv_Inventory");
                 }
             }

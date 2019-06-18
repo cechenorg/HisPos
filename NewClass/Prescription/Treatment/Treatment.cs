@@ -288,8 +288,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
             get => adjustDate;
             set
             {
+                var valueChanged = (value != adjustDate && value != null);
                 Set(() => AdjustDate, ref adjustDate, value);
-                Messenger.Default.Send(new NotificationMessage("AdjustDateChanged"));
+                if(valueChanged)
+                    Messenger.Default.Send(new NotificationMessage("AdjustDateChanged"));
             }
         }
 

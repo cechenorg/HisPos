@@ -151,6 +151,9 @@
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <command:EventToCommand Command="{Binding AdjustDateLostFocus}"/>
+                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </xctk:MaskedTextBox>
                     </StackPanel>
