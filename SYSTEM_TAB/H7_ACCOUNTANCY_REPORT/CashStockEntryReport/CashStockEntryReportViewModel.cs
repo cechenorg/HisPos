@@ -421,14 +421,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 PrescriptionDetailReportCollection = new PrescriptionDetailReports(CooperativePrescriptionSelectedItem.TypeId, StartDate, EndDate);
-                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport();
+                
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
                 IsBusy = false;
             };
             IsBusy = true;
@@ -518,7 +519,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                     tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2" );
                     break;                                                                               
                 case "自費調劑":                                                                         
-                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "4" );
+                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0" );
                     break;
             }
             PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => s.MedicalPoint);
@@ -588,7 +589,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 e.Accepted = true;
             else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "4")
+            else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
                 e.Accepted = true;
             else if (AdjustCaseSelectItem == "全部")
                 e.Accepted = true;
