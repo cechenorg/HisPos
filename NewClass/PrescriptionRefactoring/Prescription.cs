@@ -1056,5 +1056,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             //檢查健保規則
             return errorMsg;
         }
+
+        public void UpdateMedicinePrice()
+        {
+            
+        }
     }
 }

@@ -345,6 +345,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void AdjustDateChangedAction()
         {
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
+            CurrentPrescription.UpdateMedicinePrice();
         }
 
         private void GetDiseaseCodeAction(object sender)
@@ -445,7 +446,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 isAdjusting = false;
                 return;
             }
-            service.StartNormalAdjust();
+            if(!service.StartNormalAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
+
         }
         #endregion
 
