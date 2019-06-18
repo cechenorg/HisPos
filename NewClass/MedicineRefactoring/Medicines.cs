@@ -23,10 +23,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
 
         #region OrthopedicsFunctions
-        public void GetDataByOrthopedicsPrescription(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, bool isBuckle)
+        public void GetDataByOrthopedicsPrescription(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
             Clear();
-            var tempList = CreateTempMedicinesByOrthopedics(medicineOrderItem, wareHouseID);
+            var tempList = CreateTempMedicinesByOrthopedics(medicineOrderItem, wareHouseID, adjustDate);
             foreach (var order in medicineOrderItem)
             {
                 if (Items.Count(m => m.ID.Equals(order.Id)) > 0) continue;
@@ -35,10 +35,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
             SetBuckleAmount(isBuckle);
         }
-        private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID)
+        private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
         {
             var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddOrthopedicsMedicineByDataTable(tempList, table, medicineOrderItem);
             AddOrthopedicsMedicineNotFound(tempList, medicineOrderItem);
@@ -94,10 +94,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
         #endregion
 
         #region CooperativeFunctions
-        public void GetDataByCooperativePrescription(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, bool isBuckle)
+        public void GetDataByCooperativePrescription(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
             Clear();
-            var tempList = CreateTempMedicinesByCooperative(medicineOrderItem, wareHouseID);
+            var tempList = CreateTempMedicinesByCooperative(medicineOrderItem, wareHouseID, adjustDate);
             foreach (var order in medicineOrderItem)
             {
                 if (Items.Count(m => m.ID.Equals(order.Id)) > 0) continue;
@@ -106,10 +106,10 @@ namespace His_Pos.NewClass.MedicineRefactoring
             }
             SetBuckleAmount(isBuckle);
         }
-        private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID)
+        private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
             var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddCooperativeMedicineByDataTable(tempList, table, medicineOrderItem);
             AddCooperativeMedicineNotFound(tempList, medicineOrderItem);
@@ -165,26 +165,26 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         #endregion
 
-        public void GetDataByPrescriptionId(int id,string wareHouseID)
+        public void GetDataByPrescriptionId(int id,string wareHouseID, DateTime? adjustDate)
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
-            CreateMedicines(table,wareHouseID);
+            CreateMedicines(table, wareHouseID, adjustDate);
         }
 
-        public void GetDataByReserveId(int id,string wareHouseID)
+        public void GetDataByReserveId(int id,string wareHouseID, DateTime? adjustDate)
         {
             var table = MedicineDb.GetDataByReserveId(id);
-            CreateMedicines(table,wareHouseID);
+            CreateMedicines(table, wareHouseID, adjustDate);
         }
 
-        private void CreateMedicines(DataTable table,string wareHouseID)
+        private void CreateMedicines(DataTable table,string wareHouseID,DateTime? adjustDate)
         {
             var idList = new List<string>();
             foreach (DataRow r in table.Rows)
             {
                 idList.Add(r.Field<string>("Pro_ID"));
             }
-            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID);
+            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var medicines = new Medicines();
             for (var i = 0; i < medicinesTable.Rows.Count; i++)
             {
@@ -276,9 +276,9 @@ namespace His_Pos.NewClass.MedicineRefactoring
             return this.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
         }
 
-        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId)
+        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
         {
-            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId);
+            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId, adjustDate);
             Medicine medicine = null;
             foreach (DataRow r in table.Rows)
             {
@@ -336,12 +336,12 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
 
-        public void Update(bool buckle, string wareHouseId)
+        public void Update(bool buckle, string wareHouseId,DateTime? adjustDate)
         {
             var idList = CreateIdList();
             SetBuckleAmount(buckle);
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {

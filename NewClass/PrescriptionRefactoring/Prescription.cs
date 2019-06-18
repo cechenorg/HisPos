@@ -90,11 +90,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case ChronicType.Register:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID,WareHouse?.ID);
+                    Medicines.GetDataByPrescriptionId(ID,WareHouse?.ID,AdjustDate);
                     break;
                 case ChronicType.Reserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID, WareHouse?.ID);
+                    Medicines.GetDataByReserveId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }
         }
@@ -154,7 +154,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             Medicines = new Medicines();
-            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle);
+            Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
         public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
@@ -215,7 +215,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
             Medicines = new Medicines();
-            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle);
+            Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
         #endregion
@@ -924,7 +924,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             int? selectedMedicinesIndex = null;
             if (SelectedMedicine != null)
                 selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
-            Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID);
+            Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID, AdjustDate);
         }
 
         public void Init()
@@ -1059,7 +1059,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void UpdateMedicines()
         {
-            Medicines.Update(IsBuckle,WareHouse?.ID);
+            Medicines.Update(IsBuckle,WareHouse?.ID, AdjustDate);
         }
     }
 }

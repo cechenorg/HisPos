@@ -345,7 +345,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void AdjustDateChangedAction()
         {
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
-            CurrentPrescription.UpdateMedicines();
+            if(CurrentPrescription.AdjustDate != null)
+                CurrentPrescription.UpdateMedicines();
         }
 
         private void GetDiseaseCodeAction(object sender)

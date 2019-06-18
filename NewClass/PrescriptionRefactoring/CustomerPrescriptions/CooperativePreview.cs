@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         public override void GetMedicines()
         {
             var medicines = new PreviewMedicines();
-            var tempList = CreateTempMedicines();
+            var tempList = CreateTempMedicines(null);
             foreach (var setItem in Medicines)
             {
                 if (medicines.Count(m => m.ID.Equals(setItem.ID)) > 0) continue;
@@ -48,10 +48,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             Medicines = new PreviewMedicines(medicines);
         }
 
-        private PreviewMedicines CreateTempMedicines()
+        private PreviewMedicines CreateTempMedicines(DateTime? adjustDate)
         {
             var idList = CreateMedicineIDList();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, "0");
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, "0", adjustDate);
             var tempList = new PreviewMedicines();
             for (var i = 0; i < table.Rows.Count; i++)
             {
