@@ -229,7 +229,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
-        private void ShowProductGroupWindowAction() {
+        private void ShowProductGroupWindowAction() { 
             ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID, GroupSettingWareHouseSelected.ID);
         }
         private void SearchProductRecordAction()
