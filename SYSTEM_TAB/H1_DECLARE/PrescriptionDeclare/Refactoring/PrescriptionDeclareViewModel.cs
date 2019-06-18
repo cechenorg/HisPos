@@ -345,7 +345,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void AdjustDateChangedAction()
         {
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
-            CurrentPrescription.UpdateMedicinePrice();
+            CurrentPrescription.UpdateMedicines();
         }
 
         private void GetDiseaseCodeAction(object sender)
@@ -472,6 +472,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = receiveSelectedInstitution;
+            CurrentPrescription.UpdateMedicines();
             var notification = string.IsNullOrEmpty(CurrentPrescription.Division.ID) ? "FocusDivision" : "FocusMedicalNumber";
             Messenger.Default.Send(new NotificationMessage(this, notification));
         }

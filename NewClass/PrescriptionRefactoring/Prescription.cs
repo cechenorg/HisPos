@@ -1057,9 +1057,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             return errorMsg;
         }
 
-        public void UpdateMedicinePrice()
+        public void UpdateMedicines()
         {
-            
+            Medicines.Update(IsBuckle,WareHouse?.ID);
         }
     }
 }

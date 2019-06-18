@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 foreach (var item in tempList.Where(m => m.ID.Equals(order.Id)))
                     Items.Add(item);
             }
-            SetBuckle(isBuckle);
+            SetBuckleAmount(isBuckle);
         }
         private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID)
         {
@@ -104,7 +104,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 foreach (var item in tempList.Where(m => m.ID.Equals(order.Id)))
                     Items.Add(item);
             }
-            SetBuckle(isBuckle);
+            SetBuckleAmount(isBuckle);
         }
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID)
         {
@@ -164,15 +164,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
 
         #endregion
-
-        private void SetBuckle(bool isBuckle)
-        {
-            foreach (var m in Items)
-            {
-                m.IsBuckle = isBuckle;
-                m.BuckleAmount = isBuckle ? m.Amount : 0;
-            }
-        }
 
         public void GetDataByPrescriptionId(int id,string wareHouseID)
         {
@@ -334,7 +325,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             var emptyMedicine = string.Empty;
             var emptyList = (from m in Items where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\r\n").ToList();
-            //var sameList = (from m in Items where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\n").ToList();
             return emptyList.Count <= 0 ? emptyMedicine : emptyList.Aggregate(emptyMedicine, (current, s) => current + s);
         }
 
@@ -344,6 +334,69 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 return Resources.MedicineEmpty;
             return Items.Count(m => m.Amount == 0) == 0 ? string.Empty : 
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
+        }
+
+        public void Update(bool buckle, string wareHouseId)
+        {
+            var idList = CreateIdList();
+            SetBuckleAmount(buckle);
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (DataRow r in table.Rows)
+            {
+                var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
+                foreach (var m in medList)
+                {
+                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    m.Inventory = r.Field<double>("Inv_Inventory");
+                }
+            }
+        }
+
+        private List<string> CreateIdList()
+        {
+            var idList = new List<string>();
+            foreach (var m in Items)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        if (!idList.Contains(m.ID))
+                            idList.Add(m.ID);
+                        break;
+                    }
+                }
+            }
+            return idList;
+        }
+
+        private void SetBuckleAmount(bool buckle)
+        {
+            foreach (var m in Items)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        if (!buckle)
+                            m.BuckleAmount = 0;
+                        else
+                            m.BuckleAmount = m.Amount;
+                        m.IsBuckle = buckle;
+                        break;
+                    }
+                    case MedicineVirtual _:
+                        m.BuckleAmount = 0;
+                        m.IsBuckle = false;
+                        break;
+                }
+            }
         }
     }
 }
