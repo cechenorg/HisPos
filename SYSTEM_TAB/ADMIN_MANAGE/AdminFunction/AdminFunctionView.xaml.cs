@@ -11,6 +11,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -127,6 +128,13 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
             //    if(pre.PrescriptionStatus.IsDeclare)
             //        prescriptions.Add(pre);
             //}
+        }
+
+        private void CooperApi_Click(object sender, RoutedEventArgs e)
+        {
+            while (WebApi.SendToCooperClinicLoop100()) {
+            }
+            MessageWindow.ShowMessage("骨科重拋成功",MessageType.SUCCESS);
         }
     }
 }

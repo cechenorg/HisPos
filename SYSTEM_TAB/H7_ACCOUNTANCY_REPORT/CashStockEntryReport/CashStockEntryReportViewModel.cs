@@ -16,12 +16,14 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
@@ -29,7 +31,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         #region Variables
         public override TabBase getTab() {
             return this;
-        } 
+        }
+        private List<string> adjustCaseString;
+        public List<string> AdjustCaseString
+        {
+            get => adjustCaseString;
+            set
+            {
+                Set(() => AdjustCaseString, ref adjustCaseString, value);
+            }
+        }
+        private string adjustCaseSelectItem = "全部";
+        public string AdjustCaseSelectItem
+        {
+            get => adjustCaseSelectItem;
+            set
+            {
+                Set(() => AdjustCaseSelectItem, ref adjustCaseSelectItem, value);
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+            }
+        }
         private DateTime startDate = DateTime.Today;
         public DateTime StartDate
         {
@@ -140,6 +162,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => TotalPrescriptionProfitReport, ref totalPrescriptionProfitReport, value);
             }
         }
+        private PrescriptionDetailReport prescriptionDetailReportSum;
+        public PrescriptionDetailReport PrescriptionDetailReportSum
+        {
+            get => prescriptionDetailReportSum;
+            set
+            {
+                Set(() => PrescriptionDetailReportSum, ref prescriptionDetailReportSum, value);
+            }
+        }
         private PrescriptionDetailReports prescriptionDetailReportCollection;
         public PrescriptionDetailReports PrescriptionDetailReportCollection
         {
@@ -147,6 +178,25 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => PrescriptionDetailReportCollection, ref prescriptionDetailReportCollection, value);
+            }
+        }
+        private CollectionViewSource prescriptionDetailReportViewSource;
+        private CollectionViewSource PrescriptionDetailReportViewSource
+        {
+            get => prescriptionDetailReportViewSource;
+            set
+            {
+                Set(() => PrescriptionDetailReportViewSource, ref prescriptionDetailReportViewSource, value); 
+            }
+        }
+
+        private ICollectionView prescriptionDetailReportView;
+        public ICollectionView PrescriptionDetailReportView
+        {
+            get => prescriptionDetailReportView;
+            private set
+            {
+                Set(() => PrescriptionDetailReportView, ref prescriptionDetailReportView, value);
             }
         }
         private PrescriptionDetailReport prescriptionDetailReportSelectItem;
@@ -253,9 +303,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
-            GetData(); 
+            GetData();
+            InitCollection();
         }
         #region Action
+        private void InitCollection() {
+            AdjustCaseString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" }; 
+        }
         private void PrintCashPerDayAction() {
             if (CashflowSelectedItem is null) 
                 return;  
@@ -349,9 +403,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CooperativePrescriptionSelectionChangedAction()
         {
-          
-            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) 
+
+            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) { 
                 PrescriptionDetailReportCollection.Clear();
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+            }
             if (CooperativePrescriptionSelectedItem is null)
                 return; 
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
@@ -362,10 +421,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 PrescriptionDetailReportCollection = new PrescriptionDetailReports(CooperativePrescriptionSelectedItem.TypeId, StartDate, EndDate);
+                
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
                 IsBusy = false;
             };
             IsBusy = true;
@@ -373,9 +437,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             SelfPrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
         }
-        private void SelfPrescriptionSelectionChangedAction() { 
-            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null)
+        private void SelfPrescriptionSelectionChangedAction() {
+            if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
                 PrescriptionDetailReportCollection.Clear();
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+            }
+               
             if (SelfPrescriptionSelectedItem is null)
                 return; 
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
@@ -384,12 +454,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(SelfPrescriptionSelectedItem.TypeId, StartDate, EndDate); 
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(SelfPrescriptionSelectedItem.TypeId, StartDate, EndDate);
+                  
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                IsBusy = false; 
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -431,6 +506,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             IsBusy = true;
             worker.RunWorkerAsync();
              
+        }
+        private void SumPrescriptionDetailReport() {
+            PrescriptionDetailReportSum = new PrescriptionDetailReport();
+            PrescriptionDetailReportSum.InsName = "總計"; 
+            var tempCollection = PrescriptionDetailReportCollection.Where(p => true);
+            switch (AdjustCaseSelectItem) {
+                case "一般箋":
+                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
+                    break;
+                case "慢箋":
+                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2" );
+                    break;                                                                               
+                case "自費調劑":                                                                         
+                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0" );
+                    break;
+            }
+            PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => s.MedicalPoint);
+            PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => s.MedicalServicePoint);
+            PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => s.PaySelfPoint);
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
         }
         private void CaculateTotalCashFlow() {
             
@@ -479,6 +575,24 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 CooperativePrescriptionProfitReport.Profit += r.Profit;
             }
            
+        }
+        private void AdjustCaseFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is PrescriptionDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            PrescriptionDetailReport indexitem = ((PrescriptionDetailReport)e.Item);
+            if (AdjustCaseSelectItem == "一般箋" && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
+                e.Accepted = true;
+            else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
+                e.Accepted = true;
+            else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
+                e.Accepted = true;
+            else if (AdjustCaseSelectItem == "全部")
+                e.Accepted = true;
         }
         #endregion
     }

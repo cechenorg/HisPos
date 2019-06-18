@@ -46,10 +46,10 @@ namespace His_Pos.NewClass.Product.Medicine
             EnglishName = m.Desc;
             UsageName = m.Freq;
             PositionID = m.Way;
-            Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days);
-            PaySelf = !string.IsNullOrEmpty(m.Remark) ;
+            Amount = Convert.ToDouble(m.Total_dose);
+            PaySelf = !string.IsNullOrEmpty(m.Remark);
             IsBuckle = false;
             switch (m.Remark) {
                 case "":
@@ -71,9 +71,9 @@ namespace His_Pos.NewClass.Product.Medicine
             EnglishName = m.Desc;
             UsageName = m.Freq;
             PositionID = m.Way;
-            Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
             Days = Convert.ToInt32(m.Days.Split('.')[0]);
+            Amount = Convert.ToDouble(m.Total_dose);
             PaySelf = m.Remark == "-" || m.Remark == "*";
             IsBuckle = false;
             switch (m.Remark)
@@ -106,7 +106,6 @@ namespace His_Pos.NewClass.Product.Medicine
             set
             {
                 Set(() => Amount, ref amount, value);
-                BuckleAmount = amount;
                 CheckIsPriceReadOnly();
                 CountTotalPrice();
             }

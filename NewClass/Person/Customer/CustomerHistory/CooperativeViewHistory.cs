@@ -27,7 +27,7 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
                 if (!idList.Contains(m.ID))
                     idList.Add(m.ID);
             }
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, "0");
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, "0", AdjustDate);
             var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {

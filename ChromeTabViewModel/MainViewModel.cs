@@ -354,7 +354,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 //會計報表
                 case nameof(FeatureItem.申報院所點數總表):
-                    newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

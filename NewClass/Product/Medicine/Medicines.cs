@@ -125,8 +125,9 @@ namespace His_Pos.NewClass.Product.Medicine
             return result;
         }
 
-        public void SetBuckle(bool b)
+        public void SetBuckleAndUpdateInventory(bool b,string wareHouseId,DateTime? adjustDate)
         {
+            var idList = new List<string>();
             foreach (var m in Items)
             {
                 switch (m)
@@ -142,6 +143,8 @@ namespace His_Pos.NewClass.Product.Medicine
                             m.BuckleAmount = m.Amount;
                         }
                         m.IsBuckle = b;
+                        if(!idList.Contains(m.ID))
+                            idList.Add(m.ID);
                         break;
                     }
                     case MedicineVirtual _:
@@ -150,9 +153,20 @@ namespace His_Pos.NewClass.Product.Medicine
                         break;
                 }
             }
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (DataRow r in table.Rows)
+            {
+                var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
+                foreach (var m in medList)
+                {
+                    m.Inventory = r.Field<double>("Inv_Inventory");
+                }
+            }
         }
 
-        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet, string wareHouseID)
+        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet, string wareHouseID,DateTime? adjustDate)
         {
             Clear();
             var medicineIDList = new List<string>();
@@ -161,7 +175,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if(!medicineIDList.Contains(item.ID))
                  medicineIDList.Add(item.ID);
             }
-            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID);
+            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID, adjustDate);
             var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -225,11 +239,11 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        public void GetDataByWareHouse(WareHouse.WareHouse wareHouse)
+        public void GetDataByWareHouse(WareHouse.WareHouse wareHouse,DateTime? adjustDate)
         {
             var medIDList = Items.Select(m => m.ID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(medIDList, wareHouse is null ? "0" : wareHouse.ID);
+            var table = MedicineDb.GetMedicinesBySearchIds(medIDList, wareHouse is null ? "0" : wareHouse.ID, adjustDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {
