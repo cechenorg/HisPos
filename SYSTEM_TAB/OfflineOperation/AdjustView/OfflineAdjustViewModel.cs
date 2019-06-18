@@ -753,7 +753,7 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
             if (msg.Notification != nameof(OfflineAdjustViewModel)) return;
             Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.AddMedicineBySearch(msg.Content.ID);
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID,CurrentPrescription.Treatment.AdjustDate);
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint(true);
         }
@@ -1125,12 +1125,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
                         CheckIsCooperativeVIP();
-                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
+                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
                         CurrentPrescription.CooperativeAdjust(false);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
+                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
                     CurrentPrescription.CooperativeAdjust(false);
                     break;
                 case PrescriptionSource.ChronicReserve:
@@ -1215,12 +1215,12 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView
                         CurrentPrescription.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
                         if (string.IsNullOrEmpty(CurrentPrescription.Remark) || CurrentPrescription.Remark.Length != 16)
                             return;
-                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
+                        CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
                         CurrentPrescription.CooperativeAdjust(true);
                     }
                     break;
                 case PrescriptionSource.Cooperative:
-                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID);
+                    CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(false, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
                     CurrentPrescription.CooperativeAdjust(true);
                     break;
                 case PrescriptionSource.ChronicReserve:

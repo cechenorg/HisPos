@@ -399,10 +399,10 @@ namespace His_Pos.NewClass.Prescription
             return ma1;
         }
 
-        public void AddMedicineBySearch(string proId)
+        public void AddMedicineBySearch(string proId,DateTime? adjustDate)
         {
             IsBuckle = WareHouse != null;
-            DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID);
+            DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID, adjustDate);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
             {
@@ -454,7 +454,7 @@ namespace His_Pos.NewClass.Prescription
         #endregion
         public void AdjustMedicinesType() {
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
-                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID);
+                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID,Treatment.AdjustDate);
                 var temp = new Medicine();
                 if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
                     Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))
@@ -1251,8 +1251,8 @@ namespace His_Pos.NewClass.Prescription
         {
             IsBuckle = WareHouse != null;
             CheckIsBuckleAndSource();
-            Medicines.GetDataByWareHouse(WareHouse);
-            Medicines.SetBuckleAndUpdateInventory(IsBuckle,WareHouse?.ID);
+            Medicines.GetDataByWareHouse(WareHouse,Treatment.AdjustDate);
+            Medicines.SetBuckleAndUpdateInventory(IsBuckle,WareHouse?.ID,Treatment.AdjustDate);
         }
 
         public string CheckMedicinesIdEmpty()

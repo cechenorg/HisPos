@@ -565,7 +565,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (msg.Notification != nameof(PrescriptionEditViewModel)) return;
             Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             MainWindow.ServerConnection.OpenConnection();
-            EditedPrescription.AddMedicineBySearch(msg.Content.ID);
+            EditedPrescription.AddMedicineBySearch(msg.Content.ID,EditedPrescription.Treatment.AdjustDate);
             MainWindow.ServerConnection.CloseConnection();
             EditedPrescription.CountPrescriptionPoint(true);
             CheckEditStatus();

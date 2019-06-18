@@ -125,7 +125,7 @@ namespace His_Pos.NewClass.Product.Medicine
             return result;
         }
 
-        public void SetBuckleAndUpdateInventory(bool b,string wareHouseId)
+        public void SetBuckleAndUpdateInventory(bool b,string wareHouseId,DateTime? adjustDate)
         {
             var idList = new List<string>();
             foreach (var m in Items)
@@ -154,7 +154,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId);
+            var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {
@@ -166,7 +166,7 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet, string wareHouseID)
+        public void GetMedicineBySet(MedicineSet.MedicineSet currentSet, string wareHouseID,DateTime? adjustDate)
         {
             Clear();
             var medicineIDList = new List<string>();
@@ -175,7 +175,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 if(!medicineIDList.Contains(item.ID))
                  medicineIDList.Add(item.ID);
             }
-            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID);
+            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID, adjustDate);
             var tempList = new List<Medicine>();
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -239,11 +239,11 @@ namespace His_Pos.NewClass.Product.Medicine
             }
         }
 
-        public void GetDataByWareHouse(WareHouse.WareHouse wareHouse)
+        public void GetDataByWareHouse(WareHouse.WareHouse wareHouse,DateTime? adjustDate)
         {
             var medIDList = Items.Select(m => m.ID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(medIDList, wareHouse is null ? "0" : wareHouse.ID);
+            var table = MedicineDb.GetMedicinesBySearchIds(medIDList, wareHouse is null ? "0" : wareHouse.ID, adjustDate);
             MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {

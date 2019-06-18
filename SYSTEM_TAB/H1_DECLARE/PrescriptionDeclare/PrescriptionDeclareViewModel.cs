@@ -444,7 +444,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainWindow.ServerConnection.OpenConnection();
                     CurrentSet.MedicineSetItems = new MedicineSetItems();
                     CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
-                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet, CurrentPrescription.WareHouse is null ? "0" : CurrentPrescription.WareHouse.ID);
+                    CurrentPrescription.Medicines.GetMedicineBySet(CurrentSet, CurrentPrescription.WareHouse is null ? "0" : CurrentPrescription.WareHouse.ID, CurrentPrescription.Treatment.AdjustDate);
                     CurrentPrescription.CountPrescriptionPoint(true);
                     CurrentPrescription.CheckIsCooperative();
                     MainWindow.ServerConnection.CloseConnection();
@@ -1151,7 +1151,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (msg.Notification != nameof(PrescriptionDeclareViewModel)) return;
             Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.AddMedicineBySearch(msg.Content.ID);
+            CurrentPrescription.AddMedicineBySearch(msg.Content.ID, CurrentPrescription.Treatment.AdjustDate);
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint(true);
         }
