@@ -200,7 +200,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="TextChanged">
+                                <i:EventTrigger EventName="LostFocus">
                                     <command:EventToCommand Command="{Binding AdjustDateChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
