@@ -286,11 +286,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
-            if (row?.Item is null) return;
-            if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
-                !((Medicine)row.Item is MedicineSpecialMaterial)) return;
-            ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((Medicine)row.Item).ID, "ShowProductDetail"));
+            if (!(row?.Item is Medicine med)) return;
+            ((PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)

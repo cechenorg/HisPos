@@ -54,6 +54,7 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 
 // ReSharper disable InconsistentNaming
@@ -290,6 +291,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<string> EditMedicineSet { get; set; }
         public RelayCommand ShowCustomerDetailCommand { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
+        public RelayCommand<string> ShowMedicineDetail { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -365,6 +367,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             ShowCustomerDetailCommand = new RelayCommand(ShowCustomerDetailAction);
             AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
+            ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
         }
 
         private void InitialPrescription(bool setPharmacist)
@@ -488,6 +491,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (CurrentPrescription.Treatment.AdjustDate is null) return;
             CurrentPrescription.Medicines.SetBuckleAndUpdateInventory(CurrentPrescription.IsBuckle, CurrentPrescription.WareHouse?.ID, CurrentPrescription.Treatment.AdjustDate);
+        }
+
+        private void ShowMedicineDetailAction(string medicineID)
+        {
+            var wareID = CurrentPrescription.WareHouse is null ? "0" : CurrentPrescription.WareHouse.ID;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new []{medicineID, wareID }, "ShowProductDetail"));
         }
 
         private void SearchCusAction(object sender)
@@ -1461,7 +1471,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 IsBusy = false;
                 if (!AskErrorUpload())
+                {
+                    IsAdjusting = false;
                     return;
+                }
             }
             if (ErrorCode != null && !CurrentPrescription.PrescriptionStatus.IsGetCard)
                 CurrentPrescription.PrescriptionStatus.IsGetCard = true;
