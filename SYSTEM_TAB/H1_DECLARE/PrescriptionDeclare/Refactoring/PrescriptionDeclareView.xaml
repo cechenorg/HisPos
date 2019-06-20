@@ -258,7 +258,7 @@
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="AdjustCombo"  Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown" SelectionChanged="AdjustCombo_SelectionChanged"/>
+                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}"/>
@@ -362,7 +362,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="Dosage" MinWidth="60" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                             FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                             FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                              Text="{Binding Dosage, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -371,7 +371,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="Usage" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth"
-                                             InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="16" FontWeight="Bold" CaretBrush="Red" IsReadOnlyCaretVisible="False" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                             InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="16" FontWeight="Bold" CaretBrush="Red" IsReadOnlyCaretVisible="False" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                              Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                                 </DataTemplate>
@@ -380,7 +380,7 @@
                         <DataGridTemplateColumn MinWidth="40" Header="天數" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                    <TextBox x:Name="MedicineDays" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                    <TextBox x:Name="MedicineDays" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                          FontSize="16" FontWeight="Bold" Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputScope="Number"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -390,7 +390,7 @@
                                 <DataTemplate>
                                     <TextBox x:Name="Position" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" CaretBrush="Red"
                                              CharacterCasing="Upper" FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth"
-                                             Text="{Binding PositionID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"/>
+                                             Text="{Binding PositionID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -398,7 +398,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineAmount" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" Foreground="IndianRed" CaretBrush="Red" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                         FontSize="16" FontWeight="Bold" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                         FontSize="16" FontWeight="Bold" PreviewKeyDown="MedicineTotal_PreviewKeyDown" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
@@ -434,7 +434,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                         FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                         FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBooleanConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -443,7 +443,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="MedicineTotal" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Red" IsReadOnlyCaretVisible="False"
-                                         FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                         FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                          Text="{Binding TotalPrice, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBooleanConverter}}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
@@ -474,7 +474,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                             FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
+                                             FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
                                              Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -7,6 +7,7 @@ using His_Pos.Class;
 using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -36,11 +37,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             current = p;
         }
-
         protected Prescription current { get; set; }
+        protected Prescription tempPre { get; set; }
         #region Functions
-        public static PrescriptionService CreateService(Prescription p)
+        public static PrescriptionService CreateService(Prescription p,IcCard c)
         {
+            p.Card = c;
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.current = p;
             return ps;
@@ -165,6 +167,28 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if(string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
             return false;
+        }
+
+        protected bool PrintConfirm()
+        {
+            var printResult = NewFunction.CheckPrint(current);
+            var printMedBag = printResult[0];
+            var printSingle = printResult[1];
+            var printReceipt = printResult[2];
+            if (printMedBag is null || printReceipt is null)
+                return false;
+            if ((bool)printMedBag && printSingle is null)
+                return false;
+            tempPre = (Prescription)current.Clone();
+            return true;
+        }
+
+        protected void SavePatientData()
+        {
+            if (current.Patient.ID == 0 || current.Patient.ID == -1) return;
+            MainWindow.ServerConnection.OpenConnection();
+            current.Patient.Save();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
@@ -335,6 +359,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 new ReportParameter("ActualReceive", actualReceive.ToString()),
                 new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(actualReceive))
             };
+        }
+
+        public bool IsReadCard()
+        {
+            return !string.IsNullOrEmpty(current.Card.CardNumber);
         }
     }
 }

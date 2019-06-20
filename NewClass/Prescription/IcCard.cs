@@ -212,5 +212,13 @@ namespace His_Pos.NewClass.Prescription
             c.Tel = Tel;
             return c;
         }
+
+        public bool CheckNeedUpdate()
+        {
+            if (AvailableTimes is null) return false;
+            var availableTimesUseUp = AvailableTimes == 0;
+            var expired = DateTime.Compare(ValidityPeriod, DateTime.Today) < 0;
+            return availableTimesUseUp || expired;
+        }
     }
 }

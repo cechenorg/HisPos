@@ -17,13 +17,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckMedicalNumber()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (!CheckNhiRules()) return false;
+            if (!PrintConfirm()) return false;
             //列印確認
             return true;
         }
 
         public override bool NormalAdjust()
         {
-            throw new NotImplementedException();
+            SavePatientData();
+            return true;
         }
 
         public override bool ErrorAdjust()

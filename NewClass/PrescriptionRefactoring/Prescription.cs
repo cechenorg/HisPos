@@ -231,7 +231,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public List<string> PrescriptionSign { get; set; }
         public Medicines Medicines { get; set; }
         public PrescriptionType Type { get; set; }
-
+        public IcCard Card { get; set; } 
         private Customer patient;
         public Customer Patient
         {
@@ -1023,24 +1023,28 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var clone = new Prescription
             {
                 Type = Type,
-                Patient = Patient.DeepCloneViaJson(),
-                Institution = Institution.DeepCloneViaJson(),
-                Division = Division.DeepCloneViaJson(),
-                Pharmacist = Pharmacist.DeepCloneViaJson(),
-                TempMedicalNumber = TempMedicalNumber,
-                TreatDate = TreatDate,
-                AdjustDate = AdjustDate,
-                MainDisease = MainDisease.DeepCloneViaJson(),
-                SubDisease = SubDisease.DeepCloneViaJson(),
-                ChronicSeq = ChronicSeq,
-                ChronicTotal = ChronicTotal,
-                AdjustCase = AdjustCase.DeepCloneViaJson(),
-                PrescriptionCase = PrescriptionCase.DeepCloneViaJson(),
-                Copayment = Copayment.DeepCloneViaJson(),
-                PaymentCategory = PaymentCategory.DeepCloneViaJson(),
-                SpecialTreat = SpecialTreat.DeepCloneViaJson(),
-                Medicines = Medicines
+                patient = Patient.DeepCloneViaJson(),
+                institution = Institution.DeepCloneViaJson(),
+                division = Division.DeepCloneViaJson(),
+                pharmacist = Pharmacist.DeepCloneViaJson(),
+                tempMedicalNumber = TempMedicalNumber,
+                treatDate = TreatDate,
+                adjustDate = AdjustDate,
+                mainDisease = MainDisease.DeepCloneViaJson(),
+                subDisease = SubDisease.DeepCloneViaJson(),
+                chronicSeq = ChronicSeq,
+                chronicTotal = ChronicTotal,
+                adjustCase = AdjustCase.DeepCloneViaJson(),
+                prescriptionCase = PrescriptionCase.DeepCloneViaJson(),
+                copayment = Copayment.DeepCloneViaJson(),
+                paymentCategory = PaymentCategory.DeepCloneViaJson(),
+                specialTreat = SpecialTreat.DeepCloneViaJson()
             };
+            clone.Medicines = new Medicines();
+            foreach (var m in Medicines)
+            {
+                clone.Medicines.Add(m);
+            }
             return clone;
         }
 

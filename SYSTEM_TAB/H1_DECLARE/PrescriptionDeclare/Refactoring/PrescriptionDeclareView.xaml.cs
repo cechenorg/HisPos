@@ -259,7 +259,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             focusGrid.SelectedIndex = rowIndex;
         }
 
-        private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
+        private void InputTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
 
@@ -282,8 +282,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             var row = sender as DataGridRow;
             if (!(row?.Item is Medicine med)) return;
-            ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string>(this, med.ID, "ShowProductDetail"));
+            ((PrescriptionDeclareViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
@@ -343,11 +342,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void Division_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CheckPharmacistSelected();
-        }
-
-        private void AdjustCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }
