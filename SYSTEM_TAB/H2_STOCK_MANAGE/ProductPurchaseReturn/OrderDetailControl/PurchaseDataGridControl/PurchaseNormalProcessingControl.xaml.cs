@@ -13,7 +13,7 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using MahApps.Metro.Controls;
 using Button = System.Windows.Controls.Button;
-using DataGridCell = Microsoft.Windows.Controls.DataGridCell;
+using DataGridCell = System.Windows.Controls.DataGridCell;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
