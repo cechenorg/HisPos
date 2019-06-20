@@ -59,6 +59,7 @@ namespace His_Pos.Class
         合作診所結帳報表 = 28,
         額外收入登錄 = 29,
         申報院所點數總表 = 30,
+        盤點計畫 = 31,
     }
 
     public enum StoreOrderProductType

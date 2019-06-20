@@ -21,7 +21,7 @@ namespace His_Pos.ChromeTabViewModel
     public class ProductDetailViewModel : ViewModelBase
     {
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
-        public RelayCommand<string> AddTabCommand { get; set; }
+        public RelayCommand<string[]> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -57,7 +57,7 @@ namespace His_Pos.ChromeTabViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            this.AddTabCommand = new RelayCommand<string>(AddTabCommandAction);
+            this.AddTabCommand = new RelayCommand<string[]>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -124,20 +124,20 @@ namespace His_Pos.ChromeTabViewModel
                 
         }
         
-        public void AddTabCommandAction(string newProductID)
+        public void AddTabCommandAction(string[] newProduct)
         {
             TabBase newTab;
 
             foreach (TabBase tab in ItemCollection)
             {
-                if (tab.TabName == newProductID)
+                if (tab.TabName == newProduct[0])
                 {
                     SelectedTab = tab;
                     return;
                 }
             }
 
-            DataTable dataTable = ProductDetailDB.GetProductTypeByID(newProductID);
+            DataTable dataTable = ProductDetailDB.GetProductTypeByID(newProduct[0]);
 
             if (dataTable is null || dataTable.Rows.Count == 0)
             {
@@ -150,12 +150,12 @@ namespace His_Pos.ChromeTabViewModel
             switch (type)
             {
                 case ProductTypeEnum.OTC:
-                    newTab = new OtcDetailView() { TabName = newProductID, Icon = "/Images/OrangeDot.png" };
+                    newTab = new OtcDetailView() { TabName = newProduct[0], Icon = "/Images/OrangeDot.png" };
                     break;
                 case ProductTypeEnum.NHIMedicine:
                 case ProductTypeEnum.OTCMedicine:
                 case ProductTypeEnum.SpecialMedicine:
-                    newTab = new MedicineControlViewModel(newProductID, type) { TabName = newProductID, Icon = "/Images/BlueDot.png" };
+                    newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
                     break;
                 default:
                     return;

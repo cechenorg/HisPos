@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.StockTaking;
 
 namespace His_Pos.NewClass.Product.StockTaking
 {
@@ -16,6 +17,10 @@ namespace His_Pos.NewClass.Product.StockTaking
             {
                 Add(new StockTakingProduct(row));
             }
+        }
+        internal static StockTakingProducts GetStockTakingPlanProductsByID(int planID)
+        {
+            return new StockTakingProducts(StockTakingDB.GetStockTakingPlanProductsByID(planID));
         }
     }
 }

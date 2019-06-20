@@ -75,7 +75,7 @@ namespace His_Pos
                             new[] { StringRes.StockSearch, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", StringRes.StockTaking,
-                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord }));
+                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord, StringRes.StockTakingPlan }));
 
             HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
                             new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage,

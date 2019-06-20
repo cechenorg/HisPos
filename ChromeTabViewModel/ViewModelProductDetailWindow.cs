@@ -63,10 +63,10 @@ namespace His_Pos.ChromeTabViewModel
         #region ----- Define Functions -----
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedProductDetail);
+            Messenger.Default.Register<NotificationMessage<string[]>>(this, GetSelectedProductDetail);
             Messenger.Default.Register<NotificationMessage>(this, ClearTabs);
         }
-        private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
+        private void GetSelectedProductDetail(NotificationMessage<string[]> notificationMessage)
         {
             if (notificationMessage.Notification == "ShowProductDetail")
                 AddTabCommandAction(notificationMessage.Content);
