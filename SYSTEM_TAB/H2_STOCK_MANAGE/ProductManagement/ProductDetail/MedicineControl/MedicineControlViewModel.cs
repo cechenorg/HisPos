@@ -18,6 +18,7 @@ using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -156,11 +157,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         #endregion
 
-        public MedicineControlViewModel(string id, ProductTypeEnum type)
+        public MedicineControlViewModel(string proID, ProductTypeEnum type, string wareHouseID)
         {
             RegisterCommand();
             ProductType = type;
-            InitMedicineData(id);
+            InitMedicineData(proID, wareHouseID);
         }
         
         #region ----- Define Actions -----
@@ -178,7 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void CancelChangeAction()
         {
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
             IsDataChanged = false;
         }
         private void SyncDataAction()
@@ -187,7 +188,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             //ProductDetailDB.GetProductManageMedicineDataByID(id);
             MainWindow.ServerConnection.CloseConnection();
 
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
         }
         private void StockTakingAction()
         {
@@ -201,7 +202,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 if (stockTakingNoLastPriceWindow.ConfirmClicked)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price);
+                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
                     MainWindow.ServerConnection.CloseConnection();
                 }
                 else
@@ -216,7 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
         }
@@ -307,7 +308,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
         }
-        private void InitMedicineData(string id)
+        private void InitMedicineData(string id, string wareHouseID)
         {
             MainWindow.ServerConnection.OpenConnection();
             WareHouseCollection = WareHouses.GetWareHouses();
@@ -337,7 +338,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
-            SelectedWareHouse = WareHouseCollection[0];
+            SelectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
 
             switch (ProductType)
             {
@@ -351,7 +352,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
-            GroupSettingWareHouseSelected = WareHouseCollection[0];
+            GroupSettingWareHouseSelected = WareHouseCollection[int.Parse(wareHouseID)];
             ProductGroupSettingCollection.GetDataByID(id, GroupSettingWareHouseSelected.ID);
 
             ReloadStockDetail();

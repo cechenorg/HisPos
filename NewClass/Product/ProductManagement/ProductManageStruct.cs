@@ -8,6 +8,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             ProductType = (ProductTypeEnum)row.Field<int>("TYPE");
             ID = row.Field<string>("Pro_ID");
+            WareHouseID = row.Field<int>("Inv_WarehouseID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             Inventory = row.Field<double>("Inv_Inventory");
@@ -24,6 +25,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
         public ProductTypeEnum ProductType { get; set; }
         public string ID { get; set; }
+        public int WareHouseID { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
         public string FullName
