@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double subTotal;
         private double price;
         private bool isProcessing = false;
+        private string onTheWayDetail = "";
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
         public bool IsSingde { get; set; } = false;
@@ -36,6 +37,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set { Set(() => StartInputVariable, ref startInputVariable, value); }
         }
         public double Inventory { get; private set; }
+        public int WareHouseID { get; set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
         public int SafeAmount { get; private set; }
@@ -43,6 +45,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double OnTheWayAmount { get; private set; }
         public double MedBagOnTheWayAmount { get; private set; }
         public double LastPrice { get; private set; }
+        public string OnTheWayDetail
+        {
+            get { return onTheWayDetail; }
+            set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
+        }
         public double OrderAmount
         {
             get { return orderAmount; }
@@ -113,6 +120,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public PurchaseProduct() : base() {}
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
+            WareHouseID = dataRow.Field<int>("Inv_WarehouseID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");
@@ -208,6 +216,21 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             IsSingde = purchaseProduct.IsSingde;
             StartInputVariable = purchaseProduct.StartInputVariable;
+        }
+        public void GetOnTheWayDetail()
+        {
+            if(OnTheWayAmount == 0.0) return;
+
+            DataTable dataTable = PurchaseReturnProductDB.GetProductOnTheWayDetailByID(ID, WareHouseID);
+
+            if(dataTable?.Rows.Count == 0) return;
+
+            string tempDetail = "";
+
+            foreach (DataRow row in dataTable.Rows)
+                tempDetail += row.Field<string>("STO_ID").PadLeft(12) + "  數量: " + row.Field<double>("AMOUNT").ToString("####");
+
+            OnTheWayDetail = tempDetail;
         }
 
         public abstract object Clone();
