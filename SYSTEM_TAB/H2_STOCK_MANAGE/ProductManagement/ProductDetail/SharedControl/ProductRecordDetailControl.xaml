@@ -7,6 +7,8 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -26,6 +28,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -59,9 +62,23 @@
             <Button Content="查詢" BorderThickness="0" FontSize="18" Width="80" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="12,0,0,0" Command="{Binding SearchProductRecordCommand}"/>
             <Button Content="匯出結果" BorderThickness="0" FontSize="18" Width="120" FontFamily="Segoe UI Semibold" Background="DimGray" Margin="10,0,0,0" Command="{Binding ExportRecordCommand}"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollection, UpdateSourceTrigger=PropertyChanged}"
+        <StackPanel Grid.Row="1" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
+            <RadioButton Content="全部" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding FilterRecordCommand}" CommandParameter="5"/>
+            <RadioButton Content="進退貨" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="1"/>
+            <Image Source="/Images/BlueDot.png" Width="15"/>
+            <RadioButton Content="調劑" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="3"/>
+            <Image Source="/Images/OrangeDot.png" Width="15"/>
+            <RadioButton Content="交易" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="4"/>
+            <Image Source="/Images/LightBlueDot.png" Width="15"/>
+            <RadioButton Content="盤點" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
+            <Image Source="/Images/GreenDot.png" Width="15"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollectionView, UpdateSourceTrigger=PropertyChanged}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding CurrentInventoryRecord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:ScrollIntoView/>
+            </i:Interaction.Behaviors>
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

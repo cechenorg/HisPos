@@ -35,6 +35,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -171,6 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
+        public RelayCommand<string> ShowMedicineDetail { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -261,6 +263,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Delete = new RelayCommand(DeleteAction);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
+            ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
         }
         #endregion
         #region CommandActions
@@ -594,6 +597,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.Treatment.AdjustDate is null) return;
             EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
+        }
+
+        private void ShowMedicineDetailAction(string medicineID)
+        {
+            var wareID = EditedPrescription.WareHouse is null ? "0" : EditedPrescription.WareHouse.ID;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, wareID }, "ShowProductDetail"));
         }
 
         private bool CheckSameOrIDEmptyMedicine()

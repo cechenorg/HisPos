@@ -572,4 +572,7 @@
   <data name="InstitutionDeclarePointReport" xml:space="preserve">
     <value>申報院所點數總表</value>
   </data>
+  <data name="StockTakingPlan" xml:space="preserve">
+    <value>盤點計畫</value>
+  </data>
 </root>

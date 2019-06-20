@@ -688,6 +688,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 盤點計畫 的當地語系化字串。
+        /// </summary>
+        internal static string StockTakingPlan {
+            get {
+                return ResourceManager.GetString("StockTakingPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 庫存盤點紀錄 的當地語系化字串。
         /// </summary>
         internal static string StockTakingRecord {

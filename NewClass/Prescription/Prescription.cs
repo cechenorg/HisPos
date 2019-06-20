@@ -263,8 +263,16 @@ namespace His_Pos.NewClass.Prescription
         public void InsertPrescription()
         {
             if (PrescriptionStatus.IsPrescribe)
+            {
                 Treatment.AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
-            if(Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
+                MedicalServiceID = string.Empty;//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 0;
+                PrescriptionPoint.MedicinePoint = 0;
+                PrescriptionPoint.TotalPoint = 0;
+                PrescriptionPoint.ApplyPoint = 0;
+                PrescriptionPoint.SpecialMaterialPoint = 0;
+            }
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0)
                 CountMedicineDays();
             if (!Treatment.AdjustCase.ID.Equals("0"))
                 CheckMedicalServiceData();//確認藥事服務資料
@@ -989,9 +997,12 @@ namespace His_Pos.NewClass.Prescription
             var details = SetPrescriptionDetail();//產生藥品資料
             if (Treatment.AdjustCase.ID.Equals("0"))
             {
-                PrescriptionPoint.SpecialMaterialPoint = 0;
+                MedicalServiceID = string.Empty;//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 0;
+                PrescriptionPoint.MedicinePoint = 0;
                 PrescriptionPoint.TotalPoint = 0;
                 PrescriptionPoint.ApplyPoint = 0;
+                PrescriptionPoint.SpecialMaterialPoint = 0;
             }
             else
             {
