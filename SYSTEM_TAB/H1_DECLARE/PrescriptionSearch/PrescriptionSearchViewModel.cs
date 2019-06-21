@@ -398,9 +398,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MainWindow.ServerConnection.CloseConnection();
             prescription.Source = SelectedPrescription.Source;
             var pSource = SelectedPrescription.Source;
-            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            prescriptionEdit.ShowDialog();
+            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()

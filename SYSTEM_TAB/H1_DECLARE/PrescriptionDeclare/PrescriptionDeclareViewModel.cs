@@ -410,9 +410,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (SelectedHistory is null || !msg.Notification.Equals(nameof(PrescriptionDeclareView) + "ShowPrescriptionEditWindow")) return;
             var pSource = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
-            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            prescriptionEdit.ShowDialog();
+            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void Refresh(NotificationMessage msg)

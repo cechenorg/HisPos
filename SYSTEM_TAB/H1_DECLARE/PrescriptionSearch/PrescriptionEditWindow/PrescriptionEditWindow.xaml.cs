@@ -28,13 +28,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            
             DataContext = new PrescriptionEditViewModel(preID, pSource);
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage<int>>("FocusDosage", FocusDosage);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
+            if (((PrescriptionEditViewModel) DataContext).ShowDialog)
+            {
+                ShowDialog();
+            }
         }
 
         private void FocusDosage(NotificationMessage<int> msg)
