@@ -175,7 +175,11 @@
                             <Setter Property="BorderBrush" Value="Transparent" />
                             <Setter Property="Foreground" Value="#FF424040" />
                             <Setter Property="Margin" Value="-1" />
-                            <Setter Property="ToolTip" Value="{Binding OnTheWayDetail, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <ToolTip Content="{Binding OnTheWayDetail, UpdateSourceTrigger=PropertyChanged}" FontSize="20"/>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>

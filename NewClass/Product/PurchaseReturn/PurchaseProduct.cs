@@ -227,8 +227,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             string tempDetail = "";
 
-            foreach (DataRow row in dataTable.Rows)
-                tempDetail += row.Field<string>("STO_ID").PadLeft(12) + "  數量: " + row.Field<double>("AMOUNT").ToString("####");
+            for (int x = 0; x < dataTable.Rows.Count; x++)
+            {
+                tempDetail += dataTable.Rows[x].Field<string>("STO_ID").PadLeft(12) + "  數量: " + dataTable.Rows[x].Field<double>("AMOUNT").ToString("####");
+
+                if (x < dataTable.Rows.Count - 1)
+                    tempDetail += "\n";
+            }
+                
 
             OnTheWayDetail = tempDetail;
         }
