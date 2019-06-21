@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -286,9 +290,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MainWindow.ServerConnection.OpenConnection();
             var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(DeclareFile.SelectedDayPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
             Messenger.Default.Register<NotificationMessage>(this, PrescriptionEditedRefresh);
-            prescriptionEdit.ShowDialog();
+            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
             Messenger.Default.Unregister<NotificationMessage>(this, PrescriptionEditedRefresh);
         }
 
@@ -311,10 +314,57 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 IsBusy = false;
                 var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
                 DeclareFile.CreateDeclareFile(decFile,(DateTime)DeclareDate);
+                ExportExcelAction();
                 Refresh();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+        private void ExportExcelAction() {
+            InstitutionDeclarePoints InstitutionDeclarePointCollection = new InstitutionDeclarePoints();
+            InstitutionDeclarePointCollection.GetDataByDate((DateTime)DeclareDate);
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "院所申報點數統計表";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = ((DateTime)DeclareDate).Month.ToString() + "月" + ViewModelMainWindow.CurrentPharmacy.Name + "院所申報統計表";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
+                        file.WriteLine("院所申報統計表");
+                        file.WriteLine("月份 " + ((DateTime)DeclareDate).Month.ToString() + "月");
+                        foreach (InstitutionDeclarePoint ins in InstitutionDeclarePointCollection)
+                        {
+                            file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
+                        }
+                        InstitutionDeclarePoint sum = new InstitutionDeclarePoint();
+                        sum.InsName = "總計";
+                        sum.MedicinePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicinePoint);
+                        sum.SpecialMedPoint = InstitutionDeclarePointCollection.Sum(ins => ins.SpecialMedPoint);
+                        sum.MedicalServicePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicalServicePoint);
+                        sum.SubTotal = InstitutionDeclarePointCollection.Sum(ins => ins.SubTotal);
+                        sum.CopayMentPoint = InstitutionDeclarePointCollection.Sum(ins => ins.CopayMentPoint);
+                        sum.DeclarePoint = InstitutionDeclarePointCollection.Sum(ins => ins.DeclarePoint);
+                        sum.PrescriptionCount = InstitutionDeclarePointCollection.Sum(ins => ins.PrescriptionCount);
+                        file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
         private void AddToEditListAction()
         {

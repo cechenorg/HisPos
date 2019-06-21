@@ -159,6 +159,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #region Command
         public RelayCommand ReserveSearchCommand { get; set; }
         public RelayCommand ReserveMedicineSendCommand { get; set; }
+        public RelayCommand ReserveMedicineBackCommand { get; set; }
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
@@ -177,9 +178,19 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
+            ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
             //ReserveSearchAction(); 
         }
         #region Action
+        private void ReserveMedicineBackAction() {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否將未設定為常備藥且90天內慢箋未使用之藥品退貨?", "慢箋退貨");
+            if ((bool)confirmWindow.DialogResult)
+            {
+                StoreOrderDB.StoreOrderReturnReserve();
+                MessageWindow.ShowMessage("已轉出退貨單 請至進退貨管理確認", MessageType.SUCCESS);
+            }
+          
+        }
         private void ShowCustomerPrescriptionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
             CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow customerPrescriptionChangedWindow = new CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow(IndexReserveSelectedItem.CusId); 

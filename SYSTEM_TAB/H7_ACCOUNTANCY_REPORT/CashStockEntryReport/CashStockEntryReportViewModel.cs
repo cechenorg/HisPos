@@ -373,7 +373,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 return;
             }
             PrescriptionEditWindow prescriptionEditWindow = new PrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id);
-            prescriptionEditWindow.ShowDialog();
         }
         private void PrescriptionDetailClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
