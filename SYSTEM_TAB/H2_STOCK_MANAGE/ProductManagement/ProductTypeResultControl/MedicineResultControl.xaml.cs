@@ -33,7 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductTypeResult
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((ProductManageStruct)row.Item).ID, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ProductManageStruct)row.Item).ID, ((ProductManageStruct)row.Item).WareHouseID.ToString() }, "ShowProductDetail"));
         }
     }
 }

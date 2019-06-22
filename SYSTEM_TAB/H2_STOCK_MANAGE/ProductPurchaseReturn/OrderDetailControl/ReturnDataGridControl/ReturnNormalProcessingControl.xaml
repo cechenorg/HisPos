@@ -117,6 +117,14 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowDetail"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="#FF424040" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn MinWidth="70" Header="退貨價">
                     <DataGridTemplateColumn.CellTemplate>
