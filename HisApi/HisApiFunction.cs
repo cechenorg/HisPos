@@ -50,6 +50,38 @@ namespace His_Pos.HisApi
             }
             return signList;
         }
+        public static List<string> WritePrescriptionData(NewClass.PrescriptionRefactoring.Prescription p)
+        {
+            p.WriteCardSuccess = -1;
+            var signList = new List<string>();
+            var medList = p.Medicines.Where(m => (m is NewClass.MedicineRefactoring.MedicineNHI || m is NewClass.MedicineRefactoring.MedicineSpecialMaterial || m is NewClass.MedicineRefactoring.MedicineVirtual) && !m.PaySelf).ToList();
+            var iWriteCount = medList.Count;
+            var iBufferLength = 40 * iWriteCount;
+            p.Card.Read();
+            var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
+            var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
+            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime + "\0", 14);
+            byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", 11);
+            byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", 8);
+            byte[] pDataWrite = ConvertData.StringToBytes(pDataWriteStr, 3660);
+            byte[] pBuffer = new byte[iBufferLength];
+            if (OpenCom())
+            {
+                var res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientID, pPatientBirthDay, pDataWrite, ref iWriteCount, pBuffer, ref iBufferLength);
+                p.WriteCardSuccess = res;
+                if (res == 0)
+                {
+                    var startIndex = 0;
+                    for (int i = 0; i < iWriteCount; i++)
+                    {
+                        signList.Add(ConvertData.ByToString(pBuffer, startIndex, 40));
+                        startIndex += 40;
+                    }
+                }
+                CloseCom();
+            }
+            return signList;
+        }
         //正常上傳
         public static DataTable CreatDailyUploadData(Prescription p, bool isMakeUp)
         {
@@ -62,8 +94,32 @@ namespace His_Pos.HisApi
             return table;
         }
 
+        //正常上傳
+        public static DataTable CreatDailyUploadData(NewClass.PrescriptionRefactoring.Prescription p, bool isMakeUp)
+        {
+            DataTable table;
+            Rec rec = new Rec(p, isMakeUp);
+            var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
+            table = InsertUploadData(p, uploadData, p.Card.MedicalNumberData.TreatDateTime);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+
         //異常上傳
         public static DataTable CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
+        {
+            DataTable table;
+            Rec rec = new Rec(p, isMakeUp, e);
+            var uploadData = rec.SerializeDailyUploadObject();
+            MainWindow.ServerConnection.OpenConnection();
+            table = InsertUploadData(p, uploadData, DateTime.Now);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+
+        //異常上傳
+        public static DataTable CreatErrorDailyUploadData(NewClass.PrescriptionRefactoring.Prescription p, bool isMakeUp, ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
             DataTable table;
             Rec rec = new Rec(p, isMakeUp, e);
@@ -241,10 +297,21 @@ namespace His_Pos.HisApi
         private static DataTable InsertUploadData(Prescription p,string uploadData,DateTime treat)
         {
             var table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
-            while (table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result"))
+            while (NewFunction.CheckTransaction(table))
             {
                 MessageWindow.ShowMessage("寫卡資料存檔異常，按下OK重試", MessageType.WARNING);
                 table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
+            }
+            return table;
+        }
+
+        private static DataTable InsertUploadData(NewClass.PrescriptionRefactoring.Prescription p, string uploadData, DateTime treat)
+        {
+            var table = IcDataUploadDb.InsertDailyUploadData(p.ID, uploadData, treat);
+            while (NewFunction.CheckTransaction(table))
+            {
+                MessageWindow.ShowMessage("寫卡資料存檔異常，按下OK重試", MessageType.WARNING);
+                table = IcDataUploadDb.InsertDailyUploadData(p.ID, uploadData, treat);
             }
             return table;
         }

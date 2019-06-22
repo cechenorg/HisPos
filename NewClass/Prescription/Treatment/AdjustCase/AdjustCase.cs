@@ -42,5 +42,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         {
             return ID.Equals("3");
         }
+
+        public bool CheckIsQuitSmoking()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals("5");
+        }
+        public bool CheckIsHomeCare()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals("D");
+        }
     }
 }

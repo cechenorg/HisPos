@@ -398,5 +398,81 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 }
             }
         }
+
+        public string CreateMedicalData(string dateTime)
+        {
+            SetPosition();
+            var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
+            var result = string.Empty;
+            foreach (var med in medList)
+            {
+                result += dateTime;
+                switch (med)
+                {
+                    case MedicineNHI _:
+                        CreateMedicineNHIData(ref result,med);
+                        break;
+                    case MedicineVirtual _:
+                        CreateMedicineVirtualData(ref result,med);
+                        break;
+                    default:
+                        CreateMedicineSpecialMaterialData(ref result, med);
+                        break;
+                }
+            }
+            return result;
+        }
+
+        private void CreateMedicineNHIData(ref string result,Medicine med)
+        {
+            result += "1";
+            result += med.ID.PadLeft(12, ' ');
+            result += med.PositionID.PadLeft(6, ' ');
+            result += med.UsageName.PadLeft(18, ' ');
+            result += med.Days.ToString().PadLeft(2, ' ');
+            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += "01";
+        }
+
+        private void CreateMedicineVirtualData(ref string result, Medicine med)
+        {
+            result += "G";
+            result += med.ID.PadLeft(12, ' ');
+            result += string.Empty.PadLeft(6, ' ');
+            result += string.Empty.PadLeft(18, ' ');
+            result += string.Empty.PadLeft(2, ' ');
+            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += string.Empty.PadLeft(2, ' ');
+        }
+
+        private void CreateMedicineSpecialMaterialData(ref string result, Medicine med)
+        {
+            result += "4";
+            result += med.ID.Substring(0, 12).PadLeft(12, ' ');
+            if (med.Days != null)
+                result += med.Days.ToString().PadLeft(2, ' ');
+            else
+                result += string.Empty.PadLeft(2, ' ');
+            result += string.Empty.PadLeft(6, ' ');
+            result += string.Empty.PadLeft(18, ' ');
+            if (med.Days != null)
+                result += med.Days.ToString().PadLeft(2, ' ');
+            else
+                result += string.Empty.PadLeft(2, ' ');
+            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += "03";
+        }
+
+        private void SetPosition()
+        {
+            foreach (var m in Items)
+            {
+                if (!(m is MedicineNHI) || m.PaySelf) continue;
+                if (string.IsNullOrEmpty(m.PositionID))
+                    m.PositionID = "XX";
+                if (string.IsNullOrEmpty(m.UsageName))
+                    m.UsageName = "ASORDER";
+            }
+        }
     }
 }

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -16,6 +18,7 @@ using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using HisAPI = His_Pos.HisApi.HisApiFunction;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -40,9 +43,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         protected Prescription current { get; set; }
         protected Prescription tempPre { get; set; }
         #region Functions
-        public static PrescriptionService CreateService(Prescription p,IcCard c)
+        public static PrescriptionService CreateService(Prescription p)
         {
-            p.Card = c;
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.current = p;
             return ps;
@@ -80,6 +82,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
             current.Pharmacist = selectedPharmacist;
             return true;
+        }
+        public void SetCard(IcCard c)
+        {
+            current.Card = c;
         }
 
         protected void CheckAnonymousPatient()
@@ -189,6 +195,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             MainWindow.ServerConnection.OpenConnection();
             current.Patient.Save();
             MainWindow.ServerConnection.CloseConnection();
+        }
+
+        public void CheckDailyUpload(ErrorUploadWindowViewModel.IcErrorCode errorCode)
+        {
+            if (current.IsPrescribe) return;
+            if ((bool)current.PrescriptionStatus.IsCreateSign)
+                HisAPI.CreatDailyUploadData(current, false);
+            else
+                HisAPI.CreatErrorDailyUploadData(current, false, errorCode);
         }
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
@@ -361,9 +376,32 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             };
         }
 
-        public bool IsReadCard()
+        public void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
-            return !string.IsNullOrEmpty(current.Card.CardNumber);
+            if (current.PrescriptionStatus.IsGetCard || errorCode != null)
+            {
+                if (current.Card.IsGetMedicalNumber)
+                    CreatePrescriptionSign();
+                else
+                    current.PrescriptionStatus.IsCreateSign = false;
+            }
+            else
+                current.PrescriptionStatus.IsDeclare = false;
+        }
+
+        private void CreatePrescriptionSign()
+        {
+            current.PrescriptionSign = HisAPI.WritePrescriptionData(current);
+            if (current.WriteCardSuccess != 0)
+            {
+                Application.Current.Dispatcher.Invoke(delegate {
+                    var description = MainWindow.GetEnumDescription((ErrorCode)current.WriteCardSuccess);
+                    MessageWindow.ShowMessage("寫卡異常 " + current.WriteCardSuccess + ":" + description, MessageType.WARNING);
+                });
+                current.PrescriptionStatus.IsCreateSign = null;
+            }
+            else
+                current.PrescriptionStatus.IsCreateSign = true;
         }
     }
 }

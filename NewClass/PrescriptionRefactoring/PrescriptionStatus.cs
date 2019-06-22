@@ -26,6 +26,32 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsRead { get; set; }
         public bool IsVIP { get; set; }
         public bool IsGetCard { get; set; }
+        public bool IsDeclare { get; set; }
+        public bool IsDeposit { get; set; }
+        public bool IsRegister { get; set; }
+        public bool? IsCreateSign { get; set; }
+
         #endregion
+
+        public void SetPrescribeStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
+
+        public void SetErrorAdjustStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetNormalAdjustStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = true;
+            IsDeposit = false;
+        }
     }
 }

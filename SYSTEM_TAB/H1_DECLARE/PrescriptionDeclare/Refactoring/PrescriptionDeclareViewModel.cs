@@ -30,6 +30,7 @@ using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow;
@@ -194,13 +195,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private bool CheckIsAdjusting()
         {
-            return isAdjusting;
+            return !isAdjusting;
         }
         #endregion
         #region CommandAction
         private void ScanPrescriptionQRCodeAction()
         {
-
+            Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
+            QRCodeReceiveWindow receive = new QRCodeReceiveWindow();
         }
 
         private void GetCooperativePresAction()
@@ -215,7 +217,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             isNotInit = false;
             setBuckleAmount = false;
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            if(!CheckPatientEqual(receiveMsg.Content)) return;
+            Messenger.Default.Unregister<NotificationMessage<Prescription>>("QRCodePrescriptionScanned", GetCustomerPrescription);
+            if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
             setBuckleAmount = true;
             isNotInit = true;
@@ -224,13 +227,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetPatientDataAction()
         {
             //取得病患資料(讀卡)
-            var result = false;
             var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) => { ReadCard(ref result); };
+            worker.DoWork += (o, ea) => { ReadCard(); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if (result)
+                if (currentCard.IsRead)
                     GetPatientFromIcCard();
                 else
                     AskErrorUpload();
@@ -239,12 +241,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             worker.RunWorkerAsync();
         }
 
-        private void ReadCard(ref bool result)
+        private void ReadCard()
         {
             BusyContent = Resources.讀取健保卡;
             try
             {
-                result = currentCard.Read();
+                currentCard.Read();
             }
             catch (Exception e)
             {
@@ -447,7 +449,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void AdjustAction()
         {
             isAdjusting = true;
-            var service = PrescriptionService.CreateService(CurrentPrescription,currentCard);
+            var service = PrescriptionService.CreateService(CurrentPrescription);
             if (!service.SetPharmacist(SelectedPharmacist, PrescriptionCount))
             {
                 isAdjusting = false;
@@ -459,31 +461,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 return;
             }
             CheckIsReadCard(service);
-            if(!service.StartNormalAdjust())
-            {
-                isAdjusting = false;
-                return;
-            }
         }
 
         private void CheckIsReadCard(PrescriptionService service)
         {
-            if(service.IsReadCard()) return;
-            var result = false;
             var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) => { ReadCard(ref result); };
-            worker.RunWorkerCompleted += (o, ea) => { CheckReadCardResult(result); };
+            worker.DoWork += (o, ea) =>
+            {
+                if (!currentCard.IsRead)
+                    ReadCard();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                if (CheckReadCardResult())
+                    WriteCard(service);
+            };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
 
-        private void CheckReadCardResult(bool result)
+        private bool CheckReadCardResult()
         {
             IsBusy = false;
-            if (result)
+            if (currentCard.IsRead)
+            {
                 GetMedicalNumber();
-            else
-                AskErrorUpload();
+                return true;
+            }
+            AskErrorUpload();
+            return ErrorCode != null;
         }
 
         private void GetMedicalNumber()
@@ -594,7 +600,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MainWindow.ServerConnection.CloseConnection();
             return productCount;
         }
-        private void AskErrorUpload()
+        private bool AskErrorUpload()
         {
             var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber);
             e.ShowDialog();
@@ -603,8 +609,54 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 MessageWindow.ShowMessage(Resources.尚未選擇異常代碼, MessageType.WARNING);
                 isAdjusting = false;
                 isCardReading = false;
+                return false;
             }
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
+            return true;
+        }
+
+        private void WriteCard(PrescriptionService service)
+        {
+            if (!CheckIsGetMedicalNumber())
+                return;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = Resources.寫卡;
+                service.SetCard(currentCard);
+                service.CreateDailyUploadData(ErrorCode);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                StartNormalAdjust(service);
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void StartNormalAdjust(PrescriptionService service)
+        {
+            if (!service.StartNormalAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
+            service.CheckDailyUpload(ErrorCode);
+        }
+
+        private bool CheckIsGetMedicalNumber()
+        {
+            if (!currentCard.IsGetMedicalNumber && ErrorCode is null)
+            {
+                IsBusy = false;
+                if (!AskErrorUpload())
+                {
+                    isAdjusting = false;
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
     }

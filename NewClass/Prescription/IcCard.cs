@@ -48,13 +48,16 @@ namespace His_Pos.NewClass.Prescription
         public virtual string TreatDateTime { get; set; } = string.Empty;
         [Index(13)]
         public virtual string Tel { get; set; }
+        [Index(14)]
+        public virtual bool IsRead { get; set; }
         public bool Read()
         {
             if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
                 CheckCardStatus();
-                return GetBasicData();
+                IsRead = GetBasicData();
+                return true;
             }
             return false;
         }

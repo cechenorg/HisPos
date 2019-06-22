@@ -5,10 +5,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring;
 using Xceed.Wpf.Toolkit;
+using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 {
@@ -342,6 +342,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void Division_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CheckPharmacistSelected();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (InputManager.Current.MostRecentInputDevice is KeyboardDevice)
+            {
+                e.Handled = true;
+                return;
+            }
+            ((PrescriptionDeclareViewModel)DataContext).ScanPrescriptionQRCode.Execute(null);
         }
     }
 }

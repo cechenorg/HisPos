@@ -12,7 +12,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
-             mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="450" d:DesignWidth="800" >
     <UserControl.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -125,7 +125,7 @@
                     </TextBox>
                     <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Command="{Binding ScanPrescriptionQRCode}" Background="Transparent" Content="{StaticResource QrCode}" Margin="20,0,0,0" BorderBrush="Transparent" Height="35" Width="35" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Background="Transparent" Content="{StaticResource QrCode}" Margin="20,0,0,0" BorderBrush="Transparent" Height="35" Width="35" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
                     <Button Content="合作診所處方" Background="DarkCyan" Height="35" BorderThickness="0" Margin="10,0,0,0" Command="{Binding GetCooperativePres}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" Height="35" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
                 </StackPanel>

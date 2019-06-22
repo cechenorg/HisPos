@@ -17,6 +17,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -41,7 +42,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
     {
         Normal = 0,
         Cooperative = 1,
-        Orthopedics = 2
+        Orthopedics = 2,
+        ChronicReserve = 3
     }
 
     public class Prescription : ObservableObject,ICloneable
@@ -464,6 +466,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
         public bool IsPrescribe => AdjustCase.ID.Equals("0") || Medicines.Count(m => !m.PaySelf) == 0;
         public bool IsBuckle => WareHouse != null;
+        public string MedicalServiceID { get; set; }
+        public int DeclareFileID { get; set; }
+        public int WriteCardSuccess { get; set; }
+
         #endregion
         public bool CheckDiseaseEquals(List<string> parameters)
         {
@@ -981,7 +987,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckDivisionValid()
         {
-            if (string.IsNullOrEmpty(Institution.ID) || string.IsNullOrEmpty(Division.ID)) return;
+            if (string.IsNullOrEmpty(Institution?.ID) || string.IsNullOrEmpty(Division?.ID)) return;
             var table = InstitutionDb.CheckDivisionValid(Institution.ID, Division.ID);
             if (table.Rows.Count <= 0) return;
             var result = table.Rows[0].Field<bool>("Result");
@@ -1064,6 +1070,116 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void UpdateMedicines()
         {
             Medicines.Update(IsBuckle,WareHouse?.ID, AdjustDate);
+        }
+
+        public void SetAdjustStatus()
+        {
+            if (IsPrescribe)
+                PrescriptionStatus.SetPrescribeStatus();
+            else
+                PrescriptionStatus.SetNormalAdjustStatus();
+        }
+
+        public void InsertDb()
+        {
+            if (ID == 0)
+                InsertPrescription();
+            else
+                Update();
+        }
+
+        public void InsertPrescription()
+        {
+            var details = SetPrescriptionDetail();//產生藥品資料
+            SetValue(details);
+            var resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+            while (NewFunction.CheckTransaction(resultTable))
+            {
+                var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
+                Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
+                if ((bool)retry.DialogResult)
+                    resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+            }
+            ID = resultTable.Rows[0].Field<int>("DecMasId");
+        }
+
+        public void Update()
+        {
+            var details = SetPrescriptionDetail();//產生藥品資料
+            SetValue(details);
+            switch (Type)
+            {
+                default:
+                    var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                    while (NewFunction.CheckTransaction(resultTable))
+                    {
+                        MessageWindow.ShowMessage("處方登錄異常，按下OK重試", MessageType.WARNING);
+                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                    }
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    PrescriptionDb.UpdateReserve(this, details);
+                    break;
+
+            }
+        }
+
+        private void SetValue(List<Pdata> details)
+        {
+            Institution.UpdateUsedTime();
+            MedicineDays = Medicines.CountMedicineDays();
+            CheckMedicalServiceData();//確認藥事服務資料
+            PrescriptionPoint.Count(details);
+            SetPrescribeValue();
+            CreateDeclareFileContent(details);//產生申報資料
+        }
+
+        private void CheckMedicalServiceData()
+        {
+            if (IsPrescribe) return;
+            if (MedicineDays >= 28)
+            {
+                MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 69;
+            }
+            else if (MedicineDays > 7 && MedicineDays < 14)
+            {
+                MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+            else if (MedicineDays >= 14 && MedicineDays < 28)
+            {
+                MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+                PrescriptionPoint.MedicalServicePoint = 59;
+            }
+            else
+            {
+                MedicalServiceID = "05202B";//一般處方給付(7天以內)
+                PrescriptionPoint.MedicalServicePoint = 48;
+            }
+        }
+
+        private void SetPrescribeValue()
+        {
+            if (IsPrescribe)
+            {
+                AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
+                MedicalServiceID = string.Empty;
+                PrescriptionPoint.MedicalServicePoint = 0;
+                PrescriptionPoint.MedicinePoint = 0;
+                PrescriptionPoint.TotalPoint = 0;
+                PrescriptionPoint.ApplyPoint = 0;
+                PrescriptionPoint.SpecialMaterialPoint = 0;
+            }
+        }
+
+        private void CreateDeclareFileContent(List<Pdata> details)
+        {
+            if (IsPrescribe) return;
+            var medDeclare = details.Where(p => !p.P1.Equals("0")).ToList();
+            var d = new Ddata(this, medDeclare);
+            DeclareContent = d.SerializeObjectToXDocument();
+            d.Dbody.Pdata = details;
         }
     }
 }

@@ -136,6 +136,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Dhead.D18 = $"{totalPoint:00000000}";
             Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
+        public Ddata(PrescriptionRefactoring.Prescription p, List<Pdata> details)
+        {
+            Dhead = new Dhead(p);
+            Dbody = new Dbody(p, details);
+            var totalPoint = int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33);
+            if (Dbody.D38 != null)
+                totalPoint += int.Parse(Dbody.D38);
+            Dhead.D18 = $"{totalPoint:00000000}";
+            Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
+        }
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
         [XmlElement(ElementName = "dbody")]
@@ -177,6 +187,33 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 D24 = string.Empty;
             }
             D25 = t.Pharmacist.IDNumber;
+        }
+        public Dhead(PrescriptionRefactoring.Prescription p)
+        {
+            var point = p.PrescriptionPoint;
+            D1 = p.AdjustCase.ID;
+            D2 = string.Empty;
+            D3 = p.Patient.IDNumber;
+            D4 = string.Empty;
+            if (!D1.Equals("2") && !D1.Equals("D"))
+                D5 = p.PaymentCategory?.ID;
+            D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
+            D7 = p.MedicalNumber;
+            D8 = p.MainDisease.ID;
+            D9 = p.SubDisease?.ID;
+            D13 = p.Division?.ID;
+            D14 = p.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.TreatDate);
+            D15 = p.Copayment.Id;
+            D17 = $"{point.CopaymentPoint:0000}";
+            D20 = p.Patient.Name;
+            D21 = p.Institution.ID;
+            D22 = p.PrescriptionCase?.ID;
+            D23 = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, false);
+            if (!p.AdjustCase.CheckIsQuitSmoking() && !p.AdjustCase.CheckIsHomeCare())
+                D24 = D21;
+            else
+                D24 = string.Empty;
+            D25 = p.Pharmacist.IDNumber;
         }
         [XmlElement(ElementName = "d1")]
         public string D1 { get; set; }
@@ -245,6 +282,35 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             }
             D43 = t.OriginalMedicalNumber;
             if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
+                D44 = p.Card.NewBornBirthday;
+            Pdata = new List<Pdata>();
+            foreach (var d in details)
+            {
+                var pdata = new Pdata();
+                pdata = d.DeepCloneViaJson();
+                if (pdata.P1.Equals("3") && pdata.P2.Length > 12)
+                    pdata.P2 = pdata.P2.Substring(0, 12);
+                Pdata.Add(pdata);
+            }
+        }
+        public Dbody(PrescriptionRefactoring.Prescription p, List<Pdata> details)
+        {
+            var point = p.PrescriptionPoint;
+            D26 = p.SpecialTreat?.ID;
+            D30 = p.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2, '0');
+            D31 = $"{details.Where(d => d.P1.Equals("3")).Sum(d => int.Parse(d.P9)):0000000}";
+            D32 = "00000000";
+            D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
+            D35 = p.ChronicSeq is null ? string.Empty : p.ChronicSeq.ToString();
+            D36 = p.ChronicTotal is null ? string.Empty : p.ChronicTotal.ToString();
+            var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
+            if (medicalService != null)
+            {
+                D37 = p.MedicalServiceID;
+                D38 = medicalService.P9.PadLeft(8, '0');
+            }
+            D43 = p.OriginalMedicalNumber;
+            if (p.Copayment != null && p.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
             Pdata = new List<Pdata>();
             foreach (var d in details)

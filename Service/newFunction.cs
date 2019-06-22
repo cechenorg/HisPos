@@ -322,5 +322,10 @@ namespace His_Pos.Service
         {
             return row.Table.Columns.Contains(column);
         }
+
+        public static bool CheckTransaction(DataTable table)
+        {
+            return table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result");
+        }
     }
 }

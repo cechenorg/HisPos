@@ -200,5 +200,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 }
             }
         }
+
+        public void Count(List<Pdata> details)
+        {
+            MedicinePoint = details.Count(p => p.P1.Equals("1")) > 0 ? details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)) : 0;
+            SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            ApplyPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint;//計算申請點數
+            TotalPoint = ApplyPoint + CopaymentPoint;
+        }
     }
 }

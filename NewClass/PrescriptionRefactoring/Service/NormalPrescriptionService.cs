@@ -1,4 +1,5 @@
 ﻿using System;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -24,7 +25,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool NormalAdjust()
         {
+            if (current.PrescriptionStatus.IsCreateSign is null) return false;
             SavePatientData();
+            current.SetAdjustStatus();//設定處方狀態
+            current.InsertDb();
             return true;
         }
 

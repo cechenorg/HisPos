@@ -37,6 +37,16 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             MainMessage = new MainMessage(p,e, isMakeUp);
         }
 
+        public Rec(PrescriptionRefactoring.Prescription p, bool isMakeUp, ErrorUploadWindowViewModel.IcErrorCode e = null)
+        {
+            HeaderMessage = new Header();
+            HeaderMessage.DataFormat = "1";
+            HeaderMessage.DataFormat = e is null ? "1" : "2";
+
+            HeaderMessage.UploadVersion = "1.0";
+            MainMessage = new MainMessage(p, e, isMakeUp);
+        }
+
         public Rec(DataRow row)
         {
 
@@ -91,6 +101,19 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         public MainMessage(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e,bool makeUp)
         {
             IcMessage = new IcData(p,e,makeUp);
+            MedicalMessageList = new List<MedicalData>();
+            var treatDateTime = IcMessage.TreatmentDateTime;
+            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
+            for (var i = 0; i < medList.Count; i++)
+            {
+                MedicalMessageList.Add(e is null
+                    ? new MedicalData(medList[i], treatDateTime, p.PrescriptionSign[i])
+                    : new MedicalData(medList[i], treatDateTime));
+            }
+        }
+        public MainMessage(PrescriptionRefactoring.Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
+        {
+            IcMessage = new IcData(p, e, makeUp);
             MedicalMessageList = new List<MedicalData>();
             var treatDateTime = IcMessage.TreatmentDateTime;
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
@@ -165,7 +188,62 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             if (makeUp)
                 ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Treatment.AdjustDate);
         }
-        
+
+        public IcData(PrescriptionRefactoring.Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
+        {
+            var seq = p.Card.MedicalNumberData;
+            if (!string.IsNullOrEmpty(p.Card.TreatDateTime))
+            {
+                TreatmentDateTime = p.Card.TreatDateTime;
+            }
+            else
+            {
+                TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
+                {
+                    var iBufferLength = 13;
+                    var pBuffer = new byte[iBufferLength];
+                    var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
+                    TreatmentDateTime = res == 0 ?
+                        ConvertData.ByToString(pBuffer, 0, 13) :
+                        DateTimeEx.ToStringWithSecond(DateTime.Now);
+                    HisApiFunction.CloseCom();
+                }
+                else
+                {
+                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                }
+            }
+            if (e is null)
+            {
+                CardNo = p.Card.CardNumber;
+                SamCode = seq.SamId;
+                SecuritySignature = seq.SecuritySignature;
+                IDNumber = p.Card.IDNumber;
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender(p.Card.PatientBasicData.Birthday);
+                MedicalNumber = string.Empty;
+                PharmacyId = seq.InstitutionId;
+            }
+            else
+            {
+                IDNumber = p.Patient.IDNumber;
+                BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday);
+                MedicalNumber = e.ID;
+                PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
+            }
+            if (makeUp)
+                MakeUpMark = "2";
+            MedicalPersonIcNumber = p.Pharmacist.IDNumber;
+            MainDiagnosisCode = p.MainDisease.ID;
+            if (!string.IsNullOrEmpty(p.SubDisease.ID))
+                SecondDiagnosisCode = p.SubDisease.ID;
+            MedicalFee = (p.PrescriptionPoint.MedicinePoint + p.PrescriptionPoint.SpecialMaterialPoint +
+                             p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
+            CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
+            if (makeUp)
+                ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.AdjustDate);
+        }
+
         //1,3 V  2,4 ~
         [XmlElement(ElementName = "A11")]
         public string CardNo { get; set; }//卡片號碼 (get by HISAPI : csGetCardNo)
@@ -298,6 +376,45 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                     break;
             }
             if(!string.IsNullOrEmpty(preSig))
+                PrescriptionSignature = preSig;
+        }
+
+        public MedicalData(MedicineRefactoring.Medicine med, string treatDateTime, string preSig = null)
+        {
+            MedicalOrderTreatDateTime = treatDateTime;
+            MedicalOrderCategory = med is MedicineRefactoring.MedicineSpecialMaterial ? "4" : "1";
+            TreatmentProjectCode = med.ID;
+            if (!string.IsNullOrEmpty(med.PositionID))
+                TreatmentPosition = med.PositionID;
+            Usage = med.UsageName;
+            Days = med.Days.ToString();
+            TotalAmount = $"{med.Amount:00000.0}";
+            switch (MedicalOrderCategory)
+            {
+                case "1":
+                    PrescriptionDeliveryMark = "01";
+                    break;
+                case "A":
+                    PrescriptionDeliveryMark = "02";
+                    break;
+                case "2":
+                    PrescriptionDeliveryMark = "05";
+                    break;
+                case "B":
+                    PrescriptionDeliveryMark = "06";
+                    break;
+                case "3":
+                case "4":
+                case "5":
+                    PrescriptionDeliveryMark = "03";
+                    break;
+                case "C":
+                case "D":
+                case "E":
+                    PrescriptionDeliveryMark = "04";
+                    break;
+            }
+            if (!string.IsNullOrEmpty(preSig))
                 PrescriptionSignature = preSig;
         }
         //V 
