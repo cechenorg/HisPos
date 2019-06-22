@@ -187,7 +187,6 @@ namespace His_Pos
             try
             {
                 ServerConnection.OpenConnection();
-                StockValue.UpdateDailyStockValue(); //做每日進退帳
                 while (WebApi.SendToCooperClinicLoop100())
                 {  
                 } //骨科上傳

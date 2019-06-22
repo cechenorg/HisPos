@@ -6,10 +6,14 @@ namespace His_Pos.NewClass.StockValue {
     public class StockValues : ObservableCollection<StockValue> {
         public StockValues() {
         }
-        public void GetDataByDate(DateTime startDate,DateTime endDate) {
-            DataTable table = StockValueDb.GetDataByDate(startDate,endDate);
+        public void GetDataByDate(DateTime startDate,DateTime endDate,string warID) {
+            DataTable table = StockValueDb.GetDataByDate(startDate,endDate,warID);
+            if (table.Rows.Count < 1)
+                return;
+
+            double stock = table.Rows[0].Field <double>("InitStock");
             foreach (DataRow r in table.Rows) {
-                Add(new StockValue(r));
+                Add(new StockValue(r,ref stock));
             }
         }
 
