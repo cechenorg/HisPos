@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.StockValue {
             StockCheckValue =r.Field<double>("盤點");
             MedUseValue = r.Field<double>("調劑耗用");
             MinusStockAdjustValue = r.Field<double>("進貨負庫調整"); 
-            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + MinusStockAdjustValue;
+            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + 2 * MinusStockAdjustValue;
             FinalStockValue = stock; 
         }
         public DateTime Date { get; set; }

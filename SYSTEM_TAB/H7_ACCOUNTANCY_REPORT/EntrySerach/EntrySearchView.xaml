@@ -88,11 +88,12 @@
             <TextBlock Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding FinalStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="5" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Grid>
+            <TextBlock Text="{Binding  FinalStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            
+        </Grid> 
         <DataGrid  Grid.Row="2" ItemsSource="{Binding DailyStockValueCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 SelectedItem="{Binding SelectStockValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10">
             <i:Interaction.Triggers>
