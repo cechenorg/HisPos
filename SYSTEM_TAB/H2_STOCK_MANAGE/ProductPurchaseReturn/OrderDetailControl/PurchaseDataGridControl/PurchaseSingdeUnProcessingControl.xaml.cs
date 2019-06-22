@@ -5,7 +5,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
@@ -115,8 +117,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                     firstChild.Focus();
             }
         }
+        private void ShowDetail(object sender, MouseButtonEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+
+            if (!(cell?.DataContext is PurchaseProduct)) return;
+
+            ProductDetailWindow.ShowProductDetailWindow();
+
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+        }
+        private void GetProductToolTip(object sender, MouseEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+
+            if (!(cell?.DataContext is PurchaseProduct)) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
+            MainWindow.ServerConnection.CloseConnection();
+        }
         #endregion
 
-        
+
     }
 }
