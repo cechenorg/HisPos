@@ -39,6 +39,7 @@
     xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
     xmlns:InstitutionDeclarePointReport ="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
+    xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -134,6 +135,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type  InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
             <InstitutionDeclarePointReport:InstitutionDeclarePointReport/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stockTakingPlan:StockTakingPlanViewModel}">
+            <stockTakingPlan:StockTakingPlanView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>

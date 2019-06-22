@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -35,6 +36,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -150,7 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return 0;
             }
         }
-
+        public bool ShowDialog { get; set; }
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
@@ -171,6 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
+        public RelayCommand<string> ShowMedicineDetail { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -185,9 +188,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public PrescriptionEditViewModel(int preID,PrescriptionSource pSource)
         {
             MainWindow.ServerConnection.OpenConnection();
-            var selected = pSource.Equals(PrescriptionSource.Normal) ? 
-                new Prescription(PrescriptionDb.GetPrescriptionByID(preID).Rows[0], PrescriptionSource.Normal) : 
-                new Prescription(PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0], PrescriptionSource.ChronicReserve);
+            Prescription selected;
+            DataRow r;
+            if (pSource.Equals(PrescriptionSource.Normal))
+            {
+                r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+                if (r.Field<string>("IsEnable").Equals("0"))
+                {
+                    MessageWindow.ShowMessage("處方已被刪除。", MessageType.ERROR);
+                    Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
+                    ShowDialog = false;
+                    return;
+                }
+                selected = new Prescription(r, PrescriptionSource.Normal);
+                ShowDialog = true;
+            }
+            else
+            {
+                r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
+                selected = new Prescription(r, PrescriptionSource.ChronicReserve);
+                ShowDialog = true;
+            }
             MainWindow.ServerConnection.CloseConnection();
             CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
             NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
@@ -196,6 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
+
         #region InitialFunctions
         /*
          * clone checkEdit
@@ -261,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Delete = new RelayCommand(DeleteAction);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
+            ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
         }
         #endregion
         #region CommandActions
@@ -592,6 +615,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.Treatment.AdjustDate is null) return;
             EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
+        }
+
+        private void ShowMedicineDetailAction(string medicineID)
+        {
+            var wareID = EditedPrescription.WareHouse is null ? "0" : EditedPrescription.WareHouse.ID;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, wareID }, "ShowProductDetail"));
         }
 
         private bool CheckSameOrIDEmptyMedicine()

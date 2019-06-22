@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             StockValue = row.Field<double>("STOCK_VALUE");
             TotalInventory = row.Field<double>("Inv_Inventory");
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
-            LastPrice = (double)row.Field<decimal>("Pro_LastPrice");
+            LastPrice = (double)row.Field<decimal>("Inv_LastPrice");
         }
     }
 }

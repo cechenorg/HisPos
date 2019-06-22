@@ -270,7 +270,7 @@
                     </TextBox>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
+            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
                 <Button Width="100" Content="同步資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding SyncDataCommand}"/>
                 <Rectangle Width="70"/>
                 <ContentControl>

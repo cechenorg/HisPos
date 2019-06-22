@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlan
 
         internal static StockTakingPlans GetStockTakingPlans()
         {
-            throw new NotImplementedException();
+            return new StockTakingPlans(StockTakingDB.GetStockTakingPlans());
         }
     }
 }

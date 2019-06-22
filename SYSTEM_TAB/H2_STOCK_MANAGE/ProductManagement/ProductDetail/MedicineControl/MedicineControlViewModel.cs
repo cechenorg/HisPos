@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -12,9 +14,11 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -37,6 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand GroupSettingSelectionChangedCommand { get; set; }
         public RelayCommand ExportRecordCommand { get; set; }
         public RelayCommand ShowConsumeRecordCommand { get; set; }
+        public RelayCommand<string> FilterRecordCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -60,6 +65,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private ProductManageMedicine medicine;
         private MedicineStockDetail stockDetail;
         private ProductInventoryRecords inventoryRecordCollection;
+        private ProductInventoryRecord currentInventoryRecord;
+        private ICollectionView inventoryRecordCollectionView;
+        private ProductInventoryRecordType filterType = ProductInventoryRecordType.All;
         private ProductTypeEnum productType;
 
         public ProductManageMedicine Medicine
@@ -77,10 +85,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             get { return inventoryRecordCollection; }
             set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
         }
+        public ProductInventoryRecord CurrentInventoryRecord
+        {
+            get { return currentInventoryRecord; }
+            set { Set(() => CurrentInventoryRecord, ref currentInventoryRecord, value); }
+        }
         public ProductTypeEnum ProductType
         {
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
+        }
+        public ICollectionView InventoryRecordCollectionView
+        {
+            get => inventoryRecordCollectionView;
+            set { Set(() => InventoryRecordCollectionView, ref inventoryRecordCollectionView, value); }
         }
         public ProductManageDetail MedicineDetail { get; set; }
         #endregion
@@ -139,11 +157,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         #endregion
 
-        public MedicineControlViewModel(string id, ProductTypeEnum type)
+        public MedicineControlViewModel(string proID, ProductTypeEnum type, string wareHouseID)
         {
             RegisterCommand();
             ProductType = type;
-            InitMedicineData(id);
+            InitMedicineData(proID, wareHouseID);
         }
         
         #region ----- Define Actions -----
@@ -161,7 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void CancelChangeAction()
         {
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
             IsDataChanged = false;
         }
         private void SyncDataAction()
@@ -170,7 +188,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             //ProductDetailDB.GetProductManageMedicineDataByID(id);
             MainWindow.ServerConnection.CloseConnection();
 
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
         }
         private void StockTakingAction()
         {
@@ -184,7 +202,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 if (stockTakingNoLastPriceWindow.ConfirmClicked)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price);
+                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
                     MainWindow.ServerConnection.CloseConnection();
                 }
                 else
@@ -199,7 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
-            InitMedicineData(Medicine.ID);
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
         }
@@ -212,7 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
-        private void ShowProductGroupWindowAction() {
+        private void ShowProductGroupWindowAction() { 
             ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID, GroupSettingWareHouseSelected.ID);
         }
         private void SearchProductRecordAction()
@@ -226,6 +244,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             MainWindow.ServerConnection.OpenConnection();
             InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
             MainWindow.ServerConnection.CloseConnection();
+
+            InventoryRecordCollectionView = CollectionViewSource.GetDefaultView(InventoryRecordCollection);
+            InventoryRecordCollectionView.Filter += RecordFilter;
+
+            if (!InventoryRecordCollectionView.IsEmpty)
+            {
+                InventoryRecordCollectionView.MoveCurrentToLast();
+                CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
+            }  
         }
         private void ExportRecordAction()
         {
@@ -249,6 +276,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);
             productConsumeRecordWindow.ShowDialog();
         }
+        private void FilterRecordAction(string filterCondition)
+        {
+            if (filterCondition != null)
+                filterType = (ProductInventoryRecordType)int.Parse(filterCondition);
+
+            InventoryRecordCollectionView.Filter += RecordFilter;
+
+            if (!InventoryRecordCollectionView.IsEmpty)
+            {
+                InventoryRecordCollectionView.MoveCurrentToLast();
+                CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -263,11 +303,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
             GroupSettingSelectionChangedCommand = new RelayCommand(GroupSettingSelectionChangedAction);
+            FilterRecordCommand = new RelayCommand<string>(FilterRecordAction);
 
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
         }
-        private void InitMedicineData(string id)
+        private void InitMedicineData(string id, string wareHouseID)
         {
             MainWindow.ServerConnection.OpenConnection();
             WareHouseCollection = WareHouses.GetWareHouses();
@@ -297,7 +338,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
-            SelectedWareHouse = WareHouseCollection[0];
+            SelectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
 
             switch (ProductType)
             {
@@ -311,7 +352,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
-            GroupSettingWareHouseSelected = WareHouseCollection[0];
+            GroupSettingWareHouseSelected = WareHouseCollection[int.Parse(wareHouseID)];
             ProductGroupSettingCollection.GetDataByID(id, GroupSettingWareHouseSelected.ID);
 
             ReloadStockDetail();
@@ -356,6 +397,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
             MainWindow.ServerConnection.CloseConnection();
+        }
+        private bool RecordFilter(object record)
+        {
+            if (ProductInventoryRecordType.All == filterType)
+                return true;
+            else
+                return filterType == ((ProductInventoryRecord) record).Type;
         }
         #endregion
     }
