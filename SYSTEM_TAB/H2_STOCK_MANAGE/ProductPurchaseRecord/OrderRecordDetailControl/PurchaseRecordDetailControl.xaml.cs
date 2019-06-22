@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDetailControl
@@ -36,7 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord.OrderRecordDe
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((Product)row.Item).ID, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new []{((PurchaseProduct)row.Item).ID, ((PurchaseProduct)row.Item).WareHouseID.ToString() }, "ShowProductDetail"));
         }
     }
 }

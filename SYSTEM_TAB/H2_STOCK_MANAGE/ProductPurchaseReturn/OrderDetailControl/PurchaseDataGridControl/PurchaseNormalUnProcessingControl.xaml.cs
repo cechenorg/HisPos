@@ -3,10 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
 {
@@ -152,7 +155,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             ProductDataGrid.SelectedItem = (ProductDataGrid.Items[index] as Product);
         }
         #endregion
-        
+
+        private void ShowDetail(object sender, MouseButtonEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+
+            if (!(cell?.DataContext is PurchaseProduct)) return;
+
+            ProductDetailWindow.ShowProductDetailWindow();
+
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+        }
+
+        private void GetProductToolTip(object sender, MouseEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+
+            if (!(cell?.DataContext is PurchaseProduct)) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
         #endregion
     }
 }

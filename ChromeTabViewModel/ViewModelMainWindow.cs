@@ -191,7 +191,6 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得用藥途徑;
                 Positions = new Positions();
                 BusyContent = "更新庫存現值變化";
-                StockValue.UpdateDailyStockValue(); //做每日帳
                 BusyContent = "同步員工資料";
                 EmployeeDb.SyncData();
                 int i = 100;

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.StockValue;
+using His_Pos.NewClass.WareHouse;
 using System;
 using System.IO;
 using System.Linq;
@@ -41,13 +42,34 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
         }
+        private WareHouses wareHouseCollection;
+        public WareHouses WareHouseCollection
+        {
+            get { return wareHouseCollection; }
+            set
+            {
+                Set(() => WareHouseCollection, ref wareHouseCollection, value);
+            }
+        }
+        private WareHouse selectedWareHouse;
+        public WareHouse SelectedWareHouse
+        {
+            get { return selectedWareHouse; }
+            set
+            {
+                Set(() => SelectedWareHouse, ref selectedWareHouse, value); 
+            }
+        }
         #endregion
         #region Command
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ExportCsvCommand { get; set; }
         public RelayCommand ShowEntryDetailCommand { set; get; }
         #endregion
-        public EntrySearchViewModel() {
+        public EntrySearchViewModel()
+        {
+            WareHouseCollection = WareHouses.GetWareHouses();
+            SelectedWareHouse = WareHouseCollection[0];
             Search();
             SearchCommand = new RelayCommand(Search);
             ExportCsvCommand = new RelayCommand(ExportCsv);
@@ -67,10 +89,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
                 {
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
-                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "期末現值");
+                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "進貨負庫調整" + "\t" + "期末現值");
                     foreach (var row in DailyStockValueCollection)
                     {
-                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.FinalStockValue);
+                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.MinusStockAdjustValue + "\t" + row.FinalStockValue);
                     }
                     sw.Close();
                 }
@@ -78,10 +100,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         } 
         
-        private void Search() {
-            StockValue.UpdateDailyStockValue();
+        private void Search() { 
             DailyStockValueCollection.Clear();
-            DailyStockValueCollection.GetDataByDate(StartDate, EndDate);
+            DailyStockValueCollection.GetDataByDate(StartDate, EndDate, SelectedWareHouse.ID);
             CaculateTotalStock();
         }
         private void CaculateTotalStock() {
@@ -90,7 +111,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalDailyStock.PurchaseValue = DailyStockValueCollection.Sum(d => d.PurchaseValue);
                 TotalDailyStock.ReturnValue = DailyStockValueCollection.Sum(d => d.ReturnValue);
                 TotalDailyStock.MedUseValue = DailyStockValueCollection.Sum(d => d.MedUseValue);
-                TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
+                TotalDailyStock.MinusStockAdjustValue = DailyStockValueCollection.Sum(d => d.MinusStockAdjustValue); 
+                TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue); 
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
        

@@ -7,14 +7,16 @@ namespace His_Pos.NewClass.StockValue {
         public StockValue() {
 
         }
-        public StockValue(DataRow r) {
-            Date =  r.Field<DateTime>("DaiSto_Date");
-            InitStockValue = Math.Round(r.Field<double>("DaiSto_InitialValue"),2);
-            PurchaseValue = Math.Round(r.Field<double>("DaiSto_PurchaseValue"), 2);   
-            ReturnValue = Math.Round(r.Field<double>("DaiSto_ReturnValue"),2);
-            StockCheckValue = Math.Round(r.Field<double>("DaiSto_StockCheckValue"),2);
-            MedUseValue = Math.Round(r.Field<double>("DaiSto_MedUseValue"),2); 
-            FinalStockValue = Math.Round(r.Field<double>("DaiSto_FinalValue"),2); 
+        public StockValue(DataRow r,ref double stock) {
+            Date =  r.Field<DateTime>("InvRec_Time");
+            InitStockValue =  stock;
+            PurchaseValue =  r.Field<double>("進貨");   
+            ReturnValue =  r.Field<double>("退貨");
+            StockCheckValue =r.Field<double>("盤點");
+            MedUseValue = r.Field<double>("調劑耗用");
+            MinusStockAdjustValue = r.Field<double>("進貨負庫調整"); 
+            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + 2 * MinusStockAdjustValue;
+            FinalStockValue = stock; 
         }
         public DateTime Date { get; set; }
         private double initStockValue;
@@ -45,7 +47,13 @@ namespace His_Pos.NewClass.StockValue {
         {
             get { return medUseValue; }
             set { Set(() => MedUseValue, ref medUseValue, value); }
-        } 
+        }
+        private double minusStockAdjustValue;
+        public double MinusStockAdjustValue
+        {
+            get { return minusStockAdjustValue; }
+            set { Set(() => MinusStockAdjustValue, ref minusStockAdjustValue, value); }
+        }
         private double finalStockValue;
         public double FinalStockValue
         {
@@ -53,9 +61,7 @@ namespace His_Pos.NewClass.StockValue {
             set { Set(() => FinalStockValue, ref finalStockValue, value); }
         }
         #region Function
-        public static void UpdateDailyStockValue() {
-            StockValueDb.UpdateDailyStockValue();
-        }
+       
         #endregion
     }
 }
