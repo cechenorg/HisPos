@@ -30,6 +30,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsDeposit { get; set; }
         public bool IsRegister { get; set; }
         public bool? IsCreateSign { get; set; }
+        public bool IsSendOrder { get; set; }
 
         #endregion
 

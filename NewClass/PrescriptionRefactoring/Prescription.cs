@@ -347,30 +347,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     value = VM.GetAdjustCase("1");
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
-                switch (adjustCase.ID)
-                {
-                    case "4":
-                        Copayment = VM.GetCopayment("009");
-                        break;
-                    case "1":
-                    case "3":
-                        PrescriptionCase = VM.GetPrescriptionCases("09");
-                        PaymentCategory = VM.GetPaymentCategory("04");
-                        break;
-                    case "2":
-                        Copayment = VM.GetCopayment("I22");
-                        PrescriptionCase = VM.GetPrescriptionCases("04");
-                        PaymentCategory = null;
-                        break;
-                    case "5":
-                        PrescriptionCase = VM.GetPrescriptionCases("B7");
-                        TempMedicalNumber = "IC07";
-                        Copayment = VM.GetCopayment("Z00");
-                        MainWindow.ServerConnection.OpenConnection();
-                        MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
-                        MainWindow.ServerConnection.CloseConnection();
-                        break;
-                }
+                CheckVariableByAdjustCase();
             }
         }
 
@@ -943,6 +920,49 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PaymentCategory = VM.GetPaymentCategory("4");
         }
 
+        private void CheckVariableByAdjustCase()
+        {
+            switch (adjustCase.ID)
+            {
+                case "4":
+                    Copayment = VM.GetCopayment("009");
+                    break;
+                case "1":
+                case "3":
+                    SetNormalVariables();
+                    break;
+                case "2":
+                    SetChronicVariables();
+                    break;
+                case "5":
+                    SetQuitSmokeVariables();
+                    break;
+            }
+        }
+
+        private void SetNormalVariables()
+        {
+            PrescriptionCase = VM.GetPrescriptionCases("09");
+            PaymentCategory = VM.GetPaymentCategory("04");
+        }
+
+        private void SetChronicVariables()
+        {
+            Copayment = VM.GetCopayment("I22");
+            PrescriptionCase = VM.GetPrescriptionCases("04");
+            PaymentCategory = null;
+        }
+
+        private void SetQuitSmokeVariables()
+        {
+            PrescriptionCase = VM.GetPrescriptionCases("B7");
+            TempMedicalNumber = "IC07";
+            Copayment = VM.GetCopayment("Z00");
+            MainWindow.ServerConnection.OpenConnection();
+            MainDisease = DiseaseCode.GetDiseaseCodeByID("F17200");
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
         public void DeleteMedicine()
         {
             Medicines.Remove(SelectedMedicine);
@@ -1369,6 +1389,28 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                         FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
                     };
             }
+        }
+
+        public void CheckPrescriptionVariable()
+        {
+            if (AdjustCase.ID != "0" && (!string.IsNullOrEmpty(Institution.ID) && Institution.ID.Equals(VM.CurrentPharmacy.ID)))
+                Institution = new Institution();
+            CheckChronicAdjustCase();
+        }
+
+        private void CheckChronicAdjustCase()
+        {
+            if (ChronicSeq is null && AdjustCase.ID.Equals("2"))
+                AdjustCase = VM.GetAdjustCase("1");
+
+            if (ChronicSeq != null && ChronicSeq > 0)
+                AdjustCase = VM.GetAdjustCase("2");
+        }
+
+        public bool CheckCanRegister()
+        {
+            return AdjustDate != null && AdjustCase.ID.Equals("2")
+                && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
         }
     }
 }

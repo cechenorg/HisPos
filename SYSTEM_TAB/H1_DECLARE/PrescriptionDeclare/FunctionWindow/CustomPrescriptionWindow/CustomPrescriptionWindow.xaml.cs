@@ -5,7 +5,6 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescription;
-using Cus = His_Pos.NewClass.Person.Customer.Customer;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomPrescriptionWindow
 {

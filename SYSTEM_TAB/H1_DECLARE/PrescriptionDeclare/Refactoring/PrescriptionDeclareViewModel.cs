@@ -145,6 +145,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
             }
         }
+        private bool canSendOrder;
+        public bool CanSendOrder
+        {
+            get => canSendOrder;
+            set
+            {
+                Set(() => CanSendOrder, ref canSendOrder, value);
+            }
+        }
+        private PrescriptionDeclareStatus declareStatus;
+        public PrescriptionDeclareStatus DeclareStatus
+        {
+            get => declareStatus;
+            set
+            {
+                Set(() => DeclareStatus, ref declareStatus, value);
+                if (CurrentPrescription is null) return;
+                if (CurrentPrescription.CheckCanRegister())
+                    CanSendOrder = true;
+                if (!CanSendOrder)
+                    CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
+            }
+        }
         private IcCard currentCard;
         private bool setBuckleAmount;
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
@@ -162,6 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand PharmacistChanged { get; set; }
         public RelayCommand AdjustDateChanged { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
@@ -183,13 +207,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
             MainWindow.ServerConnection.CloseConnection();
-            InitPrescriptionAndCard();
+            InitLocalVariables();
+            ClearAction();
             InitCommands();
         }
 
-        private void InitPrescriptionAndCard()
+        private void InitLocalVariables()
+        {
+            DeclareStatus = PrescriptionDeclareStatus.Adjust;
+            CanSendOrder = false;
+            isAdjusting = false;
+            ErrorCode = null;
+        }
+
+        private void ClearAction()
         {
             isNotInit = false;
+            InitLocalVariables();
             CurrentPrescription = new Prescription();
             CurrentPrescription.Init();
             currentCard = new IcCard();
@@ -208,14 +242,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             PharmacistChanged = new RelayCommand(PharmacistChangedAction);
             AdjustDateChanged = new RelayCommand(AdjustDateChangedAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            ChronicSequenceTextChanged = new RelayCommand(ChronicSequenceChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
-            Clear = new RelayCommand(InitPrescriptionAndCard);
+            Clear = new RelayCommand(ClearAction);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
+        }
+
+        private void ChronicSequenceChangedAction()
+        {
+            CurrentPrescription.CheckPrescriptionVariable();
+            if (CurrentPrescription.AdjustCase.ID.Equals("2"))
+                CurrentPrescription.PaymentCategory = PaymentCategories[0];
+            CheckDeclareStatus();
         }
 
         private bool CheckIsAdjusting()
@@ -380,6 +423,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
             if(CurrentPrescription.AdjustDate != null)
                 CurrentPrescription.UpdateMedicines();
+            CheckDeclareStatus();
         }
 
         private void GetDiseaseCodeAction(object sender)
@@ -576,6 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IDNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0;
         }
+
         private void CustomerNotExist()
         {
             if (!CurrentPrescription.Patient.CheckData())
@@ -695,7 +740,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             }
             if(CurrentPrescription.IsPrescribe)
                 service.CheckDailyUpload(ErrorCode);
-            InitPrescriptionAndCard();
+            ClearAction();
             isAdjusting = false;
         }
 
@@ -711,6 +756,70 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 }
             }
             return true;
+        }
+
+        private void CheckDeclareStatus()
+        {
+            if (string.IsNullOrEmpty(CurrentPrescription.AdjustCase.ID)) return;
+            if(CheckPrescribe()) return;
+            if(CheckAdjustDateNull()) return;
+            Debug.Assert(CurrentPrescription.AdjustDate != null, "CurrentPrescription.AdjustDate != null");
+            var adjust = ((DateTime)CurrentPrescription.AdjustDate).Date;
+            if(CheckAdjustToday(adjust)) return;
+            if(CheckAdjustFuture(adjust)) return;
+            CheckAdjustBefore(adjust);
+        }
+
+        private bool CheckAdjustToday(DateTime adjust)
+        {
+            //調劑日為今天
+            if (DateTime.Today.Date == adjust)
+            {
+                //填寫領藥次數且調劑案件為慢箋 => 登錄，其餘為調劑
+                if (CurrentPrescription.ChronicSeq != null && CurrentPrescription.ChronicSeq > 0 && CurrentPrescription.AdjustCase.ID.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
+                    DeclareStatus = PrescriptionDeclareStatus.Register;
+                else
+                    DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckAdjustFuture(DateTime adjust)
+        {
+            //調劑日為未來 => 登錄
+            if (DateTime.Today.Date < adjust)
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Register;
+                return true;
+            }
+            return false;
+        }
+        private void CheckAdjustBefore(DateTime adjust)
+        {
+            //調劑日為過去 => 調劑
+            if (DateTime.Today.Date > adjust)
+                DeclareStatus = PrescriptionDeclareStatus.Adjust;
+        }
+
+        private bool CheckPrescribe()
+        {
+            if (CurrentPrescription.IsPrescribe)
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckAdjustDateNull()
+        {
+            if (CurrentPrescription.AdjustDate is null)
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Adjust;
+                return true;
+            }
+            return false;
         }
         #endregion
     }
