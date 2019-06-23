@@ -164,6 +164,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => MakeUpPrescription, ref makeUpPrescription, value);
             }
         }
+        private bool showDialog;
+        public bool ShowDialog
+        {
+            get => showDialog;
+            set
+            {
+                Set(() => ShowDialog, ref showDialog, value);
+            }
+        }
         #endregion
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
@@ -173,6 +182,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             Card = card.DeepCloneViaJson();
             InitCommands();
             InitVariable();
+            CheckShowDialog();
         }
 
         private void InitCommands()
@@ -189,6 +199,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             RegisterContent = "登錄 " + ChronicRegisterPres.Count + " 張";
             ReserveContent = "預約 " + ChronicReservePres.Count + " 張";
             SetCondition();
+        }
+
+        private void CheckShowDialog()
+        {
+            if (OrthopedicsPres.Count > 0 || CooperativePres.Count > 0 || ChronicRegisterPres.Count > 0 || ChronicReservePres.Count > 0 || (UngetCardPres.Count > 0 && !string.IsNullOrEmpty(Card.CardNumber)))
+                ShowDialog = true;
+            else
+                ShowDialog = false;
         }
 
         private void GetPrescriptions()

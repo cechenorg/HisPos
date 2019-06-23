@@ -395,7 +395,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
                 case "SecondDiagnosis":
-                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    if(!string.IsNullOrEmpty(diseaseID))
+                        CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
             }
         }
