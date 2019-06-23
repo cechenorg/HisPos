@@ -10,6 +10,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductInventoryRecords : Collection<ProductInventoryRecord>
     {
+        public double RangePurchaseReturnAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.PurchaseReturn).Sum(r => r.Amount);} }
+
+        public double RangePrescriptionAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.Prescription).Sum(r => r.Amount); } }
+
+        public double RangeStockTakingAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.StockTaking).Sum(r => r.Amount); } }
+
         public ProductInventoryRecords(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)

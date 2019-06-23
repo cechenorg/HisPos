@@ -31,6 +31,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
             <Label Content="商品歷程" FontSize="25" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
@@ -178,5 +179,13 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
+            <Label Content="期間進退貨" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangePurchaseReturnAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="期間耗用" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangePrescriptionAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="期間盤點" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangeStockTakingAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>
