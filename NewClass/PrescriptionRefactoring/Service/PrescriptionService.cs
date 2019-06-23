@@ -104,9 +104,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckValidCustomer()
         {
-            if (current.Patient.CheckData()) return false;
+            if (current.Patient.CheckData()) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
-            return true;
+            return false;
         }
 
         protected bool CheckMedicines()
@@ -137,6 +137,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         protected bool CheckAdjustAndTreatDate()
         {
             return CheckTreatDate() && CheckAdjustDate();
+        }
+
+        protected bool CheckPrescriptionRule()
+        {
+            return current.IsPrescribe ? CheckPrescribeRules() : CheckNhiRules();
         }
 
         private bool CheckTreatDate()
@@ -170,7 +175,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         protected bool CheckNhiRules()
         {
             var error = current.CheckPrescriptionRule(false);//檢查健保規則
-            if(string.IsNullOrEmpty(error)) return true;
+            if (string.IsNullOrEmpty(error)) return true;
+            MessageWindow.ShowMessage(error, MessageType.ERROR);
+            return false;
+        }
+
+        protected bool CheckPrescribeRules()
+        {
+            var error = current.CheckPrescribeRule();
+            if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
             return false;
         }

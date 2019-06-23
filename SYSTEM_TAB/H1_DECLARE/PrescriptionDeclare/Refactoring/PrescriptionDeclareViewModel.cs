@@ -14,6 +14,7 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -26,6 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
@@ -34,6 +36,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactorin
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -41,6 +44,7 @@ using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedVariable
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 {
@@ -77,6 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
         #endregion
         #region Variables
+        private BackgroundWorker worker;
         private bool isBusy;
         public bool IsBusy
         {
@@ -123,6 +128,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 Set(() => SelectedPharmacist, ref selectedPharmacist, value);
             }
         }
+        private CustomerHistory selectedHistory;
+        public CustomerHistory SelectedHistory
+        {
+            get => selectedHistory;
+            set
+            {
+                if (value != null)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    value.Products = new CustomerHistoryProducts();
+                    value.Products.GetCustomerHistoryProducts(value.SourceId, value.Type);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+                Set(() => SelectedHistory, ref selectedHistory, value);
+
+            }
+        }
         private IcCard currentCard;
         private bool setBuckleAmount;
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
@@ -145,6 +167,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand<string> ShowMedicineDetail { get; set; }
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand Adjust { get; set; }
         #endregion
@@ -170,6 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription = new Prescription();
             CurrentPrescription.Init();
             currentCard = new IcCard();
+            setBuckleAmount = true;
             isNotInit = true;
         }
 
@@ -189,6 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
+            ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             Clear = new RelayCommand(InitPrescriptionAndCard);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
         }
@@ -227,7 +252,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void GetPatientDataAction()
         {
             //取得病患資料(讀卡)
-            var worker = new BackgroundWorker();
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { ReadCard(); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -260,8 +285,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             var patient = new Customer(currentCard);
             MainWindow.ServerConnection.OpenConnection();
-            patient.Check();
+            var table = patient.Check();
             MainWindow.ServerConnection.CloseConnection();
+            patient = table[0];
             var checkPatient = CurrentPrescription.CheckPatientWithCard(patient);
             if (checkPatient)
                 GetSelectedCustomer(patient);
@@ -273,6 +299,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             #region ReSharperDisable
             //ReSharper disable RedundantAssignment
             //ReSharper disable once UnusedVariable
+            // ReSharper disable once NotAccessedVariable
             #endregion
             Messenger.Default.Register<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
             CustomerSearchWindow customerSearch;
@@ -399,26 +426,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     addMedicineWindow.ShowDialog();
             }
         }
-        private bool CheckMedicineIDLength(string medicineID)
-        {
-            if (medicineID.Length < 5)
-            {
-                switch (medicineID)
-                {
-                    case "R001":
-                    case "R002":
-                    case "R003":
-                    case "R004":
-                        CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
-                        break;
-                    default:
-                        MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "5", MessageType.WARNING);
-                        break;
-                }
-                return false;
-            }
-            return true;
-        }
 
         private void DeleteMedicineAction()
         {
@@ -437,15 +444,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription.CountPrescriptionPoint();
         }
 
-        private bool SetBuckleAmount()
+        private void ShowPrescriptionEditWindowAction()
         {
-            return setBuckleAmount;
+            if (SelectedHistory is null) return;
+            var pSource = SelectedHistory.Type.Equals(HistoryType.ReservedPrescription) ? PrescriptionSource.ChronicReserve : PrescriptionSource.Normal;
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
 
         private void MedicineAmountChangedAction()
         {
             CurrentPrescription.SetBuckleAmount();
         }
+
         private void AdjustAction()
         {
             isAdjusting = true;
@@ -460,12 +472,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 isAdjusting = false;
                 return;
             }
-            CheckIsReadCard(service);
+            if (CurrentPrescription.IsPrescribe)
+                StartNormalAdjust(service);
+            else
+                CheckIsReadCard(service);
         }
 
         private void CheckIsReadCard(PrescriptionService service)
         {
-            var worker = new BackgroundWorker();
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 if (!currentCard.IsRead)
@@ -496,14 +511,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             BusyContent = Resources.檢查就醫次數;
-            CurrentPrescription.Card.GetRegisterBasic();
-            if (CurrentPrescription.Card.CheckNeedUpdate())
+            currentCard.GetRegisterBasic();
+            if (currentCard.CheckNeedUpdate())
             {
                 BusyContent = Resources.更新卡片;
-                CurrentPrescription.Card.UpdateCard();
+                currentCard.UpdateCard();
             }
             BusyContent = Resources.取得就醫序號;
-            CurrentPrescription.Card.GetMedicalNumber(1);
+            currentCard.GetMedicalNumber(1);
         }
         #endregion
 
@@ -537,6 +552,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription.AddMedicine(msg.Content.ID);
             MainWindow.ServerConnection.CloseConnection();
             CurrentPrescription.CountPrescriptionPoint();
+        }
+
+        private void Refresh(NotificationMessage msg)
+        {
+            if (!msg.Notification.Equals("PrescriptionEdited")) return;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.GetHistories();
+            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
         #region Functions
@@ -600,6 +623,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MainWindow.ServerConnection.CloseConnection();
             return productCount;
         }
+
+        private bool CheckMedicineIDLength(string medicineID)
+        {
+            if (medicineID.Length < 5)
+            {
+                switch (medicineID)
+                {
+                    case "R001":
+                    case "R002":
+                    case "R003":
+                    case "R004":
+                        CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
+                        break;
+                    default:
+                        MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "5", MessageType.WARNING);
+                        break;
+                }
+                return false;
+            }
+            return true;
+        }
+
+        private bool SetBuckleAmount()
+        {
+            return setBuckleAmount;
+        }
+
         private bool AskErrorUpload()
         {
             var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber);
@@ -619,7 +669,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             if (!CheckIsGetMedicalNumber())
                 return;
-            var worker = new BackgroundWorker();
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = Resources.寫卡;
@@ -642,7 +692,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 isAdjusting = false;
                 return;
             }
-            service.CheckDailyUpload(ErrorCode);
+            if(CurrentPrescription.IsPrescribe)
+                service.CheckDailyUpload(ErrorCode);
+            InitPrescriptionAndCard();
+            isAdjusting = false;
         }
 
         private bool CheckIsGetMedicalNumber()

@@ -235,7 +235,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                 MakeUpMark = "2";
             MedicalPersonIcNumber = p.Pharmacist.IDNumber;
             MainDiagnosisCode = p.MainDisease.ID;
-            if (!string.IsNullOrEmpty(p.SubDisease.ID))
+            if (!string.IsNullOrEmpty(p.SubDisease?.ID))
                 SecondDiagnosisCode = p.SubDisease.ID;
             MedicalFee = (p.PrescriptionPoint.MedicinePoint + p.PrescriptionPoint.SpecialMaterialPoint +
                              p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();

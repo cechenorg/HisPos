@@ -336,7 +336,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             var row = sender as DataGridRow;
             if (row?.Item is null) return;
             if (!(row.Item is CustomerHistory)) return;
-            Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionDeclare.PrescriptionDeclareView) + "ShowPrescriptionEditWindow"));
+            ((PrescriptionDeclareViewModel)DataContext).ShowPrescriptionEditWindow.Execute(null);
         }
 
         private void Division_SelectionChanged(object sender, SelectionChangedEventArgs e)

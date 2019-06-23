@@ -464,7 +464,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
-        public bool IsPrescribe => AdjustCase.ID.Equals("0") || Medicines.Count(m => !m.PaySelf) == 0;
+        public bool IsPrescribe => AdjustCase.ID.Equals("0") || (Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0);
         public bool IsBuckle => WareHouse != null;
         public string MedicalServiceID { get; set; }
         public int DeclareFileID { get; set; }
@@ -595,7 +595,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionPoint.CountAmountsPay();
             if (!AdjustCase.ID.Equals("0"))
             {
-                CheckCopayment();
+                GetCopayment();
                 if (Patient.Birthday != null)
                 {
                     SetMedicalService();//確認藥事服務資料
@@ -605,7 +605,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private void CheckCopayment()
+        private void GetCopayment()
         {
             if (CheckIsChronic())
                 Copayment = VM.GetCopayment("I22");
@@ -1028,24 +1028,25 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var clone = new Prescription
             {
-                Type = Type,
-                patient = Patient.DeepCloneViaJson(),
-                institution = Institution.DeepCloneViaJson(),
-                division = Division.DeepCloneViaJson(),
-                pharmacist = Pharmacist.DeepCloneViaJson(),
-                tempMedicalNumber = TempMedicalNumber,
-                treatDate = TreatDate,
-                adjustDate = AdjustDate,
-                mainDisease = MainDisease.DeepCloneViaJson(),
-                subDisease = SubDisease.DeepCloneViaJson(),
-                chronicSeq = ChronicSeq,
-                chronicTotal = ChronicTotal,
-                adjustCase = AdjustCase.DeepCloneViaJson(),
-                prescriptionCase = PrescriptionCase.DeepCloneViaJson(),
-                copayment = Copayment.DeepCloneViaJson(),
-                paymentCategory = PaymentCategory.DeepCloneViaJson(),
-                specialTreat = SpecialTreat.DeepCloneViaJson()
+                
             };
+            clone.Type = Type;
+            clone.patient = (Customer)Patient.Clone();
+            clone.institution = Institution.DeepCloneViaJson();
+            clone.division = Division.DeepCloneViaJson();
+            clone.pharmacist = Pharmacist.DeepCloneViaJson();
+            clone.tempMedicalNumber = TempMedicalNumber;
+            clone.treatDate = TreatDate;
+            clone.adjustDate = AdjustDate;
+            clone.mainDisease = MainDisease.DeepCloneViaJson();
+            clone.subDisease = SubDisease.DeepCloneViaJson();
+            clone.chronicSeq = ChronicSeq;
+            clone.chronicTotal = ChronicTotal;
+            clone.adjustCase = AdjustCase.DeepCloneViaJson();
+            clone.prescriptionCase = PrescriptionCase.DeepCloneViaJson();
+            clone.copayment = Copayment.DeepCloneViaJson();
+            clone.paymentCategory = PaymentCategory.DeepCloneViaJson();
+            clone.specialTreat = SpecialTreat.DeepCloneViaJson();
             clone.Medicines = new Medicines();
             foreach (var m in Medicines)
             {
@@ -1062,8 +1063,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public string CheckPrescriptionRule(bool noCard)
         {
             var errorMsg = string.Empty;
-            if (IsPrescribe) return errorMsg;
-            //檢查健保規則
+            errorMsg += CheckInstitution();
+            errorMsg += CheckAdjustCase();
+            errorMsg += CheckPrescriptionCase();
+            errorMsg += CheckPharmacist();
+            errorMsg += CheckMedicalNumber(noCard);
+            errorMsg += CheckCopayment();
+            errorMsg += CheckDivision();
+            errorMsg += CheckPaymentCategory();
+            errorMsg += CheckDiseaseCode();
+            errorMsg += CheckChronicTimes();
             return errorMsg;
         }
 
@@ -1180,6 +1189,186 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var d = new Ddata(this, medDeclare);
             DeclareContent = d.SerializeObjectToXDocument();
             d.Dbody.Pdata = details;
+        }
+
+        public string CheckInstitution()
+        {
+            if (CheckIsHomeCare() || CheckIsQuitSmoking())
+            {
+                Institution = new Institution { ID = "N", Name = string.Empty };
+                return string.Empty;
+            }
+            if (string.IsNullOrEmpty(Institution?.ID))
+                return Resources.InstitutionError;
+            return VM.GetInstitution(Institution.ID) is null ? Resources.InstitutionError : string.Empty;
+        }
+
+        private bool CheckIsQuitSmoking()
+        {
+            return !string.IsNullOrEmpty(AdjustCase?.ID) && AdjustCase.ID.Equals("5");
+        }
+
+        private bool CheckIsHomeCare()
+        {
+            return !string.IsNullOrEmpty(AdjustCase?.ID) && AdjustCase.ID.Equals("D");
+        }
+
+        public string CheckAdjustCase()
+        {
+            return string.IsNullOrEmpty(AdjustCase?.ID) ? Resources.AdjustCaseError : string.Empty;
+        }
+
+        public string CheckPrescriptionCase()
+        {
+            var homeCareAndQuitSmoke = CheckIsHomeCare() || CheckIsQuitSmoking();
+            if (!homeCareAndQuitSmoke && string.IsNullOrEmpty(PrescriptionCase?.ID))
+                return Resources.PrescriptionCaseError;
+            if (Division.ID.Equals("40") && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+                PrescriptionCase = VM.GetPrescriptionCases("19");
+            return string.Empty;
+        }
+
+        public string CheckPharmacist()
+        {
+            return string.IsNullOrEmpty(Pharmacist?.IDNumber) ? Resources.尚未選擇藥師 : string.Empty;
+        }
+
+        public string CheckCopayment()
+        {
+            if (Copayment is null) return Resources.CopaymentError;
+            if (CheckIsHomeCare())
+            {
+                Copayment = VM.GetCopayment("009");
+                return string.Empty;
+            }
+            return string.IsNullOrEmpty(Copayment?.Id) ? Resources.CopaymentError : string.Empty;
+        }
+
+        public string CheckDivision()
+        {
+            if (Division is null || string.IsNullOrEmpty(Division?.ID))
+            {
+                if (CheckIsHomeCare() || CheckIsQuitSmoking())
+                    return string.Empty;
+                return Resources.DivisionError;
+            }
+            return string.Empty;
+        }
+
+        public string CheckPaymentCategory()
+        {
+            if (PaymentCategory is null)
+            {
+                var isChronic = ChronicSeq != null || AdjustCase.ID.Equals("2");
+                if (CheckIsHomeCare() || isChronic)
+                    return string.Empty;
+                return Resources.PaymentCategoryError;
+            }
+            return string.Empty;
+        }
+
+        public string CheckDiseaseCode()
+        {
+            if (string.IsNullOrEmpty(MainDisease?.ID))
+                return CheckIsHomeCare() ? string.Empty : Resources.DiseaseCodeError;
+            return string.Empty;
+        }
+
+        private string CheckMedicalNumber(bool noCard)
+        {
+            if (noCard)
+                return SetMedicalNumberWithoutICCard();
+            var medicalNumberEmpty = CheckMedicalNumberEmpty();
+            if (!string.IsNullOrEmpty(medicalNumberEmpty))
+                return medicalNumberEmpty;
+            SetMedicalNumber();
+            return string.Empty;
+        }
+
+        private string SetMedicalNumberWithoutICCard()
+        {
+            if (!string.IsNullOrEmpty(TempMedicalNumber))
+            {
+                if (ChronicSeq is null)
+                    MedicalNumber = TempMedicalNumber;
+                else
+                {
+                    if (ChronicSeq > 1)
+                    {
+                        MedicalNumber = "IC0" + ChronicSeq;
+                        OriginalMedicalNumber = TempMedicalNumber;
+                    }
+                    else
+                    {
+                        MedicalNumber = TempMedicalNumber;
+                        OriginalMedicalNumber = null;
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
+        private string CheckMedicalNumberEmpty()
+        {
+            if (string.IsNullOrEmpty(TempMedicalNumber))
+            {
+                if (!CheckIsHomeCare()) return Resources.MedicalNumberError;
+                TempMedicalNumber = "N";
+                return string.Empty;
+            }
+            return string.Empty;
+        }
+
+        private void SetMedicalNumber()
+        {
+            if (ChronicSeq is null)
+                MedicalNumber = TempMedicalNumber;
+            else
+            {
+                if (ChronicSeq > 1)
+                {
+                    MedicalNumber = "IC0" + ChronicSeq;
+                    OriginalMedicalNumber = TempMedicalNumber;
+                }
+                else
+                {
+                    MedicalNumber = TempMedicalNumber;
+                    OriginalMedicalNumber = null;
+                }
+            }
+        }
+
+        private string CheckChronicTimes()
+        {
+            if (string.IsNullOrEmpty(AdjustCase.ID)) return string.Empty;
+            if (!AdjustCase.ID.Equals("2")) return string.Empty;
+            if (ChronicSeq is null && ChronicTotal is null)
+                return Resources.ChronicTimesError;
+            if (ChronicSeq is null)
+                return Resources.ChronicSeqError;
+            return ChronicTotal is null ? Resources.ChronicTotalError : string.Empty;
+        }
+
+        public string CheckPrescribeRule()
+        {
+            CheckPrescribeInstitution();
+            if (AdjustCase is null || !AdjustCase.ID.Equals("0"))
+                AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
+            return CheckPharmacist();
+        }
+
+        private void CheckPrescribeInstitution()
+        {
+            if (string.IsNullOrEmpty(Institution.FullName))
+            {
+                Institution =
+                    new Institution
+                    {
+                        ID = VM.CurrentPharmacy.ID,
+                        Name = VM.CurrentPharmacy.Name,
+                        FullName = VM.CurrentPharmacy.ID + VM.CurrentPharmacy.Name
+                    };
+            }
         }
     }
 }

@@ -18,9 +18,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
     /// </summary>
     public partial class QRCodeReceiveWindow : Window
     {
+        private Prescription p;
         public QRCodeReceiveWindow()
         {
             InitializeComponent();
+            p = new Prescription();
             QRCodeReceiver.Focus();
             ShowDialog();
         }
@@ -29,113 +31,190 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             if (e.Key == Key.Return)
             {
-                Console.WriteLine(QRCodeReceiver.Text);
-                var p = new Prescription();
-                var temp = QRCodeReceiver.Text;
-                var result = temp.Split(';');
-                var institution = result[0].Substring(result[0].Length - 10, 10);
-                var adjustCase = result[1];
-                var preCase = ViewModelMainWindow.GetPrescriptionCases(result[2]);
-                var cusName = result[3].Replace("?", "");
-                var IDNum = result[4].Contains("*") ? "" : result[4];
-                var birth = new DateTime(int.Parse(result[5].Substring(0, result[5].Length - 4)) + 1911, int.Parse(result[5].Substring(result[5].Length - 4, 2)), int.Parse(result[5].Substring(result[5].Length - 2, 2)));
-                var division = result[6];
-                var treDate = new DateTime(int.Parse(result[7].Substring(0, result[7].Length - 4)) + 1911, int.Parse(result[7].Substring(result[7].Length - 4, 2)), int.Parse(result[7].Substring(result[7].Length - 2, 2)));
-                var medicalNum = result[8];
-                var preDays = result[9];
-                var copayment = ViewModelMainWindow.GetCopayment(result[10]);
-                switch (adjustCase)
-                {
-                    case "1":
-                        p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
-                        break;
-                    case "2":
-                        p.AdjustCase = ViewModelMainWindow.GetAdjustCase("2");
-                        break;
-                    default:
-                        p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
-                        break;
-                }
-                p.Institution = ViewModelMainWindow.GetInstitution(institution);
-                p.Division = ViewModelMainWindow.GetDivision(division);
-                var c = new Customer {Name = cusName, Birthday = birth, IDNumber = IDNum};
-                if (!string.IsNullOrEmpty(c.IDNumber))
-                    c.Check();
-                p.Patient = c;
-                p.TreatDate = treDate;
-                p.TempMedicalNumber = medicalNum;
-                p.AdjustDate = DateTime.Today;
-                p.Copayment = copayment ?? ViewModelMainWindow.GetCopayment("I21");
-                var dArray = new[] { result[11] };
-
-                if (result[11].Contains("#"))
-                    dArray = result[11].Split('#');
-                else if (result[11].Contains(","))
-                    dArray = result[11].Split(',');
-
-                var mainDiseaseCode = dArray[0].Replace(".", "");
-                p.MainDisease = DiseaseCode.GetDiseaseCodeByID(mainDiseaseCode);
-                if (dArray.Length > 1)
-                {
-                    var twoDiseaseCode = dArray[1].Replace(".", "");
-                    p.SubDisease = DiseaseCode.GetDiseaseCodeByID(twoDiseaseCode);
-                }
-                var medIdList = new List<string>();
-                for (var x = 14; x < result.Length - 1; x += 5)
-                {
-                    if (result[x].Equals(string.Empty)) continue;
-                    var id = result[x];
-                    medIdList.Add(id);
-                }
-
-                var table = MedicineDb.GetMedicinesBySearchIds(medIdList, p.WareHouse?.ID, p.AdjustDate);
-                for (var i = 0; i < table.Rows.Count; i++)
-                {
-                    Medicine medicine;
-                    switch (table.Rows[i].Field<int>("DataType"))
-                    {
-                        case 1:
-                            medicine = new NewClass.MedicineRefactoring.MedicineNHI(table.Rows[i]);
-                            p.Medicines.Add(medicine);
-                            break;
-                        case 2:
-                            medicine = new NewClass.MedicineRefactoring.MedicineOTC(table.Rows[i]);
-                            p.Medicines.Add(medicine);
-                            break;
-                        case 3:
-                            medicine = new NewClass.MedicineRefactoring.MedicineSpecialMaterial(table.Rows[i]);
-                            p.Medicines.Add(medicine);
-                            break;
-                    }
-                }
-
-                var j = 0;
-                for (var x = 14; x < result.Length - 1; x += 5)
-                {
-                    if (result[x].Equals(string.Empty)) continue;
-
-                    var amount = double.Parse(result[x + 1].Replace("+", ""));
-                    var frequency = result[x + 2];
-                    var way = result[x + 3];
-                    var total = double.Parse(result[x + 4].Replace("+", ""));
-                    p.Medicines[j].Dosage = amount;
-                    p.Medicines[j].UsageName = frequency;
-                    if (way.Contains("AC"))
-                    {
-                        p.Medicines[j].UsageName += "AC";
-                        way = way.Replace("AC", "").Replace("/", "").Replace(" ", "").Replace(",", "");
-                    }
-                    if (way.Contains("PC"))
-                    {
-                        p.Medicines[j].UsageName += "PC";
-                        way = way.Replace("PC", "").Replace("/", "").Replace(" ", "").Replace(",", "");
-                    }
-                    p.Medicines[j].PositionID = way;
-                    p.Medicines[j].Amount = total;
-                    j++;
-                }
+                SetPrescriptionData();
                 Close();
                 Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
+            }
+        }
+
+        private void SetPrescriptionData()
+        {
+            var result = QRCodeReceiver.Text.Split(';');
+            //var prescriptionCase = ViewModelMainWindow.GetPrescriptionCases(result[2]);
+            //var medicineDays = result[9];
+            SetPatient(result);
+            SetTreatmentData(result);
+            GetMedicines(result);
+            SetMedicinesValue(result);
+        }
+
+        private void SetTreatmentData(IReadOnlyList<string> result)
+        {
+            SetAdjustCase(result);
+            SetInstitution(result);
+            SetDivision(result);
+            SetTreatDateAndAdjustDate(result);
+            SetCopayment(result);
+            GetDisease(result);
+            SetMedicalNumber(result);
+        }
+
+        private void SetPatient(IReadOnlyList<string> result)
+        {
+            var patientName = result[3].Replace("?", "");
+            var patientIDNumber = result[4].Contains("*") ? "" : result[4];
+            var patientBirthday = ParseBirthday(result);
+            var c = new Customer { Name = patientName, Birthday = patientBirthday, IDNumber = patientIDNumber };
+            if (!string.IsNullOrEmpty(c.IDNumber))
+                c.Check();
+            p.Patient = c;
+        }
+
+        private DateTime? ParseBirthday(IReadOnlyList<string> result)
+        {
+            var dateString = result[5];
+            var dateStringLength = dateString.Length;
+            var year = int.Parse(dateString.Substring(0, dateStringLength - 4)) + 1911;
+            var month = int.Parse(dateString.Substring(dateStringLength - 4, 2));
+            var date = int.Parse(dateString.Substring(dateStringLength - 2, 2));
+            return new DateTime(year,month,date);
+        }
+
+        private void SetAdjustCase(IReadOnlyList<string> result)
+        {
+            var adjustCase = result[1];
+            switch (adjustCase)
+            {
+                case "1":
+                    p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
+                    break;
+                case "2":
+                    p.AdjustCase = ViewModelMainWindow.GetAdjustCase("2");
+                    break;
+                default:
+                    p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
+                    break;
+            }
+        }
+
+        private void SetInstitution(IReadOnlyList<string> result)
+        {
+            var institution = result[0].Substring(result[0].Length - 10, 10);
+            p.Institution = ViewModelMainWindow.GetInstitution(institution);
+        }
+
+        private void SetDivision(IReadOnlyList<string> result)
+        {
+            var division = result[6];
+            p.Division = ViewModelMainWindow.GetDivision(division);
+        }
+
+        private void SetMedicalNumber(IReadOnlyList<string> result)
+        {
+            var medicalNum = result[8];
+            p.TempMedicalNumber = medicalNum;
+        }
+
+        private void SetTreatDateAndAdjustDate(IReadOnlyList<string> result)
+        {
+            var treDate = new DateTime(int.Parse(result[7].Substring(0, result[7].Length - 4)) + 1911, int.Parse(result[7].Substring(result[7].Length - 4, 2)), int.Parse(result[7].Substring(result[7].Length - 2, 2)));
+            p.TreatDate = treDate;
+            p.AdjustDate = DateTime.Today;
+        }
+
+        private void SetCopayment(IReadOnlyList<string> result)
+        {
+            var copayment = ViewModelMainWindow.GetCopayment(result[10]);
+            p.Copayment = copayment ?? ViewModelMainWindow.GetCopayment("I21");
+        }
+
+        private void GetDisease(IReadOnlyList<string> result)
+        {
+            var diseases = new[] { result[11] };
+
+            if (result[11].Contains("#"))
+                diseases = result[11].Split('#');
+            else if (result[11].Contains(","))
+                diseases = result[11].Split(',');
+            var mainDiseaseCode = diseases[0].Replace(".", "");
+            p.MainDisease = DiseaseCode.GetDiseaseCodeByID(mainDiseaseCode);
+            if (diseases.Length > 1)
+            {
+                var twoDiseaseCode = diseases[1].Replace(".", "");
+                p.SubDisease = DiseaseCode.GetDiseaseCodeByID(twoDiseaseCode);
+            }
+        }
+
+        private void GetMedicines(string[] result)
+        {
+            DataTable table = CreateMedicinesTable(result);
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                Medicine medicine;
+                switch (table.Rows[i].Field<int>("DataType"))
+                {
+                    case 1:
+                        medicine = new NewClass.MedicineRefactoring.MedicineNHI(table.Rows[i]);
+                        p.Medicines.Add(medicine);
+                        break;
+                    case 2:
+                        medicine = new NewClass.MedicineRefactoring.MedicineOTC(table.Rows[i]);
+                        p.Medicines.Add(medicine);
+                        break;
+                    case 3:
+                        medicine = new NewClass.MedicineRefactoring.MedicineSpecialMaterial(table.Rows[i]);
+                        p.Medicines.Add(medicine);
+                        break;
+                }
+            }
+        }
+
+        private DataTable CreateMedicinesTable(string[] result)
+        {
+            var medIdList = CreateMedicineIDList(result);
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MedicineDb.GetMedicinesBySearchIds(medIdList, p.WareHouse?.ID, p.AdjustDate);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+
+        private List<string> CreateMedicineIDList(string[] result)
+        {
+            var medIdList = new List<string>();
+            for (var x = 14; x < result.Length - 1; x += 5)
+            {
+                if (result[x].Equals(string.Empty)) continue;
+                var id = result[x];
+                medIdList.Add(id);
+            }
+            return medIdList;
+        }
+
+        private void SetMedicinesValue(string[] result)
+        {
+            var i = 0;
+            for (var x = 14; x < result.Length - 1; x += 5)
+            {
+                if (result[x].Equals(string.Empty)) continue;
+                var amount = double.Parse(result[x + 1].Replace("+", ""));
+                var frequency = result[x + 2];
+                var way = result[x + 3];
+                var total = double.Parse(result[x + 4].Replace("+", ""));
+                p.Medicines[i].Dosage = amount;
+                p.Medicines[i].UsageName = frequency;
+                if (way.Contains("AC"))
+                {
+                    p.Medicines[i].UsageName += "AC";
+                    way = way.Replace("AC", "").Replace("/", "").Replace(" ", "").Replace(",", "");
+                }
+                if (way.Contains("PC"))
+                {
+                    p.Medicines[i].UsageName += "PC";
+                    way = way.Replace("PC", "").Replace("/", "").Replace(" ", "").Replace(",", "");
+                }
+                p.Medicines[i].PositionID = way;
+                p.Medicines[i].Amount = total;
+                i++;
             }
         }
     }
