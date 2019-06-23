@@ -143,7 +143,7 @@
                     </TextBox>
                 </StackPanel>
             </StackPanel>
-            <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
+            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
                     <RowDefinition Height="90"/>
