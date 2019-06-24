@@ -1,6 +1,7 @@
 ﻿using System;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -21,7 +22,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             throw new NotImplementedException();
         }
 
-        public override bool ErrorAdjust()
+        public override void ErrorAdjust()
         {
             throw new NotImplementedException();
         }

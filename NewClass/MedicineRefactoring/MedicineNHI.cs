@@ -12,9 +12,25 @@ namespace His_Pos.NewClass.MedicineRefactoring
     {
         public MedicineNHI(DataRow r) : base(r)
         {
-            
+            Ingredient = r.Field<string>("Med_Ingredient");
+            SideEffect = r.Field<string>("Med_SideEffect");
+            Indication = r.Field<string>("Med_Indication");
+            ATCCode = r.Field<string>("Med_ATC");
+            SingleCompound = r.Field<string>("Med_SingleCompound");
+            Form = r.Field<string>("Med_Form");
+            ControlLevel = r.Field<byte?>("Med_Control");
+            Note = r.Field<string>("Med_NhiNote");
+            Warning = r.Field<string>("Med_Warning");
         }
-
+        private int? controlLevel;
+        public int? ControlLevel
+        {
+            get => controlLevel;
+            set
+            {
+                Set(() => ControlLevel, ref controlLevel, value);
+            }
+        }
         private string atcCode;
         public string ATCCode
         {

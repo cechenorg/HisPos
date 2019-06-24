@@ -801,7 +801,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private void PrintMedBagSingleMode()
+        public void PrintMedBagSingleMode()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -816,7 +816,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private void PrintMedBagMultiMode()
+        public void PrintMedBagMultiMode()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -827,7 +827,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             });
         }
 
-        private void PrintReceipt()
+        public void PrintReceipt()
         {
             try
             {
@@ -1033,26 +1033,26 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var clone = new Prescription
             {
-                
+                Type = Type,
+                patient = (Customer) Patient.Clone(),
+                institution = Institution.DeepCloneViaJson(),
+                division = Division.DeepCloneViaJson(),
+                pharmacist = Pharmacist.DeepCloneViaJson(),
+                tempMedicalNumber = TempMedicalNumber,
+                treatDate = TreatDate,
+                adjustDate = AdjustDate,
+                mainDisease = MainDisease.DeepCloneViaJson(),
+                subDisease = SubDisease.DeepCloneViaJson(),
+                chronicSeq = ChronicSeq,
+                chronicTotal = ChronicTotal,
+                adjustCase = AdjustCase.DeepCloneViaJson(),
+                prescriptionCase = PrescriptionCase.DeepCloneViaJson(),
+                copayment = Copayment.DeepCloneViaJson(),
+                paymentCategory = PaymentCategory.DeepCloneViaJson(),
+                specialTreat = SpecialTreat.DeepCloneViaJson(),
+                PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
+                Medicines = new Medicines()
             };
-            clone.Type = Type;
-            clone.patient = (Customer)Patient.Clone();
-            clone.institution = Institution.DeepCloneViaJson();
-            clone.division = Division.DeepCloneViaJson();
-            clone.pharmacist = Pharmacist.DeepCloneViaJson();
-            clone.tempMedicalNumber = TempMedicalNumber;
-            clone.treatDate = TreatDate;
-            clone.adjustDate = AdjustDate;
-            clone.mainDisease = MainDisease.DeepCloneViaJson();
-            clone.subDisease = SubDisease.DeepCloneViaJson();
-            clone.chronicSeq = ChronicSeq;
-            clone.chronicTotal = ChronicTotal;
-            clone.adjustCase = AdjustCase.DeepCloneViaJson();
-            clone.prescriptionCase = PrescriptionCase.DeepCloneViaJson();
-            clone.copayment = Copayment.DeepCloneViaJson();
-            clone.paymentCategory = PaymentCategory.DeepCloneViaJson();
-            clone.specialTreat = SpecialTreat.DeepCloneViaJson();
-            clone.Medicines = new Medicines();
             foreach (var m in Medicines)
             {
                 clone.Medicines.Add(m);
@@ -1086,12 +1086,19 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Medicines.Update(IsBuckle,WareHouse?.ID, AdjustDate);
         }
 
-        public void SetAdjustStatus()
+        public void SetNormalAdjustStatus()
         {
-            if (IsPrescribe)
-                PrescriptionStatus.SetPrescribeStatus();
-            else
-                PrescriptionStatus.SetNormalAdjustStatus();
+            PrescriptionStatus.SetNormalAdjustStatus();
+        }
+
+        public void SetPrescribeAdjustStatus()
+        {
+            PrescriptionStatus.SetPrescribeStatus();
+        }
+
+        public void SetErrorAdjustStatus()
+        {
+            PrescriptionStatus.SetErrorAdjustStatus();
         }
 
         public void InsertDb()

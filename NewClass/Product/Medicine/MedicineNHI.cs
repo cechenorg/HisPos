@@ -15,8 +15,7 @@ namespace His_Pos.NewClass.Product.Medicine
             Form = r.Field<string>("Med_Form");
             ControlLevel = r.Field<byte?>("Med_Control");
             Note = r.Field<string>("Med_NhiNote");
-            Warning = r.Field<string>("Med_Warning"); 
-			 
+            Warning = r.Field<string>("Med_Warning");
         }
         public MedicineNHI(ProductStruct p) : base(p) { }
         private string ingredient;//成分

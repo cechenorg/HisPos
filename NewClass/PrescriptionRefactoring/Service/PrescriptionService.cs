@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -15,6 +16,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -27,7 +29,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         #region AbstractFunctions
         public abstract bool CheckPrescription();
         public abstract bool NormalAdjust();
-        public abstract bool ErrorAdjust();
+        public abstract void ErrorAdjust();
         public abstract bool DepositAdjust();
         public abstract bool Register();
         #endregion
@@ -39,9 +41,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         protected PrescriptionService(Prescription p)
         {
             current = p;
+            printResult = new List<bool?>();
         }
         protected Prescription current { get; set; }
         protected Prescription tempPre { get; set; }
+        protected List<bool?> printResult { get; set; }
         #region Functions
         public static PrescriptionService CreateService(Prescription p)
         {
@@ -53,9 +57,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             return NormalAdjust();
         }
-        public bool StartErrorAdjust()
+        public void StartErrorAdjust()
         {
-            return ErrorAdjust();
+            ErrorAdjust();
         }
         public bool StartDepositAdjust()
         {
@@ -180,9 +184,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return false;
         }
 
-        protected bool PrintConfirm()
+        public bool PrintConfirm()
         {
-            var printResult = NewFunction.CheckPrint(current);
+            printResult = NewFunction.CheckPrint(current);
             var printMedBag = printResult[0];
             var printSingle = printResult[1];
             var printReceipt = printResult[2];
@@ -407,6 +411,39 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
             else
                 current.PrescriptionStatus.IsCreateSign = true;
+        }
+
+        public void Print(bool noCard)
+        {
+            PrintMedBag();
+            PrintReceipt(noCard);
+        }
+
+        private void PrintMedBag()
+        {
+            var printMedBag = (bool)printResult[0];
+            if (printMedBag)
+                CheckMedBagPrintMode();
+        }
+
+        private void PrintReceipt(bool noCard)
+        {
+            // ReSharper disable once PossibleInvalidOperationException
+            var printReceipt = (bool)printResult[2];
+            if (printReceipt)
+                tempPre.PrintReceipt();
+            if (noCard)
+                tempPre.PrintDepositSheet();
+        }
+
+        [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
+        private void CheckMedBagPrintMode()
+        {
+            var singleMode = (bool)printResult[1];
+            if (singleMode)
+                tempPre.PrintMedBagSingleMode();
+            else
+                tempPre.PrintMedBagMultiMode();
         }
     }
 }

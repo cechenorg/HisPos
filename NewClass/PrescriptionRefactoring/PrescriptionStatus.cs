@@ -44,7 +44,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void SetErrorAdjustStatus()
         {
-            throw new NotImplementedException();
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
         }
 
         public void SetNormalAdjustStatus()

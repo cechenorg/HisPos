@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region Using
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,7 +50,7 @@ using TextBox = System.Windows.Controls.TextBox;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedVariable
 // ReSharper disable UnusedMember.Global
-
+#endregion
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 {
     public class PrescriptionDeclareViewModel : TabBase
@@ -97,7 +98,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public string BusyContent
         {
             get => busyContent;
-            private set
+            set
             {
                 Set(() => BusyContent, ref busyContent, value);
             }
@@ -171,6 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             }
         }
         private IcCard currentCard;
+        private PrescriptionService currentService;
         private bool setBuckleAmount;
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
         private bool isNotInit;
@@ -197,6 +199,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand SendOrderCommand { get; set; }
         public RelayCommand Clear { get; set; }
+        public RelayCommand ErrorAdjust { get; set; }
         public RelayCommand Adjust { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
@@ -257,6 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SendOrderCommand = new RelayCommand(CheckDeclareStatus);
             Clear = new RelayCommand(ClearAction);
+            ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
         }
 
@@ -280,7 +284,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void ScanPrescriptionQRCodeAction()
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
-            QRCodeReceiveWindow receive = new QRCodeReceiveWindow();
+            var receive = new QRCodeReceiveWindow();
         }
 
         private void GetCooperativePresAction()
@@ -508,24 +512,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription.SetBuckleAmount();
         }
 
+        private void ErrorAdjustAction()
+        {
+            isAdjusting = true;
+            if (!CheckPrescription())
+            {
+                isAdjusting = false;
+                return;
+            }
+            StartErrorAdjust();
+        }
+
         private void AdjustAction()
         {
             isAdjusting = true;
-            var service = PrescriptionService.CreateService(CurrentPrescription);
-            if (!service.SetPharmacist(SelectedPharmacist, PrescriptionCount))
+            if (!CheckPrescription())
             {
                 isAdjusting = false;
                 return;
             }
-            if (!service.CheckPrescription())
-            {
-                isAdjusting = false;
-                return;
-            }
-            CheckIsReadCard(service);
+            CheckIsReadCard();
         }
 
-        private void CheckIsReadCard(PrescriptionService service)
+        private void CheckIsReadCard()
         {
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -537,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             {
                 isCardReading = false;
                 if (CheckReadCardResult())
-                    WriteCard(service);
+                    WriteCard();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -743,36 +752,51 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             return true;
         }
 
-        private void WriteCard(PrescriptionService service)
+        private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = Resources.寫卡;
-                service.SetCard(currentCard);
-                service.CreateDailyUploadData(ErrorCode);
+                currentService.SetCard(currentCard);
+                currentService.CreateDailyUploadData(ErrorCode);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                StartNormalAdjust(service);
+                StartNormalAdjust();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
 
-        private void StartNormalAdjust(PrescriptionService service)
+        private void StartNormalAdjust()
         {
-            if (!service.StartNormalAdjust())
+            if (!currentService.StartNormalAdjust())
             {
                 isAdjusting = false;
                 return;
             }
-            service.CheckDailyUpload(ErrorCode);
+            currentService.CheckDailyUpload(ErrorCode);
+            StartPrint(false);
             MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess,MessageType.SUCCESS);
             ClearAction();
             isAdjusting = false;
+        }
+
+        private void StartErrorAdjust()
+        {
+            currentService.StartErrorAdjust();
+            StartPrint(false);
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            ClearAction();
+            isAdjusting = false;
+        }
+
+        private void StartPrint(bool noCard)
+        {
+            currentService.Print(noCard);
         }
 
         private bool CheckIsGetMedicalNumber()
@@ -783,7 +807,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             isAdjusting = false;
             return false;
         }
-
+        #region CheckDeclareStatus
         private void CheckDeclareStatus()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.AdjustCase.ID)) return;
@@ -838,6 +862,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             if (!(CurrentPrescription.AdjustDate is null)) return false;
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
             return true;
+        }
+
+        #endregion
+        private bool CheckPrescription()
+        {
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            return currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount) && currentService.CheckPrescription();
         }
         #endregion
     }

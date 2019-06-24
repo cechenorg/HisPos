@@ -1,4 +1,5 @@
 ﻿using System;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -18,22 +19,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
             if (!PrintConfirm()) return false;
-            //列印確認
             return true;
         }
 
         public override bool NormalAdjust()
         {
             if (current.PrescriptionStatus.IsCreateSign is null) return false;
-            SavePatientData();
-            current.SetAdjustStatus();//設定處方狀態
+            current.SetNormalAdjustStatus();//設定處方狀態
             current.InsertDb();
             return true;
         }
 
-        public override bool ErrorAdjust()
+        public override void ErrorAdjust()
         {
-            throw new NotImplementedException();
+            current.SetErrorAdjustStatus();//設定處方狀態
+            current.InsertDb();
         }
 
         public override bool DepositAdjust()
