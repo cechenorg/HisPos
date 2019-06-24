@@ -290,9 +290,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             MainWindow.ServerConnection.OpenConnection();
             var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(DeclareFile.SelectedDayPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
             MainWindow.ServerConnection.CloseConnection();
-            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
             Messenger.Default.Register<NotificationMessage>(this, PrescriptionEditedRefresh);
-            prescriptionEdit.ShowDialog();
+            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
             Messenger.Default.Unregister<NotificationMessage>(this, PrescriptionEditedRefresh);
         }
 

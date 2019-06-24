@@ -6,6 +6,7 @@ using System.Xml;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
@@ -190,10 +191,34 @@ namespace His_Pos.FunctionWindow
         }
         private static void CheckCsHis()
         {
-            if (File.Exists("C:\\NHI\\VPN\\CSHIS.dll"))
+            try
             {
-                File.Copy("C:\\NHI\\VPN\\CSHIS.dll",
-                    Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHIS.dll" : "C:\\Windows\\System32\\CSHIS.dll", true);
+                var csHisSource = "C:\\NHI\\VPN\\CSHIS.dll";
+                var csHisMed2Source = "C:\\NHI\\VPN\\CSHISMED2.dll";
+                var csHisMed3Source = "C:\\NHI\\VPN\\CSHISMED3.dll";
+                var csHisTarget = Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHIS.dll" : "C:\\Windows\\System32\\CSHIS.dll";
+                var csHisMed2Target = Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHISMED2.dll" : "C:\\Windows\\System32\\CSHISMED2.dll";
+                var csHisMed3Target = Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHISMED3.dll" : "C:\\Windows\\System32\\CSHISMED3.dll";
+                CheckAndReplaceFile(csHisSource, csHisTarget);
+                CheckAndReplaceFile(csHisMed2Source, csHisMed2Target);
+                CheckAndReplaceFile(csHisMed3Source, csHisMed3Target);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        private static void CheckAndReplaceFile(string sourceFile,string targetFile)
+        {
+            if (File.Exists(sourceFile))
+            {
+                if (File.Exists(targetFile))
+                {
+                    File.SetAttributes(targetFile, FileAttributes.Normal);
+                    File.Delete(targetFile);
+                }
+                File.Copy(sourceFile, targetFile, true);
             }
         }
     }

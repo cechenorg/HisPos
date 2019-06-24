@@ -43,7 +43,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                     break;
                 case ProductInventoryRecordType.Prescription:
                     PrescriptionEditWindow prescriptionEditWindow = new PrescriptionEditWindow(int.Parse(((ProductInventoryRecord)(sender as DataGridRow).Item).ID));
-                    prescriptionEditWindow.ShowDialog();
                     break;
                 case ProductInventoryRecordType.StockTaking:
                     break;
