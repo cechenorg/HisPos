@@ -26,14 +26,7 @@ using His_Pos.NewClass.Prescription.Treatment.Division;
 namespace His_Pos.NewClass.Prescription
 {
     public static class PrescriptionDb
-    { 
-        public static int InsertPrescription(Prescription prescription,List<Pdata> prescriptionDetails) { 
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails)); 
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescription]", parameterList);
-            return Convert.ToInt32(table.Rows[0]["DecMasId"].ToString()); 
-        }
+    {  
         public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             int warID = 0; 
@@ -218,16 +211,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles,preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
-        }
-        public static void UpdatePrescription(Prescription prescription, List<Pdata> prescriptionDetails)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataTable prescriptionMater = SetPrescriptionMaster(prescription);
-            prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescription]", parameterList);
-        }
+        } 
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             int warID = 0;

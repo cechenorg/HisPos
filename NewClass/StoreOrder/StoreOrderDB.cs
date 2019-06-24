@@ -599,12 +599,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderPurchaseByDailyCondition]", parameters);
         }
-        internal static void DailyProductsReturn()
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnByDailyCondition]", parameters);
-        }
+        
         internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
