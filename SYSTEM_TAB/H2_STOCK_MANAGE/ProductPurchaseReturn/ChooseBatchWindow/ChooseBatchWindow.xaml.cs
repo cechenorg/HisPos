@@ -22,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
     {
         private bool isWindowClosed = false;
 
-        public ChooseBatchWindow(string productID)
+        public ChooseBatchWindow(string productID, string wareID)
         {
             InitializeComponent();
             
@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
                 }
             });
 
-            DataContext = new ChooseBatchWindowViewModel(productID);
+            DataContext = new ChooseBatchWindowViewModel(productID, wareID);
 
             if(!isWindowClosed)
                 ShowDialog();

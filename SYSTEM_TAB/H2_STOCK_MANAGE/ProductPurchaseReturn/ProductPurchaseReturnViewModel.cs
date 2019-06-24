@@ -207,7 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void ChooseBatchAction()
         {
-            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID);
+            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID, CurrentStoreOrder.OrderWarehouse.ID);
             
             ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
 
