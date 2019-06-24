@@ -146,5 +146,12 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", tel);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchCustomer]", parameterList);
         }
+
+        public static DataTable CheckCustomerByCard(string idNumber)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerByCard]", parameterList);
+        }
     }
 }

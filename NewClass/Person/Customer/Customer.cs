@@ -234,5 +234,16 @@ namespace His_Pos.NewClass.Person.Customer
             var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
             return table.Rows[0].Field<int>("Count") > 0;
         }
+
+        public void CheckPatientWithCard(Customer patientFromCard)
+        {
+            if (!IDNumber.Equals(patientFromCard.IDNumber))
+                IDNumber = patientFromCard.IDNumber;
+            if (!Name.Equals(patientFromCard.Name))
+                Name = patientFromCard.Name;
+            if (!Birthday.Equals(patientFromCard.Birthday))
+                Birthday = patientFromCard.Birthday;
+            CheckGender();
+        }
     }
 }

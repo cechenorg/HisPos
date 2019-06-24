@@ -66,5 +66,12 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         {
             return new Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionSource.Normal);
         }
+
+        public PrescriptionSource GetPrescriptionSourceFromHistoryType()
+        {
+            return Type.Equals(HistoryType.ReservedPrescription)
+                ? PrescriptionSource.ChronicReserve
+                : PrescriptionSource.Normal;
+        }
     }
 }

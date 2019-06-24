@@ -5,9 +5,12 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.Service;
 using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
@@ -39,13 +42,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void SetPrescriptionData()
         {
-            var result = QRCodeReceiver.Text.Split(';');
-            //var prescriptionCase = ViewModelMainWindow.GetPrescriptionCases(result[2]);
-            //var medicineDays = result[9];
-            SetPatient(result);
-            SetTreatmentData(result);
-            GetMedicines(result);
-            SetMedicinesValue(result);
+            try
+            {
+                var result = QRCodeReceiver.Text.Split(';');
+                //var prescriptionCase = ViewModelMainWindow.GetPrescriptionCases(result[2]);
+                //var medicineDays = result[9];
+                SetPatient(result);
+                SetTreatmentData(result);
+                GetMedicines(result);
+                SetMedicinesValue(result);
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage(e.Message,MessageType.ERROR);
+            }
         }
 
         private void SetTreatmentData(IReadOnlyList<string> result)
@@ -196,12 +206,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             for (var x = 14; x < result.Length - 1; x += 5)
             {
                 if (result[x].Equals(string.Empty)) continue;
-                var amount = double.Parse(result[x + 1].Replace("+", ""));
+                var dosage = double.Parse(result[x + 1].Replace("+", ""));
                 var frequency = result[x + 2];
-                var way = result[x + 3];
+                var way = result[x + 3].ToUpper();
                 var total = double.Parse(result[x + 4].Replace("+", ""));
-                p.Medicines[i].Dosage = amount;
-                p.Medicines[i].UsageName = frequency;
+                p.Medicines[i].Dosage = dosage;
+                p.Medicines[i].UsageName = frequency.ToUpper();
                 if (way.Contains("AC"))
                 {
                     p.Medicines[i].UsageName += "AC";
@@ -214,6 +224,59 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 }
                 p.Medicines[i].PositionID = way;
                 p.Medicines[i].Amount = total;
+                if (p.Medicines[i].ID.EndsWith("00") || p.Medicines[i].ID.EndsWith("G0"))
+                {
+                    switch (p.Medicines[i].UsageName)
+                    {
+                        case "QD":
+                        case "HS":
+                        case "QN":
+                        case "QM":
+                        case "QMA":
+                        case "QAM":
+                        case "QDA":
+                        case "QDAM":
+                        case "QDPM":
+                        case "QDHS":
+                        case "QDAC":
+                        case "QDPC":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QD(total, dosage);
+                            break;
+                        case "BD":
+                        case "BID":
+                        case "BIDA":
+                        case "BIDHS":
+                        case "BIDCC":
+                        case "QPMHS":
+                        case "QAMPM":
+                        case "QAMHS":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_BID(total, dosage);
+                            break;
+                        case "TID":
+                        case "TIDA":
+                        case "TIDHS":
+                        case "TIDCC":
+                        case "TIDAC":
+                        case "TIDPC":
+                        case "BIDACHS":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_TID(total, dosage);
+                            break;
+                        case "QID":
+                        case "QIDA":
+                        case "QIDAC":
+                        case "QIDPC":
+                        case "QIDP":
+                        case "QIDACHS":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QID(total, dosage);
+                            break;
+                        case "QOD":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QOD(total, dosage);
+                            break;
+                        case "PID":
+                            p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_PID(total, dosage);
+                            break;
+                    }
+                }
                 i++;
             }
         }

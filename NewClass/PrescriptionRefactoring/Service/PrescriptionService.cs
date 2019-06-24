@@ -139,19 +139,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return CheckTreatDate() && CheckAdjustDate();
         }
 
-        protected bool CheckPrescriptionRule()
-        {
-            return current.IsPrescribe ? CheckPrescribeRules() : CheckNhiRules();
-        }
-
         private bool CheckTreatDate()
         {
-            if (current.TreatDate is null && !current.AdjustCase.ID.Equals("D"))
-            {
-                MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
-                return false;
-            }
-            return true;
+            if (!(current.TreatDate is null) || current.AdjustCase.ID.Equals("D")) return true;
+            MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
+            return false;
         }
 
         private bool CheckAdjustDate()

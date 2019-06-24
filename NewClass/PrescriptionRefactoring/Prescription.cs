@@ -17,7 +17,6 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Linq;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -441,7 +440,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
-        public bool IsPrescribe => AdjustCase.ID.Equals("0") || (Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0);
+        public bool IsPrescribe => Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0;
         public bool IsBuckle => WareHouse != null;
         public string MedicalServiceID { get; set; }
         public int DeclareFileID { get; set; }
@@ -912,6 +911,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void Init()
         {
+            Division = null;
+            SpecialTreat = null;
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;
             AdjustCase = VM.GetAdjustCase("1");
@@ -924,7 +925,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             switch (adjustCase.ID)
             {
-                case "4":
+                case "D":
                     Copayment = VM.GetCopayment("009");
                     break;
                 case "1":
@@ -943,7 +944,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private void SetNormalVariables()
         {
             PrescriptionCase = VM.GetPrescriptionCases("09");
-            PaymentCategory = VM.GetPaymentCategory("04");
+            PaymentCategory = VM.GetPaymentCategory("4");
         }
 
         private void SetChronicVariables()
@@ -987,22 +988,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     m.BuckleAmount = 0;
                 }
             }
-        }
-
-        public bool CheckPatientWithCard(Customer patientFromCard)
-        {
-            if (!string.IsNullOrEmpty(Patient.IDNumber))
-            {
-                if (Patient.IDNumber.Equals(patientFromCard.IDNumber))
-                {
-                    Patient = patientFromCard;
-                    return true;
-                }
-                MessageWindow.ShowMessage("卡片讀取結果與目前處方病患不符，請確認卡片或病患資料",MessageType.ERROR);
-                return false;
-            }
-            Patient = patientFromCard;
-            return true;
         }
 
         private void CheckDivisionValid()
@@ -1393,9 +1378,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void CheckPrescriptionVariable()
         {
-            if (AdjustCase.ID != "0" && (!string.IsNullOrEmpty(Institution.ID) && Institution.ID.Equals(VM.CurrentPharmacy.ID)))
-                Institution = new Institution();
+            CheckCurrentPharmacyInstitution();
             CheckChronicAdjustCase();
+        }
+
+        private void CheckCurrentPharmacyInstitution()
+        {
+            if (!IsPrescribe && !string.IsNullOrEmpty(Institution.ID) && Institution.ID.Equals(VM.CurrentPharmacy.ID))
+                Institution = new Institution();
         }
 
         private void CheckChronicAdjustCase()
@@ -1403,7 +1393,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (ChronicSeq is null && AdjustCase.ID.Equals("2"))
                 AdjustCase = VM.GetAdjustCase("1");
 
-            if (ChronicSeq != null && ChronicSeq > 0)
+            if (CheckChronicSeqValid())
                 AdjustCase = VM.GetAdjustCase("2");
         }
 
@@ -1411,6 +1401,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             return AdjustDate != null && AdjustCase.ID.Equals("2")
                 && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
+        }
+
+        public bool CheckChronicSeqValid()
+        {
+            return ChronicSeq != null && ChronicSeq > 0;
+        }
+
+        public string GetWareHouseID()
+        {
+            return WareHouse.ID;
         }
     }
 }

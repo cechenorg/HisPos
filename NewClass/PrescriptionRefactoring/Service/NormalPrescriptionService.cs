@@ -1,5 +1,4 @@
 ﻿using System;
-using His_Pos.FunctionWindow.ErrorUploadWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -15,7 +14,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (!CheckPrescriptionRule()) return false;
+            if (!CheckNhiRules()) return false;
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
             if (!PrintConfirm()) return false;

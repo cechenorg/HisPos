@@ -86,7 +86,7 @@
                     <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding ShowCustomerDetailCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding ShowCustomerEditWindow}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Image>
@@ -125,7 +125,7 @@
                     </TextBox>
                     <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Background="Transparent" Content="{StaticResource QrCode}" Margin="20,0,0,0" BorderBrush="Transparent" Height="35" Width="35" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
+                    <Button Background="#378AE5" Content="{StaticResource QrCode}" Margin="15,0,0,0" BorderBrush="Transparent" Height="35" Width="40" Padding="8" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
                     <Button Content="合作診所處方" Background="DarkCyan" Height="35" BorderThickness="0" Margin="10,0,0,0" Command="{Binding GetCooperativePres}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" Height="35" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
                 </StackPanel>
