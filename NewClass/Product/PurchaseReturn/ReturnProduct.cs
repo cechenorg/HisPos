@@ -108,7 +108,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public ReturnProduct(DataRow row) : base(row)
         {
-            WareHouseID = row.Field<int>("Inv_WarehouseID");
+            WareHouseID = row.Field<int>("ProInv_WareHouseID");
             Inventory = row.Field<double>("Inv_Inventory");
             UnitName = row.Field<string>("StoOrdDet_UnitName");
             UnitAmount = row.Field<double>("StoOrdDet_UnitAmount");
