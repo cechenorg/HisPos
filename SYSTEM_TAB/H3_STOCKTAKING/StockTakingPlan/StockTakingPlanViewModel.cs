@@ -69,16 +69,23 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         #region ----- Define Actions -----
         private void AddPlanAction()
         {
-            AddNewPlanWindow addNewPlanWindow = new AddNewPlanWindow();
-            addNewPlanWindow.ShowDialog();
+            AddNewPlanWindow.AddNewPlanWindow addNewPlanWindow = new AddNewPlanWindow.AddNewPlanWindow();
+            MainWindow.ServerConnection.OpenConnection();
+            StockTakingPlanCollection = StockTakingPlans.GetStockTakingPlans();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void DeletePlanAction()
         {
-            CurrentPlan.Delete();
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除此盤點計畫?","盤點計畫刪除");
+            if ((bool)confirmWindow.DialogResult) {
+                CurrentPlan.Delete();
+                StockTakingPlanCollection.Remove(CurrentPlan);
+            }
+            MessageWindow.ShowMessage("刪除成功",MessageType.SUCCESS);
         }
         private void AddProductAction()
         {
-
+            AddNewProductWindow.AddNewProductWindow addNewProductWindow = new AddNewProductWindow.AddNewProductWindow(CurrentPlan.WareHouse.ID); 
         }
         private void DataChangedAction()
         {

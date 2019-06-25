@@ -17,19 +17,25 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlan
         public WareHouse.WareHouse WareHouse { get; set; }
         public StockTakingProducts StockTakingProductCollection { get; set; }
         #endregion
-
+        public StockTakingPlan() {
+            StockTakingProductCollection = new StockTakingProducts();
+        }
         public StockTakingPlan(DataRow row)
         {
             ID = row.Field<int>("StoTakPlanMas_ID");
             Name = row.Field<string>("StoTakPlanMas_Name");
             WareHouse = new WareHouse.WareHouse(row);
             Note = row.Field<string>("StoTakPlanMas_Note");
+            StockTakingProductCollection = new StockTakingProducts();
         }
-        
+
         #region ----- Define Functions -----
+        internal void NewStockTakingPlan() {
+            StockTakingDB.NewStockTakingPlan(this);
+        }
         internal void Delete()
         {
-            throw new NotImplementedException();
+            StockTakingDB.DeleteStockTakingPlan(this); 
         }
         internal void GetPlanProducts()
         {

@@ -11,6 +11,9 @@ namespace His_Pos.NewClass.Product.StockTaking
 {
     public class StockTakingProducts : Collection<StockTakingProduct>
     {
+        public StockTakingProducts() {
+
+        }
         private StockTakingProducts(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)

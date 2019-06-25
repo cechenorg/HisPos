@@ -535,6 +535,8 @@
     <Compile Include="NewClass\StockTaking\StockTakingDB.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlan.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlans.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProduct.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProducts.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
@@ -843,9 +845,14 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\EditTypeWindow.xaml.cs">
       <DependentUpon>EditTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewPlanWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewPlanWindow\AddNewPlanWindow.xaml.cs">
       <DependentUpon>AddNewPlanWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewPlanWindow\AddNewPlanWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewProductWindow\AddNewProductWindow.xaml.cs">
+      <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewProductWindow\AddNewProductWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanControl.xaml.cs">
       <DependentUpon>StockTakingPlanControl.xaml</DependentUpon>
     </Compile>
@@ -1421,7 +1428,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewPlanWindow.xaml">
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewPlanWindow\AddNewPlanWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\AddNewProductWindow\AddNewProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
