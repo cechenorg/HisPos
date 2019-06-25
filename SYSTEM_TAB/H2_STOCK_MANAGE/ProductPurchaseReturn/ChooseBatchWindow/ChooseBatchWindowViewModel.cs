@@ -27,11 +27,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
         public bool IsSelected { get; set; } = false;
         #endregion
 
-        public ChooseBatchWindowViewModel(string productID)
+        public ChooseBatchWindowViewModel(string productID, string wareID)
         {
             Title = productID + " 批號選擇";
 
-            InitBatchCollection(productID);
+            InitBatchCollection(productID, wareID);
             SelectBatchCommand = new RelayCommand<string>(SelectBatchAction);
         }
 
@@ -47,10 +47,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWi
         #endregion
 
         #region ----- Define Functions -----
-        private void InitBatchCollection(string productID)
+        private void InitBatchCollection(string productID, string wareID)
         {
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductBatchNumbers(productID);
+            DataTable dataTable = PurchaseReturnProductDB.GetReturnProductBatchNumbers(productID, wareID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count == 0)

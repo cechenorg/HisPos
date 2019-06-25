@@ -120,7 +120,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public PurchaseProduct() : base() {}
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
-            WareHouseID = dataRow.Field<int>("Inv_WarehouseID");
+            WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");

@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare
         public ControlMedicineDeclare() { }
         public ControlMedicineDeclare(DataRow r) : base(r)
         {
-            WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("Inv_WarehouseID").ToString());
+            WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("ProInv_WareHouseID").ToString());
             InitStock = r.Field<double>("InvRec_OldStock");
             PayValue = r.Field<double>("PayAmount");
             GetValue = r.Field<double>("GetAmount");
