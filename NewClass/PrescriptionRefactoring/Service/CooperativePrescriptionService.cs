@@ -1,4 +1,6 @@
 ﻿using System;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
@@ -10,7 +12,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             
         }
 
-        public override bool CheckPrescription()
+        public override bool CheckPrescription(bool noCard)
         {
             throw new NotImplementedException();
         }
@@ -25,14 +27,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             throw new NotImplementedException();
         }
 
-        public override bool DepositAdjust()
+        public override void DepositAdjust()
         {
-            throw new NotImplementedException();
+            current.SetDepositAdjustStatus();
+            current.InsertDb();
         }
 
         public override bool Register()
         {
-            throw new NotImplementedException();
+            if (!current.AdjustCase.IsChronic())
+            {
+                MessageWindow.ShowMessage("一般箋處方不可登錄", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
         }
     }
 }

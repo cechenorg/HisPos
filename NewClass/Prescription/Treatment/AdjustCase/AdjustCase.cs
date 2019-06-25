@@ -51,5 +51,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         {
             return !string.IsNullOrEmpty(ID) && ID.Equals("D");
         }
+
+        public bool IsChronic()
+        {
+            return ID.Equals("2");
+        }
     }
 }

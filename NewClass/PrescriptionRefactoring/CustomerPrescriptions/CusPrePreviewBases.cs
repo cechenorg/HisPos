@@ -60,7 +60,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             var table = PrescriptionDb.GetRegisterPrescriptionByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
-                Add(new ChronicPreview(r, ChronicType.Register));
+                Add(new ChronicPreview(r, PrescriptionType.ChronicRegister));
             }
         }
 
@@ -69,7 +69,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             var table = PrescriptionDb.GetReservePrescriptionByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
-                Add(new ChronicPreview(r, ChronicType.Reserve));
+                Add(new ChronicPreview(r, PrescriptionType.ChronicReserve));
             }
         }
 

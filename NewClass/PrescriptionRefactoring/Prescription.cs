@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription;
@@ -22,7 +23,6 @@ using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
-using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.Service;
@@ -42,7 +42,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         Normal = 0,
         Cooperative = 1,
         Orthopedics = 2,
-        ChronicReserve = 3
+        ChronicRegister = 3,
+        ChronicReserve = 4
     }
 
     public class Prescription : ObservableObject,ICloneable
@@ -65,12 +66,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r,ChronicType type)
+        public Prescription(DataRow r, PrescriptionType type)
         {
             ID = r.Field<int>("ID");
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
+            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
@@ -87,15 +89,23 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             PrescriptionPoint = new PrescriptionPoint(r,type);
             PrescriptionStatus = new PrescriptionStatus(r);
+            MedicalNumber = r.Field<string>("MedicalNumber");
+            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+            if (AdjustCase.ID.Equals("2"))
+            {
+                TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
+            }
+            else
+                TempMedicalNumber = MedicalNumber;
             switch (type)
             {
-                case ChronicType.Register:
-                    Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID,WareHouse?.ID,AdjustDate);
-                    break;
-                case ChronicType.Reserve:
+                case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
                     Medicines.GetDataByReserveId(ID, WareHouse?.ID, AdjustDate);
+                    break;
+                default:
+                    Medicines = new Medicines();
+                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }
         }
@@ -442,8 +452,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
         public bool IsPrescribe => Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0;
         public bool IsBuckle => WareHouse != null;
-        public string MedicalServiceID { get; set; }
-        public int DeclareFileID { get; set; }
+        public string MedicalServiceID { get; private set; }
+        public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
 
         #endregion
@@ -588,6 +598,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
             PrescriptionPoint.CopaymentPoint = CheckNotFreeCopayment() ? CountCopaymentPoint() : 0;
+            if (Type.Equals(PrescriptionType.Orthopedics))
+                PrescriptionPoint.CopaymentPointPayable =
+                    PrescriptionStatus.IsVIP ? 0 : PrescriptionPoint.CopaymentPoint;
+            else
+            {
+                PrescriptionPoint.CopaymentPointPayable = PrescriptionPoint.CopaymentPoint;
+            }
         }
         private bool CheckIsChronic()
         {
@@ -1101,6 +1118,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionStatus.SetErrorAdjustStatus();
         }
 
+        public void SetDepositAdjustStatus()
+        {
+            PrescriptionStatus.SetDepositAdjustStatus();
+        }
+
         public void InsertDb()
         {
             if (ID == 0)
@@ -1155,30 +1177,63 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             CreateDeclareFileContent(details);//產生申報資料
         }
 
+        #region CheckMedicalServiceFunctions
+
         private void CheckMedicalServiceData()
         {
             if (IsPrescribe) return;
-            if (MedicineDays >= 28)
-            {
-                MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
-                PrescriptionPoint.MedicalServicePoint = 69;
-            }
-            else if (MedicineDays > 7 && MedicineDays < 14)
-            {
-                MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
-                PrescriptionPoint.MedicalServicePoint = 48;
-            }
-            else if (MedicineDays >= 14 && MedicineDays < 28)
-            {
-                MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
-                PrescriptionPoint.MedicalServicePoint = 59;
-            }
-            else
-            {
-                MedicalServiceID = "05202B";//一般處方給付(7天以內)
-                PrescriptionPoint.MedicalServicePoint = 48;
-            }
+            if(SetMedicalService28Days()) return;
+            if(SetMedicalServiceBetween14And28Days())return;
+            if (SetMedicalServiceBetween7And14Days()) return;
+            SetMedicalServiceLessThan7Days();
         }
+
+        private bool SetMedicalService28Days()
+        {
+            if (!CheckMedicineDays28()) return false;
+            MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+            PrescriptionPoint.MedicalServicePoint = 69;
+            return true;
+        }
+
+        private bool SetMedicalServiceBetween14And28Days()
+        {
+            if (!CheckMedicineDaysBetween14And28()) return false;
+            MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+            PrescriptionPoint.MedicalServicePoint = 59;
+            return true;
+        }
+
+        private bool SetMedicalServiceBetween7And14Days()
+        {
+            if (!CheckMedicineDaysBetween7And14()) return false;
+            MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+            PrescriptionPoint.MedicalServicePoint = 48;
+            return true;
+        }
+
+        private void SetMedicalServiceLessThan7Days()
+        {
+            MedicalServiceID = "05202B";//一般處方給付(7天以內)
+            PrescriptionPoint.MedicalServicePoint = 48;
+        }
+
+        private bool CheckMedicineDaysBetween14And28()
+        {
+            return MedicineDays >= 14 && MedicineDays < 28;
+        }
+
+        private bool CheckMedicineDaysBetween7And14()
+        {
+            return MedicineDays > 7 && MedicineDays < 14;
+        }
+        
+        private bool CheckMedicineDays28()
+        {
+            return MedicineDays >= 28;
+        }
+
+        #endregion
 
         private void SetPrescribeValue()
         {
@@ -1203,7 +1258,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             d.Dbody.Pdata = details;
         }
 
-        public string CheckInstitution()
+        private string CheckInstitution()
         {
             if (CheckIsHomeCare() || CheckIsQuitSmoking())
             {
@@ -1225,12 +1280,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             return !string.IsNullOrEmpty(AdjustCase?.ID) && AdjustCase.ID.Equals("D");
         }
 
-        public string CheckAdjustCase()
+        private string CheckAdjustCase()
         {
             return string.IsNullOrEmpty(AdjustCase?.ID) ? Resources.AdjustCaseError : string.Empty;
         }
 
-        public string CheckPrescriptionCase()
+        private string CheckPrescriptionCase()
         {
             var homeCareAndQuitSmoke = CheckIsHomeCare() || CheckIsQuitSmoking();
             if (!homeCareAndQuitSmoke && string.IsNullOrEmpty(PrescriptionCase?.ID))
@@ -1240,52 +1295,45 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             return string.Empty;
         }
 
-        public string CheckPharmacist()
+        private string CheckPharmacist()
         {
             return string.IsNullOrEmpty(Pharmacist?.IDNumber) ? Resources.尚未選擇藥師 : string.Empty;
         }
 
-        public string CheckCopayment()
+        private string CheckCopayment()
         {
             if (Copayment is null) return Resources.CopaymentError;
-            if (CheckIsHomeCare())
-            {
-                Copayment = VM.GetCopayment("009");
+            if (!CheckIsHomeCare())
+                return string.IsNullOrEmpty(Copayment?.Id) ? Resources.CopaymentError : string.Empty;
+            Copayment = VM.GetCopayment("009");
+            return string.Empty;
+        }
+
+        private string CheckDivision()
+        {
+            if (Division != null && Division.CheckIDNotEmpty()) return string.Empty;
+            if (CheckIsHomeCare() || CheckIsQuitSmoking())
                 return string.Empty;
-            }
-            return string.IsNullOrEmpty(Copayment?.Id) ? Resources.CopaymentError : string.Empty;
+            return Resources.DivisionError;
         }
 
-        public string CheckDivision()
+        private string CheckPaymentCategory()
         {
-            if (Division is null || string.IsNullOrEmpty(Division?.ID))
-            {
-                if (CheckIsHomeCare() || CheckIsQuitSmoking())
-                    return string.Empty;
-                return Resources.DivisionError;
-            }
-            return string.Empty;
+            if (!(PaymentCategory is null)) return string.Empty;
+            var isChronic = ChronicSeq != null || AdjustCase.IsChronic();
+            if (CheckIsHomeCare() || isChronic)
+                return string.Empty;
+            return Resources.PaymentCategoryError;
         }
 
-        public string CheckPaymentCategory()
-        {
-            if (PaymentCategory is null)
-            {
-                var isChronic = ChronicSeq != null || AdjustCase.ID.Equals("2");
-                if (CheckIsHomeCare() || isChronic)
-                    return string.Empty;
-                return Resources.PaymentCategoryError;
-            }
-            return string.Empty;
-        }
-
-        public string CheckDiseaseCode()
+        private string CheckDiseaseCode()
         {
             if (string.IsNullOrEmpty(MainDisease?.ID))
                 return CheckIsHomeCare() ? string.Empty : Resources.DiseaseCodeError;
             return string.Empty;
         }
 
+        [SuppressMessage("ReSharper", "FlagArgument")]
         private string CheckMedicalNumber(bool noCard)
         {
             if (noCard)
@@ -1299,22 +1347,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private string SetMedicalNumberWithoutICCard()
         {
-            if (!string.IsNullOrEmpty(TempMedicalNumber))
+            if (string.IsNullOrEmpty(TempMedicalNumber)) return string.Empty;
+            if (ChronicSeq is null)
+                MedicalNumber = TempMedicalNumber;
+            else
             {
-                if (ChronicSeq is null)
-                    MedicalNumber = TempMedicalNumber;
+                if (ChronicSeq > 1)
+                {
+                    MedicalNumber = "IC0" + ChronicSeq;
+                    OriginalMedicalNumber = TempMedicalNumber;
+                }
                 else
                 {
-                    if (ChronicSeq > 1)
-                    {
-                        MedicalNumber = "IC0" + ChronicSeq;
-                        OriginalMedicalNumber = TempMedicalNumber;
-                    }
-                    else
-                    {
-                        MedicalNumber = TempMedicalNumber;
-                        OriginalMedicalNumber = null;
-                    }
+                    MedicalNumber = TempMedicalNumber;
+                    OriginalMedicalNumber = null;
                 }
             }
             return string.Empty;
@@ -1391,7 +1437,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckCurrentPharmacyInstitution()
         {
-            if (!IsPrescribe && !string.IsNullOrEmpty(Institution.ID) && Institution.ID.Equals(VM.CurrentPharmacy.ID))
+            if (!IsPrescribe && Institution.CheckIDEqualsCurrentPharmacy())
                 Institution = new Institution();
         }
 
@@ -1418,6 +1464,25 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public string GetWareHouseID()
         {
             return WareHouse.ID;
+        }
+
+        public bool CheckPatientDataEmpty(string data)
+        {
+            switch (data)
+            {
+                case "IDNumber":
+                    return Patient.CheckIDNumberEmpty();
+                case "Name":
+                    return Patient.CheckNameEmpty();
+                case "Birthday":
+                    return Patient.CheckBirthdayNull();
+                case "Tel":
+                    return Patient.CheckTelEmpty();
+                case "CellPhone":
+                    return Patient.CheckCellPhoneEmpty();
+                default:
+                    return false;
+            }
         }
     }
 }

@@ -677,7 +677,7 @@
                         <StackPanel Grid.Row="3" Margin="10,0,10,0" Orientation="Horizontal">
                             <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}"/>
                             <TextBox x:Name="CopaymentText"  Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.CopaymentPointPayable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
@@ -706,7 +706,7 @@
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">
                             <Button Width="95" Height="30" Background="DimGray" BorderThickness="0" Content="異常結案" FontSize="16" Command="{Binding ErrorAdjust}" />
-                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding NoCardAdjust}" Margin="10,0,0,0"/>
+                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding DepositAdjust}" Margin="10,0,0,0"/>
                             <ContentControl>
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">

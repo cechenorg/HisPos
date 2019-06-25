@@ -516,7 +516,7 @@ namespace His_Pos.NewClass.Prescription
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateIsReadByDeclareId", keyValues);
         }
-        internal static void UpdateCooperativePrescriptionStatus(string DeclareId) {
+        internal static void UpdateOrthopedicsStatus(string DeclareId) {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
                     {"DeclareId",DeclareId },

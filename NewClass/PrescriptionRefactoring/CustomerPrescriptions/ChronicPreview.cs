@@ -4,19 +4,14 @@ using His_Pos.NewClass.Prescription;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 {
-    public enum ChronicType
-    {
-        Register = 0,
-        Reserve = 1
-    }
     public class ChronicPreview : CusPrePreviewBase
     {
         private int ID { get; set; }
-        public ChronicType Type { get; }
+        public PrescriptionType Type { get; }
         public DateTime AdjustDate { get; }
         public int ChronicSeq { get; }
         public int ChronicTotal { get; }
-        public ChronicPreview(DataRow r, ChronicType type) : base(r)
+        public ChronicPreview(DataRow r, PrescriptionType type) : base(r)
         {
             Type = type;
             ID = r.Field<int>("ID");
@@ -35,10 +30,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             DataTable table;
             switch (Type)
             {
-                case ChronicType.Register:
+                case PrescriptionType.ChronicRegister:
                     table = PrescriptionDb.GetPrescriptionByID(ID);
                     return table.Rows.Count > 0 ? new Prescription(table.Rows[0],Type) : null;
-                case ChronicType.Reserve:
+                case PrescriptionType.ChronicReserve:
                     table = PrescriptionDb.GetReservePrescriptionByID(ID);
                     return table.Rows.Count > 0 ? new Prescription(table.Rows[0],Type) : null;
                 default:
@@ -51,11 +46,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             Medicines.Clear();
             switch (Type)
             {
-                case ChronicType.Register:
-                    Medicines.GetDataByPrescriptionId(ID);
-                    break;
-                case ChronicType.Reserve:
+                case PrescriptionType.ChronicReserve:
                     Medicines.GetDataByReserveId(ID);
+                    break;
+                default:
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
         }

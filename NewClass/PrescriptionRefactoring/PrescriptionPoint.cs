@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
         }
 
-        public PrescriptionPoint(DataRow r,ChronicType type)
+        public PrescriptionPoint(DataRow r,PrescriptionType type)
         {
             ApplyPoint = r.Field<int>("ApplyPoint");
             TotalPoint = r.Field<int>("TotalPoint");
@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
             MedicalServicePoint = r.Field<int>("MedicalServicePoint");
-            if (type != ChronicType.Reserve)
+            if (type != PrescriptionType.ChronicReserve)
             {
                 AmountSelfPay = r.Field<int>("PaySelfPoint");
                 Deposit = r.Field<int>("DepositPoint");
@@ -61,6 +61,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
+        private int copaymentPointPayable;//應付部分負擔
+        public int CopaymentPointPayable
+        {
+            get => copaymentPointPayable;
+            set
+            {
+                Set(() => CopaymentPointPayable, ref copaymentPointPayable, value);
             }
         }
         public int SpecialMaterialPoint { get; set; } //特殊材料費用

@@ -10,12 +10,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             
         }
 
-        public override bool CheckPrescription()
+        public override bool CheckPrescription(bool noCard)
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (!CheckNhiRules()) return false;
+            if (!CheckNhiRules(noCard)) return false;
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
             if (!PrintConfirm()) return false;
@@ -32,18 +32,19 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override void ErrorAdjust()
         {
-            current.SetErrorAdjustStatus();//設定處方狀態
+            current.SetErrorAdjustStatus();
             current.InsertDb();
         }
 
-        public override bool DepositAdjust()
+        public override void DepositAdjust()
         {
-            throw new NotImplementedException();
+            current.SetDepositAdjustStatus();
+            current.InsertDb();
         }
 
         public override bool Register()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

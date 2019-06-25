@@ -27,12 +27,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
     public abstract class PrescriptionService:ObservableObject
     {
         #region AbstractFunctions
-        public abstract bool CheckPrescription();
+        public abstract bool CheckPrescription(bool noCard);
         public abstract bool NormalAdjust();
         public abstract void ErrorAdjust();
-        public abstract bool DepositAdjust();
+        public abstract void DepositAdjust();
         public abstract bool Register();
-        #endregion
+            #endregion
         public PrescriptionService()
         {
 
@@ -53,18 +53,22 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             ps.current = p;
             return ps;
         }
+
         public bool StartNormalAdjust()
         {
             return NormalAdjust();
         }
+
         public void StartErrorAdjust()
         {
             ErrorAdjust();
         }
-        public bool StartDepositAdjust()
+
+        public void StartDepositAdjust()
         {
-            return DepositAdjust();
+            DepositAdjust();
         }
+
         public bool StartRegister()
         {
             return Register();
@@ -168,9 +172,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return true;
         }
 
-        protected bool CheckNhiRules()
+        protected bool CheckNhiRules(bool noCard)
         {
-            var error = current.CheckPrescriptionRule(false);//檢查健保規則
+            var error = current.CheckPrescriptionRule(noCard);//檢查健保規則
             if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
             return false;

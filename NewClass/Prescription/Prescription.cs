@@ -568,7 +568,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void UpdateCooperativePrescriptionStatus() {
             if(!string.IsNullOrEmpty(SourceId))
-            PrescriptionDb.UpdateCooperativePrescriptionStatus(SourceId);
+            PrescriptionDb.UpdateOrthopedicsStatus(SourceId);
         }
         public void InsertCooperAdjust() {
             Treatment.Institution.UpdateUsedTime();

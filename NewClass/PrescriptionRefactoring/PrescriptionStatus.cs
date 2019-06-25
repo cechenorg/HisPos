@@ -57,5 +57,31 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             IsDeclare = true;
             IsDeposit = false;
         }
+
+        public void Init()
+        {
+            IsGetCard = false;
+            IsRead = false;
+            IsAdjust = false;
+            IsSendOrder = false;
+            IsSendToSingde = false;
+            IsRegister = false;
+            IsDeclare = true;
+            IsVIP = false;
+            IsCreateSign = null;
+            IsDeposit = false;
+        }
+
+        public void SetDepositAdjustStatus()
+        {
+            IsGetCard = false;
+            IsDeposit = true;
+            IsDeclare = false;
+            IsAdjust = true;
+            IsSendOrder = false;
+            IsSendToSingde = false;
+            IsRegister = false;
+            IsCreateSign = null;
+        }
     }
 }

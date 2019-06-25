@@ -245,5 +245,30 @@ namespace His_Pos.NewClass.Person.Customer
                 Birthday = patientFromCard.Birthday;
             CheckGender();
         }
+
+        public bool CheckIDNumberEmpty()
+        {
+            return string.IsNullOrEmpty(IDNumber);
+        }
+
+        public bool CheckNameEmpty()
+        {
+            return string.IsNullOrEmpty(Name);
+        }
+
+        public bool CheckBirthdayNull()
+        {
+            return Birthday is null;
+        }
+
+        public bool CheckTelEmpty()
+        {
+            return string.IsNullOrEmpty(Tel);
+        }
+
+        public bool CheckCellPhoneEmpty()
+        {
+            return string.IsNullOrEmpty(CellPhone);
+        }
     }
 }

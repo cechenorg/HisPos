@@ -59,5 +59,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             return VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(ID)) > 0;
         }
+
+        public bool CheckIDEqualsCurrentPharmacy()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals(VM.CurrentPharmacy.ID);
+        }
     }
 }

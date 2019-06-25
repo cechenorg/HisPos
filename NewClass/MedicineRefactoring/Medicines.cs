@@ -192,15 +192,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 switch (medicinesTable.Rows[i].Field<int>("DataType"))
                 {
                     case 1:
-                        medicine = new MedicineNHI(table.Rows[i]);
+                        medicine = new MedicineNHI(medicinesTable.Rows[i]);
                         medicines.Add(medicine);
                         break;
                     case 2:
-                        medicine = new MedicineOTC(table.Rows[i]);
+                        medicine = new MedicineOTC(medicinesTable.Rows[i]);
                         medicines.Add(medicine);
                         break;
                     case 3:
-                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
+                        medicine = new MedicineSpecialMaterial(medicinesTable.Rows[i]);
                         medicines.Add(medicine);
                         break;
                 }

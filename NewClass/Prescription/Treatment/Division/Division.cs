@@ -46,5 +46,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
                 Set(() => FullName, ref fullName, value);
             }
         }
+
+        public bool CheckIDNotEmpty()
+        {
+            return !string.IsNullOrEmpty(ID);
+        }
     }
 }
