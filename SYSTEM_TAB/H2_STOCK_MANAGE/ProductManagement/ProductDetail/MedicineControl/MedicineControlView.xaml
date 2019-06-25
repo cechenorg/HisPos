@@ -35,10 +35,10 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Visibility="{Binding MedicineDetail.IsControl, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="管制藥 " Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
-                    <TextBlock Text="{Binding MedicineDetail.ControlLevel}" Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="管制藥 " Foreground="IndianRed" FontSize="26" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="{Binding MedicineDetail.ControlLevel}" Foreground="IndianRed" FontSize="26" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <TextBlock Text="冷藏藥" Grid.Row="1" Foreground="RoyalBlue" FontSize="30" FontFamily="Segoe UI Semibold" Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBlock Text="冷藏藥" Grid.Row="1" Foreground="RoyalBlue" FontSize="26" FontFamily="Segoe UI Semibold" Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="NoMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}"/>
