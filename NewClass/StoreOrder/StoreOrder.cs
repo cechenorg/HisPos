@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.StoreOrder
         private OrderStatusEnum orderStatus;
         private double totalPrice;
 
-        protected int initProductCount = 0;
+        protected int initProductCount;
 
         public Product.Product SelectedItem
         {
@@ -218,11 +218,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
-            string PrescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
+            string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
             if (orderFlag == 2)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                System.Windows.Application.Current.Dispatcher.Invoke(delegate
                 {
                     MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
                 });
@@ -231,7 +231,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else if (isShipment)
             {
-                ReceiveID = PrescriptionReceiveID;
+                ReceiveID = prescriptionReceiveID;
 
                 bool isSuccess = UpdateOrderProductsFromSingde();
 
