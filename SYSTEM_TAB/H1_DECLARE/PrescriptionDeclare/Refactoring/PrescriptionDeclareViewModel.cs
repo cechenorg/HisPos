@@ -1,10 +1,4 @@
 ﻿#region Using
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -39,11 +33,17 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactorin
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Resources = His_Pos.Properties.Resources;
 using TextBox = System.Windows.Controls.TextBox;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 // ReSharper disable ClassTooBig
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
@@ -209,7 +209,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Init();
         }
-
         #region InitFunctions
         private void Init()
         {
