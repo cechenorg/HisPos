@@ -832,10 +832,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void StartRegister()
         {
-            if(!currentService.StartRegister()) return;
+            if (!currentService.StartRegister()) return;
             StartPrint(false);
             DeclareSuccess();
         }
+
         private bool ErrorAdjustConfirm()
         {
             var errorAdjustConfirm = new ConfirmWindow("確認異常結案?(非必要請勿使用此功能，若過卡率低於九成，將被勸導限期改善並列為輔導對象，最重可能勒令停業)", "異常確認");

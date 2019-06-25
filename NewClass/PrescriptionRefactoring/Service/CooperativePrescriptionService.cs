@@ -1,7 +1,5 @@
 ﻿using System;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -35,12 +33,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool Register()
         {
-            if (!current.AdjustCase.IsChronic())
+            if (!CheckChronicRegister()) return false;
+            MedicinesSendSingdeViewModel vm = null;
+            if (current.PrescriptionStatus.IsSendOrder)
             {
-                MessageWindow.ShowMessage("一般箋處方不可登錄", MessageType.ERROR);
-                return false;
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
+                    return false;
             }
-
+            current.PrescriptionStatus.SetRegisterStatus();
+            current.InsertDb();
+            SendOrder(vm);
             return true;
         }
     }

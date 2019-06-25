@@ -321,6 +321,27 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
+        public static bool InsertPrescriptionOrder(PrescriptionRefactoring.Prescription p, PrescriptionSendDatas pSendData)
+        {
+            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
+            try
+            {
+                if (PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData))
+                {
+                    StoreOrderDB.StoreOrderToWaiting(newstoordId);
+                    return true;
+                }
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+                return false;
+            }
+        }
         public static  bool InsertPrescriptionOrder(Prescription.Prescription p,PrescriptionSendDatas pSendData) {
            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
             try {
@@ -338,8 +359,24 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             } 
         }
-        public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData) {
+        public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
+        {
             string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.Id).Rows[0][0].ToString();
+            try
+            {
+                int result = PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData);
+                if (result == 0)
+                    MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+                else if (result == 2)
+                    MessageWindow.ShowMessage("藥健康已出貨 不可修改傳送藥袋 (若已修改處方 需注意處方與藥袋藥品差異)", MessageType.WARNING);
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+            }
+        }
+        public static void UpdatePrescriptionOrder(PrescriptionRefactoring.Prescription p, PrescriptionSendDatas pSendData) {
+            string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID).Rows[0][0].ToString();
             try
             {
                 int result = PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData);

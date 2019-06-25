@@ -104,6 +104,26 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Set DataTable -----
 
         #region ///// StoreOrderMasterTable /////
+        public static DataTable SetPrescriptionOrderMaster(PrescriptionRefactoring.Prescription p)
+        {
+            DataTable storeOrderMasterTable = StoreOrderMasterTable();
+            DataRow newRow = storeOrderMasterTable.NewRow();
+            newRow["StoOrd_ID"] = DBNull.Value;
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveEmployeeID", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ManufactoryID", "0");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID", p.ID);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true);
+
+            storeOrderMasterTable.Rows.Add(newRow);
+            return storeOrderMasterTable;
+        }
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p)
         {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
@@ -476,11 +496,18 @@ namespace His_Pos.NewClass.StoreOrder
 
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
-        public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas,Prescription.Prescription p) {
+        public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas,PrescriptionRefactoring.Prescription p) {
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(p));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas)); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList); 
+        }
+        public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas, Prescription.Prescription p)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(p));
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList);
         }
         internal static DataTable GetSingdeOrderNewStatus(string dateTime)
         {

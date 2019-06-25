@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Prescription;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
@@ -82,6 +83,19 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             IsSendToSingde = false;
             IsRegister = false;
             IsCreateSign = null;
+        }
+
+        public void SetRegisterStatus()
+        {
+            IsGetCard = false;
+            IsAdjust = false;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
+
+        public void UpdateStatus(int currentID)
+        {
+            PrescriptionDb.UpdatePrescriptionStatus(this, currentID);
         }
     }
 }

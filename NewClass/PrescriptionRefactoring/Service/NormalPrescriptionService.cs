@@ -1,4 +1,8 @@
 ﻿using System;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Product;
+using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
@@ -44,6 +48,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool Register()
         {
+            if (!CheckChronicRegister()) return false;
+            MedicinesSendSingdeViewModel vm = null;
+            if (current.PrescriptionStatus.IsSendOrder)
+            {
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
+                    return false;
+            }
+            current.PrescriptionStatus.SetRegisterStatus();
+            current.InsertDb();
+            SendOrder(vm);
             return true;
         }
     }

@@ -5,6 +5,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
@@ -54,12 +55,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool Register()
         {
-            if (!current.AdjustCase.IsChronic())
+            if (!CheckChronicRegister()) return false;
+            MedicinesSendSingdeViewModel vm = null;
+            if (current.PrescriptionStatus.IsSendOrder)
             {
-                MessageWindow.ShowMessage("一般箋處方不可登錄", MessageType.ERROR);
-                return false;
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
+                    return false;
             }
-
+            current.PrescriptionStatus.SetRegisterStatus();
+            current.InsertDb();
+            SendOrder(vm);
             return true;
         }
 

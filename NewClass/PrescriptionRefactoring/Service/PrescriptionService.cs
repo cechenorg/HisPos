@@ -14,8 +14,10 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine.MedBag;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
@@ -56,22 +58,32 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public bool StartNormalAdjust()
         {
-            return NormalAdjust();
+            MainWindow.ServerConnection.OpenConnection();
+            var result = NormalAdjust();
+            MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public void StartErrorAdjust()
         {
+            MainWindow.ServerConnection.OpenConnection();
             ErrorAdjust();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         public void StartDepositAdjust()
         {
+            MainWindow.ServerConnection.OpenConnection();
             DepositAdjust();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         public bool StartRegister()
         {
-            return Register();
+            MainWindow.ServerConnection.OpenConnection();
+            var result = Register();
+            MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public bool SetPharmacist(Employee selectedPharmacist,int prescriptionCount)
@@ -448,6 +460,29 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 tempPre.PrintMedBagSingleMode();
             else
                 tempPre.PrintMedBagMultiMode();
+        }
+
+        protected bool CheckChronicRegister()
+        {
+            if (current.AdjustCase.IsChronic()) return true;
+            MessageWindow.ShowMessage("一般箋處方不可登錄", MessageType.ERROR);
+            return false;
+        }
+
+        protected void SendOrder(MedicinesSendSingdeViewModel vm)
+        {
+            if (current.PrescriptionStatus.IsSendOrder)
+            {
+                var sendData = vm.PrescriptionSendData;
+                if (!current.PrescriptionStatus.IsSendToSingde)
+                    current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(current, sendData);
+                //紀錄訂單and送單
+                else if (current.PrescriptionStatus.IsSendToSingde)
+                {
+                    PurchaseOrder.UpdatePrescriptionOrder(current, sendData);
+                } //更新傳送藥健康
+            }
+            current.PrescriptionStatus.UpdateStatus(current.ID);
         }
     }
 }
