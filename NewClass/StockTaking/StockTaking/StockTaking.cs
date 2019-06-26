@@ -20,5 +20,6 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         public WareHouse.WareHouse WareHouse { get; set; }
         public string EnpName { get; set; }
         public DateTime Time { get; set; }
+        
     }
 }
