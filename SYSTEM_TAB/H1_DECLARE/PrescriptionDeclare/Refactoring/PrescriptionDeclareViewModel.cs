@@ -289,40 +289,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 MessageWindow.ShowMessage("尚未選擇藥品組合", MessageType.ERROR);
                 return;
             }
-            MedicineSetWindow medicineSetWindow;
-            int tempID = 0;
+            MainWindow.ServerConnection.OpenConnection();
             switch (mode)
             {
                 case "Get":
-                    MainWindow.ServerConnection.OpenConnection();
-                    CurrentSet.MedicineSetItems = new MedicineSetItems();
-                    CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
-                    CurrentPrescription.GetMedicinesBySet(CurrentSet);
-                    CurrentPrescription.UpdateMedicines();
-                    CountMedicinePointAction();
-                    MainWindow.ServerConnection.CloseConnection();
+                    GetMedicinesFromMedicineSet();
                     break;
                 case "Add":
-                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
-                    medicineSetWindow.ShowDialog();
-                    if (CurrentSet != null)
-                        tempID = CurrentSet.ID;
-                    MainWindow.ServerConnection.OpenConnection();
-                    MedicineSets = new MedicineSets();
-                    MainWindow.ServerConnection.CloseConnection();
-                    if (CurrentSet != null)
-                        CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    AddMedicineSet();
                     break;
                 case "Edit":
-                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit, CurrentSet);
-                    medicineSetWindow.ShowDialog();
-                    tempID = CurrentSet.ID;
-                    MainWindow.ServerConnection.OpenConnection();
-                    MedicineSets = new MedicineSets();
-                    MainWindow.ServerConnection.CloseConnection();
-                    CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    EditCurrentMedicineSet();
                     break;
             }
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void ChronicSequenceChangedAction()
@@ -996,9 +976,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         }
 
         #endregion
+        #region MedicineSetFunctions
+        private void GetMedicinesFromMedicineSet()
+        {
+            CurrentSet.MedicineSetItems = new MedicineSetItems();
+            CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
+            CurrentPrescription.GetMedicinesBySet(CurrentSet);
+            CurrentPrescription.UpdateMedicines();
+            CountMedicinePointAction();
+        }
+
+        private void AddMedicineSet()
+        {
+            var tempID = 0;
+            var medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
+            medicineSetWindow.ShowDialog();
+            if (CurrentSet != null)
+                tempID = CurrentSet.ID;
+            MedicineSets = new MedicineSets();
+            if (CurrentSet != null)
+                CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+        }
+
+        private void EditCurrentMedicineSet()
+        {
+            var medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit, CurrentSet);
+            medicineSetWindow.ShowDialog();
+            var tempID = CurrentSet.ID;
+            MedicineSets = new MedicineSets();
+            CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+        }
+
+        #endregion
         #region OtherFunctions
         private void CheckNewCustomer()
         {
+            // ReSharper disable once TooManyChainedReferences
             var customers = CurrentPrescription.Patient.Check();
             switch (customers.Count)
             {
