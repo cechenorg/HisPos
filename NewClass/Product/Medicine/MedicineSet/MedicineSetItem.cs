@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Product.Medicine.MedicineSet
             Frozen = r.Field<bool>("Med_IsFrozen");
             Usage = new Usage.Usage();
             Position = new Position.Position();
-            Days = r.Field<short>("MedSetDet_MedicineDays");
+            Days = r.Field<short?>("MedSetDet_MedicineDays");
             Amount = r.Field<double>("MedSetDet_TotalAmount");
             Dosage = r.Field<double>("MedSetDet_Dosage");
             PaySelf = r.Field<bool>("MedSetDet_IsPaySelf");
