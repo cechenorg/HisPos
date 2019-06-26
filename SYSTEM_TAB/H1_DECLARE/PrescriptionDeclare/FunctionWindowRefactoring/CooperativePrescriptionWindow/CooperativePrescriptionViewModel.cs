@@ -1,14 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -187,9 +190,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void PrescriptionSelectedAction()
         {
-            if (SelectedPrescription is null) return;
-            Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
-            Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
+            try
+            {
+                if (SelectedPrescription is null) return;
+                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                Messenger.Default.Send(new NotificationMessage("CloseCooperativePrescriptionWindow"));
+            }
+            catch (Exception e)
+            {
+                NewFunction.ExceptionLog(e.Message);
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+            }
         }
         #endregion
 

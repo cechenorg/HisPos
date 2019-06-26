@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
 using His_Pos.Service;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
+// ReSharper disable TooManyDeclarations
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
@@ -23,6 +26,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
 
         #region OrthopedicsFunctions
+        [SuppressMessage("ReSharper", "TooManyArguments")]
         public void GetDataByOrthopedicsPrescription(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
             Clear();
@@ -94,6 +98,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         #endregion
 
         #region CooperativeFunctions
+        [SuppressMessage("ReSharper", "TooManyArguments")]
         public void GetDataByCooperativePrescription(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
             Clear();
@@ -232,7 +237,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             var notPaySelfNhiMedicines = GetNotPaySelfNhiMedicines();
             if (!notPaySelfNhiMedicines.Any()) return 0;
             var medicinePoint = notPaySelfNhiMedicines.Sum(m => m.NHIPrice * m.Amount);
-            return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString()), 0, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString(CultureInfo.InvariantCulture)), 0, MidpointRounding.AwayFromZero);
         }
 
         private List<Medicine> GetNotPaySelfNhiMedicines()
@@ -245,7 +250,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             var notPaySelfSpecialMaterials = GetNotPaySelfSpecialMaterials();
             if (!notPaySelfSpecialMaterials.Any()) return 0;
             var specialMaterial = notPaySelfSpecialMaterials.Sum(m => m.NHIPrice * m.Amount) * 1.05;
-            return (int)Math.Round(Convert.ToDouble(specialMaterial.ToString()), 0, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(Convert.ToDouble(specialMaterial.ToString(CultureInfo.InvariantCulture)), 0, MidpointRounding.AwayFromZero);
         }
 
         private List<Medicine> GetNotPaySelfSpecialMaterials()
@@ -266,8 +271,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public int CountMedicineDays()
         {
-            if (this.Count(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf && m.Days != null) > 0)
-                return (int)this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial) && !m.PaySelf).Max(m => m.Days);//計算最大給藥日份
+            if (this.Count(m => m.CanCountMedicineDays()) > 0)
+                return (int)this.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);//計算最大給藥日份
             return 0;
         }
 
@@ -279,6 +284,27 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
         {
             var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId, adjustDate);
+            var medicine = AddMedicineByDataType(table);
+            Debug.Assert(medicine != null, nameof(medicine) + " != null");
+            medicine.PaySelf = paySelf;
+            if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
+                medicine.PositionID = "PO";
+            if (selectedMedicinesIndex != null)
+            {
+                if (selectedMedicinesIndex > 0)
+                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
+                Items[(int)selectedMedicinesIndex] = medicine;
+            }
+            else
+            {
+                if (Count > 0)
+                    medicine.CopyPrevious(Items[Count - 1]);
+                Add(medicine);
+            }
+        }
+
+        private Medicine AddMedicineByDataType(DataTable table)
+        {
             Medicine medicine = null;
             foreach (DataRow r in table.Rows)
             {
@@ -295,23 +321,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                         break;
                 }
             }
-            Debug.Assert(medicine != null, nameof(medicine) + " != null");
-            medicine.PaySelf = paySelf;
-            if (medicine.ID.EndsWith("00") ||
-                medicine.ID.EndsWith("G0"))
-                medicine.PositionID = "PO";
-            if (selectedMedicinesIndex != null)
-            {
-                if (selectedMedicinesIndex > 0)
-                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
-                Items[(int)selectedMedicinesIndex] = medicine;
-            }
-            else
-            {
-                if (Count > 0)
-                    medicine.CopyPrevious(Items[Count - 1]);
-                Add(medicine);
-            }
+            return medicine;
         }
 
         public string Check()
@@ -321,6 +331,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
             errorMsg += CheckAmountZero();
             return errorMsg;
         }
+
+        [SuppressMessage("ReSharper", "ComplexConditionExpression")]
         private string CheckIDEmpty()
         {
             var emptyMedicine = string.Empty;
@@ -328,6 +340,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             return emptyList.Count <= 0 ? emptyMedicine : emptyList.Aggregate(emptyMedicine, (current, s) => current + s);
         }
 
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         private string CheckAmountZero()
         {
             if (!Items.Any())
@@ -374,6 +387,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             return idList;
         }
 
+        [SuppressMessage("ReSharper", "FlagArgument")]
         private void SetBuckleAmount(bool buckle)
         {
             foreach (var m in Items)
@@ -402,7 +416,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public string CreateMedicalData(string dateTime)
         {
             SetPosition();
-            var medList = this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
+            var medList = this.Where(CheckDeclareMedicine).ToList();
             var result = string.Empty;
             foreach (var med in medList)
             {
@@ -423,6 +437,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
             return result;
         }
 
+        private bool CheckDeclareMedicine(Medicine medicine)
+        {
+            return (medicine is MedicineNHI || medicine is MedicineSpecialMaterial || medicine is MedicineVirtual) && !medicine.PaySelf;
+        }
+
         private void CreateMedicineNHIData(ref string result,Medicine med)
         {
             result += "1";
@@ -430,7 +449,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             result += med.PositionID.PadLeft(6, ' ');
             result += med.UsageName.PadLeft(18, ' ');
             result += med.Days.ToString().PadLeft(2, ' ');
-            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += med.Amount.ToString(CultureInfo.InvariantCulture).PadLeft(7, ' ');
             result += "01";
         }
 
@@ -441,7 +460,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             result += string.Empty.PadLeft(6, ' ');
             result += string.Empty.PadLeft(18, ' ');
             result += string.Empty.PadLeft(2, ' ');
-            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += med.Amount.ToString(CultureInfo.InvariantCulture).PadLeft(7, ' ');
             result += string.Empty.PadLeft(2, ' ');
         }
 
@@ -459,7 +478,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 result += med.Days.ToString().PadLeft(2, ' ');
             else
                 result += string.Empty.PadLeft(2, ' ');
-            result += med.Amount.ToString().PadLeft(7, ' ');
+            result += med.Amount.ToString(CultureInfo.InvariantCulture).PadLeft(7, ' ');
             result += "03";
         }
 
@@ -473,6 +492,80 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 if (string.IsNullOrEmpty(m.UsageName))
                     m.UsageName = "ASORDER";
             }
+        }
+
+        public void GetMedicineBySet(MedicineSet currentSet, string wareHouseID, DateTime? adjustDate)
+        {
+            Clear();
+            var medicineIDList = CreateIdListByMedicineSet(currentSet);
+            var table = MedicineDb.GetMedicinesBySearchIds(medicineIDList, wareHouseID, adjustDate);
+            var tempList = GetMedicinesByCurrentSetAndTable(currentSet, table);
+            foreach (var setItem in currentSet.MedicineSetItems)
+            {
+                if (Items.Count(m => m.ID.Equals(setItem.ID)) > 0) continue;
+                var medList = tempList.Where(m => m.ID.Equals(setItem.ID));
+                foreach (var item in medList)
+                {
+                    Add(item);
+                }
+            }
+        }
+
+        private List<Medicine> GetMedicinesByCurrentSetAndTable(MedicineSet currentSet, DataTable table)
+        {
+            var tempList = new List<Medicine>();
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var current = i;
+                var tempMedList = currentSet.MedicineSetItems.Where(m => m.ID.Equals(table.Rows[current].Field<string>("Pro_ID")));
+                tempList.AddRange(tempMedList.Select(setItem => AddMedicineByDataTypeAndMedicineSetItem(table.Rows[i], setItem)));
+            }
+            return tempList;
+        }
+
+        private Medicine AddMedicineByDataTypeAndMedicineSetItem(DataRow r, MedicineSetItem setItem)
+        {
+            Medicine medicine;
+            switch (r.Field<int>("DataType"))
+            {
+                case 1:
+                    medicine = new MedicineNHI(r);
+                    SetValue(medicine, setItem);
+                    return medicine;
+                case 2:
+                    medicine = new MedicineOTC(r);
+                    SetValue(medicine, setItem);
+                    return medicine;
+                case 3:
+                    medicine = new MedicineSpecialMaterial(r);
+                    SetValue(medicine, setItem);
+                    return medicine;
+                default:
+                    return null;
+            }
+        }
+
+        private List<string> CreateIdListByMedicineSet(MedicineSet currentSet)
+        {
+            var medicineIDList = new List<string>();
+            foreach (var item in currentSet.MedicineSetItems)
+            {
+                if (!medicineIDList.Contains(item.ID))
+                    medicineIDList.Add(item.ID);
+            }
+            return medicineIDList;
+        }
+
+        private void SetValue(Medicine medicine, MedicineSetItem setItem)
+        {
+            medicine.Dosage = setItem.Dosage;
+            medicine.UsageName = setItem.UsageName;
+            medicine.PositionID = setItem.PositionID;
+            medicine.Days = setItem.Days;
+            medicine.Amount = setItem.Amount;
+            medicine.PaySelf = setItem.PaySelf;
+            if (medicine.PaySelf)
+                medicine.Price = setItem.Price;
         }
     }
 }

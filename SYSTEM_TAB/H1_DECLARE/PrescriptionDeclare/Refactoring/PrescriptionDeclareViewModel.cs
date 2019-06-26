@@ -39,6 +39,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -171,6 +173,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
             }
         }
+        private MedicineSet currentSet;
+        public MedicineSet CurrentSet
+        {
+            get => currentSet;
+            set
+            {
+                Set(() => CurrentSet, ref currentSet, value);
+            }
+        }
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -198,6 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
+        public RelayCommand<string> EditMedicineSet { get; set; }
         public RelayCommand SendOrder { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand ErrorAdjust { get; set; }
@@ -261,12 +273,56 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
+            EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             SendOrder = new RelayCommand(CheckDeclareStatus);
             Clear = new RelayCommand(ClearAction);
             ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
-            DepositAdjust = new RelayCommand(DepositAdjustAction, CheckIsAdjusting);
+            DepositAdjust = new RelayCommand(DepositAdjustAction, CheckDepositAdjustEnable);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
+        }
+
+        private void EditMedicineSetAction(string mode)
+        {
+            if (CurrentSet is null && !mode.Equals("Add"))
+            {
+                MessageWindow.ShowMessage("尚未選擇藥品組合", MessageType.ERROR);
+                return;
+            }
+            MedicineSetWindow medicineSetWindow;
+            int tempID = 0;
+            switch (mode)
+            {
+                case "Get":
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentSet.MedicineSetItems = new MedicineSetItems();
+                    CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
+                    CurrentPrescription.GetMedicinesBySet(CurrentSet);
+                    CurrentPrescription.UpdateMedicines();
+                    CountMedicinePointAction();
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+                case "Add":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Add);
+                    medicineSetWindow.ShowDialog();
+                    if (CurrentSet != null)
+                        tempID = CurrentSet.ID;
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (CurrentSet != null)
+                        CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    break;
+                case "Edit":
+                    medicineSetWindow = new MedicineSetWindow(MedicineSetMode.Edit, CurrentSet);
+                    medicineSetWindow.ShowDialog();
+                    tempID = CurrentSet.ID;
+                    MainWindow.ServerConnection.OpenConnection();
+                    MedicineSets = new MedicineSets();
+                    MainWindow.ServerConnection.CloseConnection();
+                    CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
+                    break;
+            }
         }
 
         private void ChronicSequenceChangedAction()
@@ -297,7 +353,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("QRCodePrescriptionScanned", GetCustomerPrescription);
             if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
-            CheckDeclareStatus();
+            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            CheckNewCustomer();
+            CountMedicinePointAction();
             setBuckleAmount = true;
             isNotInit = true;
         }
@@ -520,6 +578,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             CurrentPrescription = prescription;
             CurrentPrescription.ID = 0;
             CheckDeclareStatus();
+            CountMedicinePointAction();
         }
 
         private void ErrorAdjustAction()
@@ -686,6 +745,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             BusyContent = Resources.讀取健保卡;
             try
             {
+                currentCard = new IcCard();
                 currentCard.Read();
             }
             catch (Exception e)
@@ -749,7 +809,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             if (currentCard.IsRead)
                 GetPatientFromIcCard();
             else
-                AskErrorUpload();
+            {
+                MessageWindow.ShowMessage("讀取卡片異常，請確認卡面及讀卡機燈號正常，如持續異常且其他健保卡可正常讀取請使用異常上傳。",MessageType.WARNING);
+            }
         }
         private void CheckCustomPrescriptions()
         {
@@ -845,8 +907,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private bool CheckPrescription(bool noCard)
         {
+            MainWindow.ServerConnection.OpenConnection();
             currentService = PrescriptionService.CreateService(CurrentPrescription);
-            return currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount) && currentService.CheckPrescription(noCard);
+            var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
+            var checkPrescription = currentService.CheckPrescription(noCard);
+            MainWindow.ServerConnection.CloseConnection();
+            return  setPharmacist && checkPrescription;
         }
 
         private void DeclareSuccess()
@@ -862,6 +928,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private bool CheckIsAdjusting()
         {
             return !isAdjusting;
+        }
+        private bool CheckDepositAdjustEnable()
+        {
+            return !isAdjusting && string.IsNullOrEmpty(currentCard.CardNumber);
         }
         #endregion
         #region CheckDeclareStatus
@@ -927,6 +997,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         #endregion
         #region OtherFunctions
+        private void CheckNewCustomer()
+        {
+            var customers = CurrentPrescription.Patient.Check();
+            switch (customers.Count)
+            {
+                case 0:
+                    CheckInsertCustomerData();
+                    break;
+                case 1:
+                    CurrentPrescription.Patient = customers[0];
+                    MainWindow.ServerConnection.OpenConnection();
+                    CurrentPrescription.Patient.GetHistories();
+                    MainWindow.ServerConnection.CloseConnection();
+                    break;
+            }
+        }
+        private void CheckInsertCustomerData()
+        {
+            if (!CurrentPrescription.Patient.CheckData())
+                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
+            else
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentPrescription.Patient.InsertData();
+                CurrentPrescription.Patient.GetHistories();
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
         private bool CheckFocusDivision(string insID)
         {
             return CurrentPrescription.Institution != null &&

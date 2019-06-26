@@ -306,7 +306,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
             if (medicalService != null)
             {
-                D37 = p.MedicalServiceID;
+                D37 = p.MedicalServiceCode;
                 D38 = medicalService.P9.PadLeft(8, '0');
             }
             D43 = p.OriginalMedicalNumber;

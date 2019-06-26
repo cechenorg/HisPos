@@ -154,7 +154,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void CountAmountsPay()
         {
-            AmountsPay = AmountSelfPay + CopaymentPoint;
+            AmountsPay = AmountSelfPay + CopaymentPointPayable;
             ActualReceive = AmountsPay;
         }
 

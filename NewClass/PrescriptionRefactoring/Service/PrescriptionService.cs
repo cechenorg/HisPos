@@ -6,19 +6,16 @@ using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
-using His_Pos.Class.Employee;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.SameDeclareConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -54,6 +51,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.current = p;
             return ps;
+        }
+
+        protected bool CheckSameDeclare()
+        {
+            var table = PrescriptionDb.CheckSameDeclarePrescription(current);
+            if (table.Rows.Count > 0)
+            {
+                var pres = new SameDeclarePrescriptions.SameDeclarePrescriptions();
+                pres.AddItems(table);
+                var window = new SameDeclareConfirmWindow(pres);
+                var result = window.DialogResult;
+                return !(result is null) && (bool)result;
+            }
+            return true;
         }
 
         public bool StartNormalAdjust()
@@ -263,7 +274,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                         new ReportParameter("PaySelf", p.PrescriptionPoint.AmountSelfPay.ToString()),
                         new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                         new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
-                        new ReportParameter("CopaymentPoint", p.PrescriptionPoint.CopaymentPoint.ToString()),
+                        new ReportParameter("CopaymentPoint", p.PrescriptionPoint.CopaymentPointPayable.ToString()),
                         new ReportParameter("HcPoint", p.PrescriptionPoint.ApplyPoint.ToString()),
                         new ReportParameter("MedicinePoint", p.PrescriptionPoint.MedicinePoint.ToString(CultureInfo.InvariantCulture)),
                         new ReportParameter("MedicineId", m.Id),
@@ -313,7 +324,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 new ReportParameter("PaySelf", p.PrescriptionPoint.AmountSelfPay.ToString()),
                 new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                 new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
-                new ReportParameter("CopaymentPoint",p.PrescriptionPoint.CopaymentPoint.ToString()),
+                new ReportParameter("CopaymentPoint",p.PrescriptionPoint.CopaymentPointPayable.ToString()),
                 new ReportParameter("HcPoint", p.PrescriptionPoint.ApplyPoint.ToString()),
                 new ReportParameter("MedicinePoint", p.PrescriptionPoint.MedicinePoint.ToString()),
                 new ReportParameter("Division", p.Division is null ?string.Empty:p.Division.Name),

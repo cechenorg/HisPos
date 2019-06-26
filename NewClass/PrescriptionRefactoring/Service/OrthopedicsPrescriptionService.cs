@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public override bool CheckPrescription(bool noCard)
         {
             CheckAnonymousPatient();
-            if (!CheckMissingCooperativeContinue()) return false;
+            if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (!CheckNhiRules(noCard)) return false;
@@ -76,7 +76,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 PrescriptionDb.UpdateOrthopedicsStatus(current.SourceId);
         }
 
-        private bool CheckMissingCooperativeContinue()
+        private bool CheckRemarkEmpty()
         {
             if (current.AdjustCase.ID != "2" && string.IsNullOrEmpty(current.Remark))
             {
@@ -95,6 +95,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             var isVip = new ConfirmWindow(Resources.收部分負擔, Resources.免收確認);
             Debug.Assert(isVip.DialogResult != null, "isVip.DialogResult != null");
             current.PrescriptionStatus.IsVIP = (bool)!isVip.DialogResult;
+            current.PrescriptionPoint.CopaymentPointPayable = current.PrescriptionStatus.IsVIP ? 0 : current.PrescriptionPoint.CopaymentPoint;
         }
     }
 }

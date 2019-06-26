@@ -22,8 +22,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckNhiRules(noCard)) return false;
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
-            if (!PrintConfirm()) return false;
-            return true;
+            return CheckSameDeclare() && PrintConfirm();
         }
 
         public override bool NormalAdjust()
@@ -42,6 +41,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override void DepositAdjust()
         {
+            current.CountDeposit();
             current.SetDepositAdjustStatus();
             current.InsertDb();
         }

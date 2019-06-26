@@ -1,6 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
@@ -253,9 +256,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void PrescriptionSelectedAction()
         {
-            if(SelectedPrescription is null) return;
-            Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
-            Messenger.Default.Send(new NotificationMessage("CloseCustomerPrescriptionWindow"));
+            try
+            {
+                if (SelectedPrescription is null) return;
+                Messenger.Default.Send(new NotificationMessage<Prescription>(this, SelectedPrescription.CreatePrescription(), "CustomerPrescriptionSelected"));
+                Messenger.Default.Send(new NotificationMessage("CloseCustomerPrescriptionWindow"));
+            }
+            catch (Exception e)
+            {
+                NewFunction.ExceptionLog(e.Message);
+                MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
+            }
         }
     }
 }

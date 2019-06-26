@@ -220,7 +220,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (AvailableTimes is null) return false;
             var availableTimesUseUp = AvailableTimes == 0;
-            var expired = DateTime.Compare(ValidityPeriod, DateTime.Today) < 0;
+            var expired = new TimeSpan(ValidityPeriod.Ticks - DateTime.Today.Ticks).Days < 30;
             return availableTimesUseUp || expired;
         }
     }

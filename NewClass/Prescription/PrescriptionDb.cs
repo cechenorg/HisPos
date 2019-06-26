@@ -870,7 +870,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicinePoint", p.PrescriptionPoint.MedicinePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicSequence", p.ChronicSeq);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicTotal", p.ChronicTotal);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceCode);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.OriginalMedicalNumber);
             if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
@@ -1055,7 +1055,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicinePoint", p.PrescriptionPoint.MedicinePoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_ChronicSequence", p.ChronicSeq);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_ChronicTotal", p.ChronicTotal);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServiceID", p.MedicalServiceID);
+            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServiceID", p.MedicalServiceCode);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "ResMas_OldMedicalNumber", p.OriginalMedicalNumber);
             if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
@@ -1326,6 +1326,27 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionSameDeclare]", parameterList);
+        }
+
+        public static DataTable CheckSameDeclarePrescription(PrescriptionRefactoring.Prescription current)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusID", current.Patient.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "TreatDate", current.TreatDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "Institution", current.Institution.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Division", current.Division.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCase", current.AdjustCase.ID);
+            if (current.ChronicTotal is null)
+            {
+                DataBaseFunction.AddSqlParameter(parameterList, "ChronicTotal", DBNull.Value);
+                DataBaseFunction.AddSqlParameter(parameterList, "ChronicSeq", DBNull.Value);
+            }
+            else
+            {
+                DataBaseFunction.AddSqlParameter(parameterList, "ChronicTotal", current.ChronicTotal);
+                DataBaseFunction.AddSqlParameter(parameterList, "ChronicSeq", current.ChronicSeq);
+            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CountSameDeclarePrescription]", parameterList);
         }
     }
 }

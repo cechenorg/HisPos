@@ -393,5 +393,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     break;
             }
         }
+
+        public bool CanCountMedicineDays()
+        {
+            return (this is MedicineNHI || this is MedicineSpecialMaterial) && !PaySelf && CheckDaysNotNull();
+        }
+
+        private bool CheckDaysNotNull()
+        {
+            return Days != null && Days > 0;
+        }
     }
 }

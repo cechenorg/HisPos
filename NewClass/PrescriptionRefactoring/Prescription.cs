@@ -25,6 +25,7 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
+using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Microsoft.Reporting.WinForms;
@@ -452,7 +453,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
         public bool IsPrescribe => Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0;
         public bool IsBuckle => WareHouse != null;
-        public string MedicalServiceID { get; private set; }
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
 
@@ -1051,22 +1051,22 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var clone = new Prescription
             {
                 Type = Type,
-                patient = (Customer) Patient.Clone(),
-                institution = Institution.DeepCloneViaJson(),
-                division = Division.DeepCloneViaJson(),
-                pharmacist = Pharmacist.DeepCloneViaJson(),
-                tempMedicalNumber = TempMedicalNumber,
-                treatDate = TreatDate,
-                adjustDate = AdjustDate,
-                mainDisease = MainDisease.DeepCloneViaJson(),
-                subDisease = SubDisease.DeepCloneViaJson(),
-                chronicSeq = ChronicSeq,
-                chronicTotal = ChronicTotal,
-                adjustCase = AdjustCase.DeepCloneViaJson(),
-                prescriptionCase = PrescriptionCase.DeepCloneViaJson(),
-                copayment = Copayment.DeepCloneViaJson(),
-                paymentCategory = PaymentCategory.DeepCloneViaJson(),
-                specialTreat = SpecialTreat.DeepCloneViaJson(),
+                Patient = (Customer) Patient.Clone(),
+                Institution = VM.GetInstitution(Institution?.ID),
+                Division = VM.GetDivision(Division?.ID),
+                Pharmacist = Pharmacist.DeepCloneViaJson(),
+                TempMedicalNumber = TempMedicalNumber,
+                TreatDate = TreatDate,
+                AdjustDate = AdjustDate,
+                MainDisease = MainDisease.DeepCloneViaJson(),
+                SubDisease = SubDisease?.DeepCloneViaJson(),
+                ChronicSeq = ChronicSeq,
+                ChronicTotal = ChronicTotal,
+                AdjustCase = VM.GetAdjustCase(AdjustCase?.ID),
+                PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID),
+                Copayment = VM.GetCopayment(Copayment?.Id),
+                PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID),
+                SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
                 PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
                 Medicines = new Medicines()
             };
@@ -1191,7 +1191,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private bool SetMedicalService28Days()
         {
             if (!CheckMedicineDays28()) return false;
-            MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
+            MedicalServiceCode = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
             PrescriptionPoint.MedicalServicePoint = 69;
             return true;
         }
@@ -1199,7 +1199,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private bool SetMedicalServiceBetween14And28Days()
         {
             if (!CheckMedicineDaysBetween14And28()) return false;
-            MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
+            MedicalServiceCode = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
             PrescriptionPoint.MedicalServicePoint = 59;
             return true;
         }
@@ -1207,14 +1207,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private bool SetMedicalServiceBetween7And14Days()
         {
             if (!CheckMedicineDaysBetween7And14()) return false;
-            MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
+            MedicalServiceCode = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
             PrescriptionPoint.MedicalServicePoint = 48;
             return true;
         }
 
         private void SetMedicalServiceLessThan7Days()
         {
-            MedicalServiceID = "05202B";//一般處方給付(7天以內)
+            MedicalServiceCode = "05202B";//一般處方給付(7天以內)
             PrescriptionPoint.MedicalServicePoint = 48;
         }
 
@@ -1240,7 +1240,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (IsPrescribe)
             {
                 AdjustCase = VM.GetAdjustCase("0").DeepCloneViaJson();
-                MedicalServiceID = string.Empty;
+                MedicalServiceCode = string.Empty;
                 PrescriptionPoint.MedicalServicePoint = 0;
                 PrescriptionPoint.MedicinePoint = 0;
                 PrescriptionPoint.TotalPoint = 0;
@@ -1483,6 +1483,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 default:
                     return false;
             }
+        }
+
+        public void CountDeposit()
+        {
+            PrescriptionPoint.CountDeposit();
+        }
+
+        public void GetMedicinesBySet(MedicineSet currentSet)
+        {
+            Medicines.GetMedicineBySet(currentSet, WareHouse is null ? "0" : WareHouse.ID, AdjustDate);
         }
     }
 }

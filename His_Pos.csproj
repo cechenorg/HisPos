@@ -382,6 +382,8 @@
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\OrthopedicsPreview.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\UngetCardPreview.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Prescriptions.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\CooperativePrescriptionService.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionServiceProvider.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\NormalPrescriptionService.cs" />
@@ -639,6 +641,10 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\QRCodeReceiveWindow.xaml.cs">
       <DependentUpon>QRCodeReceiveWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\SameDeclareConfirmWindow\SameDeclareConfirmViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\SameDeclareConfirmWindow\SameDeclareConfirmWindow.xaml.cs">
+      <DependentUpon>SameDeclareConfirmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CommonHospitalsWindow\CommonHospitalsWindow.xaml.cs">
@@ -1255,6 +1261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\QRCodeReceiveWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindowRefactoring\SameDeclareConfirmWindow\SameDeclareConfirmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
