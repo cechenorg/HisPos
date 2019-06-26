@@ -5,339 +5,141 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
-             mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365" Name="StockTaking">
+             xmlns:stockTakingControl="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingControl"
+             mc:Ignorable="d">
     <UserControl.Resources>
-        <stockTaking:IsResultEqualConverter x:Key="IsResultEqualConverter"/>
+        <DataTemplate x:Key="ChooseProductControl" DataType="UserControl">
+            <stockTakingControl:ChooseProductControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ResultInputControl" DataType="UserControl">
+            <stockTakingControl:ResultInputControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="DifferenceReasonControl" DataType="UserControl">
+            <stockTakingControl:DifferenceReasonControl/>
+        </DataTemplate>
     </UserControl.Resources>
-    <Viewbox Stretch="Fill" Name="StockTakingViewBox">
-        <Grid Name="ViewGrid" Width="1365" Height="839">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="150"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,10,0,0">
-                <Rectangle Width="150"/>
-                <Ellipse Name="AddProductsEllipse" Width="25" Height="25" Fill="GreenYellow"/>
-                <Polyline Name="PrintLine" Stroke="LightSlateGray" StrokeThickness="5" Width="315" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="PrintEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
-                <Polyline Name="InputLine" Stroke="LightSlateGray" StrokeThickness="5" Width="320" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="InputEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
-                <Polyline Name="CompleteLine" Stroke="LightSlateGray" StrokeThickness="5" Width="315" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="CompleteEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Rectangle Width="100"/>
-                <Label Content="新增盤點品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="250"/>
-                <Label Content="列印" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="255"/>
-                <Label Content="輸入盤點結果" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="250"/>
-                <Label Content="盤差" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            </StackPanel>
-            <Polygon Name="AddProductTri" Points="165,0 180,15, 150,15" Fill="{StaticResource GridDarkestBackGround}" Grid.Row="2"/>
-            <Polygon Name="PrintTri" Points="505,0 520,15, 490,15" Fill="{StaticResource GridDarkestBackGround}" Grid.Row="2"/>
-            <Grid Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Content="全部" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="9">
-                    <Label Content="櫃位" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="Location" Margin="0,0,10,0" Width="120" FontSize="16"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="9">
-                    <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="ProductId" Margin="0,0,10,0" Width="90" FontSize="16"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="9">
-                    <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="ProductName" Margin="0,0,10,0" Width="90" FontSize="16"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="9">
-                    <Label Content="效期" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="ValidDate" Width="60" FontSize="16"/>
-                    <Label Content="個月內" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                </StackPanel>
-                <CheckBox Name="SafeAmount" Grid.Column="5" Grid.Row="0" Content="低於安全量" Margin="50,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Grid.Column="0" Grid.Row="1" Content="OTC" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="9">
-                    <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="120"  Foreground="Black"  FontFamily="Segoe UI Semibold" 
-                              FontSize="14"  HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
-                        <ComboBox.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
-                        </ComboBox.GroupStyle>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <Label Grid.Column="0" Grid.Row="2" Content="藥品" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
-                    <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="20,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="5" Margin="9">
-                    <Label Content="盤點人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox Name="TakingEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30" HorizontalContentAlignment="Center"
-                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <controls:AutoCompleteBox.TextBoxStyle>
-                            <Style TargetType="TextBox">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </controls:AutoCompleteBox.TextBoxStyle>
-                        <controls:AutoCompleteBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Width="50" Content="{Binding Id}"/>
-                                    <Label Width="100" Content="{Binding Name}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </controls:AutoCompleteBox.ItemTemplate>
-                    </controls:AutoCompleteBox>
-                </StackPanel>
-                <Button Name="AddStockItems" Grid.Column="6" Grid.Row="1" Width="150" Content="盤點所有庫存" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="AddStockItems_Click"/>
-                <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="AddItems_Click"/>
-            </Grid>
-            <StackPanel Name="SortType" Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}">
-                <Label Content="列印排序: " VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,10,0"/>
-                <RadioButton Content="依代碼" Tag="1" Margin="10,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="OrderMode_OnChecked"/>
-                <RadioButton Content="依名稱" Tag="2" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="OrderMode_OnChecked"/>
-                <RadioButton Content="依類別" Tag="3" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="OrderMode_OnChecked"/>
-                <RadioButton Content="依櫃位" Tag="9" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="OrderMode_OnChecked"/>
-            </StackPanel>
-            <DataGrid Name="CheckItems" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CanUserSortColumns="False"
-                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
-                      CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+    <Grid Width="1365" Height="839">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="150,0,150,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="25"/>
+            </Grid.ColumnDefinitions>
+            <Ellipse Grid.Column="0" Width="25" Height="25" Fill="GreenYellow"/>
+            <Polyline Grid.Column="1" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashCap="Round">
+                <Polyline.Style>
+                    <Style TargetType="Polyline">
+                        <Setter Property="Stroke" Value="LightSlateGray"/>
+                        <Setter Property="StrokeDashArray" Value="5"/>
                         <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Horizontal">
-                                <Setter Property="Width" Value="Auto" />
-                                <Setter Property="Height" Value="15" />
-                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                            </Trigger>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                            </Trigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="LightSlateGray"/>
+                                <Setter Property="StrokeDashArray" Value="5"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                <Setter Property="StrokeDashArray" Value="100"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                <Setter Property="StrokeDashArray" Value="100"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
+                </Polyline.Style>
+            </Polyline>
+            <Ellipse Grid.Column="2" Width="25" Height="25">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Setter Property="Fill" Value="LightSlateGray"/>
                         <Style.Triggers>
-                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                            </Trigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="LightSlateGray"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="GreenYellow"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="GreenYellow"/>
+                            </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
-                        <Setter Property="FontSize" Value="14"/>
                     </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="30">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Margin="10,0,0,0"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="110" MaxWidth="110" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="250" MaxWidth="500" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="150" MaxWidth="150" Header="類別" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Category}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="200" MaxWidth="200" Header="批號" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ListView Background="Transparent" Margin="0,-15,0,0"
-                                          ItemsSource="{Binding BatchNumbersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListViewItem}">
-                                            <Setter Property="Height" Value="40"/>
-                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                        <GridViewRowPresenter />
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridView.ColumnHeaderContainerStyle>
-                                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                </Style>
-                                            </GridView.ColumnHeaderContainerStyle>
-                                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding BatchNumber}"/>
-                                            <GridViewColumn Width="50" DisplayMemberBinding="{Binding Amount}" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="庫存總量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="100" MaxWidth="100" Header="盤點數量">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="StockTakingResult" Text="{Binding TakingResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="90" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2" TextChanged="StockTakingResult_OnTextChanged"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding IsEqual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsResultEqualConverter}}" Width="20"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="盤差價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValueDiff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="效期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValidDate}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="櫃位" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Location}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="上次盤點" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastCheckDate}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="200" MaxWidth="200" Header="盤差原因">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox  Name="ComboBox1" Text="{Binding TakingReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" VerticalAlignment="Center">
-                                    <ComboBoxItem Content="汙損"></ComboBoxItem>
-                                    <ComboBoxItem Content="被竊"></ComboBoxItem>
-                                    <ComboBoxItem Content="不明原因"></ComboBoxItem> 
-                                </ComboBox>
-                                <!--<TextBox Width="190" FontSize="18" FontFamily="Segoe UI Semi" Text="{Binding TakingReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" VerticalAlignment="Center" />-->
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="盤點人" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding EmpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <StackPanel Orientation="Horizontal" Grid.Row="6" Background="{StaticResource GridDarkerBackGround}">
-                <Button Name="AddOneItem" Content="+ 新增單筆商品" Width="150" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="AddOneItem_Click"/>
-                <Label Content="盤點商品  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="{Binding Path=TakingCollection.Count}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Name="Row1Rectangle" Width="610"/>
-                <Button Name="ClearProduct" Margin="0,0,20,0" Width="150" Content="清空盤點單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="ClearProduct_Click"/>
-                <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="FinishedAddProduct_Click"/>
-                <CheckBox Width="100" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Name="CheckBoxSkipPrint" Content="跳過列印"/>
-                <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Click="Print_OnClick"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="7" Background="{StaticResource GridDarkerBackGround}">
-                <Label Content="已盤點" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="{Binding ResultFilled, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Label Content="項 , 剩餘" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="{Binding ResultNotFilled, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="410"/>
-                <Label Content="有更動  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="{Binding ResultChanged, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" Margin="0,0,20,0"/>
-                <Button Width="150" Content="自動補齊未填寫" Name="AutoFill" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,20,0" Background="DimGray" BorderThickness="0" Click="AutoFill_Click" />
-                <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0" Click="StockTakingComplete_Click"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="8" Background="{StaticResource GridDarkerBackGround}">
-                <Rectangle Width="1200"/>
-                <Button Width="150" Content="完成" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0" Click="Complete_Click"/>
-            </StackPanel>
+                </Ellipse.Style>
+            </Ellipse>
+            <Polyline Grid.Column="3" Stroke="LightSlateGray" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="5" StrokeDashCap="Round">
+                <Polyline.Style>
+                    <Style TargetType="Polyline">
+                        <Setter Property="Stroke" Value="LightSlateGray"/>
+                        <Setter Property="StrokeDashArray" Value="5"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="LightSlateGray"/>
+                                <Setter Property="StrokeDashArray" Value="5"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="LightSlateGray"/>
+                                <Setter Property="StrokeDashArray" Value="5"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                <Setter Property="StrokeDashArray" Value="100"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Polyline.Style>
+            </Polyline>
+            <Ellipse Grid.Column="4" Width="25" Height="25">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Setter Property="Fill" Value="LightSlateGray"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="LightSlateGray"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="LightSlateGray"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Fill" Value="GreenYellow"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
         </Grid>
-    </Viewbox>
+        <Grid Grid.Row="1" Margin="87,0,87,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="新增盤點品項" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <Label Content="輸入盤點結果" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <Label Content="盤差" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+        </Grid>
+        <ContentControl Grid.Row="2" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
 </UserControl>

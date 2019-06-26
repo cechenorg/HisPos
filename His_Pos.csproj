@@ -864,6 +864,15 @@
       <DependentUpon>StockTakingPlanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ChooseProductControl.xaml.cs">
+      <DependentUpon>ChooseProductControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\DifferenceReasonControl.xaml.cs">
+      <DependentUpon>DifferenceReasonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ResultInputControl.xaml.cs">
+      <DependentUpon>ResultInputControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
@@ -1093,7 +1102,7 @@
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
       <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTaking.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
       <DependentUpon>StockTakingHistory.xaml</DependentUpon>
     </Compile>
@@ -1445,6 +1454,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ChooseProductControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\DifferenceReasonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ResultInputControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

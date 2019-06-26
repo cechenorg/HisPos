@@ -305,7 +305,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):
-                    newTab = new StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTakingViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):

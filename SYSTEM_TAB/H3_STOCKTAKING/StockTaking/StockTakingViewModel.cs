@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 {
-    class StockTaking : TabBase
+    class StockTakingViewModel : TabBase
     {
         public override TabBase getTab()
         {
