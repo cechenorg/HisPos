@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
             DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", proID);
             DataBaseFunction.AddSqlParameter(parameterList, "MER_PRO_ID", merProID);
             DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareHouseID);
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductSplitInventory]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductMergeInventory]", parameterList);
         }
     }
 }

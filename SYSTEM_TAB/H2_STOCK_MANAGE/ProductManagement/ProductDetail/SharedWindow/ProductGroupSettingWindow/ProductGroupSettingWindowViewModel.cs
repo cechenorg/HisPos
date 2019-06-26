@@ -68,6 +68,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Actions -----
         private void MergeProductGroupAction()
         {
+            SearchMergeProductAction();
+
             if (!IsMergeValid()) return;
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {mergeProductStruct.ID} 併入群組\n合併後庫存量為 {mergeProductStruct.Inventory + TotalInventory}", "");
