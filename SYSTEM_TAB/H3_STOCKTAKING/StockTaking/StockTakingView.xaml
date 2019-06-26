@@ -6,7 +6,11 @@
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
              xmlns:stockTakingControl="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingControl"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
              mc:Ignorable="d">
+    <UserControl.DataContext>
+        <local:StockTakingViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="ChooseProductControl" DataType="UserControl">
             <stockTakingControl:ChooseProductControl/>

@@ -403,15 +403,7 @@ namespace His_Pos.ChromeTabViewModel
                         case nameof(FeatureItem.進退貨紀錄):
                             break;
 
-                        case nameof(FeatureItem.新增盤點):
-                            if (StockTakingView.Instance is null) break;
-
-                            if (StockTakingView.DataChanged)
-                            {
-                                StockTakingView.Instance.InitProduct();
-
-                                StockTakingView.DataChanged = false;
-                            }
+                        case nameof(FeatureItem.新增盤點): 
                             break;
 
                         case nameof(FeatureItem.審核管理):

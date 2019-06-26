@@ -24,7 +24,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         public RelayCommand AddPlanCommand { get; set; }
         public RelayCommand DeletePlanCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
-        public RelayCommand RemoveProductCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand ConfirmChangeCommand { get; set; }
         public RelayCommand CancelChangeCommand { get; set; }
@@ -94,10 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
             }
             MessageWindow.ShowMessage("刪除成功",MessageType.SUCCESS);
         }
-        private void RemoveProductAction() { 
-            CurrentPlan.StockTakingProductCollection.Remove(StockTakingPlanSelectProduct);
-            IsDataChanged = true;
-        }
+       
         private void AddProductAction()
         {
             Messenger.Default.Register<NotificationMessage<StockTakingPlanProducts>>(this, GetProductSubmit);
@@ -144,7 +140,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
             DataChangedCommand = new RelayCommand(DataChangedAction);
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsPlanDataChanged);
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsPlanDataChanged);
-            RemoveProductCommand = new RelayCommand(RemoveProductAction);
         }
         private bool IsPlanDataChanged()
         {

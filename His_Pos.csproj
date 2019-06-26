@@ -536,6 +536,8 @@
     <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProduct.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProducts.cs" />
     <Compile Include="NewClass\StockTaking\StockTaking\StockTaking.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakingPage\StockTakingPage.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakingPage\StockTakingPages.cs" />
     <Compile Include="NewClass\StockTaking\StockTaking\StockTakings.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
@@ -1099,12 +1101,6 @@
       <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
-      <DependentUpon>StockTakingHistory.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
-      <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Database\SQLServerConnection.cs" />
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
@@ -1679,14 +1675,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

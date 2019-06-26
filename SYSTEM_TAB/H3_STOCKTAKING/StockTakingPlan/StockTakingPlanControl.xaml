@@ -101,7 +101,7 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource Shadow}" Margin="10,0,10,0">
             <Button Content="+ 新增品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" Command="{Binding AddProductCommand}"/>
-            <Button Content="- 移除品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" Command="{Binding RemoveProductCommand}"/>
+            <Rectangle Width="120"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="70,0,0,0"/>
             <Label Content="{Binding CurrentPlan.StockTakingProductCollection.Count, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="個品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
