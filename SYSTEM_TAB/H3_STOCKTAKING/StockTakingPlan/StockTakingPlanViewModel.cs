@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StockTaking.StockTakingPlan;
+using His_Pos.NewClass.StockTaking.StockTakingProduct;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
 {
@@ -22,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         public RelayCommand AddPlanCommand { get; set; }
         public RelayCommand DeletePlanCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
+        public RelayCommand RemoveProductCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand ConfirmChangeCommand { get; set; }
         public RelayCommand CancelChangeCommand { get; set; }
@@ -30,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         #region ----- Define Variables -----
         private StockTakingPlans stockTakingPlanCollection;
         private NewClass.StockTaking.StockTakingPlan.StockTakingPlan currentPlan;
+        private StockTakingPlanProduct stockTakingPlanSelectProduct;
         private bool isDataChanged;
 
         public bool IsDataChanged
@@ -42,11 +46,18 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
+        public StockTakingPlanProduct StockTakingPlanSelectProduct {
+            get { return stockTakingPlanSelectProduct; }
+            set
+            {
+                Set(() => StockTakingPlanSelectProduct, ref stockTakingPlanSelectProduct, value); 
+            }
+        }
         public StockTakingPlans StockTakingPlanCollection
         {
             get { return stockTakingPlanCollection; }
             set { Set(() => StockTakingPlanCollection, ref stockTakingPlanCollection, value); }
-        }
+        } 
         public NewClass.StockTaking.StockTakingPlan.StockTakingPlan CurrentPlan
         {
             get { return currentPlan; }
@@ -69,16 +80,43 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         #region ----- Define Actions -----
         private void AddPlanAction()
         {
-            AddNewPlanWindow addNewPlanWindow = new AddNewPlanWindow();
-            addNewPlanWindow.ShowDialog();
+            AddNewPlanWindow.AddNewPlanWindow addNewPlanWindow = new AddNewPlanWindow.AddNewPlanWindow();
+            MainWindow.ServerConnection.OpenConnection();
+            StockTakingPlanCollection = StockTakingPlans.GetStockTakingPlans();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void DeletePlanAction()
         {
-            CurrentPlan.Delete();
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除此盤點計畫?","盤點計畫刪除");
+            if ((bool)confirmWindow.DialogResult) {
+                CurrentPlan.Delete();
+                StockTakingPlanCollection.Remove(CurrentPlan);
+            }
+            MessageWindow.ShowMessage("刪除成功",MessageType.SUCCESS);
+        }
+        private void RemoveProductAction() { 
+            CurrentPlan.StockTakingProductCollection.Remove(StockTakingPlanSelectProduct);
+            IsDataChanged = true;
         }
         private void AddProductAction()
         {
-
+            Messenger.Default.Register<NotificationMessage<StockTakingPlanProducts>>(this, GetProductSubmit);
+            AddNewProductWindow.AddNewProductWindow addNewProductWindow = new AddNewProductWindow.AddNewProductWindow(CurrentPlan.WareHouse.ID);
+            Messenger.Default.Unregister<NotificationMessage<StockTakingPlanProducts>>(this, GetProductSubmit);
+            IsDataChanged = true;
+        }
+        
+        private void GetProductSubmit(NotificationMessage<StockTakingPlanProducts> notificationMessage)
+        {
+            if (notificationMessage.Notification == "GetProductSubmit")
+                AddProducts(notificationMessage.Content);
+        }
+        private void AddProducts(StockTakingPlanProducts stockTakingProducts) {
+            foreach (var s in stockTakingProducts) {
+                if(CurrentPlan.StockTakingProductCollection.Count(c => c.ID == s.ID) == 0)
+                CurrentPlan.StockTakingProductCollection.Add(s);
+            }
+           
         }
         private void DataChangedAction()
         {
@@ -87,10 +125,13 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         private void ConfirmChangeAction()
         {
             IsDataChanged = false;
+            CurrentPlan.Update();
+            MessageWindow.ShowMessage("更新盤點計畫成功",MessageType.SUCCESS);
         }
         private void CancelChangeAction()
         {
             IsDataChanged = false;
+            CurrentPlan.GetPlanProducts();
         }
         #endregion
 
@@ -103,6 +144,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
             DataChangedCommand = new RelayCommand(DataChangedAction);
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsPlanDataChanged);
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsPlanDataChanged);
+            RemoveProductCommand = new RelayCommand(RemoveProductAction);
         }
         private bool IsPlanDataChanged()
         {

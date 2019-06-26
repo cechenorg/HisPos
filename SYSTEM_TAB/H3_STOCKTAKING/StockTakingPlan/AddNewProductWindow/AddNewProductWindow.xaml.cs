@@ -12,16 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
-{
+namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow {
     /// <summary>
-    /// AddNewPlanWindow.xaml 的互動邏輯
+    /// AddNewProductWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class AddNewPlanWindow : Window
-    {
-        public AddNewPlanWindow()
-        {
+    public partial class AddNewProductWindow : Window {
+        public AddNewProductWindow(string warID) {
             InitializeComponent();
+            AddNewProductWindowViewModel addNewProductWindowViewModel = new AddNewProductWindowViewModel(warID);
+            DataContext = addNewProductWindowViewModel;
+            ShowDialog();
         }
     }
 }
