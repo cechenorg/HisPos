@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Database;
-using His_Pos.NewClass.Product.StockTaking;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
 
 namespace His_Pos.NewClass.StockTaking
@@ -51,7 +50,13 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "PLAN_ID", planID); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductsByID]", parameterList);
         }
-         
+        internal static DataTable GetStockTakingProductsByID(string ID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoTakID", ID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingProductsByID]", parameterList);
+        }
+
         internal static void UpdateStockTakingPlan(StockTakingPlan.StockTakingPlan stockTakingPlan)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();

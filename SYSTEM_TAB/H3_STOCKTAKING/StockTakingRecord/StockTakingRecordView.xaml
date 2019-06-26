@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="61*"/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="StockTakingRecord" Grid.Column="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" Margin="10,10,0,10"
-                             ItemsSource="{Binding StockTakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                             ItemsSource="{Binding StockTakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="210">
                             <DataGridTemplateColumn.CellStyle>
@@ -99,7 +99,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Margin="0,10,10,10" Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding StockTakingOrder}" Grid.ColumnSpan="2">
+                <Grid Margin="0,10,10,10" Grid.Column="1" Background="{StaticResource GridDarkerBackGround}"   Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition/>
@@ -138,7 +138,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="有更動" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Grid.Column="0" Grid.Row="0"/>
                         <Label Content="未更動" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Grid.Column="1" Grid.Row="0"/>
-                        <DataGrid Name="Changed" ItemsSource="{Binding ChangedtakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,5,10" Grid.Row="2" Grid.Column="0">
+                        <DataGrid  ItemsSource="{Binding ChangeProductCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,5,10" Grid.Row="2" Grid.Column="0">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
@@ -152,7 +152,7 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="100" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                                <DataGridTextColumn Width="100" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -160,7 +160,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -168,7 +168,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="80" Header="當下庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OldValue}">
+                                <DataGridTextColumn Width="80" Header="當下庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -176,7 +176,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="80" Header="盤點量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NewValue}">
+                                <DataGridTextColumn Width="80" Header="盤點量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NewInventory}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -184,23 +184,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="80" Header="盤差量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValueDiff}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/> 
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Width="80" Header="盤差價格" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PriceDiff}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/> 
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Width="140" Header="盤差原因" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Reason}">
+                                <DataGridTextColumn Width="250" Header="盤差原因" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Note}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -210,8 +194,8 @@
                                 </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <DataGrid Name="UnChanged" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                 ItemsSource="{Binding UnchangedtakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" Grid.Row="2" Grid.Column="1">
+                        <DataGrid  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                 ItemsSource="{Binding UnChangeProductCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" Grid.Row="2" Grid.Column="1">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
@@ -225,7 +209,7 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="120" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                                <DataGridTextColumn Width="120" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -233,7 +217,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="190" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                                <DataGridTextColumn Width="190" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -241,7 +225,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="90" Header="當下庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OldValue}">
+                                <DataGridTextColumn Width="90" Header="當下庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -254,13 +238,11 @@
                     </Grid>
                     <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource Shadow}">
                         <Label Content="盤點" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <Label Name="TotalAmount" Width="90" Foreground="Black" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                        <Label  Content="{Binding TotalProductCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="Black" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                         <Label Content="項 , 有更動" Foreground="Black" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <Label Name="ChangedAmount" Width="90" Foreground="Black" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                        <Label  Content="{Binding ChangeProductCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="Black" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                         <Label Content="項" Foreground="Black" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <Rectangle Width="550"/>
-                        <Label Content="總盤差 $" Foreground="Black" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <Label Content="{Binding TotalPriceDiff}" Width="90" Foreground="Black" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                        <Rectangle Width="550"/> 
                     </StackPanel>
                 </Grid>
             </Grid>

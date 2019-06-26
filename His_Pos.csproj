@@ -504,10 +504,6 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingMedicine.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingOTC.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingProduct.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />

@@ -15,11 +15,16 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
             WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("StoTakMas_WarehouseID").ToString());
             EnpName = r.Field<string>("Emp_Name");
             Time = r.Field<DateTime>("StoTakMas_Time");
+            StockTakingProductCollection = new StockTakingProduct.StockTakingProducts();
         }
         public string ID { get; set; }
         public WareHouse.WareHouse WareHouse { get; set; }
         public string EnpName { get; set; }
         public DateTime Time { get; set; }
+        public StockTakingProduct.StockTakingProducts StockTakingProductCollection { get; set; }
+        public void GetStockTakingProductbyID() {
+            StockTakingProductCollection = StockTakingProductCollection.GetStockTakingProductsByID(ID); 
+        }
         
     }
 }
