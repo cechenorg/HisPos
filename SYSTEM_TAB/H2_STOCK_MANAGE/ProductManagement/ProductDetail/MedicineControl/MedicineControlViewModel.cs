@@ -40,6 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand ExportRecordCommand { get; set; }
         public RelayCommand ShowConsumeRecordCommand { get; set; }
         public RelayCommand<string> FilterRecordCommand { get; set; }
+        public RelayCommand ShowProductGroupWindowCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -272,6 +273,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
             }
         }
+        private void ShowProductGroupWindowAction()
+        {
+            if (StockDetail.TotalInventory < 0)
+            {
+                MessageWindow.ShowMessage("欲調整商品群組 需先解決負庫問題", MessageType.ERROR);
+                return;
+            }
+
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(ProductGroupSettingCollection, SelectedWareHouse.ID, StockDetail.TotalInventory);
+            productGroupSettingWindow.ShowDialog();
+
+            SearchProductRecordAction();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -285,6 +299,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             DataChangedCommand = new RelayCommand(DataChangedAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
             FilterRecordCommand = new RelayCommand<string>(FilterRecordAction);
+            ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
 
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);

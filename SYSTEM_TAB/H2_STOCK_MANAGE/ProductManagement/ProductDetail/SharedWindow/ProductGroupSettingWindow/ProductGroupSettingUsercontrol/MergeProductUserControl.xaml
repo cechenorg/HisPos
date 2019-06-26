@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol"
+             xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="450">
     <UserControl.Resources>
@@ -54,47 +55,25 @@
                         </Trigger>
                     </Style.Triggers>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Height" Value="42"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="50" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsEditable, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Image.InputBindings>
-                                    <MouseBinding Command="{Binding DataContext.RemoveMergeProductCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
-                                </Image.InputBindings>
-                            </Image>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="100" Header="商品代碼" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ContentControl Content="{Binding}">
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                        <Setter Property="ContentTemplate" Value="{StaticResource EnableProduct}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsEditable}" Value="true">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource DisableProduct}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="250" Header="商品名稱" >
+                <DataGridTextColumn Header="商品編號" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn MinWidth="200" MaxWidth="500" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Label Width="250" Margin="20,0,0,0" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
-                                 Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                 
+                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -102,8 +81,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Rectangle Width="310"/>
-          
+            <Label Content="商品編號" Foreground="Black" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox Text="" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="187"/>
             <Button Width="120" Command="{Binding MergeProductGroupCommand}" Margin="10,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
