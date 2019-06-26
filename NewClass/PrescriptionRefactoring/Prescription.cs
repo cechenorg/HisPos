@@ -353,8 +353,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             get => adjustCase;
             set
             {
-                if (value.CheckIsPrescribe() && MedicineDays > 3)
-                    value = VM.GetAdjustCase("1");
+                if (value.CheckIsPrescribe() && !IsPrescribe)
+                {
+                    value = VM.GetAdjustCase(ChronicTotal != null ? "2" : "1");
+                }
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
                 CheckVariableByAdjustCase();

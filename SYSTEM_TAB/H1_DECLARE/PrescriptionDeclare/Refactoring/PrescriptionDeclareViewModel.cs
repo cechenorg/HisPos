@@ -959,10 +959,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private bool CheckPrescribe()
         {
             if (!CurrentPrescription.IsPrescribe)
-            {
-                CurrentPrescription.AdjustCase = VM.GetAdjustCase("1");
                 return false;
-            }
             DeclareStatus = PrescriptionDeclareStatus.Prescribe;
             CurrentPrescription.SetPrescribeAdjustCase();
             return true;
