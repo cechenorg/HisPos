@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.StockTaking.StockTakingProduct {
-    public class StockTakingProduct : Product.Product {
-        public StockTakingProduct(DataRow r):base(r) {
+    public class StockTakingPlanProduct : Product.Product {
+        public StockTakingPlanProduct(DataRow r):base(r) {
 
         }
         private bool isSelected;
