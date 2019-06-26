@@ -28,5 +28,14 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
             DataBaseFunction.AddSqlParameter(parameterList, "SPL_AMOUNT", splitAmount);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductSplitInventory]", parameterList);
         }
+
+        internal static DataTable MergeProduct(string proID, string merProID, string wareHouseID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MER_PRO_ID", merProID);
+            DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareHouseID);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductSplitInventory]", parameterList);
+        }
     }
 }

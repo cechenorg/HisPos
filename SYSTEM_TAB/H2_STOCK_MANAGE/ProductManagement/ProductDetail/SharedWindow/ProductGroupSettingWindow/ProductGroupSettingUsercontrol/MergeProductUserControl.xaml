@@ -82,7 +82,7 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="商品編號" Foreground="Black" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Text="" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="187"/>
+            <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="187" KeyDown="MergeProduct_OnKeyDown"/>
             <Button Width="120" Command="{Binding MergeProductGroupCommand}" Margin="10,0,0,0" Content="合併" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>

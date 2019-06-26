@@ -21,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Commands -----
         public RelayCommand MergeProductGroupCommand { get; set; }
         public RelayCommand SplitProductGroupCommand { get; set; }
+        public RelayCommand SearchMergeProductCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -28,6 +29,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private string wareHouseID;
         private ProductGroupSettings productGroupSettingCollection;
         private ProductGroupSetting currentProductGroupSetting;
+        private ProductStruct mergeProductStruct;
+        private string searchString = "";
 
         public bool IsMergeProduct
         {
@@ -46,6 +49,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
         public double TotalInventory { get; set; }
         public double SplitAmount { get; set; }
+        public string SearchString
+        {
+            get { return searchString; }
+            set { Set(() => SearchString, ref searchString, value); }
+        }
         #endregion
 
         public ProductGroupSettingWindowViewModel(ProductGroupSettings productGroupSettingCollection, string wareID, double inventory)
@@ -60,11 +68,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Actions -----
         private void MergeProductGroupAction()
         {
+            if (!IsMergeValid()) return;
 
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {mergeProductStruct.ID} 併入群組\n合併後庫存量為 {mergeProductStruct.Inventory + TotalInventory}", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductGroupSettingDB.MergeProduct(ProductGroupSettingCollection[0].ID ,mergeProductStruct.ID, wareHouseID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable?.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("合併成功", MessageType.SUCCESS);
+                Messenger.Default.Send(new NotificationMessage("CloseProductGroupSettingWindow"));
+            }
+            else
+                MessageWindow.ShowMessage("合併失敗 請稍後再試", MessageType.ERROR);
         }
         private void SplitProductGroupAction()
         {
-            if(IsSplitValid()) return;
+            if(!IsSplitValid()) return;
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {CurrentProductGroupSetting.ID} 從群組中拆出\n拆出數量為 {SplitAmount}", "");
 
@@ -82,6 +106,38 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 MessageWindow.ShowMessage("拆分失敗 請稍後再試", MessageType.ERROR);
         }
+
+        private void SearchMergeProductAction()
+        {
+            if (SearchString.Length < 5)
+            {
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
+            }
+
+            AddProductEnum addProductEnum = AddProductEnum.ProductGroupSetting;
+
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructCountBySearchString(SearchString, addProductEnum, wareHouseID);
+            MainWindow.ServerConnection.CloseConnection();
+            if (productCount > 1)
+            {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+                AddMedicineWindow addMedicineWindow = new AddMedicineWindow(SearchString, addProductEnum, wareHouseID);
+                addMedicineWindow.ShowDialog();
+                Messenger.Default.Unregister(this);
+            }
+            else if (productCount == 1)
+            {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+                AddMedicineWindow addMedicineWindow = new AddMedicineWindow(SearchString, addProductEnum, wareHouseID);
+                Messenger.Default.Unregister(this);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -89,9 +145,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
             SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
+            SearchMergeProductCommand = new RelayCommand(SearchMergeProductAction);
         }
         private bool IsSplitValid()
         {
+            if (ProductGroupSettingCollection.Count == 1)
+            {
+                MessageWindow.ShowMessage("已剩最後一個品項 無法拆分", MessageType.ERROR);
+                return false;
+            }
+
             if (SplitAmount > TotalInventory)
             {
                 MessageWindow.ShowMessage("拆分量不得大於庫存量", MessageType.ERROR);
@@ -110,13 +173,31 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 return false;
             }
 
-            if(ProductGroupSettingCollection.Count == 1)
+            return true;
+        }
+        private bool IsMergeValid()
+        {
+            if (mergeProductStruct.Inventory < 0)
             {
-                MessageWindow.ShowMessage("已剩最後一個品項 無法拆分", MessageType.ERROR);
+                MessageWindow.ShowMessage("合併商品庫存不得小於0", MessageType.ERROR);
+                return false;
+            }
+
+            if (mergeProductStruct.ID is null)
+            {
+                MessageWindow.ShowMessage("必須選擇合併品項", MessageType.ERROR);
                 return false;
             }
 
             return true;
+        }
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductGroupSettingWindowViewModel))
+            {
+                mergeProductStruct = notificationMessage.Content;
+                SearchString = mergeProductStruct.ID;
+            }
         }
         #endregion
     }
