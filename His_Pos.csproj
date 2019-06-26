@@ -535,8 +535,12 @@
     <Compile Include="NewClass\StockTaking\StockTakingDB.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlan.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlans.cs" />
-    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingPlanProduct.cs" />
-    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingPlanProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlanProduct\StockTakingPlanProduct.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlanProduct\StockTakingPlanProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProduct.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTaking.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakings.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />

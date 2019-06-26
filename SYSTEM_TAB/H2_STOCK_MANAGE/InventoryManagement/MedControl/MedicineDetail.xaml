@@ -12,8 +12,7 @@
     xmlns:service="clr-namespace:His_Pos.Service"
     mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
-        <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
-        <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
+        <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/> 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">

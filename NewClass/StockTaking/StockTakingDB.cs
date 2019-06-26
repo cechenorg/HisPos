@@ -33,11 +33,17 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "ID", stockTakingPlan.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStockTakingPlan]", parameterList);
         }
-        internal static DataTable GetStockTakingProductByType(string type,string warID) {
+        internal static DataTable GetStockTakingPlanProductByType(string type,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "type", type);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
-           return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingProductByType]", parameterList);
+           return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductByType]", parameterList);
+        }
+        internal static DataTable GetStockTakingPlanProductByProName(string name)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Name", name); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductByProName]", parameterList);
         }
         internal static DataTable GetStockTakingPlanProductsByID(int planID)
         {
@@ -56,7 +62,16 @@ namespace His_Pos.NewClass.StockTaking
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStockTakingPlan]", parameterList);
              
         }
-         
+        internal static DataTable GetStockTakingRecordByCondition(DateTime? sDate,DateTime? eDate,string proID,string proName)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate is null ? null : sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate is null ? null : eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "ProductID", string.IsNullOrEmpty(proID) ? null : proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "ProductName", string.IsNullOrEmpty(proName) ? null : proName); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingRecordByCondition]", parameterList);
+        } 
+
         #region TableSet
         public static DataTable ProductListTable()
         {
