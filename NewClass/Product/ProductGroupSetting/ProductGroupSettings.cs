@@ -8,22 +8,19 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
-    public class ProductGroupSettings :  ObservableCollection<ProductGroupSetting>
+    public class ProductGroupSettings :  Collection<ProductGroupSetting>
     {
-        public ProductGroupSettings() { }
-
-        public void GetDataByID(string proID,string warID) {
-            Clear();
-            DataTable table = ProductGroupSettingDb.GetDataByID(proID,warID);
-            foreach (DataRow r in table.Rows) {
-                Add(new ProductGroupSetting(r));
+        private ProductGroupSettings(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Add(new ProductGroupSetting(row));
             }
         }
-        public void MergeProduct(string warID) {
-            ProductGroupSettingDb.MergeProductGroup(this,warID);
+
+        internal static ProductGroupSettings GetProductGroupSettingsByID(string proID, string wareID)
+        {
+            return new ProductGroupSettings(ProductGroupSettingDB.GetProductGroupSettingsByID(proID, wareID));
         }
-        public void SplitProduct(string proID, int amount, string warID) {
-            ProductGroupSettingDb.SplitProductInventory(proID,amount,warID);
-        } 
     }
 }

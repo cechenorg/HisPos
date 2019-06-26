@@ -20,14 +20,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class ProductGroupSettingWindow : Window {
         public ProductGroupSettingWindow(string proID,string warID) {
             InitializeComponent();
-            ProductGroupSettingWindowViewModel productGroupSettingWindowViewModel = new ProductGroupSettingWindowViewModel(proID, warID);
-            DataContext = productGroupSettingWindowViewModel;
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification == "CloseProductGroupSettingWindow")
-                    Close();
-            });
-            ShowDialog();
+            //ProductGroupSettingWindowViewModel productGroupSettingWindowViewModel = new ProductGroupSettingWindowViewModel(proID, warID);
+            //DataContext = productGroupSettingWindowViewModel;
+            //Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            //{
+            //    if (notificationMessage.Notification == "CloseProductGroupSettingWindow")
+            //        Close();
+            //});
+            //ShowDialog();
         }
     }
 }

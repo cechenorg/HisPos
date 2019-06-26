@@ -12,11 +12,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="55,0,0,0"/>
+            <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="60,0,0,0"/>
             <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
         </StackPanel>
         <DataGrid ItemsSource="{Binding ProductGroupSettingCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                  Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" >
+                  Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -44,12 +44,12 @@
                         </Trigger>
                     </Style.Triggers>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontSize" Value="16"/>
                     <Setter Property="Height" Value="40"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="220" Header="商品代碼" Binding="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="230" Header="商品代碼" Binding="{Binding ID}" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
