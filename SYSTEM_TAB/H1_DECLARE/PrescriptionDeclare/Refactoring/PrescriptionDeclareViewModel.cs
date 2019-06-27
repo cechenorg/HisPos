@@ -529,6 +529,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void CountMedicinePointAction()
         {
+            CurrentPrescription.CheckPrescriptionVariable();
             CurrentPrescription.CountPrescriptionPoint();
             CheckDeclareStatus();
         }

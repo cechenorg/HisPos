@@ -174,7 +174,7 @@ namespace His_Pos.Service
         {
             var tmpStartDate = start.DeepCloneViaJson();
             var holiday = 0;
-            while (start < end)
+            while (tmpStartDate < end)
             {
                 if (CheckIsWeekend(tmpStartDate))
                     holiday += 1;

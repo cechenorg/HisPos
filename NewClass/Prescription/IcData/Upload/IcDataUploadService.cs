@@ -383,7 +383,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
         {
             MedicalOrderTreatDateTime = treatDateTime;
             MedicalOrderCategory = med is MedicineRefactoring.MedicineSpecialMaterial ? "4" : "1";
-            TreatmentProjectCode = med.ID;
+            TreatmentProjectCode = med is MedicineRefactoring.MedicineSpecialMaterial ? med.ID.Substring(0,12) : med.ID;
             if (!string.IsNullOrEmpty(med.PositionID))
                 TreatmentPosition = med.PositionID;
             Usage = med.UsageName;
