@@ -91,7 +91,7 @@
                     </TextBox>
                 </StackPanel>
                 <DataGrid Grid.Row="3" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">

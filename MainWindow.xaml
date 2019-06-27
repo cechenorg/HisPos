@@ -70,7 +70,7 @@
         <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecordViewModel}">
             <productPurchaseRecord:ProductPurchaseRecordView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type stockTaking:StockTaking}">
+        <DataTemplate DataType="{x:Type stockTaking:StockTakingViewModel}">
             <stockTaking:StockTakingView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">

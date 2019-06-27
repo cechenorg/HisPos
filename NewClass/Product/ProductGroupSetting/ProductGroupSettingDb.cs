@@ -10,47 +10,32 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
-    public static class ProductGroupSettingDb
+    public static class ProductGroupSettingDB
     {
-        public static DataTable GetDataByID(string proID,string warID)
+        internal static DataTable GetProductGroupSettingsByID(string proID, string wareID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "proID", proID);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductGroupSettingByProID]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductGroupSettingsByProID]", parameterList);
         }
-        public static void MergeProductGroup(ProductGroupSettings productGroupSettings, string warID) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetPrescriptionDetail(productGroupSettings));
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[MergeProductInventory]", parameterList);
-        }
-        public static void SplitProductInventory(string proID, int amount, string warID)
+
+        internal static DataTable SplitProduct(string proID, double splitAmount, string wareHouseID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ProID", proID);
-            DataBaseFunction.AddSqlParameter(parameterList, "Amount", amount);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ViewModelMainWindow.CurrentUser.ID);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[SplitProductInventory]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "SPL_PRO_ID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareHouseID);
+            DataBaseFunction.AddSqlParameter(parameterList, "SPL_AMOUNT", splitAmount);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductSplitInventory]", parameterList);
         }
-        public static DataTable MedicineListTable()
+
+        internal static DataTable MergeProduct(string proID, string merProID, string wareHouseID)
         {
-            DataTable masterTable = new DataTable();
-            masterTable.Columns.Add("MedicineID", typeof(string));
-            return masterTable;
-        }
-        public static DataTable SetPrescriptionDetail(ProductGroupSettings productGroupSettings)
-        { //一般藥費
-            DataTable medicineListTable = MedicineListTable();
-            foreach (var m in productGroupSettings)
-            {
-                DataRow newRow = medicineListTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m.ID);
-                medicineListTable.Rows.Add(newRow);
-            }
-            return medicineListTable;
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MER_PRO_ID", merProID);
+            DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareHouseID);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductMergeInventory]", parameterList);
         }
     }
 }

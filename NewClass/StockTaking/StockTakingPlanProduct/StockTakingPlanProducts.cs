@@ -16,10 +16,14 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct {
         }
 
         public StockTakingPlanProducts GetControlMedincines(string warID) {
-          return new StockTakingPlanProducts( StockTakingDB.GetStockTakingProductByType("ControlMedicines", warID));
+          return new StockTakingPlanProducts( StockTakingDB.GetStockTakingPlanProductByType("ControlMedicines", warID));
         }
         public StockTakingPlanProducts GetStockLessProducts(string warID) {
-            return new StockTakingPlanProducts(StockTakingDB.GetStockTakingProductByType("StockLess", warID)); 
+            return new StockTakingPlanProducts(StockTakingDB.GetStockTakingPlanProductByType("StockLess", warID)); 
+        }
+        public StockTakingPlanProducts GetStockTakingPlanProductByProName(string name)
+        {
+            return new StockTakingPlanProducts(StockTakingDB.GetStockTakingPlanProductByProName(name));
         }
         
     }

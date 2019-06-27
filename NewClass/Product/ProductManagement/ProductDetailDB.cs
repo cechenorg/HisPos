@@ -80,7 +80,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ProID", productID));
             parameters.Add(new SqlParameter("Inventory", newInventory));
-            parameters.Add(new SqlParameter("warID", warID)); 
+            parameters.Add(new SqlParameter("warID", warID));
+            parameters.Add(new SqlParameter("typeName", "單品盤點"));
+            parameters.Add(new SqlParameter("Source", "無"));
+            parameters.Add(new SqlParameter("SourceID", "無"));
             MainWindow.ServerConnection.ExecuteProc("[Set].[ProductStockCheck]", parameters);
         }
 

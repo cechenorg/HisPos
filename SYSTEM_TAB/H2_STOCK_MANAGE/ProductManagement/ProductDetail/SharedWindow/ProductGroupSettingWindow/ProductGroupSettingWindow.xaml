@@ -9,10 +9,10 @@
         Title="商品群組設定" Height="400" Width="450" WindowStartupLocation="CenterScreen" >
     
     <Window.Resources>
-        <DataTemplate x:Key="MergeProduct" DataType="{x:Type productgroupsetting:MergeProductUserControl}">
+        <DataTemplate x:Key="MergeProduct" DataType="UserControl">
             <productgroupsetting:MergeProductUserControl/>
         </DataTemplate>
-        <DataTemplate x:Key="SplitProduct" DataType="{x:Type productgroupsetting:SplitProductUserControl}">
+        <DataTemplate x:Key="SplitProduct" DataType="UserControl">
             <productgroupsetting:SplitProductUserControl/>
         </DataTemplate>
     </Window.Resources>
@@ -21,16 +21,16 @@
             <RowDefinition Height="50"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <RadioButton Content="併庫" Command="{Binding SetIsSpiltFalseCommand}"  IsChecked="True"  Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            <RadioButton Content="拆庫" Command="{Binding SetIsSpiltTrueCommand}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"  />
-             </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <RadioButton Content="合併品項" IsChecked="{Binding IsMergeProduct, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <RadioButton Content="拆分品項" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"  />
+        </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource MergeProduct}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSplit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding IsMergeProduct, UpdateSourceTrigger=PropertyChanged}" Value="False">
                             <Setter Property="ContentTemplate" Value="{StaticResource SplitProduct}"/>
                         </DataTrigger>
                     </Style.Triggers> 

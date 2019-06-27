@@ -28,8 +28,8 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>50</ApplicationRevision>
-    <ApplicationVersion>2.0.6.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>2.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -497,7 +497,7 @@
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
-    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
@@ -528,10 +528,6 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingMedicine.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingOTC.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingProduct.cs" />
-    <Compile Include="NewClass\Product\StockTaking\StockTakingProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailRecordReport\CashDetailRecordReport.cs" />
@@ -559,8 +555,14 @@
     <Compile Include="NewClass\StockTaking\StockTakingDB.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlan.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlans.cs" />
-    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingPlanProduct.cs" />
-    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingPlanProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlanProduct\StockTakingPlanProduct.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingPlanProduct\StockTakingPlanProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProduct.cs" />
+    <Compile Include="NewClass\StockTaking\StockTakingProduct\StockTakingProducts.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTaking.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakingPage\StockTakingPage.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakingPage\StockTakingPages.cs" />
+    <Compile Include="NewClass\StockTaking\StockTaking\StockTakings.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntry.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntryDb.cs" />
     <Compile Include="NewClass\StockValue\StockEntry\StockEntrys.cs" />
@@ -907,6 +909,16 @@
       <DependentUpon>StockTakingPlanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingPlan\StockTakingPlanViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ChooseProductControl.xaml.cs">
+      <DependentUpon>ChooseProductControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\DifferenceReasonControl.xaml.cs">
+      <DependentUpon>DifferenceReasonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ResultInputControl.xaml.cs">
+      <DependentUpon>ResultInputControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingEnum.cs" />
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
@@ -1136,13 +1148,7 @@
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
       <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTaking.cs" />
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
-      <DependentUpon>StockTakingHistory.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
-      <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingViewModel.cs" />
     <Compile Include="Database\SQLServerConnection.cs" />
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
@@ -1515,6 +1521,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ChooseProductControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\DifferenceReasonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ResultInputControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1729,14 +1747,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

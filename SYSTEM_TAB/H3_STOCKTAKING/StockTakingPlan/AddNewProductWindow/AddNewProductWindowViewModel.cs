@@ -10,6 +10,15 @@ using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow {
     public class AddNewProductWindowViewModel : ViewModelBase {
+        private string productSearchName;
+        public string ProductSearchName
+        {
+            get { return productSearchName; }
+            set
+            {
+                Set(() => ProductSearchName, ref productSearchName, value); 
+            }
+        }
         private StockTakingPlanProducts sourceStockTakingProducts = new StockTakingPlanProducts();
         public StockTakingPlanProducts SourceStockTakingProducts
         {
@@ -58,6 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ProductSubmitCommand { get; set; }
+        public RelayCommand ProductSearchCommand { get; set; }
 
 
         public string WarID { get; set; }
@@ -66,7 +76,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
-            ProductSubmitCommand = new RelayCommand(ProductSubmitAction); 
+            ProductSubmitCommand = new RelayCommand(ProductSubmitAction);
+            ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
             WarID = warID;
         }
         #region Function
@@ -96,7 +107,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         private void GetStockLessProductsAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockLessProducts(WarID);
         }
-        
+        private void GetStockTakingProductByProNameAction() {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName);
+        }
         #endregion
     }
 }

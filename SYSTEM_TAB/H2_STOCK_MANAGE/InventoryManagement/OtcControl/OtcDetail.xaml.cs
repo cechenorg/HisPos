@@ -333,9 +333,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 
         private void LastCheckTime_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            StockTakingHistory stockTakingHistory = new StockTakingHistory(StockTakingOverviewCollection);
-
-            stockTakingHistory.Show();
+           
         }
 
         private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="歷史健保價" Height="450" Width="400" WindowStartupLocation="CenterScreen">
     <DataGrid Margin="10" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False"
-              CanUserResizeColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding HistoryPriceCollection}">
+              CanUserResizeColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding HistoryPriceCollection}" CanUserDeleteRows="False">
         <DataGrid.Resources>
             <Style TargetType="{x:Type ScrollBar}">
                 <Setter Property="SnapsToDevicePixels" Value="True"/>

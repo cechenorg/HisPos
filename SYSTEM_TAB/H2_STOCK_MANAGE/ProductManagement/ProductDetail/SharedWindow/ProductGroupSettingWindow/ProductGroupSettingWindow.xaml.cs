@@ -18,16 +18,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     /// ProductGroupSettingWindow.xaml 的互動邏輯
     /// </summary>
     public partial class ProductGroupSettingWindow : Window {
-        public ProductGroupSettingWindow(string proID,string warID) {
+        public ProductGroupSettingWindow(NewClass.Product.ProductGroupSetting.ProductGroupSettings productGroupSettingCollection, string wareID, double inventory) {
             InitializeComponent();
-            ProductGroupSettingWindowViewModel productGroupSettingWindowViewModel = new ProductGroupSettingWindowViewModel(proID, warID);
+
+            ProductGroupSettingWindowViewModel productGroupSettingWindowViewModel = new ProductGroupSettingWindowViewModel(productGroupSettingCollection, wareID, inventory);
             DataContext = productGroupSettingWindowViewModel;
+
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
-                if (notificationMessage.Notification == "CloseProductGroupSettingWindow")
+                if (notificationMessage.Notification.Equals("CloseProductGroupSettingWindow"))
                     Close();
             });
-            ShowDialog();
         }
     }
 }

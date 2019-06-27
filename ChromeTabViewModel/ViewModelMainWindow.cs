@@ -126,6 +126,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Positions Positions { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
+        public static Employees EmployeeCollection { get; set; }
         public static string CooperativeInstitutionID { get; private set; }
         private int mCurrentPageIndex;
         private IList<Stream> mStreams;
@@ -186,10 +187,12 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得用法;
                 Usages = new Usages();
                 BusyContent = StringRes.取得用藥途徑;
-                Positions = new Positions();
-                BusyContent = "更新庫存現值變化";
+                Positions = new Positions(); 
                 BusyContent = "同步員工資料";
                 EmployeeDb.SyncData();
+                BusyContent = "取得員工";
+                EmployeeCollection = new Employees();
+                EmployeeCollection.Init();
                 int i = 100;
                 while (WebApi.SendToCooperClinicLoop100())
                 { 
@@ -313,6 +316,12 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
             return result;
         }
+        public static Employee GetEmployeeByID(int ID)
+        {
+            var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
+            return result;
+        }
+        
         public void StartPrintMedBag(ReportViewer r)
         {
             IsBusy = true;

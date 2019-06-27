@@ -36,12 +36,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
-        public RelayCommand ShowProductGroupWindowCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
-        public RelayCommand GroupSettingSelectionChangedCommand { get; set; }
         public RelayCommand ExportRecordCommand { get; set; }
         public RelayCommand ShowConsumeRecordCommand { get; set; }
         public RelayCommand<string> FilterRecordCommand { get; set; }
+        public RelayCommand ShowProductGroupWindowCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -105,6 +104,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
         private string newInventory = "";
         private WareHouse selectedWareHouse;
+        private ProductGroupSettings productGroupSettingCollection;
         private DateTime? startDate = DateTime.Today.AddMonths(-3);
         private DateTime? endDate = DateTime.Today;
         
@@ -117,14 +117,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 StockTakingCommand.RaiseCanExecuteChanged();
             }
         }
-        
-        private ProductGroupSettings productGroupSettingCollection = new ProductGroupSettings();
         public ProductGroupSettings ProductGroupSettingCollection
         {
             get { return productGroupSettingCollection; }
             set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
         }
-        
         public WareHouses WareHouseCollection { get; set; }
         public WareHouse SelectedWareHouse
         {
@@ -132,17 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             set
             {
                 Set(() => SelectedWareHouse, ref selectedWareHouse, value); 
-                ReloadStockDetail();
                 SearchProductRecordAction();
-            }
-        }
-        private WareHouse groupSettingWareHouseSelected = ViewModelMainWindow.GetWareHouse("0");
-        public WareHouse GroupSettingWareHouseSelected
-        {
-            get { return groupSettingWareHouseSelected; }
-            set
-            {
-                Set(() => GroupSettingWareHouseSelected, ref groupSettingWareHouseSelected, value); 
             }
         }
         public DateTime? StartDate
@@ -185,7 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void SyncDataAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            //ProductDetailDB.GetProductManageMedicineDataByID(id);
+            //ProductDetailDB.GetProductManageMedicineDataByID(proID);
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
@@ -230,9 +217,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
-        private void ShowProductGroupWindowAction() { 
-            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(Medicine.ID, GroupSettingWareHouseSelected.ID);
-        }
         private void SearchProductRecordAction()
         {
             if (StartDate is null || EndDate is null)
@@ -252,7 +236,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             {
                 InventoryRecordCollectionView.MoveCurrentToLast();
                 CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
-            }  
+            }
+
+            ReloadStockDetail();
+            ReloadProductGroup();
         }
         private void ExportRecordAction()
         {
@@ -267,9 +254,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
             else
                 MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
-        }
-        private void GroupSettingSelectionChangedAction() {
-            ProductGroupSettingCollection.GetDataByID(Medicine.ID, GroupSettingWareHouseSelected.ID);
         }
         private void ShowConsumeRecordAction()
         {
@@ -289,6 +273,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
             }
         }
+        private void ShowProductGroupWindowAction()
+        {
+            if (StockDetail.TotalInventory < 0)
+            {
+                MessageWindow.ShowMessage("欲調整商品群組 需先解決負庫問題", MessageType.ERROR);
+                return;
+            }
+
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(ProductGroupSettingCollection, SelectedWareHouse.ID, StockDetail.TotalInventory);
+            productGroupSettingWindow.ShowDialog();
+
+            SearchProductRecordAction();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -300,15 +297,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockTakingCommand = new RelayCommand(StockTakingAction, IsNewInventoryHasValue);
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             DataChangedCommand = new RelayCommand(DataChangedAction);
-            ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
-            GroupSettingSelectionChangedCommand = new RelayCommand(GroupSettingSelectionChangedAction);
             FilterRecordCommand = new RelayCommand<string>(FilterRecordAction);
+            ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
 
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
         }
-        private void InitMedicineData(string id, string wareHouseID)
+        private void InitMedicineData(string proID, string wareHouseID)
         {
             MainWindow.ServerConnection.OpenConnection();
             WareHouseCollection = WareHouses.GetWareHouses();
@@ -318,17 +314,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             switch (ProductType)
             {
                 case ProductTypeEnum.OTCMedicine:
-                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(id);
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(proID);
                     break;
                 case ProductTypeEnum.NHIMedicine:
-                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageNHIMedicineDetailByID(id);
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageNHIMedicineDetailByID(proID);
                     break;
                 case ProductTypeEnum.SpecialMedicine:
-                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(id);
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(proID);
                     break;
             }
 
-            DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(id);
+            DataTable manageMedicineDataTable = ProductDetailDB.GetProductManageMedicineDataByID(proID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (manageMedicineDataTable is null || manageMedicineDetailDataTable is null || manageMedicineDataTable.Rows.Count == 0 || manageMedicineDetailDataTable.Rows.Count == 0 || WareHouseCollection is null || WareHouseCollection.Count == 0)
@@ -352,10 +348,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
-            GroupSettingWareHouseSelected = WareHouseCollection[int.Parse(wareHouseID)];
-            ProductGroupSettingCollection.GetDataByID(id, GroupSettingWareHouseSelected.ID);
 
             ReloadStockDetail();
+            ReloadProductGroup();
         }
         private bool IsMedicineDataChanged()
         {
@@ -396,6 +391,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
+            MainWindow.ServerConnection.CloseConnection();
+        }
+        private void ReloadProductGroup()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(Medicine.ID, SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
         private bool RecordFilter(object record)

@@ -305,7 +305,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):
-                    newTab = new StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTakingViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):
@@ -403,15 +403,7 @@ namespace His_Pos.ChromeTabViewModel
                         case nameof(FeatureItem.進退貨紀錄):
                             break;
 
-                        case nameof(FeatureItem.新增盤點):
-                            if (StockTakingView.Instance is null) break;
-
-                            if (StockTakingView.DataChanged)
-                            {
-                                StockTakingView.Instance.InitProduct();
-
-                                StockTakingView.DataChanged = false;
-                            }
+                        case nameof(FeatureItem.新增盤點): 
                             break;
 
                         case nameof(FeatureItem.審核管理):
