@@ -31,7 +31,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public abstract void ErrorAdjust();
         public abstract void DepositAdjust();
         public abstract bool Register();
-            #endregion
+        public abstract void PrescribeAdjust();
+        #endregion
         public PrescriptionService()
         {
 
@@ -55,6 +56,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckSameDeclare()
         {
+            if (current.IsPrescribe) return true;
             var table = PrescriptionDb.CheckSameDeclarePrescription(current);
             if (table.Rows.Count > 0)
             {
@@ -95,6 +97,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
             return result;
+        }
+
+        public void StartPrescribeAdjust()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            PrescribeAdjust();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         public bool SetPharmacist(Employee selectedPharmacist,int prescriptionCount)
@@ -197,6 +206,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckNhiRules(bool noCard)
         {
+            if (current.IsPrescribe) return true;
             var error = current.CheckPrescriptionRule(noCard);//檢查健保規則
             if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
@@ -205,6 +215,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckPrescribeRules()
         {
+            if (!current.IsPrescribe) return true;
             var error = current.CheckPrescribeRule();
             if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
@@ -494,6 +505,55 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 } //更新傳送藥健康
             }
             current.PrescriptionStatus.UpdateStatus(current.ID);
+        }
+
+        public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
+        {
+            current.TempMedicalNumber = errorCode.ID;
+            if (current.AdjustCase.ID.Equals("2") && current.ChronicSeq > 1)
+            {
+                current.MedicalNumber = "IC0" + current.ChronicSeq;
+                current.OriginalMedicalNumber = errorCode.ID;
+            }
+            else
+            {
+                current.MedicalNumber = errorCode.ID;
+            }
+        }
+
+        public void MakeUpComplete()
+        {
+            var deposit = current.PrescriptionPoint.Deposit;
+            MainWindow.ServerConnection.OpenConnection();
+            current.PrescriptionPoint.Deposit = 0;
+            current.PrescriptionStatus.SetNormalAdjustStatus();
+            current.Update();
+            MainWindow.ServerConnection.CloseConnection();
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                MessageWindow.ShowMessage("補卡作業成功，退還押金" + deposit + "元", MessageType.SUCCESS);
+            });
+        }
+
+        public void CheckDailyUploadMakeUp(ErrorUploadWindowViewModel.IcErrorCode errorCode)
+        {
+            if (current.IsPrescribe) return;
+            if ((bool)current.PrescriptionStatus.IsCreateSign)
+                HisAPI.CreatDailyUploadData(current, true);
+            else
+                HisAPI.CreatErrorDailyUploadData(current, true, errorCode);
+        }
+
+        public void SetMedicalNumber()
+        {
+            if (current.AdjustCase.ID.Equals("2") && current.ChronicSeq > 1)
+            {
+                current.MedicalNumber = "IC0" + current.ChronicSeq;
+                current.OriginalMedicalNumber = current.TempMedicalNumber;
+            }
+            else
+            {
+                current.MedicalNumber = current.TempMedicalNumber;
+            }
         }
     }
 }

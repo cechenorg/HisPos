@@ -1,9 +1,4 @@
-﻿using System;
-using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.StoreOrder;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
+﻿using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -20,6 +15,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (!CheckNhiRules(noCard)) return false;
+            if (!CheckPrescribeRules()) return false;
             if (!CheckMedicines()) return false;
             if (!CheckMedicalNumber()) return false;
             return CheckSameDeclare() && PrintConfirm();
@@ -41,8 +37,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override void DepositAdjust()
         {
-            current.CountDeposit();
             current.SetDepositAdjustStatus();
+            current.InsertDb();
+        }
+
+        public override void PrescribeAdjust()
+        {
+            current.SetPrescribeAdjustStatus();
             current.InsertDb();
         }
 

@@ -116,7 +116,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             IcMessage = new IcData(p, e, makeUp);
             MedicalMessageList = new List<MedicalData>();
             var treatDateTime = IcMessage.TreatmentDateTime;
-            var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
+            var medList = p.Medicines.Where(m => (m is MedicineRefactoring.MedicineNHI || m is MedicineRefactoring.MedicineSpecialMaterial || m is MedicineRefactoring.MedicineVirtual) && !m.PaySelf).ToList();
             for (var i = 0; i < medList.Count; i++)
             {
                 MedicalMessageList.Add(e is null

@@ -16,9 +16,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
         }
 
-        public PrescriptionStatus(DataRow r)
+        public PrescriptionStatus(DataRow r,PrescriptionType type)
         {
-
+            switch (type)
+            {
+                default:
+                    IsGetCard = r.Field<bool>("IsGetCard");
+                    IsDeclare = r.Field<bool>("IsDeclare");
+                    IsSendToSingde = r.Field<bool>("IsSendToServer");
+                    IsDeposit = r.Field<bool>("IsDeposit");
+                    IsAdjust = r.Field<bool>("IsAdjust");
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    IsSendToSingde = r.Field<bool>("IsSendToServer");
+                    break;
+            }
         }
 
         #region Properties

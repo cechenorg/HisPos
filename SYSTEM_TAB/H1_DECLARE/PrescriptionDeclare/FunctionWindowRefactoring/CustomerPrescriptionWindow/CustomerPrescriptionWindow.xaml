@@ -293,10 +293,10 @@
                     <StackPanel Orientation="Vertical" Margin="0,0,10,10" DockPanel.Dock="Top" Visibility="{Binding UngetCardGridVisible,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,10" >
                             <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
-                            <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="450,0,0,0" VerticalAlignment="Center" Command="{Binding MakeUpCard}"/>
+                            <Button Content="補卡" Background="IndianRed" BorderThickness="0"  Margin="325,0,0,0" VerticalAlignment="Center" Command="{Binding MakeUp}"/>
                         </StackPanel>
                         <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" CanUserResizeColumns="False" CanUserResizeRows="False"
-                                  GridLinesVisibility="Horizontal" ItemsSource="{Binding UngetCardPrescriptions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding MakeUpPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                  GridLinesVisibility="Horizontal" ItemsSource="{Binding NoCardPres,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding MakeUpPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type ScrollBar}">
                                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -333,13 +333,13 @@
                                     <Setter Property="Height" Value="40" />
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="院所" Width="250" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ReleaseIns.Name, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn Header="院所" Width="250" FontSize="14" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Institution.Name, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Center" />

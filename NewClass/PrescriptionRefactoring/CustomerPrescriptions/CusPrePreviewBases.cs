@@ -78,7 +78,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
-                Add(new UngetCardPreview(r));
+                Add(new NoCardPreview(r));
             }
         }
     }

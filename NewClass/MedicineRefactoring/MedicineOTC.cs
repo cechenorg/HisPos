@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public MedicineOTC() : base() { }
         public MedicineOTC(DataRow r) : base(r)
         {
-
+            CanEdit = true;
         }
 
         public MedicineOTC(CooperativePrescription.Item m) : base(m)

@@ -27,6 +27,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     ChineseName = "其他提前回診或慢箋提前領藥";
                     break;
             }
+            ID = id;
             Dosage = 0.00;
             Days = 0;
             BuckleAmount = 0;
@@ -34,6 +35,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Price = 0.00;
             PaySelf = false;
             IsBuckle = false;
+            CanEdit = false;
         }
         public MedicineVirtual(DataRow r)
         {

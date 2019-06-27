@@ -8,7 +8,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
     {
         private int ID { get; set; }
         public PrescriptionType Type { get; }
-        public DateTime AdjustDate { get; }
         public int ChronicSeq { get; }
         public int ChronicTotal { get; }
         public ChronicPreview(DataRow r, PrescriptionType type) : base(r)

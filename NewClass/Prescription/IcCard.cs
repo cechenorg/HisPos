@@ -223,5 +223,20 @@ namespace His_Pos.NewClass.Prescription
             var expired = new TimeSpan(ValidityPeriod.Ticks - DateTime.Today.Ticks).Days < 30;
             return availableTimesUseUp || expired;
         }
+
+        public string GetLastMedicalNumber()
+        {
+            var tempMedicalNumber = string.Empty;
+            if (HisApiFunction.OpenCom())
+            {
+                int iBufferLen = 7;
+                byte[] pBuffer = new byte[7];
+                var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                if (res == 0)
+                    tempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                HisApiFunction.CloseCom();
+            }
+            return tempMedicalNumber;
+        }
     }
 }

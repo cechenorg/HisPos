@@ -41,8 +41,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
     public enum PrescriptionType
     {
         Normal = 0,
-        Cooperative = 1,
-        Orthopedics = 2,
+        XmlOfPrescription = 1,
+        Cooperative = 2,
         ChronicRegister = 3,
         ChronicReserve = 4
     }
@@ -89,7 +89,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionCase = VM.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
             PrescriptionPoint = new PrescriptionPoint(r,type);
-            PrescriptionStatus = new PrescriptionStatus(r);
+            PrescriptionStatus = new PrescriptionStatus(r, type);
             MedicalNumber = r.Field<string>("MedicalNumber");
             OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
             if (AdjustCase.ID.Equals("2"))
@@ -124,7 +124,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
             #endregion 
-            Type = PrescriptionType.Orthopedics;
+            Type = PrescriptionType.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
             PrescriptionStatus.IsVIP = Remark.EndsWith("Y");
@@ -187,7 +187,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 birthDay = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(5, 2));
             }
             #endregion
-            Type = PrescriptionType.Cooperative;
+            Type = PrescriptionType.XmlOfPrescription;
             SourceId = sourceId;
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Patient = new Customer(customer, birthYear, birthMonth, birthDay);
@@ -457,7 +457,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsBuckle => WareHouse != null;
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
-
+        private List<Pdata> details { get; set; }
         #endregion
         public bool CheckDiseaseEquals(List<string> parameters)
         {
@@ -498,7 +498,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckIsOrthopedics()
         {
-            Type = Institution.CheckIsOrthopedics() ? PrescriptionType.Orthopedics : PrescriptionType.Cooperative;
+            Type = Institution.CheckIsOrthopedics() ? PrescriptionType.Cooperative : PrescriptionType.XmlOfPrescription;
         }
 
         public void UpdateCooperativePrescriptionIsRead()
@@ -600,7 +600,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
             PrescriptionPoint.CopaymentPoint = CheckNotFreeCopayment() ? CountCopaymentPoint() : 0;
-            if (Type.Equals(PrescriptionType.Orthopedics))
+            if (Type.Equals(PrescriptionType.Cooperative))
                 PrescriptionPoint.CopaymentPointPayable =
                     PrescriptionStatus.IsVIP ? 0 : PrescriptionPoint.CopaymentPoint;
             else
@@ -699,7 +699,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private List<Pdata> SetPrescriptionDetail()
         {
-            var details = new List<Pdata>();
+            details = new List<Pdata>();
             CreateMedicinesDetail(details);
             if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return details;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
@@ -1135,8 +1135,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void InsertPrescription()
         {
-            var details = SetPrescriptionDetail();//產生藥品資料
-            SetValue(details);
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
             while (NewFunction.CheckTransaction(resultTable))
             {
@@ -1150,8 +1148,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void Update()
         {
-            var details = SetPrescriptionDetail();//產生藥品資料
-            SetValue(details);
             switch (Type)
             {
                 default:
@@ -1452,12 +1448,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 AdjustCase = VM.GetAdjustCase("2");
         }
 
-        public bool CheckCanRegister()
-        {
-            return AdjustDate != null && AdjustCase.ID.Equals("2")
-                && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
-        }
-
         public bool CheckChronicSeqValid()
         {
             return ChronicSeq != null && ChronicSeq > 0;
@@ -1495,6 +1485,17 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void GetMedicinesBySet(MedicineSet currentSet)
         {
             Medicines.GetMedicineBySet(currentSet, WareHouse is null ? "0" : WareHouse.ID, AdjustDate);
+        }
+
+        public void SetDetail()
+        {
+            details = SetPrescriptionDetail();//產生藥品資料
+            SetValue(details);
+        }
+
+        public bool CheckCanSendOrder()
+        {
+            return AdjustDate != null && !string.IsNullOrEmpty(AdjustCase.ID) && AdjustCase.ID.Equals("2") && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
         }
     }
 }

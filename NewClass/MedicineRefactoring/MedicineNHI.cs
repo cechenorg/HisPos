@@ -21,6 +21,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             ControlLevel = r.Field<byte?>("Med_Control");
             Note = r.Field<string>("Med_NhiNote");
             Warning = r.Field<string>("Med_Warning");
+            CanEdit = true;
         }
         private int? controlLevel;
         public int? ControlLevel

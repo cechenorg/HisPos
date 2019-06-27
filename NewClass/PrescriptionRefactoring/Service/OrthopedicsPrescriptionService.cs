@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using His_Pos.Class;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
@@ -17,6 +15,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         }
 
+        [SuppressMessage("ReSharper", "FlagArgument")]
         public override bool CheckPrescription(bool noCard)
         {
             CheckAnonymousPatient();
@@ -24,38 +23,48 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (!CheckNhiRules(noCard)) return false;
-            if (!CheckMedicines()) return false;
+            if (!CheckPrescribeRules()) return false;
             if (!CheckMedicalNumber()) return false;
-            if (!PrintConfirm()) return false;
-            return true;
+            return CheckSameDeclare() && PrintConfirm();
         }
 
         public override bool NormalAdjust()
         {
             if (current.PrescriptionStatus.IsCreateSign is null) return false;
+            CheckCovertType();
             current.SetNormalAdjustStatus();//設定處方狀態
             current.InsertDb();
-            UpdateOrthopedicsStatus();
+            CheckUpdateOrthopedicsStatus();
             return true;
         }
 
         public override void ErrorAdjust()
         {
+            CheckCovertType();
             current.SetErrorAdjustStatus();
             current.InsertDb();
-            UpdateOrthopedicsStatus();
+            CheckUpdateOrthopedicsStatus();
         }
 
         public override void DepositAdjust()
         {
+            CheckCovertType();
             current.SetDepositAdjustStatus();
             current.InsertDb();
-            UpdateOrthopedicsStatus();
+            CheckUpdateOrthopedicsStatus();
+        }
+
+        public override void PrescribeAdjust()
+        {
+            current.SetPrescribeAdjustStatus();
+            current.InsertDb();
+            CheckUpdateOrthopedicsStatus();
         }
 
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
+            CheckCovertType();
             MedicinesSendSingdeViewModel vm = null;
             if (current.PrescriptionStatus.IsSendOrder)
             {
@@ -96,6 +105,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             Debug.Assert(isVip.DialogResult != null, "isVip.DialogResult != null");
             current.PrescriptionStatus.IsVIP = (bool)!isVip.DialogResult;
             current.PrescriptionPoint.CopaymentPointPayable = current.PrescriptionStatus.IsVIP ? 0 : current.PrescriptionPoint.CopaymentPoint;
+        }
+
+        private void CheckCovertType()
+        {
+            if (current.AdjustCase.IsChronic())
+                current.Type = PrescriptionType.Normal;
+        }
+
+        private void CheckUpdateOrthopedicsStatus()
+        {
+            if (!current.AdjustCase.IsChronic())
+                UpdateOrthopedicsStatus();
         }
     }
 }

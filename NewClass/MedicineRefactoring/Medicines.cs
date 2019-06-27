@@ -242,7 +242,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         private List<Medicine> GetNotPaySelfNhiMedicines()
         {
-            return this.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
+            return Items.Where(m => m is MedicineNHI && !m.PaySelf).ToList();
         }
 
         public int CountSpecialMedicinePoint()
@@ -255,30 +255,30 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         private List<Medicine> GetNotPaySelfSpecialMaterials()
         {
-            return this.Where(m => !m.PaySelf && m is MedicineSpecialMaterial).ToList();
+            return Items.Where(m => !m.PaySelf && m is MedicineSpecialMaterial).ToList();
         }
 
         public int CountSelfPay()
         {
-            var selfPay = this.Where(m => m.PaySelf).Sum(m => m.TotalPrice);
+            var selfPay = Items.Where(m => m.PaySelf).Sum(m => m.TotalPrice);
             return (int)Math.Ceiling(selfPay);
         }
 
         public IEnumerable<Medicine> GetDeclare()
         {
-            return this.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf);
+            return Items.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf);
         }
 
         public int CountMedicineDays()
         {
-            if (this.Count(m => m.CanCountMedicineDays()) > 0)
-                return (int)this.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);//計算最大給藥日份
+            if (Items.Count(m => m.CanCountMedicineDays()) > 0)
+                return (int)Items.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);//計算最大給藥日份
             return 0;
         }
 
         public int CountOralLiquidAgent()
         {
-            return this.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
+            return Items.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
         }
 
         public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
@@ -289,16 +289,19 @@ namespace His_Pos.NewClass.MedicineRefactoring
             medicine.PaySelf = paySelf;
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
+            medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
                     medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
+                medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 Items[(int)selectedMedicinesIndex] = medicine;
             }
             else
             {
                 if (Count > 0)
                     medicine.CopyPrevious(Items[Count - 1]);
+                medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 Add(medicine);
             }
         }
@@ -416,7 +419,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public string CreateMedicalData(string dateTime)
         {
             SetPosition();
-            var medList = this.Where(CheckDeclareMedicine).ToList();
+            var medList = Items.Where(CheckDeclareMedicine).ToList();
             var result = string.Empty;
             foreach (var med in medList)
             {

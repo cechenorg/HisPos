@@ -319,6 +319,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => isSelected;
             set { Set(() => IsSelected, ref isSelected, value); }
         }
+        private bool canEdit;
+        public bool CanEdit
+        {
+            get => canEdit;
+            set
+            {
+                Set(() => CanEdit, ref canEdit, value);
+            }
+        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()

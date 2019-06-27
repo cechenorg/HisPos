@@ -47,12 +47,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public CooperativeClinicSetting IsCooperativeClinic()
         {
-            return ViewModelMainWindow.CooperativeClinicSettings.SingleOrDefault(c => c.CooperavieClinic.ID.Equals(ID));
+            return VM.CooperativeClinicSettings.SingleOrDefault(c => c.CooperavieClinic.ID.Equals(ID));
         }
 
         public bool CheckIsOrthopedics()
         {
-            return !string.IsNullOrEmpty(ViewModelMainWindow.CooperativeInstitutionID) && ID.Equals(ViewModelMainWindow.CooperativeInstitutionID);
+            return !string.IsNullOrEmpty(VM.CooperativeInstitutionID) && ID.Equals(VM.CooperativeInstitutionID);
         }
 
         public bool CheckCooperative()

@@ -72,7 +72,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => CopaymentPointPayable, ref copaymentPointPayable, value);
             }
         }
-        public int SpecialMaterialPoint { get; set; } //特殊材料費用
+        private int specialMaterialPoint;//特殊材料費用
+        public int SpecialMaterialPoint
+        {
+            get => specialMaterialPoint;
+            set
+            {
+                Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
+            }
+        }
         public int TreatmentPoint { get; set; } //診療點數
         private int medicinePoint;//藥品點數
         public int MedicinePoint
@@ -156,16 +164,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             AmountsPay = AmountSelfPay + CopaymentPointPayable;
             ActualReceive = AmountsPay;
-        }
-
-        public void GetDeposit(int id)
-        {
-            Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
-        }
-
-        public void GetAmountPaySelf(int id)
-        {
-            AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
         }
 
         public void CountTotal()

@@ -380,11 +380,10 @@
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\CooperativePreview.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\CusPrePreviewBase.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\OrthopedicsPreview.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\UngetCardPreview.cs" />
+    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\NoCardPreview.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Prescriptions.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Service\CooperativePrescriptionService.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionServiceProvider.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\NormalPrescriptionService.cs" />
     <Compile Include="NewClass\PrescriptionRefactoring\Service\OrthopedicsPrescriptionService.cs" />

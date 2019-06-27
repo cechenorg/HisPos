@@ -167,7 +167,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             {
                 Set(() => DeclareStatus, ref declareStatus, value);
                 if (CurrentPrescription is null) return;
-                if (CurrentPrescription.CheckCanRegister())
+                if (CurrentPrescription.CheckCanSendOrder())
                     CanSendOrder = true;
                 if (!CanSendOrder)
                     CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
@@ -216,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand DepositAdjust { get; set; }
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
+        public RelayCommand PrescribeAdjust { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -280,6 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             DepositAdjust = new RelayCommand(DepositAdjustAction, CheckDepositAdjustEnable);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
+            PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
         }
 
         private void EditMedicineSetAction(string mode)
@@ -565,6 +567,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
+            CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -576,6 +579,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void DepositAdjustAction()
         {
             isAdjusting = true;
+            CurrentPrescription.SetDetail();
+            CurrentPrescription.CountDeposit();
             if (!CheckPrescription(true))
             {
                 isAdjusting = false;
@@ -587,6 +592,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void AdjustAction()
         {
             isAdjusting = true;
+            CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -598,12 +604,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void RegisterAction()
         {
             isAdjusting = true;
+            CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
             StartRegister();
+        }
+
+        private void PrescribeAdjustAction()
+        {
+            isAdjusting = true;
+            CurrentPrescription.SetDetail();
+            if (!CheckPrescription(false))
+            {
+                isAdjusting = false;
+                return;
+            }
+            StartPrescribeAdjust();
         }
         #endregion
         #region MessengerFunctions
@@ -866,6 +885,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private void StartDepositAdjust()
         {
+            CurrentPrescription.CountDeposit();
             currentService.StartDepositAdjust();
             StartPrint(true);
             DeclareSuccess();
@@ -874,6 +894,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void StartRegister()
         {
             if (!currentService.StartRegister()) return;
+            StartPrint(false);
+            DeclareSuccess();
+        }
+
+        private void StartPrescribeAdjust()
+        {
+            CurrentPrescription.SetDetail();
+            currentService.StartPrescribeAdjust();
             StartPrint(false);
             DeclareSuccess();
         }
@@ -929,7 +957,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private bool CheckAdjustToday(DateTime adjust)
         {
-            if (DateTime.Compare(adjust, DateTime.Today) == 0) return false;
+            if (DateTime.Compare(adjust, DateTime.Today) != 0) return false;
             //填寫領藥次數且調劑案件為慢箋 => 登錄，其餘為調劑
             if (CurrentPrescription.CheckChronicSeqValid() && CurrentPrescription.AdjustCase.ID.Equals("2") && CurrentPrescription.PrescriptionStatus.IsSendOrder)
                 DeclareStatus = PrescriptionDeclareStatus.Register;
@@ -940,7 +968,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
 
         private bool CheckAdjustFuture(DateTime adjust)
         {
-            if (DateTime.Compare(adjust, DateTime.Today) > 0) return false;
+            if (DateTime.Compare(adjust, DateTime.Today) <= 0) return false;
             //調劑日為未來且為慢箋 => 登錄
             if (CurrentPrescription.CheckChronicSeqValid() && CurrentPrescription.AdjustCase.ID.Equals("2"))
                 DeclareStatus = PrescriptionDeclareStatus.Register;
@@ -952,7 +980,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         private void CheckAdjustPast(DateTime adjust)
         {
             //調劑日為過去 => 調劑
-            if ((DateTime.Compare(adjust, DateTime.Today) < 0))
+            if (DateTime.Compare(adjust, DateTime.Today) < 0)
                 DeclareStatus = PrescriptionDeclareStatus.Adjust;
         }
 
