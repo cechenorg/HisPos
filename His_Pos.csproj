@@ -871,6 +871,7 @@
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingControl\ResultInputControl.xaml.cs">
       <DependentUpon>ResultInputControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingEnum.cs" />
     <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>

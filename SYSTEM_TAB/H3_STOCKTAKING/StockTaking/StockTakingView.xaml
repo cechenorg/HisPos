@@ -43,15 +43,15 @@
                         <Setter Property="Stroke" Value="LightSlateGray"/>
                         <Setter Property="StrokeDashArray" Value="5"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
                                 <Setter Property="Stroke" Value="LightSlateGray"/>
                                 <Setter Property="StrokeDashArray" Value="5"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
                                 <Setter Property="Stroke" Value="DeepSkyBlue"/>
                                 <Setter Property="StrokeDashArray" Value="100"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
                                 <Setter Property="Stroke" Value="DeepSkyBlue"/>
                                 <Setter Property="StrokeDashArray" Value="100"/>
                             </DataTrigger>
@@ -64,13 +64,13 @@
                     <Style TargetType="Ellipse">
                         <Setter Property="Fill" Value="LightSlateGray"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
                                 <Setter Property="Fill" Value="LightSlateGray"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
                                 <Setter Property="Fill" Value="GreenYellow"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
                                 <Setter Property="Fill" Value="GreenYellow"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -104,13 +104,13 @@
                     <Style TargetType="Ellipse">
                         <Setter Property="Fill" Value="LightSlateGray"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
                                 <Setter Property="Fill" Value="LightSlateGray"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
                                 <Setter Property="Fill" Value="LightSlateGray"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="">
+                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
                                 <Setter Property="Fill" Value="GreenYellow"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -135,10 +135,10 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="">
+                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Result">
                             <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding SearchType, UpdateSourceTrigger=PropertyChanged}" Value="">
+                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Reason">
                             <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
                         </DataTrigger>
                     </Style.Triggers>

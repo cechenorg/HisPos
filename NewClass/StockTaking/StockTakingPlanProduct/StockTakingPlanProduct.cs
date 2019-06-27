@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct {
         public StockTakingPlanProduct(DataRow r):base(r) {
 
         }
+        
         private bool isSelected;
         public bool IsSelected {
             get { return isSelected; }

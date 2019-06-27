@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.NewClass.Person.Employee;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,20 +11,44 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
    public class StockTakingProduct : Product.Product
     {
         #region ----- Define Variables -----
-        public double Inventory { get; set; }
-        public double NewInventory { get; set; }
-        public string Note { get; set; }
-        public string Emp_Name { get; set; }
+        private double inventory;
+        public double Inventory {
+            get { return inventory; }
+            set { Set(() => Inventory, ref inventory, value);
+                ValueDiff = NewInventory - Inventory;
+            }
+        }
+        private double newInventory;
+        public double NewInventory
+        {
+            get { return newInventory; }
+            set {
+                Set(() => NewInventory, ref newInventory, value);
+                ValueDiff = NewInventory - Inventory;
+            }
+        }
+        private double valueDiff;
+        public double ValueDiff
+        {
+            get { return valueDiff; }
+            set { Set(() => ValueDiff, ref valueDiff, value); }
+        }
+        private string note;
+        public string Note
+        {
+            get { return note; }
+            set { Set(() => Note, ref note, value); }
+        } 
+        public Employee Employee { get; set; } 
         #endregion
 
         public StockTakingProduct(DataRow row) : base(row)
         {
             Inventory = row.Field<double>("StoTakDet_OldValue");
             NewInventory = row.Field<double>("StoTakDet_NewValue");
-            Note = row.Field<string>("StoTakDet_Note");
-            Emp_Name = row.Field<string>("Emp_Name"); 
+            Note = row.Field<string>("StoTakDet_Note"); 
         }
-
+        
         #region ----- Define Functions -----
         #endregion
     }

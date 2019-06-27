@@ -90,7 +90,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
                                             <Label Content="盤點人" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding EnpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                            <TextBlock Text="{Binding Employee.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                            
                                         </StackPanel>
                                     </Grid>

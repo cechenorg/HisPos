@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingControl"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>
@@ -12,7 +13,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Margin="10"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal"  CanUserDeleteRows="False" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StockTakingResult.StockTakingProductCollection}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -71,7 +72,7 @@
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="原庫存量" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                <DataGridTextColumn Header="原庫存量" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -82,41 +83,34 @@
                 <DataGridTemplateColumn Width="120" Header="盤點量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="120" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="120" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SetDiffInventoryAmountCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="盤點差異" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                <DataGridTextColumn Header="盤點差異" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValueDiff}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="現值差異" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn> 
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
-            <Button Width="120" Content="上一步" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" Background="DimGray" BorderThickness="0"/>
-            <Label Content="已盤點" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding ResultFilled, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-            <Label Content="項 , 剩餘" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding ResultNotFilled, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Button Width="120" Content="上一步" Command="{Binding LastToChoosePageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" Background="DimGray" BorderThickness="0"/>
+            <Label Content="盤差品項  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <Label Content="{Binding DiffInventoryAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
             <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Rectangle Width="410"/>
-            <Label Content="有更動  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding ResultChanged, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-            <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" Margin="0,0,20,0"/>
-            <Button Width="150" Content="自動補齊未填寫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" Background="DimGray" BorderThickness="0"/>
-            <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0"/>
+            <Rectangle Width="600"/>
+            <Button Width="150" Content="自動補齊未填寫" Command="{Binding FillUnTakingInventoryCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" Background="DimGray" BorderThickness="0"/>
+            <Button Width="150" Content="完成盤點" Command="{Binding NextToReasonPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0"/>
         </StackPanel>
     </Grid>
 </UserControl>
