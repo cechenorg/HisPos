@@ -227,8 +227,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             MainWindow.ServerConnection.OpenConnection();
             InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
-            MainWindow.ServerConnection.CloseConnection();
-
+            
             InventoryRecordCollectionView = CollectionViewSource.GetDefaultView(InventoryRecordCollection);
             InventoryRecordCollectionView.Filter += RecordFilter;
 
@@ -240,6 +239,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             ReloadStockDetail();
             ReloadProductGroup();
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void ExportRecordAction()
         {
@@ -381,7 +381,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void ReloadStockDetail()
         {
-            MainWindow.ServerConnection.OpenConnection();
             DataTable stockDataTable = ProductDetailDB.GetMedicineStockDetailByID(Medicine.ID, SelectedWareHouse.ID);
 
             if (stockDataTable is null || stockDataTable.Rows.Count == 0)
@@ -391,13 +390,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
-            MainWindow.ServerConnection.CloseConnection();
         }
         private void ReloadProductGroup()
         {
-            MainWindow.ServerConnection.OpenConnection();
             ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(Medicine.ID, SelectedWareHouse.ID);
-            MainWindow.ServerConnection.CloseConnection();
         }
         private bool RecordFilter(object record)
         {
