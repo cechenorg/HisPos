@@ -1176,7 +1176,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private void SetValue(List<Pdata> details)
+        private void SetValue()
         {
             Institution.UpdateUsedTime();
             MedicineDays = Medicines.CountMedicineDays();
@@ -1501,7 +1501,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void SetDetail()
         {
             details = SetPrescriptionDetail();//產生藥品資料
-            SetValue(details);
+            SetValue();
         }
 
         public bool CheckCanSendOrder()
