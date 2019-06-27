@@ -207,7 +207,7 @@
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
-            <Button Width="150" Content="下一步" Command="{Binding NextToResultPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="1190,0,0,0"/>
+            <Button Width="150" Content="下一步" Command="{Binding NextToResultPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="1205,0,0,0"/>
         </StackPanel>
     </Grid>
 </UserControl>
