@@ -9,135 +9,109 @@ using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.NewClass.WareHouse;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow {
-    public class ProductGroupSettingWindowViewModel : ObservableObject {
-        #region Var
-        public string WarID { get; set; }
-        public int Stock { get; set; }
-        private bool isSplit = false;
-        public bool IsSplit {
-            get { return isSplit; }
-            set { Set(() => IsSplit, ref isSplit, value); }
-        }
-        private int splitAmount = 0;
-        public int SplitAmount
+    public class ProductGroupSettingWindowViewModel : ViewModelBase
+    {
+        #region ----- Define Commands -----
+        public RelayCommand MergeProductGroupCommand { get; set; }
+        public RelayCommand SplitProductGroupCommand { get; set; }
+        public RelayCommand SearchMergeProductCommand { get; set; }
+        #endregion
+
+        #region ----- Define Variables -----
+        private bool isMergeProduct = true;
+        private string wareHouseID;
+        private ProductGroupSettings productGroupSettingCollection;
+        private ProductGroupSetting currentProductGroupSetting;
+        private ProductStruct mergeProductStruct;
+        private string searchString = "";
+
+        public bool IsMergeProduct
         {
-            get { return splitAmount; }
-            set { Set(() => SplitAmount, ref splitAmount, value); }
+            get { return isMergeProduct; }
+            set { Set(() => IsMergeProduct, ref isMergeProduct, value); }
         }
-        private ProductGroupSetting productGroupSettingSelectedItem;
-        public ProductGroupSetting ProductGroupSettingSelectedItem
-        {
-            get { return productGroupSettingSelectedItem; }
-            set { Set(() => ProductGroupSettingSelectedItem, ref productGroupSettingSelectedItem, value); }
-        }
-        private ProductGroupSettings productGroupSettingCollection = new ProductGroupSettings();
         public ProductGroupSettings ProductGroupSettingCollection
         {
             get { return productGroupSettingCollection; }
             set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
         }
-        public RelayCommand SetIsSpiltTrueCommand { get; set; }
-        public RelayCommand SetIsSpiltFalseCommand { get; set; }
-        public RelayCommand<string> AddProductByInputCommand { get; set; }
-        public RelayCommand MergeProductGroupCommand { get; set; }
-        public RelayCommand SplitProductGroupCommand { get; set; }
-        public RelayCommand RemoveMergeProductCommand { get; set; }
+        public ProductGroupSetting CurrentProductGroupSetting
+        {
+            get { return currentProductGroupSetting; }
+            set { Set(() => CurrentProductGroupSetting, ref currentProductGroupSetting, value); }
+        }
+        public double TotalInventory { get; set; }
+        public double SplitAmount { get; set; }
+        public string SearchString
+        {
+            get { return searchString; }
+            set { Set(() => SearchString, ref searchString, value); }
+        }
         #endregion
 
+        public ProductGroupSettingWindowViewModel(ProductGroupSettings productGroupSettingCollection, string wareID, double inventory)
+        {
+            ProductGroupSettingCollection = productGroupSettingCollection;
+            wareHouseID = wareID;
+            TotalInventory = inventory;
 
-        public ProductGroupSettingWindowViewModel(string proID,string warID) {
-            
-            SetIsSpiltTrueCommand = new RelayCommand(SetIsSpiltTrueAction);
-            SetIsSpiltFalseCommand = new RelayCommand(SetIsSpiltFalseAction);
-            AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
-            MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
-            SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
-            RemoveMergeProductCommand = new RelayCommand(RemoveMergeProductAction);
-            ProductGroupSettingCollection.GetDataByID(proID, warID);
-            Stock = ProductGroupSettingCollection.Sum(pro => pro.Stock);
-            WarID = warID; 
+            RegisterCommands();
         }
-        #region Function
-        private void CloseWindow() {
-            Messenger.Default.Send(new NotificationMessage(this, "CloseProductGroupSettingWindow"));
-        }
-        private void RemoveMergeProductAction() {
-            if (ProductGroupSettingSelectedItem is null) return;
-            ProductGroupSettingCollection.Remove(ProductGroupSettingSelectedItem);
-        }
-        private void SplitProductGroupAction() {
-            if(ProductGroupSettingSelectedItem is null)
-                MessageWindow.ShowMessage("請選擇欲拆出之商品", MessageType.ERROR);
-            if (ProductGroupSettingCollection.Count < 2)
-            {
-                MessageWindow.ShowMessage("商品不可小於兩種", MessageType.ERROR);
-                return;
-            }
-            if (SplitAmount > Stock) {
-                MessageWindow.ShowMessage("拆出量不可大於庫存", MessageType.ERROR);
-                return;
-            }
-            if (SplitAmount < 0)
-            {
-                MessageWindow.ShowMessage("拆出量不可小於0", MessageType.ERROR);
-                return;
-            }
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否拆出此商品?", "拆庫確認");
-            if (((bool)confirmWindow.DialogResult) == true)
-            {
-                ProductGroupSettingCollection.SplitProduct(ProductGroupSettingSelectedItem.ID,SplitAmount,WarID);
-                CloseWindow();
-            }
-        }
-        private void MergeProductGroupAction() {
-            if (ProductGroupSettingCollection.Count < 2) {
-                MessageWindow.ShowMessage("合併商品不可小於兩種", MessageType.ERROR);
-                return;
-            }
-             
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否合併庫存?","併庫確認");
-            if (((bool)confirmWindow.DialogResult) == true)
-            {
-                ProductGroupSettingCollection.MergeProduct(WarID);
-                MessageWindow.ShowMessage("合併成功",MessageType.SUCCESS);
-                CloseWindow();
-            }
-            
-        }
-        private void SetIsSpiltTrueAction()  {
-            IsSplit = true;
-        }
-        private void SetIsSpiltFalseAction()
+
+        #region ----- Define Actions -----
+        private void MergeProductGroupAction()
         {
-            IsSplit = false;
-        }
-        private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
-        {
-            if (notificationMessage.Notification == nameof(ProductGroupSettingWindowViewModel))
+            SearchMergeProductAction();
+
+            if (!IsMergeValid()) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {mergeProductStruct.ID} 併入群組\n合併後庫存量為 {mergeProductStruct.Inventory + TotalInventory}", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductGroupSettingDB.MergeProduct(ProductGroupSettingCollection[0].ID ,mergeProductStruct.ID, wareHouseID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable?.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
-                if (ProductGroupSettingCollection.Count(p => p.ID == notificationMessage.Content.ID) > 0) {
-                    MessageWindow.ShowMessage("已輸入過此商品",MessageType.ERROR);
-                    return;
-                }
-                 
-                ProductGroupSettingSelectedItem = new ProductGroupSetting();
-                ProductGroupSettingSelectedItem.IsEditable = true;
-                ProductGroupSettingSelectedItem.ID = notificationMessage.Content.ID;
-                ProductGroupSettingSelectedItem.ChineseName = notificationMessage.Content.ChineseName;
-                ProductGroupSettingSelectedItem.EnglishName = notificationMessage.Content.EnglishName;
-                ProductGroupSettingCollection.Add(ProductGroupSettingSelectedItem);
+                MessageWindow.ShowMessage("合併成功", MessageType.SUCCESS);
+                Messenger.Default.Send(new NotificationMessage("CloseProductGroupSettingWindow"));
             }
+            else
+                MessageWindow.ShowMessage("合併失敗 請稍後再試", MessageType.ERROR);
         }
-        private void AddProductByInputAction(string searchString)
+        private void SplitProductGroupAction()
         {
-          
-            if (searchString.Length < 5)
+            if(!IsSplitValid()) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {CurrentProductGroupSetting.ID} 從群組中拆出\n拆出數量為 {SplitAmount}", "");
+
+            if(!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductGroupSettingDB.SplitProduct(CurrentProductGroupSetting.ID, SplitAmount, wareHouseID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable?.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("拆分成功", MessageType.SUCCESS);
+                Messenger.Default.Send(new NotificationMessage("CloseProductGroupSettingWindow"));
+            }
+            else
+                MessageWindow.ShowMessage("拆分失敗 請稍後再試", MessageType.ERROR);
+        }
+
+        private void SearchMergeProductAction()
+        {
+            if (SearchString.Length < 5)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
@@ -146,24 +120,85 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             AddProductEnum addProductEnum = AddProductEnum.ProductGroupSetting;
 
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(SearchString, addProductEnum, wareHouseID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
-                productPurchaseReturnAddProductWindow.ShowDialog();
+                AddMedicineWindow addMedicineWindow = new AddMedicineWindow(SearchString, addProductEnum, wareHouseID);
+                addMedicineWindow.ShowDialog();
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
+                AddMedicineWindow addMedicineWindow = new AddMedicineWindow(SearchString, addProductEnum, wareHouseID);
                 Messenger.Default.Unregister(this);
             }
             else
             {
-                MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+                MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
+            }
+        }
+        #endregion
+
+        #region ----- Define Functions -----
+        private void RegisterCommands()
+        {
+            MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
+            SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
+            SearchMergeProductCommand = new RelayCommand(SearchMergeProductAction);
+        }
+        private bool IsSplitValid()
+        {
+            if (ProductGroupSettingCollection.Count == 1)
+            {
+                MessageWindow.ShowMessage("已剩最後一個品項 無法拆分", MessageType.ERROR);
+                return false;
+            }
+
+            if (SplitAmount > TotalInventory)
+            {
+                MessageWindow.ShowMessage("拆分量不得大於庫存量", MessageType.ERROR);
+                return false;
+            }
+
+            if (SplitAmount < 0)
+            {
+                MessageWindow.ShowMessage("拆分量不得小於0", MessageType.ERROR);
+                return false;
+            }
+
+            if (CurrentProductGroupSetting is null)
+            {
+                MessageWindow.ShowMessage("必須指定拆分品項", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
+        private bool IsMergeValid()
+        {
+            if (mergeProductStruct.Inventory < 0)
+            {
+                MessageWindow.ShowMessage("合併商品庫存不得小於0", MessageType.ERROR);
+                return false;
+            }
+
+            if (mergeProductStruct.ID is null)
+            {
+                MessageWindow.ShowMessage("必須選擇合併品項", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
+        private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
+        {
+            if (notificationMessage.Notification == nameof(ProductGroupSettingWindowViewModel))
+            {
+                mergeProductStruct = notificationMessage.Content;
+                SearchString = mergeProductStruct.ID;
             }
         }
         #endregion

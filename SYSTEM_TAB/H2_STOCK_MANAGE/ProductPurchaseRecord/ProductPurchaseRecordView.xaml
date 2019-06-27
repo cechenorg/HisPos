@@ -121,7 +121,7 @@
                         <RadioButton Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                         <RadioButton Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
                     </StackPanel>
-                    <DataGrid Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGrid Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="260">

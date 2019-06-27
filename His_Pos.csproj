@@ -473,7 +473,7 @@
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\ProductDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
-    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDb.cs" />
+    <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
