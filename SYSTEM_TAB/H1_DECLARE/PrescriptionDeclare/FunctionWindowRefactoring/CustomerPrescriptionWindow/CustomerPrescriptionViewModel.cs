@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -13,6 +13,7 @@ using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.Properties;
 using His_Pos.Service;
+using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow
@@ -235,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
             if (CheckCardNotNull())
-                NoCardPres.GetUngetCardByCusId(Patient.ID);
+                NoCardPres.GetNoCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -280,6 +281,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         }
         private void MakeUpAction()
         {
+            if (MakeUpPrescription is null)
+            {
+                if (NoCardPres.Count == 1)
+                    MakeUpPrescription = NoCardPres[0];
+                else
+                {
+                    MessageWindow.ShowMessage("請選擇欲補卡處方。",MessageType.WARNING);
+                    return;
+                }
+            }
             MessageWindow.ShowMessage("補卡作業進行時請勿拔起卡片，以免補卡異常", MessageType.WARNING);
             int deposit = 0;
             var result = false;
@@ -358,7 +369,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 currentService = PrescriptionService.CreateService(pre);
                 WriteCard();
                 currentService.MakeUpComplete();
-                NoCardPres.GetUngetCardByCusId(Patient.ID);
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    NoCardPres.GetNoCardByCusId(Patient.ID);
+                });
                 IsBusy = false;
             }
             else

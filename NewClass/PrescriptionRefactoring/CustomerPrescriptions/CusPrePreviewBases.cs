@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public void GetOrthopedicsByCustomerIDNumber(string idNumber)
         {
+            Clear();
             var table = PrescriptionDb.GetOrthopedicsPrescriptionsByCusIdNumber(idNumber);
             foreach (var xmlDocument in table)
             {
@@ -45,6 +46,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public void GetCooperativeByCusIDNumber(string idNumber) //取得合作XML格式處方  
         {
+            Clear();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByCusIDNumber(idNumber);
             foreach (DataRow r in table.Rows)
             {
@@ -57,6 +59,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public void GetRegisterByCusId(int cusID) //取得登錄慢箋
         {
+            Clear();
             var table = PrescriptionDb.GetRegisterPrescriptionByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
@@ -66,6 +69,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
 
         public void GetReserveByCusId(int cusID) //取得預約慢箋
         {
+            Clear();
             var table = PrescriptionDb.GetReservePrescriptionByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
@@ -73,8 +77,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             }
         }
 
-        public void GetUngetCardByCusId(int cusID) //取得預約慢箋
+        public void GetNoCardByCusId(int cusID) //取得預約慢箋
         {
+            Clear();
             var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
