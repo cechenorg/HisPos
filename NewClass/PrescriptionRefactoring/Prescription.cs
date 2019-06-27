@@ -957,6 +957,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 case "5":
                     SetQuitSmokeVariables();
                     break;
+                case "0":
+                    SetInstitutionToCurrentPharmacy();
+                    break;
             }
         }
 
@@ -1082,6 +1085,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void SetPrescribeAdjustCase()
         {
             AdjustCase = VM.GetAdjustCase("0");
+        }
+
+        private void SetInstitutionToCurrentPharmacy()
+        {
+            if (Institution is null || string.IsNullOrEmpty(Institution.ID))
+            {
+                Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
+            }
         }
 
         public string CheckPrescriptionRule(bool noCard)
