@@ -16,7 +16,7 @@
             <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
         </StackPanel>
         <DataGrid ItemsSource="{Binding ProductGroupSettingCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                  Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled">
+                  Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CanUserDeleteRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

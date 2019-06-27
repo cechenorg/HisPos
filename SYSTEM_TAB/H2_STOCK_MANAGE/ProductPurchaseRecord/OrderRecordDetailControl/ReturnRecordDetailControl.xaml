@@ -39,7 +39,7 @@
             <Label Width="980" Content="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18"/>
         </StackPanel>
         <DataGrid Grid.Row="3" CanUserAddRows="False" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" ItemsSource="{Binding ReturnProducts}" FrozenColumnCount="2">
+                  CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" ItemsSource="{Binding ReturnProducts}" FrozenColumnCount="2" CanUserDeleteRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
