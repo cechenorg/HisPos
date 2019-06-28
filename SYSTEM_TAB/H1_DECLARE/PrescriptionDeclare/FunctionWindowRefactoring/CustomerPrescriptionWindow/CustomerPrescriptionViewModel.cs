@@ -20,7 +20,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 {
     public enum CustomerPrescriptionType
     {
-        Orthopedics = 0,
         Cooperative = 1,
         Register = 2,
         Reserve = 3
@@ -48,15 +47,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 switch (selectedRadioButton)
                 {
                     case "Option1":
-                        SelectedType = CustomerPrescriptionType.Orthopedics;
-                        break;
-                    case "Option2":
                         SelectedType = CustomerPrescriptionType.Cooperative;
                         break;
-                    case "Option3":
+                    case "Option2":
                         SelectedType = CustomerPrescriptionType.Register;
                         break;
-                    case "Option4":
+                    case "Option3":
                         SelectedType = CustomerPrescriptionType.Reserve;
                         break;
                 }
@@ -92,15 +88,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             }
         }
 
-        private string orthopedicsContent;
-        public string OrthopedicsContent
-        {
-            get => orthopedicsContent;
-            set
-            {
-                Set(() => OrthopedicsContent, ref orthopedicsContent, value);
-            }
-        }
         private string cooperativeContent;
         public string CooperativeContent
         {
@@ -139,12 +126,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 Set(() => SelectedType, ref selectedType, value);
             }
         }
-        public bool UngetCardGridVisible => NoCardPres != null && NoCardPres.Count > 0;
-        public bool OrthopedicsRadioBtnEnable => OrthopedicsPres != null && OrthopedicsPres.Count > 0;
+        public bool NoCardGridVisible => NoCardPres != null && NoCardPres.Count > 0;
         public bool CooperativeRadioBtnEnable => CooperativePres != null && CooperativePres.Count > 0;
         public bool RegisterRadioBtnEnable => ChronicRegisterPres != null && ChronicRegisterPres.Count > 0;
         public bool ReserveRadioBtnEnable => ChronicReservePres != null && ChronicReservePres.Count > 0;
-        public CusPrePreviewBases OrthopedicsPres { get; set; }
         public CusPrePreviewBases CooperativePres { get; set; }
         public CusPrePreviewBases ChronicRegisterPres { get; set; }
         public CusPrePreviewBases ChronicReservePres { get; set; }
@@ -208,7 +193,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             WindowTitle = Patient.Name + " 可調劑處方";
             GetPrescriptions();
-            OrthopedicsContent = "骨科 " + OrthopedicsPres.Count + " 張";
             CooperativeContent = "合作 " + CooperativePres.Count + " 張";
             RegisterContent = "登錄 " + ChronicRegisterPres.Count + " 張";
             ReserveContent = "預約 " + ChronicReservePres.Count + " 張";
@@ -217,7 +201,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void CheckShowDialog()
         {
-            if (OrthopedicsPres.Count > 0 || CooperativePres.Count > 0 || ChronicRegisterPres.Count > 0 || ChronicReservePres.Count > 0 || (NoCardPres.Count > 0 && !string.IsNullOrEmpty(Card.CardNumber)))
+            if (CooperativePres.Count > 0 || ChronicRegisterPres.Count > 0 || ChronicReservePres.Count > 0 || (NoCardPres.Count > 0 && !string.IsNullOrEmpty(Card.CardNumber)))
                 ShowDialog = true;
             else
                 ShowDialog = false;
@@ -225,13 +209,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void GetPrescriptions()
         {
-            OrthopedicsPres = new CusPrePreviewBases();
             CooperativePres = new CusPrePreviewBases();
             ChronicRegisterPres = new CusPrePreviewBases();
             ChronicReservePres = new CusPrePreviewBases();
             NoCardPres = new CusPrePreviewBases();
             MainWindow.ServerConnection.OpenConnection();
-            OrthopedicsPres.GetOrthopedicsByCustomerIDNumber(Patient.IDNumber);
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
@@ -247,22 +229,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void SetCondition()
         {
-            if (ChronicReservePres.Count > 0)
-                SelectedRadioButton = "Option4";
+            if (CooperativePres.Count > 0)
+                SelectedRadioButton = "Option1";
 
             if (ChronicRegisterPres.Count > 0)
-                SelectedRadioButton = "Option3";
-
-            if (CooperativePres.Count > 0)
                 SelectedRadioButton = "Option2";
 
-            if (OrthopedicsPres.Count > 0 || CheckNoOtherPrescriptions())
-                SelectedRadioButton = "Option1";
+            if (CheckNoOtherPrescriptions())
+                SelectedRadioButton = "Option3";
         }
 
         private bool CheckNoOtherPrescriptions()
         {
-            return CooperativePres.Count == 0 && ChronicRegisterPres.Count == 0 && ChronicReservePres.Count == 0;
+            return ChronicRegisterPres.Count == 0 && CooperativePres.Count == 0;
         }
 
         private void PrescriptionSelectedAction()

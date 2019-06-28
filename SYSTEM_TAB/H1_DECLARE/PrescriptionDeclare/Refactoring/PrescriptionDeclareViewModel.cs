@@ -335,7 +335,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("QRCodePrescriptionScanned", GetCustomerPrescription);
             if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
-            Messenger.Default.Register<Customer>(this, "SelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Register<NotificationMessage<Customer>>("SelectedCustomer", GetSelectedCustomer);
             CheckNewCustomer();
             CountMedicinePointAction();
             setBuckleAmount = true;
@@ -355,10 +355,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         //顧客查詢
         private void GetCustomersAction(TextBox condition)
         {
-            Messenger.Default.Register<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Register<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Register<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
             if (!CheckConditionEmpty(condition.Name))
             {
-                Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
                 return;
             }
             ShowCustomerSearch(condition.Name);
@@ -378,7 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
                     break;
                 case "PatientBirthday":
-                    customerSearch = new CustomerSearchWindow(DateTimeExtensions.NullableDateToTWCalender(CurrentPrescription.Patient.Birthday, false), CustomerSearchCondition.Birthday);
+                    customerSearch = new CustomerSearchWindow((DateTime)CurrentPrescription.Patient.Birthday);
                     break;
                 case "PatientTel":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Tel, CustomerSearchCondition.Tel);
@@ -387,7 +389,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.CellPhone, CustomerSearchCondition.Tel);
                     break;
             }
-            Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
         }
 
         private bool CheckConditionEmpty(string conditionName)
@@ -652,14 +654,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 checkedPatient = patientFromCard;
             }
             MainWindow.ServerConnection.CloseConnection();
-            GetSelectedCustomer(checkedPatient);
+            GetSelectedCustomer(new NotificationMessage<Customer>(checkedPatient, "GetSelectedCustomer"));
         }
 
-        private void GetSelectedCustomer(Customer receiveSelectedCustomer)
+        private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<Customer>(this, "GetSelectedCustomer", GetSelectedCustomer);
-            if (receiveSelectedCustomer is null) return;
-            CurrentPrescription.Patient = receiveSelectedCustomer;
+            Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+            if (receiveSelectedCustomer.Content is null)
+            {
+                if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
+                if(!CheckInsertCustomerData()) return;
+            }
+            else
+            {
+                CurrentPrescription.Patient = receiveSelectedCustomer.Content;
+            }
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
@@ -817,6 +827,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var cusPreWindow = new CustomerPrescriptionWindow(CurrentPrescription.Patient, currentCard);
+            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
         }
 
         private bool CheckPatientEqual(Prescription receive)
@@ -1052,18 +1063,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                     break;
             }
         }
-        private void CheckInsertCustomerData()
+
+        private bool CheckInsertCustomerData()
         {
             if (!CurrentPrescription.Patient.CheckData())
-                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
-            else
             {
-                MainWindow.ServerConnection.OpenConnection();
-                CurrentPrescription.Patient.InsertData();
-                CurrentPrescription.Patient.GetHistories();
-                MainWindow.ServerConnection.CloseConnection();
+                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
+                return false;
             }
+            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認", null);
+            if (!(bool) insertCustomerConfirm.DialogResult) return false;
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.InsertData();
+            MainWindow.ServerConnection.CloseConnection();
+            return true;
+
         }
+
         private bool CheckFocusDivision(string insID)
         {
             return CurrentPrescription.Institution != null &&

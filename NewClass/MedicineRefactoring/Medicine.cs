@@ -129,7 +129,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => positionID;
             set
             {
-                Set(() => PositionID, ref positionID, value);
+                if (value != null)
+                {
+                    Set(() => PositionID, ref positionID, value);
+                    Position = ViewModelMainWindow.GetPosition(positionID);
+                    if (Position != null)
+                    {
+                        Position.ID = positionID;
+                    }
+                }
             }
         }
 

@@ -34,9 +34,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             }
         }
 
-        public void GetOrthopedicsByCustomerIDNumber(string idNumber)
+        private void GetOrthopedicsByCustomerIDNumber(string idNumber)
         {
-            Clear();
             var table = PrescriptionDb.GetOrthopedicsPrescriptionsByCusIdNumber(idNumber);
             foreach (var xmlDocument in table)
             {
@@ -55,6 +54,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
                 Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml)
                     , r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
             }
+            GetOrthopedicsByCustomerIDNumber(idNumber);
         }
 
         public void GetRegisterByCusId(int cusID) //取得登錄慢箋

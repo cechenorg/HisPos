@@ -44,11 +44,11 @@
         </DataTemplate>
         <DataTemplate x:Key="UpdateSendToSingde" DataType="{x:Type CheckBox}">
             <CheckBox Width="133" Height="35" Content="修改傳送杏德"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="IndianRed" Margin="10,0,0,0"
-                      IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                      IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrder, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <DataTemplate x:Key="SendToSingde" DataType="{x:Type CheckBox}">
             <CheckBox Width="133" Height="35" Content="傳送杏德" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"
-                      IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                      IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrder, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <declare:MedicineDataGrid x:Key="MedicineDataGrid" x:Name="MedicineDataGrid"/>
         <Style TargetType="declare:MedicineDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
@@ -77,10 +77,10 @@
                 </Grid.RowDefinitions>
                 <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                     <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientIdNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
+                    <TextBox Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIdNumber}"/>
+                            <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
@@ -116,7 +116,7 @@
                             <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Image Width="30" Height="30" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
+                    <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
                     <TextBox Name="PatientTel" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>

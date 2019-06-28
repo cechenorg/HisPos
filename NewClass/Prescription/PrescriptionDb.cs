@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
@@ -22,7 +22,9 @@ using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
+using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
+// ReSharper disable TooManyArguments
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -78,7 +80,7 @@ namespace His_Pos.NewClass.Prescription
             resMaster.Rows[0]["ResMas_ID"] = prescription.SourceId;
             DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", resMaster);
             DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
         }
 
         public static void UpdateReserve(PrescriptionRefactoring.Prescription prescription, List<Pdata> prescriptionDetails)
@@ -88,7 +90,7 @@ namespace His_Pos.NewClass.Prescription
             resMaster.Rows[0]["ResMas_ID"] = prescription.SourceId;
             DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", resMaster);
             DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescriptionDetails));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList);
         }
 
         public static DataTable ProcessInventory(string productID,double amount,string type,string source,string sourcdId)
@@ -171,11 +173,12 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
             DataBaseFunction.AddSqlParameter(parameterList, "MedID", string.IsNullOrEmpty(medID) ? null : medID);
             DataBaseFunction.AddSqlParameter(parameterList, "MedName", string.IsNullOrEmpty(medName) ? null : medName);
-            DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins == null ? null : ins.ID); 
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj == null ? null : adj.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div == null ? null : div.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins?.ID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div?.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         } 
+
         public static DataTable GetReservePrescriptionsData(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -230,11 +233,11 @@ namespace His_Pos.NewClass.Prescription
         public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles,string fileId) {
             Customers cs = new Customers();
             cs = cs.SetCustomersByPrescriptions(ddatas);
-            int preId = PrescriptionDb.GetPrescriptionId().Rows[0].Field<int>("MaxPreId");
+            var preId = GetPrescriptionId().Rows[0].Field<int>("MaxPreId");
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles,preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
         } 
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
@@ -290,20 +293,20 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
         }
-        public static void UpdateXmfOfPrescriptionStatus(string sourceId,int Id)
+        public static void UpdateXmfOfPrescriptionStatus(string sourceId,int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
-            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", id);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]", parameterList);
         }
-        public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData)
         {
-            return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
+            return sendOrderAction(storId, p, prescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS";
         }
-        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData)
         {
-            switch (sendOrderAction(storId, p, PrescriptionSendData, "UpdateDeclareOrder"))
+            switch (sendOrderAction(storId, p, prescriptionSendData, "UpdateDeclareOrder"))
             {
                 case "SUCCESS":
                     return 1;
@@ -313,12 +316,12 @@ namespace His_Pos.NewClass.Prescription
                     return 0;
             }
         }
-        public static bool SendDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas PrescriptionSendData)
+        public static bool SendDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData)
         {
-            return sendOrderAction(storId, p, PrescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS" ? true : false;
+            return SendOrderAction(storId, p, prescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS";
         }
-        public static int UpdateDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas PrescriptionSendData) {
-            switch (sendOrderAction(storId, p, PrescriptionSendData, "UpdateDeclareOrder")) {
+        public static int UpdateDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData) {
+            switch (SendOrderAction(storId, p, prescriptionSendData, "UpdateDeclareOrder")) {
                 case "SUCCESS":
                     return 1;
                 case "DONE":
@@ -327,70 +330,123 @@ namespace His_Pos.NewClass.Prescription
                     return 0;
             } 
         }
-        public static string sendOrderAction(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas PrescriptionSendData,string sql) {
-            string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
-            string Rx_order = Convert.ToDateTime(p.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
-            string Pt_name = p.Patient.Name; // 藥袋名稱(病患姓名)
-            string Upload_data = DateTime.Now.ToString(" yyyy - MM - dd hh:mm:ss "); //更新時間( 2014 - 01 - 24 21:13:03 )
-            string Upload_status = string.Empty; //	列印判斷
-            string Prt_date = string.Empty; //列印日期
-            string Inv_flag = "0"; //轉單處理確認0未處理 1已處理 2不處理
-            string Batch_sht = storId; //出貨單號
-            string Inv_chk = "0"; //  庫存確認 是1 否0
-            string Inv_msg = ""; //庫存確認
 
-            string empty = string.Empty;
-            StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
+        private static string SendOrderAction(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData,string sql) {
+            var rxOrder = Convert.ToDateTime(p.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
+            var dtlData = new StringBuilder(); //  備註text  處方資訊
+            AppendPatientData(dtlData,p);
+            AppendInstitutionData(dtlData,p);
+            AppendTreatmentData(dtlData,p);
+            AppendMedicineCost(dtlData,p);
+            AppendMedicinesData(dtlData, p, prescriptionSendData);
+            var result = "FAIL";
+            switch (sql) {
+                case "AddDeclareOrderToPreDrug":
+                    result = AddDeclareOrderToPreDrug(storId,p.Patient.Name,dtlData,p.AdjustDate);
+                    break;
+                case "UpdateDeclareOrder":
+                    result = UpdateDeclareOrder(storId,rxOrder,dtlData);
+                    break;
+            }
+            return result;
+        }
+
+        private static string UpdateDeclareOrder(string storId,string rxOrder ,StringBuilder dtlData)
+        {
+            var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
+            var result = "FAIL";
+            MainWindow.SingdeConnection.OpenConnection();
+            var table = MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{rxID}','{storId}','{rxOrder}','{dtlData}')");
+            if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                result = "SUCCESS";
+            else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
+                result = "DONE";
+            MainWindow.SingdeConnection.CloseConnection();
+            return result;
+        }
+
+        private static string AddDeclareOrderToPreDrug(string storId,string patientName,StringBuilder dtlData,DateTime? adjustDate)
+        {
+            var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
+            var result = "FAIL";
+            MainWindow.SingdeConnection.OpenConnection();
+            Debug.Assert(adjustDate != null, nameof(adjustDate) + " != null");
+            var table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{rxID}', '{storId}', '{patientName}','{dtlData}','{((DateTime)adjustDate).AddYears(-1911):yyyMMdd}')");
+            if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                result = "SUCCESS";
+            MainWindow.SingdeConnection.CloseConnection();
+            return result;
+        }
+
+        private static void AppendPatientData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        {
             //第一行
-            Dtl_data.Append(p.ID.ToString().PadLeft(8, '0')); //藥局病歷號
-            Dtl_data.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名 
-            Dtl_data.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
-            Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
-            string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
-            Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
+            dtlData.Append(p.ID.ToString().PadLeft(8, '0')); //藥局病歷號
+            dtlData.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名 
+            dtlData.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
+            Debug.Assert(p.Patient.Birthday != null, "p.Patient.Birthday != null");
+            dtlData.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
+            p.Patient.CheckGender();
+            var gender = p.Patient.Gender.Equals("男") ? "1" : "2";
+            dtlData.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
+            AppendPatientTel(dtlData, p.Patient);
+            dtlData.AppendLine();
+        }
 
+        private static void AppendPatientTel(StringBuilder dtlData, Customer patient)
+        {
             string patientTel;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            if (!string.IsNullOrEmpty(patient.CellPhone))
+                patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.CellPhone : patient.CellPhone + "(註)";
             else
             {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                if (!string.IsNullOrEmpty(patient.Tel))
+                    patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
                 else
-                    patientTel = p.Patient.ContactNote;
+                    patientTel = patient.ContactNote;
             }
+            dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
+        }
 
-
-            Dtl_data.Append( string.IsNullOrEmpty(patientTel)  ? empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
-            Dtl_data.AppendLine();
+        private static void AppendInstitutionData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        {
             //第二行   
-            Dtl_data.Append(p.Institution.ID.PadRight(10, ' ')); //院所代號
-            Dtl_data.Append(p.Institution.ID.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
-            Dtl_data.Append(empty.PadRight(20, ' ')); //空
-            Dtl_data.Append(ViewModelMainWindow.CurrentUser.ID.ToString().PadRight(10, ' ')); //藥師代號
-            Dtl_data.Append(ViewModelMainWindow.CurrentUser.Name.PadRight(20 - NewFunction.HowManyChinese(ViewModelMainWindow.CurrentUser.Name), ' ')); //藥師姓名 
-            Dtl_data.AppendLine();
-            //第三行
-            Dtl_data.Append(((DateTime)p.TreatDate).AddYears(-1911).ToString("yyyMMdd")); //處方日(就診日期)
-            Dtl_data.Append(((DateTime)p.AdjustDate).AddYears(-1911).ToString("yyyMMdd")); //調劑日期
-            Dtl_data.Append(p.PrescriptionCase.ID.PadRight(2, ' ')); //案件
-            Dtl_data.Append(p.Division.ID.PadRight(2, ' ')); //科別
-            Dtl_data.Append(p.MainDisease.ID.PadRight(10, ' ')); //主診斷
-            Dtl_data.Append(string.IsNullOrEmpty(p.SubDisease.ID) ? empty.PadRight(10, ' ') : p.SubDisease.ID.PadRight(10, ' ')); //次診斷
-            Dtl_data.Append(p.TempMedicalNumber == null ? empty.PadRight(4, ' ') : p.TempMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
-            Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
-            Dtl_data.Append(p.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
-            Dtl_data.Append(p.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
-            Dtl_data.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
+            dtlData.Append(p.Institution.ID.PadRight(10, ' ')); //院所代號
+            dtlData.Append(p.Institution.ID.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
+            dtlData.Append(string.Empty.PadRight(20, ' ')); //空
+            dtlData.Append(ViewModelMainWindow.CurrentUser.ID.ToString().PadRight(10, ' ')); //藥師代號
+            dtlData.Append(ViewModelMainWindow.CurrentUser.Name.PadRight(20 - NewFunction.HowManyChinese(ViewModelMainWindow.CurrentUser.Name), ' ')); //藥師姓名 
+            dtlData.AppendLine();
+        }
 
+        private static void AppendTreatmentData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        {
+            //第三行
+            Debug.Assert(p.TreatDate != null, "p.TreatDate != null");
+            Debug.Assert(p.AdjustDate != null, "p.AdjustDate != null");
+            dtlData.Append(((DateTime)p.TreatDate).AddYears(-1911).ToString("yyyMMdd")); //處方日(就診日期)
+            dtlData.Append(((DateTime)p.AdjustDate).AddYears(-1911).ToString("yyyMMdd")); //調劑日期
+            dtlData.Append(p.PrescriptionCase.ID.PadRight(2, ' ')); //案件
+            dtlData.Append(p.Division.ID.PadRight(2, ' ')); //科別
+            dtlData.Append(p.MainDisease.ID.PadRight(10, ' ')); //主診斷
+            dtlData.Append(string.IsNullOrEmpty(p.SubDisease?.ID) ? string.Empty.PadRight(10, ' ') : p.SubDisease.ID.PadRight(10, ' ')); //次診斷
+            dtlData.Append(p.TempMedicalNumber == null ? string.Empty.PadRight(4, ' ') : p.TempMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
+            dtlData.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
+            dtlData.Append(p.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
+            dtlData.Append(p.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
+            dtlData.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
+        }
+
+        private static void AppendMedicineCost(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        {
             double medCost = 0;
-            foreach (MedicineRefactoring.Medicine declareMedicine in p.Medicines)
+            foreach (var declareMedicine in p.Medicines)
             {
                 if (declareMedicine is MedicineRefactoring.MedicineNHI || declareMedicine is MedicineRefactoring.MedicineSpecialMaterial)
                     medCost += declareMedicine.TotalPrice;
             }
-            Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
-            string medicalPay = "0";
+            dtlData.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
+            var medicalPay = "0";
             if (Convert.ToInt32(p.MedicineDays) <= 13)
                 medicalPay = "48";
             if (Convert.ToInt32(p.MedicineDays) >= 14 && Convert.ToInt32(p.MedicineDays) < 28)
@@ -398,73 +454,59 @@ namespace His_Pos.NewClass.Prescription
             if (Convert.ToInt32(p.MedicineDays) >= 28)
                 medicalPay = "69";
 
-            Dtl_data.Append(medicalPay.PadRight(4, ' ')); //藥事費
-            Dtl_data.Append(p.PrescriptionPoint.CopaymentPoint.ToString().PadRight(4, ' ')); //部分負擔
-            Dtl_data.AppendLine();
+            dtlData.Append(medicalPay.PadRight(4, ' ')); //藥事費
+            dtlData.Append(p.PrescriptionPoint.CopaymentPoint.ToString().PadRight(4, ' ')); //部分負擔
+            dtlData.AppendLine();
+        }
+
+        private static void AppendMedicinesData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData)
+        {
             //第四行
-            int i = 1;
-            foreach (Medicine declareMedicine in p.Medicines)
+            var i = 1;
+            foreach (var declareMedicine in p.Medicines)
             {
                 if (declareMedicine is MedicineRefactoring.MedicineNHI || declareMedicine is MedicineRefactoring.MedicineSpecialMaterial)
                 {
-                    if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')); //健保碼
-                    else
-                        Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-
-                    Dtl_data.Append(declareMedicine.Dosage == null ? empty.PadRight(8, ' ') : declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
-                    Dtl_data.Append(declareMedicine.Usage.Name == null ? empty.PadRight(16, ' ') : declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
-                    Dtl_data.Append(declareMedicine.Days == null ? empty.PadRight(3, ' ') : declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
-                    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                    if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Split('-')[1].PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                    else
-                        Dtl_data.Append(declareMedicine.Position.ID.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-
-                    if (!declareMedicine.PaySelf)
-                        Dtl_data.Append(" ");
-                    else
-                        Dtl_data.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
-
-                    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                    string amount = string.Empty;
-                    foreach (PrescriptionSendData row in PrescriptionSendData)
-                    {
-                        if (row.MedId == declareMedicine.ID)
-                        {
-                            amount = row.SendAmount.ToString();
-                            break;
-                        }
-                    }
-                    Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
-
+                    AppendMedicineData(declareMedicine,dtlData,prescriptionSendData);
                 }
-                if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
-                    Dtl_data.AppendLine();
+                if (i < p.Medicines.Count(med => med is MedicineRefactoring.MedicineNHI || med is MedicineRefactoring.MedicineSpecialMaterial))
+                    dtlData.AppendLine();
                 i++;
             }
-            string result = "FAIL";
-            DataTable table;
-            switch (sql) {
-                case "AddDeclareOrderToPreDrug":
-                    MainWindow.SingdeConnection.OpenConnection();
-                    table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
-                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        result = "SUCCESS";
-                    MainWindow.SingdeConnection.CloseConnection();
-                    break;
-                case "UpdateDeclareOrder":
-                    MainWindow.SingdeConnection.OpenConnection();
-                    table =  MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{Rx_id}', '{storId}','{Rx_order}','{Dtl_data}')");
-                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        result = "SUCCESS";
-                    else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
-                        result = "DONE";
-                    MainWindow.SingdeConnection.CloseConnection();
-                    break;
-            }
-            return result;
         }
+
+        private static void AppendMedicineData(Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        {
+            dtlData.Append(declareMedicine.ID.Length > 12
+                ? declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')
+                : declareMedicine.ID.PadRight(12, ' '));//健保碼
+            dtlData.Append(declareMedicine.Dosage == null ? string.Empty.PadRight(8, ' ') : declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
+            dtlData.Append(string.IsNullOrEmpty(declareMedicine.Usage?.Name) ? string.Empty.PadRight(16, ' ') : declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
+            dtlData.Append(declareMedicine.Days == null ? string.Empty.PadRight(3, ' ') : declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
+            dtlData.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
+            dtlData.Append(declareMedicine.ID.Length > 12
+                ? declareMedicine.ID.Split('-')[1].PadRight(6, ' ')
+                : declareMedicine.Position?.ID.PadRight(6, ' '));
+            AppendAmountAndPaySelf(declareMedicine, dtlData, prescriptionSendData);
+        }
+
+        private static void AppendAmountAndPaySelf(Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        {
+            if (!declareMedicine.PaySelf)
+                dtlData.Append(" ");
+            else
+                dtlData.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
+            dtlData.Append(string.Empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
+            var amount = string.Empty;
+            foreach (var row in prescriptionSendData)
+            {
+                if (row.MedId != declareMedicine.ID) continue;
+                amount = row.SendAmount.ToString();
+                break;
+            }
+            dtlData.Append(amount.PadRight(10, ' ')); //訂購量
+        }
+
         public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData, string sql)
         {
             string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY

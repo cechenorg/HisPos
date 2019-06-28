@@ -132,7 +132,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
                 case 0:
                     ShowDialog = false;
                     MessageWindow.ShowMessage("查無顧客", MessageType.WARNING);
-                    break;
+                    AskAddCustomerData();
+                    return;
                 case 1:
                     ShowDialog = false;
                     SelectedCustomer = Customers[0];
@@ -152,6 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
         {
             SearchCondition = CustomerSearchCondition.Birthday;
             SelectedRadioButton = "Option3";
+            Search = DateTimeExtensions.ConvertToTaiwanCalender(birth);
             Customers = new Customers();
             Customers.SearchCustomers(null, null, null,null, birth);
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
@@ -180,7 +182,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
 
         private void ExecuteCustomerSelected()
         {
-            Messenger.Default.Send(SelectedCustomer, "GetSelectedCustomer");
+            Messenger.Default.Send(new NotificationMessage<Customer>(SelectedCustomer, "GetSelectedCustomer"));
+            Messenger.Default.Send(new NotificationMessage("CloseCustomerSearchWindow"));
+        }
+
+        private void AskAddCustomerData()
+        {
+            SelectedCustomer = null;
+            Messenger.Default.Send(new NotificationMessage<Customer>(SelectedCustomer, "AskAddCustomerData"));
             Messenger.Default.Send(new NotificationMessage("CloseCustomerSearchWindow"));
         }
 
@@ -208,6 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefact
             if (IsEditing)
             {
                 IsEditing = false;
+                Customers.Clear();
                 switch (SearchCondition)
                 {
                     case CustomerSearchCondition.IDNumber:

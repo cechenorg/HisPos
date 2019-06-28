@@ -77,9 +77,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
-                ChronicSeq = int.Parse(r.Field<byte>("ChronicSequence").ToString());
+                ChronicSeq = r.Field<byte>("ChronicSequence");
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicTotal").ToString()))
-                ChronicTotal = int.Parse(r.Field<byte>("ChronicTotal").ToString());
+                ChronicTotal = r.Field<byte>("ChronicTotal");
             if (!string.IsNullOrEmpty(r.Field<string>("MainDiseaseID")))
                 MainDisease = DiseaseCode.GetDiseaseCodeByID(r.Field<string>("MainDiseaseID"));
             if (!string.IsNullOrEmpty(r.Field<string>("SecondDiseaseID")))
@@ -453,7 +453,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
-        public bool IsPrescribe => Medicines.Count(m => !m.PaySelf) == 0 && Medicines.Count > 0;
+        public bool IsPrescribe => Medicines!= null && Medicines.Count(m => m.PaySelf) == Medicines.Count && Medicines.Count > 0;
         public bool IsBuckle => WareHouse != null;
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
@@ -957,10 +957,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 case "5":
                     SetQuitSmokeVariables();
                     break;
-                case "0":
-                    SetInstitutionToCurrentPharmacy();
-                    break;
             }
+            SetInstitutionToCurrentPharmacy();
         }
 
         private void SetNormalVariables()
@@ -1089,9 +1087,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void SetInstitutionToCurrentPharmacy()
         {
+            if(!IsPrescribe) return;
             if (Institution is null || string.IsNullOrEmpty(Institution.ID))
             {
                 Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
+            }
+            else if(Institution.ID.Equals(VM.CurrentPharmacy.ID))
+            {
+                Institution = new Institution();
             }
         }
 
@@ -1146,6 +1149,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void InsertPrescription()
         {
+            CreateDeclareFileContent(details);//產生申報資料
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
             while (NewFunction.CheckTransaction(resultTable))
             {
@@ -1162,6 +1166,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             switch (Type)
             {
                 default:
+                    CreateDeclareFileContent(details);//產生申報資料
                     var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
                     while (NewFunction.CheckTransaction(resultTable))
                     {
@@ -1183,7 +1188,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             CheckMedicalServiceData();//確認藥事服務資料
             PrescriptionPoint.Count(details);
             SetPrescribeValue();
-            CreateDeclareFileContent(details);//產生申報資料
         }
 
         #region CheckMedicalServiceFunctions
