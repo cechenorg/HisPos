@@ -667,9 +667,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 if(!CheckInsertCustomerData()) return;
             }
             else
-            {
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
-            }
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();

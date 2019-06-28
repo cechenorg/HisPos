@@ -189,17 +189,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             #endregion
             Type = PrescriptionType.XmlOfPrescription;
             SourceId = sourceId;
-            MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
-            Patient = new Customer(customer, birthYear, birthMonth, birthDay);
-            Institution = VM.GetInstitution(prescription.From);
-            Division = VM.GetDivision(study.Subject);
-            PaymentCategory = VM.GetPaymentCategory("4");
-            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
-            TreatDate = treatDate.Date;
-            AdjustDate = DateTime.Today;
-            SpecialTreat = new SpecialTreat();
-            CooperativeGetDisease(diseases);
-            GetCopayment(insurance.CopaymentCode);
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -221,6 +210,17 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
+            MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
+            Patient = new Customer(customer, birthYear, birthMonth, birthDay);
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            PaymentCategory = VM.GetPaymentCategory("4");
+            PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
+            TreatDate = treatDate.Date;
+            AdjustDate = DateTime.Today;
+            SpecialTreat = new SpecialTreat();
+            CooperativeGetDisease(diseases);
+            GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.Insurance.IcErrorCode;
             PrescriptionStatus.IsSendToSingde = false;
@@ -654,7 +654,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private bool CheckIsAdministrativeAssistanceCopayment()
         {
-            if(AdjustCase.ID.Equals("5"))
+            if(AdjustCase!= null && AdjustCase.ID.Equals("5"))
                return Copayment.Id.Equals("003") || Copayment.Id.Equals("007") || Copayment.Id.Equals("907");
             switch (Copayment.Id)
             {

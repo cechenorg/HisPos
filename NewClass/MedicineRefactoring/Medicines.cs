@@ -365,7 +365,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 foreach (var m in medList)
                 {
                     m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                    m.Inventory = r.Field<double>("Inv_Inventory");
+                    m.Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
                 }
             }
         }
