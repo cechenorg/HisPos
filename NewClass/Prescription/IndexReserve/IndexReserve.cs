@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             TreatDate = r.Field<DateTime>("TreatmentDate");
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
-            Profit = r.Field<string>("Profit");
+            Profit = r.Field<double>("Profit");
 
             IsNoPrepareMed = r.Field<string>("MedPrepareStatus") == "F";
             
@@ -42,7 +42,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public string CusName { get; set; }
         public string InsName { get; set; }
         public string DivName { get; set; }
-        public string Profit { get; set; }
+        public double Profit { get; set; }
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }

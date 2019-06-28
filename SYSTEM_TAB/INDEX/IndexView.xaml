@@ -175,7 +175,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="80" Header="毛利(估)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
+                    <DataGridTextColumn Width="80" Header="毛利(估)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit,StringFormat=N2}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
