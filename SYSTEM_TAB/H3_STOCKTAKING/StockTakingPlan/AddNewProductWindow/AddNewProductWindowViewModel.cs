@@ -71,7 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
 
 
         public string WarID { get; set; }
-        public AddNewProductWindowViewModel(string warID) {
+        public AddNewProductWindowViewModel(string warID, StockTakingPlanProducts takingPlanProducts) {
             GetControlMedicinesCommand = new RelayCommand(GetControlMedicinesAction);
             GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
             AddProductCommand = new RelayCommand(AddProductAction);
@@ -79,23 +79,29 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             ProductSubmitCommand = new RelayCommand(ProductSubmitAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
             WarID = warID;
+            TargetStockTakingProducts.Clear();
+            foreach (var t in takingPlanProducts) {
+                TargetStockTakingProducts.Add(t);
+            } 
         }
         #region Function
         private void ProductSubmitAction() {
             Messenger.Default.Send(new NotificationMessage<StockTakingPlanProducts>(this, TargetStockTakingProducts, "GetProductSubmit"));
-            TargetStockTakingProducts.Clear();
         }
         private void AddProductAction()
         {
-            foreach (var s in SourceStockTakingProducts) {
-                if (s.IsSelected && TargetStockTakingProducts.Count(t => t.ID == s.ID) == 0 )
-                    TargetStockTakingProducts.Add(s);
-            }
-
+            for (int i = 0; i < SourceStockTakingProducts.Count; i++) {
+                if (SourceStockTakingProducts[i].IsSelected && TargetStockTakingProducts.Count(t => t.ID == SourceStockTakingProducts[i].ID) == 0) {
+                    TargetStockTakingProducts.Add(SourceStockTakingProducts[i]);
+                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    i--;
+                }
+            } 
         }
         private void DeleteProductAction() {
             for (int i = 0; i < TargetStockTakingProducts.Count; i++) {
                 if (TargetStockTakingProducts[i].IsSelected) {
+                    SourceStockTakingProducts.Add(TargetStockTakingProducts[i]);
                     TargetStockTakingProducts.Remove(TargetStockTakingProducts[i]);
                     i--;
                 }  
@@ -103,12 +109,23 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         }
         private void GetControlMedicinesAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetControlMedincines(WarID);
+            RemoveSourceProInTarget();
         }
         private void GetStockLessProductsAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockLessProducts(WarID);
+            RemoveSourceProInTarget();
         }
         private void GetStockTakingProductByProNameAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName);
+            RemoveSourceProInTarget();
+        }
+        private void RemoveSourceProInTarget() {
+            for (int i = 0; i < SourceStockTakingProducts.Count; i++) {
+                if (TargetStockTakingProducts.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0) {
+                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    i--;
+                }
+            }
         }
         #endregion
     }

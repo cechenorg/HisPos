@@ -1,11 +1,16 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.StockTaking.StockTaking.StockTakingPage;
 using His_Pos.NewClass.StockTaking.StockTakingPlan;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
+using System;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 {
@@ -86,6 +91,16 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => StockTakingReason, ref stockTakingReason, value);
             }
         }
+        private StockTakingProduct stockTakingResultProductSelected ;
+        public StockTakingProduct StockTakingResultProductSelected
+        {
+            get { return stockTakingResultProductSelected; }
+            set
+            {
+                Set(() => StockTakingResultProductSelected, ref stockTakingResultProductSelected, value);
+            }
+        }
+        
         public RelayCommand AssignPageCommand { get; set; }
         public RelayCommand ClearStockTakingProductCommand { get; set; }
         public RelayCommand NextToResultPageCommand { get; set; }
@@ -95,6 +110,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand SetDiffInventoryAmountCommand { get; set; }
         public RelayCommand LastToResultPageCommand { get; set; }
         public RelayCommand CompleteStockTakingCommand { get; set; }
+        public RelayCommand ExportCsvCommand { get; set; }
 
         public StockTakingViewModel() {
             RegisterCommand();
@@ -113,34 +129,43 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 }
             }
             EmployeeCollection.Add(ViewModelMainWindow.CurrentUser);
-        }
-        private void CompleteStockTakingAction() {
-            foreach (var s in StockTakingReason.StockTakingProductCollection) {
-                StockTakingResult.StockTakingProductCollection.Single(st => st.ID == s.ID).Note = s.Note; 
-            }
-            StockTakingResult.WareHouse = CurrentPlan.WareHouse;
-            StockTakingResult.InsertStockTaking();
-            MessageWindow.ShowMessage("盤點完成",Class.MessageType.SUCCESS);
-            StockTakingType = StockTakingType.Choose;
+        } 
+        private void SetDiffInventoryAmountAction() {
+            DiffInventoryAmount = StockTakingResult.StockTakingProductCollection.Count(s => s.NewInventory != s.Inventory); 
+            if (StockTakingResultProductSelected is null) return;
+            StockTakingResultProductSelected.IsUpdate = true;
         }
         private void LastToResultPageAction() {
             StockTakingType = StockTakingType.Result;
         }
+        private void LastToChoosePageAction() {
+            StockTakingPageCollection.AssignPages(CurrentPlan);
+            StockTakingType = StockTakingType.Choose;
+        }
         private void NextToReasonPageAction() {
+            if (StockTakingResult.StockTakingProductCollection.Count(s => s.NewInventory < 0) > 0) {
+                MessageWindow.ShowMessage("盤點量不可為負值!",Class.MessageType.ERROR);
+                return;
+            }
+
+            if(DiffInventoryAmount == 0)  {
+                ConfirmWindow confirmWindow = new ConfirmWindow("未有盤差品項 是否直接盤點?","盤點確認");
+                if ((bool)confirmWindow.DialogResult) {
+                    StockTakingResult.WareHouse = CurrentPlan.WareHouse;
+                    StockTakingResult.InsertStockTaking();
+                    MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
+                    StockTakingType = StockTakingType.Choose; 
+                } 
+                return;
+            }
+
             StockTakingReason.StockTakingProductCollection.Clear();
             foreach (var s in StockTakingResult.StockTakingProductCollection) {
                 if (s.ValueDiff != 0)
                     StockTakingReason.StockTakingProductCollection.Add(s);
             } 
             StockTakingType = StockTakingType.Reason;
-        }
-        private void SetDiffInventoryAmountAction() {
-            DiffInventoryAmount = StockTakingResult.StockTakingProductCollection.Count(s => s.NewInventory != s.Inventory);
-        }
-        private void LastToChoosePageAction() {
-            StockTakingPageCollection.AssignPages(CurrentPlan);
-            StockTakingType = StockTakingType.Choose;
-        }
+        }  
         private void NextToResultPageAction() {
             StockTakingPageCollection.AssignPages(CurrentPlan);
             StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
@@ -157,11 +182,23 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             SetDiffInventoryAmountAction();
             StockTakingType = StockTakingType.Result;
         }
+        private void CompleteStockTakingAction() {
+            foreach (var s in StockTakingReason.StockTakingProductCollection)
+            {
+                StockTakingResult.StockTakingProductCollection.Single(st => st.ID == s.ID).Note = s.Note;
+            }
+            StockTakingResult.WareHouse = CurrentPlan.WareHouse;
+            StockTakingResult.InsertStockTaking();
+            MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
+            StockTakingType = StockTakingType.Choose;
+        }
         private void FillUnTakingInventoryAction() {
             for (int i = 0; i < StockTakingResult.StockTakingProductCollection.Count; i++)
             {
-                StockTakingResult.StockTakingProductCollection[i].NewInventory = 
-                    StockTakingResult.StockTakingProductCollection[i].Inventory < 0 ? 0 : StockTakingResult.StockTakingProductCollection[i].Inventory;
+                if (!StockTakingResult.StockTakingProductCollection[i].IsUpdate) { 
+                    StockTakingResult.StockTakingProductCollection[i].NewInventory =
+                        StockTakingResult.StockTakingProductCollection[i].Inventory < 0 ? 0 : StockTakingResult.StockTakingProductCollection[i].Inventory;
+                }
             }
             SetDiffInventoryAmountAction();
         }
@@ -174,6 +211,42 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             CurrentPlan.StockTakingProductCollection.Clear();
             StockTakingPageCollection.AssignPages(CurrentPlan); 
         }
+        private void ExportCsvAction() {
+            StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
+           
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = CurrentPlan.Name +  "盤點單";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + CurrentPlan.Name + "盤點單";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("庫名," + CurrentPlan.WareHouse.Name);
+                        file.WriteLine("商品代碼,藥品名稱,庫存,盤點量");
+                        foreach (var s in StockTakingResult.StockTakingProductCollection)
+                        {
+                            file.WriteLine($"{s.ID},{s.FullName},{s.Inventory},");
+                        }
+                         
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                } 
+            }
+        }
         private void RegisterCommand() {
             AssignPageCommand = new RelayCommand(AssignPageAction);
             ClearStockTakingProductCommand = new RelayCommand(ClearStockTakingProductAction);
@@ -184,6 +257,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             NextToReasonPageCommand = new RelayCommand(NextToReasonPageAction);
             LastToResultPageCommand = new RelayCommand(LastToResultPageAction);
             CompleteStockTakingCommand = new RelayCommand(CompleteStockTakingAction);
+            ExportCsvCommand = new RelayCommand(ExportCsvAction);
         }
     }
 }

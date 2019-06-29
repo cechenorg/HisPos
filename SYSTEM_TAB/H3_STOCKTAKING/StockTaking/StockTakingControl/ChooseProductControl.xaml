@@ -200,10 +200,8 @@
                 <Label Content="盤點商品  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="{Binding CurrentPlan.StockTakingProductCollection.Count}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="210"/>
-                <Button Width="150" Content="重新分配盤點單" Command="{Binding AssignPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="100,0,0,0"/>
-                <Button Width="150" Content="清空盤點單" Command="{Binding ClearStockTakingProductCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Margin="10,0,0,0"/>
-                <Button Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0"/>
+                <Rectangle Width="630"/>
+                <Button Width="150" Content="列印盤點單" Command="{Binding ExportCsvCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0"/>
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">

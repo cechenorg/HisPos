@@ -12,9 +12,9 @@ namespace His_Pos.NewClass.Prescription.CustomerDetailPrescription.CustomerDetai
     {
         public CustomerDetailPrescriptionMedicines() { }
 
-        public void GetDataByID(int ID) {
+        public void GetDataByID(int ID,string typeName) {
             Clear();
-            var table = CustomerDetailPrescriptionMedicineDb.GetDataByCusID(ID);
+            var table = typeName == "預約" ? CustomerDetailPrescriptionMedicineDb.GetReserveDataByCusID(ID) : CustomerDetailPrescriptionMedicineDb.GetPrescriptionDataByCusID(ID);
             foreach (DataRow r in table.Rows) {
                 Add(new CustomerDetailPrescriptionMedicine(r));
             }
