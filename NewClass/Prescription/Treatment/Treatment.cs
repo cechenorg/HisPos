@@ -8,7 +8,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Person.MedicalPerson;
+using System.Collections.Generic;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
@@ -688,11 +688,18 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
             t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID);
             t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID);
-            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IDNumber.Equals(Pharmacist.IDNumber));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IDNumber.Equals(Pharmacist?.IDNumber));
             t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;
             return t;
+        }
+
+        public bool CheckDiseaseEquals(List<string> parameters)
+        {
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease.FullName : SubDisease.FullName);
         }
     }
 }

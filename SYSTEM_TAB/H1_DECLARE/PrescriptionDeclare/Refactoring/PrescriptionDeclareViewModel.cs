@@ -40,6 +40,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using His_Pos.Behaviors;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
@@ -217,6 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
         public RelayCommand PrescribeAdjust { get; set; }
+        public RelayCommand<DataGridDragDropEventArgs> ItemsDragDropCommand { get; private set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -282,6 +284,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
+            ItemsDragDropCommand = new RelayCommand<DataGridDragDropEventArgs>((args) => DragDropItem(args), (args) => args != null && args.TargetObject != null && args.DroppedObject != null && args.Effects != System.Windows.DragDropEffects.None);
         }
 
         private void EditMedicineSetAction(string mode)
@@ -476,7 +479,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
             var parameters = sender.ConvertTo<List<string>>();
             var elementName = parameters[0];
             var diseaseID = parameters[1];
-            if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEquals(parameters)) DiseaseFocusNext(elementName);
+            if (string.IsNullOrEmpty(diseaseID) || CurrentPrescription.CheckDiseaseEquals(parameters))
+            {
+                DiseaseFocusNext(elementName);
+                return;
+            }
             //診斷碼查詢
             switch (elementName)
             {
@@ -626,6 +633,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.Refactoring
                 return;
             }
             StartPrescribeAdjust();
+        }
+
+        public void DragDropItem(DataGridDragDropEventArgs args)
+        {
+            if(!(args.TargetObject is Medicine)) return;
+            int targetIndex = CurrentPrescription.Medicines.IndexOf((Medicine)args.TargetObject);
+            if (args.Direction == DataGridDragDropDirection.Down) targetIndex++;
+
+            if (args.Effects == System.Windows.DragDropEffects.Move && args.DroppedObject is Medicine m )
+            {
+                int sourceIndex = CurrentPrescription.Medicines.IndexOf(m);
+                if (sourceIndex < targetIndex) targetIndex--;
+                CurrentPrescription.Medicines.Remove(m);
+
+                CurrentPrescription.Medicines.Insert(targetIndex, m);
+            }
+            else if (args.Effects == System.Windows.DragDropEffects.Copy)
+            {
+                CurrentPrescription.Medicines.Insert(targetIndex, (Medicine)((Medicine)args.DroppedObject).Clone());
+            }
         }
         #endregion
         #region MessengerFunctions

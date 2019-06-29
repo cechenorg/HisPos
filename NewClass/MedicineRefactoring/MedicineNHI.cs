@@ -23,6 +23,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Warning = r.Field<string>("Med_Warning");
             CanEdit = true;
         }
+
+        public MedicineNHI()
+        {
+        }
+
         private int? controlLevel;
         public int? ControlLevel
         {

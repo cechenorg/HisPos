@@ -29,6 +29,7 @@
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:SentinelConverter x:Key="SentinelConverter"/>
         <declare:MedicineDataGrid x:Key="MedicineDataGrid" x:Name="MedicineDataGrid"/>
+        <service:MultiCommandParametersConverter x:Key="MultiCommandParametersConverter"/>
         <Style TargetType="declare:MedicineDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
     </Window.Resources>
     <Viewbox Stretch="Fill">
@@ -161,14 +162,21 @@
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding EditedPrescription.Treatment.MainDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding EditedPrescription.Treatment.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding GetMainDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=MainDiagnosis}" Key="Enter" />
+                                <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
+                                    <KeyBinding.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                            <Binding Path="Name" ElementName="MainDiagnosis" />
+                                            <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                        </MultiBinding>
+                                    </KeyBinding.CommandParameter>
+                                </KeyBinding>
                             </TextBox.InputBindings>
                         </TextBox>
                     </StackPanel>
@@ -183,7 +191,14 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding GetSubDiseaseCodeById}" CommandParameter="{Binding Text, ElementName=SecondDiagnosis}" Key="Enter" />
+                                <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
+                                    <KeyBinding.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                            <Binding Path="Name" ElementName="SecondDiagnosis" />
+                                            <Binding Path="Text" ElementName="SecondDiagnosis"/>
+                                        </MultiBinding>
+                                    </KeyBinding.CommandParameter>
+                                </KeyBinding>
                             </TextBox.InputBindings>
                         </TextBox>
                     </StackPanel>
@@ -297,7 +312,6 @@
                             <Setter Property="BorderBrush" Value="Transparent" />
                             <Setter Property="FontSize" Value="16" />
                             <Setter Property="Height" Value="40" />
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -340,6 +354,14 @@
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="#FF424040" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>

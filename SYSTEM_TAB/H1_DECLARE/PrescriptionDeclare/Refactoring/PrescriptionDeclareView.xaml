@@ -12,6 +12,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
              mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="450" d:DesignWidth="800" >
     <UserControl.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -291,10 +292,10 @@
                               SelectedItem="{Binding CurrentPrescription.SpecialTreat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Grid>
-                <declare:MedicineDataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding CurrentPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}"
+                <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding CurrentPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" AllowDrop="True"
                           AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
                           FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines, UpdateSourceTrigger=PropertyChanged}">
-                    <declare:MedicineDataGrid.Resources>
+                    <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="OverridesDefaultStyle" Value="False" />
@@ -313,22 +314,24 @@
                             </Style.Triggers>
                         </Style>
                         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
-                    </declare:MedicineDataGrid.Resources>
-                    <declare:MedicineDataGrid.RowStyle>
+                    </DataGrid.Resources>
+                    <i:Interaction.Behaviors>
+                        <behaviors:DataGridDragDropBehavior AllowedEffects="Copy, Move" Command="{Binding ItemsDragDropCommand}"/>
+                    </i:Interaction.Behaviors>
+                    <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
                             <Setter Property="FontSize" Value="17" />
                             <Setter Property="Height" Value="40" />
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                    </declare:MedicineDataGrid.RowStyle>
-                    <declare:MedicineDataGrid.Columns>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
                         <DataGridTemplateColumn Width="50" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -357,6 +360,14 @@
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="#FF424040" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
@@ -479,8 +490,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                    </declare:MedicineDataGrid.Columns>
-                </declare:MedicineDataGrid>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Grid Grid.Row="3" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="450" />

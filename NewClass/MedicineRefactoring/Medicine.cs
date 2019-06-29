@@ -2,16 +2,18 @@
 using System.Data;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
+using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedBag;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public abstract class Medicine:Product.Product,IDeletableProduct
+    public abstract class Medicine:Product.Product,IDeletableProduct,ICloneable
     {
         public Medicine() : base()
         {
@@ -419,6 +421,119 @@ namespace His_Pos.NewClass.MedicineRefactoring
         private bool CheckDaysNotNull()
         {
             return Days != null && Days > 0;
+        }
+
+
+        public object Clone()
+        {
+            if (this is MedicineNHI)
+            {
+                var clonedMed = this as MedicineNHI;
+                var medNHI = new MedicineNHI
+                {
+                    ID = ID,
+                    ChineseName = ChineseName,
+                    EnglishName = EnglishName,
+                    UsageName = UsageName,
+                    PositionID = PositionID,
+                    Dosage = Dosage,
+                    Days = Days,
+                    Amount = Amount,
+                    PaySelf = PaySelf,
+                    IsBuckle = false,
+                    BuckleAmount = BuckleAmount,
+                    ATCCode = clonedMed.ATCCode,
+                    ControlLevel = clonedMed.ControlLevel,
+                    Form = clonedMed.Form,
+                    Note = clonedMed.Note,
+                    SingleCompound = clonedMed.SingleCompound,
+                    Warning = clonedMed.Warning,
+                    CanEdit = clonedMed.CanEdit,
+                    CostPrice = clonedMed.CostPrice,
+                    Indication = clonedMed.Indication,
+                    Ingredient = clonedMed.Ingredient,
+                    Price = clonedMed.Price,
+                    NHIPrice = clonedMed.NHIPrice,
+                    Inventory = clonedMed.Inventory,
+                    IsCommon = clonedMed.IsCommon,
+                    SideEffect = clonedMed.SideEffect,
+                    TotalPrice = clonedMed.TotalPrice,
+                    Enable = clonedMed.Enable,
+                    Frozen = clonedMed.Frozen
+                };
+                return medNHI;
+            }
+
+            if (this is MedicineSpecialMaterial)
+            {
+                var clonedMed = this as MedicineSpecialMaterial;
+                var medSpecialMaterial = new MedicineSpecialMaterial
+                {
+                    ID = ID,
+                    ChineseName = ChineseName,
+                    EnglishName = EnglishName,
+                    UsageName = UsageName,
+                    PositionID = PositionID,
+                    Dosage = Dosage,
+                    Days = Days,
+                    Amount = Amount,
+                    PaySelf = PaySelf,
+                    IsBuckle = false,
+                    BuckleAmount = BuckleAmount,
+                    CanEdit = clonedMed.CanEdit,
+                    CostPrice = clonedMed.CostPrice,
+                    Indication = clonedMed.Indication,
+                    Ingredient = clonedMed.Ingredient,
+                    Price = clonedMed.Price,
+                    NHIPrice = clonedMed.NHIPrice,
+                    Inventory = clonedMed.Inventory,
+                    IsCommon = clonedMed.IsCommon,
+                    SideEffect = clonedMed.SideEffect,
+                    TotalPrice = clonedMed.TotalPrice,
+                    Enable = clonedMed.Enable,
+                    Frozen = clonedMed.Frozen
+                };
+                return medSpecialMaterial;
+            }
+
+            if (this is MedicineOTC)
+            {
+                var clonedMed = this as MedicineOTC;
+                var medOtc = new MedicineOTC
+                {
+                    ID = ID,
+                    ChineseName = ChineseName,
+                    EnglishName = EnglishName,
+                    UsageName = UsageName,
+                    PositionID = PositionID,
+                    Dosage = Dosage,
+                    Days = Days,
+                    Amount = Amount,
+                    PaySelf = PaySelf,
+                    IsBuckle = false,
+                    BuckleAmount = BuckleAmount,
+                    CanEdit = clonedMed.CanEdit,
+                    CostPrice = clonedMed.CostPrice,
+                    Indication = clonedMed.Indication,
+                    Ingredient = clonedMed.Ingredient,
+                    Price = clonedMed.Price,
+                    NHIPrice = 0,
+                    Inventory = clonedMed.Inventory,
+                    IsCommon = clonedMed.IsCommon,
+                    SideEffect = clonedMed.SideEffect,
+                    TotalPrice = clonedMed.TotalPrice,
+                    Enable = clonedMed.Enable,
+                    Frozen = clonedMed.Frozen
+                };
+                return medOtc;
+            }
+
+            if (this is MedicineVirtual)
+            {
+                var medVirtual = new MedicineVirtual(ID);
+                return medVirtual;
+            }
+            return null;
         }
     }
 }

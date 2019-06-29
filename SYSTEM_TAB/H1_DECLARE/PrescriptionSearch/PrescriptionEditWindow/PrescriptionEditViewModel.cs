@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -156,8 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
-        public RelayCommand<string> GetMainDiseaseCodeById { get; set; }
-        public RelayCommand<string> GetSubDiseaseCodeById { get; set; }
+        public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
@@ -267,8 +267,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrintMedBagCmd = new RelayCommand(PrintMedBagAction);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
-            GetMainDiseaseCodeById = new RelayCommand<string>(GetMainDiseaseCodeByIdAction);
-            GetSubDiseaseCodeById = new RelayCommand<string>(GetSubDiseaseCodeByIdAction);
+            GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction,CheckIsNotPrescribe);
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
@@ -349,7 +348,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void GetMainDiseaseCodeByIdAction(string id)
         {
             if (string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName))
+            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && (id.Trim()).Equals(EditedPrescription.Treatment.MainDisease.FullName))
             {
                 Messenger.Default.Send(new NotificationMessage(this,"FocusSubDisease"));
                 return;
@@ -362,19 +361,38 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             CheckEditStatus();
         }
 
-        private void GetSubDiseaseCodeByIdAction(string id)
+        private void GetDiseaseCodeAction(object sender)
         {
-            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName)))
+            var parameters = sender.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            if (string.IsNullOrEmpty(diseaseID) || EditedPrescription.Treatment.CheckDiseaseEquals(parameters))
             {
-                Messenger.Default.Send(new NotificationMessage(this,"FocusChronicTotal"));
+                DiseaseFocusNext(elementName);
                 return;
             }
-            var result = DiseaseCode.GetDiseaseCodeByID(id);
-            if (result != null)
+            //診斷碼查詢
+            switch (elementName)
             {
-                EditedPrescription.Treatment.SubDisease = result;
+                case "MainDiagnosis":
+                    EditedPrescription.Treatment.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    break;
+                case "SecondDiagnosis":
+                    if (!string.IsNullOrEmpty(diseaseID))
+                        EditedPrescription.Treatment.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    break;
             }
             CheckEditStatus();
+        }
+
+        private void DiseaseFocusNext(string elementName)
+        {
+            if (elementName == "MainDiagnosis")
+            {
+                Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
+                return;
+            }
+            Messenger.Default.Send(new NotificationMessage(this, "FocusChronicTotal"));
         }
         private void AdjustCaseSelectionChangedAction()
         {
