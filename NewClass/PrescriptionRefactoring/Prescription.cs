@@ -169,6 +169,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
+        [SuppressMessage("ReSharper", "TooManyDependencies")]
         public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
         {
             #region CooPreVariable
@@ -259,7 +260,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => Institution, ref institution, value);
                 if (institution == null) return;
                 CheckTypeByInstitution();
-                CheckDivisions();
+                CheckEnableDivisions();
             }
         }
 
@@ -457,8 +458,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsBuckle => WareHouse != null;
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
-        private List<Pdata> details { get; set; }
+        private List<Pdata> Details { get; set; }
         #endregion
+
         public bool CheckDiseaseEquals(List<string> parameters)
         {
             var elementName = parameters[0];
@@ -476,11 +478,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (Medicines is null) return;
 
             foreach (var m in Medicines)
-            {
                 m.IsBuckle = IsBuckle;
-            }
         }
-        private void CheckDivisions()
+
+        private void CheckEnableDivisions()
         {
             if (string.IsNullOrEmpty(Institution.ID)) return;
             var table = InstitutionDb.GetEnableDivisions(Institution.ID);
@@ -499,11 +500,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         private void CheckIsOrthopedics()
         {
             Type = Institution.CheckIsOrthopedics() ? PrescriptionType.Cooperative : PrescriptionType.XmlOfPrescription;
-        }
-
-        public void UpdateCooperativePrescriptionIsRead()
-        {
-            PrescriptionDb.UpdateCooperativePrescriptionIsRead(SourceId);
         }
 
         private void GetCopayment(string copID)
@@ -530,6 +526,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     break;
             }
         }
+
         private void OrthopedicsGetDisease(IReadOnlyList<Item> diseases)
         {
             MainDisease = new DiseaseCode();
@@ -697,24 +694,23 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private List<Pdata> SetPrescriptionDetail()
+        private void SetPrescriptionDetail()
         {
-            details = new List<Pdata>();
-            CreateMedicinesDetail(details);
-            if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return details;
+            Details = new List<Pdata>();
+            CreateMedicinesDetail();
+            if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
             var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
-            details.Add(medicalService);
-            if (CheckNotNormalPrescription()) return details;
+            Details.Add(medicalService);
+            if (CheckNotNormalPrescription()) return;
             var dailyPrice = CheckIfSimpleFormDeclare();
-            if (dailyPrice <= 0) return details;
-            CreateSimpleFormDetail(details,dailyPrice);
-            return details;
+            if (dailyPrice <= 0) return;
+            CreateSimpleFormDetail(dailyPrice);
         }
 
-        private void CreateSimpleFormDetail(List<Pdata> details,int dailyPrice)
+        private void CreateSimpleFormDetail(int dailyPrice)
         {
-            foreach (var d in details)
+            foreach (var d in Details)
             {
                 if (!d.P1.Equals("1")) continue;
                 d.P1 = "4";
@@ -722,18 +718,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 d.P9 = "00000000";
             }
             var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
-            details.Add(simpleForm);
+            Details.Add(simpleForm);
         }
 
-        private void CreateMedicinesDetail(List<Pdata> details)
+        private void CreateMedicinesDetail()
         {
             var serialNumber = 1;
             foreach (var med in Medicines.GetDeclare())
             {
-                details.Add(new Pdata(med, serialNumber.ToString()));
+                Details.Add(new Pdata(med, serialNumber.ToString()));
                 serialNumber++;
             }
-            details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
+            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
         }
 
         private bool CheckNotNormalPrescription()
@@ -1149,14 +1145,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void InsertPrescription()
         {
-            CreateDeclareFileContent(details);//產生申報資料
-            var resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+            CreateDeclareFileContent();//產生申報資料
+            var resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
             while (NewFunction.CheckTransaction(resultTable))
             {
                 var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
                 Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
                 if ((bool)retry.DialogResult)
-                    resultTable = PrescriptionDb.InsertPrescriptionByType(this, details);
+                    resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
             }
             ID = resultTable.Rows[0].Field<int>("DecMasId");
         }
@@ -1166,16 +1162,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             switch (Type)
             {
                 default:
-                    CreateDeclareFileContent(details);//產生申報資料
-                    var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                    CreateDeclareFileContent();//產生申報資料
+                    var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
                     while (NewFunction.CheckTransaction(resultTable))
                     {
                         MessageWindow.ShowMessage("處方登錄異常，按下OK重試", MessageType.WARNING);
-                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, details);
+                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
                     }
                     break;
                 case PrescriptionType.ChronicReserve:
-                    PrescriptionDb.UpdateReserve(this, details);
+                    PrescriptionDb.UpdateReserve(this, Details);
                     break;
 
             }
@@ -1186,7 +1182,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Institution.UpdateUsedTime();
             MedicineDays = Medicines.CountMedicineDays();
             CheckMedicalServiceData();//確認藥事服務資料
-            PrescriptionPoint.Count(details);
+            PrescriptionPoint.Count(Details);
             SetPrescribeValue();
         }
 
@@ -1262,13 +1258,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
         }
 
-        private void CreateDeclareFileContent(List<Pdata> details)
+        private void CreateDeclareFileContent()
         {
             if (IsPrescribe) return;
-            var medDeclare = details.Where(p => !p.P1.Equals("0")).ToList();
+            var notPrescribeMedicines = Details.Where(p => !p.P1.Equals("0"));
+            var medDeclare = notPrescribeMedicines.ToList();
             var d = new Ddata(this, medDeclare);
             DeclareContent = d.SerializeObjectToXDocument();
-            d.Dbody.Pdata = details;
+            d.Dbody.Pdata = Details;
         }
 
         private string CheckInstitution()
@@ -1504,7 +1501,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void SetDetail()
         {
-            details = SetPrescriptionDetail();//產生藥品資料
+            SetPrescriptionDetail();//產生藥品資料
             SetValue();
         }
 

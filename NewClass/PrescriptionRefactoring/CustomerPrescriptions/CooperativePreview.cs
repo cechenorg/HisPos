@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.PreviewMedicine;
 
@@ -26,7 +27,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         public override Prescription CreatePrescription()
         {
             var pre = new Prescription(Content, TreatDate, SourceID, IsRead);
-            pre.UpdateCooperativePrescriptionIsRead();
+            PrescriptionDb.UpdateCooperativePrescriptionIsRead(pre.SourceId);
             pre.CountPrescriptionPoint();
             return pre;
         }
