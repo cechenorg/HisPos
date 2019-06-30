@@ -486,11 +486,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 CheckIsOrthopedics();
             else
                 Type = PrescriptionType.Normal;
-
-            if (Medicines is null) return;
-
-            foreach (var m in Medicines)
-                m.IsBuckle = IsBuckle;
         }
 
         private void CheckEnableDivisions()
