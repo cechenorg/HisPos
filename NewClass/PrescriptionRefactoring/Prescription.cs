@@ -355,9 +355,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             get => adjustCase;
             set
             {
-                if (value.CheckIsPrescribe() && !IsPrescribe)
+                if (adjustCase != null && value != null)
                 {
-                    value = VM.GetAdjustCase(ChronicTotal != null ? "2" : "1");
+                    if ((value.IsChronic() && !adjustCase.IsChronic()) || (!value.IsChronic() && adjustCase.IsChronic()))
+                        IsBuckle = WareHouse != null;
                 }
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
@@ -950,7 +951,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckVariableByAdjustCase()
         {
-            IsBuckle = WareHouse != null;
             switch (adjustCase.ID)
             {
                 case "D":
@@ -1077,14 +1077,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void SetInstitutionToCurrentPharmacy()
         {
-            if(!IsPrescribe) return;
-            if (Institution is null || string.IsNullOrEmpty(Institution.ID))
+            if (IsPrescribe)
             {
-                Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
+                if (Institution is null || string.IsNullOrEmpty(Institution.ID))
+                    Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
             }
-            else if(Institution.ID.Equals(VM.CurrentPharmacy.ID))
+            else
             {
-                Institution = new Institution();
+                if (Institution.ID.Equals(VM.CurrentPharmacy.ID))
+                    Institution = new Institution();
             }
         }
 
@@ -1436,7 +1437,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void CheckPrescriptionVariable()
         {
             CheckCurrentPharmacyInstitution();
-            CheckChronicAdjustCase();
+            CheckIllegalAdjustCase();
         }
 
         private void CheckCurrentPharmacyInstitution()
@@ -1445,8 +1446,17 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Institution = new Institution();
         }
 
-        private void CheckChronicAdjustCase()
+        private void CheckIllegalAdjustCase()
         {
+            if (!IsPrescribe && AdjustCase.CheckIsPrescribe())
+            {
+                if (ChronicSeq is null)
+                    AdjustCase = VM.GetAdjustCase("1");
+
+                if (CheckChronicSeqValid())
+                    AdjustCase = VM.GetAdjustCase("2");
+            }
+
             if (ChronicSeq is null && AdjustCase.ID.Equals("2"))
                 AdjustCase = VM.GetAdjustCase("1");
 
