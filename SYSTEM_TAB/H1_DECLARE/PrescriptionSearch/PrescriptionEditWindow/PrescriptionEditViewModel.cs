@@ -256,7 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             Institutions = VM.Institutions;
             Divisions = VM.Divisions;
-            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels.GetLocalPharmacist();
+            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(EditedPrescription.Treatment.AdjustDate ?? DateTime.Today);
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;
@@ -639,6 +639,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void AdjustDateLostFocusAction()
         {
+            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(EditedPrescription.Treatment.AdjustDate ?? DateTime.Today);
             if (EditedPrescription.Treatment.AdjustDate is null) return;
             EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
         }
