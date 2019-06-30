@@ -30,6 +30,7 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <Button Width="120" Command="{Binding GetControlMedicinesCommand}" Margin="10,0,0,0" Content="管制藥品" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <Button Width="120" Command="{Binding GetMonthMedicinesCommand}" Margin="10,0,0,0" Content="月耗用量" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="商品名稱" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" BorderBrush="Black"/>
@@ -94,7 +95,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="180" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
+                    <DataGridTextColumn Width="230" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left" />
