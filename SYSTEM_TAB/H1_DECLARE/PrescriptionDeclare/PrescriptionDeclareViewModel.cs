@@ -198,6 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ShowCustomerEditWindow { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
+        public RelayCommand ShowCustomerDetail { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand PharmacistChanged { get; set; }
@@ -263,6 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
+            ShowCustomerDetail = new RelayCommand(ShowCustomerDetailAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
@@ -357,6 +359,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) => { GetPatientDataComplete(); };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void ShowCustomerDetailAction()
+        {
+            if (CurrentPrescription.Patient.ID <= 0) return;
+            var customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         //顧客查詢

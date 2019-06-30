@@ -87,7 +87,7 @@
                     <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding ShowCustomerEditWindow}"/>
+                                <i:InvokeCommandAction Command="{Binding ShowCustomerDetail}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Image>
