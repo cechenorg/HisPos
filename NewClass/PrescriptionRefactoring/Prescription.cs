@@ -22,6 +22,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -455,7 +456,17 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution,AdjustCase?.ID);
         public bool IsPrescribe => Medicines!= null && Medicines.Count(m => m.PaySelf) == Medicines.Count && Medicines.Count > 0;
-        public bool IsBuckle => WareHouse != null;
+        private bool isBuckle = true;
+        public bool IsBuckle
+        {
+            get => isBuckle;
+            set
+            {
+                Set(() => IsBuckle, ref isBuckle, value);
+                if(Medicines is null || !Medicines.Any()) return;
+                    Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
+            }
+        }
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
@@ -917,6 +928,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void AddMedicine(string medicineID)
         {
+            IsBuckle = WareHouse != null;
             var paySelf = AdjustCase.CheckIsPrescribe();
             int? selectedMedicinesIndex = null;
             if (SelectedMedicine != null)
@@ -938,6 +950,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckVariableByAdjustCase()
         {
+            IsBuckle = WareHouse != null;
             switch (adjustCase.ID)
             {
                 case "D":
@@ -982,28 +995,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void DeleteMedicine()
         {
+            IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
             CountPrescriptionPoint();
-        }
-
-        public void SetBuckleAmount()
-        {
-            if (IsBuckle)
-            {
-                foreach (var m in Medicines)
-                {
-                    m.IsBuckle = true;
-                    m.BuckleAmount = m.Amount;
-                }
-            }
-            else
-            {
-                foreach (var m in Medicines)
-                {
-                    m.IsBuckle = false;
-                    m.BuckleAmount = 0;
-                }
-            }
         }
 
         private void CheckDivisionValid()
@@ -1112,7 +1106,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void UpdateMedicines()
         {
-            Medicines.Update(IsBuckle,WareHouse?.ID, AdjustDate);
+            IsBuckle = WareHouse != null;
         }
 
         public void SetNormalAdjustStatus()

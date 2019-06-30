@@ -167,6 +167,16 @@
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                        <command:EventToCommand.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                                <Binding Path="Name" ElementName="MainDiagnosis" />
+                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                            </MultiBinding>
+                                        </command:EventToCommand.CommandParameter>
+                                    </command:EventToCommand>
+                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
@@ -188,6 +198,16 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                        <command:EventToCommand.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                                <Binding Path="Name" ElementName="MainDiagnosis" />
+                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                            </MultiBinding>
+                                        </command:EventToCommand.CommandParameter>
+                                    </command:EventToCommand>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBox.InputBindings>

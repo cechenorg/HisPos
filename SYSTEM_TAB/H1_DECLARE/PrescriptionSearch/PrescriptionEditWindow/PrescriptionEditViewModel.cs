@@ -158,6 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
@@ -268,6 +269,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction,CheckIsNotPrescribe);
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
@@ -345,21 +347,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     break;
             }
         }
-        private void GetMainDiseaseCodeByIdAction(string id)
-        {
-            if (string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && (id.Trim()).Equals(EditedPrescription.Treatment.MainDisease.FullName))
-            {
-                Messenger.Default.Send(new NotificationMessage(this,"FocusSubDisease"));
-                return;
-            }
-            var result = DiseaseCode.GetDiseaseCodeByID(id);
-            if (result != null)
-            {
-                EditedPrescription.Treatment.MainDisease = result;
-            }
-            CheckEditStatus();
-        }
 
         private void GetDiseaseCodeAction(object sender)
         {
@@ -383,6 +370,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     break;
             }
             CheckEditStatus();
+        }
+
+        private void CheckClearDiseaseAction(object sender)
+        {
+            var parameters = sender.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            if (string.IsNullOrEmpty(diseaseID))
+            {
+                switch (elementName)
+                {
+                    case "MainDiagnosis":
+                        EditedPrescription.Treatment.MainDisease = new DiseaseCode();
+                        break;
+                    case "SecondDiagnosis":
+                        EditedPrescription.Treatment.SubDisease = new DiseaseCode();
+                        break;
+                }
+            }
         }
 
         private void DiseaseFocusNext(string elementName)

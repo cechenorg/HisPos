@@ -203,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand PharmacistChanged { get; set; }
         public RelayCommand AdjustDateChanged { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
@@ -269,6 +270,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PharmacistChanged = new RelayCommand(PharmacistChangedAction);
             AdjustDateChanged = new RelayCommand(AdjustDateChangedAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             ChronicSequenceTextChanged = new RelayCommand(ChronicSequenceChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
@@ -339,6 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Unregister<NotificationMessage<Prescription>>("QRCodePrescriptionScanned", GetCustomerPrescription);
             if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
+            CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
             Messenger.Default.Register<NotificationMessage<Customer>>("SelectedCustomer", GetSelectedCustomer);
             CheckNewCustomer();
             CountMedicinePointAction();
@@ -492,9 +495,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
                 case "SecondDiagnosis":
-                    if(!string.IsNullOrEmpty(diseaseID))
-                        CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     break;
+            }
+        }
+
+        private void CheckClearDiseaseAction(object sender)
+        {
+            var parameters = sender.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            if (string.IsNullOrEmpty(diseaseID))
+            {
+                switch (elementName)
+                {
+                    case "MainDiagnosis":
+                        CurrentPrescription.MainDisease = new DiseaseCode();
+                        break;
+                    case "SecondDiagnosis":
+                        CurrentPrescription.SubDisease = new DiseaseCode();
+                        break;
+                }
             }
         }
 
@@ -555,7 +576,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void MedicineAmountChangedAction()
         {
-            CurrentPrescription.SetBuckleAmount();
+            CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
         }
 
         private void CopyPrescriptionAction()

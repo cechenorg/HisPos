@@ -211,7 +211,7 @@
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="MainDiagnosis" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding CurrentPrescription.MainDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                             Text="{Binding CurrentPrescription.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                     <KeyBinding.CommandParameter>
@@ -222,6 +222,18 @@
                                     </KeyBinding.CommandParameter>
                                 </KeyBinding>
                             </TextBox.InputBindings>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                        <command:EventToCommand.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                                <Binding Path="Name" ElementName="MainDiagnosis" />
+                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                            </MultiBinding>
+                                        </command:EventToCommand.CommandParameter>
+                                    </command:EventToCommand>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="3" Margin="8,0,8,0" Orientation="Horizontal">
@@ -239,6 +251,18 @@
                                     </KeyBinding.CommandParameter>
                                 </KeyBinding>
                             </TextBox.InputBindings>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                        <command:EventToCommand.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                                <Binding Path="Name" ElementName="SecondDiagnosis" />
+                                                <Binding Path="Text" ElementName="SecondDiagnosis"/>
+                                            </MultiBinding>
+                                        </command:EventToCommand.CommandParameter>
+                                    </command:EventToCommand>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="8,0,8,0" Orientation="Horizontal">
@@ -465,7 +489,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="80" Header="上次進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" >
+                        <DataGridTextColumn MinWidth="80" Header="上次進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.CurrentPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}, FallbackValue=Collapsed}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />

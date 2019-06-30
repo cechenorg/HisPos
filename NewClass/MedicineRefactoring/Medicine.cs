@@ -23,6 +23,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public Medicine(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
+            Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
+            CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
         }
 
         public Medicine(CooperativeMedicine m)

@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             Note = r.Field<string>("Med_NhiNote");
             Warning = r.Field<string>("Med_Warning");
             CanEdit = true;
+            IsBuckle = true;
         }
 
         public MedicineNHI()
