@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CooperativePrescriptionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow
 {
     /// <summary>
     /// CooperativePrescriptionWindow.xaml 的互動邏輯

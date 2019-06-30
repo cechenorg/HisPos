@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.PrescriptionRefactoring.SameDeclarePrescriptions;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.SameDeclareConfirmWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow
 {
     public class SameDeclareConfirmViewModel : ViewModelBase
     {

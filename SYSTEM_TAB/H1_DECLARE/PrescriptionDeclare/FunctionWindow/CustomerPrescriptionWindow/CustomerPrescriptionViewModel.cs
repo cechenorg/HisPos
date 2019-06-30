@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -16,7 +15,7 @@ using His_Pos.Service;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerPrescriptionWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow
 {
     public enum CustomerPrescriptionType
     {

@@ -9,7 +9,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring.CustomerSearchWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow
 {
     public enum CustomerSearchCondition
     {

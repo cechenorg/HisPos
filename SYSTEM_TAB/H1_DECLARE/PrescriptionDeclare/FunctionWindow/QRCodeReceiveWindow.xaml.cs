@@ -14,7 +14,7 @@ using His_Pos.Service;
 using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindowRefactoring
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
 {
     /// <summary>
     /// QRCodeReveiveWindow.xaml 的互動邏輯
