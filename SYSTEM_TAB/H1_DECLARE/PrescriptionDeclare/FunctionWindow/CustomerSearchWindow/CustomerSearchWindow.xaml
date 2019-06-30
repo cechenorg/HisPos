@@ -18,7 +18,7 @@
             <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type customerSearchWindow:CustomerSearchViewModel}">
-            <DataGrid Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="675" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCollectionView}"
+            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="720" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCollectionView}"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" EnableRowVirtualization="True" 
                       SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}">
                 <i:Interaction.Triggers>
@@ -104,7 +104,7 @@
                 <RadioButton Content="手機" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
                 <RadioButton Content="家電" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option5}"/>
             </StackPanel>
-             <ContentControl Name="ResultGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding}" Margin="10,10,10,0">
+             <ContentControl Name="ResultGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding}" Margin="10,10,10,0" Width="720">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
