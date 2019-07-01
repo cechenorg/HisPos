@@ -352,7 +352,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
             CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
-            Messenger.Default.Register<NotificationMessage<Customer>>("SelectedCustomer", GetSelectedCustomer);
             CheckNewCustomer();
             CountMedicinePointAction();
             setBuckleAmount = true;

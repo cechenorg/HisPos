@@ -240,7 +240,7 @@
                         <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="SecondDiagnosis" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding CurrentPrescription.SubDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding CurrentPrescription.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                     <KeyBinding.CommandParameter>

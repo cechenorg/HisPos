@@ -194,7 +194,7 @@
                         <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding EditedPrescription.Treatment.SubDisease.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding EditedPrescription.Treatment.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding CheckDataChanged}"/>

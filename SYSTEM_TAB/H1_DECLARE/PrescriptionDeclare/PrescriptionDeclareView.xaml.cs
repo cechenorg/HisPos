@@ -19,7 +19,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionDeclareView()
         {
             InitializeComponent();
-            DataContext = new PrescriptionDeclareViewModel();
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
             Messenger.Default.Register<NotificationMessage>("FocusMedicalNumber", FocusMedicalNumber);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
