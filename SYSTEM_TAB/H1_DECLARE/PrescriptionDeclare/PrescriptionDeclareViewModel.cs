@@ -326,6 +326,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustCaseSelectionChangedAction()
         {
             CheckDeclareStatus();
+            if(CurrentPrescription.AdjustCase.CheckIsPrescribe())
+                CurrentPrescription.Medicines.SetToPaySelf();
         }
 
         #endregion
@@ -395,6 +397,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         [SuppressMessage("ReSharper", "RedundantAssignment")]
         private void ShowCustomerSearch(string conditionName)
         {
+            MainWindow.ServerConnection.OpenConnection();
             CustomerSearchWindow customerSearch;
             switch (conditionName)
             {
@@ -720,14 +723,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 patientFromCard.InsertData();
                 checkedPatient = patientFromCard;
             }
-            MainWindow.ServerConnection.CloseConnection();
             GetSelectedCustomer(new NotificationMessage<Customer>(checkedPatient, "GetSelectedCustomer"));
         }
 
         private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
-            Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+            if(receiveSelectedCustomer.Notification.Equals("receiveSelectedCustomer"))
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
+            if(receiveSelectedCustomer.Notification.Equals("AskAddCustomerData"))
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
@@ -735,7 +739,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
-            MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
@@ -1002,17 +1005,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckPrescription(bool noCard)
         {
-            MainWindow.ServerConnection.OpenConnection();
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist) return false;
+            MainWindow.ServerConnection.OpenConnection();
             var checkPrescription = currentService.CheckPrescription(noCard);
             MainWindow.ServerConnection.CloseConnection();
-            return  setPharmacist && checkPrescription;
+            return  checkPrescription;
         }
 
         private void DeclareSuccess()
         {
             MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MainWindow.ServerConnection.OpenConnection();
+            NewFunction.GetXmlFiles();
+            MainWindow.ServerConnection.CloseConnection();
             ClearAction();
             isAdjusting = false;
         }
@@ -1130,6 +1137,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckNewCustomer()
         {
             // ReSharper disable once TooManyChainedReferences
+            MainWindow.ServerConnection.OpenConnection();
             var customers = CurrentPrescription.Patient.Check();
             switch (customers.Count)
             {
@@ -1138,11 +1146,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case 1:
                     CurrentPrescription.Patient = customers[0];
-                    MainWindow.ServerConnection.OpenConnection();
                     CurrentPrescription.Patient.GetHistories();
-                    MainWindow.ServerConnection.CloseConnection();
                     break;
             }
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private bool CheckInsertCustomerData()
@@ -1154,9 +1161,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認", null);
             if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.InsertData();
-            MainWindow.ServerConnection.CloseConnection();
             return true;
 
         }

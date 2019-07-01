@@ -572,5 +572,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
             if (medicine.PaySelf)
                 medicine.Price = setItem.Price;
         }
+
+        public void SetToPaySelf()
+        {
+            foreach (var m in Items)
+            {
+                if (m is MedicineVirtual) continue;
+                if (!m.PaySelf)
+                    m.PaySelf = true;
+            }
+        }
     }
 }
