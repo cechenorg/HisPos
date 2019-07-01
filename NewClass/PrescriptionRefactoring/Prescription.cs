@@ -76,7 +76,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 SourceId = r.Field<int>("ID").ToString();
             }
             else
+            {
                 ID = r.Field<int>("ID");
+            }
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
