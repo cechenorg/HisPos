@@ -1072,6 +1072,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void SetInstitutionToCurrentPharmacy()
         {
+
             if (IsPrescribe)
             {
                 if (Institution is null || string.IsNullOrEmpty(Institution.ID))
@@ -1079,8 +1080,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             else
             {
-                if (Institution.ID.Equals(VM.CurrentPharmacy.ID))
-                    Institution = new Institution();
+                if (Institution != null)
+                {
+                    if (Institution.ID.Equals(VM.CurrentPharmacy.ID))
+                        Institution = new Institution();
+                }
             }
         }
 
