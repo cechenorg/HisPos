@@ -77,6 +77,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             foreach (var order in medicineOrderItem)
             {
+                if (string.IsNullOrEmpty(order.Id)) continue;
                 if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
                 var medicine = new MedicineOTC
                 {
@@ -149,6 +150,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             foreach (var order in medicineOrderItem)
             {
+                if(string.IsNullOrEmpty(order.Id)) continue;
                 if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
                 var medicine = new MedicineOTC
                 {
