@@ -118,6 +118,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }
+            if (type.Equals(PrescriptionType.ChronicReserve) || type.Equals(PrescriptionType.ChronicRegister))
+            {
+                AdjustDate = null;
+                if (type.Equals(PrescriptionType.ChronicReserve))
+                {
+                    TreatDate = null;
+                    TempMedicalNumber = string.Empty;
+                }
+            }
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -484,7 +493,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var elementName = parameters[0];
             var diseaseID = parameters[1];
-            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease.FullName : SubDisease.FullName);
+            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease?.FullName : SubDisease?.FullName);
         }
 
         private void CheckTypeByInstitution()
@@ -1290,7 +1299,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var homeCareAndQuitSmoke = CheckIsHomeCare() || CheckIsQuitSmoking();
             if (!homeCareAndQuitSmoke && string.IsNullOrEmpty(PrescriptionCase?.ID))
                 return Resources.PrescriptionCaseError;
-            if (Division.ID.Equals("40") && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+            if (Division!=null && Division.ID.Equals("40") && AdjustCase!= null && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
                 PrescriptionCase = VM.GetPrescriptionCases("19");
             return string.Empty;
         }
