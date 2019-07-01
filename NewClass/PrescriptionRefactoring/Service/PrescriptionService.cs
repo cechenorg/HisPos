@@ -193,6 +193,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
                 return false;
             }
+            if (current.AdjustCase.IsChronic()) return true;
             var startDate = (DateTime)current.TreatDate;
             var endDate = (DateTime)current.AdjustDate;
             if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(startDate, endDate) > 3)
