@@ -111,7 +111,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
                     break;
                 default:
                     Medicines = new Medicines();
