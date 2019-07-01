@@ -370,11 +370,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             var copaymentPoint = p.PrescriptionPoint.CopaymentPoint;
             var actualReceive = p.PrescriptionPoint.ActualReceive;
             var birth = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true);
-            if (p.PrescriptionStatus.IsVIP)
-            {
-                copaymentPoint = 0;
-                actualReceive = p.PrescriptionPoint.ActualReceive - p.PrescriptionPoint.CopaymentPoint;
-            }
             string patientName;
             if (string.IsNullOrEmpty(p.Patient.Name) || p.Patient.Name.Equals("匿名"))
                 patientName = " ";

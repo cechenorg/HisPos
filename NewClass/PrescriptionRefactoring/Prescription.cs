@@ -583,7 +583,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionPoint.MedicinePoint = Medicines.CountMedicinePoint();
             PrescriptionPoint.SpecialMaterialPoint = Medicines.CountSpecialMedicinePoint();
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
-            PrescriptionPoint.CountAmountsPay();
             if (!AdjustCase.ID.Equals("0"))
             {
                 GetCopayment();
@@ -594,6 +593,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PrescriptionPoint.CountTotal();
                 PrescriptionPoint.CountApply();
             }
+            PrescriptionPoint.CountAmountsPay();
         }
 
         private void GetCopayment()
