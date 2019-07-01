@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.Behaviors
 {
@@ -42,66 +45,85 @@ namespace His_Pos.Behaviors
 
         protected override void OnAttached()
         {
-            // Mouse Move
-            var mouseListener = new WeakEventListener<DataGridDragDropBehavior, DataGrid, MouseEventArgs>(this, AssociatedObject);
-            mouseListener.OnEventAction = (instance, source, args) => instance.DataGrid_MouseMove(source, args);
-            mouseListener.OnDetachAction = (listenerRef, source) => source.MouseMove -= listenerRef.OnEvent;
-            AssociatedObject.MouseMove += mouseListener.OnEvent;
-
-            // Drag Enter/Leave/Over
-            var dragListener = new WeakEventListener<DataGridDragDropBehavior, DataGrid, DragEventArgs>(this, AssociatedObject);
-            dragListener.OnEventAction = (instance, source, args) => instance.DataGrid_CheckDropTarget(source, args);
-            dragListener.OnDetachAction = (listenerRef, source) =>
+            try
             {
-                source.DragEnter -= listenerRef.OnEvent;
-                source.DragLeave -= listenerRef.OnEvent;
-                source.DragOver -= listenerRef.OnEvent;
-            };
-            AssociatedObject.DragEnter += dragListener.OnEvent;
-            AssociatedObject.DragLeave += dragListener.OnEvent;
-            AssociatedObject.DragOver += dragListener.OnEvent;
+                // Mouse Move
+                var mouseListener =
+                    new WeakEventListener<DataGridDragDropBehavior, DataGrid, MouseEventArgs>(this, AssociatedObject);
+                mouseListener.OnEventAction = (instance, source, args) => instance.DataGrid_MouseMove(source, args);
+                mouseListener.OnDetachAction = (listenerRef, source) => source.MouseMove -= listenerRef.OnEvent;
+                AssociatedObject.MouseMove += mouseListener.OnEvent;
 
-            // Drop
-            var dropListener = new WeakEventListener<DataGridDragDropBehavior, DataGrid, DragEventArgs>(this, AssociatedObject);
-            dropListener.OnEventAction = (instance, source, args) => instance.DataGrid_Drop(source, args);
-            dropListener.OnDetachAction = (listenerRef, source) => source.Drop -= listenerRef.OnEvent;
-            AssociatedObject.Drop += dropListener.OnEvent;
+                // Drag Enter/Leave/Over
+                var dragListener =
+                    new WeakEventListener<DataGridDragDropBehavior, DataGrid, DragEventArgs>(this, AssociatedObject);
+                dragListener.OnEventAction =
+                    (instance, source, args) => instance.DataGrid_CheckDropTarget(source, args);
+                dragListener.OnDetachAction = (listenerRef, source) =>
+                {
+                    source.DragEnter -= listenerRef.OnEvent;
+                    source.DragLeave -= listenerRef.OnEvent;
+                    source.DragOver -= listenerRef.OnEvent;
+                };
+                AssociatedObject.DragEnter += dragListener.OnEvent;
+                AssociatedObject.DragLeave += dragListener.OnEvent;
+                AssociatedObject.DragOver += dragListener.OnEvent;
 
-            base.OnAttached();
+                // Drop
+                var dropListener =
+                    new WeakEventListener<DataGridDragDropBehavior, DataGrid, DragEventArgs>(this, AssociatedObject);
+                dropListener.OnEventAction = (instance, source, args) => instance.DataGrid_Drop(source, args);
+                dropListener.OnDetachAction = (listenerRef, source) => source.Drop -= listenerRef.OnEvent;
+                AssociatedObject.Drop += dropListener.OnEvent;
+
+                base.OnAttached();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         private void DataGrid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            try
             {
-                var row = UIHelper.FindVisualParent<DataGridRow>(e.OriginalSource as FrameworkElement);
-                if (row != null && row.IsSelected)
+                if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    _source = UIHelper.FindVisualParent<DataGrid>(row).ItemsSource;
-                    _itemToMove = row.Item;
-                    var finalEffects = DragDrop.DoDragDrop(row, _itemToMove, AllowedEffects);
-                    var args = new DataGridDragDropEventArgs()
+                    var row = UIHelper.FindVisualParent<DataGridRow>(e.OriginalSource as FrameworkElement);
+                    if (row != null && row.IsSelected)
                     {
-                        Destination = _destination,
-                        Direction = _direction,
-                        DroppedObject = _itemToMove,
-                        Effects = finalEffects,
-                        Source = _source,
-                        TargetObject = _dropTarget
-                    };
+                        _source = UIHelper.FindVisualParent<DataGrid>(row).ItemsSource;
+                        _itemToMove = row.Item;
+                        var finalEffects = DragDrop.DoDragDrop(row, _itemToMove, AllowedEffects);
+                        var args = new DataGridDragDropEventArgs()
+                        {
+                            Destination = _destination,
+                            Direction = _direction,
+                            DroppedObject = _itemToMove,
+                            Effects = finalEffects,
+                            Source = _source,
+                            TargetObject = _dropTarget
+                        };
 
-                    if (_dropTarget != null && Command != null && Command.CanExecute(args))
-                    {
-                        Command.Execute(args);
+                        if (_dropTarget != null && Command != null && Command.CanExecute(args))
+                        {
+                            Command.Execute(args);
 
-                        _itemToMove = null;
-                        _dropTarget = null;
-                        _source = null;
-                        _destination = null;
-                        _direction = DataGridDragDropDirection.Indeterminate;
-                        _lastIndex = -1;
+                            _itemToMove = null;
+                            _dropTarget = null;
+                            _source = null;
+                            _destination = null;
+                            _direction = DataGridDragDropDirection.Indeterminate;
+                            _lastIndex = -1;
+                        }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return;
             }
         }
 

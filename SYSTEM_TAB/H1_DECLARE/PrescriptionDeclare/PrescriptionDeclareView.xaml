@@ -345,9 +345,9 @@
                         </Style>
                         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                     </DataGrid.Resources>
-                    <i:Interaction.Behaviors>
+                    <!--<i:Interaction.Behaviors>
                         <behaviors:DataGridDragDropBehavior AllowedEffects="Copy, Move" Command="{Binding ItemsDragDropCommand}"/>
-                    </i:Interaction.Behaviors>
+                    </i:Interaction.Behaviors>-->
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -376,8 +376,8 @@
                         <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Name="MedicineID"  Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red" KeyDown="MedicineID_OnKeyDown"
-                                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"/>
+                                    <TextBox Name="MedicineID"  Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Red" KeyDown="MedicineID_OnKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus"
+                                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

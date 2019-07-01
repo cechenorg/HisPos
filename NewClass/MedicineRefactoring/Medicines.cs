@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
         {
-            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
+            var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddOrthopedicsMedicineByDataTable(tempList, table, medicineOrderItem);
@@ -113,7 +113,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
-            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
+            var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddCooperativeMedicineByDataTable(tempList, table, medicineOrderItem);

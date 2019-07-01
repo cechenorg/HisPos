@@ -350,5 +350,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             ((PrescriptionDeclareViewModel)DataContext).ScanPrescriptionQRCode.Execute(null);
         }
+
+        private void MedicineID_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox t)
+            {
+                t.SelectAll();
+            }
+        }
+
+        private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        {
+            TextBox tb = (sender as TextBox);
+            if (tb != null)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                }
+            }
+        }
     }
 }

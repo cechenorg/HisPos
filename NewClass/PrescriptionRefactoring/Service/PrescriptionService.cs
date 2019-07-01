@@ -367,7 +367,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             var adjustDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var cusGender = p.Patient.CheckGender();
-            var copaymentPoint = p.PrescriptionPoint.CopaymentPoint;
+            var copaymentPoint = p.PrescriptionPoint.CopaymentPointPayable;
             var actualReceive = p.PrescriptionPoint.ActualReceive;
             var birth = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true);
             string patientName;
