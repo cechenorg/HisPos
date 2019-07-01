@@ -283,7 +283,13 @@
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
                         <ComboBox x:Name="AdjustCombo"  Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown"/>
+                              SelectedItem="{Binding CurrentPrescription.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding AdjustCaseSelectionChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
                         <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}"/>

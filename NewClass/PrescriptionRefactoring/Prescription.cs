@@ -272,7 +272,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
-                CheckDivisionValid();
                 CheckVariableByDivision();
             }
         }
@@ -995,16 +994,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             CountPrescriptionPoint();
         }
 
-        private void CheckDivisionValid()
-        {
-            if (string.IsNullOrEmpty(Institution?.ID) || string.IsNullOrEmpty(Division?.ID)) return;
-            var table = InstitutionDb.CheckDivisionValid(Institution.ID, Division.ID);
-            if (table.Rows.Count <= 0) return;
-            var result = table.Rows[0].Field<bool>("Result");
-            if (!result)
-                MessageWindow.ShowMessage("該院所登記之診療科別不包含目前選取科別。", MessageType.WARNING);
-        }
-
         private void CheckVariableByDivision()
         {
             if (AdjustCase is null) return;
@@ -1072,8 +1061,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void SetInstitutionToCurrentPharmacy()
         {
-
-            if (IsPrescribe)
+            if (IsPrescribe || AdjustCase.CheckIsPrescribe())
             {
                 if (Institution is null || string.IsNullOrEmpty(Institution.ID))
                     Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);

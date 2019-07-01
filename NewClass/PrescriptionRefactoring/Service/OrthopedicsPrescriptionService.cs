@@ -22,9 +22,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (!CheckNhiRules(noCard)) return false;
+            if (current.IsPrescribe)
+            {
+                if (!CheckPrescribeRules()) return false;
+            }
+            else
+            {
+                if (!CheckNhiRules(noCard)) return false;
+                if (!CheckMedicalNumber(noCard)) return false;
+            }
             if (!CheckPrescribeRules()) return false;
-            if (!CheckMedicalNumber()) return false;
             return CheckSameDeclare() && PrintConfirm();
         }
 

@@ -14,10 +14,16 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (!CheckNhiRules(noCard)) return false;
-            if (!CheckPrescribeRules()) return false;
+            if (current.IsPrescribe)
+            {
+                if (!CheckPrescribeRules()) return false;
+            }
+            else
+            {
+                if (!CheckNhiRules(noCard)) return false;
+                if (!CheckMedicalNumber(noCard)) return false;
+            }
             if (!CheckMedicines()) return false;
-            if (!CheckMedicalNumber()) return false;
             return CheckSameDeclare() && PrintConfirm();
         }
 

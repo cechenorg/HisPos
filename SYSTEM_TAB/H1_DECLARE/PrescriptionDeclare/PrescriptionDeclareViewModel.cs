@@ -206,6 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
+        public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
@@ -274,6 +275,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             ChronicSequenceTextChanged = new RelayCommand(ChronicSequenceChangedAction);
+            AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
@@ -320,6 +322,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.CheckPrescriptionVariable();
             CheckDeclareStatus();
         }
+
+        private void AdjustCaseSelectionChangedAction()
+        {
+            CheckDeclareStatus();
+        }
+
         #endregion
         #region CommandAction
         private void ScanPrescriptionQRCodeAction()
@@ -1056,6 +1064,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckPrescribe()
         {
+            if (CurrentPrescription.AdjustCase.CheckIsPrescribe())
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+                CurrentPrescription.SetPrescribeAdjustCase();
+                return true;
+            }
             if (!CurrentPrescription.IsPrescribe)
                 return false;
             DeclareStatus = PrescriptionDeclareStatus.Prescribe;

@@ -11,7 +11,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -23,9 +22,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.Properties;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -33,10 +30,8 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow

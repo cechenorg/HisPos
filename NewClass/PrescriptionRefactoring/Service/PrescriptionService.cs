@@ -157,8 +157,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return false;
         }
 
-        protected bool CheckMedicalNumber()
+        protected bool CheckMedicalNumber(bool noCard)
         {
+            if (noCard) return true;
             if (string.IsNullOrEmpty(current.TempMedicalNumber))
             {
                 var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
