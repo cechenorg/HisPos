@@ -70,7 +70,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public Prescription(DataRow r, PrescriptionType type)
         {
-            ID = r.Field<int>("ID");
+            if (type.Equals(PrescriptionType.ChronicReserve))
+            {
+                ID = 0;
+                SourceId = r.Field<int>("ID").ToString();
+            }
+            else
+                ID = r.Field<int>("ID");
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));

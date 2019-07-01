@@ -699,8 +699,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region MessengerFunctions
         private void GetPatientFromIcCard()
         {
-            CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             var patientFromCard = new Customer(currentCard);
+            CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             CheckCustomerByCard(patientFromCard);
         }
 
@@ -848,6 +848,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;
+            if (CurrentPrescription.Patient != null && !string.IsNullOrEmpty(currentCard.IDNumber))
+            {
+                if (!CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
+                {
+                    MessageWindow.ShowMessage("卡片資料與目前病患資料不符，請確認。", MessageType.ERROR);
+                    return;
+                }
+            }
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
