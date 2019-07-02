@@ -300,7 +300,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
             {
                 if (!med.ID.Equals(textBox.Text))
-                    ((PrescriptionDeclare.PrescriptionDeclareViewModel)DataContext).AddMedicine.Execute(textBox.Text);
+                    ((PrescriptionDeclareViewModel)DataContext).AddMedicine.Execute(textBox.Text);
 
                 var textBoxList = new List<TextBox>();
                 NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);
@@ -368,6 +368,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     e.Handled = true;
                     tb.Focus();
+                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
                 }
             }
         }

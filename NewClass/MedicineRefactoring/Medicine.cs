@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
+            
         }
 
         public Medicine(CooperativeMedicine m)
@@ -95,6 +96,15 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
                 Set(() => Dosage, ref dosage, value);
                 CalculateAmount();
+            }
+        }
+        private bool canEdit;
+        public bool CanEdit
+        {
+            get => canEdit;
+            set
+            {
+                Set(() => CanEdit, ref canEdit, value);
             }
         }
 
@@ -331,15 +341,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
             get => isSelected;
             set { Set(() => IsSelected, ref isSelected, value); }
         }
-        private bool canEdit;
-        public bool CanEdit
-        {
-            get => canEdit;
-            set
-            {
-                Set(() => CanEdit, ref canEdit, value);
-            }
-        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()
@@ -433,24 +434,23 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 var clonedMed = this as MedicineNHI;
                 var medNHI = new MedicineNHI
                 {
-                    ID = ID,
-                    ChineseName = ChineseName,
-                    EnglishName = EnglishName,
-                    UsageName = UsageName,
-                    PositionID = PositionID,
-                    Dosage = Dosage,
-                    Days = Days,
-                    Amount = Amount,
-                    PaySelf = PaySelf,
-                    IsBuckle = false,
-                    BuckleAmount = BuckleAmount,
+                    ID = clonedMed.ID,
+                    ChineseName = clonedMed.ChineseName,
+                    EnglishName = clonedMed.EnglishName,
+                    UsageName = clonedMed.UsageName,
+                    PositionID = clonedMed.PositionID,
+                    Dosage = clonedMed.Dosage,
+                    Days = clonedMed.Days,
+                    Amount = clonedMed.Amount,
+                    PaySelf = clonedMed.PaySelf,
+                    IsBuckle = clonedMed.IsBuckle,
+                    BuckleAmount = clonedMed.BuckleAmount,
                     ATCCode = clonedMed.ATCCode,
                     ControlLevel = clonedMed.ControlLevel,
                     Form = clonedMed.Form,
                     Note = clonedMed.Note,
                     SingleCompound = clonedMed.SingleCompound,
                     Warning = clonedMed.Warning,
-                    CanEdit = clonedMed.CanEdit,
                     CostPrice = clonedMed.CostPrice,
                     Indication = clonedMed.Indication,
                     Ingredient = clonedMed.Ingredient,
@@ -471,18 +471,17 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 var clonedMed = this as MedicineSpecialMaterial;
                 var medSpecialMaterial = new MedicineSpecialMaterial
                 {
-                    ID = ID,
-                    ChineseName = ChineseName,
-                    EnglishName = EnglishName,
-                    UsageName = UsageName,
-                    PositionID = PositionID,
-                    Dosage = Dosage,
-                    Days = Days,
-                    Amount = Amount,
-                    PaySelf = PaySelf,
-                    IsBuckle = false,
-                    BuckleAmount = BuckleAmount,
-                    CanEdit = clonedMed.CanEdit,
+                    ID = clonedMed.ID,
+                    ChineseName = clonedMed.ChineseName,
+                    EnglishName = clonedMed.EnglishName,
+                    UsageName = clonedMed.UsageName,
+                    PositionID = clonedMed.PositionID,
+                    Dosage = clonedMed.Dosage,
+                    Days = clonedMed.Days,
+                    Amount = clonedMed.Amount,
+                    PaySelf = clonedMed.PaySelf,
+                    IsBuckle = clonedMed.IsBuckle,
+                    BuckleAmount = clonedMed.BuckleAmount,
                     CostPrice = clonedMed.CostPrice,
                     Indication = clonedMed.Indication,
                     Ingredient = clonedMed.Ingredient,
@@ -503,18 +502,17 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 var clonedMed = this as MedicineOTC;
                 var medOtc = new MedicineOTC
                 {
-                    ID = ID,
-                    ChineseName = ChineseName,
-                    EnglishName = EnglishName,
-                    UsageName = UsageName,
-                    PositionID = PositionID,
-                    Dosage = Dosage,
-                    Days = Days,
-                    Amount = Amount,
-                    PaySelf = PaySelf,
-                    IsBuckle = false,
-                    BuckleAmount = BuckleAmount,
-                    CanEdit = clonedMed.CanEdit,
+                    ID = clonedMed.ID,
+                    ChineseName = clonedMed.ChineseName,
+                    EnglishName = clonedMed.EnglishName,
+                    UsageName = clonedMed.UsageName,
+                    PositionID = clonedMed.PositionID,
+                    Dosage = clonedMed.Dosage,
+                    Days = clonedMed.Days,
+                    Amount = clonedMed.Amount,
+                    PaySelf = clonedMed.PaySelf,
+                    IsBuckle = clonedMed.IsBuckle,
+                    BuckleAmount = clonedMed.BuckleAmount,
                     CostPrice = clonedMed.CostPrice,
                     Indication = clonedMed.Indication,
                     Ingredient = clonedMed.Ingredient,
@@ -536,6 +534,25 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 return medVirtual;
             }
             return null;
+        }
+
+        public void SetValueByDataRow(DataRow r)
+        {
+            Usage = new Usage();
+            Position = new Position();
+            Dosage = r.Field<double?>("Dosage");
+            UsageName = r.Field<string>("Usage");
+            PositionID = r.Field<string>("Position");
+            Days = r.Field<int?>("MedicineDays");
+            PaySelf = r.Field<bool>("PaySelf");
+            IsBuckle = r.Field<bool>("IsBuckle");
+            Amount = r.Field<double>("TotalAmount");
+            BuckleAmount = NewFunction.CheckDataRowContainsColumn(r, "BuckleAmount") ? r.Field<double>("BuckleAmount") : Amount;
+            Price = NewFunction.CheckDataRowContainsColumn(r, "PaySelfValue") ? (double)r.Field<decimal>("PaySelfValue") : 0;
+            if (PaySelf)
+            {
+                TotalPrice = r.Field<int>("Point");
+            }
         }
     }
 }

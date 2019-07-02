@@ -118,14 +118,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }
-            if (type.Equals(PrescriptionType.ChronicReserve) || type.Equals(PrescriptionType.ChronicRegister))
+            if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 AdjustDate = null;
-                if (type.Equals(PrescriptionType.ChronicReserve))
-                {
-                    TreatDate = null;
-                    TempMedicalNumber = string.Empty;
-                }
+                TreatDate = null;
+                TempMedicalNumber = string.Empty;
             }
         }
 
@@ -944,7 +941,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var paySelf = AdjustCase.CheckIsPrescribe();
             int? selectedMedicinesIndex = null;
             if (SelectedMedicine != null)
+            {
                 selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
+            }
             Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID, AdjustDate);
         }
 
@@ -1509,6 +1508,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void SetDetail()
         {
+            CountPrescriptionPoint();
             SetPrescriptionDetail();//產生藥品資料
             SetValue();
         }
@@ -1516,6 +1516,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool CheckCanSendOrder()
         {
             return AdjustDate != null && !string.IsNullOrEmpty(AdjustCase.ID) && AdjustCase.ID.Equals("2") && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
+        }
+
+        public string CheckMedicinesNegativeStock()
+        {
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
         }
     }
 }

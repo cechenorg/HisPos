@@ -336,6 +336,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var receive = new QRCodeReceiveWindow();
+            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
         }
 
         private void GetCooperativePresAction()
@@ -343,6 +344,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //查詢合作診所處方
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
             var cooPresWindow = new CooperativePrescriptionWindow();
+            Messenger.Default.Unregister<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
         }
 
         private void GetCustomerPrescription(NotificationMessage<Prescription> receiveMsg)
@@ -382,12 +384,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         //顧客查詢
         private void GetCustomersAction(TextBox condition)
         {
-            Messenger.Default.Register<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
-            Messenger.Default.Register<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             if (!CheckConditionEmpty(condition.Name))
             {
-                Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
-                Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+                Messenger.Default.Unregister<NotificationMessage<Customer>>(this, GetSelectedCustomer);
                 return;
             }
             ShowCustomerSearch(condition.Name);
@@ -403,21 +403,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case "PatientIDNumber":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.IDNumber, CustomerSearchCondition.IDNumber);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientName":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientBirthday":
                     customerSearch = new CustomerSearchWindow((DateTime)CurrentPrescription.Patient.Birthday);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientTel":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Tel, CustomerSearchCondition.Tel);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientCellPhone":
                     customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.CellPhone, CustomerSearchCondition.Tel);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
             }
-            Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
         }
 
         private bool CheckConditionEmpty(string conditionName)
@@ -620,61 +624,81 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartErrorAdjust();
         }
 
         private void DepositAdjustAction()
         {
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
-            CurrentPrescription.CountDeposit();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(true))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
+            CurrentPrescription.CountDeposit();
             StartDepositAdjust();
         }
 
         private void AdjustAction()
         {
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             CheckIsReadCard();
         }
 
         private void RegisterAction()
         {
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartRegister();
         }
 
         private void PrescribeAdjustAction()
         {
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartPrescribeAdjust();
         }
 
@@ -728,10 +752,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            if(receiveSelectedCustomer.Notification.Equals("receiveSelectedCustomer"))
-                Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
-            if(receiveSelectedCustomer.Notification.Equals("AskAddCustomerData"))
-                Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
@@ -1178,6 +1199,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return SelectedPharmacist != null
                 ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IDNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0;
+        }
+
+        private bool CheckMedicinesNegativeStock()
+        {
+            var result = CurrentPrescription.CheckMedicinesNegativeStock();
+            return string.IsNullOrEmpty(result);
         }
         #endregion
     }
