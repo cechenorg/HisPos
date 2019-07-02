@@ -213,7 +213,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             ChronicReservePres = new CusPrePreviewBases();
             NoCardPres = new CusPrePreviewBases();
             MainWindow.ServerConnection.OpenConnection();
-            NewFunction.GetXmlFiles();
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);

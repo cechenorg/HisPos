@@ -157,8 +157,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return false;
         }
 
-        protected bool CheckMedicalNumber()
+        protected bool CheckMedicalNumber(bool noCard)
         {
+            if (noCard) return true;
             if (string.IsNullOrEmpty(current.TempMedicalNumber))
             {
                 var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
@@ -193,6 +194,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
                 return false;
             }
+            if (current.AdjustCase.IsChronic()) return true;
             var startDate = (DateTime)current.TreatDate;
             var endDate = (DateTime)current.AdjustDate;
             if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(startDate, endDate) > 3)
@@ -365,14 +367,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             var adjustDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var cusGender = p.Patient.CheckGender();
-            var copaymentPoint = p.PrescriptionPoint.CopaymentPoint;
+            var copaymentPoint = p.PrescriptionPoint.CopaymentPointPayable;
             var actualReceive = p.PrescriptionPoint.ActualReceive;
             var birth = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true);
-            if (p.PrescriptionStatus.IsVIP)
-            {
-                copaymentPoint = 0;
-                actualReceive = p.PrescriptionPoint.ActualReceive - p.PrescriptionPoint.CopaymentPoint;
-            }
             string patientName;
             if (string.IsNullOrEmpty(p.Patient.Name) || p.Patient.Name.Equals("匿名"))
                 patientName = " ";

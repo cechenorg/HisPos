@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
         {
-            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
+            var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddOrthopedicsMedicineByDataTable(tempList, table, medicineOrderItem);
@@ -77,6 +77,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             foreach (var order in medicineOrderItem)
             {
+                if (string.IsNullOrEmpty(order.Id)) continue;
                 if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
                 var medicine = new MedicineOTC
                 {
@@ -113,7 +114,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
-            var idList = medicineOrderItem.Select(m => m.Id).Distinct().ToList();
+            var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
             var tempList = new Medicines();
             AddCooperativeMedicineByDataTable(tempList, table, medicineOrderItem);
@@ -149,6 +150,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             foreach (var order in medicineOrderItem)
             {
+                if(string.IsNullOrEmpty(order.Id)) continue;
                 if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
                 var medicine = new MedicineOTC
                 {
@@ -569,6 +571,16 @@ namespace His_Pos.NewClass.MedicineRefactoring
             medicine.PaySelf = setItem.PaySelf;
             if (medicine.PaySelf)
                 medicine.Price = setItem.Price;
+        }
+
+        public void SetToPaySelf()
+        {
+            foreach (var m in Items)
+            {
+                if (m is MedicineVirtual) continue;
+                if (!m.PaySelf)
+                    m.PaySelf = true;
+            }
         }
     }
 }

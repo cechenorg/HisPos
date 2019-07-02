@@ -28,8 +28,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.SameDeclarePrescriptions
             MedicalNumber = r.Field<string>("MedicalNumber");
             if (r.Field<string>("AdjustCase").Equals("2"))
             {
-                ChronicTotal = r.Field<short>("ChronicTotal");
-                ChronicSeq = r.Field<short>("ChronicSeq");
+                ChronicTotal = r.Field<byte>("ChronicTotal");
+                ChronicSeq = r.Field<byte>("ChronicSeq");
                 ChronicTimes = ChronicTotal + " - " + ChronicSeq;
             }
             Medicines = new Medicines();

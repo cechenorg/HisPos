@@ -449,7 +449,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 default:
                     Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
                     var institutionSelectionWindow = new InstitutionSelectionWindow(search);
-                    institutionSelectionWindow.ShowDialog();
                     Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
                     break;
             }

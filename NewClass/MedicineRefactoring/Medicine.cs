@@ -382,18 +382,18 @@ namespace His_Pos.NewClass.MedicineRefactoring
             PositionID = setItem.Way;
             Days = Convert.ToInt32(setItem.Days);
             Amount = Convert.ToDouble(setItem.Total_dose);
-            PaySelf = !string.IsNullOrEmpty(setItem.Remark);
+            PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
             SetPriceByRemark(setItem.Remark, setItem.Price);
         }
 
         public void SetValueByCooperativeMedicine(CooperativeMedicine setItem)
         {
             Dosage = Convert.ToDouble(setItem.Divided_dose);
-            UsageName = setItem.Freq;
-            PositionID = setItem.Way;
-            Days = Convert.ToInt32(setItem.Days);
+            UsageName = setItem.Freq.ToUpper();
+            PositionID = setItem.Way.ToUpper();
+            Days = Convert.ToInt32(setItem.Days.Contains(".") ? setItem.Days.Substring(0, setItem.Days.IndexOf('.')) : setItem.Days);
             Amount = Convert.ToDouble(setItem.Total_dose);
-            PaySelf = !string.IsNullOrEmpty(setItem.Remark);
+            PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
             SetPriceByRemark(setItem.Remark, setItem.Price);
         }
 

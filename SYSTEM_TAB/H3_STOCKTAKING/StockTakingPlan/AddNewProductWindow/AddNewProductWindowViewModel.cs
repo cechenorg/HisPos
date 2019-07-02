@@ -16,7 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             get { return productSearchName; }
             set
             {
-                Set(() => ProductSearchName, ref productSearchName, value); 
+                Set(() => ProductSearchName, ref productSearchName, value);
             }
         }
         private StockTakingPlanProducts sourceStockTakingProducts = new StockTakingPlanProducts();
@@ -64,6 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         }
         public RelayCommand GetControlMedicinesCommand { get; set; }
         public RelayCommand GetStockLessProductsCommand { get; set; }
+        public RelayCommand GetMonthMedicinesCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ProductSubmitCommand { get; set; }
@@ -78,6 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             ProductSubmitCommand = new RelayCommand(ProductSubmitAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
+            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
             WarID = warID;
             TargetStockTakingProducts.Clear();
             foreach (var t in takingPlanProducts) {
@@ -114,6 +116,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         private void GetStockLessProductsAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockLessProducts(WarID);
             RemoveSourceProInTarget();
+        }
+        private void GetMonthMedicinesAction() {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetMonthMedicines(WarID);
+            RemoveSourceProInTarget(); 
         }
         private void GetStockTakingProductByProNameAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName);

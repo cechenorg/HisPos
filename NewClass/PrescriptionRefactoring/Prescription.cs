@@ -70,7 +70,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public Prescription(DataRow r, PrescriptionType type)
         {
-            ID = r.Field<int>("ID");
+            if (type.Equals(PrescriptionType.ChronicReserve))
+            {
+                ID = 0;
+                SourceId = r.Field<int>("ID").ToString();
+            }
+            else
+            {
+                ID = r.Field<int>("ID");
+            }
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
@@ -103,12 +111,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
                     break;
                 default:
                     Medicines = new Medicines();
                     Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
+            }
+            if (type.Equals(PrescriptionType.ChronicReserve) || type.Equals(PrescriptionType.ChronicRegister))
+            {
+                AdjustDate = null;
+                if (type.Equals(PrescriptionType.ChronicReserve))
+                {
+                    TreatDate = null;
+                    TempMedicalNumber = string.Empty;
+                }
             }
         }
 
@@ -272,7 +289,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => Division, ref division, value);
-                CheckDivisionValid();
                 CheckVariableByDivision();
             }
         }
@@ -355,9 +371,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             get => adjustCase;
             set
             {
-                if (value.CheckIsPrescribe() && !IsPrescribe)
+                if (adjustCase != null && value != null)
                 {
-                    value = VM.GetAdjustCase(ChronicTotal != null ? "2" : "1");
+                    if ((value.IsChronic() && !adjustCase.IsChronic()) || (!value.IsChronic() && adjustCase.IsChronic()))
+                        IsBuckle = WareHouse != null;
                 }
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
@@ -476,7 +493,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var elementName = parameters[0];
             var diseaseID = parameters[1];
-            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease.FullName : SubDisease.FullName);
+            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease?.FullName : SubDisease?.FullName);
         }
 
         private void CheckTypeByInstitution()
@@ -485,11 +502,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 CheckIsOrthopedics();
             else
                 Type = PrescriptionType.Normal;
-
-            if (Medicines is null) return;
-
-            foreach (var m in Medicines)
-                m.IsBuckle = IsBuckle;
         }
 
         private void CheckEnableDivisions()
@@ -588,7 +600,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             PrescriptionPoint.MedicinePoint = Medicines.CountMedicinePoint();
             PrescriptionPoint.SpecialMaterialPoint = Medicines.CountSpecialMedicinePoint();
             PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
-            PrescriptionPoint.CountAmountsPay();
             if (!AdjustCase.ID.Equals("0"))
             {
                 GetCopayment();
@@ -599,6 +610,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PrescriptionPoint.CountTotal();
                 PrescriptionPoint.CountApply();
             }
+            PrescriptionPoint.CountAmountsPay();
         }
 
         private void GetCopayment()
@@ -950,7 +962,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void CheckVariableByAdjustCase()
         {
-            IsBuckle = WareHouse != null;
             switch (adjustCase.ID)
             {
                 case "D":
@@ -998,16 +1009,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
             CountPrescriptionPoint();
-        }
-
-        private void CheckDivisionValid()
-        {
-            if (string.IsNullOrEmpty(Institution?.ID) || string.IsNullOrEmpty(Division?.ID)) return;
-            var table = InstitutionDb.CheckDivisionValid(Institution.ID, Division.ID);
-            if (table.Rows.Count <= 0) return;
-            var result = table.Rows[0].Field<bool>("Result");
-            if (!result)
-                MessageWindow.ShowMessage("該院所登記之診療科別不包含目前選取科別。", MessageType.WARNING);
         }
 
         private void CheckVariableByDivision()
@@ -1077,14 +1078,18 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         private void SetInstitutionToCurrentPharmacy()
         {
-            if(!IsPrescribe) return;
-            if (Institution is null || string.IsNullOrEmpty(Institution.ID))
+            if (IsPrescribe || AdjustCase.CheckIsPrescribe())
             {
-                Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
+                if (Institution is null || string.IsNullOrEmpty(Institution.ID))
+                    Institution = VM.GetInstitution(VM.CurrentPharmacy.ID);
             }
-            else if(Institution.ID.Equals(VM.CurrentPharmacy.ID))
+            else
             {
-                Institution = new Institution();
+                if (Institution != null)
+                {
+                    if (Institution.ID.Equals(VM.CurrentPharmacy.ID))
+                        Institution = new Institution();
+                }
             }
         }
 
@@ -1294,7 +1299,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var homeCareAndQuitSmoke = CheckIsHomeCare() || CheckIsQuitSmoking();
             if (!homeCareAndQuitSmoke && string.IsNullOrEmpty(PrescriptionCase?.ID))
                 return Resources.PrescriptionCaseError;
-            if (Division.ID.Equals("40") && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
+            if (Division!=null && Division.ID.Equals("40") && AdjustCase!= null && (AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3")))
                 PrescriptionCase = VM.GetPrescriptionCases("19");
             return string.Empty;
         }
@@ -1436,7 +1441,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void CheckPrescriptionVariable()
         {
             CheckCurrentPharmacyInstitution();
-            CheckChronicAdjustCase();
+            CheckIllegalAdjustCase();
         }
 
         private void CheckCurrentPharmacyInstitution()
@@ -1445,8 +1450,17 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Institution = new Institution();
         }
 
-        private void CheckChronicAdjustCase()
+        private void CheckIllegalAdjustCase()
         {
+            if (!IsPrescribe && AdjustCase.CheckIsPrescribe())
+            {
+                if (ChronicSeq is null)
+                    AdjustCase = VM.GetAdjustCase("1");
+
+                if (CheckChronicSeqValid())
+                    AdjustCase = VM.GetAdjustCase("2");
+            }
+
             if (ChronicSeq is null && AdjustCase.ID.Equals("2"))
                 AdjustCase = VM.GetAdjustCase("1");
 

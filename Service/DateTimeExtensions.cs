@@ -162,7 +162,7 @@ namespace His_Pos.Service
 
         public static bool CheckIsWeekend(DateTime start)
         {
-            return (int)start.DayOfWeek == 0 || (int)start.DayOfWeek == 6;
+            return (int)start.DayOfWeek == 0;
         }
 
         public static int CountTimeDifferenceWithoutHoliday(DateTime startDate, DateTime endDate)

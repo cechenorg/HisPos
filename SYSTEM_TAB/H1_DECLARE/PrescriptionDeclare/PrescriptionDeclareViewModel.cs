@@ -198,6 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand ShowCustomerEditWindow { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
+        public RelayCommand ShowCustomerDetail { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand PharmacistChanged { get; set; }
@@ -205,6 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
+        public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
@@ -263,6 +265,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
+            ShowCustomerDetail = new RelayCommand(ShowCustomerDetailAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
@@ -272,6 +275,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             ChronicSequenceTextChanged = new RelayCommand(ChronicSequenceChangedAction);
+            AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
@@ -318,6 +322,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.CheckPrescriptionVariable();
             CheckDeclareStatus();
         }
+
+        private void AdjustCaseSelectionChangedAction()
+        {
+            CheckDeclareStatus();
+            if(CurrentPrescription.AdjustCase.CheckIsPrescribe())
+                CurrentPrescription.Medicines.SetToPaySelf();
+        }
+
         #endregion
         #region CommandAction
         private void ScanPrescriptionQRCodeAction()
@@ -342,7 +354,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckPatientEqual(receiveMsg.Content)) return;
             CurrentPrescription = receiveMsg.Content;
             CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
-            Messenger.Default.Register<NotificationMessage<Customer>>("SelectedCustomer", GetSelectedCustomer);
             CheckNewCustomer();
             CountMedicinePointAction();
             setBuckleAmount = true;
@@ -357,6 +368,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) => { GetPatientDataComplete(); };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void ShowCustomerDetailAction()
+        {
+            if (CurrentPrescription.Patient.ID <= 0) return;
+            var customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         //顧客查詢
@@ -377,6 +397,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         [SuppressMessage("ReSharper", "RedundantAssignment")]
         private void ShowCustomerSearch(string conditionName)
         {
+            MainWindow.ServerConnection.OpenConnection();
             CustomerSearchWindow customerSearch;
             switch (conditionName)
             {
@@ -680,8 +701,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region MessengerFunctions
         private void GetPatientFromIcCard()
         {
-            CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             var patientFromCard = new Customer(currentCard);
+            CurrentPrescription.PrescriptionStatus.IsGetCard = true;
             CheckCustomerByCard(patientFromCard);
         }
 
@@ -702,14 +723,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 patientFromCard.InsertData();
                 checkedPatient = patientFromCard;
             }
-            MainWindow.ServerConnection.CloseConnection();
             GetSelectedCustomer(new NotificationMessage<Customer>(checkedPatient, "GetSelectedCustomer"));
         }
 
         private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
-            Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
+            if(receiveSelectedCustomer.Notification.Equals("receiveSelectedCustomer"))
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("GetSelectedCustomer", GetSelectedCustomer);
+            if(receiveSelectedCustomer.Notification.Equals("AskAddCustomerData"))
+                Messenger.Default.Unregister<NotificationMessage<Customer>>("AskAddCustomerData", GetSelectedCustomer);
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
@@ -717,7 +739,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
-            MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
@@ -829,6 +850,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;
+            if (CurrentPrescription.Patient != null && !string.IsNullOrEmpty(currentCard.IDNumber))
+            {
+                if (!CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
+                {
+                    MessageWindow.ShowMessage("卡片資料與目前病患資料不符，請確認。", MessageType.ERROR);
+                    IsBusy = false;
+                    isAdjusting = false;
+                    return;
+                }
+            }
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -974,17 +1005,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckPrescription(bool noCard)
         {
-            MainWindow.ServerConnection.OpenConnection();
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist) return false;
+            MainWindow.ServerConnection.OpenConnection();
             var checkPrescription = currentService.CheckPrescription(noCard);
             MainWindow.ServerConnection.CloseConnection();
-            return  setPharmacist && checkPrescription;
+            return  checkPrescription;
         }
 
         private void DeclareSuccess()
         {
             MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            MainWindow.ServerConnection.OpenConnection();
+            NewFunction.GetXmlFiles();
+            MainWindow.ServerConnection.CloseConnection();
             ClearAction();
             isAdjusting = false;
         }
@@ -1045,6 +1080,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckPrescribe()
         {
+            if (CurrentPrescription.AdjustCase.CheckIsPrescribe())
+            {
+                DeclareStatus = PrescriptionDeclareStatus.Prescribe;
+                CurrentPrescription.SetPrescribeAdjustCase();
+                return true;
+            }
             if (!CurrentPrescription.IsPrescribe)
                 return false;
             DeclareStatus = PrescriptionDeclareStatus.Prescribe;
@@ -1096,6 +1137,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckNewCustomer()
         {
             // ReSharper disable once TooManyChainedReferences
+            MainWindow.ServerConnection.OpenConnection();
             var customers = CurrentPrescription.Patient.Check();
             switch (customers.Count)
             {
@@ -1104,11 +1146,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case 1:
                     CurrentPrescription.Patient = customers[0];
-                    MainWindow.ServerConnection.OpenConnection();
                     CurrentPrescription.Patient.GetHistories();
-                    MainWindow.ServerConnection.CloseConnection();
                     break;
             }
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private bool CheckInsertCustomerData()
@@ -1120,9 +1161,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認", null);
             if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.InsertData();
-            MainWindow.ServerConnection.CloseConnection();
             return true;
 
         }
