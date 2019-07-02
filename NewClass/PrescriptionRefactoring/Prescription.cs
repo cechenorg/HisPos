@@ -118,14 +118,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }
-            if (type.Equals(PrescriptionType.ChronicReserve) || type.Equals(PrescriptionType.ChronicRegister))
+            if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 AdjustDate = null;
-                if (type.Equals(PrescriptionType.ChronicReserve))
-                {
-                    TreatDate = null;
-                    TempMedicalNumber = string.Empty;
-                }
+                TreatDate = null;
+                TempMedicalNumber = string.Empty;
             }
         }
 
