@@ -624,81 +624,81 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
-            if (!CheckMedicinesNegativeStock())
-            {
-                isAdjusting = false;
-                return;
-            }
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartErrorAdjust();
         }
 
         private void DepositAdjustAction()
         {
             isAdjusting = true;
-            if (!CheckMedicinesNegativeStock())
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
+            if (!CheckPrescription(true))
             {
                 isAdjusting = false;
                 return;
             }
             CurrentPrescription.SetDetail();
             CurrentPrescription.CountDeposit();
-            if (!CheckPrescription(true))
-            {
-                isAdjusting = false;
-                return;
-            }
             StartDepositAdjust();
         }
 
         private void AdjustAction()
         {
             isAdjusting = true;
-            if (!CheckMedicinesNegativeStock())
-            {
-                isAdjusting = false;
-                return;
-            }
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             CheckIsReadCard();
         }
 
         private void RegisterAction()
         {
             isAdjusting = true;
-            CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartRegister();
         }
 
         private void PrescribeAdjustAction()
         {
             isAdjusting = true;
-            if (!CheckMedicinesNegativeStock())
-            {
-                isAdjusting = false;
-                return;
-            }
-            CurrentPrescription.SetDetail();
+            //if (!CheckMedicinesNegativeStock())
+            //{
+            //    isAdjusting = false;
+            //    return;
+            //}
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.SetDetail();
             StartPrescribeAdjust();
         }
 

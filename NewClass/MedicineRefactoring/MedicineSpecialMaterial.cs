@@ -14,8 +14,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public MedicineSpecialMaterial(DataRow r) : base(r)
         {
-            CanEdit = true;
             IsBuckle = true;
+            CanEdit = true;
         }
         public string BigCate { get; set; }//大類碼
         public string BigSmallCate { get; set; }//大小類

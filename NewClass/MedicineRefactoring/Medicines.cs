@@ -191,48 +191,48 @@ namespace His_Pos.NewClass.MedicineRefactoring
             var idList = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                idList.Add(r.Field<string>("Pro_ID"));
+                if(!idList.Contains(r.Field<string>("Pro_ID")))
+                    idList.Add(r.Field<string>("Pro_ID"));
             }
             var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
-            var medicines = new Medicines();
-            for (var i = 0; i < medicinesTable.Rows.Count; i++)
+            var medicineRows = new List<DataRow>();
+            foreach (DataRow r in medicinesTable.Rows)
             {
-                Medicine medicine;
-                switch (medicinesTable.Rows[i].Field<int>("DataType"))
-                {
-                    case 1:
-                        medicine = new MedicineNHI(medicinesTable.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 2:
-                        medicine = new MedicineOTC(medicinesTable.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                    case 3:
-                        medicine = new MedicineSpecialMaterial(medicinesTable.Rows[i]);
-                        medicines.Add(medicine);
-                        break;
-                }
+                medicineRows.Add(r);
             }
             foreach (DataRow r in table.Rows)
             {
-                var med = medicines.Single(m => m.ID.Equals(r.Field<string>("Pro_ID")));
-                med.Usage = new Usage();
-                med.Position = new Position();
-                med.Dosage = r.Field<double?>("Dosage");
-                med.UsageName = r.Field<string>("Usage");
-                med.PositionID = r.Field<string>("Position");
-                med.Days = r.Field<int?>("MedicineDays");
-                med.PaySelf = r.Field<bool>("PaySelf");
-                med.IsBuckle = r.Field<bool>("IsBuckle");
-                med.Amount = r.Field<double>("TotalAmount");
-                med.BuckleAmount = NewFunction.CheckDataRowContainsColumn(r, "BuckleAmount") ? r.Field<double>("BuckleAmount") : med.Amount;
-                med.Price = NewFunction.CheckDataRowContainsColumn(r, "PaySelfValue") ? (double)r.Field<decimal>("PaySelfValue") : 0;
-                if (med.PaySelf)
+                Medicine medicine;
+                var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
+                if(medicineRow is null)
                 {
-                    med.TotalPrice = r.Field<int>("Point");
+                    switch (r.Field<string>("Pro_ID"))
+                    {
+                        case "R001":
+                        case "R002":
+                        case "R003":
+                        case "R004":
+                            medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
+                            Add(medicine);
+                            continue;
+                    }
                 }
-                Add(med);
+                switch (medicineRow.Field<int>("DataType"))
+                {
+                    case 1:
+                        medicine = new MedicineNHI(medicineRow);
+                        break;
+                    case 2:
+                        medicine = new MedicineOTC(medicineRow);
+                        break;
+                    case 3:
+                        medicine = new MedicineSpecialMaterial(medicineRow);
+                        break;
+                    default:
+                        continue;
+                }
+                medicine.SetValueByDataRow(r);
+                Add(medicine);
             }
         }
 
@@ -297,7 +297,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
-                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex - 1]);
+                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 Items[(int)selectedMedicinesIndex] = medicine;
             }

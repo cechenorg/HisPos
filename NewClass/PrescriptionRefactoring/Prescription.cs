@@ -941,7 +941,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var paySelf = AdjustCase.CheckIsPrescribe();
             int? selectedMedicinesIndex = null;
             if (SelectedMedicine != null)
+            {
                 selectedMedicinesIndex = Medicines.IndexOf(SelectedMedicine);
+            }
             Medicines.AddMedicine(medicineID, paySelf, selectedMedicinesIndex,WareHouse?.ID, AdjustDate);
         }
 
@@ -1506,6 +1508,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public void SetDetail()
         {
+            CountPrescriptionPoint();
             SetPrescriptionDetail();//產生藥品資料
             SetValue();
         }
