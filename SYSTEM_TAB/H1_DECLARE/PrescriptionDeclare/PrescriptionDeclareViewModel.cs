@@ -620,6 +620,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
@@ -632,6 +637,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DepositAdjustAction()
         {
             isAdjusting = true;
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             CurrentPrescription.CountDeposit();
             if (!CheckPrescription(true))
@@ -645,6 +655,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustAction()
         {
             isAdjusting = true;
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
@@ -669,6 +684,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescribeAdjustAction()
         {
             isAdjusting = true;
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             if (!CheckPrescription(false))
             {
@@ -1178,6 +1198,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return SelectedPharmacist != null
                 ? PrescriptionDb.GetPrescriptionCountByID(SelectedPharmacist.IDNumber).Rows[0].Field<int>("PrescriptionCount")
                 : 0;
+        }
+
+        private bool CheckMedicinesNegativeStock()
+        {
+            var result = CurrentPrescription.CheckMedicinesNegativeStock();
+            return string.IsNullOrEmpty(result);
         }
         #endregion
     }

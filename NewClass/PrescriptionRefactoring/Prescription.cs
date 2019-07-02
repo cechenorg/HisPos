@@ -1517,5 +1517,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             return AdjustDate != null && !string.IsNullOrEmpty(AdjustCase.ID) && AdjustCase.ID.Equals("2") && DateTime.Compare((DateTime) AdjustDate, DateTime.Today) >= 0;
         }
+
+        public string CheckMedicinesNegativeStock()
+        {
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
+        }
     }
 }
