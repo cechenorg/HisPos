@@ -447,10 +447,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SelectedInstitution = result[0];
                     break;
                 default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
-                    institutionSelectionWindow.ShowDialog();
-                    Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
+                    Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
+                    Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
                     break;
             }
         }

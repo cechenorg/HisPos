@@ -32,5 +32,29 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
                 Set(() => FullName, ref fullName, value);
             }
         }
+
+        public bool CheckIsPrescribe()
+        {
+            return ID.Equals("0");
+        }
+
+        public bool CheckIsSimpleForm()
+        {
+            return ID.Equals("3");
+        }
+
+        public bool CheckIsQuitSmoking()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals("5");
+        }
+        public bool CheckIsHomeCare()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals("D");
+        }
+
+        public bool IsChronic()
+        {
+            return ID.Equals("2");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -55,7 +56,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
-        private ViewModelEnum viewModel { get; set; }
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
@@ -66,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
             get => selectedInstitution;
             set { Set(() => SelectedInstitution, ref selectedInstitution, value); }
         }
+        public bool ShowDialog { get; private set; }
         private void ExecuteSearchTextChanged()
         {
             if (IsEditing)
@@ -90,24 +91,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         }
         private void ExecuteInstitutionSelected()
         {
-            switch (viewModel)
-            {
-                case ViewModelEnum.PrescriptionDeclare:
-                    Messenger.Default.Send(SelectedInstitution,nameof(PrescriptionDeclareViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.PrescriptionSearch:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionSearchViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.PrescriptionEdit:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionEditViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.DeclareFileManage:
-                    Messenger.Default.Send(SelectedInstitution, nameof(DeclareFileManageViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.CooperativeClinicControl:
-                    Messenger.Default.Send(SelectedInstitution, nameof(CooperativeClinicControlViewModel) + "InsSelected");
-                    break;
-            }
+            Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");
             Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));
         }
         private void FilterBySearchText(object sender, FilterEventArgs e)
@@ -121,13 +105,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 e.Accepted = false;
             }
         }
-        public InstitutionSelectionViewModel(string searchText,ViewModelEnum vm)
+        public InstitutionSelectionViewModel(string searchText)
         {
-            viewModel = vm;
             Institutions = ViewModelMainWindow.Institutions;
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             InstitutionSelected = new RelayCommand(ExecuteInstitutionSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
+            var resultList = Institutions.Where(i => i.FullName.Contains(searchText)).ToList();
+            var resultCount = resultList.Count();
+            switch (resultCount)
+            {
+                case 0 :
+                    ShowDialog = false;
+                    MessageWindow.ShowMessage("查無此院所",MessageType.WARNING);
+                    break;
+                case 1:
+                    ShowDialog = false;
+                    SelectedInstitution = resultList[0];
+                    ExecuteInstitutionSelected();
+                    break;
+                default:
+                    ShowDialog = true;
+                    break;
+            }
             InsCollectionViewSource = new CollectionViewSource { Source = Institutions };
             InsCollectionView = InsCollectionViewSource.View;
             Search = searchText;

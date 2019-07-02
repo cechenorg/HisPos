@@ -16,11 +16,27 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             Name = r.Field<string>("Div_Name");
             FullName = r.Field<string>("Div_FullName");
         }
+        private string id;
         [Index(0)]
-        public virtual string ID { get; set; } = string.Empty;
+        public virtual string ID
+        {
+            get => id;
+            set
+            {
+                Set(() => ID, ref id, value);
+            }
+        }
+        private string name;
         [Index(1)]
-        public virtual string Name { get; set; } = string.Empty;
-        private string fullName = string.Empty;
+        public virtual string Name
+        {
+            get => name;
+            set
+            {
+                Set(() => Name, ref name, value);
+            }
+        }
+        private string fullName;
         [Index(2)]
         public virtual string FullName
         {
@@ -29,6 +45,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             {
                 Set(() => FullName, ref fullName, value);
             }
+        }
+
+        public bool CheckIDNotEmpty()
+        {
+            return !string.IsNullOrEmpty(ID);
         }
     }
 }

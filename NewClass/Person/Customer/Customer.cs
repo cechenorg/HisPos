@@ -2,10 +2,8 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using IcCard = His_Pos.NewClass.Prescription.IcCard;
@@ -44,6 +42,26 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
         private ICollectionView historyCollectionView;
+
+        public Customer(CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            Tel = customer.Phone;
+        }
+
+        public Customer(CooperativePrescription.Customer customer, int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            if (birthYear >= 1911)
+            {
+                Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            }
+            Tel = customer.Phone;
+        }
+
         public ICollectionView HistoryCollectionView
         {
             get => historyCollectionView;
@@ -98,6 +116,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         public int CheckAgePercentage()
         {
+            if (Birthday is null) return 100;
             var cusAge = CountAgeToMonth();
             if (cusAge.Years == 0 && cusAge.Months < 6)
             {
@@ -214,6 +233,42 @@ namespace His_Pos.NewClass.Person.Customer
         {
             var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
             return table.Rows[0].Field<int>("Count") > 0;
+        }
+
+        public void CheckPatientWithCard(Customer patientFromCard)
+        {
+            if (!IDNumber.Equals(patientFromCard.IDNumber))
+                IDNumber = patientFromCard.IDNumber;
+            if (!Name.Equals(patientFromCard.Name))
+                Name = patientFromCard.Name;
+            if (!Birthday.Equals(patientFromCard.Birthday))
+                Birthday = patientFromCard.Birthday;
+            CheckGender();
+        }
+
+        public bool CheckIDNumberEmpty()
+        {
+            return string.IsNullOrEmpty(IDNumber);
+        }
+
+        public bool CheckNameEmpty()
+        {
+            return string.IsNullOrEmpty(Name);
+        }
+
+        public bool CheckBirthdayNull()
+        {
+            return Birthday is null;
+        }
+
+        public bool CheckTelEmpty()
+        {
+            return string.IsNullOrEmpty(Tel);
+        }
+
+        public bool CheckCellPhoneEmpty()
+        {
+            return string.IsNullOrEmpty(CellPhone);
         }
     }
 }

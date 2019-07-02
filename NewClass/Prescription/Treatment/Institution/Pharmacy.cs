@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
@@ -70,5 +71,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             PharmacyDb.InsertPharmacy(this);
         }
         #endregion
+
+        public Employees GetPharmacists(DateTime date)
+        {
+            var pharmacists = new Employees();
+            foreach (var e in MedicalPersonnels)
+            {
+                if(e.CheckLeave(date) && e.IsLocal)
+                    pharmacists.Add(e);
+            }
+            return pharmacists;
+        }
     }
 }

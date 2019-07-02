@@ -104,15 +104,15 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
                     } 
                     break;
                 default:
-                    Messenger.Default.Register<Institution>(this,nameof(CooperativeClinicControlViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.CooperativeClinicControl);
+                    Messenger.Default.Register<Institution>(this,"GetSelectedInstitution", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
         }
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            Messenger.Default.Unregister<Institution>(this, nameof(CooperativeClinicControlViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             if (CheckInsSame(receiveSelectedInstitution)) {
                 CooperativeClinicSettingCollection.Add(new CooperativeClinicSetting());
                 SelectItem = CooperativeClinicSettingCollection[CooperativeClinicSettingCollection.Count - 1];

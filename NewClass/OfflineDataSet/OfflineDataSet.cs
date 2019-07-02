@@ -73,12 +73,12 @@ namespace His_Pos.NewClass.OfflineDataSet
             var diseaseTable = DiseaseCodeDb.GetDiseaseCodes();
             foreach (DataRow r in diseaseTable.Rows)
             {
-                DiseaseCodes.Add(new DiseaseCode(r,true));
+                DiseaseCodes.Add(new DiseaseCode(r));
             }
             var diseaseICD9Table = DiseaseCodeDb.GetICD9DiseaseCodes();
             foreach (DataRow r in diseaseICD9Table.Rows)
             {
-                var disease = new DiseaseCode(r, true);
+                var disease = new DiseaseCode(r);
                 disease.ICD9_ID = r.Field<string>("DisCodeMap_ICD9_ID");
                 DiseaseCodes.Add(disease);
             }

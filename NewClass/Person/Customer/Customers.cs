@@ -12,8 +12,9 @@ namespace His_Pos.NewClass.Person.Customer
         {
 
         }
-        public void GetDataByCondition(Customer customer) { 
-            DataTable table = CustomerDb.GetDataByCondition(customer);
+
+        public void SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth) { 
+            var table = CustomerDb.SearchCustomers(idNumber, name, cellPhone, tel, birth);
             foreach (DataRow r in table.Rows) {
                 Add(new Customer(r));
             }

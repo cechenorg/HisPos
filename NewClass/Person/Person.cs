@@ -29,18 +29,64 @@ namespace His_Pos.NewClass.Person
         }
         [Index(0)]
         public virtual int ID { get; set; }
+
+        private string name;
         [Index(1)]
-        public virtual string Name { get; set; }//姓名
+        public virtual string Name
+        {
+            get => name;
+            set
+            {
+                Set(() => Name, ref name, value);
+            }
+        }//姓名
         [Index(2)]
         public virtual string Gender { get; set; }//性別
+
+        private string idNumber;
+
         [Index(3)]
-        public virtual string IDNumber { get; set; }//身分證字號
-        [IgnoreFormat]
-        public DateTime? Birthday { get; set; }//生日
-        [IgnoreFormat]
-        public string Tel { get; set; }//家電
-        [IgnoreFormat]
-        public string CellPhone { get; set; }//手機
+        public virtual string IDNumber
+        {
+            get => idNumber;
+            set
+            {
+                Set(() => IDNumber, ref idNumber, value);
+            }
+        }//身分證字號
+
+        private DateTime? birthday;
+        [Index(4)]
+        public virtual DateTime? Birthday
+        {
+            get => birthday;
+            set
+            {
+                Set(() => Birthday, ref birthday, value);
+            }
+        }//生日
+
+        private string tel;
+        [Index(5)]
+        public virtual string Tel
+        {
+            get => tel;
+            set
+            {
+                Set(() => Tel, ref tel, value);
+            }
+        }//家電
+
+        private string cellPhone;
+        [Index(6)]
+        public virtual string CellPhone
+        {
+            get => cellPhone;
+            set
+            {
+                Set(() => CellPhone, ref cellPhone, value);
+            }
+        }//手機
         [IgnoreFormat]
         public string Address { get; set; }//地址
         [IgnoreFormat]

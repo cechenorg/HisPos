@@ -42,10 +42,10 @@ namespace His_Pos.NewClass.Prescription.IcData
             Name = Function.ByteArrayToString(20, pBuffer, 12).Trim();
             IDNumber = Function.ByteArrayToString(10, pBuffer, 32);
             BirthdayStr = Function.ByteArrayToString(7, pBuffer, 42);
-            Birthday = DateTimeExtensions.TWDateStringToDateOnly(BirthdayStr);
+            Birthday = (DateTime)DateTimeExtensions.TWDateStringToDateOnly(BirthdayStr);
             Gender = Function.ByteArrayToString(1, pBuffer, 49).Equals("M") ? StringRes.Male : StringRes.Female;
             string dateString = Function.ByteArrayToString(7, pBuffer, 50);
-            CardReleaseDate = DateTimeExtensions.TWDateStringToDateOnly(dateString);
+            CardReleaseDate = (DateTime)DateTimeExtensions.TWDateStringToDateOnly(dateString);
             CardLogoutMark = Function.ByteArrayToString(1, pBuffer, 57);
             Tel = Function.ByteArrayToString(14, pBuffer, 58);
         }

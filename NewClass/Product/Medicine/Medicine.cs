@@ -63,7 +63,7 @@ namespace His_Pos.NewClass.Product.Medicine
                     break;
             }
         }
-        public Medicine(XmlOfPrescription.Item m) {
+        public Medicine(CooperativePrescription.Item m) {
             Usage = new Usage.Usage();
             Position = new Position.Position();
             ID = m.Id;
@@ -201,13 +201,10 @@ namespace His_Pos.NewClass.Product.Medicine
             get => days;
             set
             {
-                if (days != value)
-                {
-                    Set(() => Days, ref days, value);
-                    if (ID is null) return;
-                    if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
-                        CalculateAmount();
-                }
+                Set(() => Days, ref days, value);
+                if (ID is null) return;
+                if ((ID.EndsWith("00") || ID.EndsWith("G0")) && !string.IsNullOrEmpty(Usage.Name) && (Days != null && Days > 0) && (Dosage != null && Dosage > 0))
+                    CalculateAmount();
             }
         }
         private double price;//售價

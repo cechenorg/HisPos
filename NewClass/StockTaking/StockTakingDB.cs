@@ -24,9 +24,6 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "note", stockTakingPlan.Note);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockTakingPlan]", parameterList); 
         }
-        internal static void UpdateStockTakingPlan() {
-
-        }
         internal static void DeleteStockTakingPlan(StockTakingPlan.StockTakingPlan stockTakingPlan) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ID", stockTakingPlan.ID);

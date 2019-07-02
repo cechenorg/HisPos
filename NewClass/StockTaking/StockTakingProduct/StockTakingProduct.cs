@@ -24,7 +24,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             get { return newInventory; }
             set {
                 Set(() => NewInventory, ref newInventory, value);
-                ValueDiff = NewInventory - Inventory;
+                ValueDiff = NewInventory - Inventory; 
             }
         }
         private double valueDiff;
@@ -38,7 +38,13 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         {
             get { return note; }
             set { Set(() => Note, ref note, value); }
-        } 
+        }
+        private bool isUpdate;
+        public bool IsUpdate
+        {
+            get { return isUpdate; }
+            set { Set(() => IsUpdate, ref isUpdate, value); }
+        }
         public Employee Employee { get; set; } 
         #endregion
 
@@ -46,7 +52,8 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         {
             Inventory = row.Field<double>("StoTakDet_OldValue");
             NewInventory = row.Field<double>("StoTakDet_NewValue");
-            Note = row.Field<string>("StoTakDet_Note"); 
+            Note = row.Field<string>("StoTakDet_Note");
+            IsUpdate = false;
         }
         
         #region ----- Define Functions -----

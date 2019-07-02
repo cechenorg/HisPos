@@ -24,7 +24,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescription
             switch (Source)
             {
                 case PrescriptionSource.ChronicReserve:
-                    Medicines.GetDataByReserveId(ID.ToString());
+                    Medicines.GetDataByReserveId((int)ID);
                     break;
                 case PrescriptionSource.Normal:
                 case PrescriptionSource.Register:

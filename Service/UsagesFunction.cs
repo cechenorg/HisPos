@@ -129,5 +129,48 @@ namespace His_Pos.Service
                 values.Add(int.Parse(match.Value));
             return values;
         }
+
+        public static int GetDaysByUsage_QD(double amount,double dosage)
+        {
+            var dosagePerDay = dosage;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        public static int GetDaysByUsage_BID(double amount, double dosage)
+        {
+            var dosagePerDay = dosage * 2;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        public static int GetDaysByUsage_TID(double amount, double dosage)
+        {
+            var dosagePerDay = dosage * 3;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        public static int GetDaysByUsage_QID(double amount, double dosage)
+        {
+            var dosagePerDay = dosage * 4;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        public static int GetDaysByUsage_PID(double amount, double dosage)
+        {
+            var dosagePerDay = dosage * 5;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        public static int GetDaysByUsage_QOD(double amount, double dosage)
+        {
+            var dosagePerDay = dosage * 0.5;
+            return CountDaysByDosagePerDay(amount, dosagePerDay);
+        }
+
+        private static int CountDaysByDosagePerDay(double amount, double dosagePerDay)
+        {
+            var days = (int)(amount / dosagePerDay);
+            var remain = amount % dosagePerDay;
+            return remain == 0 ? days : days + 1;
+        }
     }
 }

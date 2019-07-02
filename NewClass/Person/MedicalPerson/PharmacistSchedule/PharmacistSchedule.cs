@@ -7,6 +7,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
     public class PharmacistSchedule : ObservableCollection<PharmacistScheduleItem>
     {
         public PharmacistSchedule() { }
+
         public void GetPharmacistScheduleWithCount(DateTime start, DateTime end)
         {
             Clear();
@@ -16,6 +17,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 Add(new PharmacistScheduleItem(r));
             }
         }
+
         public void GetPharmacistSchedule(DateTime start, DateTime end)
         {
             Clear();

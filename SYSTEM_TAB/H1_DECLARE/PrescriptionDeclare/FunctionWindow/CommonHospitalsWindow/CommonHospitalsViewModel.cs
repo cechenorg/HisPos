@@ -5,8 +5,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow
 {
@@ -51,10 +49,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 Set(() => CommonHospitalsCollection, ref commonHospitalsCollection, value);
             }
         }
-        private ViewModelEnum viewModel { get; set; }
-        public CommonHospitalsViewModel(ViewModelEnum viewModelEnum)
+        public CommonHospitalsViewModel()
         {
-            viewModel = viewModelEnum;
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             InstitutionSelected = new RelayCommand(InstitutionSelectedAction);
             CommonHospitalsCollection = new Institutions(false);
@@ -85,15 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
         }
         private void InstitutionSelectedAction()
         {
-            switch (viewModel)
-            {
-                case ViewModelEnum.PrescriptionDeclare:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionDeclareViewModel) + "InsSelected");
-                    break;
-                case ViewModelEnum.PrescriptionEdit:
-                    Messenger.Default.Send(SelectedInstitution, nameof(PrescriptionEditViewModel) + "InsSelected");
-                    break;
-            }
+            Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");
             Messenger.Default.Send(new NotificationMessage("CloseCommonHospitalsWindow"));
         }
     }

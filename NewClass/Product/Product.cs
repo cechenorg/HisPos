@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
-    public class Product : ObservableObject
+    public abstract class Product : ObservableObject
     {
         public Product()
         {
@@ -30,6 +32,20 @@ namespace His_Pos.NewClass.Product
             ID = m.ID;
             ChineseName = m.ChineseName;
             EnglishName = m.EnglishName;
+        }
+
+        protected Product(Item m)
+        {
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+        }
+
+        protected Product(CooperativePrescription.Item m)
+        {
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
         }
         #region ----- Define Variables -----
 

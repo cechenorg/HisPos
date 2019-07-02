@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.Person.Employee
             WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
-        [Index(4)]
+        [Index(7)]
         public virtual string Password
         {
             get => password;
@@ -47,7 +47,7 @@ namespace His_Pos.NewClass.Person.Employee
         }
 
         private string nickName;//暱稱
-        [Index(5)]
+        [IgnoreFormat]
         public virtual string NickName
         {
             get => nickName;
@@ -67,7 +67,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         } 
         private DateTime? startDate;//到職日
-        [Index(8)]
+        [IgnoreFormat]
         public virtual DateTime? StartDate
         {
             get => startDate;
@@ -77,7 +77,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private DateTime? leaveDate;//離職日
-        [Index(9)]
+        [IgnoreFormat]
         public virtual DateTime? LeaveDate
         {
             get => leaveDate;
@@ -87,7 +87,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private int purchaseLimit;//員購上限
-        [Index(10)]
+        [IgnoreFormat]
         public virtual int PurchaseLimit
         {
             get => purchaseLimit;
@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private bool isEnable;//備註
-        [Index(11)]
+        [IgnoreFormat]
         public virtual bool IsEnable
         {
             get => isEnable;
@@ -176,5 +176,10 @@ namespace His_Pos.NewClass.Person.Employee
         }
        
         #endregion
+
+        public bool CheckLeave(DateTime date)
+        {
+            return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
+        }
     }
 }
