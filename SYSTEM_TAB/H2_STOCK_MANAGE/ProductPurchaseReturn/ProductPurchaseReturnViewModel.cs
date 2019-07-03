@@ -49,7 +49,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private string busyContent;
         private StoreOrders storeOrderCollection;
         private ICollectionView storeOrderCollectionView;
+        private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
+        private BackgroundWorker initBackgroundWorker;
 
         public bool IsBusy
         {
@@ -81,13 +83,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
-        public string SearchString { get; set; }
+        public string SearchString
+        {
+            get => searchString;
+            set { Set(() => SearchString, ref searchString, value); }
+        }
         #endregion
 
         public ProductPurchaseReturnViewModel()
         {
             TabName = MainWindow.HisFeatures[1].Functions[1];
             Icon = MainWindow.HisFeatures[1].Icon;
+            InitBackgroundWorker();
             RegisterCommand();
             RegisterMessengers();
         }
@@ -218,14 +225,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ----- Define Functions -----
-        private void InitVariables()
+        private void InitBackgroundWorker()
         {
-            IsBusy = true;
-            SearchString = "";
-            
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            initBackgroundWorker = new BackgroundWorker();
 
-            backgroundWorker.DoWork += (sender, args) =>
+            initBackgroundWorker.DoWork += (sender, args) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
@@ -263,12 +267,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                     }
                 }
-                
+
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
             };
 
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
                 StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
                 StoreOrderCollectionView.Filter += OrderFilter;
@@ -281,8 +285,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 IsBusy = false;
             };
+        }
+        private void InitVariables(string searchStr = "")
+        {
+            IsBusy = true;
+            SearchString = searchStr;
 
-            backgroundWorker.RunWorkerAsync();
+            if(!initBackgroundWorker.IsBusy)
+                initBackgroundWorker.RunWorkerAsync();
         }
         private void RegisterCommand()
         {
@@ -310,10 +320,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.Instance.AddNewTab(TabName);
 
-                ReloadAction();
-
-                SearchString = notificationMessage.Content;
-                StoreOrderCollectionView.Filter += OrderFilter;
+                InitVariables(notificationMessage.Content);
             }
         }
         #region ///// Messenger Functions /////
