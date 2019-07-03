@@ -1045,6 +1045,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             MainWindow.ServerConnection.OpenConnection();
             NewFunction.GetXmlFiles();
+            PrescriptionCount = UpdatePrescriptionCount();
             MainWindow.ServerConnection.CloseConnection();
             ClearAction();
             isAdjusting = false;
