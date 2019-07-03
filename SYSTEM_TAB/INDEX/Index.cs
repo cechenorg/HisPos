@@ -42,7 +42,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => ReserveCollectionView, ref reserveCollectionView, value); 
             }
         }
-       
+        
+        private bool isDataChanged;
+        public bool IsDataChanged
+        {
+            get => isDataChanged;
+            set
+            {
+                Set(() => IsDataChanged, ref isDataChanged, value);
+            }
+        }
         private int indexReserveCount;  
         public int IndexReserveCount
         {
@@ -157,6 +166,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => CustomerData, ref customerData, value);
+                IsDataChanged = false;
             }
         }
         #endregion
@@ -170,6 +180,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
+        public RelayCommand DataChangeCommand { get; set; }
 
         #endregion
         public Index() {
@@ -183,9 +194,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
-            //ReserveSearchAction(); 
+            DataChangeCommand = new RelayCommand(DataChangeAction);
         }
         #region Action
+        private void DataChangeAction() {
+            IsDataChanged = true;
+        }
         private void ReserveMedicineBackAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將未設定為常備藥且90天內慢箋未使用之藥品退貨?", "慢箋退貨");
             if ((bool)confirmWindow.DialogResult)

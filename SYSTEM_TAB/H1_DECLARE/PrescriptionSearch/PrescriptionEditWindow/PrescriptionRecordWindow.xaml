@@ -92,59 +92,59 @@
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
+                               Content="{Binding EditedPrescription.Treatment.TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
+                               Content="{Binding EditedPrescription.Treatment.AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.MainDisease.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.MainDisease.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
                         <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.SubDisease.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.SubDisease.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="60" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.ChronicTotal,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.ChronicTotal,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                         <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="60" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.ChronicSeq,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.ChronicSeq,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                         <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.AdjustCase.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.AdjustCase.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
                         <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.PrescriptionCase.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.PrescriptionCase.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                         <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.Copayment.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.Copayment.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
                         <Label Content="給付類別" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.PaymentCategory.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.PaymentCategory.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
                         <Label Content="特定治療" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Width="170" Height="34" Margin="5,0,0,0" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                               Content="{Binding EditedPrescription.Treatment.SpecialTreat.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                               Content="{Binding EditedPrescription.Treatment.SpecialTreat.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding EditedPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}"
-                          AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
+                <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding EditedPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" CanUserAddRows="False"
+                          AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding EditedPrescription.Medicines, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -180,15 +180,15 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="150" Header="健保代碼" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Name="MedicineID"  Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Margin="10,0,0,0"
-                                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" Content="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
-                                    </Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="150" Header="健保代碼" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ID,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="10,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn MinWidth="400" MaxWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -207,46 +207,46 @@
                                 </Style>
                             </DataGridTemplateColumn.CellStyle>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="Dosage" MinWidth="60" Height="35"  HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                             FontSize="16" FontWeight="Bold" Content="{Binding Dosage, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="用法" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="Usage" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                             FontSize="16" FontWeight="Bold" Content="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="天數" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                    <Label x:Name="MedicineDays" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                         FontSize="16" FontWeight="Bold" Content="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputScope="Number"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="途徑" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="Position" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                           FontSize="16" FontWeight="Bold" Content="{Binding PositionID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="MedicineAmount" MinWidth="40" Height="35" HorizontalContentAlignment="Center" Foreground="IndianRed" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                         FontSize="16" FontWeight="Bold" Content="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="60" Header="用量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Dosage,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn MinWidth="40" Header="用法" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding UsageName,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn MinWidth="40" Header="天數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Days,Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn MinWidth="40" Header="途徑" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding PositionID,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn MinWidth="40" Header="總量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Amount,Mode=OneWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn MinWidth="60" Binding="{Binding NHIPrice, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" Header="健保價" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -262,22 +262,22 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="60" Header="自費價" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                         FontSize="16" FontWeight="Bold" Content="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="60" Header="總價" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="MedicineTotal" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1"
-                                         FontSize="16" FontWeight="Bold"  InputScope="AlphanumericHalfWidth" Content="{Binding TotalPrice, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="60" Header="自費價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Price,Mode=OneWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn MinWidth="60" Header="總價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding TotalPrice,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn MinWidth="80" Header="上次進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">

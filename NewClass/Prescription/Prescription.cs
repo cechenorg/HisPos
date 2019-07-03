@@ -1347,5 +1347,10 @@ namespace His_Pos.NewClass.Prescription
         {
             IsBuckle = WareHouse != null;
         }
+
+        public string CheckMedicinesNegativeStock()
+        {
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Documents;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.Product.Medicine
@@ -256,6 +257,18 @@ namespace His_Pos.NewClass.Product.Medicine
                     m.Inventory = r.Field<double>("Inv_Inventory");
                 }
             }
+        }
+
+        public string CheckNegativeStock()
+        {
+            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => (m.Inventory - m.BuckleAmount < 0) && m.BuckleAmount > 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                result += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
+                MessageWindow.ShowMessage(result, MessageType.WARNING);
+            }
+            return result;
         }
     }
 }
