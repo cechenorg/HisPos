@@ -26,10 +26,10 @@
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="230"/>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="5*"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="720"/>
@@ -63,7 +63,7 @@
                 </xctk:MaskedTextBox>
                 <Button Width="120" Command="{Binding SearchCommand}" Margin="850,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
-            <Label Grid.Row="1" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="30"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Grid Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -183,10 +183,10 @@
                     <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Right" Width="100"/>
                 </StackPanel>
             </Grid>
-            <Label Grid.Row="3" Grid.Column="0" Content="處方毛利" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="處方毛利" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
             <Grid Grid.Row="4" Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="168"/>
+                    <RowDefinition Height="210"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                     <RowDefinition Height="60"/>

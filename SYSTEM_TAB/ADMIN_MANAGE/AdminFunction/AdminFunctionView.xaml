@@ -10,15 +10,12 @@
             <RowDefinition Height="50"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-        <Button Name="ButtonPredictChronic" Content="申報檔慢箋" Click="ButtonPredictChronic_Click"/>
-        <Button Name="DayliUpload" Grid.Column="1" Width="150" Content="每日上傳" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="0,0,10,0" Click="DayliUpload_Click" />
-        <Button Name="changeCus" Grid.Column="2" Width="150" Content="重做申報檔" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="0,0,10,0" Click="ChangeCus_Click" />
-        <Button Name="CooperApi" Grid.Column="3" Content="骨科拋單" Click="CooperApi_Click" />
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Width="120" Margin="10,0,0,0" Content="申報檔慢箋" Background="RoyalBlue" BorderThickness="0" Click="ButtonPredictChronic_Click"/>
+            <Button Width="120" Margin="10,0,0,0" Content="每日上傳" Background="RoyalBlue" BorderThickness="0" Click="DayliUpload_Click"/>
+            <Button Width="120" Margin="10,0,0,0" Content="重做申報檔" Background="RoyalBlue" BorderThickness="0" Click="ChangeCus_Click"/>
+            <Button Width="120" Margin="10,0,0,0" Content="骨科拋單" Background="RoyalBlue" BorderThickness="0" Click="CooperApi_Click"/>
+            <Button Width="120" Margin="10,0,0,0" Content="合併同類藥品" Background="RoyalBlue" BorderThickness="0" Click="MergeProduct_OnClick"/>
+        </StackPanel>
     </Grid>
 </UserControl>

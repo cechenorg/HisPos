@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product.ProductGroupSetting;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl {
     /// <summary>
@@ -20,6 +22,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class GroupInventoryControl : UserControl {
         public GroupInventoryControl() {
             InitializeComponent();
+        }
+
+        private void Product_Click(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+
+            if (!(row?.DataContext is ProductGroupSetting)) return;
+
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ProductGroupSetting)row.Item).ID, ((ProductGroupSetting)row.Item).WareHouseID }, "ShowProductDetail"));
         }
     }
 }

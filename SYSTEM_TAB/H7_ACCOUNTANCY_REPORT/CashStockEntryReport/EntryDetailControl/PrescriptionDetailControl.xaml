@@ -9,14 +9,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="300"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="30"/>
-            <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" FontSize="30"/>
+            <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" FontSize="25"/>
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrescriptionCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding PrescriptionCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>

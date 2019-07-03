@@ -54,7 +54,7 @@
             <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
             <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <TextBox Text="{Binding SearchName, Mode=TwoWay}" Margin="0,0,10,0" Width="120" FontSize="16" GotFocus="SearchTextbox_OnGotFocus" PreviewMouseLeftButtonDown="SearchTextbox_OnPreviewMouseLeftButtonDown"/>
-            <Label Content="倉庫" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="庫別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="16" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox Content="顯示無庫存" IsChecked="{Binding SearchIsInventoryZero, Mode=TwoWay}" Background="RoyalBlue" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <CheckBox Content="顯示已停用" IsChecked="{Binding SearchIsEnable, Mode=TwoWay}" Margin="10,0,20,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>

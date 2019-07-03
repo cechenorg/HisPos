@@ -191,6 +191,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 return false;
             }
 
+            foreach (var product in ProductGroupSettingCollection)
+            {
+                if (mergeProductStruct.ID.Equals(product.ID))
+                {
+                    MessageWindow.ShowMessage("不可新增已存在品項", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             return true;
         }
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)

@@ -54,7 +54,7 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <Label Content="倉庫 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding Path=OrderWarehouse.Name}" Width="120" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding Path=OrderManufactory.GetName}" Width="200" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
