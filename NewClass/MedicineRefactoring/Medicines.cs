@@ -297,14 +297,14 @@ namespace His_Pos.NewClass.MedicineRefactoring
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
-                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex]);
+                    medicine.CopyPrevious(this[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
-                Items[(int)selectedMedicinesIndex] = medicine;
+                this[(int)selectedMedicinesIndex] = medicine;
             }
             else
             {
                 if (Count > 0)
-                    medicine.CopyPrevious(Items[Count - 1]);
+                    medicine.CopyPrevious(this[Count - 1]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 Add(medicine);
             }
@@ -587,11 +587,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public string CheckNegativeStock()
         {
-            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => m.Inventory - m.BuckleAmount <= 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
+            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => m.Inventory - m.BuckleAmount < 0 && m.BuckleAmount > 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
             
             if (!string.IsNullOrEmpty(result))
             {
-                result += "如需繼續調劑請將扣庫量調至小於等於庫存。";
+                result += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
                 MessageWindow.ShowMessage(result,MessageType.WARNING);
             }
             return result;

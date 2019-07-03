@@ -588,6 +588,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.CheckPrescriptionVariable();
             CurrentPrescription.CountPrescriptionPoint();
             CurrentPrescription.CountSelfPay();
+            CurrentPrescription.PrescriptionPoint.CountAmountsPay();
             CheckDeclareStatus();
         }
 
@@ -625,11 +626,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -642,11 +643,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DepositAdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(true))
             {
                 isAdjusting = false;
@@ -659,11 +660,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -688,11 +689,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescribeAdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -779,11 +780,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedMedicine(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification != nameof(PrescriptionDeclareViewModel)) return;
-            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedMedicine);
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this);
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.AddMedicine(msg.Content.ID);
             MainWindow.ServerConnection.CloseConnection();
-            CurrentPrescription.CountPrescriptionPoint();
         }
 
         private void Refresh(NotificationMessage msg)

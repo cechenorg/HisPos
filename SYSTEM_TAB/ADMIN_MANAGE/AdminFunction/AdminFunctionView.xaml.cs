@@ -33,7 +33,6 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
         private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
             Prescriptions.PredictThreeMonthPrescription();
             MessageWindow.ShowMessage("預約慢箋完成!",MessageType.SUCCESS);
-            
         }
 
         private void DayliUpload_Click(object sender, RoutedEventArgs e)
@@ -135,6 +134,11 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
             while (WebApi.SendToCooperClinicLoop100()) {
             }
             MessageWindow.ShowMessage("骨科重拋成功",MessageType.SUCCESS);
+        }
+
+        private void MergeProduct_OnClick(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -343,6 +343,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             if (CheckReadCardResult(pre))
             {
                 pre.CountPrescriptionPoint();
+                pre.CountSelfPay();
+                pre.PrescriptionPoint.CountAmountsPay();
                 pre.SetDetail();
                 currentService = PrescriptionService.CreateService(pre);
                 WriteCard();

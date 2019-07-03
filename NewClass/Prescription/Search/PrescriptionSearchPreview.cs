@@ -36,7 +36,6 @@ namespace His_Pos.NewClass.Prescription.Search
                 if (r.Field<DateTime?>("InsertTime") != null) {
                     DateTime istime = r.Field<DateTime>("InsertTime");
                     InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
-                         
                 } 
                 
                 switch (r.Field<string>("StoOrd_Status")) {

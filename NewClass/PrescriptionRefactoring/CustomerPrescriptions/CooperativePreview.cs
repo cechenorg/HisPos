@@ -29,6 +29,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             var pre = new Prescription(Content, TreatDate, SourceID, IsRead);
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(pre.SourceId);
             pre.CountPrescriptionPoint();
+            pre.CountSelfPay();
+            pre.PrescriptionPoint.CountAmountsPay();
             return pre;
         }
 

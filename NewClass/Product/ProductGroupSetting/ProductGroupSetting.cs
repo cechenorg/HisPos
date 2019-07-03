@@ -10,6 +10,11 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
     public class ProductGroupSetting : Product
     {
-        public ProductGroupSetting(DataRow row):base(row) { }
+        public string WareHouseID { get; set; }
+
+        public ProductGroupSetting(DataRow row) : base(row)
+        {
+            WareHouseID = row.Field<int>("WARE_ID").ToString();
+        }
     }
 }

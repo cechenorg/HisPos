@@ -213,7 +213,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
-
+        public PrescriptionEditViewModel(Prescription p)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var selected = p;
+            MainWindow.ServerConnection.CloseConnection();
+            CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
+            NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
+            OriginalPrescription = selected;
+            if(!p.Source.Equals(PrescriptionSource.ChronicReserve))
+            OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
+            Init((Prescription)OriginalPrescription.Clone());
+            IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
+        }
         #region InitialFunctions
         /*
          * clone checkEdit
@@ -298,12 +310,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 if ((bool)printMedBag)
                     PrintMedBag(false, (bool)printMedBag, (bool)printSingle, (bool)printReceipt);
-                if ((bool) printReceipt)
-                {
-                    EditedPrescription.PrescriptionPoint.ActualReceive = EditedPrescription.PrescriptionPoint.AmountSelfPay + EditedPrescription.PrescriptionPoint.CopaymentPoint;
-                    BusyContent = StringRes.收據列印;
-                    EditedPrescription.PrintReceipt();
-                }
             };
             worker.RunWorkerAsync();
         }
@@ -505,6 +511,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (IsEdit)
             {
                 if (!CheckSameOrIDEmptyMedicine())return;
+                if(!CheckMedicinesNegativeStock())return;
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
                     var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
@@ -851,7 +858,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             return CanMakeup;
         }
-
+        private bool CheckMedicinesNegativeStock()
+        {
+            var result = EditedPrescription.CheckMedicinesNegativeStock();
+            return string.IsNullOrEmpty(result);
+        }
         #endregion
     }
 }

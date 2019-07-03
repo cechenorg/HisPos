@@ -19,6 +19,7 @@ using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
@@ -399,7 +400,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             prescription.Source = SelectedPrescription.Source;
             var pSource = SelectedPrescription.Source;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, pSource);
+            //var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()

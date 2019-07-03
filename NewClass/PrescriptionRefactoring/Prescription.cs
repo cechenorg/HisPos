@@ -22,7 +22,6 @@ using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -606,7 +605,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PrescriptionPoint.CountTotal();
                 PrescriptionPoint.CountApply();
             }
-            PrescriptionPoint.CountAmountsPay();
         }
 
         private void GetCopayment()
@@ -807,24 +805,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         #region PrintFunctions
         public void PrintMedBagAndReceipt()
         {
-            PrintMedBagConfirm();
-            var receiptPrint = false;
-            if (PrescriptionPoint.AmountsPay > 0)
-            {
-                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
-                if (receiptResult.DialogResult != null)
-                    receiptPrint = (bool)receiptResult.DialogResult;
-            }
-            if (receiptPrint)
-                PrintReceipt();
+            PrintConfirm();
         }
 
-        private void PrintMedBagConfirm()
+        private void PrintConfirm()
         {
-            var medBagPrint = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
-            Debug.Assert(medBagPrint.DialogResult != null, "medBagPrint.DialogResult != null");
-            if (!(bool)medBagPrint.DialogResult) return;
+            var medBagPrint = PrintMedBagConfirm();
+            if (!medBagPrint) return;
             var printBySingleMode = new MedBagSelectionWindow();
+            var receiptPrint = PrintReceiptConfirm();
             // ReSharper disable once PossibleInvalidOperationException
             var singleMode = (bool)printBySingleMode.ShowDialog();
             if (singleMode)
@@ -833,6 +822,30 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             {
                 PrintMedBagMultiMode();
             }
+            if (receiptPrint)
+                PrintReceipt();
+        }
+
+        private bool PrintMedBagConfirm()
+        {
+            var medBagPrint = false;
+            var medBagConfirm = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
+            Debug.Assert(medBagConfirm.DialogResult != null, "medBagPrint.DialogResult != null");
+            if (medBagConfirm.DialogResult != null)
+                medBagPrint = (bool)medBagConfirm.DialogResult;
+            return medBagPrint;
+        }
+
+        private bool PrintReceiptConfirm()
+        {
+            var receiptPrint = false;
+            if (PrescriptionPoint.AmountsPay > 0)
+            {
+                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
+                if (receiptResult.DialogResult != null)
+                    receiptPrint = (bool)receiptResult.DialogResult;
+            }
+            return receiptPrint;
         }
 
         public void PrintMedBagSingleMode()
@@ -1007,6 +1020,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
             CountPrescriptionPoint();
+            CountSelfPay();
+            PrescriptionPoint.CountAmountsPay();
         }
 
         private void CheckVariableByDivision()
@@ -1508,6 +1523,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public void SetDetail()
         {
             CountPrescriptionPoint();
+            CountSelfPay();
+            PrescriptionPoint.CountAmountsPay();
             SetPrescriptionDetail();//產生藥品資料
             SetValue();
         }

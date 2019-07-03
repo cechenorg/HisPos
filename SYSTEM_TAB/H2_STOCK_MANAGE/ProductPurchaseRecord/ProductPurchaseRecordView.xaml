@@ -100,7 +100,7 @@
                 <TextBox Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="商品代碼/名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Text="{Binding SearchProductID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Label Content="倉庫" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="庫別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Text="{Binding SearchWareName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>

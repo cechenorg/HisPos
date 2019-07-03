@@ -10,6 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -38,7 +42,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => ReserveCollectionView, ref reserveCollectionView, value); 
             }
         }
-       
+        
+        private bool isDataChanged;
+        public bool IsDataChanged
+        {
+            get => isDataChanged;
+            set
+            {
+                Set(() => IsDataChanged, ref isDataChanged, value);
+            }
+        }
         private int indexReserveCount;  
         public int IndexReserveCount
         {
@@ -153,6 +166,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => CustomerData, ref customerData, value);
+                IsDataChanged = false;
             }
         }
         #endregion
@@ -166,6 +180,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
+        public RelayCommand DataChangeCommand { get; set; }
 
         #endregion
         public Index() {
@@ -179,17 +194,25 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
-            //ReserveSearchAction(); 
+            DataChangeCommand = new RelayCommand(DataChangeAction);
         }
         #region Action
+        private void DataChangeAction() {
+            IsDataChanged = true;
+        }
         private void ReserveMedicineBackAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將未設定為常備藥且90天內慢箋未使用之藥品退貨?", "慢箋退貨");
             if ((bool)confirmWindow.DialogResult)
             {
-                StoreOrderDB.StoreOrderReturnReserve();
-                MessageWindow.ShowMessage("已轉出退貨單 請至進退貨管理確認", MessageType.SUCCESS);
+                DataTable table = StoreOrderDB.StoreOrderReturnReserve();
+                if (table.Rows.Count > 0)
+                {
+                    MessageWindow.ShowMessage("已轉出退貨單 將跳轉至進退貨管理", MessageType.SUCCESS);
+                    ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
+                    Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
+                }
             }
-          
+           
         }
         private void ShowCustomerPrescriptionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -228,9 +251,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void ReserveMedicineSendAction()
         {
+            DataTable table = StoreOrderDB.StoreOrderReserveByResIDList(StartDate,EndDate);
             
-            StoreOrderDB.StoreOrderReserveByResIDList(StartDate,EndDate);
-            MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認",MessageType.SUCCESS);
+            if (table.Rows.Count > 0)
+            {
+                MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
+                ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn; 
+                Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
+            } 
         }
           
         private void IndexReserveSelectionChangedAction() {

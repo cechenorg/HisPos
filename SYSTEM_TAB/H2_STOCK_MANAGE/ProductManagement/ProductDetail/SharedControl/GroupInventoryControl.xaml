@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Label Content="群組商品" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="60,0,0,0"/>
-            <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
+            <Button Width="60" Padding="0" Command="{Binding ShowProductGroupWindowCommand}" Visibility="Collapsed" Margin="10,0,0,0" Content="設定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
         </StackPanel>
         <DataGrid ItemsSource="{Binding ProductGroupSettingCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                   Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CanUserDeleteRows="False">
@@ -43,6 +43,7 @@
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="Product_Click"></EventSetter>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>
                     <Setter Property="Height" Value="40"/>
