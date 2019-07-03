@@ -171,7 +171,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
             AdjustPharmacistSetting = new RelayCommand(AdjustPharmacistSettingAction);
-            AdjustPharmacistOfDay = new RelayCommand(AdjustPharmacistOfDayAction,CheckDayIsOutOfRange);
+            AdjustPharmacistOfDay = new RelayCommand(AdjustPharmacistOfDayAction);
             AdjustPharmacistOfMonth = new RelayCommand(AdjustPharmacistOfMonthAction,CheckMonthIsOutOfRange);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
@@ -236,7 +236,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
                 MainWindow.ServerConnection.CloseConnection();
                 DeclareFile.SelectedDayPreview.CheckAdjustOutOfRange();
-                DeclareFile.SetSummary();
+                BusyContent = StringRes.取得歷史處方;
+                GetPrescriptions();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
