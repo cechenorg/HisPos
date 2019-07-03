@@ -37,7 +37,7 @@ namespace His_Pos.NewClass.WareHouse
         {
             if (StockValue > 0 || NegativeStockValue < 0)
             {
-                MessageWindow.ShowMessage("欲刪除之倉庫庫存現值及負庫需清空!", MessageType.ERROR);
+                MessageWindow.ShowMessage("欲刪除之庫別庫存現值及負庫需清空!", MessageType.ERROR);
                 return false;
             }
 

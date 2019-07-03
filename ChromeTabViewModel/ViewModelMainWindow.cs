@@ -165,7 +165,7 @@ namespace His_Pos.ChromeTabViewModel
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection(); 
-                BusyContent = "取得倉庫名";
+                BusyContent = "取得庫別名";
                 WareHouses = WareHouses.GetWareHouses();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);

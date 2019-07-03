@@ -65,7 +65,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         FontWeight="Bold"
-                        Header="倉庫名"
+                        Header="庫別名"
                         IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">

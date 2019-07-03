@@ -48,7 +48,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             SettingTabCollection.Add(new SettingTabData(SettingTabs.MyPharmacy, "藥局設定", "/Images/pharmacy.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.Printer, "印表機設定", "/Images/Printer.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "倉庫設定", "/Images/StockTaking.png"));
+            SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png"));
 
             SelectedSettingTab = SettingTabCollection[0];
         }
