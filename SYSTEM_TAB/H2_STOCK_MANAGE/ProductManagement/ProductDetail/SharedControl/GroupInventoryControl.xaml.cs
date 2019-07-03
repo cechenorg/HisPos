@@ -30,7 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             if (!(row?.DataContext is ProductGroupSetting)) return;
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ProductGroupSetting)row.Item).ID, "0" }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ProductGroupSetting)row.Item).ID, ((ProductGroupSetting)row.Item).WareHouseID }, "ShowProductDetail"));
         }
     }
 }
