@@ -38,7 +38,7 @@ namespace His_Pos.NewClass.Product.Medicine
             DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionDetailByPreMasId]", parameterList);
         }
-        public static DataTable GetDataByReserveId(string resId)
+        public static DataTable GetDataByReserveId(int resId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "ResMasId", resId);

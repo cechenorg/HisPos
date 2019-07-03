@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -64,14 +65,13 @@ namespace His_Pos.NewClass.Prescription
                     Source = PrescriptionSource.ChronicReserve;
                     SourceId = r.Field<int>("ID").ToString();
                     MainWindow.ServerConnection.OpenConnection();
-                    Medicines.GetDataByReserveId(SourceId);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     MainWindow.ServerConnection.CloseConnection();
                     PrescriptionStatus = new PrescriptionStatus(r, PrescriptionSource.ChronicReserve);
                     break;
             }
         }
-        public Prescription(CooperativePrescription c) {
-             
+        public Prescription(OrthopedicsPrescription c) {
             #region CooPreVariable
             var prescription = c.DeclareXmlDocument.Prescription;
             var customer = prescription.CustomerProfile.Customer;
@@ -100,7 +100,7 @@ namespace His_Pos.NewClass.Prescription
                 Medicines.Add(new Medicine(m));
             }
         }
-        public Prescription(XmlOfPrescription.Prescription c,DateTime treatDate,string sourceId,bool IsRead) { 
+        public Prescription(CooperativePrescription.Prescription c,DateTime treatDate,string sourceId,bool IsRead) { 
             #region CooPreVariable
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
@@ -568,7 +568,7 @@ namespace His_Pos.NewClass.Prescription
         }
         public void UpdateCooperativePrescriptionStatus() {
             if(!string.IsNullOrEmpty(SourceId))
-            PrescriptionDb.UpdateCooperativePrescriptionStatus(SourceId);
+            PrescriptionDb.UpdateOrthopedicsStatus(SourceId);
         }
         public void InsertCooperAdjust() {
             Treatment.Institution.UpdateUsedTime();
@@ -975,7 +975,7 @@ namespace His_Pos.NewClass.Prescription
         #endregion
         public bool GetCard()
         {
-            var success = Card.GetBasicData();
+            var success = Card.Read();
             if (success)
             {
                 var cus = new Customer(Card);
@@ -1184,8 +1184,8 @@ namespace His_Pos.NewClass.Prescription
         public void GetCompletePrescriptionData(bool updateIsRead,bool getDeposit)
         {
             MainWindow.ServerConnection.OpenConnection();
-            Treatment.MainDisease.GetDataByCodeId(Treatment.MainDisease.ID);
-            Treatment.SubDisease.GetDataByCodeId(Treatment.SubDisease.ID);
+            Treatment.MainDisease.GetData();
+            Treatment.SubDisease.GetData();
             AdjustMedicinesType();
             if(updateIsRead)
                 UpdateCooperativePrescriptionIsRead();
@@ -1324,6 +1324,23 @@ namespace His_Pos.NewClass.Prescription
                 if (Source.Equals(PrescriptionSource.Cooperative) || Source.Equals(PrescriptionSource.XmlOfPrescription))
                     Source = PrescriptionSource.Normal;
             }
+        }
+
+        public bool CheckMedicalNumber()
+        {
+            if (string.IsNullOrEmpty(Treatment.TempMedicalNumber))
+            {
+                var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
+                Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
+                return (bool)medicalNumberEmptyConfirm.DialogResult;
+            }
+
+            if (Treatment.TempMedicalNumber.Length != 4)
+            {
+                MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
 
         public void CheckIsBuckle()

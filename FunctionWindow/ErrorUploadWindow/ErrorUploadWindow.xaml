@@ -3,10 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.FunctionWindow.ErrorUploadWindow"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="選擇異常代碼" Height="450" Width="560" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Viewbox Stretch="Fill">
@@ -79,7 +75,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="取消" Command="{Binding CancleClick}" Width="100" Background="DimGray" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="320,9,10,9"/>
+                <Button Content="取消" Command="{Binding CancelClick}" Width="100" Background="DimGray" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="320,9,10,9"/>
                 <Button Content="確認" Command="{Binding ConfirmClick}" Width="100" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="0,9"/>
             </StackPanel>
         </Grid>

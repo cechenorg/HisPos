@@ -284,8 +284,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
-            var row = sender as DataGridRow;
-            if (!(row?.Item is Medicine med)) return;
+            if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
             ((PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 

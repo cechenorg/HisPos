@@ -62,9 +62,12 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <Label Content="處方歷程"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
+                <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrescriptionCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding PrescriptionCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                </ComboBox>
             </StackPanel>
             <DataGrid   Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,0,0,10"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding CustomerDetailPrescriptionCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding PrescriptionDetailView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding CustomerDetailPrescriptionSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">

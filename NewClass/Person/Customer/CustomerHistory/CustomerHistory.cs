@@ -3,6 +3,7 @@ using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
@@ -65,6 +66,18 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public Prescription.Prescription GetPrescriptionByID()
         {
             return new Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionSource.Normal);
+        }
+
+        public PrescriptionRefactoring.Prescription GetPrescriptionRefactoringByID()
+        {
+            return new PrescriptionRefactoring.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionType.Normal);
+        }
+
+        public PrescriptionSource GetPrescriptionSourceFromHistoryType()
+        {
+            return Type.Equals(HistoryType.ReservedPrescription)
+                ? PrescriptionSource.ChronicReserve
+                : PrescriptionSource.Normal;
         }
     }
 }

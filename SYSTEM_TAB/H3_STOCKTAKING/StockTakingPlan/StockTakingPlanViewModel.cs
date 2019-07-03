@@ -97,7 +97,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         private void AddProductAction()
         {
             Messenger.Default.Register<NotificationMessage<StockTakingPlanProducts>>(this, GetProductSubmit);
-            AddNewProductWindow.AddNewProductWindow addNewProductWindow = new AddNewProductWindow.AddNewProductWindow(CurrentPlan.WareHouse.ID);
+            AddNewProductWindow.AddNewProductWindow addNewProductWindow = new AddNewProductWindow.AddNewProductWindow(CurrentPlan.WareHouse.ID,CurrentPlan.StockTakingProductCollection);
             Messenger.Default.Unregister<NotificationMessage<StockTakingPlanProducts>>(this, GetProductSubmit);
             IsDataChanged = true;
         }
@@ -108,6 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
                 AddProducts(notificationMessage.Content);
         }
         private void AddProducts(StockTakingPlanProducts stockTakingProducts) {
+            CurrentPlan.StockTakingProductCollection.Clear();
             foreach (var s in stockTakingProducts) {
                 if(CurrentPlan.StockTakingProductCollection.Count(c => c.ID == s.ID) == 0)
                 CurrentPlan.StockTakingProductCollection.Add(s);

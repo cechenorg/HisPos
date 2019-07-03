@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -10,7 +11,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -22,9 +22,7 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
-using His_Pos.Properties;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -32,10 +30,8 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -156,8 +152,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
-        public RelayCommand<string> GetMainDiseaseCodeById { get; set; }
-        public RelayCommand<string> GetSubDiseaseCodeById { get; set; }
+        public RelayCommand<object> GetDiseaseCode { get; set; }
+        public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand AdjustCaseSelectionChanged { get; set; }
         public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand ShowCommonInstitutionSelectionWindow { get; set; }
@@ -255,7 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             Institutions = VM.Institutions;
             Divisions = VM.Divisions;
-            MedicalPersonnels = VM.CurrentPharmacy.MedicalPersonnels.GetLocalPharmacist();
+            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(EditedPrescription.Treatment.AdjustDate ?? DateTime.Today);
             AdjustCases = VM.AdjustCases;
             PaymentCategories = VM.PaymentCategories;
             PrescriptionCases = VM.PrescriptionCases;
@@ -267,8 +263,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrintMedBagCmd = new RelayCommand(PrintMedBagAction);
             ShowCommonInstitutionSelectionWindow = new RelayCommand(ShowCommonInsSelectionWindowAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(ShowInsSelectionWindowAction);
-            GetMainDiseaseCodeById = new RelayCommand<string>(GetMainDiseaseCodeByIdAction);
-            GetSubDiseaseCodeById = new RelayCommand<string>(GetSubDiseaseCodeByIdAction);
+            GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
+            CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction,CheckIsNotPrescribe);
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
@@ -313,8 +309,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void ShowCommonInsSelectionWindowAction()
         {
-            Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
-            var commonInsSelectionWindow = new CommonHospitalsWindow(ViewModelEnum.PrescriptionEdit);
+            Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+            var commonInsSelectionWindow = new CommonHospitalsWindow();
             commonInsSelectionWindow.ShowDialog();
         }
         private void ShowInsSelectionWindowAction(string search)
@@ -340,41 +336,64 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.CheckIsCooperative();
                     break;
                 default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search,ViewModelEnum.PrescriptionEdit);
+                    Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
+                    var institutionSelectionWindow = new InstitutionSelectionWindow(search);
                     institutionSelectionWindow.ShowDialog();
                     break;
             }
         }
-        private void GetMainDiseaseCodeByIdAction(string id)
+
+        private void GetDiseaseCodeAction(object sender)
         {
-            if (string.IsNullOrEmpty(id)) return;
-            if (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName))
+            var parameters = sender.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            if (string.IsNullOrEmpty(diseaseID) || EditedPrescription.Treatment.CheckDiseaseEquals(parameters))
             {
-                Messenger.Default.Send(new NotificationMessage(this,"FocusSubDisease"));
+                DiseaseFocusNext(elementName);
                 return;
             }
-            var result = DiseaseCode.GetDiseaseCodeByID(id);
-            if (result != null)
+            //診斷碼查詢
+            switch (elementName)
             {
-                EditedPrescription.Treatment.MainDisease = result;
+                case "MainDiagnosis":
+                    EditedPrescription.Treatment.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    break;
+                case "SecondDiagnosis":
+                    if (!string.IsNullOrEmpty(diseaseID))
+                        EditedPrescription.Treatment.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    break;
             }
             CheckEditStatus();
         }
 
-        private void GetSubDiseaseCodeByIdAction(string id)
+        private void CheckClearDiseaseAction(object sender)
         {
-            if (string.IsNullOrEmpty(id) || (!string.IsNullOrEmpty(EditedPrescription.Treatment.MainDisease.FullName) && id.Equals(EditedPrescription.Treatment.MainDisease.FullName)))
+            var parameters = sender.ConvertTo<List<string>>();
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            if (string.IsNullOrEmpty(diseaseID))
             {
-                Messenger.Default.Send(new NotificationMessage(this,"FocusChronicTotal"));
+                switch (elementName)
+                {
+                    case "MainDiagnosis":
+                        EditedPrescription.Treatment.MainDisease = new DiseaseCode();
+                        break;
+                    case "SecondDiagnosis":
+                        EditedPrescription.Treatment.SubDisease = new DiseaseCode();
+                        break;
+                }
+            }
+        }
+
+        private void DiseaseFocusNext(string elementName)
+        {
+            if (elementName == "MainDiagnosis")
+            {
+                Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
                 return;
             }
-            var result = DiseaseCode.GetDiseaseCodeByID(id);
-            if (result != null)
-            {
-                EditedPrescription.Treatment.SubDisease = result;
-            }
-            CheckEditStatus();
+            Messenger.Default.Send(new NotificationMessage(this, "FocusChronicTotal"));
         }
         private void AdjustCaseSelectionChangedAction()
         {
@@ -498,6 +517,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         return;
                     }
                 }
+                if (!EditedPrescription.CheckMedicalNumber())
+                    return;
                 EditedPrescription.CountPrescriptionPoint(false);
                 if(!EditedPrescription.IsBuckle)
                     EditedPrescription.Medicines.SetNoBuckle();
@@ -560,7 +581,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void PrintReceiptAction()
         {
-            var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+            var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
             var printReceipt = receiptResult.DialogResult;
             if (!(bool)printReceipt)
                 return;
@@ -579,7 +600,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         #region MessengerReceive
         private void GetSelectedInstitution(Institution receiveSelectedInstitution)
         {
-            Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionEditViewModel) + "InsSelected", GetSelectedInstitution);
+            Messenger.Default.Unregister<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             EditedPrescription.Treatment.Institution = receiveSelectedInstitution;
             EditedPrescription.CheckIsCooperative();
             CheckEditStatus();
@@ -613,6 +634,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private void AdjustDateLostFocusAction()
         {
+            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(EditedPrescription.Treatment.AdjustDate ?? DateTime.Today);
             if (EditedPrescription.Treatment.AdjustDate is null) return;
             EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
         }

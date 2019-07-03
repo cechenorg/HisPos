@@ -1,10 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
@@ -51,44 +48,58 @@ namespace His_Pos.NewClass.Prescription
         public virtual string TreatDateTime { get; set; } = string.Empty;
         [Index(13)]
         public virtual string Tel { get; set; }
-        public bool GetBasicData()
+        [Index(14)]
+        public virtual bool IsRead { get; set; }
+        public bool Read()
         {
-            var strLength = 72;
-            var icData = new byte[72];
             if (HisApiFunction.OpenCom())
             {
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                var cardStatus = HisApiBase.hisGetCardStatus(2);
-                if(cardStatus != 2)
-                {
-                    Thread.Sleep(1500);
-                }
-                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
-                if (res == 0)
-                {
-                    var basicDataArr = new byte[72];
-                    MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
-                    icData.CopyTo(basicDataArr, 0);
-                    PatientBasicData = new BasicData(icData);
-                    CardNumber = PatientBasicData.CardNumber;
-                    Name = PatientBasicData.Name;
-                    Birthday = PatientBasicData.Birthday;
-                    Gender = PatientBasicData.Gender;
-                    IDNumber = PatientBasicData.IDNumber;
-                    CardReleaseDate = PatientBasicData.CardReleaseDate;
-                    Tel = PatientBasicData.Tel;
-                    HisApiFunction.CloseCom();
-                    return true;
-                }
-                var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    MessageWindow.ShowMessage("取得健保卡基本資料異常 " + res + ":" + description, MessageType.WARNING);
-                });
-                HisApiFunction.CloseCom();
+                CheckCardStatus();
+                IsRead = GetBasicData();
+                return true;
             }
             return false;
         }
+
+        private bool GetBasicData()
+        {
+            var strLength = 72;
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+            if (res == 0)
+            {
+                var basicDataArr = new byte[72];
+                MainWindow.Instance.SetCardReaderStatus(StringRes.讀取成功);
+                icData.CopyTo(basicDataArr, 0);
+                SetBasicData(icData);
+                HisApiFunction.CloseCom();
+                return true;
+            }
+            ShowHISAPIErrorMessage(res, "取得健保卡基本資料異常 ");
+            HisApiFunction.CloseCom();
+            return false;
+        }
+
+        private void CheckCardStatus()
+        {
+            var cardStatus = HisApiBase.hisGetCardStatus(2);
+            if (cardStatus != 2)
+                Thread.Sleep(1500);
+        }
+
+        private void SetBasicData(byte[] icData)
+        {
+            PatientBasicData = new BasicData(icData);
+            CardNumber = PatientBasicData.CardNumber;
+            Name = PatientBasicData.Name;
+            Birthday = PatientBasicData.Birthday;
+            Gender = PatientBasicData.Gender;
+            IDNumber = PatientBasicData.IDNumber;
+            CardReleaseDate = PatientBasicData.CardReleaseDate;
+            Tel = PatientBasicData.Tel;
+        }
+
         public void GetMedicalNumber(byte makeUp)
         {
             byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);//就醫類別長度3個char;
@@ -120,19 +131,15 @@ namespace His_Pos.NewClass.Prescription
                         return;
                     }
                 }
-                var description = MainWindow.GetEnumDescription((ErrorCode)res);
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    MessageWindow.ShowMessage("取得就醫序號異常" + res + ":" + description, MessageType.WARNING);
-                });
+                ShowHISAPIErrorMessage(res, "取得就醫序號異常 ");
                 HisApiFunction.CloseCom();
             }
         }
 
         public void GetTreatDataNoNeedHPC()
         {
-            int iBufferLen = 498;
-            byte[] pBuffer = new byte[498];
+            var iBufferLen = 498;
+            var pBuffer = new byte[498];
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -146,54 +153,46 @@ namespace His_Pos.NewClass.Prescription
                     HisApiFunction.CloseCom();
                 }
             };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-
-            };
             worker.RunWorkerAsync();
         }
 
         public void GetRegisterBasic()
         {
-            byte[] pBuffer = new byte[9];
+            var pBuffer = new byte[9];
             var strLength = 9;
             if (HisApiFunction.OpenCom())
             {
                 var res = HisApiBase.hisGetRegisterBasic2(pBuffer, ref strLength);
                 if (res == 0)
                 {
-                    ValidityPeriod = DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
+                    ValidityPeriod = (DateTime)DateTimeExtensions.TWDateStringToDateOnly(Function.ByteArrayToString(7, pBuffer, 0));
                     AvailableTimes = int.Parse(Function.ByteArrayToString(2, pBuffer, 7));
                 }
                 else
-                {
-                    var registerBasicErr = MainWindow.GetEnumDescription((ErrorCode)res);
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        MessageWindow.ShowMessage("取得就醫可用次數異常 " + res + ":" + registerBasicErr, MessageType.WARNING);
-                    });
-                }
+                    ShowHISAPIErrorMessage(res, "取得就醫可用次數異常 ");
                 HisApiFunction.CloseCom();
             }
         }
 
         public void UpdateCard()
         {
-            int res = -1;
             if (AvailableTimes != 0) return;
             if (HisApiFunction.OpenCom())
             {
-                res = HisApiBase.csUpdateHCContents();
+                var res = HisApiBase.csUpdateHCContents();
                 if (res != 0)
-                {
-                    var registerBasicErr = MainWindow.GetEnumDescription((ErrorCode)res);
-                    Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        MessageWindow.ShowMessage("更新卡片異常 " + res + ":" + registerBasicErr, MessageType.WARNING);
-                    });
-                }
+                    ShowHISAPIErrorMessage(res, "更新卡片異常 ");
                 HisApiFunction.CloseCom();
             }
+        }
+
+        private void ShowHISAPIErrorMessage(int res, string title)
+        {
+            var description = MainWindow.GetEnumDescription((ErrorCode)res);
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                MessageWindow.ShowMessage(title + res + ":" + description, MessageType.WARNING);
+            });
         }
 
         public object Clone()
@@ -215,6 +214,29 @@ namespace His_Pos.NewClass.Prescription
             c.TreatDateTime = TreatDateTime;
             c.Tel = Tel;
             return c;
+        }
+
+        public bool CheckNeedUpdate()
+        {
+            if (AvailableTimes is null) return false;
+            var availableTimesUseUp = AvailableTimes == 0;
+            var expired = new TimeSpan(ValidityPeriod.Ticks - DateTime.Today.Ticks).Days < 30;
+            return availableTimesUseUp || expired;
+        }
+
+        public string GetLastMedicalNumber()
+        {
+            var tempMedicalNumber = string.Empty;
+            if (HisApiFunction.OpenCom())
+            {
+                int iBufferLen = 7;
+                byte[] pBuffer = new byte[7];
+                var res = HisApiBase.hisGetLastSeqNum(pBuffer, ref iBufferLen);
+                if (res == 0)
+                    tempMedicalNumber = Function.ByteArrayToString(4, pBuffer, 3);
+                HisApiFunction.CloseCom();
+            }
+            return tempMedicalNumber;
         }
     }
 }

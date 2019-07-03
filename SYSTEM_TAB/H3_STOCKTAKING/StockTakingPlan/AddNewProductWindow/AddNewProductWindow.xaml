@@ -29,8 +29,8 @@
                 <RowDefinition/> 
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Button Width="100" Command="{Binding GetStockLessProductsCommand}" Margin="10,0,0,0" Content="負庫存" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
                 <Button Width="120" Command="{Binding GetControlMedicinesCommand}" Margin="10,0,0,0" Content="管制藥品" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <Button Width="120" Command="{Binding GetMonthMedicinesCommand}" Margin="10,0,0,0" Content="月耗用量" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="商品名稱" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" BorderBrush="Black"/>
@@ -95,7 +95,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="180" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
+                    <DataGridTextColumn Width="230" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left" />
@@ -107,8 +107,8 @@
             </DataGrid>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
-            <Button Width="80" Command="{Binding AddProductCommand}" Margin="0,200,0,0" Content="+" Height="35" FontSize="20" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
-            <Button Width="80" Command="{Binding DeleteProductCommand}" Margin="0,10,0,0" Content="-" Height="35" FontSize="20" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+            <Button Width="80" Command="{Binding AddProductCommand}" Margin="0,200,0,0" Content="&gt;&gt;" Height="35" FontSize="20" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+            <Button Width="80" Command="{Binding DeleteProductCommand}" Margin="0,10,0,0" Content="&lt;&lt;" Height="35" FontSize="20" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
         </StackPanel>
         <Grid Grid.Row="2" Grid.Column="2">
             <Grid.RowDefinitions>
@@ -184,7 +184,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal"  Grid.Row="1"  >
-                <Button Width="100" Command="{Binding ProductSubmitCommand}" Margin="280,0,0,0" Content="加入商品" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <Button Width="100" Command="{Binding ProductSubmitCommand}" Margin="280,0,0,0" Content="確定" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
             </StackPanel>
         </Grid>
         

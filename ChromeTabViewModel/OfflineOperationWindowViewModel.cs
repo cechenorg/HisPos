@@ -15,7 +15,6 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
-using His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView;
 
 namespace His_Pos.SYSTEM_TAB.OfflineOperation
 {
@@ -140,13 +139,13 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation
             switch (tabName)
             {
                 case "調劑":
-                    newTab = new OfflineAdjustViewModel { TabName = "調劑", Icon = "/Images/PrescriptionIcon.png" };
+                    //newTab = new OfflineAdjustViewModel { TabName = "調劑", Icon = "/Images/PrescriptionIcon.png" };
                     break;
                 default:
                     return;
             }
 
-            this.ItemCollection.Add(newTab.getTab());
+            //this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }
     }

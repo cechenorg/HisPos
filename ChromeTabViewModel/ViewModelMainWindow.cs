@@ -13,9 +13,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
-using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -25,7 +23,6 @@ using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product.Medicine.Position;
 using His_Pos.NewClass.Product.Medicine.Usage;
-using His_Pos.NewClass.StockValue;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -36,58 +33,58 @@ namespace His_Pos.ChromeTabViewModel
     public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
     {
         //this property is to show you can lock the tabs with a binding
-        private bool _canMoveTabs;
+        private bool canMoveTabs;
         public bool CanMoveTabs
         {
-            get => _canMoveTabs;
+            get => canMoveTabs;
             set
             {
-                if (_canMoveTabs != value)
+                if (canMoveTabs != value)
                 {
-                    Set(() => CanMoveTabs, ref _canMoveTabs, value);
+                    Set(() => CanMoveTabs, ref canMoveTabs, value);
                 }
             }
         }
         //this property is to show you can bind the visibility of the add button
-        private bool _showAddButton;
+        private bool showAddButton;
         public bool ShowAddButton
         {
-            get => _showAddButton;
+            get => showAddButton;
             set
             {
-                if (_showAddButton != value)
+                if (showAddButton != value)
                 {
-                    Set(() => ShowAddButton, ref _showAddButton, value);
+                    Set(() => ShowAddButton, ref showAddButton, value);
                 }
             }
         }
 
-        private string _cardReaderStatus;
+        private string cardReaderStatus;
         public string CardReaderStatus
         {
-            get => _cardReaderStatus;
+            get => cardReaderStatus;
             set
             {
-                Set(() => CardReaderStatus, ref _cardReaderStatus, value);
+                Set(() => CardReaderStatus, ref cardReaderStatus, value);
             }
         }
-        private string _samDcStatus;
+        private string samDcStatus;
         public string SamDcStatus
         {
-            get => _samDcStatus;
+            get => samDcStatus;
             set
             {
-                Set(() => SamDcStatus, ref _samDcStatus, value);
+                Set(() => SamDcStatus, ref samDcStatus, value);
             }
         }
 
-        private string _hpcCardStatus;
+        private string hpcCardStatus;
         public string HpcCardStatus
         {
-            get => _hpcCardStatus;
+            get => hpcCardStatus;
             set
             {
-                Set(() => HpcCardStatus, ref _hpcCardStatus, value);
+                Set(() => HpcCardStatus, ref hpcCardStatus, value);
             }
         }
         public static bool IsConnectionOpened { get; set; }
@@ -96,23 +93,23 @@ namespace His_Pos.ChromeTabViewModel
         public static bool IsHpcValid { get; set; }
         public static bool IsVerifySamDc { get; set; }
 
-        private bool _isBusy;
+        private bool isBusy;
         public bool IsBusy
         {
-            get => _isBusy;
+            get => isBusy;
             set
             {
-                Set(() => IsBusy, ref _isBusy, value);
+                Set(() => IsBusy, ref isBusy, value);
             }
         }
-        private string _busyContent;
+        private string busyContent;
 
         public string BusyContent
         {
-            get => _busyContent;
+            get => busyContent;
             set
             {
-                Set(() => BusyContent, ref _busyContent, value);
+                Set(() => BusyContent, ref busyContent, value);
             }
         }
 
@@ -131,8 +128,8 @@ namespace His_Pos.ChromeTabViewModel
         public static Employee CurrentUser { get; set; }
         public static Employees EmployeeCollection { get; set; }
         public static string CooperativeInstitutionID { get; private set; }
-        private int m_currentPageIndex;
-        private IList<Stream> m_streams;
+        private int mCurrentPageIndex;
+        private IList<Stream> mStreams;
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
@@ -232,7 +229,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Division GetDivision(string id)
         {
-            var result = Divisions.SingleOrDefault(i => i.ID.Equals(id));
+            var result = Divisions.SingleOrDefault(i => !string.IsNullOrEmpty(i.ID) && i.ID.Equals(id));
             return result;
         }
         public static PaymentCategory GetPaymentCategory(string id)
@@ -263,7 +260,7 @@ namespace His_Pos.ChromeTabViewModel
                     result.Name = name;
                     if (name.Contains("AC"))
                         result.PrintName += "(飯前)";
-                    else if(name.Contains("PC"))
+                    else if (name.Contains("PC"))
                         result.PrintName += "(飯後)";
                 }
                 return result;
@@ -291,11 +288,8 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Usage FindUsageByQuickName(string quickName)
         {
-            if (Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).Count(u => u.QuickName.Equals(quickName)) == 1)
-            {
-                return Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName));
-            }
-            return null;
+            return Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).Count(u => u.QuickName.Equals(quickName)) == 1 ? 
+                Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName)) : null;
         }
         public static Position GetPosition(string id)
         {
@@ -361,9 +355,9 @@ namespace His_Pos.ChromeTabViewModel
                 "  <MarginBottom>0cm</MarginBottom>" +
                 "</DeviceInfo>";
             Warning[] warnings;
-            m_streams = new List<Stream>();
+            mStreams = new List<Stream>();
             report.Render("Image", deviceInfo, CreateStream, out warnings);
-            foreach (Stream stream in m_streams)
+            foreach (Stream stream in mStreams)
                 stream.Position = 0;
             //try
             //{
@@ -397,7 +391,7 @@ namespace His_Pos.ChromeTabViewModel
             PrintDocument printDoc = new PrintDocument();
             printDoc.PrinterSettings.PrinterName = printer;
             printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-            m_currentPageIndex = 0;
+            mCurrentPageIndex = 0;
             try
             {
                 printDoc.Print();
@@ -428,7 +422,7 @@ namespace His_Pos.ChromeTabViewModel
             string mimeType, bool willSeek)
         {
             Stream stream = new MemoryStream();
-            m_streams.Add(stream);
+            mStreams.Add(stream);
             return stream;
         }
         public void WindowCloseAction() {
@@ -437,7 +431,7 @@ namespace His_Pos.ChromeTabViewModel
         private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
         {
             Metafile pageImage = new
-                Metafile(m_streams[m_currentPageIndex]);
+                Metafile(mStreams[mCurrentPageIndex]);
 
             // Adjust rectangular area with printer margins.
             Rectangle adjustedRect = new Rectangle(
@@ -453,8 +447,8 @@ namespace His_Pos.ChromeTabViewModel
             ev.Graphics.DrawImage(pageImage, adjustedRect);
 
             // Prepare for the next page. Make sure we haven't hit the end.
-            m_currentPageIndex++;
-            ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+            mCurrentPageIndex++;
+            ev.HasMorePages = (mCurrentPageIndex < mStreams.Count);
             //try
             //{
             //    Metafile pageImage = new

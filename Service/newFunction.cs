@@ -9,9 +9,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xml.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -221,7 +225,7 @@ namespace His_Pos.Service
         public static List<bool?> CheckPrint(Prescription p)
         {
             var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.PrintMedBag, StringRes.PrintConfirm, true);
+            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
             var printMedBag = medBagPrint.DialogResult;
             bool? printSingle = null;
             bool? receiptPrint = null;
@@ -229,7 +233,7 @@ namespace His_Pos.Service
             {
                 if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
                 {
-                    var receiptResult = new ConfirmWindow(StringRes.PrintReceipt, StringRes.PrintConfirm, true);
+                    var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
                     receiptPrint = receiptResult.DialogResult;
                 }
                 else
@@ -247,9 +251,81 @@ namespace His_Pos.Service
             return result;
         }
 
+        public static List<bool?> CheckPrint(NewClass.PrescriptionRefactoring.Prescription p)
+        {
+            var result = new List<bool?>();
+            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
+            var printMedBag = medBagPrint.DialogResult;
+            bool? printSingle = null;
+            bool? receiptPrint = null;
+            if (printMedBag != null)
+            {
+                if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
+                {
+                    var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
+                    receiptPrint = receiptResult.DialogResult;
+                }
+                else
+                    receiptPrint = false;
+                if ((bool)printMedBag)
+                {
+                    var printBySingleMode = new SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedBagSelectionWindow();
+                    printBySingleMode.ShowDialog();
+                    printSingle = printBySingleMode.result;
+                }
+            }
+            result.Add(printMedBag);
+            result.Add(printSingle);
+            result.Add(receiptPrint);
+            return result;
+        }
+
+        public static void GetXmlFiles()
+        {
+            var cooperativeClinicSettings = new CooperativeClinicSettings();
+            cooperativeClinicSettings.Init();
+            var xDocs = new List<XDocument>();
+            var cusIdNumbers = new List<string>();
+            var paths = new List<string>();
+            foreach (var c in cooperativeClinicSettings)
+            {
+                var path = c.FilePath;
+                if (string.IsNullOrEmpty(path)) continue;
+                try
+                {
+                    var fileEntries = Directory.GetFiles(path);
+                    foreach (var s in fileEntries)
+                    {
+                        try
+                        {
+                            var xDocument = XDocument.Load(s);
+                            var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                            xDocs.Add(xDocument);
+                            cusIdNumbers.Add(cusIdNumber);
+                            paths.Add(s);
+                        }
+                        catch (Exception ex)
+                        {
+                            ExceptionLog(ex.Message);
+                        }
+                    }
+                    XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLog(ex.Message);
+                }
+            }
+        }
+
         public static bool CheckDataRowContainsColumn(DataRow row, string column)
         {
             return row.Table.Columns.Contains(column);
+        }
+
+        public static bool CheckTransaction(DataTable table)
+        {
+            return table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result");
         }
     }
 }

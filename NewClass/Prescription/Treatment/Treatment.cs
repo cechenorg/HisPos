@@ -8,7 +8,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Person.MedicalPerson;
+using System.Collections.Generic;
 using His_Pos.Service;
 using StringRes = His_Pos.Properties.Resources;
 using Ins = His_Pos.NewClass.Prescription.Treatment.Institution.Institution;
@@ -21,6 +21,7 @@ using Cop = His_Pos.NewClass.Prescription.Treatment.Copayment.Copayment;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
@@ -39,7 +40,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             SpecialTreat = new SpeTre();
             Copayment = new Cop();
         }
-        public Treatment(CooperativePrescription c)
+        public Treatment(OrthopedicsPrescription c)
         {
             var prescription = c.DeclareXmlDocument.Prescription;
             var study = prescription.Study;
@@ -112,7 +113,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             PaymentCategory = VM.GetPaymentCategory("4");
             SpecialTreat = new SpeTre();
         }
-        public Treatment(XmlOfPrescription.Prescription c,DateTime treatDate) {
+        public Treatment(CooperativePrescription.Prescription c,DateTime treatDate) {
             var prescription = c;
             var study = prescription.Study;
             var diseases = study.Diseases.Disease;
@@ -410,6 +411,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
                 }
             }
         }
+        public PrescriptionType Type { get; private set; }
         #endregion
         #region NHIRulesCheckFunctions
         private string CheckInstitution()
@@ -537,7 +539,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         }
         private string CheckPharmacist()
         {
-            return string.IsNullOrEmpty(Pharmacist.IDNumber) ? StringRes.PharmacistIDError : string.Empty;
+            return string.IsNullOrEmpty(Pharmacist.IDNumber) ? StringRes.尚未選擇藥師 : string.Empty;
         }
         private string CheckDivision()
         {
@@ -686,11 +688,18 @@ namespace His_Pos.NewClass.Prescription.Treatment
             t.OriginalMedicalNumber = string.IsNullOrEmpty(OriginalMedicalNumber)?string.Empty:OriginalMedicalNumber;
             t.PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID);
             t.SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID);
-            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IDNumber.Equals(Pharmacist.IDNumber));
+            t.Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p=>p.IDNumber.Equals(Pharmacist?.IDNumber));
             t.PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID);
             t.TreatDate = TreatDate;
             t.TempMedicalNumber = TempMedicalNumber;
             return t;
+        }
+
+        public bool CheckDiseaseEquals(List<string> parameters)
+        {
+            var elementName = parameters[0];
+            var diseaseID = parameters[1];
+            return diseaseID.Equals(elementName.Equals("MainDiagnosis") ? MainDisease.FullName : SubDisease.FullName);
         }
     }
 }

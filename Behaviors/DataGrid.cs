@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interactivity;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace His_Pos.Behaviors
 {

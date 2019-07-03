@@ -23,10 +23,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 Set(() => PrescriptionSendData, ref prescriptionSendData, value);
             }
         }
-        private Prescription Prescription;
+        private NewClass.PrescriptionRefactoring.Prescription Prescription;
         private string DecMasId { get; set; }
         #endregion
         public MedicinesSendSingdeViewModel(Prescription p) {
+            //Prescription = p;
+            Init();
+        }
+
+        public MedicinesSendSingdeViewModel(NewClass.PrescriptionRefactoring.Prescription p)
+        {
             Prescription = p;
             Init();
         }
