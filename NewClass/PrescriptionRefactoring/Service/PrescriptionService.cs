@@ -234,7 +234,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 return false;
             if ((bool)printMedBag && printSingle is null)
                 return false;
-            tempPre = (Prescription)current.Clone();
             return true;
         }
 
@@ -551,6 +550,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             {
                 current.MedicalNumber = current.TempMedicalNumber;
             }
+        }
+
+        public void CloneTempPre()
+        {
+            tempPre = (Prescription)current.Clone();
         }
     }
 }

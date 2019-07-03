@@ -652,7 +652,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             CurrentPrescription.SetDetail();
-            CurrentPrescription.CountDeposit();
             StartDepositAdjust();
         }
 
@@ -983,6 +982,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             }
             currentService.CheckDailyUpload(ErrorCode);
+            currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
         }
@@ -990,6 +990,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartErrorAdjust()
         {
             currentService.StartErrorAdjust();
+            currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
         }
@@ -998,6 +999,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.CountDeposit();
             currentService.StartDepositAdjust();
+            currentService.CloneTempPre();
             StartPrint(true);
             DeclareSuccess();
         }
@@ -1005,6 +1007,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartRegister()
         {
             if (!currentService.StartRegister()) return;
+            currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
         }
@@ -1013,6 +1016,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CurrentPrescription.SetDetail();
             currentService.StartPrescribeAdjust();
+            currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
         }
