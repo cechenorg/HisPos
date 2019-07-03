@@ -297,14 +297,14 @@ namespace His_Pos.NewClass.MedicineRefactoring
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
-                    medicine.CopyPrevious(Items[(int)selectedMedicinesIndex]);
+                    medicine.CopyPrevious(this[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
-                Items[(int)selectedMedicinesIndex] = medicine;
+                this[(int)selectedMedicinesIndex] = medicine;
             }
             else
             {
                 if (Count > 0)
-                    medicine.CopyPrevious(Items[Count - 1]);
+                    medicine.CopyPrevious(this[Count - 1]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 Add(medicine);
             }

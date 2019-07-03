@@ -58,8 +58,27 @@ namespace His_Pos.NewClass.Product
                 Set(() => ID, ref id, value);
             }
         }
-        public string ChineseName { get; set; }
-        public string EnglishName { get; set; }
+        private string chineseName;
+        public string ChineseName
+        {
+            get { return chineseName; }
+            set
+            {
+                Set(() => ChineseName, ref chineseName, value);
+                RaisePropertyChanged(nameof(FullName));
+            }
+        }
+
+        private string englishName;
+        public string EnglishName
+        {
+            get { return englishName; }
+            set
+            {
+                Set(() => EnglishName, ref englishName, value);
+                RaisePropertyChanged(nameof(FullName));
+            }
+        }
 
         public string FullName
         {
