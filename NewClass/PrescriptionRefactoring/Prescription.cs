@@ -596,7 +596,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             PrescriptionPoint.MedicinePoint = Medicines.CountMedicinePoint();
             PrescriptionPoint.SpecialMaterialPoint = Medicines.CountSpecialMedicinePoint();
-            PrescriptionPoint.AmountSelfPay = Medicines.CountSelfPay();
             if (!AdjustCase.ID.Equals("0"))
             {
                 GetCopayment();
@@ -1521,6 +1520,13 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public string CheckMedicinesNegativeStock()
         {
             return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
+        }
+
+        public void CountSelfPay()
+        {
+            var selfPay = Medicines.CountSelfPay();
+            if (selfPay > 0)
+                PrescriptionPoint.AmountSelfPay = selfPay;
         }
     }
 }
