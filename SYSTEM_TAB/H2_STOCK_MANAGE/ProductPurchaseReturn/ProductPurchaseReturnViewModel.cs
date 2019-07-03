@@ -89,6 +89,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             TabName = MainWindow.HisFeatures[1].Functions[1];
             Icon = MainWindow.HisFeatures[1].Icon;
             RegisterCommand();
+            RegisterMessengers();
         }
 
         #region ----- Define Actions -----
@@ -299,7 +300,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
         }
-        
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
+        }
+        private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Target == this)
+            {
+                MainWindow.Instance.AddNewTab(TabName);
+
+                ReloadAction();
+
+                SearchString = notificationMessage.Content;
+                StoreOrderCollectionView.Filter += OrderFilter;
+            }
+        }
         #region ///// Messenger Functions /////
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {

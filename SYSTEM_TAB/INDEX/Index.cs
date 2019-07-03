@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -228,9 +231,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void ReserveMedicineSendAction()
         {
-            
             StoreOrderDB.StoreOrderReserveByResIDList(StartDate,EndDate);
+            
             MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認",MessageType.SUCCESS);
+
+            ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
+
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "IDDDDDDDDDDDDDDDDDD", ""));
         }
           
         private void IndexReserveSelectionChangedAction() {
