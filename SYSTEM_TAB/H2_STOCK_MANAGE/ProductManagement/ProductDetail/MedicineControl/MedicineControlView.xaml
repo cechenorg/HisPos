@@ -118,7 +118,7 @@
                 <CheckBox Content="常備藥" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay, FallbackValue=null}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
+                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -126,7 +126,7 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                     <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay, FallbackValue=null}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
+                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
