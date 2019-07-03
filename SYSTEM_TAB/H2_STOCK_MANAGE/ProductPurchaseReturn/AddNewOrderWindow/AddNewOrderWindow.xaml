@@ -30,7 +30,7 @@
             <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Command="{Binding ToReturnCommand}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-            <Label Content="選擇倉庫:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
+            <Label Content="選擇庫別:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
             <ComboBox Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" ItemsSource="{Binding WareHouseCollection}"
                       ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>

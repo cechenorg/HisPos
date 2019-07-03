@@ -63,7 +63,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
         {
             if (!SelectedWareHouse.IsDeletable()) return;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除 {SelectedWareHouse.Name}", "刪除倉庫");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除 {SelectedWareHouse.Name}", "刪除庫別");
 
             if ((bool)confirmWindow.DialogResult)
             {

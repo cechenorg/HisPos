@@ -655,19 +655,19 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryTaxFlag]", parameters);
         }
-        internal static void StoreOrderReserveByResIDList(DateTime sDate  , DateTime eDate )
+        internal static DataTable StoreOrderReserveByResIDList(DateTime sDate  , DateTime eDate )
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
         }
-        internal static void StoreOrderReturnReserve ( )
+        internal static DataTable StoreOrderReturnReserve ( )
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
+           return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
         }
         internal static void StoreOrderCommonMedicine()
         {

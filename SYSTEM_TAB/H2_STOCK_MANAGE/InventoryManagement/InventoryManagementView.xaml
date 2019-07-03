@@ -38,7 +38,7 @@
                     <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="BelowSafeAmount" Content="低於安全量" Background="RoyalBlue" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="NoneInventory" Content="無庫存" Background="RoyalBlue" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <Label Content="目前倉庫"  Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Visibility="Collapsed"/>
+                    <Label Content="目前庫別"  Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Visibility="Collapsed"/>
                     <ComboBox Width="120" Name="WareHouse" ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" 
                               SelectionChanged="WareHouse_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" Visibility="Collapsed"
                               FontSize="18" FontFamily="Segoe UI Semibold" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>

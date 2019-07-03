@@ -44,7 +44,7 @@
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="倉庫" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
+            <Label Content="庫別" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
             <ComboBox Width="100" Grid.Row="1" FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding SelectedWareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
                 <i:Interaction.Triggers>

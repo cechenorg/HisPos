@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
@@ -42,7 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                     Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, ((ProductInventoryRecord)(sender as DataGridRow).Item).Name, ""));
                     break;
                 case ProductInventoryRecordType.Prescription:
-                    PrescriptionEditWindow prescriptionEditWindow = new PrescriptionEditWindow(int.Parse(((ProductInventoryRecord)(sender as DataGridRow).Item).ID));
+                    PrescriptionService.ShowPrescriptionEditWindow(int.Parse(((ProductInventoryRecord)(sender as DataGridRow).Item).ID));
                     break;
                 case ProductInventoryRecordType.StockTaking:
                     break;
