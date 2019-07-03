@@ -17,8 +17,8 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" FontSize="25"/>
-            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrescriptionCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                            ItemsSource="{Binding PrescriptionCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
         </StackPanel> 
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"

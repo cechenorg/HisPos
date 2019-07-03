@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashDetailReport;
@@ -372,7 +373,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 PrescriptionDetailMedicineRepotCollection.Clear();
                 return;
             }
-            PrescriptionEditWindow prescriptionEditWindow = new PrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id);
+            PrescriptionService.ShowPrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id); 
         }
         private void PrescriptionDetailClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
