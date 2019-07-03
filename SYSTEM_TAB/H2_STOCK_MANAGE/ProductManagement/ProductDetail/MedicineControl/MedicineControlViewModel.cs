@@ -154,6 +154,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Actions -----
         private void ConfirmChangeAction()
         {
+            if(!IsMedicineDataValid()) return;
+
             ConfirmWindow confirmWindow = new ConfirmWindow("是否確認修改資料?", "");
 
             if(!(bool)confirmWindow.DialogResult) return;
@@ -401,6 +403,43 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 return true;
             else
                 return filterType == ((ProductInventoryRecord) record).Type;
+        }
+        private bool IsMedicineDataValid()
+        {
+            if (Medicine.IsCommon)
+            {
+                if (Medicine.BasicAmount is null || Medicine.SafeAmount is null)
+                {
+                    MessageWindow.ShowMessage("基準量及安全量為必填", MessageType.ERROR);
+                    return false;
+                }
+
+                if (Medicine.MinOrderAmount < 0)
+                {
+                    MessageWindow.ShowMessage("包裝量不能小於1", MessageType.ERROR);
+                    return false;
+                }
+
+                if (Medicine.BasicAmount <= Medicine.SafeAmount)
+                {
+                    MessageWindow.ShowMessage("基準量必須大於安全量", MessageType.ERROR);
+                    return false;
+                }
+
+                if (Medicine.BasicAmount < 0)
+                {
+                    MessageWindow.ShowMessage("基準量必須大於0", MessageType.ERROR);
+                    return false;
+                }
+
+                if (Medicine.SafeAmount < 0)
+                {
+                    MessageWindow.ShowMessage("安全量必須大於0", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            return true;
         }
         #endregion
     }

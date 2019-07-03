@@ -33,7 +33,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
         private ProductManageStructs searchProductCollection;
         private double totalStockValue;
-        private double negtiveStockValue;
         private WareHouse selectedWareHouse;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
@@ -47,11 +46,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             get { return totalStockValue; }
             set { Set(() => TotalStockValue, ref totalStockValue, value); }
-        }
-        public double NegtiveStockValue
-        {
-            get { return negtiveStockValue; }
-            set { Set(() => NegtiveStockValue, ref negtiveStockValue, value); }
         }
         public ProductSearchTypeEnum SearchType
         {
@@ -89,7 +83,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             MainWindow.ServerConnection.CloseConnection();
 
             TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
-            NegtiveStockValue = dataTable.Rows[0].Field<double>("NEG_TOTALSTOCK");
 
             if (SearchProductCollection.Count == 0)
                 MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
