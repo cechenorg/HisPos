@@ -625,11 +625,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -642,11 +642,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DepositAdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(true))
             {
                 isAdjusting = false;
@@ -659,11 +659,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;
@@ -688,11 +688,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescribeAdjustAction()
         {
             isAdjusting = true;
-            //if (!CheckMedicinesNegativeStock())
-            //{
-            //    isAdjusting = false;
-            //    return;
-            //}
+            if (!CheckMedicinesNegativeStock())
+            {
+                isAdjusting = false;
+                return;
+            }
             if (!CheckPrescription(false))
             {
                 isAdjusting = false;

@@ -587,11 +587,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public string CheckNegativeStock()
         {
-            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => m.Inventory - m.BuckleAmount <= 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
+            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => m.Inventory - m.BuckleAmount < 0 && m.BuckleAmount > 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
             
             if (!string.IsNullOrEmpty(result))
             {
-                result += "如需繼續調劑請將扣庫量調至小於等於庫存。";
+                result += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
                 MessageWindow.ShowMessage(result,MessageType.WARNING);
             }
             return result;
