@@ -213,7 +213,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Init((Prescription)OriginalPrescription.Clone());
             IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
         }
-
+        public PrescriptionEditViewModel(Prescription p)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var selected = p;
+            MainWindow.ServerConnection.CloseConnection();
+            CanMakeup = !selected.Treatment.AdjustCase.ID.Equals("0") && selected.PrescriptionStatus.IsAdjust;
+            NotPrescribe = !selected.Treatment.AdjustCase.ID.Equals("0");
+            OriginalPrescription = selected;
+            if(!p.Source.Equals(PrescriptionSource.ChronicReserve))
+                OriginalPrescription.PrescriptionPoint.GetAmountPaySelf(OriginalPrescription.Id);
+            Init((Prescription)OriginalPrescription.Clone());
+            IsGetCard = !CanMakeup || EditedPrescription.PrescriptionStatus.IsGetCard;
+        }
         #region InitialFunctions
         /*
          * clone checkEdit

@@ -779,11 +779,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetSelectedMedicine(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification != nameof(PrescriptionDeclareViewModel)) return;
-            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedMedicine);
+            Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this);
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.AddMedicine(msg.Content.ID);
             MainWindow.ServerConnection.CloseConnection();
-            CurrentPrescription.CountPrescriptionPoint();
         }
 
         private void Refresh(NotificationMessage msg)
