@@ -1889,6 +1889,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\P1_TRANSACTION\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
