@@ -10,10 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
-using His_Pos.NewClass.Product.Medicine.Position;
-using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.Properties;
-using His_Pos.Service;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
 // ReSharper disable TooManyDeclarations
@@ -587,14 +584,46 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public string CheckNegativeStock()
         {
-            var result = Items.Where(m => !(m is MedicineVirtual)).Where(m => m.Inventory - m.BuckleAmount < 0 && m.BuckleAmount > 0).Aggregate(string.Empty, (current, m) => current + ("藥品" + m.ID + "扣庫量大於庫存\n"));
-            
-            if (!string.IsNullOrEmpty(result))
+            var buckleMedicines = new List<BuckleMedicineStruct>();
+            var inventoryIDList = new List<int>();
+            foreach (var med in this)
             {
-                result += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
-                MessageWindow.ShowMessage(result,MessageType.WARNING);
+                if(med is MedicineVirtual) continue;
+                if (!inventoryIDList.Contains(med.InventoryID))
+                    inventoryIDList.Add(med.InventoryID);
             }
-            return result;
+            foreach (var inv in inventoryIDList)
+            {
+                var editMed = this.Where(m => m.InventoryID.Equals(inv));
+                var buckleAmount = editMed.Sum(m => m.BuckleAmount);
+                if (buckleAmount > 0)
+                    buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var invTable = MedicineDb.GetInventoryByInvIDs(inventoryIDList);
+            MainWindow.ServerConnection.CloseConnection();
+            var inventoryList = new List<MedicineInventoryStruct>();
+            foreach (DataRow r in invTable.Rows)
+            {
+                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_Inventory")));
+            }
+            var negativeStock = string.Empty;
+            foreach (var inv in inventoryList)
+            {
+                if (inv.Inventory - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+                foreach (var med in this)
+                {
+                    if (med is MedicineVirtual) continue;
+                    if (med.InventoryID.Equals(inv.ID))
+                        negativeStock += "藥品" + med.ID + "\n";
+                }
+            }
+            if (!string.IsNullOrEmpty(negativeStock))
+            {
+                negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
+                MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
+            }
+            return negativeStock;
         }
     }
 }

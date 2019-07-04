@@ -11,6 +11,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -33,11 +34,16 @@ using HisAPI = His_Pos.HisApi.HisApiFunction;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using MedicineNHI = His_Pos.NewClass.Product.Medicine.MedicineNHI;
+using MedicineOTC = His_Pos.NewClass.Product.Medicine.MedicineOTC;
+using MedicineSpecialMaterial = His_Pos.NewClass.Product.Medicine.MedicineSpecialMaterial;
+using MedicineVirtual = His_Pos.NewClass.Product.Medicine.MedicineVirtual;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
     public class PrescriptionEditViewModel:ViewModelBase
     {
+
         private Prescription OriginalPrescription { get; set; }
         private Prescription editedPrescription;
         public Prescription EditedPrescription
@@ -148,6 +154,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 return 0;
             }
         }
+
+        private List<BuckleMedicineStruct> editMedicines { get; set; }
         public bool ShowDialog { get; set; }
         #region Commands
         public RelayCommand PrintMedBagCmd { get; set; }
@@ -170,6 +178,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
+        public RelayCommand ComboboxSelectionChanged { get; set; }
         #endregion
         #region ItemsSources
         public Institutions Institutions { get; set; }
@@ -243,7 +252,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.OpenConnection();
             selected.Patient = Customer.GetCustomerByCusId(selected.Patient.ID);
             EditedPrescription = selected;
-            EditedPrescription.AdjustMedicinesType();
+            if (selected.Source.Equals(PrescriptionSource.Normal))
+            {
+                var id = selected.Id;
+                var warID = selected.WareHouse?.ID;
+                var adjustDate = selected.Treatment.AdjustDate;
+                OriginalPrescription.Medicines.Clear();
+                OriginalPrescription.Medicines.GetDataByPrescriptionId(id, warID, adjustDate);
+                EditedPrescription.Medicines.Clear();;
+                EditedPrescription.Medicines.GetDataByPrescriptionId(id, warID, adjustDate);
+            }
+            else
+            {
+                EditedPrescription.Medicines.GetDataByReserveId(int.Parse(EditedPrescription.SourceId), EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
+            }
             MainWindow.ServerConnection.CloseConnection();
             if (EditedPrescription.Treatment.Division != null)
                 EditedPrescription.Treatment.Division = VM.GetDivision(EditedPrescription.Treatment.Division?.ID);
@@ -292,6 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
+            ComboboxSelectionChanged = new RelayCommand(ComboboxSelectionChangedAction);
         }
         #endregion
         #region CommandActions
@@ -515,8 +538,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (!EditedPrescription.Treatment.AdjustCase.ID.Equals("0"))
                 {
                     var noCard = !EditedPrescription.PrescriptionStatus.IsGetCard;
-                    if (!EditedPrescription.Treatment.CheckAdjustDate())
-                        return;
                     var error = EditedPrescription.CheckPrescriptionRule(noCard);
                     if (!string.IsNullOrEmpty(error))
                     {
@@ -531,16 +552,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.Medicines.SetNoBuckle();
                 MainWindow.ServerConnection.OpenConnection();
                 EditedPrescription.Update();
-               //if (EditedPrescription.Treatment.Institution.ID.Equals(VM.CooperativeInstitutionID))
-               //{
-               //    EditedPrescription.AdjustCooperativeMedicines(OriginalPrescription); 
-               //}
-               //else
-               //{
-               //    if(!EditedPrescription.PrescriptionStatus.IsBuckle)
-               //        EditedPrescription.Medicines.SetBuckle(false);
-               //    EditedPrescription.AdjustMedicines(OriginalPrescription);
-               //}
                 MainWindow.ServerConnection.CloseConnection();
                 MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
                 Messenger.Default.Send(EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)
@@ -643,7 +654,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(EditedPrescription.Treatment.AdjustDate ?? DateTime.Today);
             if (EditedPrescription.Treatment.AdjustDate is null) return;
-            EditedPrescription.Medicines.SetBuckleAndUpdateInventory(EditedPrescription.IsBuckle, EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
+            EditedPrescription.Medicines.UpdateInventory(EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
         }
 
         private void ShowMedicineDetailAction(string medicineID)
@@ -651,6 +662,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var wareID = EditedPrescription.WareHouse is null ? "0" : EditedPrescription.WareHouse.ID;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, wareID }, "ShowProductDetail"));
+        }
+
+        private void ComboboxSelectionChangedAction()
+        {
+            CheckEditStatus();
         }
 
         private bool CheckSameOrIDEmptyMedicine()
@@ -860,8 +876,52 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         private bool CheckMedicinesNegativeStock()
         {
-            var result = EditedPrescription.CheckMedicinesNegativeStock();
-            return string.IsNullOrEmpty(result);
+            if (EditedPrescription.InsertTime is null ||
+                EditedPrescription.Source.Equals(PrescriptionSource.ChronicReserve)) return true;
+            editMedicines = new List<BuckleMedicineStruct>();
+            var inventoryIDList = new List<int>(); 
+            foreach (var originMed in OriginalPrescription.Medicines)
+            {
+                if(originMed is MedicineVirtual) continue;
+                if(!inventoryIDList.Contains(originMed.InventoryID) && originMed.InventoryID != 0)
+                    inventoryIDList.Add(originMed.InventoryID);
+            }
+            foreach (var inv in inventoryIDList)
+            {
+                var editMed = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
+                var originMed = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
+                var buckleDiff = editMed.Sum(m => m.BuckleAmount) - originMed.Sum(m => m.BuckleAmount);
+                if(buckleDiff > 0)
+                    editMedicines.Add(new BuckleMedicineStruct(inv,buckleDiff));
+            }
+            var editInvIDList = new List<int>();
+            foreach (var edit in editMedicines)
+            {
+                editInvIDList.Add(edit.ID);
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var invTable = MedicineDb.GetInventoryByInvIDs(editInvIDList);
+            MainWindow.ServerConnection.CloseConnection();
+            var inventoryList = new List<MedicineInventoryStruct>();
+            foreach (DataRow r in invTable.Rows)
+            {
+                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"),r.Field<double>("Inv_Inventory")));
+            }
+            var negativeStock = string.Empty;
+            foreach (var inv in inventoryList)
+            {
+                if (inv.Inventory - editMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+                foreach (var med in EditedPrescription.Medicines)
+                {
+                    if (med is MedicineVirtual) continue;
+                    if (med.InventoryID.Equals(inv.ID))
+                        negativeStock += "藥品" + med.ID + "\n";
+                }
+            }
+            if (string.IsNullOrEmpty(negativeStock)) return true;
+            negativeStock += "扣庫量變化造成負庫，請修改扣庫量。";
+            MessageWindow.ShowMessage(negativeStock,MessageType.WARNING);
+            return false;
         }
         #endregion
     }

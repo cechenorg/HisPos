@@ -15,6 +15,8 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             Id = m.ID;
             if (isSingle)
             {
+                if (m.ControlLevel > 0)
+                    Id += "[管]";
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
                 ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
                 Ingredient = Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
@@ -38,7 +40,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
-                Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
+                if (m.ControlLevel > 0)
+                    Name += "[管]";
+                Name += Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 if(!string.IsNullOrEmpty(Strings.StrConv(m.Indication, VbStrConv.Narrow)))
                     Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
@@ -168,6 +172,8 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             Id = m.ID;
             if (isSingle)
             {
+                if (m.ControlLevel > 0)
+                    Id += "[管]";
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
                 ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
                 Ingredient = Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
@@ -191,7 +197,9 @@ namespace His_Pos.NewClass.Product.Medicine.MedBag
             }
             else
             {
-                Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
+                if (m.ControlLevel > 0)
+                    Name += "[管]";
+                Name += Strings.StrConv(m.FullName, VbStrConv.Narrow);
                 Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);

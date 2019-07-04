@@ -78,6 +78,11 @@
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                             </TextBox.InputBindings>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TextBox>
                         <Button x:Name="CommonHospitalList" Command="{Binding ShowCommonInstitutionSelectionWindow}" Content="{StaticResource CommonHospital}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
@@ -245,7 +250,7 @@
                               SelectedItem="{Binding EditedPrescription.Treatment.AdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="AdjustCombo_PreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding AdjustCaseSelectionChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -257,7 +262,7 @@
                               SelectedItem="{Binding EditedPrescription.Treatment.PrescriptionCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding ComboBoxSelectionChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -269,7 +274,7 @@
                               SelectedItem="{Binding EditedPrescription.Treatment.Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding CopaymentSelectionChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
@@ -293,7 +298,7 @@
                               SelectedItem="{Binding EditedPrescription.Treatment.SpecialTreat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding ComboBoxSelectionChanged}"/>
+                                    <command:EventToCommand Command="{Binding CheckDataChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>

@@ -25,7 +25,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
-            
+            if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID"))
+                InventoryID = r.Field<int>("Inv_ID");
         }
 
         public Medicine(CooperativeMedicine m)
@@ -206,7 +207,18 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 Set(() => Inventory, ref inventory, value);
             }
         }
-
+        private int inventoryID;//庫存編號
+        public int InventoryID
+        {
+            get => inventoryID;
+            set
+            {
+                if (inventoryID != value)
+                {
+                    Set(() => InventoryID, ref inventoryID, value);
+                }
+            }
+        }
         private double costPrice;//成本
         public double CostPrice
         {

@@ -336,8 +336,9 @@
                         <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
                         <Rectangle Width="670"/>
                     </StackPanel>
-                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Label Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="75,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},FallbackValue=Hidden}"/>
+                    <Rectangle Width="64" Margin="0,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Label Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>

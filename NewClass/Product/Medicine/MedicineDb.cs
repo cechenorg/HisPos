@@ -82,5 +82,12 @@ namespace His_Pos.NewClass.Product.Medicine
             }
             return table;
         }
+
+        public static DataTable GetInventoryByInvIDs(List<int> editInvIDList)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "InvIDs", SetIDTable(editInvIDList));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineInventoryByInvIDs]", parameterList);
+        }
     }
 }

@@ -76,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionCases PrescriptionCases => VM.PrescriptionCases;
         public Copayments Copayments => VM.Copayments;
 
-        public SpecialTreats SpecialTreats = VM.SpecialTreats;
+        public SpecialTreats SpecialTreats => VM.SpecialTreats;
         private MedicineSets medicineSets;
         public MedicineSets MedicineSets
         {
