@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
             Profit = r.Field<double>("Profit");
-
+            IsExpensive = r.Field<bool>("IsExpensive");
             IsNoPrepareMed = r.Field<string>("MedPrepareStatus") == "F";
             
             switch (r.Field<string>("CallStatus"))
@@ -85,6 +85,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => IsNoPrepareMed, ref isNoPrepareMed, value);
             }
         }
+        public bool IsExpensive { get; set; }
         public void SaveStatus() {
             IndexReserveDb.Save(Id, PhoneCallStatus, IsNoPrepareMed);
         }

@@ -105,6 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private string newInventory = "";
         private WareHouse selectedWareHouse;
         private ProductGroupSettings productGroupSettingCollection;
+        private ProductRegisterPrescriptions productRegisterPrescriptionCollection;
         private DateTime? startDate = DateTime.Today.AddMonths(-3);
         private DateTime? endDate = DateTime.Today;
         
@@ -121,6 +122,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             get { return productGroupSettingCollection; }
             set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
+        }
+        public ProductRegisterPrescriptions ProductRegisterPrescriptionCollection
+        {
+            get { return productRegisterPrescriptionCollection; }
+            set { Set(() => ProductRegisterPrescriptionCollection, ref productRegisterPrescriptionCollection, value); }
         }
         public WareHouses WareHouseCollection { get; set; }
         public WareHouse SelectedWareHouse
@@ -240,7 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             ReloadStockDetail();
-            ReloadProductGroup();
+            ReloadProductGroupAndPrescription();
             MainWindow.ServerConnection.CloseConnection();
         }
         private void ExportRecordAction()
@@ -352,7 +358,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             ReloadStockDetail();
-            ReloadProductGroup();
+            ReloadProductGroupAndPrescription();
         }
         private bool IsMedicineDataChanged()
         {
@@ -393,9 +399,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
         }
-        private void ReloadProductGroup()
+        private void ReloadProductGroupAndPrescription()
         {
             ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(Medicine.ID, SelectedWareHouse.ID);
+            ProductRegisterPrescriptionCollection = ProductRegisterPrescriptions.GetRegisterPrescriptionsByID(Medicine.ID, SelectedWareHouse.ID);
         }
         private bool RecordFilter(object record)
         {

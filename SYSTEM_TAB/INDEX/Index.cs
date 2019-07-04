@@ -94,6 +94,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 SetPhoneCount();
             }
         }
+        private bool isExpensive = false;
+        public bool IsExpensive
+        {
+            get => isExpensive;
+            set
+            {
+                Set(() => IsExpensive, ref isExpensive, value);
+                ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
+            }
+        }
         
         private DateTime startDate = DateTime.Today;
         public DateTime StartDate
@@ -271,24 +282,31 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveCollectionViewSource = new CollectionViewSource { Source = IndexReserveCollection };
             ReserveCollectionView = ReserveCollectionViewSource.View;
             ReserveCollectionViewSource.Filter += Filter;
+            SetPhoneCount();
         }
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))
                 e.Accepted = false;
 
+
             e.Accepted = false;
 
-           IndexReserve indexitem = ((IndexReserve)e.Item);
+
+            IndexReserve indexitem = ((IndexReserve)e.Item);
             if (indexitem.IsNoPrepareMed && IsShowUnPrepareReserve)
                 e.Accepted = true;
             else if (indexitem.PhoneCallStatus == "F" && IsShowUnPhoneCall)
                 e.Accepted = true;
             else if (indexitem.PhoneCallStatus == "N" && IsShowUnPhoneProcess)
                 e.Accepted = true;
-            else if(!IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess)
+            else if(indexitem.IsExpensive && IsExpensive)
                 e.Accepted = true;
-            
+            else if(!IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && !indexitem.IsNoPrepareMed)
+                e.Accepted = true;
+           
+         
+                 
         }
         #endregion
     }
