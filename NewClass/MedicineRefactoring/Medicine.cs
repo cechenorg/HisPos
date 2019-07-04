@@ -38,7 +38,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
-            Days = Convert.ToInt32(m.Days);
+            Days = Convert.ToInt32(Math.Floor(Convert.ToDouble(m.Days)));
             PaySelf = !string.IsNullOrEmpty(m.Remark);
             IsBuckle = false;
             switch (m.Remark)
@@ -66,7 +66,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             PositionID = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
             Dosage = Convert.ToDouble(m.Divided_dose);
-            Days = Convert.ToInt32(m.Days);
+            Days = Convert.ToInt32(Math.Floor(Convert.ToDouble(m.Days)));
             PaySelf = m.Remark.Equals("-") || m.Remark.Equals("*");
             IsBuckle = false;
             switch (m.Remark)
