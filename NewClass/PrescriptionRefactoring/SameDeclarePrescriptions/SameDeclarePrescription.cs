@@ -51,7 +51,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.SameDeclarePrescriptions
 
         public void GetMedicines()
         {
-            Medicines.GetDataByPrescriptionId(ID,ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID).ID,AdjustDate);
+            Medicines.GetDataByPrescriptionId(ID,ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase.ID)?.ID,AdjustDate);
         }
     }
 }
