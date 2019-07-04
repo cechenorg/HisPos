@@ -245,6 +245,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions> 
                 <sharedControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0"/>
+                <medicineControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0">
