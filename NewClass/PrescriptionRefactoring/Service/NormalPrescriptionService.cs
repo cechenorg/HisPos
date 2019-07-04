@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (current.IsPrescribe)
+            if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
             }
@@ -29,43 +29,43 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool NormalAdjust()
         {
-            if (current.PrescriptionStatus.IsCreateSign is null) return false;
-            current.SetNormalAdjustStatus();//設定處方狀態
-            current.InsertDb();
+            if (Current.PrescriptionStatus.IsCreateSign is null) return false;
+            Current.SetNormalAdjustStatus();//設定處方狀態
+            Current.InsertDb();
             return true;
         }
 
         public override void ErrorAdjust()
         {
-            current.SetErrorAdjustStatus();
-            current.InsertDb();
+            Current.SetErrorAdjustStatus();
+            Current.InsertDb();
         }
 
         public override void DepositAdjust()
         {
-            current.SetDepositAdjustStatus();
-            current.InsertDb();
+            Current.SetDepositAdjustStatus();
+            Current.InsertDb();
         }
 
         public override void PrescribeAdjust()
         {
-            current.SetPrescribeAdjustStatus();
-            current.InsertDb();
+            Current.SetPrescribeAdjustStatus();
+            Current.InsertDb();
         }
 
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
             MedicinesSendSingdeViewModel vm = null;
-            if (current.PrescriptionStatus.IsSendOrder)
+            if (Current.PrescriptionStatus.IsSendOrder)
             {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(current);
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
                 vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                     return false;
             }
-            current.PrescriptionStatus.SetRegisterStatus();
-            current.InsertDb();
+            Current.PrescriptionStatus.SetRegisterStatus();
+            Current.InsertDb();
             SendOrder(vm);
             return true;
         }

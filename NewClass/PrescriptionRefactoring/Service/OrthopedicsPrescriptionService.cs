@@ -22,7 +22,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
-            if (current.IsPrescribe)
+            if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
             }
@@ -37,10 +37,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public override bool NormalAdjust()
         {
-            if (current.PrescriptionStatus.IsCreateSign is null) return false;
+            if (Current.PrescriptionStatus.IsCreateSign is null) return false;
             CheckCovertType();
-            current.SetNormalAdjustStatus();//設定處方狀態
-            current.InsertDb();
+            Current.SetNormalAdjustStatus();//設定處方狀態
+            Current.InsertDb();
             CheckUpdateOrthopedicsStatus();
             return true;
         }
@@ -48,23 +48,23 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public override void ErrorAdjust()
         {
             CheckCovertType();
-            current.SetErrorAdjustStatus();
-            current.InsertDb();
+            Current.SetErrorAdjustStatus();
+            Current.InsertDb();
             CheckUpdateOrthopedicsStatus();
         }
 
         public override void DepositAdjust()
         {
             CheckCovertType();
-            current.SetDepositAdjustStatus();
-            current.InsertDb();
+            Current.SetDepositAdjustStatus();
+            Current.InsertDb();
             CheckUpdateOrthopedicsStatus();
         }
 
         public override void PrescribeAdjust()
         {
-            current.SetPrescribeAdjustStatus();
-            current.InsertDb();
+            Current.SetPrescribeAdjustStatus();
+            Current.InsertDb();
             CheckUpdateOrthopedicsStatus();
         }
 
@@ -73,32 +73,32 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             if (!CheckChronicRegister()) return false;
             CheckCovertType();
             MedicinesSendSingdeViewModel vm = null;
-            if (current.PrescriptionStatus.IsSendOrder)
+            if (Current.PrescriptionStatus.IsSendOrder)
             {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(current);
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
                 vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
                 if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
                     return false;
             }
-            current.PrescriptionStatus.SetRegisterStatus();
-            current.InsertDb();
+            Current.PrescriptionStatus.SetRegisterStatus();
+            Current.InsertDb();
             SendOrder(vm);
             return true;
         }
 
         private void UpdateOrthopedicsStatus()
         {
-            if (!string.IsNullOrEmpty(current.SourceId))
-                PrescriptionDb.UpdateOrthopedicsStatus(current.SourceId);
+            if (!string.IsNullOrEmpty(Current.SourceId))
+                PrescriptionDb.UpdateOrthopedicsStatus(Current.SourceId);
         }
 
         private bool CheckRemarkEmpty()
         {
-            if (current.AdjustCase.ID != "2" && string.IsNullOrEmpty(current.Remark))
+            if (Current.AdjustCase.ID != "2" && string.IsNullOrEmpty(Current.Remark))
             {
                 var e = new CooperativeRemarkInsertWindow();
-                current.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                if (string.IsNullOrEmpty(current.Remark) || current.Remark.Length != 16)
+                Current.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
+                if (string.IsNullOrEmpty(Current.Remark) || Current.Remark.Length != 16)
                     return false;
                 CheckIsCooperativeVIP();
                 return true;
@@ -110,19 +110,19 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             var isVip = new ConfirmWindow(Resources.收部分負擔, Resources.免收確認);
             Debug.Assert(isVip.DialogResult != null, "isVip.DialogResult != null");
-            current.PrescriptionStatus.IsVIP = (bool)!isVip.DialogResult;
-            current.PrescriptionPoint.CopaymentPointPayable = current.PrescriptionStatus.IsVIP ? 0 : current.PrescriptionPoint.CopaymentPoint;
+            Current.PrescriptionStatus.IsVIP = (bool)!isVip.DialogResult;
+            Current.PrescriptionPoint.CopaymentPointPayable = Current.PrescriptionStatus.IsVIP ? 0 : Current.PrescriptionPoint.CopaymentPoint;
         }
 
         private void CheckCovertType()
         {
-            if (current.AdjustCase.IsChronic())
-                current.Type = PrescriptionType.Normal;
+            if (Current.AdjustCase.IsChronic())
+                Current.Type = PrescriptionType.Normal;
         }
 
         private void CheckUpdateOrthopedicsStatus()
         {
-            if (!current.AdjustCase.IsChronic())
+            if (!Current.AdjustCase.IsChronic())
                 UpdateOrthopedicsStatus();
         }
     }

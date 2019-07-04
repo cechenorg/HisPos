@@ -154,6 +154,27 @@ namespace His_Pos.NewClass.Product.Medicine
                         break;
                 }
             }
+            if(!string.IsNullOrEmpty(wareHouseId))
+                UpdateInventory(wareHouseId,adjustDate);
+        }
+
+        public void UpdateInventory(string wareHouseId, DateTime? adjustDate)
+        {
+            var idList = new List<string>();
+            foreach (var m in Items)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                    case MedicineOTC _:
+                    case MedicineSpecialMaterial _:
+                    {
+                        if (!idList.Contains(m.ID))
+                            idList.Add(m.ID);
+                    }
+                        break;
+                }
+            }
             MainWindow.ServerConnection.OpenConnection();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
             MainWindow.ServerConnection.CloseConnection();
@@ -163,7 +184,7 @@ namespace His_Pos.NewClass.Product.Medicine
                 foreach (var m in medList)
                 {
                     m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                    if(!m.PaySelf)
+                    if (!m.PaySelf)
                         m.CountTotalPrice();
                     m.Inventory = r.Field<double>("Inv_Inventory");
                 }
@@ -269,6 +290,62 @@ namespace His_Pos.NewClass.Product.Medicine
                 MessageWindow.ShowMessage(result, MessageType.WARNING);
             }
             return result;
+        }
+        public void GetDataByPrescriptionId(int id, string wareHouseID, DateTime? adjustDate)
+        {
+            var table = MedicineDb.GetDataByPrescriptionId(id);
+            CreateMedicines(table, wareHouseID, adjustDate);
+        }
+        public void GetDataByReserveId(int id, string wareHouseID, DateTime? adjustDate)
+        {
+            var table = MedicineDb.GetDataByReserveId(id);
+            CreateMedicines(table, wareHouseID, adjustDate);
+        }
+        private void CreateMedicines(DataTable table, string wareHouseID, DateTime? adjustDate)
+        {
+            var idList = new List<string>();
+            foreach (DataRow r in table.Rows)
+            {
+                if (!idList.Contains(r.Field<string>("Pro_ID")))
+                    idList.Add(r.Field<string>("Pro_ID"));
+            }
+            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
+            foreach (DataRow r in table.Rows)
+            {
+                Medicine medicine;
+                switch (r.Field<string>("Pro_ID"))
+                {
+                    case "R001":
+                    case "R002":
+                    case "R003":
+                    case "R004":
+                        medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
+                        Add(medicine);
+                        continue;
+                    default:
+                        for (int i = 0; i < medicinesTable.Rows.Count; i++)
+                        {
+                            if (!medicinesTable.Rows[i].Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID"))) continue;
+                            switch (medicinesTable.Rows[i].Field<int>("DataType"))
+                            {
+                                case 1:
+                                    medicine = new MedicineNHI(medicinesTable.Rows[i]);
+                                    break;
+                                case 2:
+                                    medicine = new MedicineOTC(medicinesTable.Rows[i]);
+                                    break;
+                                case 3:
+                                    medicine = new MedicineSpecialMaterial(medicinesTable.Rows[i]);
+                                    break;
+                                default:
+                                    continue;
+                            }
+                            medicine.SetValueByDataRow(r);
+                            Add(medicine);
+                        }
+                        continue;
+                }
+            }
         }
     }
 }

@@ -301,7 +301,9 @@
     <Compile Include="Behaviors\UIHelper.cs" />
     <Compile Include="Behaviors\WeakEventListener.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\BuckleMedicineStruct.cs" />
     <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\MedicineInventoryStruct.cs" />
     <Compile Include="NewClass\MedicineRefactoring\MedicineNHI.cs" />
     <Compile Include="NewClass\MedicineRefactoring\MedicineOTC.cs" />
     <Compile Include="NewClass\MedicineRefactoring\Medicines.cs" />
@@ -516,6 +518,8 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescription.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptions.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductSearchTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\MedicineStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\ProductStockDetail.cs" />
@@ -766,6 +770,9 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PrescriptionControl.xaml.cs">
+      <DependentUpon>PrescriptionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml.cs">
       <DependentUpon>NHIMedicinePriceControl.xaml</DependentUpon>
@@ -1333,6 +1340,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PrescriptionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1889,6 +1900,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\P1_TRANSACTION\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

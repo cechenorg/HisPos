@@ -26,6 +26,8 @@ namespace His_Pos.NewClass.Product.Medicine
             Vendor = r.Field<string>("Med_Manufactory");
             Frozen = r.Field<bool>("Med_IsFrozen");
             Enable = r.Field<bool>("Pro_IsEnable");
+            if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID"))
+                InventoryID = r.Field<int>("Inv_ID");
             Usage = new Usage.Usage();
             Position = new Position.Position(); 
         }
@@ -251,6 +253,19 @@ namespace His_Pos.NewClass.Product.Medicine
                 }
             }
         }
+
+        private int inventoryID;//庫存編號
+        public int InventoryID
+        {
+            get => inventoryID;
+            set
+            {
+                if (inventoryID != value)
+                {
+                    Set(() => InventoryID, ref inventoryID, value);
+                }
+            }
+        }
         private double costPrice;//成本
         public double CostPrice
         {
@@ -397,6 +412,24 @@ namespace His_Pos.NewClass.Product.Medicine
             Dosage = preMed.Dosage;
             UsageName = preMed.UsageName;
             Days = preMed.Days;
+        }
+        public void SetValueByDataRow(DataRow r)
+        {
+            Usage = new Usage.Usage();
+            Position = new Position.Position();
+            Dosage = r.Field<double?>("Dosage");
+            UsageName = r.Field<string>("Usage");
+            PositionID = r.Field<string>("Position");
+            Days = r.Field<int?>("MedicineDays");
+            PaySelf = r.Field<bool>("PaySelf");
+            IsBuckle = r.Field<bool>("IsBuckle");
+            Amount = r.Field<double>("TotalAmount");
+            BuckleAmount = NewFunction.CheckDataRowContainsColumn(r, "BuckleAmount") ? r.Field<double>("BuckleAmount") : Amount;
+            Price = NewFunction.CheckDataRowContainsColumn(r, "PaySelfValue") ? (double)r.Field<decimal>("PaySelfValue") : 0;
+            if (PaySelf)
+            {
+                TotalPrice = r.Field<int>("Point");
+            }
         }
     }
 }

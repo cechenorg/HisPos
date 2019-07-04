@@ -68,6 +68,7 @@
                 <CheckBox IsChecked="{Binding IsShowUnPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsShowUnPhoneProcess,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未處理" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                <CheckBox IsChecked="{Binding IsExpensive,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="高貴藥" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
             </StackPanel>
             <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding ReserveCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -102,8 +103,13 @@
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
+                            <DataTrigger Binding="{Binding IsExpensive}" Value="False">
+                                <Setter Property="Background" Value="Transparent"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsExpensive}" Value="True">
+                                <Setter Property="Background" Value="GreenYellow"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>  
                         <Setter Property="FontSize" Value="15"/>
                         <Setter Property="Height" Value="40"/>
                     </Style>

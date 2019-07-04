@@ -187,6 +187,7 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => IsBuckle, ref isBuckle, value);
             }
         }
+        public DateTime? InsertTime { get; set; }
         public void InitialCurrentPrescription()
         {
             Treatment.Initial();
@@ -1136,6 +1137,7 @@ namespace His_Pos.NewClass.Prescription
                 p.Remark = Remark;
             if (!string.IsNullOrEmpty(OrderNumber))
                 p.OrderNumber = OrderNumber;
+            p.InsertTime = InsertTime;
             return p;
         }
 

@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
@@ -43,24 +42,24 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected PrescriptionService(Prescription p)
         {
-            current = p;
-            printResult = new List<bool?>();
+            Current = p;
+            PrintResult = new List<bool?>();
         }
-        protected Prescription current { get; set; }
-        protected Prescription tempPre { get; set; }
-        protected List<bool?> printResult { get; set; }
+        protected Prescription Current { get; set; }
+        protected Prescription TempPre { get; set; }
+        protected List<bool?> PrintResult { get; set; }
         #region Functions
         public static PrescriptionService CreateService(Prescription p)
         {
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
-            ps.current = p;
+            ps.Current = p;
             return ps;
         }
 
         protected bool CheckSameDeclare()
         {
-            if (current.IsPrescribe) return true;
-            var table = PrescriptionDb.CheckSameDeclarePrescription(current);
+            if (Current.IsPrescribe) return true;
+            var table = PrescriptionDb.CheckSameDeclarePrescription(Current);
             if (table.Rows.Count > 0)
             {
                 var pres = new SameDeclarePrescriptions.SameDeclarePrescriptions();
@@ -123,38 +122,38 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 var result = (bool)confirm.DialogResult;
                 if (!result) return false;
             }
-            current.Pharmacist = selectedPharmacist;
+            Current.Pharmacist = selectedPharmacist;
             return true;
         }
         public void SetCard(IcCard c)
         {
-            current.Card = c;
+            Current.Card = c;
         }
 
         protected void CheckAnonymousPatient()
         {
-            if (!current.IsPrescribe) return;
-            if (!current.Patient.CheckData())
+            if (!Current.IsPrescribe) return;
+            if (!Current.Patient.CheckData())
             {
                 var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool)confirm.DialogResult)
-                    current.Patient = Customer.GetCustomerByCusId(0);
-                current.SetPrescribeAdjustCase();
+                    Current.Patient = Customer.GetCustomerByCusId(0);
+                Current.SetPrescribeAdjustCase();
             }
-            current.SetPrescribeAdjustCase();
+            Current.SetPrescribeAdjustCase();
         }
 
         protected bool CheckValidCustomer()
         {
-            if (current.Patient.CheckData()) return true;
+            if (Current.Patient.CheckData()) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
 
         protected bool CheckMedicines()
         {
-            var errorMsg = current.Medicines.Check();
+            var errorMsg = Current.Medicines.Check();
             if (string.IsNullOrEmpty(errorMsg)) return true;
             MessageWindow.ShowMessage(errorMsg, MessageType.WARNING);
             return false;
@@ -163,14 +162,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         protected bool CheckMedicalNumber(bool noCard)
         {
             if (noCard) return true;
-            if (string.IsNullOrEmpty(current.TempMedicalNumber))
+            if (string.IsNullOrEmpty(Current.TempMedicalNumber))
             {
                 var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
                 Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
                 return (bool)medicalNumberEmptyConfirm.DialogResult;
             }
 
-            if (current.TempMedicalNumber.Length != 4)
+            if (Current.TempMedicalNumber.Length != 4)
             {
                 MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
                 return false;
@@ -185,21 +184,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         private bool CheckTreatDate()
         {
-            if (!(current.TreatDate is null) || current.AdjustCase.ID.Equals("D")) return true;
+            if (!(Current.TreatDate is null) || Current.AdjustCase.ID.Equals("D")) return true;
             MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
             return false;
         }
 
         private bool CheckAdjustDate()
         {
-            if (current.AdjustDate is null)
+            if (Current.AdjustDate is null)
             {
                 MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
                 return false;
             }
-            if (current.AdjustCase.IsChronic()) return true;
-            var startDate = (DateTime)current.TreatDate;
-            var endDate = (DateTime)current.AdjustDate;
+            if (Current.AdjustCase.IsChronic()) return true;
+            var startDate = (DateTime)Current.TreatDate;
+            var endDate = (DateTime)Current.AdjustDate;
             if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(startDate, endDate) > 3)
             {
                 var adjustDateOutOfRange = new ConfirmWindow(Resources.PrescriptoinOutOfDate, "");
@@ -211,8 +210,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckNhiRules(bool noCard)
         {
-            if (current.IsPrescribe) return true;
-            var error = current.CheckPrescriptionRule(noCard);//檢查健保規則
+            if (Current.IsPrescribe) return true;
+            var error = Current.CheckPrescriptionRule(noCard);//檢查健保規則
             if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
             return false;
@@ -220,8 +219,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckPrescribeRules()
         {
-            if (!current.IsPrescribe) return true;
-            var error = current.CheckPrescribeRule();
+            if (!Current.IsPrescribe) return true;
+            var error = Current.CheckPrescribeRule();
             if (string.IsNullOrEmpty(error)) return true;
             MessageWindow.ShowMessage(error, MessageType.ERROR);
             return false;
@@ -229,10 +228,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public bool PrintConfirm()
         {
-            printResult = NewFunction.CheckPrint(current);
-            var printMedBag = printResult[0];
-            var printSingle = printResult[1];
-            var printReceipt = printResult[2];
+            PrintResult = NewFunction.CheckPrint(Current);
+            var printMedBag = PrintResult[0];
+            var printSingle = PrintResult[1];
+            var printReceipt = PrintResult[2];
             if (printMedBag is null || printReceipt is null)
                 return false;
             if ((bool)printMedBag && printSingle is null)
@@ -242,19 +241,19 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected void SavePatientData()
         {
-            if (current.Patient.ID == 0 || current.Patient.ID == -1) return;
+            if (Current.Patient.ID == 0 || Current.Patient.ID == -1) return;
             MainWindow.ServerConnection.OpenConnection();
-            current.Patient.Save();
+            Current.Patient.Save();
             MainWindow.ServerConnection.CloseConnection();
         }
 
         public void CheckDailyUpload(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
-            if (current.IsPrescribe) return;
-            if ((bool)current.PrescriptionStatus.IsCreateSign)
-                HisAPI.CreatDailyUploadData(current, false);
+            if (Current.IsPrescribe) return;
+            if ((bool)Current.PrescriptionStatus.IsCreateSign)
+                HisAPI.CreatDailyUploadData(Current, false);
             else
-                HisAPI.CreatErrorDailyUploadData(current, false, errorCode);
+                HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
@@ -424,30 +423,30 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public void CreateDailyUploadData(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
-            if (current.PrescriptionStatus.IsGetCard || errorCode != null)
+            if (Current.PrescriptionStatus.IsGetCard || errorCode != null)
             {
-                if (current.Card.IsGetMedicalNumber)
+                if (Current.Card.IsGetMedicalNumber)
                     CreatePrescriptionSign();
                 else
-                    current.PrescriptionStatus.IsCreateSign = false;
+                    Current.PrescriptionStatus.IsCreateSign = false;
             }
             else
-                current.PrescriptionStatus.IsDeclare = false;
+                Current.PrescriptionStatus.IsDeclare = false;
         }
 
         private void CreatePrescriptionSign()
         {
-            current.PrescriptionSign = HisAPI.WritePrescriptionData(current);
-            if (current.WriteCardSuccess != 0)
+            Current.PrescriptionSign = HisAPI.WritePrescriptionData(Current);
+            if (Current.WriteCardSuccess != 0)
             {
                 Application.Current.Dispatcher.Invoke(delegate {
-                    var description = MainWindow.GetEnumDescription((ErrorCode)current.WriteCardSuccess);
-                    MessageWindow.ShowMessage("寫卡異常 " + current.WriteCardSuccess + ":" + description, MessageType.WARNING);
+                    var description = MainWindow.GetEnumDescription((ErrorCode)Current.WriteCardSuccess);
+                    MessageWindow.ShowMessage("寫卡異常 " + Current.WriteCardSuccess + ":" + description, MessageType.WARNING);
                 });
-                current.PrescriptionStatus.IsCreateSign = null;
+                Current.PrescriptionStatus.IsCreateSign = null;
             }
             else
-                current.PrescriptionStatus.IsCreateSign = true;
+                Current.PrescriptionStatus.IsCreateSign = true;
         }
 
         public void Print(bool noCard)
@@ -458,7 +457,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         private void PrintMedBag()
         {
-            var printMedBag = (bool)printResult[0];
+            var printMedBag = (bool)PrintResult[0];
             if (printMedBag)
                 CheckMedBagPrintMode();
         }
@@ -466,67 +465,67 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         private void PrintReceipt(bool noCard)
         {
             // ReSharper disable once PossibleInvalidOperationException
-            var printReceipt = (bool)printResult[2];
+            var printReceipt = (bool)PrintResult[2];
             if (printReceipt)
-                tempPre.PrintReceipt();
+                TempPre.PrintReceipt();
             if (noCard)
-                tempPre.PrintDepositSheet();
+                TempPre.PrintDepositSheet();
         }
 
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            var singleMode = (bool)printResult[1];
+            var singleMode = (bool)PrintResult[1];
             if (singleMode)
-                tempPre.PrintMedBagSingleMode();
+                TempPre.PrintMedBagSingleMode();
             else
-                tempPre.PrintMedBagMultiMode();
+                TempPre.PrintMedBagMultiMode();
         }
 
         protected bool CheckChronicRegister()
         {
-            if (current.AdjustCase.IsChronic()) return true;
+            if (Current.AdjustCase.IsChronic()) return true;
             MessageWindow.ShowMessage("一般箋處方不可登錄", MessageType.ERROR);
             return false;
         }
 
         protected void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            if (current.PrescriptionStatus.IsSendOrder)
+            if (Current.PrescriptionStatus.IsSendOrder)
             {
                 var sendData = vm.PrescriptionSendData;
-                if (!current.PrescriptionStatus.IsSendToSingde)
-                    current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(current, sendData);
+                if (!Current.PrescriptionStatus.IsSendToSingde)
+                    Current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(Current, sendData);
                 //紀錄訂單and送單
-                else if (current.PrescriptionStatus.IsSendToSingde)
+                else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
-                    PurchaseOrder.UpdatePrescriptionOrder(current, sendData);
+                    PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康
             }
-            current.PrescriptionStatus.UpdateStatus(current.ID);
+            Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
 
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
-            current.TempMedicalNumber = errorCode.ID;
-            if (current.AdjustCase.ID.Equals("2") && current.ChronicSeq > 1)
+            Current.TempMedicalNumber = errorCode.ID;
+            if (Current.AdjustCase.ID.Equals("2") && Current.ChronicSeq > 1)
             {
-                current.MedicalNumber = "IC0" + current.ChronicSeq;
-                current.OriginalMedicalNumber = errorCode.ID;
+                Current.MedicalNumber = "IC0" + Current.ChronicSeq;
+                Current.OriginalMedicalNumber = errorCode.ID;
             }
             else
             {
-                current.MedicalNumber = errorCode.ID;
+                Current.MedicalNumber = errorCode.ID;
             }
         }
 
         public void MakeUpComplete()
         {
-            var deposit = current.PrescriptionPoint.Deposit;
+            var deposit = Current.PrescriptionPoint.Deposit;
             MainWindow.ServerConnection.OpenConnection();
-            current.PrescriptionPoint.Deposit = 0;
-            current.PrescriptionStatus.SetNormalAdjustStatus();
-            current.Update();
+            Current.PrescriptionPoint.Deposit = 0;
+            Current.PrescriptionStatus.SetNormalAdjustStatus();
+            Current.Update();
             MainWindow.ServerConnection.CloseConnection();
             Application.Current.Dispatcher.Invoke((Action)delegate {
                 MessageWindow.ShowMessage("補卡作業成功，退還押金" + deposit + "元", MessageType.SUCCESS);
@@ -535,29 +534,29 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         public void CheckDailyUploadMakeUp(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
-            if (current.IsPrescribe) return;
-            if ((bool)current.PrescriptionStatus.IsCreateSign)
-                HisAPI.CreatDailyUploadData(current, true);
+            if (Current.IsPrescribe) return;
+            if ((bool)Current.PrescriptionStatus.IsCreateSign)
+                HisAPI.CreatDailyUploadData(Current, true);
             else
-                HisAPI.CreatErrorDailyUploadData(current, true, errorCode);
+                HisAPI.CreatErrorDailyUploadData(Current, true, errorCode);
         }
 
         public void SetMedicalNumber()
         {
-            if (current.AdjustCase.ID.Equals("2") && current.ChronicSeq > 1)
+            if (Current.AdjustCase.ID.Equals("2") && Current.ChronicSeq > 1)
             {
-                current.MedicalNumber = "IC0" + current.ChronicSeq;
-                current.OriginalMedicalNumber = current.TempMedicalNumber;
+                Current.MedicalNumber = "IC0" + Current.ChronicSeq;
+                Current.OriginalMedicalNumber = Current.TempMedicalNumber;
             }
             else
             {
-                current.MedicalNumber = current.TempMedicalNumber;
+                Current.MedicalNumber = Current.TempMedicalNumber;
             }
         }
 
         public void CloneTempPre()
         {
-            tempPre = (Prescription)current.Clone();
+            TempPre = (Prescription)Current.Clone();
         }
 
         public static void ShowPrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
@@ -575,14 +574,25 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     return;
                 }
                 selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.Normal);
-                var insertTime = r.Field<DateTime?>("InsertTime");
-                if (insertTime != null && DateTime.Compare(((DateTime)insertTime),DateTime.Today) < 0)
+                
+                if (VM.CurrentUser.ID == 1)
                 {
-                    var edit = new PrescriptionRecordWindow(selected);
+                    var insertTime = r.Field<DateTime?>("InsertTime");
+                    selected.InsertTime = insertTime;
+                    var edit = new PrescriptionEditWindow(selected);
                 }
                 else
                 {
-                    var edit = new PrescriptionEditWindow(selected);
+                    var insertTime = r.Field<DateTime?>("InsertTime");
+                    selected.InsertTime = insertTime;
+                    if (insertTime != null && DateTime.Compare(((DateTime)insertTime), DateTime.Today) < 0)
+                    {
+                        var edit = new PrescriptionRecordWindow(selected);
+                    }
+                    else
+                    {
+                        var edit = new PrescriptionEditWindow(selected);
+                    }
                 }
             }
             else
