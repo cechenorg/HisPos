@@ -706,20 +706,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public void DragDropItem(DataGridDragDropEventArgs args)
         {
             if(!(args.TargetObject is Medicine)) return;
-            int targetIndex = CurrentPrescription.Medicines.IndexOf((Medicine)args.TargetObject);
+            var targetIndex = CurrentPrescription.Medicines.IndexOf((Medicine)args.TargetObject);
             if (args.Direction == DataGridDragDropDirection.Down) targetIndex++;
 
-            if (args.Effects == System.Windows.DragDropEffects.Move && args.DroppedObject is Medicine m )
+            switch (args.Effects)
             {
-                int sourceIndex = CurrentPrescription.Medicines.IndexOf(m);
-                if (sourceIndex < targetIndex) targetIndex--;
-                CurrentPrescription.Medicines.Remove(m);
+                case System.Windows.DragDropEffects.Move when args.DroppedObject is Medicine m:
+                {
+                    var sourceIndex = CurrentPrescription.Medicines.IndexOf(m);
+                    if (sourceIndex < targetIndex) targetIndex--;
+                    CurrentPrescription.Medicines.Remove(m);
 
-                CurrentPrescription.Medicines.Insert(targetIndex, m);
-            }
-            else if (args.Effects == System.Windows.DragDropEffects.Copy)
-            {
-                CurrentPrescription.Medicines.Insert(targetIndex, (Medicine)((Medicine)args.DroppedObject).Clone());
+                    CurrentPrescription.Medicines.Insert(targetIndex, m);
+                    break;
+                }
+                case System.Windows.DragDropEffects.Copy:
+                    CurrentPrescription.Medicines.Insert(targetIndex, (Medicine)((Medicine)args.DroppedObject).Clone());
+                    break;
             }
         }
         #endregion

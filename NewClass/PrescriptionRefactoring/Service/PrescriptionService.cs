@@ -146,7 +146,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckValidCustomer()
         {
-            if (Current.Patient.CheckData()) return true;
+            if (Current.Patient.CheckData())
+            {
+                if (Current.Patient.ID != 0 || Current.Patient.Name.Equals("匿名")) return true;
+                Current.Patient.InsertData();
+                return true;
+            }
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
