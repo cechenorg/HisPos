@@ -186,6 +186,7 @@
                                     </KeyBinding.CommandParameter>
                                 </KeyBinding>
                             </TextBox.InputBindings>
+                            
                         </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -201,8 +202,8 @@
                                     <command:EventToCommand Command="{Binding CheckClearDisease}">
                                         <command:EventToCommand.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                                <Binding Path="Name" ElementName="MainDiagnosis" />
-                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                                <Binding Path="Name" ElementName="SecondDiagnosis" />
+                                                <Binding Path="Text" ElementName="SecondDiagnosis"/>
                                             </MultiBinding>
                                         </command:EventToCommand.CommandParameter>
                                     </command:EventToCommand>

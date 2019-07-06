@@ -308,8 +308,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = StringRes.產生申報資料;
                 DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
-                BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
