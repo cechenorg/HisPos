@@ -400,7 +400,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             prescription.Source = SelectedPrescription.Source;
             var pSource = SelectedPrescription.Source;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, pSource);
+            //PrescriptionService.ShowPrescriptionEditWindowRefactoring(SelectedPrescription.ID, pSource);
             //var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }

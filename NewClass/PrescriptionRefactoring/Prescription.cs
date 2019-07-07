@@ -483,6 +483,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
+        public DateTime? InsertTime { get; set; }
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -1544,6 +1545,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             var selfPay = Medicines.CountSelfPay();
             if (selfPay > 0)
                 PrescriptionPoint.AmountSelfPay = selfPay;
+        }
+
+        public bool CheckCanEdit()
+        {
+            return InsertTime != null && DateTime.Compare(((DateTime) InsertTime), DateTime.Today) < 0;
         }
     }
 }

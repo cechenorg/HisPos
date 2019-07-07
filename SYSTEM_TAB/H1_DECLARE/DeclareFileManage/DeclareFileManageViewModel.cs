@@ -236,12 +236,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
                 MainWindow.ServerConnection.CloseConnection();
                 DeclareFile.SelectedDayPreview.CheckAdjustOutOfRange();
-                BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                Refresh();
             };
             IsBusy = true;
             worker.RunWorkerAsync();

@@ -43,7 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                     Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, ((ProductInventoryRecord)(sender as DataGridRow).Item).Name, ""));
                     break;
                 case ProductInventoryRecordType.Prescription:
-                    PrescriptionService.ShowPrescriptionEditWindow(int.Parse(((ProductInventoryRecord)(sender as DataGridRow).Item).ID));
+                    PrescriptionService.ShowPrescriptionEditWindowRefactoring(int.Parse(((ProductInventoryRecord)(sender as DataGridRow).Item).ID));
                     break;
                 case ProductInventoryRecordType.StockTaking:
                     break;

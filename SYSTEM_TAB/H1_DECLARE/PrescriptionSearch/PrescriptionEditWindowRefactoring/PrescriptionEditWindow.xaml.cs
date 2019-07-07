@@ -4,9 +4,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
+using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
 {
@@ -16,6 +18,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     public partial class PrescriptionEditWindow : Window
     {
         public PrescriptionEditWindow()
+        {
+            InitializeComponent();
+        }
+
+        public PrescriptionEditWindow(Prescription p)
         {
             InitializeComponent();
         }
