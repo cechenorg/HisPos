@@ -33,6 +33,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             if (!(row?.Item is ProductRegisterPrescription)) return;
 
+            if(((ProductRegisterPrescription)row.Item).ID == 0) return;
+
             PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID);
         }
     }
