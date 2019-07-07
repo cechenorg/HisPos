@@ -575,4 +575,10 @@
   <data name="StockTakingPlan" xml:space="preserve">
     <value>盤點計畫</value>
   </data>
+  <data name="院所統計表" xml:space="preserve">
+    <value>院所申報點數統計表</value>
+  </data>
+  <data name="CSV檔案" xml:space="preserve">
+    <value>Csv檔案|*.csv</value>
+  </data>
 </root>
