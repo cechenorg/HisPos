@@ -4,10 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 {
-    public class ProductStockDetail
+    public class ProductStockDetail : ObservableObject
     {
         #region ----- Define Variables -----
         public double OnTheWayAmount { get; set; }
