@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Data;
@@ -170,13 +171,17 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             Function.ExportXml(result, "每月申報檔", fileName);
         }
 
-        public void GetNotAdjustPrescriptionCount(DateTime start, DateTime end,string pharmacyID)
+        public void GetNotAdjustPrescriptionCount(DateTime? start, DateTime? end,string pharmacyID)
         {
-            var table = PrescriptionDb.GetNotAdjustPrescriptionCount(start, end, pharmacyID);
+            Debug.Assert(start != null, nameof(start) + " != null");
+            Debug.Assert(end != null, nameof(end) + " != null");
+            var sDate = (DateTime) start;
+            var eDate = (DateTime) end;
+            var table = PrescriptionDb.GetNotAdjustPrescriptionCount(sDate, eDate, pharmacyID);
             if (table.Rows.Count > 0)
             {
                 var count = table.Rows[0].Field<int>("NotAdjustCount");
-                var declareDateStr = (start.Year - 1911) + " 年 " + start.Month.ToString().PadLeft(2, '0') + " 月 ";
+                var declareDateStr = sDate.Year - 1911 + " 年 " + sDate.Month.ToString().PadLeft(2, '0') + " 月 ";
                 if (count > 0)
                     MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案",MessageType.WARNING);
             }

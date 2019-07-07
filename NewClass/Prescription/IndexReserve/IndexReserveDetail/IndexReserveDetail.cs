@@ -12,14 +12,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
         public IndexReserveDetail(DataRow r):base(r) { 
             Stock = r.Field<string>("Inventory");
             OntheWay = r.Field<string>("OntheWay");
-            Amount = r.Field<double>("TotalAmount"); 
+            Amount = r.Field<double>("TotalAmount");
+            IsFrozen = r.Field<bool>("Med_IsFrozen");
+            ControlLevel = r.Field<byte?>("Med_Control");
         }
-
-        public string Id { get; set; }
-        public string Name { get; set; }
         public string Stock { get; set; }
         public string OntheWay { get; set; }
-        
+        public bool IsFrozen { get; set; }
+        public byte? ControlLevel { get; set; }
         public double Amount { get; set; }
     }
 }

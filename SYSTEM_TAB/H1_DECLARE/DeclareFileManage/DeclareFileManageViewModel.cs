@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,21 +14,21 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using StringRes = His_Pos.Properties.Resources;
 
 // ReSharper disable InconsistentNaming
-
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 {
+    // ReSharper disable once ClassTooBig
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class DeclareFileManageViewModel:TabBase
     {
         #region Variables
@@ -50,8 +52,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             set
             {
                 if(value != null)
-
-                Set(() => DeclareDate, ref declareDate, value);
+                    Set(() => DeclareDate, ref declareDate, value);
             }
         }
         private bool isBusy;
@@ -72,17 +73,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
-        private int? startDay;
-        public int? StartDay
-        {
-            get => startDay;
-            set
-            {
-                Set(() => StartDay, ref startDay, value);
-            }
-        }
-        private int? endDay;
-        public int? EndDay
+        private int startDay => 1;
+        private int endDay;
+        public int EndDay
         {
             get => endDay;
             set
@@ -131,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => EditedList, ref editedList, value);
             }
         }
+        private BackgroundWorker worker;
         #endregion
         #region Commands
         public RelayCommand GetPreviewPrescriptions { get; set; }
@@ -156,15 +150,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
             DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
-            StartDay = 1;
-            EndDay = DateTime.DaysInMonth(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month);
+            var decDate = (DateTime)DeclareDate;
+            EndDay = DateTime.DaysInMonth(decDate.Year, decDate.Month);
+            var endDate = new DateTime(decDate.Year, decDate.Month, EndDay);
             GetPharmacistSchedule();
-            DeclareFile.GetNotAdjustPrescriptionCount((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay), SelectedPharmacy.ID);
-            var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow((DateTime)DeclareDate, new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, (int)EndDay));
+            DeclareFile.GetNotAdjustPrescriptionCount(DeclareDate, endDate, SelectedPharmacy.ID);
+            var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow(decDate, endDate);
             if (duplicatePrescriptionWindow.ShowDialog)
-            {
                 duplicatePrescriptionWindow.Show();
-            }
             EditedList = new DeclarePrescriptions();
         }
         private void InitialCommands()
@@ -172,44 +165,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
             AdjustPharmacistSetting = new RelayCommand(AdjustPharmacistSettingAction);
             AdjustPharmacistOfDay = new RelayCommand(AdjustPharmacistOfDayAction);
-            AdjustPharmacistOfMonth = new RelayCommand(AdjustPharmacistOfMonthAction,CheckMonthIsOutOfRange);
+            AdjustPharmacistOfMonth = new RelayCommand(AdjustPharmacistOfMonthAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             SetDecFilePreViewSummary = new RelayCommand(SetDecFilePreViewSummaryAction);
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
             AddToEditListCommand = new RelayCommand(AddToEditListAction);
         }
-        private bool CheckDayIsOutOfRange()
-        {
-            return DeclareFile.SelectedDayPreview != null && DeclareFile.SelectedDayPreview.IsAdjustOutOfRange;
-        }
-
-        private bool CheckMonthIsOutOfRange()
-        {
-            return DeclareFile.DeclarePreviews.Count(pre => pre.IsAdjustOutOfRange) > 0;
-        }
         #endregion
         #region CommandActions
         private void GetPreviewPrescriptionsActions()
         {
-            if (StartDay == null || EndDay == null)
-            {
-                MessageWindow.ShowMessage("請填寫查詢日期區間",MessageType.ERROR);
-                return;
-            }
-
-            if (DeclareDate is null)
-            {
-                MessageWindow.ShowMessage("請填寫申報年月", MessageType.ERROR);
-                return;
-            }
-            var worker = new BackgroundWorker();
+            if(!CheckStartOrEndDayNull()) return;
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
-
-                MainWindow.ServerConnection.CloseConnection();
+                GetDeclarePrescriptions();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -218,26 +189,75 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+
+        private void GetDeclarePrescriptions()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            GetPrescriptions();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private bool CheckStartOrEndDayNull()
+        {
+            if (DeclareDate is null)
+            {
+                MessageWindow.ShowMessage("請填寫申報年月", MessageType.ERROR);
+                return false;
+            }
+            return true;
+        }
+
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         private void AdjustPharmacistSettingAction()
         {
-            var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month, 1));
+            if (DeclareDate is null)
+            {
+                MessageWindow.ShowMessage("尚未填寫申報年月。",MessageType.WARNING);
+                return;
+            }
+            var decDate = (DateTime)DeclareDate;
+            var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(decDate.Year, decDate.Month, 1));
             MainWindow.ServerConnection.OpenConnection();
             GetPharmacistSchedule();
             MainWindow.ServerConnection.CloseConnection();
         }
         private void AdjustPharmacistOfDayAction()
         {
-            var worker = new BackgroundWorker();
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = "藥師調整處理中...";
-                DeclareFile.SelectedDayPreview.PresOfDay.AdjustPharmacist(GetAdjustPharmacist(false));
-                MainWindow.ServerConnection.OpenConnection();
-                DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
-                MainWindow.ServerConnection.CloseConnection();
-                DeclareFile.SelectedDayPreview.CheckAdjustOutOfRange();
-                BusyContent = StringRes.取得歷史處方;
-                GetPrescriptions();
+                StartAdjustPharmacistsOfDay();
+            };
+            worker.RunWorkerCompleted += (o, ea) => { IsBusy = false; };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void StartAdjustPharmacistsOfDay()
+        {
+            var pharmacists = GetAdjustPharmacist(false);
+            if (pharmacists.Count == 0)
+            {
+                MessageWindow.ShowMessage("尚未設定本日藥師", MessageType.WARNING);
+                return;
+            }
+            DeclareFile.SelectedDayPreview.PresOfDay.AdjustPharmacist(pharmacists);
+            MainWindow.ServerConnection.OpenConnection();
+            DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
+            DeclareFile.SelectedDayPreview.CheckAdjustOutOfRange();
+            BusyContent = StringRes.取得歷史處方;
+            GetPrescriptions();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void AdjustPharmacistOfMonthAction()
+        {
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "藥師調整處理中...";
+                StartAdjustPharmacistsOfMonth();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -247,52 +267,44 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.RunWorkerAsync();
         }
 
-        private void AdjustPharmacistOfMonthAction()
+        private void StartAdjustPharmacistsOfMonth()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            var adjustList = CreateAdjustList();
+            var pharmacistList = GetAdjustPharmacist(true);
+            if (pharmacistList.Count == 0)
             {
-                BusyContent = "藥師調整處理中...";
-                var adjustList = new DeclarePrescriptions();
-                foreach (var pre in DeclareFile.DeclarePreviews.Where(pre => pre.IsAdjustOutOfRange))
-                {
-                    foreach (var dec in pre.PresOfDay)
-                    {
-                        adjustList.Add(dec);
-                    }
-                }
-                adjustList.AdjustPharmacist(GetAdjustPharmacist(true));
-                MainWindow.ServerConnection.OpenConnection();
-                DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
-                MainWindow.ServerConnection.CloseConnection();
-                foreach (var pre in DeclareFile.DeclarePreviews)
-                {
-                    pre.CheckAdjustOutOfRange();
-                }
-                foreach (var pre in DeclareFile.DeclarePreviews.Where(pre => !pre.IsAdjustOutOfRange))
-                {
-                    foreach (var dec in pre.PresOfDay)
-                    {
-                        adjustList.Add(dec);
-                    }
-                }
-                DeclareFile.SetSummary();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
+                MessageWindow.ShowMessage("尚未設定本月藥師", MessageType.WARNING);
+                return;
+            }
+            adjustList.AdjustPharmacist(pharmacistList);
+            MainWindow.ServerConnection.OpenConnection();
+            DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (var pre in DeclareFile.DeclarePreviews)
             {
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+                pre.CheckAdjustOutOfRange();
+            }
+            DeclareFile.SetSummary();
         }
+
+        private DeclarePrescriptions CreateAdjustList()
+        {
+            var adjustList = new DeclarePrescriptions();
+            foreach (var pre in DeclareFile.DeclarePreviews)
+            {
+                foreach (var dec in pre.PresOfDay)
+                {
+                    adjustList.Add(dec);
+                }
+            }
+            return adjustList;
+        }
+
         private void ShowPrescriptionEditWindowAction()
         {
             if (DeclareFile.SelectedDayPreview.SelectedPrescription is null) return;
-            MainWindow.ServerConnection.OpenConnection();
-            var selected = new Prescription(PrescriptionDb.GetPrescriptionByID(DeclareFile.SelectedDayPreview.SelectedPrescription.ID).Rows[0], PrescriptionSource.Normal);
-            MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Register<NotificationMessage>(this, PrescriptionEditedRefresh);
-            var prescriptionEdit = new PrescriptionEditWindow(selected.Id);
+            PrescriptionService.ShowPrescriptionEditWindow(DeclareFile.SelectedDayPreview.SelectedPrescription.ID);
             Messenger.Default.Unregister<NotificationMessage>(this, PrescriptionEditedRefresh);
         }
 
@@ -300,73 +312,103 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             DeclareFile.SetSummary();
         }
+
         private void CreateDeclareFileAction()
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (DeclareDate is null)
             {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = StringRes.產生申報資料;
-                DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
-                MainWindow.ServerConnection.CloseConnection();
-            };
+                MessageWindow.ShowMessage("尚未填寫申報年月。", MessageType.WARNING);
+                return;
+            }
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => { CreateDeclareFile(); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                IsBusy = false;
-                var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
-                DeclareFile.CreateDeclareFile(decFile,(DateTime)DeclareDate);
                 ExportExcelAction();
                 Refresh();
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+
+        private void CreateDeclareFile()
+        {
+            Debug.Assert(DeclareDate != null, nameof(DeclareDate) + " != null");
+            var decDate = (DateTime)DeclareDate;
+            MainWindow.ServerConnection.OpenConnection();
+            BusyContent = "處方排序中...";
+            DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
+            MainWindow.ServerConnection.CloseConnection();
+            BusyContent = StringRes.產生申報資料;
+            var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
+            DeclareFile.CreateDeclareFile(decFile, decDate);
+        }
+
         private void ExportExcelAction() {
-            InstitutionDeclarePoints InstitutionDeclarePointCollection = new InstitutionDeclarePoints();
-            InstitutionDeclarePointCollection.GetDataByDate((DateTime)DeclareDate);
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "院所申報點數統計表";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Csv檔案|*.csv";
-            fdlg.FileName = ((DateTime)DeclareDate).Month.ToString() + "月" + ViewModelMainWindow.CurrentPharmacy.Name + "院所申報統計表";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
+            if (DeclareDate is null)
             {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
-                Properties.Settings.Default.Save();
-                try
-                {
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
-                    {
-                        file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
-                        file.WriteLine("院所申報統計表");
-                        file.WriteLine("月份 " + ((DateTime)DeclareDate).Month.ToString() + "月");
-                        foreach (InstitutionDeclarePoint ins in InstitutionDeclarePointCollection)
-                        {
-                            file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
-                        }
-                        InstitutionDeclarePoint sum = new InstitutionDeclarePoint();
-                        sum.InsName = "總計";
-                        sum.MedicinePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicinePoint);
-                        sum.SpecialMedPoint = InstitutionDeclarePointCollection.Sum(ins => ins.SpecialMedPoint);
-                        sum.MedicalServicePoint = InstitutionDeclarePointCollection.Sum(ins => ins.MedicalServicePoint);
-                        sum.SubTotal = InstitutionDeclarePointCollection.Sum(ins => ins.SubTotal);
-                        sum.CopayMentPoint = InstitutionDeclarePointCollection.Sum(ins => ins.CopayMentPoint);
-                        sum.DeclarePoint = InstitutionDeclarePointCollection.Sum(ins => ins.DeclarePoint);
-                        sum.PrescriptionCount = InstitutionDeclarePointCollection.Sum(ins => ins.PrescriptionCount);
-                        file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
-                        file.Close();
-                        file.Dispose();
-                    }
-                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }
+                MessageWindow.ShowMessage("尚未填寫申報年月。", MessageType.WARNING);
+                return;
+            }
+            var decDate = (DateTime) DeclareDate;
+            var institutionDeclarePoints = new InstitutionDeclarePoints();
+            institutionDeclarePoints.GetDataByDate(decDate);
+            var dialog = CreateInstitutionSummaryFileDialog(decDate);
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            Properties.Settings.Default.DeclareXmlPath = dialog.FileName;
+            Properties.Settings.Default.Save();
+            try
+            {
+                CreateInstitutionSummaryFile(dialog,institutionDeclarePoints, decDate);
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
+
+        private void CreateInstitutionSummaryFile(FileDialog dialog,InstitutionDeclarePoints institutionDeclarePoints, DateTime decDate)
+        {
+            using (var file = new StreamWriter(dialog.FileName, false, Encoding.UTF8))
+            {
+                file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
+                file.WriteLine("院所申報統計表");
+                file.WriteLine("月份 " + decDate.Month + "月");
+                foreach (var ins in institutionDeclarePoints)
+                {
+                    file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
+                }
+                var sum = new InstitutionDeclarePoint
+                {
+                    InsName = "總計",
+                    MedicinePoint = institutionDeclarePoints.Sum(ins => ins.MedicinePoint),
+                    SpecialMedPoint = institutionDeclarePoints.Sum(ins => ins.SpecialMedPoint),
+                    MedicalServicePoint = institutionDeclarePoints.Sum(ins => ins.MedicalServicePoint),
+                    SubTotal = institutionDeclarePoints.Sum(ins => ins.SubTotal),
+                    CopayMentPoint = institutionDeclarePoints.Sum(ins => ins.CopayMentPoint),
+                    DeclarePoint = institutionDeclarePoints.Sum(ins => ins.DeclarePoint),
+                    PrescriptionCount = institutionDeclarePoints.Sum(ins => ins.PrescriptionCount)
+                };
+                file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
+                file.Close();
+                file.Dispose();
+            }
+            MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+        }
+
+        private SaveFileDialog CreateInstitutionSummaryFileDialog(DateTime decDate)
+        {
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var dialog = new SaveFileDialog();
+            dialog.Title = StringRes.院所統計表;
+            dialog.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            dialog.Filter = StringRes.CSV檔案;
+            dialog.FileName = ViewModelMainWindow.CurrentPharmacy.Name + decDate.Month + "月院所申報統計表";
+            dialog.FilterIndex = 2;
+            dialog.RestoreDirectory = true;
+            return dialog;
+        }
+
         private void AddToEditListAction()
         {
             SetDecFilePreViewSummaryAction();
@@ -375,11 +417,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         private void GetPrescriptions()
         {
-            var end = new DateTime(((DateTime)DeclareDate).Year, ((DateTime)DeclareDate).Month+1, 1).AddDays(-1).Day;
-            if (EndDay > end)
-                EndDay = end;
-            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
-            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
+            Debug.Assert(DeclareDate != null, nameof(DeclareDate) + " != null");
+            var decDate = (DateTime) DeclareDate;
+            var end = DateTime.DaysInMonth(decDate.Year, decDate.Month - 1);
+            if (EndDay > end) EndDay = end;
+            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, startDay);
+            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDate;
@@ -394,8 +437,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetPharmacistSchedule()
         {
-            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)StartDay);
-            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, (int)EndDay);
+            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, startDay);
+            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
             PharmacistSchedule = new PharmacistSchedule();
             PharmacistSchedule.GetPharmacistScheduleWithCount(start, last);
         }
@@ -425,13 +468,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void Refresh()
         {
-            var worker = new BackgroundWorker();
+            worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = StringRes.取得歷史處方;
                 GetPrescriptions();
-
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
