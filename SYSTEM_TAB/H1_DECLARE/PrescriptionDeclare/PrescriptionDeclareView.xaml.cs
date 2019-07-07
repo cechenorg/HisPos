@@ -55,11 +55,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void Division_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && DivisionCombo.SelectedItem != null)
-            {
-                MedicalNumber.Focus();
-                MedicalNumber.SelectAll();
-            }
+            if (e.Key != Key.Enter || DivisionCombo.SelectedItem is null) return;
+            MedicalNumber.Focus();
+            MedicalNumber.SelectAll();
         }
 
         private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -322,11 +320,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             var t = sender as TextBox;
-            if (e.Key == Key.Decimal)
-            {
-                e.Handled = true;
-                if (t != null) t.CaretIndex++;
-            }
+            if (e.Key != Key.Decimal) return;
+            e.Handled = true;
+            if (t != null) t.CaretIndex++;
         }
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {

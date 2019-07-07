@@ -596,8 +596,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             {
                 var editMed = this.Where(m => m.InventoryID.Equals(inv));
                 var buckleAmount = editMed.Sum(m => m.BuckleAmount);
-                if (buckleAmount > 0)
-                    buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
+                buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
             }
             MainWindow.ServerConnection.OpenConnection();
             var invTable = MedicineDb.GetInventoryByInvIDs(inventoryIDList);
@@ -610,6 +609,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
+                var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
+                if(buckle.BuckleAmount == 0) continue;
                 if (inv.Inventory - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
                 foreach (var med in this)
                 {
