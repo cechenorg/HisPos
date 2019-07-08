@@ -1545,5 +1545,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (selfPay > 0)
                 PrescriptionPoint.AmountSelfPay = selfPay;
         }
+
+        public string CheckMedicinesRule()
+        {
+            return Medicines.Check();
+        }
     }
 }

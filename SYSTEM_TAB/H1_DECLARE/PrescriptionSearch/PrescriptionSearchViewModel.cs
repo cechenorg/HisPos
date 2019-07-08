@@ -393,14 +393,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
             EditedPrescription = SelectedPrescription;
-            MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
-                SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
-            MainWindow.ServerConnection.CloseConnection();
-            prescription.Source = SelectedPrescription.Source;
-            var pSource = SelectedPrescription.Source;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, pSource);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
             //var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
