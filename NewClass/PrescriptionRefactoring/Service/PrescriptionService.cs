@@ -117,7 +117,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
             if (prescriptionCount >= 80)
             {
-                var confirm = new ConfirmWindow(Resources.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?", "調劑張數提醒", true);
+                var confirmMsg = Resources.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?";
+                var confirm = new ConfirmWindow(confirmMsg, "調劑張數提醒", true);
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 var result = (bool)confirm.DialogResult;
                 if (!result) return false;
@@ -158,28 +159,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         protected bool CheckMedicines()
         {
-            var errorMsg = Current.Medicines.Check();
+            var errorMsg = Current.CheckMedicinesRule();
             if (string.IsNullOrEmpty(errorMsg)) return true;
             MessageWindow.ShowMessage(errorMsg, MessageType.WARNING);
             return false;
         }
 
-        protected bool CheckMedicalNumber(bool noCard)
+        protected bool CheckMedicalNumber()
         {
-            if (noCard) return true;
             if (string.IsNullOrEmpty(Current.TempMedicalNumber))
             {
                 var medicalNumberEmptyConfirm = new ConfirmWindow("就醫序號尚未填寫，確認繼續?(\"否\"返回填寫，\"是\"繼續調劑)?", "卡序確認");
                 Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
                 return (bool)medicalNumberEmptyConfirm.DialogResult;
             }
-
-            if (Current.TempMedicalNumber.Length != 4)
-            {
-                MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
-                return false;
-            }
-            return true;
+            return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber);
         }
 
         protected bool CheckAdjustAndTreatDate()
@@ -189,8 +183,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 
         private bool CheckTreatDate()
         {
-            if (!(Current.TreatDate is null) || Current.AdjustCase.ID.Equals("D")) return true;
-            MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
+            switch (Current.TreatDate)
+            {
+                case null when Current.AdjustCase.ID.Equals("D"):
+                    return true;
+                case null:
+                    MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
+                    return false;
+            }
+            if (DateTime.Compare((DateTime) Current.TreatDate, DateTime.Today) >= 0) return true;
+            var ts1 = new TimeSpan(DateTime.Today.Ticks);
+            var ts2 = new TimeSpan(((DateTime)Current.TreatDate).Ticks);
+            var ts = ts1.Subtract(ts2).Duration();
+            if (ts.Days < 180) return true;
+            MessageWindow.ShowMessage("就醫日不在合理範圍，請確認資料。", MessageType.WARNING);
             return false;
         }
 
@@ -202,6 +208,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 return false;
             }
             if (Current.AdjustCase.IsChronic()) return true;
+            Debug.Assert(Current.TreatDate != null, "Current.TreatDate != null");
             var startDate = (DateTime)Current.TreatDate;
             var endDate = (DateTime)Current.AdjustDate;
             if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(startDate, endDate) > 3)
@@ -244,17 +251,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return true;
         }
 
-        protected void SavePatientData()
-        {
-            if (Current.Patient.ID == 0 || Current.Patient.ID == -1) return;
-            MainWindow.ServerConnection.OpenConnection();
-            Current.Patient.Save();
-            MainWindow.ServerConnection.CloseConnection();
-        }
-
         public void CheckDailyUpload(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
             if (Current.IsPrescribe) return;
+            Debug.Assert(Current.PrescriptionStatus.IsCreateSign != null, "Current.PrescriptionStatus.IsCreateSign != null");
             if ((bool)Current.PrescriptionStatus.IsCreateSign)
                 HisAPI.CreatDailyUploadData(Current, false);
             else
@@ -264,8 +264,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
-            var treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                   treatmentDate.Split('/')[2] + "日";
+            var year = treatmentDate.Split('/')[0] + "年";
+            var month = treatmentDate.Split('/')[1] + "月";
+            var day = treatmentDate.Split('/')[2] + "日";
+            var treatmentDateChi = $"{year}年{month}月{day}日";
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
@@ -279,13 +281,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
             return new List<ReportParameter>
                     {
-                        new ReportParameter("PharmacyName_Id",
-                            VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
+                        new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                         new ReportParameter("MedicalPerson",VM.CurrentPharmacy.GetPharmacist().Name),
                         new ReportParameter("PatientName", p.Patient.Name),
-                        new ReportParameter("PatientGender_Birthday",(cusGender) + "/" + DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)),
+                        new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                         new ReportParameter("TreatmentDate", treatmentDateChi),
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",p.Division is null ?string.Empty:p.Division.Name),
@@ -316,8 +317,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var treatmentDateChi = string.Empty;
             if (!string.IsNullOrEmpty(treatmentDate))
-                treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                      treatmentDate.Split('/')[2] + "日";
+            {
+                var year = treatmentDate.Split('/')[0];
+                var month = treatmentDate.Split('/')[1];
+                var day = treatmentDate.Split('/')[2];
+                treatmentDateChi = $"{year}年{month}月{day}日";
+            }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
@@ -331,13 +336,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
             return new List<ReportParameter>
             {
-                new ReportParameter("PharmacyName_Id",
-                    VM.CurrentPharmacy.Name + "(" + VM.CurrentPharmacy.ID + ")"),
+                new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                 new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
                 new ReportParameter("MedicalPerson", VM.CurrentPharmacy.GetPharmacist().Name),
                 new ReportParameter("PatientName", p.Patient.Name),
-                new ReportParameter("PatientGender_Birthday",cusGender + "/" +DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)),
+                new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
                 new ReportParameter("Hospital", p.Institution.Name),
                 new ReportParameter("PaySelf", p.PrescriptionPoint.AmountSelfPay.ToString()),
@@ -357,7 +361,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var dateString = DateTimeExtensions.ConvertDateStringSplitToChinese(adjustDate);
-            var printTime = adjustDate + "(" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ")";
+            var printTime = $"{adjustDate}({DateTime.Now.Hour}:{DateTime.Now.Minute})";
             return new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", VM.CurrentPharmacy.Name),

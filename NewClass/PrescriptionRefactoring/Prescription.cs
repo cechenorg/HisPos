@@ -1551,5 +1551,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             return InsertTime != null && DateTime.Compare(((DateTime) InsertTime), DateTime.Today) < 0;
         }
+
+        public string CheckMedicinesRule()
+        {
+            return Medicines.Check();
+        }
     }
 }
