@@ -404,11 +404,6 @@
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicineDb.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicines.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescription.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacies.cs" />

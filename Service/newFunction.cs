@@ -15,6 +15,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
@@ -326,6 +327,61 @@ namespace His_Pos.Service
         public static bool CheckTransaction(DataTable table)
         {
             return table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result");
+        }
+
+        public static bool CheckNotIntMedicalNumber(string medicalNumber)
+        {
+            if (medicalNumber.StartsWith("IC")) return true;
+            switch (medicalNumber)
+            {
+                case "A000":
+                case "A010":
+                case "A011":
+                case "A020":
+                case "A021":
+                case "A030":
+                case "A031":
+                case "B000":
+                case "B001":
+                case "C000":
+                case "C001":
+                case "D000":
+                case "F000":
+                case "D001":
+                case "G000":
+                case "D010":
+                case "H000":
+                case "D011":
+                case "E000":
+                case "Z000":
+                case "E001":
+                case "Z001":
+                    return true;
+            }
+            int number;
+            var conversionSuccessful = int.TryParse(medicalNumber, out number);
+            if (conversionSuccessful)
+                return true;
+            MessageWindow.ShowMessage("就醫序號格式錯誤",MessageType.ERROR);
+            return false;
+        }
+
+        public static bool CheckHomeCareMedicalNumber(string medicalNumber,AdjustCase adjust)
+        {
+            switch (medicalNumber)
+            {
+                case "N":
+                    if (adjust.CheckIsHomeCare())
+                        return true;
+                    else
+                    {
+                        MessageWindow.ShowMessage("非藥事居家照護就醫序號不可為\"N\"", MessageType.ERROR);
+                        return false;
+                    }
+                default:
+                    MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
+                    return false;
+            }
         }
     }
 }
