@@ -238,6 +238,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Csv檔案|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string CSV檔案 {
+            get {
+                return ResourceManager.GetString("CSV檔案", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 顧客管理 的當地語系化字串。
         /// </summary>
         internal static string CustomerManage {
@@ -1370,6 +1379,15 @@ namespace His_Pos.Properties {
         internal static string 開啟讀卡機 {
             get {
                 return ResourceManager.GetString("開啟讀卡機", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 院所申報點數統計表 的當地語系化字串。
+        /// </summary>
+        internal static string 院所統計表 {
+            get {
+                return ResourceManager.GetString("院所統計表", resourceCulture);
             }
         }
         

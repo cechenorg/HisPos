@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl
 {
@@ -23,6 +24,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public StockControl()
         {
             InitializeComponent();
+        }
+
+        private void GetStockDetail(object sender, MouseEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+
+            if(textBlock is null) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            (textBlock.DataContext as MedicineControlViewModel).StockDetail.GetStockDetailByID((textBlock.DataContext as MedicineControlViewModel).Medicine.ID, (textBlock.DataContext as MedicineControlViewModel).SelectedWareHouse.ID);
+            MainWindow.ServerConnection.CloseConnection();
         }
     }
 }

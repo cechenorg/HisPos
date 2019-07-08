@@ -710,7 +710,7 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateDeclareFileContent]", parameterList);
         }
 
-        public static void UpdatePrescriptionFromDeclareAdjust(DeclarePrescriptions declarePrescriptions)
+        public static void UpdatePrescriptionFromDeclareAdjust(List<DeclarePrescription> declarePrescriptions)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "@PointList", SetPrescriptionDeclarePointAdjust(declarePrescriptions));
@@ -1332,7 +1332,7 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreMas_IsDeclare", typeof(bool)); 
             return detailTable;
         }
-        public static DataTable SetPrescriptionDeclarePointAdjust(DeclarePrescriptions declarePrescriptions)
+        public static DataTable SetPrescriptionDeclarePointAdjust(List<DeclarePrescription> declarePrescriptions)
         {
             DataTable table = PrescriptionDeclarePointAdjustTable();
             foreach (var d in declarePrescriptions)

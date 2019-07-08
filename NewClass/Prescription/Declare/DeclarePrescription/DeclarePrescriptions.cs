@@ -99,7 +99,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 }
                 else
                 {
-                    MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續",MessageType.WARNING);
+                    System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續", MessageType.WARNING);
+                    });
                 }
             }
         }
@@ -116,7 +119,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             AdjustMedicalService();
             AdjustSerialNumber();
             SerializeFileContent();
-            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
+            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this.Where(p => p.IsDeclare).ToList());
         }
 
         private void AdjustMedicalService()

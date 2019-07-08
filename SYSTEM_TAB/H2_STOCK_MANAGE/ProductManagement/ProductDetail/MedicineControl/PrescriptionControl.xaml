@@ -15,7 +15,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Label Content="登錄處方用量" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
+            <Label Content="處方用量" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
+            <Rectangle Fill="DarkSeaGreen" Width="15" Height="15" Margin="15,0,0,0"/>
+            <Label Content="登錄" Foreground="Black" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Padding="0" Margin="5,0,0,0"/>
+            <Rectangle Fill="DarkGray" Width="15" Height="15" Margin="15,0,0,0"/>
+            <Label Content="預約" Foreground="Black" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Padding="0" Margin="5,0,0,0"/>
         </StackPanel>
         <DataGrid ItemsSource="{Binding ProductRegisterPrescriptionCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                   Grid.Row="1" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CanUserDeleteRows="False">
@@ -44,9 +48,12 @@
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding ID}" Value="0">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </DataTrigger>
                     </Style.Triggers>
                     <EventSetter Event="MouseDoubleClick" Handler="Prescription_OnClick"/>
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Background" Value="DarkSeaGreen"/>
                     <Setter Property="FontSize" Value="16"/>
                     <Setter Property="Height" Value="40"/>
                 </Style>
