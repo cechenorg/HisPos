@@ -683,10 +683,6 @@
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocation.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocationDb.cs" />
-    <Compile Include="Class\MedBag\MedBag.cs" />
-    <Compile Include="Class\MedBag\MedBagDb.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
@@ -715,15 +711,6 @@
     <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Service\Converters.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
-      <DependentUpon>MedBagManageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
-      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
@@ -965,10 +952,6 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
-      <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
@@ -1256,14 +1239,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1594,10 +1569,6 @@
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
