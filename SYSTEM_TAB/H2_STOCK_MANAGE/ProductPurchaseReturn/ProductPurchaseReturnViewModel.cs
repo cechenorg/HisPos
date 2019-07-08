@@ -92,8 +92,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            TabName = MainWindow.HisFeatures[1].Functions[1];
-            Icon = MainWindow.HisFeatures[1].Icon;
+            TabName = MainWindow.HisFeatures[2].Functions[1];
+            Icon = MainWindow.HisFeatures[2].Icon;
             InitBackgroundWorker();
             RegisterCommand();
             RegisterMessengers();

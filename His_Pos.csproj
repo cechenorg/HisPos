@@ -404,11 +404,6 @@
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicineDb.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicines.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomPrescriptionStruct.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescription.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\CustomerPrescription.cs" />
-    <Compile Include="NewClass\Prescription\CustomerPrescription\RegisterAndReservePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFile.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\CooperativeFtpFile\CooperativeFtpFileDb.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclarePharmacy\DeclarePharmacies.cs" />
@@ -688,10 +683,6 @@
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocation.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocationDb.cs" />
-    <Compile Include="Class\MedBag\MedBag.cs" />
-    <Compile Include="Class\MedBag\MedBagDb.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
@@ -720,15 +711,6 @@
     <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Service\Converters.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
-      <DependentUpon>MedBagManageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
-      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
@@ -934,6 +916,10 @@
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\DoctorManage\DoctorManageView.xaml.cs">
+      <DependentUpon>DoctorManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\DoctorManage\DoctorManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindow.xaml.cs">
       <DependentUpon>EmployeeChangePasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -966,10 +952,10 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
-      <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
+      <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml.cs">
       <DependentUpon>AddManufactoryWindow.xaml</DependentUpon>
     </Compile>
@@ -1168,6 +1154,18 @@
       <DependentUpon>OfflineOperationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChromeTabViewModel\OfflineOperationWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageView.xaml.cs">
+      <DependentUpon>ActivityManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml.cs">
+      <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml.cs">
+      <DependentUpon>ProductTransactionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControl.xaml.cs">
       <DependentUpon>CooperativeClinicControl.xaml</DependentUpon>
     </Compile>
@@ -1241,14 +1239,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1540,6 +1530,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\DoctorManage\DoctorManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1576,9 +1570,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\AddManufactoryWindow\AddManufactoryWindow.xaml">
       <SubType>Designer</SubType>
@@ -1765,6 +1759,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1818,6 +1824,9 @@
     <Resource Include="Images\Telephone.png" />
     <Resource Include="Images\chart.png" />
     <Resource Include="Images\qr-code.png" />
+    <Resource Include="Images\AccountingReport.png" />
+    <Resource Include="Images\SystemManage.png" />
+    <Resource Include="Images\Transaction.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1900,7 +1909,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
-    <Folder Include="SYSTEM_TAB\P1_TRANSACTION\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

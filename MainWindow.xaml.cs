@@ -69,7 +69,10 @@ namespace His_Pos
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
-                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.MedFrequencyManage, StringRes.MedBagManage , StringRes.DeclareFileExport,StringRes.AdditionalCashFlowManage }));
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport,StringRes.AdditionalCashFlowManage }));
+
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
+                            new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
 
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
                             new[] { StringRes.StockSearch, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
@@ -78,20 +81,20 @@ namespace His_Pos
                             new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord, StringRes.StockTakingPlan }));
 
             HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
-                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage,
-                                           StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
+                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport,
-                  StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport,StringRes.CooperativeEntryReport }));
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
-              new[] { StringRes.AdminFunction }));
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AccountReportSystem,
-             new[] { StringRes.InstitutionDeclarePointReport }));
+                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport,StringRes.CooperativeEntryReport }));
             
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
+                            new[] { StringRes.InstitutionDeclarePointReport }));
+
+            HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
+                            new[] { StringRes.AdminFunction }));
+
         }
         
         private void InitializeMenu()
