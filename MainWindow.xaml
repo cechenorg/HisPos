@@ -17,10 +17,8 @@
     xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:customerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
-    xmlns:medFrequencyManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
     xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
-    xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
     xmlns:declareFile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage"
     xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
@@ -40,6 +38,9 @@
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
     xmlns:InstitutionDeclarePointReport ="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
     xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
+    xmlns:productTransaction="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
+    xmlns:productTransactionRecord="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
+    xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -91,17 +92,11 @@
         <DataTemplate DataType="{x:Type customerManage:CustomerManageViewModel}">
             <customerManage:CustomerManageView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type medFrequencyManage:MedFrequencyManage}">
-            <medFrequencyManage:MedFrequencyManageView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
             <workScheduleManage:WorkScheduleManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type authenticationManage:AuthenticationManage}">
             <authenticationManage:AuthenticationManageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type medBagManage:MedBagManage}">
-            <medBagManage:MedBagManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type index:Index}">
             <index:IndexView/>
@@ -138,6 +133,15 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingPlan:StockTakingPlanViewModel}">
             <stockTakingPlan:StockTakingPlanView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransaction:ProductTransactionViewModel}">
+            <productTransaction:ProductTransactionView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransactionRecord:ProductTransactionRecordViewModel}">
+            <productTransactionRecord:ProductTransactionRecordView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type activityManage:ActivityManageViewModel}">
+            <activityManage:ActivityManageView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -239,6 +243,7 @@
                         <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         </StackPanel>
                 </ScrollViewer>
             </StackPanel>

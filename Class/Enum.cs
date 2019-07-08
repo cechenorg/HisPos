@@ -60,6 +60,9 @@ namespace His_Pos.Class
         額外收入登錄 = 29,
         申報院所點數總表 = 30,
         盤點計畫 = 31,
+        結帳作業 = 32,
+        銷售紀錄 = 33,
+        促銷管理 = 34,
     }
 
     public enum StoreOrderProductType

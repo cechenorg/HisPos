@@ -670,6 +670,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isAdjusting = false;
                 return;
             }
+            if (!CheckAdjustDatePast10Days())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             CheckIsReadCard();
         }
@@ -1214,6 +1219,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var result = CurrentPrescription.CheckMedicinesNegativeStock();
             return string.IsNullOrEmpty(result);
+        }
+
+        private bool CheckAdjustDatePast10Days()
+        {
+            if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
+            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
+            if (timeDiff > 10)
+            {
+                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

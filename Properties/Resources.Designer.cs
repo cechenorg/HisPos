@@ -19,7 +19,7 @@ namespace His_Pos.Properties {
     // 類別透過 ResGen 或 Visual Studio 這類工具。
     // 若要加入或移除成員，請編輯您的 .ResX 檔，然後重新執行 ResGen
     // (利用 /str 選項)，或重建您的 VS 專案。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -66,6 +66,15 @@ namespace His_Pos.Properties {
         internal static string AccountReportSystem {
             get {
                 return ResourceManager.GetString("AccountReportSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 促銷管理 的當地語系化字串。
+        /// </summary>
+        internal static string Activity {
+            get {
+                return ResourceManager.GetString("Activity", resourceCulture);
             }
         }
         
@@ -616,6 +625,24 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 結帳作業 的當地語系化字串。
+        /// </summary>
+        internal static string ProductTransaction {
+            get {
+                return ResourceManager.GetString("ProductTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 銷售紀錄 的當地語系化字串。
+        /// </summary>
+        internal static string ProductTransactionRecord {
+            get {
+                return ResourceManager.GetString("ProductTransactionRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 商品類別管理 的當地語系化字串。
         /// </summary>
         internal static string ProductTypeManage {
@@ -711,6 +738,15 @@ namespace His_Pos.Properties {
         internal static string StockTakingRecord {
             get {
                 return ResourceManager.GetString("StockTakingRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 銷售作業 的當地語系化字串。
+        /// </summary>
+        internal static string Transaction {
+            get {
+                return ResourceManager.GetString("Transaction", resourceCulture);
             }
         }
         
