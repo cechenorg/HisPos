@@ -29,7 +29,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             else
             {
                 if (!CheckNhiRules(noCard)) return false;
-                if (noCard)
+                if (!noCard)
                     if (!CheckMedicalNumber()) return false;
             }
             if (!CheckPrescribeRules()) return false;
