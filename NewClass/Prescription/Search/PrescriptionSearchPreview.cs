@@ -8,6 +8,7 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
@@ -15,7 +16,7 @@ namespace His_Pos.NewClass.Prescription.Search
     {
         public PrescriptionSearchPreview() { }
 
-        public PrescriptionSearchPreview(DataRow r,PrescriptionSource s)
+        public PrescriptionSearchPreview(DataRow r,PrescriptionType s)
         {
             Source = s;
             ID = r.Field<int>("ID");
@@ -29,7 +30,7 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
-            if (s == PrescriptionSource.Normal)
+            if (s == PrescriptionType.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
                 TaiwanCalendar tc = new TaiwanCalendar();
@@ -157,7 +158,7 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => InsertDate, ref insertDate, value);
             }
         }
-        public PrescriptionSource Source { get; set; }
+        public PrescriptionType Source { get; set; }
         public Prescription GetPrescriptionByID()
         {
             return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0],PrescriptionSource.Normal);

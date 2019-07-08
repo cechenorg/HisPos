@@ -373,7 +373,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 PrescriptionDetailMedicineRepotCollection.Clear();
                 return;
             }
-            PrescriptionService.ShowPrescriptionEditWindowRefactoring(PrescriptionDetailReportSelectItem.Id); 
+            PrescriptionService.ShowPrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id); 
         }
         private void PrescriptionDetailClickAction() {
             if (PrescriptionDetailReportSelectItem is null)

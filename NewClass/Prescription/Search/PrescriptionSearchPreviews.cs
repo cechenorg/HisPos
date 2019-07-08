@@ -7,6 +7,7 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
@@ -18,7 +19,7 @@ namespace His_Pos.NewClass.Prescription.Search
             var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName,patientIDNumber,patientBirth,adj,medID,medName,ins, div);
             foreach (DataRow r in table.Rows)
             {
-                Add(new PrescriptionSearchPreview(r,PrescriptionSource.Normal));
+                Add(new PrescriptionSearchPreview(r,PrescriptionType.Normal));
             }
         }
 
@@ -27,7 +28,7 @@ namespace His_Pos.NewClass.Prescription.Search
             var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj, medID, medName,ins, div);
             foreach (DataRow r in table.Rows)
             {
-                Add(new PrescriptionSearchPreview(r, PrescriptionSource.ChronicReserve));
+                Add(new PrescriptionSearchPreview(r, PrescriptionType.ChronicReserve));
             }
         }
 

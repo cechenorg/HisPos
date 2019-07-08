@@ -564,7 +564,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             TempPre = (Prescription)Current.Clone();
         }
 
-        public static void ShowPrescriptionEditWindowRefactoring(int preID, PrescriptionType type = PrescriptionType.Normal)
+        public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
             var selected = GetPrescriptionByID(preID,type);
             switch (type)
@@ -606,12 +606,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             {
                 case PrescriptionType.ChronicReserve:
                     r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                    selected = new Prescription(r,PrescriptionType.Normal);
+                    selected = new Prescription(r,PrescriptionType.ChronicReserve);
                     selected.InsertTime = r.Field<DateTime?>("InsertTime");
                     break;
                 default:
                     r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-                    selected = new Prescription(r, PrescriptionType.ChronicReserve);
+                    selected = new Prescription(r, PrescriptionType.Normal);
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
