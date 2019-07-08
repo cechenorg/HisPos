@@ -40,6 +40,9 @@
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
     xmlns:InstitutionDeclarePointReport ="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
     xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
+    xmlns:productTransaction="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
+    xmlns:productTransactionRecord="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
+    xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -138,6 +141,15 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingPlan:StockTakingPlanViewModel}">
             <stockTakingPlan:StockTakingPlanView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransaction:ProductTransactionViewModel}">
+            <productTransaction:ProductTransactionView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransactionRecord:ProductTransactionRecordViewModel}">
+            <productTransactionRecord:ProductTransactionRecordView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type activityManage:ActivityManageViewModel}">
+            <activityManage:ActivityManageView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -239,6 +251,7 @@
                         <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         </StackPanel>
                 </ScrollViewer>
             </StackPanel>
