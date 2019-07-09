@@ -14,6 +14,8 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
+using His_Pos.NewClass.Product;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -42,7 +44,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => ReserveCollectionView, ref reserveCollectionView, value); 
             }
         }
-        
+        private Inventorys inventoryCollection;
+        public Inventorys InventoryCollection
+        {
+            get => inventoryCollection;
+            set
+            {
+                Set(() => InventoryCollection, ref inventoryCollection, value);
+            }
+        }
         private bool isDataChanged;
         public bool IsDataChanged
         {
@@ -72,6 +82,18 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 SetPhoneCount();
             }
         }
+        private bool isShowPrepareReserve = false;
+        public bool IsShowPrepareReserve
+        {
+            get => isShowPrepareReserve;
+            set
+            {
+                Set(() => IsShowPrepareReserve, ref isShowPrepareReserve, value);
+                ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
+            }
+        }
+        
         private bool isShowUnPhoneCall = false;
         public bool IsShowUnPhoneCall
         {
@@ -160,16 +182,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => PhoneCallStatusString, ref phoneCallStatusString, value);
             }
         }
-      
-        private string phoneCallStatusStringSelectedItem;
-        public string PhoneCallStatusStringSelectedItem
+        private List<string> prepareStatusString;
+        public List<string> PrepareStatusString
         {
-            get => phoneCallStatusStringSelectedItem;
+            get => prepareStatusString;
             set
             {
-                Set(() => PhoneCallStatusStringSelectedItem, ref phoneCallStatusStringSelectedItem, value);
+                Set(() => PrepareStatusString, ref prepareStatusString, value);
             }
         }
+         
         private Customer customerData = new Customer();
         public Customer CustomerData
         {
@@ -198,7 +220,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             InitStatusstring();
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
             IndexReserveSelectionChangedCommand = new RelayCommand(IndexReserveSelectionChangedAction);
-            ReserveMedicineSendCommand = new RelayCommand(ReserveMedicineSendAction);
+            ReserveMedicineSendCommand = new RelayCommand(ReserveSendAction);
             CommonMedStoreOrderCommand = new RelayCommand(CommonMedStoreOrderAction);
             StatusChangedCommand = new RelayCommand(StatusChangedAction);
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
@@ -246,6 +268,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void InitStatusstring() {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
+            PrepareStatusString = new List<string>() { "未處理", "備藥", "不備藥" };
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -271,6 +294,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
             } 
         }
+        private void ReserveSendAction() {
+            IndexReserves indexReserves = CaculateReserveSendAmount();
+            ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
+        }
           
         private void IndexReserveSelectionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -287,26 +314,69 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))
-                e.Accepted = false;
-
-
-            e.Accepted = false;
-
-
+                e.Accepted = false; 
+            e.Accepted = false; 
             IndexReserve indexitem = ((IndexReserve)e.Item);
-            if (indexitem.IsNoPrepareMed && IsShowUnPrepareReserve)
+            if (indexitem.PrepareMedStatus == "不備藥" && IsShowUnPrepareReserve)
                 e.Accepted = true;
+            else if(indexitem.PrepareMedStatus == "備藥" && IsShowPrepareReserve)
+                e.Accepted = true; 
             else if (indexitem.PhoneCallStatus == "F" && IsShowUnPhoneCall)
                 e.Accepted = true;
             else if (indexitem.PhoneCallStatus == "N" && IsShowUnPhoneProcess)
                 e.Accepted = true;
             else if(indexitem.IsExpensive && IsExpensive)
                 e.Accepted = true;
-            else if(!IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && !indexitem.IsNoPrepareMed)
+            else if(!IsShowPrepareReserve && !IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == "未處理")
                 e.Accepted = true;
-           
-         
-                 
+            
+        }
+        private IndexReserves CaculateReserveSendAmount() {
+            IndexReserves indexReserves = new IndexReserves(); 
+            foreach (var r in ReserveCollectionView) {
+                indexReserves.Add((IndexReserve)r);
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            InventoryCollection = Inventorys.GetAllInventoryByWarID("0");
+
+            for (int i = 0; i < indexReserves.Count; i++) {
+                if (indexReserves[i].PrepareMedStatus == "備藥")
+                {
+                    indexReserves[i].GetIndexDetail();
+                    for (int j = 0; j < indexReserves[i].IndexReserveDetailCollection.Count; j++)
+                    {
+                        var pro = indexReserves[i].IndexReserveDetailCollection[j];
+                        if (InventoryCollection.Count(inv => inv.InvID.ToString() == pro.InvID) == 0)
+                        {
+                            pro.SendAmount = Convert.ToInt32(pro.Amount);
+                        }
+                        else
+                        {
+                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
+                            if (target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0)
+                            {
+                                pro.SendAmount = Convert.ToInt32(pro.Amount);
+                                target.OnTheFrame -= Convert.ToInt32(pro.Amount);
+                            }
+                            else
+                            {
+                                pro.SendAmount = target.OnTheFrame;
+                                target.OnTheFrame = 0;
+                                InventoryCollection.Remove(target);
+                            }
+                        }
+
+                    }
+                }
+                else {
+                    indexReserves.Remove(indexReserves[i]);
+                    i--;
+                }
+               
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            return indexReserves;
         }
         #endregion
     }

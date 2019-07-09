@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
     public class IndexReserve : ObservableObject
     {
         public IndexReserve(DataRow r) {
+            IndexReserveDetailCollection = new IndexReserveDetails();
             Id = r.Field<int>("Id");
             CusId = r.Field<int>("Cus_ID");
             CusName = r.Field<string>("Cus_Name");
@@ -20,10 +22,19 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             TreatDate = r.Field<DateTime>("TreatmentDate");
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
-            Profit = r.Field<double>("Profit");
-            IsExpensive = r.Field<bool>("IsExpensive");
-            IsNoPrepareMed = r.Field<string>("MedPrepareStatus") == "F";
-            
+            Profit = Convert.ToInt32(r.Field<double>("Profit"));
+            IsExpensive = r.Field<bool>("IsExpensive"); 
+            switch (r.Field<string>("MedPrepareStatus")) {
+                case "N":
+                    PrepareMedStatus = "未處理";
+                    break;
+                case "D":
+                    PrepareMedStatus = "備藥";
+                    break;
+                case "F":
+                    PrepareMedStatus = "不備藥";
+                    break; 
+            }
             switch (r.Field<string>("CallStatus"))
             {
                 case "N":
@@ -42,7 +53,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public string CusName { get; set; }
         public string InsName { get; set; }
         public string DivName { get; set; }
-        public double Profit { get; set; }
+        public int Profit { get; set; }
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
@@ -76,18 +87,31 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 
             }
         }
-        private bool isNoPrepareMed;
-        public bool IsNoPrepareMed
+        private IndexReserveDetails indexReserveDetailCollection;
+        public IndexReserveDetails IndexReserveDetailCollection
         {
-            get => isNoPrepareMed;
+            get => indexReserveDetailCollection;
             set
             {
-                Set(() => IsNoPrepareMed, ref isNoPrepareMed, value);
+                Set(() => IndexReserveDetailCollection, ref indexReserveDetailCollection, value);
+            }
+        }
+         
+        private string prepareMedStatus;
+        public string PrepareMedStatus
+        {
+            get => prepareMedStatus;
+            set
+            {
+                Set(() => PrepareMedStatus, ref prepareMedStatus, value);
             }
         }
         public bool IsExpensive { get; set; }
         public void SaveStatus() {
-            IndexReserveDb.Save(Id, PhoneCallStatus, IsNoPrepareMed);
+            IndexReserveDb.Save(Id, PhoneCallStatus, PrepareMedStatus);
+        }
+        public void GetIndexDetail() {
+            IndexReserveDetailCollection.GetDataById(Id);
         }
     }
 }

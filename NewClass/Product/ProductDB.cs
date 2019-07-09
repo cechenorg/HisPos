@@ -87,6 +87,12 @@ namespace His_Pos.NewClass.Product
             }
              
         }
-         
+        internal static DataTable GetAllInventoryByWarID(string warID) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "@warID", warID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AllInventoryByWarID]", parameterList); 
+        }
+        
+
     }
 }

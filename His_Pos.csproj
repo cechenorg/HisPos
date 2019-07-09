@@ -442,6 +442,8 @@
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
+    <Compile Include="NewClass\Product\Inventory.cs" />
+    <Compile Include="NewClass\Product\Inventorys.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
@@ -1164,6 +1166,10 @@
     <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmWindow.xaml.cs">
+      <DependentUpon>ReserveSendConfirmWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\OfflineOperation\OfflineOperationWindow.xaml.cs">
       <DependentUpon>OfflineOperationWindow.xaml</DependentUpon>
     </Compile>
@@ -1758,6 +1764,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\ConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
