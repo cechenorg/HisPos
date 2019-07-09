@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
@@ -9,11 +10,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
     {
         #region ----- Define Variables -----
         private bool isSelected = false;
-        private string batchNumber;
         private double returnAmount;
         private double realAmount;
         private double subTotal;
         private double price;
+        private double returnStockValue;
         private bool isProcessing = false;
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
@@ -37,10 +38,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double UnitAmount { get; set; }
         public int SafeAmount { get; set; }
         public string Note { get; set; }
-        public string BatchNumber
+        public double ReturnStockValue
         {
-            get { return batchNumber; }
-            set { Set(() => BatchNumber, ref batchNumber, value); }
+            get { return returnStockValue; }
+            set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
         public ProductStartInputVariableEnum StartInputVariable
         {
@@ -53,6 +54,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set
             {
                 Set(() => ReturnAmount, ref returnAmount, value);
+                SetReturnInventoryDetail();
                 CalculatePrice();
             }
         }
@@ -101,7 +103,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculatePrice();
             }
         }
-        public DateTime? ValidDate { get; set; }
+        public ReturnProductInventoryDetails InventoryDetailCollection { get; set; } = new ReturnProductInventoryDetails();
         #endregion
 
         public ReturnProduct() : base() {}
@@ -114,15 +116,49 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             UnitAmount = row.Field<double>("StoOrdDet_UnitAmount");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             Note = row.Field<string>("StoOrdDet_Note");
-            BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
-            ReturnAmount = row.Field<double>("StoOrdDet_OrderAmount");
-            RealAmount = row.Field<double>("StoOrdDet_RealAmount");
-            Price = (double)row.Field<decimal>("StoOrdDet_Price");
-            SubTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
-            ValidDate = row.Field<DateTime?>("StoOrdDet_ValidDate");
+            returnAmount = row.Field<double>("StoOrdDet_OrderAmount");
+            realAmount = row.Field<double>("StoOrdDet_RealAmount");
+            price = (double)row.Field<decimal>("StoOrdDet_Price");
+            subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
+            InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
         }
 
         #region ----- Define Variables -----
+        public void SetReturnInventoryDetail()
+        {
+            double returnAmountTemp = ReturnAmount;
+
+            InventoryDetailCollection.ClearReturnValue();
+
+            foreach (var detail in InventoryDetailCollection)
+            {
+                if (detail.Inventory <= returnAmountTemp)
+                {
+                    detail.ReturnAmount = detail.Inventory;
+
+                    returnAmountTemp -= detail.Inventory;
+                }
+                else
+                {
+                    detail.ReturnAmount = returnAmountTemp;
+                    break;
+                }
+            }
+
+            CalculateReturnAmount();
+        }
+        public void CalculateReturnAmount()
+        {
+            returnAmount = InventoryDetailCollection.Sum(d => d.ReturnAmount);
+            returnStockValue = InventoryDetailCollection.Sum(d => d.ReturnStockValue);
+
+            RaisePropertyChanged(nameof(ReturnAmount));
+            RaisePropertyChanged(nameof(ReturnStockValue));
+        }
+        internal void AddInventoryDetail(DataRow row)
+        {
+            InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
+        }
         private void SetStartInputVariable(ProductStartInputVariableEnum startInputVariable)
         {
             StartInputVariable = startInputVariable;
@@ -174,12 +210,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             UnitAmount = returnProduct.UnitAmount;
             SafeAmount = returnProduct.SafeAmount;
             Note = returnProduct.Note;
-            BatchNumber = returnProduct.BatchNumber;
             ReturnAmount = returnProduct.ReturnAmount;
             RealAmount = returnProduct.RealAmount;
             Price = returnProduct.Price;
             SubTotal = returnProduct.SubTotal;
-            ValidDate = returnProduct.ValidDate;
+
+            InventoryDetailCollection = returnProduct.InventoryDetailCollection;
         }
         public abstract object Clone();
         #endregion

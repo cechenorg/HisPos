@@ -216,7 +216,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", "");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);

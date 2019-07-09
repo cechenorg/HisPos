@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.StoreOrder
     {
         #region ----- Define Variables -----
         private ReturnProducts returnProducts;
+        private double returnStockValue;
 
         public ReturnProducts ReturnProducts
         {
@@ -26,6 +27,11 @@ namespace His_Pos.NewClass.StoreOrder
                 if (ReturnProducts is null) return initProductCount;
                 else return ReturnProducts.Count;
             }
+        }
+        public double ReturnStockValue
+        {
+            get { return returnStockValue; }
+            set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
         #endregion
 
@@ -98,7 +104,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Product Function /////
         public override void CalculateTotalPrice()
         {
-            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
+            ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
         }
         public override void GetOrderProducts()
         {
@@ -112,13 +118,35 @@ namespace His_Pos.NewClass.StoreOrder
 
             CalculateTotalPrice();
         }
+        internal void SetInventoryDetail(string proID)
+        {
+            foreach (var returnProduct in ReturnProducts)
+            {
+                if (returnProduct.ID.Equals(proID))
+                {
+                    returnProduct.SetReturnInventoryDetail();
+                    break;
+                }
+            }
+
+            CalculateTotalPrice();
+        }
+        internal void CalculateReturnAmount()
+        {
+            foreach (var returnProduct in ReturnProducts)
+            {
+                returnProduct.CalculateReturnAmount();
+            }
+
+            CalculateTotalPrice();
+        }
         public override void SetProductToProcessingStatus()
         {
             ReturnProducts.SetToProcessing();
         }
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
-            if (ReturnProducts.Count(p => p.ID == iD && string.IsNullOrEmpty(p.BatchNumber)) > 0)
+            if (ReturnProducts.Count(p => p.ID == iD) > 0)
             {
                 MessageWindow.ShowMessage("訂單中已有 " + iD + " 商品", MessageType.ERROR);
                 return;
@@ -126,32 +154,39 @@ namespace His_Pos.NewClass.StoreOrder
 
             DataTable dataTable = PurchaseReturnProductDB.GetReturnProductByProductID(iD, OrderWarehouse.ID);
 
-            ReturnProduct returnProduct;
+            ReturnProduct tempProduct = null;
 
-            switch (dataTable.Rows[0].Field<string>("TYPE"))
+            foreach (DataRow row in dataTable.Rows)
             {
-                case "O":
-                    returnProduct = new ReturnOTC(dataTable.Rows[0]);
-                    break;
-                case "M":
-                    returnProduct = new ReturnMedicine(dataTable.Rows[0]);
-                    break;
-                default:
-                    returnProduct = null;
-                    break;
+                if (tempProduct is null)
+                {
+                    switch (row.Field<string>("TYPE"))
+                    {
+                        case "O":
+                            tempProduct = new ReturnOTC(row);
+                            break;
+                        case "M":
+                            tempProduct = new ReturnMedicine(row);
+                            break;
+                    }
+                }
+                else
+                {
+                    tempProduct.AddInventoryDetail(row);
+                }
             }
 
             if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
                 int selectedProductIndex = ReturnProducts.IndexOf((ReturnProduct)SelectedItem);
 
-                returnProduct.CopyOldProductData((ReturnProduct)SelectedItem);
+                tempProduct.CopyOldProductData((ReturnProduct)SelectedItem);
 
                 ReturnProducts.RemoveAt(selectedProductIndex);
-                ReturnProducts.Insert(selectedProductIndex, returnProduct);
+                ReturnProducts.Insert(selectedProductIndex, tempProduct);
             }
             else
-                ReturnProducts.Add(returnProduct);
+                ReturnProducts.Add(tempProduct);
 
             RaisePropertyChanged(nameof(ProductCount));
         }
