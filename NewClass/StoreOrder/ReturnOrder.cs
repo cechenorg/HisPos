@@ -108,6 +108,8 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public override void GetOrderProducts()
         {
+            SelectedItem = null;
+
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
@@ -115,19 +117,6 @@ namespace His_Pos.NewClass.StoreOrder
                 ReturnProducts.SetToProcessing();
 
             ReturnProducts.SetStartEditToPrice();
-
-            CalculateTotalPrice();
-        }
-        internal void SetInventoryDetail(string proID)
-        {
-            foreach (var returnProduct in ReturnProducts)
-            {
-                if (returnProduct.ID.Equals(proID))
-                {
-                    returnProduct.SetReturnInventoryDetail();
-                    break;
-                }
-            }
 
             CalculateTotalPrice();
         }

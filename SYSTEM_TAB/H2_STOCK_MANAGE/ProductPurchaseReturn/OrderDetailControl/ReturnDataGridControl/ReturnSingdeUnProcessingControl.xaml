@@ -131,7 +131,7 @@
         </DataGrid>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkestBackGround}"/>
         <DataGrid Grid.Row="1" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" Margin="10,0,10,10" CanUserAddRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.SelectedItem.InventoryDetailCollection}">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.SelectedItem.InventoryDetailCollection, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
