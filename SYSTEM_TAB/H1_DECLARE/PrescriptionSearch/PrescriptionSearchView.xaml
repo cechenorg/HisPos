@@ -76,11 +76,11 @@
                     <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
-                    <Label Content="藥品健保碼" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <Label Content="藥品代碼" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                     <TextBox Name="MedicineID" Text="{Binding MedicineID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown" CharacterCasing="Upper"/>
                     <Label Content="藥品名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                     <TextBox Name="MedicineName" Text="{Binding MedicineName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
-                    <Label Content="釋出院所" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                    <Label Content="院所" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                     <TextBox Name="ReleaseHospital" Width="375" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" materialDesign:HintAssist.Hint="輸入院所代碼"
                              Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
@@ -96,7 +96,7 @@
                     <ComboBox Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth" 
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" ItemsSource="{Binding Divisions}"
                               SelectedItem="{Binding SelectedDivision, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="70,0,10,0"/>
+                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="125,0,10,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                     
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >
@@ -192,7 +192,7 @@
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn> 
+                        </DataGridTextColumn>
                         <DataGridTextColumn Width="150" Header="實際調劑日" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -218,7 +218,7 @@
                     <Label Width="50" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="70" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                 
+
                     <Label Content="藥品量" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="50" Content="{Binding MedicineCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Button Command="{Binding ExportMedicineCsvCommand}" Width="120" Height="30" Content="匯出藥品檔" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="0,0,0,0" />

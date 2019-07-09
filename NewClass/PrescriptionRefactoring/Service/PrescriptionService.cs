@@ -584,7 +584,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     return;
                 }
                 selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.Normal);
-                
+
                 if (VM.CurrentUser.ID == 1)
                 {
                     var insertTime = r.Field<DateTime?>("InsertTime");

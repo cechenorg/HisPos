@@ -70,6 +70,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             set
             {
                 Set(() => CopaymentPointPayable, ref copaymentPointPayable, value);
+                CountAmountsPay();
             }
         }
         private int specialMaterialPoint;//特殊材料費用
