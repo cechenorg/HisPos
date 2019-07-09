@@ -69,31 +69,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
         public bool ShowDialog { get; private set; }
         private void ExecuteSearchTextChanged()
         {
-            if (IsEditing)
+            IsEditing = false;
+            InsCollectionViewSource.Filter += FilterBySearchText;
+            switch (Institutions.Count)
             {
-                IsEditing = false;
-                InsCollectionViewSource.Filter += FilterBySearchText;
-                switch (Institutions.Count)
-                {
-                    case 0:
-                        MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
-                        break;
-                    default:
-                        InsCollectionViewSource.View.MoveCurrentToFirst();
-                        SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
-                        break;
-                }
-            }
-            else
-            {
-                ExecuteInstitutionSelected();
+                case 0:
+                    MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
+                    break;
+                default:
+                    InsCollectionViewSource.View.MoveCurrentToFirst();
+                    SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
+                    break;
             }
         }
-        private void ExecuteInstitutionSelected()
-        {
-            Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");
-            Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));
-        }
+
         private void FilterBySearchText(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Institution src))
@@ -105,11 +94,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 e.Accepted = false;
             }
         }
+
         public InstitutionSelectionViewModel(string searchText)
         {
             Institutions = ViewModelMainWindow.Institutions;
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
-            InstitutionSelected = new RelayCommand(ExecuteInstitutionSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             var resultList = Institutions.Where(i => i.FullName.Contains(searchText)).ToList();
             var resultCount = resultList.Count();
@@ -122,7 +111,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 case 1:
                     ShowDialog = false;
                     SelectedInstitution = resultList[0];
-                    ExecuteInstitutionSelected();
                     break;
                 default:
                     ShowDialog = true;

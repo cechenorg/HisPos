@@ -35,5 +35,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", institutionID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EnableDivisions]", parameterList);
         }
+
+        public static DataTable GetAdjustedInstitutions()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AdjustedInstitutions]");
+        }
     }
 }

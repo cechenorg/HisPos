@@ -6,9 +6,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
 {
     public class AdjustCases : Collection<AdjustCase>
     {
-        public AdjustCases()
+        public AdjustCases(bool init)
         {
-            Init();
+            if(init) Init();
         }
 
         public AdjustCases(IList<AdjustCase> list)
