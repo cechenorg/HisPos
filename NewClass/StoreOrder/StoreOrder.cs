@@ -112,6 +112,8 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Status Function /////
         public void MoveToNextStatus()
         {
+            SaveOrder();
+
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
@@ -129,7 +131,6 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            SaveOrder();
         }
         private void ToWaitingStatus()
         {
@@ -137,8 +138,19 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isSuccess)
             {
-                SaveOrder();
                 OrderStatus = OrderStatusEnum.WAITING;
+
+                if (OrderType == OrderTypeEnum.RETURN)
+                {
+                    DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
+
+                    if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                    {
+                        MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
+                        return;
+                    }
+                }
+
                 StoreOrderDB.StoreOrderToWaiting(ID);
             }
             else
@@ -146,7 +158,17 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToNormalProcessingStatus()
         {
-            SaveOrder();
+            if (OrderType == OrderTypeEnum.RETURN)
+            {
+                DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
+
+                if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                {
+                    MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
+                    return;
+                }
+            }
+
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
             ReceiveID = ID;
             SetProductToProcessingStatus();
@@ -164,7 +186,6 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToDoneStatus()
         {
-            SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
 
             DataTable result = new DataTable();

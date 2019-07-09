@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Security.Policy;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -52,17 +53,6 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            var products = ReturnProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, ReturnAmount = g.Sum(p => p.ReturnAmount), Inventory = g.First().Inventory }).ToList();
-
-            foreach (var product in products)
-            {
-                if (product.Inventory < product.ReturnAmount)
-                {
-                    MessageWindow.ShowMessage(product.ProductID + " 商品退貨量不可大於庫存量!", MessageType.ERROR);
-                    return false;
-                }
-            }
-
             foreach (var product in ReturnProducts)
             {
                 if (product.ReturnAmount == 0)
@@ -77,9 +67,20 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成退貨單?\n(資料內容將不能修改)", "", true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認退貨?\n(確認後直接扣除庫存)", "", true);
 
-            return (bool)confirmWindow.DialogResult;
+            if (!(bool) confirmWindow.DialogResult)
+                return false;
+
+            DataTable dataTable = StoreOrderDB.CheckReturnProductValid(this);
+
+            if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+            {
+                MessageWindow.ShowMessage("庫存有異動 請重新設定後再傳送", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
         }
         protected override bool CheckNormalProcessingOrder()
         {
