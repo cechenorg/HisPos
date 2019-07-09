@@ -72,9 +72,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport
                             file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
                             file.WriteLine("院所申報統計表");
                             file.WriteLine("月份 " + SearchDate.Month.ToString() + "月");
+                            file.WriteLine("院所,藥品點,特材點,藥服費,小計,部分負擔,申報額,筆數");
                             foreach (InstitutionDeclarePoint ins in InstitutionDeclarePointCollection)
                             {
-                            file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
+                                file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
                             }
                             InstitutionDeclarePoint sum = new InstitutionDeclarePoint();
                             sum.InsName = "總計";
