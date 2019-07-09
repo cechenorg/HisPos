@@ -569,7 +569,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
-        public static void ShowPrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
+        public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
             var selected = GetPrescriptionByID(preID,type);
             switch (type)

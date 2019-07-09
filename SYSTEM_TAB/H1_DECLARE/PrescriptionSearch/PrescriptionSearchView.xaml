@@ -15,88 +15,57 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:PrescriptionSearchViewModel/>
-    </UserControl.DataContext>
     <Viewbox Stretch="Fill" Width="1363">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
             <Grid Width="1418" Height="839">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="55"/>
                     <RowDefinition/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="55"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,10,0">
-                    <Label Content="調劑日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <xctk:MaskedTextBox Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="MaskedTextBox_PreviewKeyDown">
-                        <xctk:MaskedTextBox.Text>
-                            <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <ComboBox Margin="10" Height="35" Width="100" ItemsSource="{Binding TimeIntervalTypes,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedTimeIntervalType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite">
+                        <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                <Binding.ValidationRules>
-                                    <service:NullDateValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </xctk:MaskedTextBox.Text>
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
                     </xctk:MaskedTextBox>
-                    <Label Content="~" VerticalContentAlignment="Center" Margin="0,10,0,10"/>
-                    <xctk:MaskedTextBox Name="EndDate" Width="100" Height="35" Margin="5,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_PreviewKeyDown">
-                        <xctk:MaskedTextBox.Text>
-                            <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                    <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
+                    <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite">
+                        <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                <Binding.ValidationRules>
-                                    <service:NullDateValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </xctk:MaskedTextBox.Text>
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
                     </xctk:MaskedTextBox>
-                    <Label Content="病患姓名" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Name="PatientNameText" Text="{Binding PatientName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
-                    <Label Content="身分證" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Name="PatientIdNumberText" Text="{Binding PatientIDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="100" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientIDNumber_PreviewKeyDown" CharacterCasing="Upper"/>
-                    <Label Content="生日" Margin="10,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <xctk:MaskedTextBox Name="PatientBirth" Width="100" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="PatientBirthday_PreviewKeyDown">
-                        <xctk:MaskedTextBox.Text>
-                            <Binding Path="PatientBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
-                                     ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                <Binding.ValidationRules>
-                                    <service:NullDateValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </xctk:MaskedTextBox.Text>
+                    <ComboBox Margin="10" Height="35" Width="100" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatientCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Text="{Binding SearchPatient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"/>
+                    <Label Content="生日" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
+                    <xctk:MaskedTextBox x:Name="Birthday" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite">
+                        <Binding Path="Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
                     </xctk:MaskedTextBox>
-                    <Label Content="案件" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"/>
-                    <ComboBox Name="PreSearchAdjustCaseCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
-                              SelectedItem="{Binding SelectedAdjustCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PreSearchAdjustCaseCombo_PreviewKeyDown"/>
-                    <Button Name="SearchButton" Content="查詢" Command="{Binding Search}" Background="RoyalBlue"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="50,0,0,0"/>
-                    <Button Content="清除" Command="{Binding Clear}" Background="Gray"  FontSize="18" FontWeight="Bold" Width="80" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
+                    <ComboBox Height="35" Width="170" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatientCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="科別" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
+                    <ComboBox Height="35" Width="170" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDivision,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Height="35" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0"/>
+                    <Button Height="35" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="10,0,0,0"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0">
-                    <Label Content="藥品代碼" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Name="MedicineID" Text="{Binding MedicineID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown" CharacterCasing="Upper"/>
-                    <Label Content="藥品名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Name="MedicineName" Text="{Binding MedicineName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" Width="130" FontSize="16" Height="35" HorizontalContentAlignment="Center" PreviewKeyDown="PatientName_PreviewKeyDown"/>
-                    <Label Content="院所" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
-                    <TextBox Name="ReleaseHospital" Width="375" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" materialDesign:HintAssist.Hint="輸入院所代碼"
-                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontStretch="ExtraExpanded" Text="{Binding SelectedInstitution.FullName,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
-                        </TextBox.InputBindings>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding CheckInsEmpty}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <Label Content="科別" Style="{StaticResource BoldLabelContent18}" Margin="10,0,10,0" />
-                    <ComboBox Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth" 
-                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" ItemsSource="{Binding Divisions}"
-                              SelectedItem="{Binding SelectedDivision, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="預約查詢" Command="{Binding ReserveSearch}" Background="CornflowerBlue"  FontSize="18" FontWeight="Bold" BorderThickness="0" Margin="125,0,10,0"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <ComboBox Height="35" Width="100" ItemsSource="{Binding MedicineCondition,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMedicineCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Grid.Row="2" >
@@ -114,14 +83,14 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="調劑狀態"  Width="100" IsReadOnly="True">
+                        <DataGridTemplateColumn Header="調劑"  Width="60" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image Source="/Images/Declared.png" Width="20" Visibility="{Binding IsAdjust,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="120" MaxWidth="120" Header="藥袋狀態" IsReadOnly="True"  Binding="{Binding StoStatus,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn MinWidth="120" MaxWidth="120" Header="訂單狀態" IsReadOnly="True"  Binding="{Binding StoStatus,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -129,7 +98,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="220" Header="醫療院所" IsReadOnly="True" Binding="{Binding Institution.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="220" Header="院所" IsReadOnly="True" Binding="{Binding Institution.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -145,7 +114,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="病患姓名" IsReadOnly="True"  Binding="{Binding Patient.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="100" Header="姓名" IsReadOnly="True"  Binding="{Binding Patient.Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -153,15 +122,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="就醫序號" IsReadOnly="True"  Binding="{Binding MedicalNumber,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="身分證" IsReadOnly="True"  Binding="{Binding Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="100" Header="身分證" IsReadOnly="True"  Binding="{Binding Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -177,7 +138,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="處方就醫日" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="80" Header="卡序" IsReadOnly="True"  Binding="{Binding MedicalNumber,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -185,15 +146,31 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="處方調劑日" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="100" Header="就醫日" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn> 
-                        <DataGridTextColumn Width="150" Header="實際調劑日" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="調劑日" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="140" Header="登錄日" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="140" Header="調劑時間" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -208,22 +185,9 @@
                     <Label Width="50" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="慢箋數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Width="50" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="總點數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="70" Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="藥品點" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="70" Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="藥服點" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="70" Content="{Binding MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="利潤" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="70" Content="{Binding Profit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                 
-                    <Label Content="藥品量" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding MedicineCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Command="{Binding ExportMedicineCsvCommand}" Width="120" Height="30" Content="匯出藥品檔" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="0,0,0,0" />
+                    <Button Command="{Binding ExportMedicineCsvCommand}" Width="120" Height="30" Content="匯出藥品檔" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="900,0,0,0" />
                     <Button Command="{Binding ExportPrescriptionCsvCommand}" Width="120" Height="30" Content="匯出處方檔" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="10,0,0,0" />
-                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" />
+                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" Visibility="Collapsed"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
