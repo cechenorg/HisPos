@@ -372,8 +372,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                     if ((value.IsChronic() && !adjustCase.IsChronic()) || (!value.IsChronic() && adjustCase.IsChronic()))
                         IsBuckle = WareHouse != null;
                 }
+                var isChronic = CheckIsChronic();
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
+                if (isChronic && !CheckIsChronic())
+                    Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                 CheckVariableByAdjustCase();
             }
         }
@@ -414,7 +417,14 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {
-                    CountCopaymentPoint();
+                    PrescriptionPoint.CopaymentPoint = CheckNotFreeCopayment() ? CountCopaymentPoint() : 0;
+                    if (Type.Equals(PrescriptionType.Cooperative))
+                        PrescriptionPoint.CopaymentPointPayable =
+                            PrescriptionStatus.IsVIP ? 0 : PrescriptionPoint.CopaymentPoint;
+                    else
+                    {
+                        PrescriptionPoint.CopaymentPointPayable = PrescriptionPoint.CopaymentPoint;
+                    }
                 }
             }
         }
@@ -614,19 +624,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 Copayment = VM.GetCopayment("I22");
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
-            PrescriptionPoint.CopaymentPoint = CheckNotFreeCopayment() ? CountCopaymentPoint() : 0;
-            if (Type.Equals(PrescriptionType.Cooperative))
-                PrescriptionPoint.CopaymentPointPayable =
-                    PrescriptionStatus.IsVIP ? 0 : PrescriptionPoint.CopaymentPoint;
-            else
-            {
-                PrescriptionPoint.CopaymentPointPayable = PrescriptionPoint.CopaymentPoint;
-            }
         }
         private bool CheckIsChronic()
         {
-            return AdjustCase.ID.Equals("2") || ChronicSeq != null && ChronicSeq > 0 ||
-                   ChronicTotal != null && ChronicTotal > 0;
+            if (AdjustCase is null) return false;
+            return AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0 &&
+                   ChronicTotal != null && ChronicTotal > 0);
         }
 
         private bool CheckNotFreeCopayment()
