@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product.Medicine
 
         public int CountMedicinePoint()
         {
-            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf).Sum(m => m.NHIPrice * m.Amount);
+            var medicinePoint = this.Where(m => m is MedicineNHI && !m.PaySelf).Sum(m => m.TotalPrice);
             return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString()), 0, MidpointRounding.AwayFromZero);
         }
 

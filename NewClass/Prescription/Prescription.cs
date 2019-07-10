@@ -306,29 +306,37 @@ namespace His_Pos.NewClass.Prescription
                 serialNumber++;
             }
             details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
-            if (!Treatment.AdjustCase.ID.Equals("0") && !CheckOnlyBloodGlucoseTestStrip())
+            if (!Treatment.AdjustCase.ID.Equals("0"))
             {
-                var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
-                details.Add(medicalService);
                 CountMedicineDays();//計算最大給藥日份
-                if (Treatment.AdjustCase.ID.Equals("1") || Treatment.AdjustCase.ID.Equals("3"))
+                if (!CheckOnlyBloodGlucoseTestStrip() && CheckCountMedicalService())
                 {
-                    var dailyPrice = CheckIfSimpleFormDeclare();
-                    if (dailyPrice > 0)
+                    var medicalService = new Pdata(PDataType.Service, MedicalServiceID, Patient.CheckAgePercentage(), 1);
+                    details.Add(medicalService);
+                    if (Treatment.AdjustCase.ID.Equals("1") || Treatment.AdjustCase.ID.Equals("3"))
                     {
-                        foreach (var d in details)
+                        var dailyPrice = CheckIfSimpleFormDeclare();
+                        if (dailyPrice > 0)
                         {
-                            if (!d.P1.Equals("1")) continue;
-                            d.P1 = "4";
-                            d.P8 = $"{0.00:0000000.00}";
-                            d.P9 = "00000000";
+                            foreach (var d in details)
+                            {
+                                if (!d.P1.Equals("1")) continue;
+                                d.P1 = "4";
+                                d.P8 = $"{0.00:0000000.00}";
+                                d.P9 = "00000000";
+                            }
+                            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
+                            details.Add(simpleForm);
                         }
-                        var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
-                        details.Add(simpleForm);
                     }
                 }
             }
             return details;
+        }
+
+        private bool CheckCountMedicalService()
+        {
+            return Medicines.Count(m => m is MedicineNHI && !m.PaySelf) > 0;
         }
 
         private bool CheckOnlyBloodGlucoseTestStrip()
@@ -349,6 +357,12 @@ namespace His_Pos.NewClass.Prescription
 
         private void CheckMedicalServiceData()
         {
+            if (Medicines.Count(m => m is MedicineNHI && !m.PaySelf) == 0)
+            {
+                MedicalServiceID = string.Empty;
+                PrescriptionPoint.MedicalServicePoint = 0;
+                return;
+            }
             if (MedicineDays >= 28)
             {
                 MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
