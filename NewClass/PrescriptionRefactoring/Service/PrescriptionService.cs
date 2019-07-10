@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -19,6 +20,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medicines
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
@@ -612,6 +614,32 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.ChronicReserve);
                 var edit = new PrescriptionEditWindow(selected);
             }
+        }
+
+        private void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer)
+        {
+            var medBagMedicines = new ReserveMedicines();
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = CreateReserveMedicinesSheetParameters();
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
+
+        private static IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("PatientName",""),
+                new ReportParameter("PatientBirthday", ""),
+                new ReportParameter("Institution", ""),
+                new ReportParameter("Division", "")
+            };
         }
     }
 }
