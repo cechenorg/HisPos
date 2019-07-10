@@ -264,9 +264,9 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
-            var year = treatmentDate.Split('/')[0] + "年";
-            var month = treatmentDate.Split('/')[1] + "月";
-            var day = treatmentDate.Split('/')[2] + "日";
+            var year = treatmentDate.Split('/')[0];
+            var month = treatmentDate.Split('/')[1];
+            var day = treatmentDate.Split('/')[2];
             var treatmentDateChi = $"{year}年{month}月{day}日";
             var cusGender = p.Patient.CheckGender();
             string patientTel;
@@ -568,6 +568,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             TempPre = (Prescription)Current.Clone();
         }
 
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         public static void ShowPrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -583,7 +584,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     return;
                 }
                 selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.Normal);
-                
+
                 if (VM.CurrentUser.ID == 1)
                 {
                     var insertTime = r.Field<DateTime?>("InsertTime");

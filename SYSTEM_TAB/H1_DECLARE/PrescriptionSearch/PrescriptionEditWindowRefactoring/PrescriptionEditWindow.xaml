@@ -38,15 +38,17 @@
                 <Button Content="藥袋" Height="35" Command="{Binding PrintMedBagCmd}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
             </StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionEditWindow}">
-            <StackPanel Orientation="Horizontal">
-                <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionEditWindow}">
-            <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-        </DataTemplate>
         <DataTemplate x:Key="NotPrescribeSummary" DataType="{x:Type local:PrescriptionEditWindow}">
+            <DataTemplate.Resources>
+                <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionEditWindow}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionEditWindow}">
+                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                </DataTemplate>
+            </DataTemplate.Resources>
             <StackPanel Orientation="Horizontal" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}" >
                 <Label Content="藥品點數" Style="{StaticResource BoldLabelContent18}" Margin="0,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 <Label Content="{Binding TotalMedPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -68,22 +70,21 @@
                 <Label Content="{Binding EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
                 <Label Content="{Binding EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                <Rectangle Width="36"/>
-                <!--<ContentControl Content="{Binding}" Margin="10,0,10,0">
+                <ContentControl Content="{Binding}" Margin="0,0,10,0">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
-                            <Setter Property="ContentTemplate" Value="{StaticResource NotPrescribeSummary}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding EditedPrescription.PrescriptionStatus.IsGetCard, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
+                                <DataTrigger Binding="{Binding IsEdit, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}" Value="false">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource NoCardButtonsArea}" />
+                                <DataTrigger Binding="{Binding IsEdit, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ContentControl.Style>
-                </ContentControl>-->
+                </ContentControl>
                 <Button Content="刪除" Command="{Binding Delete}" Background="Red" BorderBrush="Red" Margin="10,0,0,0"/>
                 <Button Content="復原編輯" Command="{Binding RedoEdit}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Content="編輯完成" Command="{Binding EditComplete}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
