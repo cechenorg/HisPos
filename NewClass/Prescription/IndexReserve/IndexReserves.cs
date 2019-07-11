@@ -1,4 +1,5 @@
-﻿using His_Pos.NewClass.StoreOrder;
+﻿using His_Pos.FunctionWindow;
+using His_Pos.NewClass.StoreOrder;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,24 +23,35 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             }
         }
         public void StoreOrderToSingde() {
-            string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
-            try
-            {
-                if (PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData))
-                {
-                    StoreOrderDB.StoreOrderToWaiting(newstoordId);
-                    return true;
+            int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
+            for (int i = 0; i < this.Count; i++) {
+                count++;
+                string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadRight(2, '0');
+                this[i].StoOrdID = newStoOrdID;
+                for (int j = 0; j < this[i].IndexReserveDetailCollection.Count;j++) {
+                    this[i].IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
                 }
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
-                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
-                return false;
             }
-            catch (Exception ex)
-            {
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
-                MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
-                return false;
-            } 
+
+
+      // string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
+      // try
+      // {
+      //     if (PrescriptionDb.SendDeclareOrderToSingde(newstoordId, p, pSendData))
+      //     {
+      //         StoreOrderDB.StoreOrderToWaiting(newstoordId);
+      //         return true;
+      //     }
+      //     StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+      //     MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+      //     return false;
+      // }
+      // catch (Exception ex)
+      // {
+      //     StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+      //     MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
+      //     return false;
+      // } 
         }
     }
 }

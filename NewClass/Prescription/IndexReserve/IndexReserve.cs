@@ -51,6 +51,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         }
         public int CusId { get; set; }
         public int Id { get; set; }
+        public string StoOrdID { get; set; }
         public string CusName { get; set; }
         public string InsName { get; set; }
         public string DivName { get; set; }

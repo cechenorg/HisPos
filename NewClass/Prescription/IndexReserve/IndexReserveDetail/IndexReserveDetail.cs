@@ -18,6 +18,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
             ControlLevel = r.Field<byte?>("Med_Control");
             SendAmount = 0;
         }
+        public string StoOrdID { get; set; }
         public string Stock { get; set; }
         public string OntheWay { get; set; }
         public bool IsFrozen { get; set; }
