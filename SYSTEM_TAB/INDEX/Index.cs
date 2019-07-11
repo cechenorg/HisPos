@@ -162,6 +162,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => IndexReserveSelectedItem, ref indexReserveSelectedItem, value);
+                if (IndexReserveSelectedItem is null) return;
+                IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
+                CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
             }
         }
         private IndexReserveDetails indexReserveDetailCollection = new IndexReserveDetails();
@@ -297,12 +300,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void ReserveSendAction() {
             IndexReserves indexReserves = CaculateReserveSendAmount();
             ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
+            ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "", ""));
         }
           
         private void IndexReserveSelectionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
-            IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
-            CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
+            
         }
         private void ReserveSearchAction() {
             IndexReserveCollection.GetDataByDate(StartDate, EndDate);
@@ -348,16 +352,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                     {
                         var pro = indexReserves[i].IndexReserveDetailCollection[j];
                         if (InventoryCollection.Count(inv => inv.InvID.ToString() == pro.InvID) == 0)
-                        {
                             pro.SendAmount = Convert.ToInt32(pro.Amount);
-                        }
                         else
                         {
                             var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
                             if (target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0)
-                            {
                                 target.OnTheFrame -= Convert.ToInt32(pro.Amount);
-                            }
                             else
                             {
                                 pro.SendAmount = Convert.ToInt32(pro.Amount) - target.OnTheFrame;

@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -49,11 +50,34 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             ConfirmWindow confirmWindow = new ConfirmWindow("是否傳送藥健康?","預約慢箋採購");
             if ((bool)confirmWindow.DialogResult) {
                 SavePrepareMedMessage();
-
+                SendReserveStoOrder();
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
             }
         }
         private void CancelAction()
         {
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
+        }
+        private void SendReserveStoOrder() {
+            IndexReserves sendIndexReserves = new IndexReserves();
+            MainWindow.ServerConnection.OpenConnection();
+            
+            for (int i = 0; i < IndexReserveCollection.Count; i++) {
+                if (IndexReserveCollection[i].PrepareMedType != "全備藥")
+                    sendIndexReserves.Add(IndexReserveCollection[i]);
+                else 
+                    IndexReserveCollection[i].SaveStatus(); 
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            for (int i = 0; i < sendIndexReserves.Count; i++) {
+                for (int j = 0; j < sendIndexReserves[i].IndexReserveDetailCollection.Count; j++) {
+                    if (sendIndexReserves[i].IndexReserveDetailCollection[j].SendAmount == 0) {
+                        sendIndexReserves[i].IndexReserveDetailCollection.Remove(sendIndexReserves[i].IndexReserveDetailCollection[j]);
+                        j--;
+                    }
+                }
+            }
+            sendIndexReserves.StoreOrderToSingde();
         }
         private void SavePrepareMedMessage() {
             SaveFileDialog fdlg = new SaveFileDialog();

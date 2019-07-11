@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+        xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
         Title="預約慢箋處方確認" Height="625" Width="900" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+    </Window.Resources>
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions> 
             <RowDefinition  />
@@ -44,8 +48,8 @@
                                         <Label Content="{Binding PrepareMedType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                         
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal"> 
-                                        <Label Content="{Binding AdjustDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding AdjustDate,Converter={StaticResource NullableDateConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center"/>
                                         <Label Content="毛利"  Width="50" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center"/>
                                     </StackPanel>
@@ -78,7 +82,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="2">
                         <Label Content="就醫日" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-                        <Label Content="{Binding TreatDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
+                        <Label Content="{Binding TreatDate,Converter={StaticResource NullableDateConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
                     </StackPanel> 
                 </Grid>
                 <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,10,10,10"

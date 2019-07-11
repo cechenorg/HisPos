@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         }
         public bool IsExpensive { get; set; }
         public void SaveStatus() {
-            IndexReserveDb.Save(Id, PhoneCallStatus, PrepareMedStatus);
+            IndexReserveDb.Save(Id, PhoneCallStatus, PrepareMedStatus,StoOrdID);
         }
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);

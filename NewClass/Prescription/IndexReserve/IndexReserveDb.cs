@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[IndexReserveByDate]", parameterList);
         }
-        public static DataTable Save(int Id,string PhoneCallStatus, string prepareMedStatus)
+        public static DataTable Save(int Id,string PhoneCallStatus, string prepareMedStatus,string stoOrdID)
         {
             string PrepareStatus = ""; 
             switch (prepareMedStatus) {
@@ -37,7 +37,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "PhoneCallStatus", PhoneCallStatus);
             DataBaseFunction.AddSqlParameter(parameterList, "PrepareStatus", PrepareStatus);
             DataBaseFunction.AddSqlParameter(parameterList, "userID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
-            
+            DataBaseFunction.AddSqlParameter(parameterList, "stoOrdID", stoOrdID); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIndexReserveStatus]", parameterList);
         } 
     }
