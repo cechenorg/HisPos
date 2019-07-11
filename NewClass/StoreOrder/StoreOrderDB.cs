@@ -404,7 +404,15 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #endregion
+        
+        internal static DataTable ReturnOrderRePurchase(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
+        }
         internal static DataTable RemoveStoreOrderByID(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

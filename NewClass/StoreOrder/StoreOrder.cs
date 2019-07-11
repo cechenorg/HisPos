@@ -179,12 +179,12 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
-        protected void ToScrapStatus()
+        private void ToScrapStatus()
         {
             OrderStatus = OrderStatusEnum.SCRAP;
             StoreOrderDB.StoreOrderToScrap(ID);
         }
-        private void ToDoneStatus()
+        protected void ToDoneStatus()
         {
             OrderStatus = OrderStatusEnum.DONE;
 

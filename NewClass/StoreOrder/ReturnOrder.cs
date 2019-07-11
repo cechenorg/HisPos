@@ -130,6 +130,20 @@ namespace His_Pos.NewClass.StoreOrder
 
             CalculateTotalPrice();
         }
+        internal void ReturnOrderRePurchase()
+        {
+            SaveOrder();
+
+            DataTable result = StoreOrderDB.ReturnOrderRePurchase(ID);
+
+            if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+            {
+                MessageWindow.ShowMessage("退貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                return;
+            }
+
+            ToDoneStatus();
+        }
         public override void SetProductToProcessingStatus()
         {
             ReturnProducts.SetToProcessing();

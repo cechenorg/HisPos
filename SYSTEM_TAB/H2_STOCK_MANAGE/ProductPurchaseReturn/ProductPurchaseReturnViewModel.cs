@@ -39,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
         public RelayCommand ReturnOrderCalculateReturnAmountCommand { get; set; }
+        public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -98,6 +99,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+        private void ReturnOrderRePurchaseAction()
+        {
+            if (CurrentStoreOrder.CheckOrder())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                (CurrentStoreOrder as ReturnOrder).ReturnOrderRePurchase();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+                storeOrderCollection.ReloadCollection();
+            }
+        }
         private void ReturnOrderCalculateReturnAmountAction()
         {
             (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
@@ -302,6 +315,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
             ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
+            ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
         }
         private void RegisterMessengers()
         {
