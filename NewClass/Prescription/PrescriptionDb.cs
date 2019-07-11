@@ -480,7 +480,7 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append(declareMedicine.ID.Length > 12
                 ? declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')
                 : declareMedicine.ID.PadRight(12, ' '));//健保碼
-            dtlData.Append(declareMedicine.Dosage == null ? string.Empty.PadRight(8, ' ') : declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
+            dtlData.Append(declareMedicine.Dosage == null ? string.Empty.PadRight(8, ' ') : ((double)declareMedicine.Dosage).ToString("0.##").PadLeft(8, ' ')); //每次使用數量
             dtlData.Append(string.IsNullOrEmpty(declareMedicine.Usage?.Name) ? string.Empty.PadRight(16, ' ') : declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
             dtlData.Append(declareMedicine.Days == null ? string.Empty.PadRight(3, ' ') : declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
             dtlData.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
