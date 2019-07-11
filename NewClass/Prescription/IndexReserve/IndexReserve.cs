@@ -30,6 +30,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     break;
                 case "D":
                     PrepareMedStatus = "備藥";
+                    IsSend = true;
                     break;
                 case "F":
                     PrepareMedStatus = "不備藥";
@@ -57,7 +58,25 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
-       
+        private string prepareMedType;
+        public string PrepareMedType
+        {
+            get => prepareMedType;
+            set
+            {
+                Set(() => PrepareMedType, ref prepareMedType, value);
+            }
+        }
+        private bool isSend;
+        public bool IsSend
+        {
+            get => isSend;
+            set
+            {
+                Set(() => IsSend, ref isSend, value);
+            }
+        }
+
         private string phoneCallStatus;
         public string PhoneCallStatus {
             get => phoneCallStatus;

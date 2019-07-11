@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         mc:Ignorable="d"
-        Title="預約慢箋處方確認" Height="625" Width="900">
+        Title="預約慢箋處方確認" Height="625" Width="900" WindowStartupLocation="CenterScreen">
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions> 
             <RowDefinition  />
@@ -30,6 +30,9 @@
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                     </Trigger>
+                                    <DataTrigger Binding="{Binding IsExpensive}" Value="True">
+                                        <Setter Property="Background" Value="GreenYellow"></Setter>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.CellStyle>
@@ -38,6 +41,7 @@
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="{Binding CusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding PrepareMedType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                         
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal"> 
@@ -151,8 +155,9 @@
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="總處方數" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-            <Button Width="100" Command="{Binding ReserveMedicineBackCommand}" Margin="10,0,0,0" Content="取消" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
-            <Button Width="120" Command="{Binding ReserveSearchCommand}" Margin="10,0,0,0" Content="確定" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Rectangle Width="520"/>
+            <Button Width="100" Command="{Binding CancelCommand}" Margin="10,0,0,0" Content="取消" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
+            <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="確定" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </Window>

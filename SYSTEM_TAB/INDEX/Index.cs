@@ -341,7 +341,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             InventoryCollection = Inventorys.GetAllInventoryByWarID("0");
 
             for (int i = 0; i < indexReserves.Count; i++) {
-                if (indexReserves[i].PrepareMedStatus == "備藥")
+                if (indexReserves[i].PrepareMedStatus == "備藥" && !indexReserves[i].IsSend)
                 {
                     indexReserves[i].GetIndexDetail();
                     for (int j = 0; j < indexReserves[i].IndexReserveDetailCollection.Count; j++)
@@ -356,12 +356,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                             var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
                             if (target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0)
                             {
-                                pro.SendAmount = Convert.ToInt32(pro.Amount);
                                 target.OnTheFrame -= Convert.ToInt32(pro.Amount);
                             }
                             else
                             {
-                                pro.SendAmount = target.OnTheFrame;
+                                pro.SendAmount = Convert.ToInt32(pro.Amount) - target.OnTheFrame;
                                 target.OnTheFrame = 0;
                                 InventoryCollection.Remove(target);
                             }
@@ -376,6 +375,20 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                
             }
             MainWindow.ServerConnection.CloseConnection();
+            for (int i = 0; i < indexReserves.Count; i++) {
+                int sameCount = 0;
+                foreach (var s in indexReserves[i].IndexReserveDetailCollection) {
+                    if (s.SendAmount == s.Amount)
+                        sameCount++;
+                }
+                if (sameCount == 0)
+                    indexReserves[i].PrepareMedType = "全備藥";
+                else if(sameCount == indexReserves[i].IndexReserveDetailCollection.Count)
+                    indexReserves[i].PrepareMedType = "全傳送";
+                else
+                    indexReserves[i].PrepareMedType = "部分備藥";
+            }
+
             return indexReserves;
         }
         #endregion

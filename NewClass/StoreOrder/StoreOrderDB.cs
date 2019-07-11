@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
+using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
@@ -144,6 +145,7 @@ namespace His_Pos.NewClass.StoreOrder
             storeOrderMasterTable.Rows.Add(newRow);
             return storeOrderMasterTable;
         }
+        
         #endregion
 
         #region ///// StoreOrderDetailTable /////
