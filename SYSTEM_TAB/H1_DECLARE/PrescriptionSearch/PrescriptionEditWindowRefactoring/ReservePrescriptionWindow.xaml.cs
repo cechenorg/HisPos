@@ -18,15 +18,15 @@ using His_Pos.Service;
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
 {
     /// <summary>
-    /// PrescriptionRecordWindow.xaml 的互動邏輯
+    /// ReservePrescriptionWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionRecordWindow : Window
+    public partial class ReservePrescriptionWindow : Window
     {
-        public PrescriptionRecordWindow()
+        public ReservePrescriptionWindow()
         {
             InitializeComponent();
         }
-        public PrescriptionRecordWindow(Prescription p)
+        public ReservePrescriptionWindow(Prescription p)
         {
             InitializeComponent();
         }

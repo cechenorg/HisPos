@@ -20,7 +20,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public Collection<string> TimeIntervalTypes => new Collection<string> {"調劑日","登錄日","預約日"};
         public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證"};
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
-
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
         private string selectedTimeIntervalType;
         public string SelectedTimeIntervalType
         {
@@ -39,6 +56,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPatientCondition, ref selectedPatientCondition, value);
             }
         }
+        private string patientCondition;
+        public string PatientCondition
+        {
+            get => patientCondition;
+            set
+            {
+                Set(() => PatientCondition, ref patientCondition, value);
+            }
+        }
         private string selectedMedicineCondition;
         public string SelectedMedicineCondition
         {
@@ -46,6 +72,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedMedicineCondition, ref selectedMedicineCondition, value);
+            }
+        }
+        private string medicineCondition;
+        public string MedicineCondition
+        {
+            get => medicineCondition;
+            set
+            {
+                Set(() => MedicineCondition, ref medicineCondition, value);
             }
         }
         private DateTime? patientBirth;
@@ -64,6 +99,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
+            }
+        }
+        private Division selectedDivision;
+        public Division SelectedDivision
+        {
+            get => selectedDivision;
+            set
+            {
+                Set(() => SelectedDivision, ref selectedDivision, value);
             }
         }
         private PrescriptionSearchPreview selectedPrescription;
@@ -145,30 +189,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             return this;
         }
-
+        private BackgroundWorker worker;
         public RelayCommand FilterAdjustedInstitution { get; set; }
-
+        public RelayCommand Search { get; set; }
         public PrescriptionSearchViewModelRe()
         {
-            SelectedTimeIntervalType = TimeIntervalTypes[0];
-            SelectedPatientCondition = PatientConditions[0];
-            SelectedMedicineCondition = MedicineConditions[0];
-            Institutions = new PrescriptionSearchInstitutions();
-            Institutions.GetAdjustedInstitutions();
-            SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
-            AdjustCases = new AdjustCases(false) {new AdjustCase()};
+            AdjustCases = new AdjustCases(false) { new AdjustCase() };
             foreach (var adjust in ViewModelMainWindow.AdjustCases)
             {
                 AdjustCases.Add(adjust);
             }
-            Divisions = new Divisions {new Division()};
+            Divisions = new Divisions { new Division() };
             foreach (var division in ViewModelMainWindow.Divisions)
             {
                 Divisions.Add(division);
             }
-            StartDate = DateTime.Today;
-            EndDate = DateTime.Today;
+            InitCondition();
             FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
+            Search = new RelayCommand(SearchAction);
+        }
+
+        private void SearchAction()
+        {
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => { SearchByConditions(); };
+            worker.RunWorkerCompleted += (o, ea) => {  };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void SearchByConditions()
+        {
+            BusyContent = "處方查詢中...";
+            var selectedIns = Institutions.Where(i => i.Selected);
+            var insIDList = selectedIns.Select(i => i.ID).ToList();
+            MainWindow.ServerConnection.OpenConnection();
+            SearchPrescriptions.GetSearchPrescriptionsRe(SelectedTimeIntervalType, StartDate, EndDate,
+                SelectedPatientCondition, PatientCondition, PatientBirth, SelectedAdjustCase, SelectedMedicineCondition,
+                MedicineCondition, insIDList, SelectedDivision);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void FilterAdjustedInstitutionAction()
@@ -177,6 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             var selectCount = Institutions.Count(i => i.Selected);
             if (selectCount <= 3)
             {
+                SelectedInstitutionCount = string.Empty;
                 foreach (var ins in Institutions.Where(i => i.Selected))
                 {
                     SelectedInstitutionCount += ins.Name.Length > 10 ? $"{ins.Name.Substring(0, 10)}... " : $"{ins.Name} " ;
@@ -186,6 +246,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
             }
+        }
+
+        private void InitCondition()
+        {
+            SelectedTimeIntervalType = TimeIntervalTypes[0];
+            SelectedPatientCondition = PatientConditions[0];
+            SelectedMedicineCondition = MedicineConditions[0];
+            Institutions = new PrescriptionSearchInstitutions();
+            Institutions.GetAdjustedInstitutions();
+            SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
+            SelectedAdjustCase = AdjustCases[0];
+            SelectedDivision = Divisions[0];
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
         }
     }
 }
