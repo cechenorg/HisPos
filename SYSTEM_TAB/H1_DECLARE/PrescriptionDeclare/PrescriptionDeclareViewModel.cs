@@ -1,5 +1,4 @@
 ﻿#region Using
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Behaviors;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -222,7 +220,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
         public RelayCommand PrescribeAdjust { get; set; }
-        public RelayCommand<DataGridDragDropEventArgs> ItemsDragDropCommand { get; private set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -291,7 +288,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
-            ItemsDragDropCommand = new RelayCommand<DataGridDragDropEventArgs>((args) => DragDropItem(args), (args) => args != null && args.TargetObject != null && args.DroppedObject != null && args.Effects != System.Windows.DragDropEffects.None);
         }
 
         private void EditMedicineSetAction(string mode)
@@ -707,29 +703,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.SetDetail();
             StartPrescribeAdjust();
         }
-
-        public void DragDropItem(DataGridDragDropEventArgs args)
-        {
-            if(!(args.TargetObject is Medicine)) return;
-            var targetIndex = CurrentPrescription.Medicines.IndexOf((Medicine)args.TargetObject);
-            if (args.Direction == DataGridDragDropDirection.Down) targetIndex++;
-
-            switch (args.Effects)
-            {
-                case System.Windows.DragDropEffects.Move when args.DroppedObject is Medicine m:
-                {
-                    var sourceIndex = CurrentPrescription.Medicines.IndexOf(m);
-                    if (sourceIndex < targetIndex) targetIndex--;
-                    CurrentPrescription.Medicines.Remove(m);
-
-                    CurrentPrescription.Medicines.Insert(targetIndex, m);
-                    break;
-                }
-                case System.Windows.DragDropEffects.Copy:
-                    CurrentPrescription.Medicines.Insert(targetIndex, (Medicine)((Medicine)args.DroppedObject).Clone());
-                    break;
-            }
-        }
         #endregion
         #region MessengerFunctions
         private void GetPatientFromIcCard()
@@ -879,16 +852,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;
-            if (CurrentPrescription.Patient != null && !string.IsNullOrEmpty(currentCard.IDNumber))
-            {
-                if (!CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
-                {
-                    MessageWindow.ShowMessage("卡片資料與目前病患資料不符，請確認。", MessageType.ERROR);
-                    IsBusy = false;
-                    isAdjusting = false;
-                    return;
-                }
-            }
+            if(!CheckPatientMatch()) return;
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -904,6 +868,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             IsBusy = true;
             worker.RunWorkerAsync();
         }
+
+        private bool CheckPatientMatch()
+        {
+            if (!CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
+            {
+                MessageWindow.ShowMessage("卡片資料與目前病患資料不符，請確認。", MessageType.ERROR);
+                IsBusy = false;
+                isAdjusting = false;
+                return false;
+            }
+            return true;
+        }
+
         private bool CheckIsGetMedicalNumber()
         {
             if (currentCard.IsGetMedicalNumber || !(ErrorCode is null)) return true;

@@ -51,5 +51,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
         {
             return !string.IsNullOrEmpty(ID);
         }
+
+        public bool IsDentistry()
+        {
+            return ID.Equals("40");
+        }
     }
 }

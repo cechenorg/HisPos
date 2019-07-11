@@ -355,11 +355,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         #endregion
 
-        public bool CheckIsBloodGlucoseTestStrip()
-        {
-            return this is MedicineSpecialMaterial && ID.StartsWith("TSS01");
-        }
-
         public abstract MedBagMedicine CreateMedBagMedicine(bool isSingle);
 
         public void CopyPrevious(Medicine previous)
