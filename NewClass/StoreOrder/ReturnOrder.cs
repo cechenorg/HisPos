@@ -133,6 +133,8 @@ namespace His_Pos.NewClass.StoreOrder
         internal void ReturnOrderRePurchase()
         {
             SaveOrder();
+            
+            OrderStatus = OrderStatusEnum.DONE;
 
             DataTable result = StoreOrderDB.ReturnOrderRePurchase(ID);
 
@@ -141,6 +143,8 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("退貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
                 return;
             }
+            else
+                MessageWindow.ShowMessage("已完成退貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         public override void SetProductToProcessingStatus()
         {
