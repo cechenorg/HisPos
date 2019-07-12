@@ -9,6 +9,7 @@ using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
@@ -30,13 +31,22 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
+            if (NewFunction.CheckDataRowContainsColumn(r, "RegisterTime"))
+            {
+                TaiwanCalendar tc = new TaiwanCalendar();
+                if (r.Field<DateTime?>("RegisterTime") != null)
+                {
+                    var istime = r.Field<DateTime>("RegisterTime");
+                    RegisterDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
+                }
+            }
             if (s == PrescriptionType.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
-                TaiwanCalendar tc = new TaiwanCalendar();
+                var tc = new TaiwanCalendar();
                 if (r.Field<DateTime?>("InsertTime") != null) {
-                    DateTime istime = r.Field<DateTime>("InsertTime");
-                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
+                    var istime = r.Field<DateTime>("InsertTime");
+                    InsertDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
                 } 
                 
                 switch (r.Field<string>("StoOrd_Status")) {
@@ -156,6 +166,15 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => InsertDate, ref insertDate, value);
+            }
+        }
+        private string registerDate;
+        public string RegisterDate
+        {
+            get => registerDate;
+            set
+            {
+                Set(() => RegisterDate, ref registerDate, value);
             }
         }
         public PrescriptionType Source { get; set; }

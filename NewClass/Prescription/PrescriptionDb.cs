@@ -177,9 +177,9 @@ namespace His_Pos.NewClass.Prescription
             switch (conditionTypes["TimeInterval"])
             {
                 case "預約日":
-                    return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
+                    return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchReservePrescriptions]", parameterList);
                 default:
-                    return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
+                    return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptions]", parameterList);
             }
         }
 
@@ -218,8 +218,8 @@ namespace His_Pos.NewClass.Prescription
             switch (dateType)
             {
                 case "調劑日":
-                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate_Start", sDate);
-                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate_End", eDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateStart", sDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateEnd", eDate);
                     DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateStart", DBNull.Value);
                     DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateEnd", DBNull.Value);
                     break;
@@ -230,8 +230,8 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateEnd", eDate);
                     break;
                 case "預約日":
-                    DataBaseFunction.AddSqlParameter(parameterList, "sDate", DBNull.Value);
-                    DataBaseFunction.AddSqlParameter(parameterList, "eDate", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateStart", sDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateEnd", eDate);
                     break;
             }
         }
@@ -1396,6 +1396,12 @@ namespace His_Pos.NewClass.Prescription
             idTable.Columns.Add("ID", typeof(string));
             return idTable;
         }
+        private static DataTable InstitutionIDTable()
+        {
+            DataTable idTable = new DataTable();
+            idTable.Columns.Add("InstitutionID", typeof(string));
+            return idTable;
+        }
         public static DataTable SetIDTable(List<int> IDList)
         {
             DataTable table = IDTable();
@@ -1409,11 +1415,11 @@ namespace His_Pos.NewClass.Prescription
         }
         public static DataTable SetStringIDTable(List<string> IDList)
         {
-            var table = IDTable();
+            var table = InstitutionIDTable();
             foreach (var id in IDList)
             {
                 DataRow newRow = table.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                DataBaseFunction.AddColumnValue(newRow, "InstitutionID", id);
                 table.Rows.Add(newRow);
             }
             return table;

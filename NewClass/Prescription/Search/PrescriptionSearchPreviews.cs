@@ -15,9 +15,20 @@ namespace His_Pos.NewClass.Prescription.Search
         public void GetSearchPrescriptionsRe(Dictionary<string,string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adj, List<string> insIDList, Division div)
         {
             var table = PrescriptionDb.GetSearchPrescriptionsDataRe(conditionTypes,conditions,dates,adj,insIDList,div);
-            foreach (DataRow r in table.Rows)
+            switch (conditionTypes["TimeInterval"])
             {
-                Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
+                case "預約日":
+                    foreach (DataRow r in table.Rows)
+                    {
+                        Add(new PrescriptionSearchPreview(r, PrescriptionType.ChronicReserve));
+                    }
+                    break;
+                default:
+                    foreach (DataRow r in table.Rows)
+                    {
+                        Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
+                    }
+                    break;
             }
         }
         public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj,string medID,string medName, Institution ins,Division div)

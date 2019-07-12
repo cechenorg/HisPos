@@ -192,14 +192,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private BackgroundWorker worker;
         public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
+        public RelayCommand Clear { get; set; }
+        public RelayCommand GetNoBucklePrescriptions { get; set; }
         public PrescriptionSearchViewModelRe()
         {
-            AdjustCases = new AdjustCases(false) { new AdjustCase() };
+            AdjustCases = new AdjustCases(false) { null };
             foreach (var adjust in ViewModelMainWindow.AdjustCases)
             {
                 AdjustCases.Add(adjust);
             }
-            Divisions = new Divisions { new Division() };
+            Divisions = new Divisions { null };
             foreach (var division in ViewModelMainWindow.Divisions)
             {
                 Divisions.Add(division);
@@ -207,15 +209,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             InitCondition();
             FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
             Search = new RelayCommand(SearchAction);
+            Clear = new RelayCommand(ClearAction);
+            GetNoBucklePrescriptions = new RelayCommand(GetNoBucklePrescriptionsAction);
         }
-
         private void SearchAction()
         {
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { SearchByConditions(); };
-            worker.RunWorkerCompleted += (o, ea) => {  };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                EndSearch();
+            };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void ClearAction()
+        {
+            InitCondition();
+        }
+
+        private void EndSearch()
+        {
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
         }
 
         private void SearchByConditions()
@@ -238,6 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 {"sDate", StartDate}, {"eDate", EndDate}, {"PatientBirthday", PatientBirth}
             };
+            SearchPrescriptions = new PrescriptionSearchPreviews();
             MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates,  SelectedAdjustCase,insIDList, SelectedDivision);
             MainWindow.ServerConnection.CloseConnection();
@@ -261,8 +280,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             }
         }
 
+        private void GetNoBucklePrescriptionsAction()
+        {
+            throw new NotImplementedException();
+        }
+
         private void InitCondition()
         {
+            SearchPrescriptions = new PrescriptionSearchPreviews();
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
             SelectedTimeIntervalType = TimeIntervalTypes[0];
             SelectedPatientCondition = PatientConditions[0];
             SelectedMedicineCondition = MedicineConditions[0];
