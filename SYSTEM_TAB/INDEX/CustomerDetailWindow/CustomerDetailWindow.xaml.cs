@@ -24,7 +24,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
             InitializeComponent();
             CustomerDetailWindowViewModel customerDetailWindowViewModel = new CustomerDetailWindowViewModel(cusID);
             DataContext = customerDetailWindowViewModel;
-            ShowDialog();
+            Show();
         }
     }
 }

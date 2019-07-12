@@ -22,31 +22,6 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Add(indexReserve);
             }
         }
-        public void StoreOrderToSingde() {
-            int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
-            for (int i = 0; i < this.Count; i++) {
-                count++;
-                string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
-                this[i].StoOrdID = newStoOrdID;
-                for (int j = 0; j < this[i].IndexReserveDetailCollection.Count;j++) {
-                    this[i].IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                }
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            MainWindow.SingdeConnection.OpenConnection();
-            StoreOrderDB.InsertIndexReserveOrder(this);
-            foreach (var i in this) {
-                if (StoreOrderDB.SendStoreOrderToSingde(i).Rows[0][0].ToString() == "SUCCESS")
-                {
-                    StoreOrderDB.StoreOrderToWaiting(i.StoOrdID);
-                    i.IsSend = true;
-                    i.SaveStatus();
-                }
-                else
-                    MessageWindow.ShowMessage(i.StoOrdID + "傳送失敗",Class.MessageType.ERROR);
-            }
-            MainWindow.ServerConnection.CloseConnection();
-            MainWindow.SingdeConnection.CloseConnection();
-        }
+       
     }
 }

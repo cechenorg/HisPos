@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
+using His_Pos.NewClass.StoreOrder;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -132,6 +134,31 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         }
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);
+        }
+        public void StoreOrderToSingde() {
+            int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
+          
+            string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
+            this.StoOrdID = newStoOrdID;
+            for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
+            {
+                IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
+            } 
+            MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
+            StoreOrderDB.InsertIndexReserveOrder(this);
+            
+            if (StoreOrderDB.SendStoreOrderToSingde(this).Rows[0][0].ToString() == "SUCCESS")
+            {
+                StoreOrderDB.StoreOrderToWaiting(StoOrdID);
+                IsSend = true;
+                SaveStatus();
+            }
+            else
+                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
+          
+            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.SingdeConnection.CloseConnection();
         }
     }
 }

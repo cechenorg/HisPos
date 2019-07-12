@@ -7,6 +7,7 @@
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="預約慢箋處方確認" Height="625" Width="900" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -145,23 +146,30 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn  Width="100" Header="傳送量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SendAmount}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                        <DataGridTemplateColumn  Width="100" Header="傳送量"  IsReadOnly="True" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0"> 
+                                        <TextBox Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding SendAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.SendAmountChangeCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                    
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn> 
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="總處方數" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-            <Rectangle Width="520"/>
-            <Button Width="100" Command="{Binding CancelCommand}" Margin="10,0,0,0" Content="取消" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
-            <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="確定" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Rectangle Width="640"/> 
+            <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="傳送此處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
 </Window>

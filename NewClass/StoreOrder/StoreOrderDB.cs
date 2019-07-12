@@ -104,25 +104,25 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ----- Set DataTable ----- 
         #region ///// StoreOrderMasterTable /////
-        public static DataTable SetPrescriptionOrderMaster(IndexReserves indexReserves)
+        public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve)
         {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
-            foreach (var i in indexReserves) {
-                DataRow newRow = storeOrderMasterTable.NewRow();
-                newRow["StoOrd_ID"] = i.StoOrdID;
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", ViewModelMainWindow.CurrentUser.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveEmployeeID", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_ManufactoryID", "0");
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID",null);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true); 
-                storeOrderMasterTable.Rows.Add(newRow); 
-            } 
+            
+            DataRow newRow = storeOrderMasterTable.NewRow();
+            newRow["StoOrd_ID"] = indexReserve.StoOrdID;
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveEmployeeID", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_CreateTime", DateTime.Now);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ReceiveTime", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_ManufactoryID", "0");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID",null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true); 
+            storeOrderMasterTable.Rows.Add(newRow); 
+           
             return storeOrderMasterTable;
         }
         public static DataTable SetPrescriptionOrderMaster(PrescriptionRefactoring.Prescription p)
@@ -169,31 +169,29 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #region ///// StoreOrderDetailTable /////
-        public static DataTable SetPrescriptionOrderDetail(IndexReserves indexReserves)
-        {
-
-            DataTable storeOrderDetailTable = StoreOrderDetailTable();
-            foreach (var i in indexReserves) {
-                int detailId = 1;
-                foreach (var pro in i.IndexReserveDetailCollection) {
-                    DataRow newRow = storeOrderDetailTable.NewRow();
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", pro.StoOrdID);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.SendAmount);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "顆");
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", 0);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", 0);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
-                    storeOrderDetailTable.Rows.Add(newRow);
-                    detailId++; 
-                }
+        public static DataTable SetPrescriptionOrderDetail(IndexReserve indexReserves)
+        { 
+            DataTable storeOrderDetailTable = StoreOrderDetailTable(); 
+            int detailId = 1;
+            foreach (var pro in indexReserves.IndexReserveDetailCollection) {
+                if (pro.SendAmount == 0) continue;
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", pro.StoOrdID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.SendAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "顆");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;  
             }  
             return storeOrderDetailTable;
         }
@@ -559,11 +557,11 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList);
         }
-        public static DataTable InsertIndexReserveOrder(IndexReserves indexReserves)
+        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserves));
-            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserves));
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
         internal static DataTable GetStoOrdMasterCountByDate( )
@@ -632,6 +630,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             foreach (var product in indexReserve.IndexReserveDetailCollection)
             {
+                if (product.SendAmount == 0) continue;
                 if (product.ID.Length > 12)
                     orderMedicines += product.ID.Substring(0, 12);
                 else
