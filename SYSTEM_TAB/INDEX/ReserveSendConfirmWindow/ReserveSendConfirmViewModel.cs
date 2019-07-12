@@ -5,6 +5,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.IndexReserve;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.StoreOrder;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             set
             {
                 Set(() => IndexReserveSelectedItem, ref indexReserveSelectedItem, value);
+                if (IndexReserveSelectedItem is null) return;
+                CaculateReserveSendAmount();
             }
         }
         public RelayCommand SubmitCommand { get; set; }
@@ -118,12 +121,44 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 }
             }  
         }
+        private void CaculateReserveSendAmount() {
+
+            MainWindow.ServerConnection.OpenConnection();
+            Inventorys InventoryCollection = Inventorys.GetAllInventoryByWarID("0");
+             
+            IndexReserveSelectedItem.GetIndexDetail();
+            for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
+            {
+                var pro = IndexReserveSelectedItem.IndexReserveDetailCollection[j];
+                if (InventoryCollection.Count(inv => inv.InvID.ToString() == pro.InvID) == 0)
+                    pro.SendAmount = Convert.ToInt32(pro.Amount);
+                else
+                {
+                    var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
+                    pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? Convert.ToInt32(pro.Amount) : Convert.ToInt32(pro.Amount) - target.OnTheFrame;
+                }
+            }
+            
+            MainWindow.ServerConnection.CloseConnection();
+            
+           int sameCount = 0;
+           foreach (var s in IndexReserveSelectedItem.IndexReserveDetailCollection)
+           {
+               if (s.SendAmount == s.Amount)
+                   sameCount++;
+           }
+           if (sameCount == 0)
+               IndexReserveSelectedItem.PrepareMedType = "全備藥";
+           else if (sameCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
+               IndexReserveSelectedItem.PrepareMedType = "全傳送";
+           else
+               IndexReserveSelectedItem.PrepareMedType = "部分備藥";
+             
+        }
         private void PrintPackage() {
 
         }
-        private void StartOrder() {
-             
-        }
+       
         #endregion
     }
 }

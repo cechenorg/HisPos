@@ -355,24 +355,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                             pro.SendAmount = Convert.ToInt32(pro.Amount);
                         else
                         {
-                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                            if (target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0)
-                                target.OnTheFrame -= Convert.ToInt32(pro.Amount);
-                            else
-                            {
-                                pro.SendAmount = Convert.ToInt32(pro.Amount) - target.OnTheFrame;
-                                target.OnTheFrame = 0;
-                                InventoryCollection.Remove(target);
-                            }
-                        }
-
+                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID); 
+                            pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? Convert.ToInt32(pro.Amount) : Convert.ToInt32(pro.Amount) - target.OnTheFrame; 
+                        } 
                     }
                 }
                 else {
                     indexReserves.Remove(indexReserves[i]);
                     i--;
-                }
-               
+                } 
             }
             MainWindow.ServerConnection.CloseConnection();
             for (int i = 0; i < indexReserves.Count; i++) {
