@@ -65,8 +65,8 @@
                     <Label Content="科別" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
                     <ComboBox Height="35" Width="170" ItemsSource="{Binding Divisions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDivision,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" DisplayMemberPath="Name"
                               ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"/>
-                    <Button Height="35" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="30,0,0,0"/>
-                    <Button Height="35" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="10,0,0,0"/>
+                    <Button Command="{Binding Search}" Height="35" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="30,0,0,0"/>
+                    <Button Command="{Binding Clear}" Height="35" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <ComboBox Height="35" Width="100" ItemsSource="{Binding MedicineConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMedicineCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10" FontSize="18" HorizontalContentAlignment="Center" BorderThickness="0"

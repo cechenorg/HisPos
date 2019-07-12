@@ -12,9 +12,9 @@ namespace His_Pos.NewClass.Prescription.Search
     public class PrescriptionSearchPreviews:ObservableCollection<PrescriptionSearchPreview>
     {
 
-        public void GetSearchPrescriptionsRe(string dateType,DateTime? sDate, DateTime? eDate,string patientConditionType, string patientCondition,DateTime? patientBirth, AdjustCase adj, string medType, string medCondition, List<string> insIDList, Division div)
+        public void GetSearchPrescriptionsRe(Dictionary<string,string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adj, List<string> insIDList, Division div)
         {
-            var table = PrescriptionDb.GetSearchPrescriptionsDataRe(dateType,sDate, eDate, patientConditionType, patientCondition, patientBirth, adj, medType, medCondition, insIDList, div);
+            var table = PrescriptionDb.GetSearchPrescriptionsDataRe(conditionTypes,conditions,dates,adj,insIDList,div);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));

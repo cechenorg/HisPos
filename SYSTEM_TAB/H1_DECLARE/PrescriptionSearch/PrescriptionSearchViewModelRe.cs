@@ -223,10 +223,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             BusyContent = "處方查詢中...";
             var selectedIns = Institutions.Where(i => i.Selected);
             var insIDList = selectedIns.Select(i => i.ID).ToList();
+            var conditionTypes = new Dictionary<string, string>
+            {
+                {"TimeInterval", SelectedTimeIntervalType},
+                {"Patient", SelectedPatientCondition},
+                {"Medicine", SelectedMedicineCondition}
+            };
+            var conditions = new Dictionary<string, string>
+            {
+                {"Patient", PatientCondition},
+                {"Medicine", MedicineCondition}
+            };
+            var dates = new Dictionary<string, DateTime?>
+            {
+                {"sDate", StartDate}, {"eDate", EndDate}, {"PatientBirthday", PatientBirth}
+            };
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetSearchPrescriptionsRe(SelectedTimeIntervalType, StartDate, EndDate,
-                SelectedPatientCondition, PatientCondition, PatientBirth, SelectedAdjustCase, SelectedMedicineCondition,
-                MedicineCondition, insIDList, SelectedDivision);
+            SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates,  SelectedAdjustCase,insIDList, SelectedDivision);
             MainWindow.ServerConnection.CloseConnection();
         }
 

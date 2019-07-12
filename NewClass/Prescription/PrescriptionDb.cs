@@ -22,6 +22,7 @@ using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.StoreOrder;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 // ReSharper disable TooManyArguments
@@ -163,19 +164,91 @@ namespace His_Pos.NewClass.Prescription
         }
         
         
-        public static DataTable GetSearchPrescriptionsDataRe(string dateType, DateTime? sDate, DateTime? eDate, string patientConditionType, string patientCondition, DateTime? patientBirth, AdjustCase adj, string medType, string medCondition, List<string> insIDList, Division div)
+        public static DataTable GetSearchPrescriptionsDataRe(Dictionary<string, string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adjustCase, List<string> insIDList, Division division)
+        {
+            var parameterList = new List<SqlParameter>();
+            AddTimeIntervalParameters(parameterList, conditionTypes["TimeInterval"],dates["sDate"],dates["eDate"]);
+            AddPatientParameters(parameterList, conditionTypes["Patient"], conditions["Patient"]);
+            AddMedicineParameters(parameterList, conditionTypes["Medicine"], conditions["Medicine"]);
+            DataBaseFunction.AddSqlParameter(parameterList, "PatientBirthday", dates["PatientBirthday"]);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCase", adjustCase?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Division", division?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Institutions", SetStringIDTable(insIDList));
+            switch (conditionTypes["TimeInterval"])
+            {
+                case "預約日":
+                    return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveBySearchCondition]", parameterList);
+                default:
+                    return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
+            }
+        }
+
+        private static void AddMedicineParameters(List<SqlParameter> parameterList, string conditionType, string medicineCondition)
+        {
+            switch (conditionType)
+            {
+                case "藥品代碼":
+                    DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", medicineCondition);
+                    DataBaseFunction.AddSqlParameter(parameterList, "MedicineName", DBNull.Value);
+                    break;
+                case "藥品名稱":
+                    DataBaseFunction.AddSqlParameter(parameterList, "MedicineID", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "MedicineName", medicineCondition);
+                    break;
+            }
+        }
+
+        private static void AddPatientParameters(List<SqlParameter> parameterList, string patientConditionType, string patientCondition)
+        {
+            switch (patientConditionType)
+            {
+                case "姓名":
+                    DataBaseFunction.AddSqlParameter(parameterList, "PatientName", patientCondition);
+                    DataBaseFunction.AddSqlParameter(parameterList, "PatientIDNumber", DBNull.Value);
+                    break;
+                case "身分證":
+                    DataBaseFunction.AddSqlParameter(parameterList, "PatientName", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "PatientIDNumber", patientCondition);
+                    break;
+            }
+        }
+
+        private static void AddTimeIntervalParameters(List<SqlParameter> parameterList, string dateType,DateTime? sDate, DateTime? eDate)
+        {
+            switch (dateType)
+            {
+                case "調劑日":
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate_Start", sDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate_End", eDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateStart", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateEnd", DBNull.Value);
+                    break;
+                case "登錄日":
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateStart", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "AdjustDateEnd", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateStart", sDate);
+                    DataBaseFunction.AddSqlParameter(parameterList, "RegisterDateEnd", eDate);
+                    break;
+                case "預約日":
+                    DataBaseFunction.AddSqlParameter(parameterList, "sDate", DBNull.Value);
+                    DataBaseFunction.AddSqlParameter(parameterList, "eDate", DBNull.Value);
+                    break;
+            }
+        }
+
+        public static DataTable GetSearchPrescriptionsDataRe(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            //DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
-            //DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
-            //DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
-            //DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
-            //DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
-            //DataBaseFunction.AddSqlParameter(parameterList, "MedID", string.IsNullOrEmpty(medID) ? null : medID);
-            //DataBaseFunction.AddSqlParameter(parameterList, "MedName", string.IsNullOrEmpty(medName) ? null : medName);
-            //DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins?.ID); 
-            //DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj?.ID);
-            //DataBaseFunction.AddSqlParameter(parameterList, "DivId", div?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "SDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusName", patientName);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusIDNum", patientIDNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", patientBirth);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedID", string.IsNullOrEmpty(medID) ? null : medID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedName", string.IsNullOrEmpty(medName) ? null : medName);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", ins?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustCaseId", adj?.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", div?.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionBySearchCondition]", parameterList);
         }
 
@@ -1327,6 +1400,17 @@ namespace His_Pos.NewClass.Prescription
         {
             DataTable table = IDTable();
             foreach (int id in IDList)
+            {
+                DataRow newRow = table.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "ID", id);
+                table.Rows.Add(newRow);
+            }
+            return table;
+        }
+        public static DataTable SetStringIDTable(List<string> IDList)
+        {
+            var table = IDTable();
+            foreach (var id in IDList)
             {
                 DataRow newRow = table.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "ID", id);
