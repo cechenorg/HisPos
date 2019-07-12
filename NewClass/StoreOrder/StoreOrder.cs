@@ -184,7 +184,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderStatus = OrderStatusEnum.SCRAP;
             StoreOrderDB.StoreOrderToScrap(ID);
         }
-        protected void ToDoneStatus()
+        private void ToDoneStatus()
         {
             OrderStatus = OrderStatusEnum.DONE;
 
