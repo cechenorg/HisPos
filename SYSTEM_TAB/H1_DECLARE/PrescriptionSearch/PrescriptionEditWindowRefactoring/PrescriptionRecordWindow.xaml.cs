@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
 {
@@ -61,6 +62,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 e.Handled = true;
                 t.CaretIndex++;
             }
+        }
+        private void DateControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }
     }
 }

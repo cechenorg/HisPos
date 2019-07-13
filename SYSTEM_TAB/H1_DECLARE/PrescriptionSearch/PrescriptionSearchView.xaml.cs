@@ -76,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DataGridRow row) || !(row.DataContext is PrescriptionSearchPreview pre)) return;
-            //((PrescriptionSearchViewModelRe)DataContext).ShowPrescriptionEdit.Execute(pre.ID);
+            ((PrescriptionSearchViewModelRe)DataContext).ShowPrescriptionEdit.Execute(pre.ID);
         }
     }
 }

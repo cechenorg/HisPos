@@ -9,6 +9,7 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="處方瀏覽" Height="700" Width="1345">
     <Window.Background>
@@ -19,6 +20,7 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:SentinelConverter x:Key="SentinelConverter"/>
+        <service:MultiCommandParametersConverter x:Key="MultiCommandParametersConverter"/>
         <DataTemplate x:Key="NoCardButtonsArea" DataType="{x:Type local:PrescriptionEditWindow}">
             <StackPanel Orientation="Horizontal">
                 <Label Width="65" Height="35" Margin="1,0,10,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red"/>
@@ -163,31 +165,127 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
                     <Label  Content="釋出院所" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label x:Name="ReleaseHospital" Width="440" Height="34" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"
-                           Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1"  FontStretch="ExtraExpanded" Content="{Binding EditedPrescription.Institution.FullName, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" HorizontalContentAlignment="Center" Height="35" Content="{Binding EditedPrescription.Division.FullName, UpdateSourceTrigger=PropertyChanged}" 
-                           BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"/>
+                    <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}" CaretBrush="Red"
+                             Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" IsEnabled="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged}"
+                             FontStretch="ExtraExpanded" Text="{Binding EditedPrescription.Institution.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding ShowInstitutionSelectionWindow}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Button x:Name="CommonHospitalList" Command="{Binding ShowCommonInstitutionSelectionWindow}" Content="{StaticResource CommonHospital}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Visible" />
+                    <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}" Margin="6,0,0,0"/>
+                    <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID" InputScope="AlphanumericHalfWidth"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding EditedPrescription.Division, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <Label Content="調劑藥師" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" Height="34" Content="{Binding EditedPrescription.Pharmacist.Name, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"
-                           Style="{StaticResource BoldLabelContent16}" BorderThickness="0,0,0,1" BorderBrush="DimGray"/>
+                    <ComboBox x:Name="HisPerson" Width="170" Height="35" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
+                              SelectedItem="{Binding EditedPrescription.Pharmacist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" Height="34" HorizontalContentAlignment="Center" FontSize="16" 
-                           Content="{Binding EditedPrescription.TempMedicalNumber, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray"/>
+                    <TextBox x:Name="MedicalNumber" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="4"
+                             Text="{Binding EditedPrescription.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal">
                     <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                           Content="{Binding EditedPrescription.TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" HorizontalContentAlignment="Center"/>
+                    <xctk:MaskedTextBox x:Name="TreatDate" Width="160" Height="34" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Binding Path="EditedPrescription.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </xctk:MaskedTextBox>
                     <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}" Margin="19,0,0,0"/>
                     <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
                            Content="{Binding EditedPrescription.AdjustDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}" HorizontalContentAlignment="Center"/>
                     <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                           Content="{Binding EditedPrescription.MainDisease.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="MainDisease" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35"
+                             InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper"
+                             Text="{Binding EditedPrescription.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LostFocus">
+                                <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                    <command:EventToCommand.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                            <Binding Path="Name" ElementName="MainDisease" />
+                                            <Binding Path="Text" ElementName="MainDisease"/>
+                                        </MultiBinding>
+                                    </command:EventToCommand.CommandParameter>
+                                </command:EventToCommand>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                        <Binding Path="Name" ElementName="MainDisease" />
+                                        <Binding Path="Text" ElementName="MainDisease"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" Height="34" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                           Content="{Binding EditedPrescription.Treatment.SubDisease.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35"
+                             InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding EditedPrescription.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LostFocus">
+                                <command:EventToCommand Command="{Binding CheckClearDisease}">
+                                    <command:EventToCommand.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                            <Binding Path="Name" ElementName="MainDiagnosis" />
+                                            <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                        </MultiBinding>
+                                    </command:EventToCommand.CommandParameter>
+                                </command:EventToCommand>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
+                                        <Binding Path="Name" ElementName="SecondDiagnosis" />
+                                        <Binding Path="Text" ElementName="SecondDiagnosis"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
                     <TextBox x:Name="ChronicTotal" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1"
                              Text="{Binding EditedPrescription.Treatment.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputMethod.IsInputMethodEnabled="False">
@@ -203,8 +301,15 @@
                     <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Height="35" />
                     <Label Width="170" Content="{Binding EditedPrescription.AdjustCase,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Height="35" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
                     <Label Content="處方案件" Style="{StaticResource BoldLabelContent18}" Margin="19,0,0,0"/>
-                    <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                           Content="{Binding EditedPrescription.PrescriptionCase.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <ComboBox x:Name="PrescriptionCaseCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding PrescriptionCases}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding EditedPrescription.Treatment.PrescriptionCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
                     <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
                            Content="{Binding EditedPrescription.Copayment.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
@@ -212,8 +317,15 @@
                     <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
                            Content="{Binding EditedPrescription.PaymentCategory.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                     <Label Content="特定治療" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <Label Width="170" Height="35" BorderThickness="0,0,0,1" BorderBrush="DimGray" Style="{StaticResource BoldLabelContent16}"
-                           Content="{Binding EditedPrescription.SpecialTreat.FullName,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
+                    <ComboBox x:Name="SpecialTreatCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
+                              IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="False" ItemsSource="{Binding SpecialTreats}"
+                              SelectedItem="{Binding EditedPrescription.SpecialTreat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <command:EventToCommand Command="{Binding CheckDataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
             <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding EditedPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" CanUserAddRows="False"

@@ -377,6 +377,18 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
         }
+
+        public static DataTable DeletePrescription(PrescriptionRefactoring.Prescription prescription)
+        {
+            int warID = 0;
+            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Institution, prescription.AdjustCase.ID) != null)
+                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Institution, prescription.AdjustCase.ID).ID);
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Type.ToString());
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);
+        }
         public static DataTable GetStoreOrderIDByPrescriptionID(int preId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);

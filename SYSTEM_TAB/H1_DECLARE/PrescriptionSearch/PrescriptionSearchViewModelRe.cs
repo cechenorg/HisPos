@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
@@ -12,11 +10,14 @@ using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
     public class PrescriptionSearchViewModelRe : TabBase
     {
+        #region Properties
+
         public Collection<string> TimeIntervalTypes => new Collection<string> {"調劑日","登錄日","預約日"};
         public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證"};
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
@@ -190,11 +191,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             return this;
         }
         private BackgroundWorker worker;
+        #endregion
+        #region Commands
+
         public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand GetNoBucklePrescriptions { get; set; }
+        public RelayCommand ShowPrescriptionEdit { get; set; }
+
+        #endregion
         public PrescriptionSearchViewModelRe()
+        {
+            InitProperties();
+            InitCondition();
+            InitCommand();
+        }
+
+        #region InitFunctions
+        private void InitProperties()
         {
             AdjustCases = new AdjustCases(false) { null };
             foreach (var adjust in ViewModelMainWindow.AdjustCases)
@@ -206,12 +221,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 Divisions.Add(division);
             }
-            InitCondition();
-            FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
-            Search = new RelayCommand(SearchAction);
-            Clear = new RelayCommand(ClearAction);
-            GetNoBucklePrescriptions = new RelayCommand(GetNoBucklePrescriptionsAction);
         }
+        private void InitCondition()
+        {
+            SearchPrescriptions = new PrescriptionSearchPreviews();
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            SelectedTimeIntervalType = TimeIntervalTypes[0];
+            SelectedPatientCondition = PatientConditions[0];
+            SelectedMedicineCondition = MedicineConditions[0];
+            Institutions = new PrescriptionSearchInstitutions();
+            Institutions.GetAdjustedInstitutions();
+            SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
+            SelectedAdjustCase = AdjustCases[0];
+            SelectedDivision = Divisions[0];
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
+        }
+
+        private void InitCommand()
+        {
+            Search = new RelayCommand(SearchAction);
+            Clear = new RelayCommand(InitCondition);
+            FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
+            GetNoBucklePrescriptions = new RelayCommand(GetNoBucklePrescriptionsAction);
+            ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
+        }
+
+
+        #endregion
+
+        private void ShowPrescriptionEditAction()
+        {
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
+        }
+
         private void SearchAction()
         {
             worker = new BackgroundWorker();
@@ -225,15 +269,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             worker.RunWorkerAsync();
         }
 
-        private void ClearAction()
+        private void FilterAdjustedInstitutionAction()
         {
-            InitCondition();
+            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions);
+            var selectCount = Institutions.Count(i => i.Selected);
+            if (selectCount <= 3)
+            {
+                SelectedInstitutionCount = string.Empty;
+                foreach (var ins in Institutions.Where(i => i.Selected))
+                {
+                    SelectedInstitutionCount += ins.Name.Length > 10 ? $"{ins.Name.Substring(0, 10)}... " : $"{ins.Name} ";
+                }
+            }
+            else
+            {
+                SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
+            }
         }
 
-        private void EndSearch()
+        private void GetNoBucklePrescriptionsAction()
         {
-            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
-            PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            throw new NotImplementedException();
         }
 
         private void SearchByConditions()
@@ -258,48 +314,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             };
             SearchPrescriptions = new PrescriptionSearchPreviews();
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates,  SelectedAdjustCase,insIDList, SelectedDivision);
+            SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates, SelectedAdjustCase, insIDList, SelectedDivision);
             MainWindow.ServerConnection.CloseConnection();
         }
 
-        private void FilterAdjustedInstitutionAction()
+        private void EndSearch()
         {
-            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions);
-            var selectCount = Institutions.Count(i => i.Selected);
-            if (selectCount <= 3)
-            {
-                SelectedInstitutionCount = string.Empty;
-                foreach (var ins in Institutions.Where(i => i.Selected))
-                {
-                    SelectedInstitutionCount += ins.Name.Length > 10 ? $"{ins.Name.Substring(0, 10)}... " : $"{ins.Name} " ;
-                }
-            }
-            else
-            {
-                SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
-            }
-        }
-
-        private void GetNoBucklePrescriptionsAction()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void InitCondition()
-        {
-            SearchPrescriptions = new PrescriptionSearchPreviews();
-            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
-            SelectedTimeIntervalType = TimeIntervalTypes[0];
-            SelectedPatientCondition = PatientConditions[0];
-            SelectedMedicineCondition = MedicineConditions[0];
-            Institutions = new PrescriptionSearchInstitutions();
-            Institutions.GetAdjustedInstitutions();
-            SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
-            SelectedAdjustCase = AdjustCases[0];
-            SelectedDivision = Divisions[0];
-            StartDate = DateTime.Today;
-            EndDate = DateTime.Today;
         }
     }
 }
