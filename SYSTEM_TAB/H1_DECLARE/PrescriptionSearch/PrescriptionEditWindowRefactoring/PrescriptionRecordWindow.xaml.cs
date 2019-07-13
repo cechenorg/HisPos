@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.Service;
@@ -27,9 +28,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             InitializeComponent();
         }
-        public PrescriptionRecordWindow(Prescription p)
+        public PrescriptionRecordWindow(Prescription p, string title)
         {
             InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
+                    Close();
+            });
+            Closing += (sender, e) => Messenger.Default.Unregister(this);
+            DataContext = new PrescriptionEditViewModel(p, title);
+            ShowDialog();
         }
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {

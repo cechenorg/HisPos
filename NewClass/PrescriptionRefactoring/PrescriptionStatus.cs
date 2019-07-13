@@ -4,11 +4,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring
 {
-    public class PrescriptionStatus
+    public class PrescriptionStatus : ObservableObject
     {
         
 
@@ -38,7 +39,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         public bool IsAdjust { get; set; }
         public bool IsRead { get; set; }
         public bool IsVIP { get; set; }
-        public bool IsGetCard { get; set; }
+        private bool isGetCard;
+        public bool IsGetCard
+        {
+            get => isGetCard;
+            set
+            {
+                Set(() => IsGetCard, ref isGetCard, value);
+            }
+        }
         public bool IsDeclare { get; set; }
         public bool IsDeposit { get; set; }
         public bool IsRegister { get; set; }

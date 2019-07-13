@@ -2,15 +2,28 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
+using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.WareHouse;
+using His_Pos.Properties;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -120,8 +133,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
-        private PrescriptionSearchPreview editedPrescription;
-        public PrescriptionSearchPreview EditedPrescription
+        private int? editedPrescription;
+        public int? EditedPrescription
         {
             get => editedPrescription;
             set
@@ -191,6 +204,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             return this;
         }
         private BackgroundWorker worker;
+        private int totalCount;
+        public int TotalCount
+        {
+            get => totalCount;
+            set
+            {
+                Set(() => TotalCount, ref totalCount, value);
+            }
+        }
+        private int chronicCount;
+        public int ChronicCount
+        {
+            get => chronicCount;
+            set
+            {
+                Set(() => ChronicCount, ref chronicCount, value);
+            }
+        }
         #endregion
         #region Commands
 
@@ -199,7 +230,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Clear { get; set; }
         public RelayCommand GetNoBucklePrescriptions { get; set; }
         public RelayCommand ShowPrescriptionEdit { get; set; }
-
+        public RelayCommand ExportPrescriptionCsv { get; set; }
+        public RelayCommand ExportMedicineCsv { get; set; }
         #endregion
         public PrescriptionSearchViewModelRe()
         {
@@ -246,15 +278,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
             GetNoBucklePrescriptions = new RelayCommand(GetNoBucklePrescriptionsAction);
             ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
+            ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
+            ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
         }
-
-
         #endregion
 
-        private void ShowPrescriptionEditAction()
-        {
-            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
-        }
+        #region CommandAction
 
         private void SearchAction()
         {
@@ -287,10 +316,136 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             }
         }
 
+        private void ShowPrescriptionEditAction()
+        {
+            if (SelectedPrescription is null) return;
+            EditedPrescription = SelectedPrescription.ID;
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
+        }
+
         private void GetNoBucklePrescriptionsAction()
         {
             throw new NotImplementedException();
         }
+
+        private void ExportPrescriptionCsvAction()
+        {
+            var fileDialog = CreatePrescriptionExportFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.DeclareXmlPath = fileDialog.FileName;
+                Settings.Default.Save();
+                StartExportPrescriptionCsv(fileDialog);
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+            }
+        }
+
+        private void StartExportPrescriptionCsv(SaveFileDialog fileDialog)
+        {
+            using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
+            {
+                file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日,登錄日");
+                foreach (var s in SearchPrescriptions)
+                {
+                    var insName = s.Institution is null ? "" : s.Institution.Name;
+                    var divName = s.Division is null ? "" : s.Division.Name;
+                    var sAdjust = s.IsAdjust ? "已調劑" : "未調劑";
+                    var adjDate = DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(s.AdjustDate);
+                    var treatDate = s.TreatDate is null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
+                    Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
+                            $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
+                            $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +
+                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate}");
+                }
+                file.Close();
+                file.Dispose();
+            }
+        }
+
+        private SaveFileDialog CreatePrescriptionExportFileDialog()
+        {
+            return new SaveFileDialog
+            {
+                Title = Resources.處方存檔,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = Resources.PrescriptionFileType,
+                FileName = DateTime.Today.ToString("yyyyMMdd") + Resources.處方存檔,
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+        }
+
+        private void ExportMedicineCsvAction()
+        {
+            var idList = CreatePrescriptionIDList();
+            var fileDialog = CreateMedicineExportFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.DeclareXmlPath = fileDialog.FileName;
+                Settings.Default.Save();
+                try
+                {
+                    StartExportMedicineCsv(fileDialog, idList);
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+
+            }
+        }
+
+        private void StartExportMedicineCsv(SaveFileDialog fileDialog, List<int> idList)
+        {
+            using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
+            {
+                var wareHouses = WareHouses.GetWareHouses();
+                foreach (var w in wareHouses)
+                {
+                    file.WriteLine("庫名," + w.Name);
+                    file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,庫存,調劑量,扣庫量");
+                    var table = MedicineDb.GetPrescriptionMedicineSumById(idList, w.ID);
+                    foreach (DataRow s in table.Rows)
+                    {
+                        file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
+                    }
+                    file.WriteLine();
+                    file.WriteLine();
+                    file.WriteLine();
+                }
+                file.Close();
+                file.Dispose();
+            }
+        }
+
+        private SaveFileDialog CreateMedicineExportFileDialog()
+        {
+            return new SaveFileDialog
+            {
+                Title = Resources.藥品統計存檔,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.DeclareXmlPath) ? @"c:\" : Settings.Default.DeclareXmlPath,
+                Filter = Resources.CSVFileType,
+                FileName = DateTime.Today.ToString("yyyyMMdd") + Resources.藥品統計存檔,
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+        }
+
+        private List<int> CreatePrescriptionIDList()
+        {
+            var idList = new List<int>();
+            foreach (var a in SearchPrescriptions)
+            {
+                idList.Add(a.ID);
+            }
+            return idList;
+        }
+
+        #endregion
 
         private void SearchByConditions()
         {
@@ -322,6 +477,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            TotalCount = SearchPrescriptions.Count;
+            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            if (EditedPrescription != null && SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)) != null)
+            {
+                PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
+            }
+        }
+
+        private void Refresh(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("PrescriptionEdited"))
+                SearchAction();
         }
     }
 }

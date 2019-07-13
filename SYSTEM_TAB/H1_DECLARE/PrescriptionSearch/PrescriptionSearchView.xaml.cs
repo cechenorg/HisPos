@@ -78,5 +78,72 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if (!(sender is DataGridRow row) || !(row.DataContext is PrescriptionSearchPreview pre)) return;
             ((PrescriptionSearchViewModelRe)DataContext).ShowPrescriptionEdit.Execute(pre.ID);
         }
+
+        private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                EndDate.Focus();
+        }
+
+        private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                PatientCondition.Focus();
+        }
+
+        private void PatientCondition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SearchPatientText.Focus();
+        }
+
+        private void PatientCondition_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                SearchPatientText.Focus();
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StartDate.Focus();
+        }
+
+        private void UIElement_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                StartDate.Focus();
+        }
+
+        private void SearchPatientText_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Birthday.Focus();
+        }
+
+        private void Birthday_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                AdjustCase.Focus();
+        }
+
+        private void AdjustCase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Division.Focus();
+        }
+
+        private void Division_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MedicineCondition.Focus();
+        }
+
+        private void MedicineCondition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SearchMedicineText.Focus();
+        }
+
+        private void MedicineCondition_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                SearchMedicineText.Focus();
+        }
     }
 }

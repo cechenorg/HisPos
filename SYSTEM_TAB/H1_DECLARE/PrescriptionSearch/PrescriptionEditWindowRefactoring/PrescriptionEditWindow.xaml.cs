@@ -22,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             InitializeComponent();
         }
 
-        public PrescriptionEditWindow(Prescription p)
+        public PrescriptionEditWindow(Prescription p,string title)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
-            DataContext = new PrescriptionEditViewModel(p);
+            DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
         }
 

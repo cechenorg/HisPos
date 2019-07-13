@@ -576,7 +576,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             switch (type)
             {
                 case PrescriptionType.ChronicReserve:
-                    var edit = new PrescriptionEditWindow(selected);
+                    var title = "預約瀏覽 ResMasID:" + selected.SourceId;
+                    var edit = new ReservePrescriptionWindow(selected, title);
                     break;
                 default:
                     CheckAdminLogin(selected);
@@ -588,17 +589,20 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         {
             if (VM.CurrentUser.ID == 1)
             {
-                var edit = new PrescriptionEditWindow(selected);
+                var title = "處方修改 PreMasID:" + selected.ID;
+                var edit = new PrescriptionEditWindow(selected, title);
             }
             else
             {
                 if (selected.CheckCanEdit())
                 {
-                    var editWindow = new PrescriptionEditWindow(selected);
+                    var title = "處方修改 PreMasID:" + selected.ID;
+                    var editWindow = new PrescriptionEditWindow(selected, title);
                 }
                 else
                 {
-                    var recordWindow = new PrescriptionRecordWindow(selected);
+                    var title = "處方瀏覽 PreMasID:" + selected.ID;
+                    var recordWindow = new PrescriptionRecordWindow(selected, title);
                 }
             }
         }
@@ -612,12 +616,15 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             {
                 case PrescriptionType.ChronicReserve:
                     r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                    selected = new Prescription(r,PrescriptionType.ChronicReserve);
-                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
-                    break;
+                    MainWindow.ServerConnection.CloseConnection();
+                    selected = new Prescription(r, PrescriptionType.ChronicReserve);
+                    selected.Type = type;
+                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");;
+                    return selected;
                 default:
                     r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
                     selected = new Prescription(r, PrescriptionType.Normal);
+                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();

@@ -122,8 +122,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 AdjustDate = null;
-                TreatDate = null;
-                TempMedicalNumber = string.Empty;
             }
         }
 
@@ -1063,7 +1061,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var clone = new Prescription
             {
-                Type = Type,
                 Patient = (Customer) Patient.Clone(),
                 Institution = VM.GetInstitution(Institution?.ID),
                 Division = VM.GetDivision(Division?.ID),
@@ -1082,6 +1079,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
                 PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
                 PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
+                InsertTime = InsertTime,
+                Type = Type,
                 Medicines = new Medicines()
             };
             foreach (var m in Medicines)
@@ -1569,7 +1568,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
 
         public bool CheckCanEdit()
         {
-            return InsertTime != null && DateTime.Compare(((DateTime) InsertTime), DateTime.Today) < 0;
+            return InsertTime != null && DateTime.Compare(((DateTime) InsertTime), DateTime.Today) >= 0;
         }
 
         public string CheckMedicinesRule()
