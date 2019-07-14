@@ -177,6 +177,12 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
+            if (ReturnProducts.Count(p => p.InvID == tempProduct.InvID) > 0)
+            {
+                MessageWindow.ShowMessage("訂單中已有同群組商品", MessageType.ERROR);
+                return;
+            }
+
             if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
                 int selectedProductIndex = ReturnProducts.IndexOf((ReturnProduct)SelectedItem);

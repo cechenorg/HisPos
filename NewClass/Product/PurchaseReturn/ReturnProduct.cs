@@ -33,6 +33,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             }
         }
         public int WareHouseID { get; set; }
+        public int InvID { get; set; }
         public double Inventory { get; set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
@@ -111,6 +112,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public ReturnProduct(DataRow row) : base(row)
         {
             WareHouseID = row.Field<int>("ProInv_WareHouseID");
+            InvID = row.Field<int>("Inv_ID");
             Inventory = row.Field<double>("Inv_Inventory");
             UnitName = row.Field<string>("StoOrdDet_UnitName");
             UnitAmount = row.Field<double>("StoOrdDet_UnitAmount");
