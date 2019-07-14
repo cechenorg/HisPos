@@ -286,17 +286,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
             }
         }
-        private void ReserveMedicineSendAction()
-        {
-            DataTable table = StoreOrderDB.StoreOrderReserveByResIDList(StartDate,EndDate);
-            
-            if (table.Rows.Count > 0)
-            {
-                MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
-                ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn; 
-                Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
-            } 
-        }
+      
         private void ReserveSendAction() {
             IndexReserves indexReserves = CaculateReserveSendAmount();
             ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);

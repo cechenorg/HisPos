@@ -87,7 +87,13 @@
                     </StackPanel> 
                 </Grid>
                 <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,10,10,10"
-                    CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding IndexReserveSelectedItem.IndexReserveDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding IndexReserveSelectedItem.IndexReserveDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding IndexReserveMedicineSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataContext.ShowMedicineDetailCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>

@@ -5,8 +5,10 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.IndexReserve;
+using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,12 +41,29 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 CaculateReserveSendAmount();
             }
         }
+        private IndexReserveDetail indexReserveMedicineSelectedItem;
+        public IndexReserveDetail IndexReserveMedicineSelectedItem
+        {
+            get => indexReserveMedicineSelectedItem;
+            set
+            {
+                Set(() => IndexReserveMedicineSelectedItem, ref indexReserveMedicineSelectedItem, value);
+                
+            }
+        }
+         
         public RelayCommand SubmitCommand { get; set; } 
         public RelayCommand SendAmountChangeCommand { get; set; }
-        
+        public RelayCommand ShowMedicineDetailCommand { get; set; }
         public ReserveSendConfirmViewModel(IndexReserves indexReserves) {
             SubmitCommand = new RelayCommand(SubmitAction);
             SendAmountChangeCommand = new RelayCommand(SendAmountChangeAction);
+            ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification == "CaculateReserveSendAmount")
+                    CaculateReserveSendAmount();
+            });
             IndexReserveCollection = indexReserves;
             if (IndexReserveCollection.Count > 0)
                 IndexReserveSelectedItem = IndexReserveCollection[0];
@@ -147,7 +166,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void PrintPackage() {
 
         }
-       
+        private void ShowMedicineDetailAction()
+        {
+            var wareID = "0";
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, wareID }, "ShowProductDetail"));
+          //  CaculateReserveSendAmount();
+        }
+      
         #endregion
     }
 }

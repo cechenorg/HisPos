@@ -19,6 +19,7 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -215,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CaculateReserveSendAmount"));
         }
         private void ViewHistoryPriceAction()
         {
