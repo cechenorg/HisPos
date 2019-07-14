@@ -84,12 +84,6 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckNormalProcessingOrder()
         {
-            if (ReturnProducts.Sum(p => p.RealAmount) == 0.0)
-            {
-                MessageWindow.ShowMessage("退貨單總退貨量不可為0!", MessageType.ERROR);
-                return false;
-            }
-
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
 
             return (bool)confirmWindow.DialogResult;
@@ -106,6 +100,7 @@ namespace His_Pos.NewClass.StoreOrder
         public override void CalculateTotalPrice()
         {
             ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
+            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
         }
         public override void GetOrderProducts()
         {
