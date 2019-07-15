@@ -16,6 +16,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
 using His_Pos.NewClass.Product;
 using System.Linq;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -176,6 +177,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => IndexReserveDetailCollection, ref indexReserveDetailCollection, value);
             }
         }
+        private IndexReserveDetail indexReserveDetailSelectedItem ;
+        public IndexReserveDetail IndexReserveDetailSelectedItem
+        {
+            get => indexReserveDetailSelectedItem;
+            set
+            {
+                Set(() => IndexReserveDetailSelectedItem, ref indexReserveDetailSelectedItem, value);
+            }
+        }
         private List<string> phoneCallStatusString;
         public List<string> PhoneCallStatusString
         {
@@ -217,7 +227,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
-        
+        public RelayCommand ShowMedicineDetailCommand { get; set; }
 
         #endregion
         public Index() {
@@ -232,6 +242,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
             DataChangeCommand = new RelayCommand(DataChangeAction);
+            ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
         }
         #region Action
         private void DataChangeAction() {
@@ -289,10 +300,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
       
         private void ReserveSendAction() {
+            if (IndexReserveCollection.Count < 0  ) return; 
             IndexReserves indexReserves = CaculateReserveSendAmount();
             ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
-            ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
-            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "", ""));
+           //ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
+           //Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "", ""));
+            ReserveSearchAction();
         }
           
         private void IndexReserveSelectionChangedAction() {
@@ -359,11 +372,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             MainWindow.ServerConnection.CloseConnection();
             for (int i = 0; i < indexReserves.Count; i++) {
                 int sameCount = 0;
+                int zeroSendCount = 0;
                 foreach (var s in indexReserves[i].IndexReserveDetailCollection) {
                     if (s.SendAmount == s.Amount)
                         sameCount++;
+                    else if (s.SendAmount == 0)
+                        zeroSendCount++; 
                 }
-                if (sameCount == 0)
+                if (sameCount == 0 && zeroSendCount == indexReserves[i].IndexReserveDetailCollection.Count)
                     indexReserves[i].PrepareMedType = "全備藥";
                 else if(sameCount == indexReserves[i].IndexReserveDetailCollection.Count)
                     indexReserves[i].PrepareMedType = "全傳送";
@@ -374,8 +390,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             return indexReserves;
         }
         private void ShowMedicineDetailAction() {
-           // ProductDetailWindow.ShowProductDetailWindow();
-           // Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, "0" }, "ShowProductDetail"));
+          ProductDetailWindow.ShowProductDetailWindow();
+          Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveDetailSelectedItem.ID, "0" }, "ShowProductDetail"));
         }
         #endregion
     }

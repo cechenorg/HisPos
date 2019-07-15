@@ -71,7 +71,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         }
         #region Action
         private void SubmitAction() {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否傳送藥健康?","預約慢箋採購");
+            string askstring = IndexReserveSelectedItem.PrepareMedType == "全備藥" ? "是否列印封包明細?" : "是否傳送藥健康?";
+            ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
             if ((bool)confirmWindow.DialogResult) { 
                 SendReserveStoOrder();
                 
@@ -84,15 +85,18 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SendReserveStoOrder() {
             MainWindow.ServerConnection.OpenConnection();
 
-            if (IndexReserveSelectedItem.PrepareMedType != "全備藥")
-                IndexReserveSelectedItem.StoreOrderToSingde();
+            if (IndexReserveSelectedItem.PrepareMedType != "全備藥") {
+                if(IndexReserveSelectedItem.StoreOrderToSingde())
+                IndexReserveCollection.Remove(IndexReserveSelectedItem);
+            }
             else {
                 IndexReserveSelectedItem.IsSend = true;
                 IndexReserveSelectedItem.SaveStatus();
-            } 
-            MainWindow.ServerConnection.CloseConnection();
-            PrintPackage();
-            IndexReserveCollection.Remove(IndexReserveSelectedItem);
+                PrintPackage();
+                IndexReserveCollection.Remove(IndexReserveSelectedItem);
+            }
+            MainWindow.ServerConnection.CloseConnection(); 
+           
         }
         private void SavePrepareMedMessage() {
             SaveFileDialog fdlg = new SaveFileDialog();
@@ -133,17 +137,21 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         }
         private void CheckSendStatus() {
             int sameCount = 0;
+            int zeroSendCount = 0;
             foreach (var s in IndexReserveSelectedItem.IndexReserveDetailCollection)
             {
                 if (s.SendAmount == s.Amount)
                     sameCount++;
+                else if (s.SendAmount == 0)
+                    zeroSendCount++;
             }
-            if (sameCount == 0)
+            if (sameCount == 0 && zeroSendCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
                 IndexReserveSelectedItem.PrepareMedType = "全備藥";
             else if (sameCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
                 IndexReserveSelectedItem.PrepareMedType = "全傳送";
             else
                 IndexReserveSelectedItem.PrepareMedType = "部分備藥";
+             
         }
         private void CaculateReserveSendAmount() {
             if (IndexReserveSelectedItem is null) return;

@@ -138,9 +138,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);
         }
-        public void StoreOrderToSingde() {
+        public bool StoreOrderToSingde() {
             int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
-          
+            bool result = false;
             string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
             this.StoOrdID = newStoOrdID;
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
@@ -150,18 +150,20 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             StoreOrderDB.InsertIndexReserveOrder(this);
-            
+
             if (StoreOrderDB.SendStoreOrderToSingde(this).Rows[0][0].ToString() == "SUCCESS")
             {
                 StoreOrderDB.StoreOrderToWaiting(StoOrdID);
                 IsSend = true;
                 SaveStatus();
+                result = true;
             }
-            else
-                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
-          
+            else  
+                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
+
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
+            return result;
         }
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer) { 
             rptViewer.LocalReport.DataSources.Clear();
