@@ -21,7 +21,8 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             else
             {
                 if (!CheckNhiRules(noCard)) return false;
-                if (!CheckMedicalNumber(noCard)) return false;
+                if(!noCard)
+                    if (!CheckMedicalNumber()) return false;
             }
             if (!CheckMedicines()) return false;
             return CheckSameDeclare() && PrintConfirm();

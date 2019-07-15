@@ -75,10 +75,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
-            var row = sender as DataGridRow;
-            if (row?.Item is null) return;
-            if (!(row.Item is PrescriptionSearchPreview)) return;
-            Messenger.Default.Send(new NotificationMessage(nameof(PrescriptionSearchView)+"ShowPrescriptionEditWindow"));
+            if (!(sender is DataGridRow row) || !(row.DataContext is PrescriptionSearchPreview pre)) return;
+            ((PrescriptionSearchViewModel)DataContext).ShowPrescriptionEdit.Execute(pre.ID);
         }
     }
 }

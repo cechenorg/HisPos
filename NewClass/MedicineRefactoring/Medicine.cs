@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
-            if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID"))
+            if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID") && r.Field<int?>("Inv_ID") != null)
                 InventoryID = r.Field<int>("Inv_ID");
         }
 
@@ -354,11 +354,6 @@ namespace His_Pos.NewClass.MedicineRefactoring
             set { Set(() => IsSelected, ref isSelected, value); }
         }
         #endregion
-
-        public bool CheckIsBloodGlucoseTestStrip()
-        {
-            return this is MedicineSpecialMaterial && ID.StartsWith("TSS01");
-        }
 
         public abstract MedBagMedicine CreateMedBagMedicine(bool isSingle);
 

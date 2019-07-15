@@ -581,4 +581,16 @@
   <data name="CSV檔案" xml:space="preserve">
     <value>Csv檔案|*.csv</value>
   </data>
+  <data name="Activity" xml:space="preserve">
+    <value>促銷管理</value>
+  </data>
+  <data name="ProductTransaction" xml:space="preserve">
+    <value>結帳作業</value>
+  </data>
+  <data name="ProductTransactionRecord" xml:space="preserve">
+    <value>銷售紀錄</value>
+  </data>
+  <data name="Transaction" xml:space="preserve">
+    <value>銷售作業</value>
+  </data>
 </root>

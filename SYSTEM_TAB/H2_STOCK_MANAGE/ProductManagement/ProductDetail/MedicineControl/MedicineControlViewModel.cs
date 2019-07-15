@@ -443,7 +443,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
                 if (Medicine.SafeAmount < 0)
                 {
-                    MessageWindow.ShowMessage("安全量必須大於0", MessageType.ERROR);
+                    MessageWindow.ShowMessage("安全量不可小於0", MessageType.ERROR);
                     return false;
                 }
             }

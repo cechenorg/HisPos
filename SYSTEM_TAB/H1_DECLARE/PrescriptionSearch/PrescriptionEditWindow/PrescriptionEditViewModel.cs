@@ -259,11 +259,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var adjustDate = selected.Treatment.AdjustDate;
                 OriginalPrescription.Medicines.Clear();
                 OriginalPrescription.Medicines.GetDataByPrescriptionId(id, warID, adjustDate);
-                EditedPrescription.Medicines.Clear();;
+                EditedPrescription.Medicines.Clear();
                 EditedPrescription.Medicines.GetDataByPrescriptionId(id, warID, adjustDate);
             }
             else
             {
+                EditedPrescription.Medicines.Clear();
                 EditedPrescription.Medicines.GetDataByReserveId(int.Parse(EditedPrescription.SourceId), EditedPrescription.WareHouse?.ID, EditedPrescription.Treatment.AdjustDate);
             }
             MainWindow.ServerConnection.CloseConnection();

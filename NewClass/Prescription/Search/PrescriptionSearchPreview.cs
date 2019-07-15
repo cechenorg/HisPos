@@ -8,14 +8,15 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
-    public class PrescriptionSearchPreview:ObservableObject
+    public class PrescriptionSearchPreview : ObservableObject
     {
         public PrescriptionSearchPreview() { }
 
-        public PrescriptionSearchPreview(DataRow r,PrescriptionSource s)
+        public PrescriptionSearchPreview(DataRow r, PrescriptionSource s)
         {
             Source = s;
             ID = r.Field<int>("ID");
@@ -33,12 +34,14 @@ namespace His_Pos.NewClass.Prescription.Search
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
                 TaiwanCalendar tc = new TaiwanCalendar();
-                if (r.Field<DateTime?>("InsertTime") != null) {
+                if (r.Field<DateTime?>("InsertTime") != null)
+                {
                     DateTime istime = r.Field<DateTime>("InsertTime");
-                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
-                } 
-                
-                switch (r.Field<string>("StoOrd_Status")) {
+                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime), istime.ToString("MM-dd HH點mm分"));
+                }
+
+                switch (r.Field<string>("StoOrd_Status"))
+                {
                     case "W":
                         StoStatus = "等待確認";
                         break;
@@ -160,7 +163,7 @@ namespace His_Pos.NewClass.Prescription.Search
         public PrescriptionSource Source { get; set; }
         public Prescription GetPrescriptionByID()
         {
-            return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0],PrescriptionSource.Normal);
+            return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0], PrescriptionSource.Normal);
         }
 
         public Prescription GetReservePrescriptionByID()

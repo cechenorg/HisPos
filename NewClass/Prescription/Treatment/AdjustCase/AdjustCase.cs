@@ -56,5 +56,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         {
             return ID.Equals("2");
         }
+
+        public bool IsNormal()
+        {
+            return ID.Equals("1") || ID.Equals("3");
+        }
     }
 }

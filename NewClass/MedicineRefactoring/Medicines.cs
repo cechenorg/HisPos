@@ -237,7 +237,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             var notPaySelfNhiMedicines = GetNotPaySelfNhiMedicines();
             if (!notPaySelfNhiMedicines.Any()) return 0;
-            var medicinePoint = notPaySelfNhiMedicines.Sum(m => m.NHIPrice * m.Amount);
+            var medicinePoint = notPaySelfNhiMedicines.Sum(m => m.TotalPrice);
             return (int)Math.Round(Convert.ToDouble(medicinePoint.ToString(CultureInfo.InvariantCulture)), 0, MidpointRounding.AwayFromZero);
         }
 
@@ -250,8 +250,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             var notPaySelfSpecialMaterials = GetNotPaySelfSpecialMaterials();
             if (!notPaySelfSpecialMaterials.Any()) return 0;
-            var specialMaterial = notPaySelfSpecialMaterials.Sum(m => m.NHIPrice * m.Amount) * 1.05;
-            return (int)Math.Round(Convert.ToDouble(specialMaterial.ToString(CultureInfo.InvariantCulture)), 0, MidpointRounding.AwayFromZero);
+            var specialMaterial = notPaySelfSpecialMaterials.Sum(m => (int)Math.Round(Convert.ToDouble((m.TotalPrice * 1.05).ToString(CultureInfo.InvariantCulture)), 0, MidpointRounding.AwayFromZero));
+            return specialMaterial;
         }
 
         private List<Medicine> GetNotPaySelfSpecialMaterials()
@@ -273,7 +273,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public int CountMedicineDays()
         {
             if (Items.Count(m => m.CanCountMedicineDays()) > 0)
-                return (int)Items.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);//計算最大給藥日份
+                return (int)this.Where(m => m.CanCountMedicineDays()).Max(m => m.Days);//計算最大給藥日份
             return 0;
         }
 
@@ -625,6 +625,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
             }
             return negativeStock;
+        }
+
+        public bool DeclareMedicalService()
+        {
+            return this.Count(m => m is MedicineNHI && !m.PaySelf) > 0;
         }
     }
 }

@@ -231,7 +231,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
                 MedicalNumber = e.ID;
                 PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
             }
-            if (makeUp)
+            if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
                 MakeUpMark = "2";
             MedicalPersonIcNumber = p.Pharmacist.IDNumber;
             MainDiagnosisCode = p.MainDisease.ID;
@@ -240,7 +240,7 @@ namespace His_Pos.NewClass.Prescription.IcData.Upload
             MedicalFee = (p.PrescriptionPoint.MedicinePoint + p.PrescriptionPoint.SpecialMaterialPoint +
                              p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.MedicalServicePoint).ToString();
             CopaymentFee = p.PrescriptionPoint.CopaymentPoint.ToString();
-            if (makeUp)
+            if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
                 ActualTreatDate = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.AdjustDate);
         }
 
