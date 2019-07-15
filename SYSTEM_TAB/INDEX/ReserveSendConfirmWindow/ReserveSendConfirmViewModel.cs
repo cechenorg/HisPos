@@ -9,6 +9,7 @@ using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
 {
     public class ReserveSendConfirmViewModel : ViewModelBase
@@ -71,9 +72,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         #region Action
         private void SubmitAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否傳送藥健康?","預約慢箋採購");
-            if ((bool)confirmWindow.DialogResult) {
-                //SavePrepareMedMessage();
+            if ((bool)confirmWindow.DialogResult) { 
                 SendReserveStoOrder();
+                
                 //Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
             }
         }
@@ -90,6 +91,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 IndexReserveSelectedItem.SaveStatus();
             } 
             MainWindow.ServerConnection.CloseConnection();
+            PrintPackage();
             IndexReserveCollection.Remove(IndexReserveSelectedItem);
         }
         private void SavePrepareMedMessage() {
@@ -164,14 +166,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             CheckSendStatus();
         }
         private void PrintPackage() {
-
+            ReportViewer rptViewer = new ReportViewer();
+            IndexReserveSelectedItem.SetReserveMedicinesSheetReportViewer(rptViewer);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+            });
         }
         private void ShowMedicineDetailAction()
-        {
-            var wareID = "0";
+        { 
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, wareID }, "ShowProductDetail"));
-          //  CaculateReserveSendAmount();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, "0" }, "ShowProductDetail")); 
         }
       
         #endregion

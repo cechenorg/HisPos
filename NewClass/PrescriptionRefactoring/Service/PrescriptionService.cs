@@ -616,30 +616,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             }
         }
 
-        private void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer)
-        {
-            var medBagMedicines = new ReserveMedicines();
-            var json = JsonConvert.SerializeObject(medBagMedicines);
-            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = CreateReserveMedicinesSheetParameters();
-            rptViewer.LocalReport.SetParameters(parameters);
-            rptViewer.LocalReport.DataSources.Clear();
-            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
-            rptViewer.LocalReport.DataSources.Add(rd);
-            rptViewer.LocalReport.Refresh();
-        }
-
-        private static IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
-        {
-            return new List<ReportParameter>
-            {
-                new ReportParameter("PatientName",""),
-                new ReportParameter("PatientBirthday", ""),
-                new ReportParameter("Institution", ""),
-                new ReportParameter("Division", "")
-            };
-        }
+       
     }
 }

@@ -217,6 +217,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
+        public RelayCommand 
 
         #endregion
         public Index() {
@@ -371,6 +372,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
 
             return indexReserves;
+        }
+        private void ShowMedicineDetailAction() {
+           // ProductDetailWindow.ShowProductDetailWindow();
+           // Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, "0" }, "ShowProductDetail"));
         }
         #endregion
     }

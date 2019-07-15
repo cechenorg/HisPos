@@ -1,14 +1,17 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.StoreOrder;
+using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace His_Pos.NewClass.Prescription.IndexReserve
 {
@@ -160,5 +163,30 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
         }
+        public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer) { 
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = CreateReserveMedicinesSheetParameters();
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
+
+        private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters() {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("PatientName",CusName),
+                new ReportParameter("PatientBirthday","105/02/28"),
+                new ReportParameter("Institution", InsName),
+                new ReportParameter("Division", DivName)
+            };
+        }
+
     }
 }
