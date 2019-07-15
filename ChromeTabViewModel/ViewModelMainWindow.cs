@@ -338,7 +338,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public void StartPrintReserve(ReportViewer r) {
             BusyContent = "封包列印...";
-            Export(r.LocalReport, 25.4, 9.3);
+            Export(r.LocalReport, 22, 9.3);
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
         public void StartPrintDeposit(ReportViewer r)

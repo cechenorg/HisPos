@@ -170,7 +170,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
+            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = CreateReserveMedicinesSheetParameters();
             rptViewer.LocalReport.SetParameters(parameters);
@@ -185,6 +185,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             {
                 new ReportParameter("PatientName",CusName),
                 new ReportParameter("PatientBirthday","105/02/28"),
+                new ReportParameter("PatientTel","105/02/28"),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName)
             };
