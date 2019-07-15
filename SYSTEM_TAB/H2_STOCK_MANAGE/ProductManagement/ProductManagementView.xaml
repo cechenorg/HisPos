@@ -30,6 +30,8 @@
                 <Label Content="進階搜尋條件" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <Label Content="成分" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="10,0,0,0" Width="200" FontSize="16" InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Center"/>
+                <Label Content="成分" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="10,0,0,0" Width="200" FontSize="16" InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="MixedResult" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
