@@ -202,7 +202,7 @@
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
              
-            <Rectangle Width="750"/> 
+            <Rectangle Width="850"/> 
             <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="傳送此處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>
