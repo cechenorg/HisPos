@@ -38,6 +38,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
         public int SafeAmount { get; set; }
+        public string BatchNumber { get; set; }
         public string Note { get; set; }
         public double ReturnStockValue
         {
@@ -120,6 +121,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             Note = row.Field<string>("StoOrdDet_Note");
             returnAmount = row.Field<double>("StoOrdDet_OrderAmount");
             realAmount = row.Field<double>("StoOrdDet_RealAmount");
+            BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
             price = (double)row.Field<decimal>("StoOrdDet_Price");
             subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
             InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));

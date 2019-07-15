@@ -34,8 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private ProductManageStructs searchProductCollection;
         private double totalStockValue;
         private WareHouse selectedWareHouse;
-        private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
-        private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
+        private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.Medicine;
+        private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.Medicine;
 
         public ProductManageStructs SearchProductCollection
         {

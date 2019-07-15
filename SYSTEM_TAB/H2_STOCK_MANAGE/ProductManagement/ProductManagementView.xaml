@@ -13,7 +13,7 @@
         <DataTemplate x:Key="MixedCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
         </DataTemplate>
         <DataTemplate x:Key="OTCCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
-            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50" Margin="0,0,0,10">
                 <Label Content="進階搜尋條件" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <Label Content="大類別" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" TextSearch.TextPath="ID"
@@ -26,7 +26,7 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="MedicineCondition" DataType="{x:Type chromeTabViewModel:ViewModelProductDetailWindow}">
-            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50" Margin="0,0,0,10">
                 <Label Content="進階搜尋條件" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <Label Content="成分" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding SearchID, Mode=TwoWay}" Margin="10,0,0,0" Width="200" FontSize="16" InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Center"/>

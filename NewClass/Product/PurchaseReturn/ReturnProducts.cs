@@ -10,10 +10,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private ReturnProducts(DataTable dataTable)
         {
             ReturnProduct tempProduct = null;
+            short tempID = 0;
 
             foreach (DataRow row in dataTable.Rows)
             {
-                if (tempProduct is null || !tempProduct.ID.Equals(row.Field<string>("Pro_ID")))
+                if (tempID == 0 || tempID != row.Field<short>("StoOrdDet_ID"))
                 {
                     switch (row.Field<string>("TYPE"))
                     {
@@ -31,6 +32,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 {
                     tempProduct.AddInventoryDetail(row);
                 }
+
+                tempID = row.Field<short>("StoOrdDet_ID");
             }
 
             foreach (var product in this)
