@@ -394,7 +394,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         [SuppressMessage("ReSharper", "FlagArgument")]
         private void SetBuckleAmount(bool buckle)
         {
-            foreach (var m in Items)
+            foreach (var m in this)
             {
                 switch (m)
                 {

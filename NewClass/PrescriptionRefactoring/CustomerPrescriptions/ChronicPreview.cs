@@ -10,6 +10,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         public PrescriptionType Type { get; }
         public int ChronicSeq { get; }
         public int ChronicTotal { get; }
+        public string IsSend { get; }
         public ChronicPreview(DataRow r, PrescriptionType type) : base(r)
         {
             Type = type;
@@ -17,6 +18,21 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
             AdjustDate = r.Field<DateTime>("Adj_Date");
             ChronicSeq = r.Field<byte>("ChronicSequence");
             ChronicTotal = r.Field<byte>("ChronicTotal");
+            if(type.Equals(PrescriptionType.ChronicReserve))
+            {
+                switch (r.Field<string>("MedPrepareStatus"))
+                {
+                    case "N":
+                        IsSend = "未處理";
+                        break;
+                    case "D":
+                        IsSend = "已備藥";
+                        break;
+                    default:
+                        IsSend = "不備藥";
+                        break;
+                }
+            }
         }
 
         public override void Print()

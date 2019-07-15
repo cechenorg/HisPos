@@ -259,7 +259,7 @@
                             </i:Interaction.Triggers>
                         </xctk:MaskedTextBox>
                         <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}" Margin="18,0,0,0"/>
-                        <TextBox x:Name="MainDisease" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35" Foreground="{StaticResource ForeGround}"
+                        <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35" Foreground="{StaticResource ForeGround}"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding EditedPrescription.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                             <i:Interaction.Triggers>
@@ -270,8 +270,8 @@
                                     <command:EventToCommand Command="{Binding CheckClearDisease}">
                                         <command:EventToCommand.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                                <Binding Path="Name" ElementName="MainDisease" />
-                                                <Binding Path="Text" ElementName="MainDisease"/>
+                                                <Binding Path="Name" ElementName="MainDiagnosis" />
+                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
                                             </MultiBinding>
                                         </command:EventToCommand.CommandParameter>
                                     </command:EventToCommand>
@@ -281,8 +281,8 @@
                                 <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                     <KeyBinding.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                            <Binding Path="Name" ElementName="MainDisease" />
-                                            <Binding Path="Text" ElementName="MainDisease"/>
+                                            <Binding Path="Name" ElementName="MainDiagnosis" />
+                                            <Binding Path="Text" ElementName="MainDiagnosis"/>
                                         </MultiBinding>
                                     </KeyBinding.CommandParameter>
                                 </KeyBinding>
@@ -300,8 +300,8 @@
                                     <command:EventToCommand Command="{Binding CheckClearDisease}">
                                         <command:EventToCommand.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                                <Binding Path="Name" ElementName="MainDiagnosis" />
-                                                <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                                <Binding Path="Name" ElementName="SecondDiagnosis" />
+                                                <Binding Path="Text" ElementName="SecondDiagnosis"/>
                                             </MultiBinding>
                                         </command:EventToCommand.CommandParameter>
                                     </command:EventToCommand>

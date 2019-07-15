@@ -41,13 +41,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void FocusDosage(NotificationMessage<int> msg)
         {
-            if (msg.Sender is PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel && msg.Notification.Equals("FocusDosage"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDosage"))
                 FocusDataGridCell("Dosage", PrescriptionMedicines, msg.Content);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel && msg.Notification.Equals("FocusChronicTotal"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusChronicTotal"))
             {
                 ChronicTotal.Focus();
                 ChronicTotal.SelectionStart = 0;
@@ -56,7 +56,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel && msg.Notification.Equals("FocusSubDisease"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusSubDisease"))
             {
                 SecondDiagnosis.Focus();
                 SecondDiagnosis.SelectionStart = 0;
@@ -65,7 +65,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void FocusDivision(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel && msg.Notification.Equals("FocusDivision"))
+            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDivision"))
                 DivisionCombo.Focus();
         }
 
@@ -87,8 +87,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (e.Key == Key.Enter)
             {
-                MainDisease.Focus();
-                MainDisease.SelectionStart = 0;
+                MainDiagnosis.Focus();
+                MainDiagnosis.SelectionStart = 0;
             }
         }
 

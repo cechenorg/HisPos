@@ -275,7 +275,7 @@
                         </TextBox.InputBindings>
                     </TextBox>
                     <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35"
+                    <TextBox x:Name="SecondDisease" Width="170" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Height="35"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Text="{Binding EditedPrescription.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
@@ -286,8 +286,8 @@
                                 <command:EventToCommand Command="{Binding CheckClearDisease}">
                                     <command:EventToCommand.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                            <Binding Path="Name" ElementName="MainDiagnosis" />
-                                            <Binding Path="Text" ElementName="MainDiagnosis"/>
+                                            <Binding Path="Name" ElementName="SecondDisease" />
+                                            <Binding Path="Text" ElementName="SecondDisease"/>
                                         </MultiBinding>
                                     </command:EventToCommand.CommandParameter>
                                 </command:EventToCommand>
@@ -297,8 +297,8 @@
                             <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                 <KeyBinding.CommandParameter>
                                     <MultiBinding Converter="{StaticResource MultiCommandParametersConverter}">
-                                        <Binding Path="Name" ElementName="SecondDiagnosis" />
-                                        <Binding Path="Text" ElementName="SecondDiagnosis"/>
+                                        <Binding Path="Name" ElementName="SecondDisease" />
+                                        <Binding Path="Text" ElementName="SecondDisease"/>
                                     </MultiBinding>
                                 </KeyBinding.CommandParameter>
                             </KeyBinding>

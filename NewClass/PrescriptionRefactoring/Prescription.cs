@@ -1605,11 +1605,11 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             switch (Type)
             {
                 case PrescriptionType.ChronicReserve:
-                    Medicines = new Medicines();
+                    Medicines.Clear();
                     Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
                     break;
                 default:
-                    Medicines = new Medicines();
+                    Medicines.Clear();
                     Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
                     break;
             }

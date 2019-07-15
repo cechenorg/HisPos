@@ -380,11 +380,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void GetNoBucklePrescriptionsAction()
         {
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => { SearchNoBucklePrescriptions(); };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                EndSearch();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void SearchNoBucklePrescriptions()
+        {
             BusyContent = "處方查詢中...";
             SelectedTimeIntervalType = TimeIntervalTypes[0];
             SearchPrescriptions = new PrescriptionSearchPreviews();
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetNoBucklePrescriptions(StartDate,EndDate);
+            SearchPrescriptions.GetNoBucklePrescriptions(StartDate, EndDate);
             SetPrescriptionsSummary();
             MainWindow.ServerConnection.CloseConnection();
         }

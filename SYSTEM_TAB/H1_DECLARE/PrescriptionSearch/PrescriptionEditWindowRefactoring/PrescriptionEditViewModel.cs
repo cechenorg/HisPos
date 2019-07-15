@@ -209,6 +209,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.UpdateMedicines();
             MainWindow.ServerConnection.CloseConnection();
             IsPrescribe = EditedPrescription.IsPrescribe;
+            foreach (var m in OriginalPrescription.Medicines)
+            {
+                foreach (var editMed in EditedPrescription.Medicines)
+                {
+                    if (!editMed.ID.Equals(m.ID)) continue;
+                    if (editMed.Dosage != m.Dosage) continue;
+                    if (editMed.UsageName != m.UsageName) continue;
+                    if (editMed.Days != m.Days) continue;
+                    if (m.PositionID != editMed.PositionID) continue;
+                    if (editMed.Amount != m.Amount) continue;
+                    editMed.BuckleAmount = m.BuckleAmount;
+                }
+            }
         }
 
         private void InitialItemsSources()
@@ -512,7 +525,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if(!CheckWareHouseNotChanged(receiveSelectedInstitution))return;
             EditedPrescription.Institution = new Institution();
             EditedPrescription.Institution = receiveSelectedInstitution;
-            EditedPrescription.UpdateMedicines();
             var notification = string.IsNullOrEmpty(EditedPrescription.Division?.ID) ? "FocusDivision" : "FocusMedicalNumber";
             Messenger.Default.Send(new NotificationMessage(this, notification));
         }
