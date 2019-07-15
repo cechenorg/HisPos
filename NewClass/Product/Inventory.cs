@@ -12,15 +12,15 @@ namespace His_Pos.NewClass.Product
     {
         public Inventory(DataRow r) {
             InvID = r.Field<int>("Inv_ID");
-            InventoryAmount = r.Field<int>("Inv_Inventory");
-            OnTheWayAmount = r.Field<int>("Inv_OnTheWay");
-            MegBagAmount = r.Field<int>("MegBagAmount");
-            OnTheFrame = r.Field<int>("OnTheFrame");
+            InventoryAmount = r.Field<double>("Inv_Inventory");
+            OnTheWayAmount = r.Field<double>("Inv_OnTheWay");
+            MegBagAmount = r.Field<double>("MegBagAmount");
+            OnTheFrame = r.Field<double>("OnTheFrame");
         }
         public int InvID { get; set; }
-        public int InventoryAmount { get; set; }
-        public int OnTheWayAmount { get; set; }
-        public int MegBagAmount { get; set; }
-        public int OnTheFrame { get; set; }
+        public double InventoryAmount { get; set; }
+        public double OnTheWayAmount { get; set; }
+        public double MegBagAmount { get; set; }
+        public double OnTheFrame { get; set; }
     }
 }

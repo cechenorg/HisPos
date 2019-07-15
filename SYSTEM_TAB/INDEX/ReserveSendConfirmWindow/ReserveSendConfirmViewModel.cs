@@ -73,11 +73,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SubmitAction() {
             string askstring = IndexReserveSelectedItem.PrepareMedType == ReserveSendType.AllPrepare  ? "是否列印封包明細?" : "是否傳送藥健康?";
             ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
-            if ((bool)confirmWindow.DialogResult) { 
+            if ((bool)confirmWindow.DialogResult)   
                 SendReserveStoOrder();
-                
-                //Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
-            }
+            if (IndexReserveCollection.Count == 0) {
+                MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.WARNING);
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
+            } 
         }
         private void SendAmountChangeAction() {
             CheckSendStatus();
@@ -155,7 +156,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void CaculateReserveSendAmount() {
             if (IndexReserveSelectedItem is null) return;
             MainWindow.ServerConnection.OpenConnection();
-            Inventorys InventoryCollection = Inventorys.GetAllInventoryByWarID("0");
+            List<string> MedicineIds = new List<string>();
+            foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection) {
+                MedicineIds.Add(med.ID);
+            }
+            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
              
             IndexReserveSelectedItem.GetIndexDetail();
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
@@ -166,7 +171,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 else
                 {
                     var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                    pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? 0 : Convert.ToInt32(pro.Amount) - target.OnTheFrame;
+                    pro.SendAmount = target.OnTheFrame -  pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
                     pro.FrameAmount = target.OnTheFrame;
                 }
             } 
