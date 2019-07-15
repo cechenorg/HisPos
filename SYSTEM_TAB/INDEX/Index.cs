@@ -217,7 +217,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
-        public RelayCommand 
+        
 
         #endregion
         public Index() {
