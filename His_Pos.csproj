@@ -1840,7 +1840,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\ReserveMedicinesSheet.rdlc">
+    <EmbeddedResource Include="RDLC\ReserveSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="RDLC\ReserveMedicinesDataSet.xsc">
