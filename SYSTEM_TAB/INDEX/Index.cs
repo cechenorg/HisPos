@@ -360,8 +360,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                             pro.SendAmount = Convert.ToInt32(pro.Amount);
                         else
                         {
-                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID); 
-                            pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? Convert.ToInt32(pro.Amount) : Convert.ToInt32(pro.Amount) - target.OnTheFrame; 
+                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
+                            pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? 0 : Convert.ToInt32(pro.Amount) - target.OnTheFrame;
                         } 
                     }
                 }

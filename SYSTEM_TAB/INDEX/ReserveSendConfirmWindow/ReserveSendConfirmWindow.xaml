@@ -8,7 +8,7 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        Title="預約慢箋處方確認" Height="625" Width="900" WindowStartupLocation="CenterScreen">
+        Title="預約慢箋處方確認" Height="625" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="MedPrepareTypeAllPrepare" DataType="{x:Type Label}">
@@ -167,6 +167,14 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn> 
                         <DataGridTextColumn  Width="80" Header="調劑量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn  Width="80" Header="架上量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FrameAmount}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

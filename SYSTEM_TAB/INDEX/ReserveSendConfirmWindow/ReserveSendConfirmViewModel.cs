@@ -148,10 +148,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             if (sameCount == 0 && zeroSendCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
                 IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllPrepare;
             else if (sameCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
-                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllSend ;
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllSend;
             else
-                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.CoPrepare ;
-             
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.CoPrepare; 
         }
         private void CaculateReserveSendAmount() {
             if (IndexReserveSelectedItem is null) return;
@@ -167,7 +166,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 else
                 {
                     var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                    pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? Convert.ToInt32(pro.Amount) : Convert.ToInt32(pro.Amount) - target.OnTheFrame;
+                    pro.SendAmount = target.OnTheFrame - Convert.ToInt32(pro.Amount) > 0 ? 0 : Convert.ToInt32(pro.Amount) - target.OnTheFrame;
+                    pro.FrameAmount = target.OnTheFrame;
                 }
             } 
             MainWindow.ServerConnection.CloseConnection();

@@ -25,6 +25,15 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
         public byte? ControlLevel { get; set; }
         public double Amount { get; set; }
         public string InvID { get; set; }
+        private int frameAmount;
+        public int FrameAmount
+        {
+            get => frameAmount;
+            set
+            {
+                Set(() => FrameAmount, ref frameAmount, value); 
+            }
+        }
         private int sendAmount;
         public int SendAmount
         {
@@ -32,6 +41,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
             set
             {
                 Set(() => SendAmount, ref sendAmount, value);
+                if (SendAmount > Convert.ToInt32(Amount))
+                    SendAmount = Convert.ToInt32(Amount);
             }
         }
     }
