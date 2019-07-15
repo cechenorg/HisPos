@@ -193,14 +193,24 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" Margin="10,0">
-                    <Label Content="處方總數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Content="慢箋數" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="50" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Command="{Binding ExportMedicineCsv}" Width="120" Height="30" Content="匯出藥品檔" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="900,0,0,0" />
-                    <Button Command="{Binding ExportPrescriptionCsv}" Width="120" Height="30" Content="匯出處方檔" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="10,0,0,0" />
-                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="30" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" Visibility="Collapsed"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" Margin="10,0">
+                    <Label Content="處方總數" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Height="35" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="慢箋數" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="50" Height="35" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="藥品(含特材)" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="100" Height="35" Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="藥服" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="100" Height="35" Content="{Binding MedicalServicePoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="申請點數" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="100" Height="35" Content="{Binding ApplyPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="部分負擔" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="80" Height="35" Content="{Binding CopaymentPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Content="總點數" Height="35" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label Width="100" Height="35" Content="{Binding TotalPoint,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Button Command="{Binding ExportMedicineCsv}" Width="120" Height="35" Content="匯出藥品檔" FontSize="16" Background="DarkCyan" BorderThickness="0" Margin="35,0,0,0" />
+                    <Button Command="{Binding ExportPrescriptionCsv}" Width="120" Height="35" Content="匯出處方檔" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="10,0,0,0" />
+                    <Button Command="{Binding ImportDeclareFileCommand}" Width="120" Height="35" Content="匯入申報檔" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" Visibility="Collapsed"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

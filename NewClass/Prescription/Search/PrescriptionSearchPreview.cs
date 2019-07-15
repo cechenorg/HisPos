@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Prescription.Search
 
         public PrescriptionSearchPreview(DataRow r,PrescriptionType s)
         {
-            Source = s;
+            Type = s;
             ID = r.Field<int>("ID");
             Patient = new Customer();
             Patient.Name = r.Field<string>("Cus_Name");
@@ -177,15 +177,6 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => RegisterDate, ref registerDate, value);
             }
         }
-        public PrescriptionType Source { get; set; }
-        public Prescription GetPrescriptionByID()
-        {
-            return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0],PrescriptionSource.Normal);
-        }
-
-        public Prescription GetReservePrescriptionByID()
-        {
-            return new Prescription(PrescriptionDb.GetReservePrescriptionByID(ID).Rows[0], PrescriptionSource.ChronicReserve);
-        }
+        public PrescriptionType Type { get; set; }
     }
 }

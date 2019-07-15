@@ -18,12 +18,13 @@ using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Properties;
 using His_Pos.Service;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -222,6 +223,51 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => ChronicCount, ref chronicCount, value);
             }
         }
+        private int totalPoint;
+        public int TotalPoint
+        {
+            get => totalPoint;
+            set
+            {
+                Set(() => TotalPoint, ref totalPoint, value);
+            }
+        }
+        private int medicinePoint;
+        public int MedicinePoint
+        {
+            get => medicinePoint;
+            set
+            {
+                Set(() => MedicinePoint, ref medicinePoint, value);
+            }
+        }
+        private int medicalServicePoint;
+        public int MedicalServicePoint
+        {
+            get => medicalServicePoint;
+            set
+            {
+                Set(() => MedicalServicePoint, ref medicalServicePoint, value);
+            }
+        }
+        private int copaymentPoint;
+        public int CopaymentPoint
+        {
+            get => copaymentPoint;
+            set
+            {
+                Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
+        private int applyPoint;
+        public int ApplyPoint
+        {
+            get => applyPoint;
+            set
+            {
+                Set(() => ApplyPoint, ref applyPoint, value);
+            }
+        }
         #endregion
         #region Commands
 
@@ -269,6 +315,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SelectedDivision = Divisions[0];
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
+            TotalCount = 0;
+            ChronicCount = 0;
+            TotalPoint = 0;
+            MedicinePoint = 0;
+            MedicalServicePoint = 0;
+            CopaymentPoint = 0;
+            ApplyPoint = 0;
         }
 
         private void InitCommand()
@@ -321,13 +374,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if (SelectedPrescription is null) return;
             EditedPrescription = SelectedPrescription.ID;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Type);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
 
         private void GetNoBucklePrescriptionsAction()
         {
-            throw new NotImplementedException();
+            BusyContent = "處方查詢中...";
+            SelectedTimeIntervalType = TimeIntervalTypes[0];
+            SearchPrescriptions = new PrescriptionSearchPreviews();
+            MainWindow.ServerConnection.OpenConnection();
+            SearchPrescriptions.GetNoBucklePrescriptions(StartDate,EndDate);
+            SetPrescriptionsSummary();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void ExportPrescriptionCsvAction()
@@ -470,6 +529,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions = new PrescriptionSearchPreviews();
             MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates, SelectedAdjustCase, insIDList, SelectedDivision);
+            SetPrescriptionsSummary();
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -489,6 +549,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             if (msg.Notification.Equals("PrescriptionEdited"))
                 SearchAction();
+        }
+
+        private void SetPrescriptionsSummary()
+        {
+            var summary = SearchPrescriptions.GetSummary();
+            TotalCount = SearchPrescriptions.Count;
+            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            MedicinePoint = summary[0];
+            CopaymentPoint = summary[1];
+            MedicalServicePoint = summary[2];
+            ApplyPoint = summary[3];
+            TotalPoint = summary[4];
         }
     }
 }

@@ -31,6 +31,17 @@ namespace His_Pos.NewClass.Prescription.Search
                     break;
             }
         }
+
+        public void GetNoBucklePrescriptions(DateTime? sDate,DateTime? eDate)
+        {
+            var table = PrescriptionDb.GetNoBucklePrescriptions(sDate,eDate);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
+            }
+        }
+
+
         public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj,string medID,string medName, Institution ins,Division div)
         {
             var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName,patientIDNumber,patientBirth,adj,medID,medName,ins, div);
@@ -49,7 +60,7 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public List<int> GetSummary(bool reserve,string MedicineID)
+        public List<int> GetSummary()
         {
             var presID = new List<int>();
             var summary = new List<int>();
@@ -57,13 +68,24 @@ namespace His_Pos.NewClass.Prescription.Search
             {
                 presID.Add(p.ID);
             }
-            DataTable table = new DataTable();
-            if(reserve)
-                table = PrescriptionDb.GetSearchReservesSummary(presID, MedicineID);
-            else 
+
+            var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+            foreach (DataColumn c in table.Rows[0].Table.Columns)
             {
-                table = PrescriptionDb.GetSearchPrescriptionsSummary(presID, MedicineID);
+                summary.Add(table.Rows[0].Field<int>(c.ColumnName));
             }
+            return summary;
+        }
+
+        public List<int> GetReserveSummary()
+        {
+            var presID = new List<int>();
+            var summary = new List<int>();
+            foreach (var p in this)
+            {
+                presID.Add(p.ID);
+            }
+            var table = PrescriptionDb.GetSearchReservesSummary(presID);
             foreach (DataColumn c in table.Rows[0].Table.Columns)
             {
                 summary.Add(table.Rows[0].Field<int>(c.ColumnName));

@@ -619,7 +619,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     MainWindow.ServerConnection.CloseConnection();
                     selected = new Prescription(r, PrescriptionType.ChronicReserve);
                     selected.Type = type;
-                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");;
+                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");
                     return selected;
                 default:
                     r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
