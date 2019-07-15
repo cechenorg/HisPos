@@ -57,10 +57,26 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             var d = new DiseaseCode {ID = id};
             MainWindow.ServerConnection.OpenConnection();
             d.GetData();
+            if (!d.CheckDiseaseValid())
+            {
+                MessageWindow.ShowMessage("疾病代碼不完整",MessageType.WARNING);
+                return null;
+            }
             MainWindow.ServerConnection.CloseConnection();
             if (!string.IsNullOrEmpty(d.ID)) return d;
             MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
             return null;
+        }
+
+        private bool CheckDiseaseValid()
+        {
+            var table = DiseaseCodeDb.CheckDiseaseValid(ID);
+            if (table.Rows.Count > 0)
+            {
+                var count = table.Rows[0].Field<int>("DiseaseCount");
+                return count == 1;
+            }
+            return true;
         }
     }
 }

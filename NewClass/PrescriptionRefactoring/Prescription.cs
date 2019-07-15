@@ -98,6 +98,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Copayment = VM.GetCopayment(r.Field<string>("CopaymentID"));
             PrescriptionCase = VM.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
+            SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r,type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
             MedicalNumber = r.Field<string>("MedicalNumber");
