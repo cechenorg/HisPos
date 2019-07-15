@@ -342,7 +342,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
-            SelectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
+            selectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
 
             switch (ProductType)
             {
