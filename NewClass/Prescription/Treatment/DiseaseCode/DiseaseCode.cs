@@ -59,7 +59,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             d.GetData();
             if (!d.CheckDiseaseValid())
             {
-                MessageWindow.ShowMessage("疾病代碼不完整",MessageType.WARNING);
+                MessageWindow.ShowMessage("疾病代碼"+ id + "不完整",MessageType.WARNING);
+                MainWindow.ServerConnection.CloseConnection();
                 return null;
             }
             MainWindow.ServerConnection.CloseConnection();
