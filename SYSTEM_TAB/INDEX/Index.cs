@@ -386,6 +386,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                     }
                 }
                 else {
+                    if (indexReserves[i].PrepareMedStatus != "未處理")
+                        indexReserves[i].SaveStatus();
                     indexReserves.Remove(indexReserves[i]);
                     i--;
                 } 
