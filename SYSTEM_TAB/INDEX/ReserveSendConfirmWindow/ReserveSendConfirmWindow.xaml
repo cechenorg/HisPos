@@ -11,6 +11,15 @@
         Title="預約慢箋處方確認" Height="625" Width="900" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <DataTemplate x:Key="MedPrepareTypeAllPrepare" DataType="{x:Type Label}">
+            <Label Content="全自備"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+        </DataTemplate>
+        <DataTemplate x:Key="MedPrepareTypeCoPrepare" DataType="{x:Type Label}">
+            <Label Content="部分自備"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+        </DataTemplate>
+        <DataTemplate x:Key="MedPrepareTypeAllSend" DataType="{x:Type Label}">
+            <Label Content="全傳送"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+        </DataTemplate>
     </Window.Resources>
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions> 
@@ -46,8 +55,21 @@
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="{Binding CusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding PrepareMedType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="130" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
-                                        
+                                        <ContentControl Content="{Binding}">
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource MedPrepareTypeAllPrepare}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PrepareMedType}" Value="CoPrepare">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource MedPrepareTypeCoPrepare}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PrepareMedType}" Value="AllSend">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource MedPrepareTypeAllSend}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="{Binding AdjustDate,Converter={StaticResource NullableDateConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center"/>
@@ -140,7 +162,7 @@
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                                         <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding IsFrozen}"/>
                                         <Label x:Name="FullName"  Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Margin="-5,0,0,0"/>
-                                    </StackPanel>
+                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn> 
@@ -154,16 +176,14 @@
                         </DataGridTextColumn>
                         <DataGridTemplateColumn  Width="100" Header="傳送量"  IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0"> 
-                                        <TextBox Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding SendAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
+                                <DataTemplate> 
+                                        <TextBox Width="80" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding SendAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="TextChanged">
                                                     <i:InvokeCommandAction Command="{Binding DataContext.SendAmountChangeCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                        </TextBox>
-                                    </StackPanel>
+                                        </TextBox> 
                                     
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -173,8 +193,8 @@
             </Grid>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Label Content="總處方數" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
-            <Rectangle Width="640"/> 
+             
+            <Rectangle Width="750"/> 
             <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="傳送此處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
         </StackPanel>
     </Grid>

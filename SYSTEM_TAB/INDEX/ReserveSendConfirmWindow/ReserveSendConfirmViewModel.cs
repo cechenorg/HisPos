@@ -71,7 +71,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         }
         #region Action
         private void SubmitAction() {
-            string askstring = IndexReserveSelectedItem.PrepareMedType == "全備藥" ? "是否列印封包明細?" : "是否傳送藥健康?";
+            string askstring = IndexReserveSelectedItem.PrepareMedType == ReserveSendType.AllPrepare  ? "是否列印封包明細?" : "是否傳送藥健康?";
             ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
             if ((bool)confirmWindow.DialogResult) { 
                 SendReserveStoOrder();
@@ -85,7 +85,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SendReserveStoOrder() {
             MainWindow.ServerConnection.OpenConnection();
 
-            if (IndexReserveSelectedItem.PrepareMedType != "全備藥") {
+            if (IndexReserveSelectedItem.PrepareMedType != ReserveSendType.AllPrepare ) {
                 if(IndexReserveSelectedItem.StoreOrderToSingde())
                 IndexReserveCollection.Remove(IndexReserveSelectedItem);
             }
@@ -146,11 +146,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     zeroSendCount++;
             }
             if (sameCount == 0 && zeroSendCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
-                IndexReserveSelectedItem.PrepareMedType = "全備藥";
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllPrepare;
             else if (sameCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
-                IndexReserveSelectedItem.PrepareMedType = "全傳送";
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllSend ;
             else
-                IndexReserveSelectedItem.PrepareMedType = "部分備藥";
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.CoPrepare ;
              
         }
         private void CaculateReserveSendAmount() {

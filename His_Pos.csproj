@@ -1163,6 +1163,7 @@
     <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveEnum.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmWindow.xaml.cs">
       <DependentUpon>ReserveSendConfirmWindow.xaml</DependentUpon>

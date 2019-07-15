@@ -17,6 +17,7 @@ using System.Data;
 using His_Pos.NewClass.Product;
 using System.Linq;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -305,7 +306,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
            //ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
            //Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "", ""));
-            ReserveSearchAction();
+           //ReserveSearchAction();
         }
           
         private void IndexReserveSelectionChangedAction() {
@@ -380,11 +381,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         zeroSendCount++; 
                 }
                 if (sameCount == 0 && zeroSendCount == indexReserves[i].IndexReserveDetailCollection.Count)
-                    indexReserves[i].PrepareMedType = "全備藥";
+                    indexReserves[i].PrepareMedType = ReserveSendType.AllPrepare;
                 else if(sameCount == indexReserves[i].IndexReserveDetailCollection.Count)
-                    indexReserves[i].PrepareMedType = "全傳送";
+                    indexReserves[i].PrepareMedType = ReserveSendType.AllSend;
                 else
-                    indexReserves[i].PrepareMedType = "部分備藥";
+                    indexReserves[i].PrepareMedType = ReserveSendType.CoPrepare;
             }
 
             return indexReserves;

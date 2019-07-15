@@ -1,4 +1,5 @@
 ﻿using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         public ReserveMedicine(IndexReserveDetail indexReserveDetail)
         {
             ID = indexReserveDetail.ID;
-            Name = indexReserveDetail.FullName; 
+            Name = Strings.StrConv(indexReserveDetail.FullName, VbStrConv.Narrow);  
             Amount = indexReserveDetail.Amount;
         }
         public string ID { get; set; }

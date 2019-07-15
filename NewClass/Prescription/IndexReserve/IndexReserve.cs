@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using System;
@@ -64,8 +65,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
-        private string prepareMedType;
-        public string PrepareMedType
+        private ReserveSendType prepareMedType;
+        public ReserveSendType PrepareMedType
         {
             get => prepareMedType;
             set
