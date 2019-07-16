@@ -110,7 +110,7 @@
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger> 
                             <DataTrigger Binding="{Binding IsExpensive}" Value="True">
-                                <Setter Property="Background" Value="GreenYellow"></Setter>
+                                <Setter Property="Background" Value="Khaki"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
