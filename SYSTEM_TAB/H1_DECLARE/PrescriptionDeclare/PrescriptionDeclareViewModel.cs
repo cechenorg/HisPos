@@ -595,9 +595,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ShowPrescriptionEditWindowAction()
         {
             if (SelectedHistory is null) return;
-            var pSource = SelectedHistory.GetPrescriptionSourceFromHistoryType();
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedHistory.SourceId);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
 
