@@ -193,8 +193,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("StartDate", AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")),
-                new ReportParameter("EndDate", AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd"))
+                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
             };
         }
 
