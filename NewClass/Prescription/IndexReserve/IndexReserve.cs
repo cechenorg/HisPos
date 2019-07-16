@@ -185,10 +185,12 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             return new List<ReportParameter>
             {
                 new ReportParameter("PatientName",CusName),
-                new ReportParameter("PatientBirthday","105/02/28"),
-                new ReportParameter("PatientTel","105/02/28"),
+                new ReportParameter("PatientBirthday",""),
+                new ReportParameter("PatientTel",""),
                 new ReportParameter("Institution", InsName),
-                new ReportParameter("Division", DivName)
+                new ReportParameter("Division", DivName),
+                new ReportParameter("StartDate", ""),
+                new ReportParameter("EndDate", "")
             };
         }
 
