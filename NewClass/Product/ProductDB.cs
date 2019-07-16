@@ -87,6 +87,27 @@ namespace His_Pos.NewClass.Product
             }
              
         }
-         
+        internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Products", SetMedicines(MedicineIds));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AllInventoryByProIDs]", parameterList); 
+        }
+
+        public static DataTable SetMedicines(List<string> MedicineIds) { 
+            DataTable medicineListTable = MedicineListTable();
+            foreach (string m in MedicineIds)
+            {
+                DataRow newRow = medicineListTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m);
+                medicineListTable.Rows.Add(newRow);
+            }
+            return medicineListTable;
+        }
+        public static DataTable MedicineListTable() {
+            DataTable masterTable = new DataTable();
+            masterTable.Columns.Add("MedicineID", typeof(string));
+            return masterTable;
+        }
+
     }
 }

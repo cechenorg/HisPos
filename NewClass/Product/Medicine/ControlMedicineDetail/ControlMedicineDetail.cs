@@ -19,7 +19,10 @@ namespace His_Pos.NewClass.Product.Medicine.ControlMedicineDetail
             OutputAmount = r.Field<double>("OutputAmount");
             BatchNumber = r.Field<string>("InvRec_BatchNumber");
             Description = r.Field<string>("Description");
-            FinalStock = stock + InputAmount + OutputAmount;
+            if (TypeName != "調劑(未過卡)")
+                FinalStock = stock + InputAmount + OutputAmount;
+            else
+                FinalStock = stock;
         }
         public DateTime Date { get; set; }
         public string TypeName { get; set; }
