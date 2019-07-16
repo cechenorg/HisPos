@@ -104,7 +104,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ----- Set DataTable ----- 
         #region ///// StoreOrderMasterTable /////
-        public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve)
+        public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve,string note)
         {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
             
@@ -118,7 +118,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", note.Replace("\r\n","/"));
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID",null);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true); 
             storeOrderMasterTable.Rows.Add(newRow); 
@@ -557,10 +557,10 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList);
         }
-        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
+        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve,string note)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve, note));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
@@ -622,11 +622,11 @@ namespace His_Pos.NewClass.StoreOrder
 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
         }
-        internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve)
+        internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve,string note)
         {
             string orderMedicines = "";
             string cusName = "";
-            string planDate = "";
+            string planDate = ""; 
             foreach (var product in indexReserve.IndexReserveDetailCollection)
             {
                 if (product.SendAmount == 0) continue;
@@ -639,16 +639,12 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (product.ID.Length > 12)
                     orderMedicines += product.ID.Substring(13);
-
-                if (product.Amount > product.SendAmount)
-                    orderMedicines += $"需從架上拿{product.Amount - product.SendAmount}個單位至封包";
-                
-                orderMedicines += "\r\n";
+                 
+                orderMedicines += "\r\n"; 
             } 
             cusName = indexReserve.CusName; 
-            planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd");
-           
-            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','{planDate}','', '{orderMedicines}')");
+            planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd"); 
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','{planDate}','{note}', '{orderMedicines}')");
         }
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {

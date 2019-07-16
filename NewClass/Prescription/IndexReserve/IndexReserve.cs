@@ -146,15 +146,17 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             bool result = false;
             string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
             this.StoOrdID = newStoOrdID;
+            string note = "";
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
+                note += $"{IndexReserveDetailCollection[j].ID} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            StoreOrderDB.InsertIndexReserveOrder(this);
+            StoreOrderDB.InsertIndexReserveOrder(this,note);
 
-            if (StoreOrderDB.SendStoreOrderToSingde(this).Rows[0][0].ToString() == "SUCCESS")
+            if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
             {
                 StoreOrderDB.StoreOrderToWaiting(StoOrdID);
                 IsSend = true;
