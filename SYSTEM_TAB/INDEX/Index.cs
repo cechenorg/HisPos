@@ -16,6 +16,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
 using His_Pos.NewClass.Product;
 using System.Linq;
+using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
@@ -435,7 +436,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void ShowReserveDetailAction() {
             if (IndexReserveSelectedItem is null) 
                 return; 
-            PrescriptionService.ShowPrescriptionEditWindow(IndexReserveSelectedItem.Id,NewClass.Prescription.PrescriptionSource.ChronicReserve);
+            PrescriptionService.ShowPrescriptionEditWindow(IndexReserveSelectedItem.Id, PrescriptionType.ChronicReserve);
         }
         #endregion
     }
