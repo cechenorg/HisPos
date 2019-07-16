@@ -71,6 +71,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         }
         #region Action
         private void SubmitAction() {
+            if (IndexReserveSelectedItem is null) return;
             string askstring = IndexReserveSelectedItem.PrepareMedType == ReserveSendType.AllPrepare  ? "是否列印封包明細?" : "是否傳送藥健康?";
             ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
             if ((bool)confirmWindow.DialogResult)   
@@ -96,6 +97,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 PrintPackage();
                 IndexReserveCollection.Remove(IndexReserveSelectedItem);
             }
+            if (IndexReserveCollection.Count > 0)
+                IndexReserveSelectedItem = IndexReserveCollection[0];
             MainWindow.ServerConnection.CloseConnection(); 
            
         }
@@ -171,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 else
                 {
                     var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                    pro.SendAmount = target.OnTheFrame -  pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
+                    pro.SendAmount = target.OnTheFrame - pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
                     pro.FrameAmount = target.OnTheFrame;
                 }
             } 

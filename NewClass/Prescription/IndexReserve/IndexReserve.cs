@@ -154,18 +154,20 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            StoreOrderDB.InsertIndexReserveOrder(this,note);
-
-            if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
+            if (StoreOrderDB.InsertIndexReserveOrder(this, note).Rows.Count > 0)
             {
-                StoreOrderDB.StoreOrderToWaiting(StoOrdID);
-                IsSend = true;
-                SaveStatus();
-                result = true;
+                if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
+                {
+                    StoreOrderDB.StoreOrderToWaiting(StoOrdID);
+                    IsSend = true;
+                    SaveStatus();
+                    result = true;
+                }
+                else
+                    MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
             }
-            else  
-                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
-
+            else
+                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             return result;

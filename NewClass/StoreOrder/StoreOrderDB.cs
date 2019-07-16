@@ -562,6 +562,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve, note));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
+            DataBaseFunction.AddSqlParameter(parameterList, "CusName", indexReserve.CusName);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
         internal static DataTable GetStoOrdMasterCountByDate( )
@@ -643,8 +644,8 @@ namespace His_Pos.NewClass.StoreOrder
                 orderMedicines += "\r\n"; 
             } 
             cusName = indexReserve.CusName; 
-            planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd"); 
-            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','{planDate}','{note}', '{orderMedicines}')");
+            //planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd"); 
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
         }
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
