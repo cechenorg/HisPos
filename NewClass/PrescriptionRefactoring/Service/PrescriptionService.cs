@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -18,16 +17,15 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring;
 using Microsoft.Reporting.WinForms;
-using Newtonsoft.Json;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
-    public abstract class PrescriptionService:ObservableObject
+    public abstract class PrescriptionService : ObservableObject
     {
         #region AbstractFunctions
         public abstract bool CheckPrescription(bool noCard);
@@ -111,7 +109,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             MainWindow.ServerConnection.CloseConnection();
         }
 
-        public bool SetPharmacist(Employee selectedPharmacist,int prescriptionCount)
+        public bool SetPharmacist(Employee selectedPharmacist, int prescriptionCount)
         {
             if (selectedPharmacist is null || string.IsNullOrEmpty(selectedPharmacist.IDNumber))
             {
@@ -194,7 +192,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
                     return false;
             }
-            if (DateTime.Compare((DateTime) Current.TreatDate, DateTime.Today) >= 0) return true;
+            if (DateTime.Compare((DateTime)Current.TreatDate, DateTime.Today) >= 0) return true;
             var ts1 = new TimeSpan(DateTime.Today.Ticks);
             var ts2 = new TimeSpan(((DateTime)Current.TreatDate).Ticks);
             var ts = ts1.Subtract(ts2).Duration();
@@ -264,7 +262,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var year = treatmentDate.Split('/')[0];
@@ -388,7 +386,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 patientName = " ";
             else
                 patientName = p.Patient.Name;
-            if(string.IsNullOrEmpty(birth))
+            if (string.IsNullOrEmpty(birth))
                 birth = "  /  /  ";
             if (p.AdjustCase.ID.Equals("0"))
             {
@@ -572,12 +570,10 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
-        public static void ShowPrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
+        public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
-            MainWindow.ServerConnection.OpenConnection();
-            NewClass.Prescription.Prescription selected;
-            DataRow r;
-            if (pSource.Equals(PrescriptionSource.Normal))
+            var selected = GetPrescriptionByID(preID, type);
+            switch (type)
             {
                 case PrescriptionType.ChronicReserve:
                     var title = "預約瀏覽 ResMasID:" + selected.SourceId;

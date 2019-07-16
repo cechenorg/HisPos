@@ -13,7 +13,7 @@ using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public abstract class Medicine:Product.Product,IDeletableProduct,ICloneable
+    public abstract class Medicine : Product.Product, IDeletableProduct, ICloneable
     {
         public Medicine() : base()
         {
@@ -355,6 +355,11 @@ namespace His_Pos.NewClass.MedicineRefactoring
         }
         #endregion
 
+        public bool CheckIsBloodGlucoseTestStrip()
+        {
+            return this is MedicineSpecialMaterial && ID.StartsWith("TSS01");
+        }
+
         public abstract MedBagMedicine CreateMedBagMedicine(bool isSingle);
 
         public void CopyPrevious(Medicine previous)
@@ -366,7 +371,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         private void CalculateAmount()
         {
-            if(string.IsNullOrEmpty(ID)) return;
+            if (string.IsNullOrEmpty(ID)) return;
             if (Dosage is null || Days is null) return;
             if (Usage is null || string.IsNullOrEmpty(Usage.Name)) return;
             if (ID.EndsWith("00") || ID.EndsWith("G0"))

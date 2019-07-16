@@ -9,12 +9,12 @@ using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
-    public class PrescriptionSearchPreviews:ObservableCollection<PrescriptionSearchPreview>
+    public class PrescriptionSearchPreviews : ObservableCollection<PrescriptionSearchPreview>
     {
 
-        public void GetSearchPrescriptionsRe(Dictionary<string,string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adj, List<string> insIDList, Division div)
+        public void GetSearchPrescriptionsRe(Dictionary<string, string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adj, List<string> insIDList, Division div)
         {
-            var table = PrescriptionDb.GetSearchPrescriptionsDataRe(conditionTypes,conditions,dates,adj,insIDList,div);
+            var table = PrescriptionDb.GetSearchPrescriptionsDataRe(conditionTypes, conditions, dates, adj, insIDList, div);
             switch (conditionTypes["TimeInterval"])
             {
                 case "預約日":
@@ -32,9 +32,9 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public void GetNoBucklePrescriptions(DateTime? sDate,DateTime? eDate)
+        public void GetNoBucklePrescriptions(DateTime? sDate, DateTime? eDate)
         {
-            var table = PrescriptionDb.GetNoBucklePrescriptions(sDate,eDate);
+            var table = PrescriptionDb.GetNoBucklePrescriptions(sDate, eDate);
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
@@ -42,12 +42,12 @@ namespace His_Pos.NewClass.Prescription.Search
         }
 
 
-        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate,string patientName , string patientIDNumber,DateTime? patientBirth, AdjustCase adj,string medID,string medName, Institution ins,Division div)
+        public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
         {
             var table = PrescriptionDb.GetSearchPrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj, medID, medName, ins, div);
             foreach (DataRow r in table.Rows)
             {
-                Add(new PrescriptionSearchPreview(r, PrescriptionSource.Normal));
+                Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
             }
         }
 
@@ -56,7 +56,7 @@ namespace His_Pos.NewClass.Prescription.Search
             var table = PrescriptionDb.GetReservePrescriptionsData(sDate, eDate, patientName, patientIDNumber, patientBirth, adj, medID, medName, ins, div);
             foreach (DataRow r in table.Rows)
             {
-                Add(new PrescriptionSearchPreview(r, PrescriptionSource.ChronicReserve));
+                Add(new PrescriptionSearchPreview(r, PrescriptionType.ChronicReserve));
             }
         }
 

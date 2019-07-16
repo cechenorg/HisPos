@@ -16,15 +16,12 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Image x:Key="Add" Source="/Images/cross.png"/>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:PrescriptionSearchViewModel/>
-    </UserControl.DataContext>
     <Viewbox Stretch="Fill" Width="1363">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
             <Grid Width="1418" Height="839">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="55"/>
                     <RowDefinition/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>

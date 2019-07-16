@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Prescription.Search
     {
         public PrescriptionSearchPreview() { }
 
-        public PrescriptionSearchPreview(DataRow r, PrescriptionSource s)
+        public PrescriptionSearchPreview(DataRow r, PrescriptionType s)
         {
             Type = s;
             ID = r.Field<int>("ID");
@@ -48,12 +48,14 @@ namespace His_Pos.NewClass.Prescription.Search
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
                 var tc = new TaiwanCalendar();
-                if (r.Field<DateTime?>("InsertTime") != null) {
+                if (r.Field<DateTime?>("InsertTime") != null)
+                {
                     var istime = r.Field<DateTime>("InsertTime");
                     InsertDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
-                } 
-                
-                switch (r.Field<string>("StoOrd_Status")) {
+                }
+
+                switch (r.Field<string>("StoOrd_Status"))
+                {
                     case "W":
                         StoStatus = "等待確認";
                         break;

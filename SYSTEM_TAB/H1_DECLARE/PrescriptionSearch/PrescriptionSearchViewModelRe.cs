@@ -563,12 +563,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            if (PrescriptionCollectionVS != null)
+                PrescriptionCollectionVS.Filter += NoBuckleFilter;
             if (EditedPrescription != null && SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)) != null)
             {
                 PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
             }
-            if (PrescriptionCollectionVS != null)
-                PrescriptionCollectionVS.Filter += NoBuckleFilter;
         }
 
         private void Refresh(NotificationMessage msg)
