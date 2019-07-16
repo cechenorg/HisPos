@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,9 +10,12 @@ namespace His_Pos.NewClass.MedicineRefactoring
 {
     public class ReserveMedicines:Collection<ReserveMedicine>
     {
-        public ReserveMedicines()
+        public ReserveMedicines(IndexReserveDetails indexReserveDetails)
         {
-
+            Clear();
+            foreach (var i in indexReserveDetails) {
+                Add(new ReserveMedicine(i));
+            }
         }
     }
 }

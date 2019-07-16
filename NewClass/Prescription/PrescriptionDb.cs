@@ -496,7 +496,7 @@ namespace His_Pos.NewClass.Prescription
                 if (!string.IsNullOrEmpty(patient.Tel))
                     patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
                 else
-                    patientTel = patient.ContactNote;
+                    patientTel = patient.ContactNote.Replace("\r\n","/");
             }
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
         }
