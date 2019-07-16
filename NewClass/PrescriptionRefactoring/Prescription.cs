@@ -22,6 +22,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.CooperativeInstitution;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -30,6 +31,7 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 using Medicines = His_Pos.NewClass.MedicineRefactoring.Medicines;
 using Resources = His_Pos.Properties.Resources;
@@ -67,7 +69,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r, PrescriptionType type)
+        public Prescription(DataRow r, PrescriptionType type,bool? reserveSend = null)
         {
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
@@ -96,6 +98,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Copayment = VM.GetCopayment(r.Field<string>("CopaymentID"));
             PrescriptionCase = VM.GetPrescriptionCases(r.Field<string>("PrescriptionCaseID"));
             PaymentCategory = VM.GetPaymentCategory(r.Field<string>("PaymentCategoryID"));
+            SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r,type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
             MedicalNumber = r.Field<string>("MedicalNumber");
@@ -111,6 +114,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
                     Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    PrescriptionStatus.ReserveSend = reserveSend;
                     break;
                 default:
                     Medicines = new Medicines();
@@ -119,6 +123,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             }
             if (type.Equals(PrescriptionType.ChronicReserve))
                 AdjustDate = null;
+            }
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -974,7 +979,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         {
             var clone = new Prescription
             {
-                Type = Type,
                 Patient = (Customer) Patient.Clone(),
                 Institution = VM.GetInstitution(Institution?.ID),
                 Division = VM.GetDivision(Division?.ID),
@@ -992,11 +996,28 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID),
                 SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
                 PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
+                PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
+                InsertTime = InsertTime,
+                Type = Type,
                 Medicines = new Medicines()
             };
             foreach (var m in Medicines)
             {
-                clone.Medicines.Add(m);
+                switch (m)
+                {
+                    case MedicineNHI _:
+                        clone.Medicines.Add((MedicineNHI)m.Clone());
+                        break;
+                    case MedicineSpecialMaterial _:
+                        clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
+                        break;
+                    case MedicineOTC _:
+                        clone.Medicines.Add((MedicineOTC)m.Clone());
+                        break;
+                    default:
+                        clone.Medicines.Add((MedicineVirtual)m.Clone());
+                        break;
+                }
             }
             return clone;
         }
@@ -1468,9 +1489,53 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 PrescriptionPoint.AmountSelfPay = selfPay;
         }
 
+        public bool CheckCanEdit()
+        {
+            return InsertTime != null && DateTime.Compare(((DateTime) InsertTime), DateTime.Today) >= 0;
+        }
+
         public string CheckMedicinesRule()
         {
             return Medicines.Check();
+        }
+
+        public void Delete()
+        {
+            switch (Type)
+            {
+                default:
+                    var resultTable = PrescriptionDb.DeletePrescription(this);
+                    while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
+                    {
+                        MessageWindow.ShowMessage("處方刪除異常，按下OK重試", MessageType.WARNING);
+                        resultTable = PrescriptionDb.DeletePrescription(this);
+                    }
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    PrescriptionDb.DeleteReserve(SourceId);
+                    break;
+            }
+        }
+        public string CheckMedicinesIdEmpty()
+        {
+            var emptyMedicine = string.Empty;
+            var sameList = (from m in Medicines.Where(m => !(m is MedicineVirtual)) where string.IsNullOrEmpty(m.ID) select "藥品:" + m.FullName + "代碼不得為空。\n").ToList();
+            return sameList.Count <= 0 ? emptyMedicine : sameList.Distinct().Aggregate(emptyMedicine, (current, s) => current + s);
+        }
+
+        public void GetMedicines()
+        {
+            switch (Type)
+            {
+                case PrescriptionType.ChronicReserve:
+                    Medicines.Clear();
+                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    break;
+                default:
+                    Medicines.Clear();
+                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    break;
+            }
         }
     }
 }

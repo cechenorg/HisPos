@@ -295,11 +295,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\DataGridDragDropBehavior.cs" />
-    <Compile Include="Behaviors\DataGridDragDropDirection.cs" />
-    <Compile Include="Behaviors\DataGridDragDropEventArgs.cs" />
-    <Compile Include="Behaviors\UIHelper.cs" />
-    <Compile Include="Behaviors\WeakEventListener.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
     <Compile Include="NewClass\MedicineRefactoring\BuckleMedicineStruct.cs" />
     <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
@@ -430,6 +425,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitution.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitutions.cs" />
     <Compile Include="NewClass\ProductType\ProductType.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeDB.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageDetail.cs" />
@@ -724,6 +721,10 @@
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml.cs">
+      <DependentUpon>AdjustedInstitutionSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
@@ -731,12 +732,8 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml.cs">
       <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
-      <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml.cs">
-      <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml.cs">
+      <DependentUpon>ReservePrescriptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchView.xaml.cs">
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
@@ -1292,6 +1289,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1300,11 +1301,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -468,7 +468,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medNHI;
             }
@@ -499,7 +500,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medSpecialMaterial;
             }
@@ -530,7 +532,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medOtc;
             }

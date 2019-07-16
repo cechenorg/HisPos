@@ -207,6 +207,12 @@
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
+                    <Style x:Key="BoldLabelContent17" TargetType="{x:Type Label }">
+                        <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                        <Setter Property="FontSize" Value="17" />
+                        <Setter Property="Foreground" Value="#FF424040" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
                     <Style x:Key="BoldTextBoxContent16" TargetType="{x:Type TextBox }">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="16" />

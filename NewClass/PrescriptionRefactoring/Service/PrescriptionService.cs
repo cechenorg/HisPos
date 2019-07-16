@@ -31,6 +31,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
     {
         #region AbstractFunctions
         public abstract bool CheckPrescription(bool noCard);
+        public abstract bool CheckEditPrescription(bool noCard);
         public abstract bool NormalAdjust();
         public abstract void ErrorAdjust();
         public abstract void DepositAdjust();
@@ -578,68 +579,70 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             DataRow r;
             if (pSource.Equals(PrescriptionSource.Normal))
             {
-                r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-                MainWindow.ServerConnection.CloseConnection();
-                if (r.Field<string>("IsEnable").Equals("0"))
-                {
-                    MessageWindow.ShowMessage("處方已被刪除。", MessageType.ERROR);
-                    return;
-                }
-                selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.Normal);
+                case PrescriptionType.ChronicReserve:
+                    var title = "預約瀏覽 ResMasID:" + selected.SourceId;
+                    var edit = new ReservePrescriptionWindow(selected, title);
+                    break;
+                default:
+                    CheckAdminLogin(selected);
+                    break;
+            }
+        }
 
-                if (VM.CurrentUser.ID == 1)
-                {
-                    var insertTime = r.Field<DateTime?>("InsertTime");
-                    selected.InsertTime = insertTime;
-                    var edit = new PrescriptionEditWindow(selected);
-                }
-                else
-                {
-                    var insertTime = r.Field<DateTime?>("InsertTime");
-                    selected.InsertTime = insertTime;
-                    if (insertTime != null && DateTime.Compare(((DateTime)insertTime), DateTime.Today) < 0)
-                    {
-                        var edit = new PrescriptionRecordWindow(selected);
-                    }
-                    else
-                    {
-                        var edit = new PrescriptionEditWindow(selected);
-                    }
-                }
+        private static void CheckAdminLogin(Prescription selected)
+        {
+            if (VM.CurrentUser.ID == 1)
+            {
+                var title = "處方修改 PreMasID:" + selected.ID;
+                var edit = new PrescriptionEditWindow(selected, title);
             }
             else
             {
-                r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                MainWindow.ServerConnection.CloseConnection();
-                selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.ChronicReserve);
-                var edit = new PrescriptionEditWindow(selected);
+                if (selected.CheckCanEdit())
+                {
+                    var title = "處方修改 PreMasID:" + selected.ID;
+                    var editWindow = new PrescriptionEditWindow(selected, title);
+                }
+                else
+                {
+                    var title = "處方瀏覽 PreMasID:" + selected.ID;
+                    var recordWindow = new PrescriptionRecordWindow(selected, title);
+                }
             }
         }
 
-        private void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer)
+        private static Prescription GetPrescriptionByID(int preID, PrescriptionType type)
         {
-            var medBagMedicines = new ReserveMedicines();
-            var json = JsonConvert.SerializeObject(medBagMedicines);
-            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = CreateReserveMedicinesSheetParameters();
-            rptViewer.LocalReport.SetParameters(parameters);
-            rptViewer.LocalReport.DataSources.Clear();
-            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
-            rptViewer.LocalReport.DataSources.Add(rd);
-            rptViewer.LocalReport.Refresh();
+            MainWindow.ServerConnection.OpenConnection();
+            Prescription selected;
+            DataRow r;
+            switch (type)
+            {
+                case PrescriptionType.ChronicReserve:
+                    r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
+                    MainWindow.ServerConnection.CloseConnection();
+                    selected = new Prescription(r, PrescriptionType.ChronicReserve);
+                    selected.Type = type;
+                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");
+                    return selected;
+                default:
+                    r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+                    selected = new Prescription(r, PrescriptionType.Normal);
+                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
+                    break;
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            return !CheckPrescriptionEnable(r) ? null : selected;
         }
 
-        private static IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        private static bool CheckPrescriptionEnable(DataRow r)
         {
-            return new List<ReportParameter>
+            if (r.Field<string>("IsEnable").Equals("0"))
             {
-                new ReportParameter("PatientName",""),
-                new ReportParameter("PatientBirthday", ""),
-                new ReportParameter("Institution", ""),
-                new ReportParameter("Division", "")
-            };
+                MessageWindow.ShowMessage("處方已被刪除。", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
     }
 }
