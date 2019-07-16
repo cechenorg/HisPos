@@ -35,11 +35,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
                 tempID = row.Field<short>("StoOrdDet_ID");
             }
-
-            foreach (var product in this)
-            {
-                product.SetReturnInventoryDetail();
-            }
         }
 
         internal static ReturnProducts GetProductsByStoreOrderID(string orederID)
@@ -65,6 +60,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             foreach (var product in Items)
                 product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
+        }
+
+        internal void SetReturnInventoryDetail()
+        {
+            foreach (var product in this)
+                product.SetReturnInventoryDetail();
         }
     }
 }

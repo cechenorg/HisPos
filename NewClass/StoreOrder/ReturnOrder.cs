@@ -109,6 +109,9 @@ namespace His_Pos.NewClass.StoreOrder
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
+            if(OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                ReturnProducts.SetReturnInventoryDetail();
+
             if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
                 ReturnProducts.SetToProcessing();
 
