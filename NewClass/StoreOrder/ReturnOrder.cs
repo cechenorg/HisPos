@@ -183,6 +183,21 @@ namespace His_Pos.NewClass.StoreOrder
                 return;
             }
 
+            if (tempProduct is ReturnMedicine && OrderManufactory.ID == "0")
+            {
+                if ((tempProduct as ReturnMedicine).IsFrozen)
+                {
+                    MessageWindow.ShowMessage("冰品無法退貨", MessageType.ERROR);
+                    return;
+                }
+
+                if ((tempProduct as ReturnMedicine).IsControl != null)
+                {
+                    MessageWindow.ShowMessage("管藥無法退貨", MessageType.ERROR);
+                    return;
+                }
+            }
+
             if (SelectedItem is PurchaseProduct && !isFromAddButton)
             {
                 int selectedProductIndex = ReturnProducts.IndexOf((ReturnProduct)SelectedItem);

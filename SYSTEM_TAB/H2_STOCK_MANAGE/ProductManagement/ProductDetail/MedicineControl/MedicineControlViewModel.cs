@@ -427,9 +427,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     return false;
                 }
 
-                if (Medicine.BasicAmount <= Medicine.SafeAmount)
+                if (Medicine.BasicAmount < Medicine.SafeAmount)
                 {
-                    MessageWindow.ShowMessage("基準量必須大於安全量", MessageType.ERROR);
+                    MessageWindow.ShowMessage("基準量不可小於安全量", MessageType.ERROR);
                     return false;
                 }
 
