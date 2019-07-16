@@ -25,10 +25,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:60001/</InstallUrl>
+    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>25</ApplicationRevision>
+    <ApplicationRevision>37</ApplicationRevision>
     <ApplicationVersion>2.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -312,6 +312,8 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoint.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\ReserveMedicine.cs" />
+    <Compile Include="NewClass\MedicineRefactoring\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -593,6 +595,11 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="RDLC\ReserveMedicinesDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelService.cs" />
     <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
@@ -685,10 +692,6 @@
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocation.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocationDb.cs" />
-    <Compile Include="Class\MedBag\MedBag.cs" />
-    <Compile Include="Class\MedBag\MedBagDb.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
@@ -717,15 +720,6 @@
     <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Service\Converters.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
-      <DependentUpon>MedBagManageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
-      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
@@ -733,6 +727,9 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml.cs">
+      <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
@@ -745,6 +742,7 @@
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModelRe.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
       <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
     </Compile>
@@ -960,10 +958,6 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
-      <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
@@ -1254,14 +1248,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1307,6 +1293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1582,10 +1572,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1831,6 +1817,18 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\ReserveMedicinesSheet.rdlc" />
+    <None Include="RDLC\ReserveMedicinesDataSet.xsc">
+      <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\ReserveMedicinesDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReserveMedicinesDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\ReserveMedicinesDataSet.xss">
+      <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+    </None>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
     <Content Include="CsHis.dll" />

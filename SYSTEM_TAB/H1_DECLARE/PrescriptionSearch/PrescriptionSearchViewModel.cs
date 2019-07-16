@@ -256,6 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedInstitution, ref selectedInstitution, value);
             }
         }
+
         private Division selectedDivision;
         public Division SelectedDivision
         {
@@ -275,12 +276,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand Clear { get; set; }
         public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
         public RelayCommand<string> CheckInsEmpty { get; set; }
+        public RelayCommand<int> ShowPrescriptionEdit { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
         {
             InitialVariables();
             InitialCommands();
-            RegisterMessengers();
         }
         ~PrescriptionSearchViewModel()
         {
@@ -306,12 +307,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Clear = new RelayCommand(ClearAction);
             ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
             CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
-
-        }
-
-        private void RegisterMessengers()
-        {
-            Messenger.Default.Register<NotificationMessage>(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow", ShowPrescriptionEditWindowAction);
+            ShowPrescriptionEdit = new RelayCommand<int>(ShowPrescriptionEditWindowAction);
         }
         #endregion
         #region CommandActions
@@ -389,13 +385,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ImportDeclareFile();
             MainWindow.ServerConnection.CloseConnection();
         }
-        private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
+        private void ShowPrescriptionEditWindowAction(int preID)
         {
-            if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
+            if(SelectedPrescription is null) return;
             EditedPrescription = SelectedPrescription;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Source);
-            //var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
+            PrescriptionService.ShowPrescriptionEditWindow(preID,SelectedPrescription.Source);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()
