@@ -19,6 +19,7 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -215,6 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CaculateReserveSendAmount"));
         }
         private void ViewHistoryPriceAction()
         {
@@ -342,7 +344,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             }
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
-            SelectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
+            selectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
 
             switch (ProductType)
             {
@@ -427,9 +429,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     return false;
                 }
 
-                if (Medicine.BasicAmount <= Medicine.SafeAmount)
+                if (Medicine.BasicAmount < Medicine.SafeAmount)
                 {
-                    MessageWindow.ShowMessage("基準量必須大於安全量", MessageType.ERROR);
+                    MessageWindow.ShowMessage("基準量不可小於安全量", MessageType.ERROR);
                     return false;
                 }
 

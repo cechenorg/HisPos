@@ -15,7 +15,6 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -39,8 +38,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
-        public RelayCommand ChooseBatchCommand { get; set; }
-        public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
+        public RelayCommand ReturnOrderCalculateReturnAmountCommand { get; set; }
+        public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -100,6 +99,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+        private void ReturnOrderRePurchaseAction()
+        {
+            if (CurrentStoreOrder.CheckOrder())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                (CurrentStoreOrder as ReturnOrder).ReturnOrderRePurchase();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+                storeOrderCollection.ReloadCollection();
+            }
+        }
+        private void ReturnOrderCalculateReturnAmountAction()
+        {
+            (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
+        }
         private void CalculateTotalPriceAction()
         {
             CurrentStoreOrder.CalculateTotalPrice();
@@ -213,15 +228,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if(CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
-        private void ChooseBatchAction()
-        {
-            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID, CurrentStoreOrder.OrderWarehouse.ID);
-            
-            ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
-
-            if (dataContext.IsSelected)
-                ((ReturnProduct)CurrentStoreOrder.SelectedItem).BatchNumber = dataContext.ChoosedBatchNumber;
-        }
         #endregion
 
         #region ----- Define Functions -----
@@ -307,8 +313,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
-            ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
+            ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
+            ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
         }
         private void RegisterMessengers()
         {

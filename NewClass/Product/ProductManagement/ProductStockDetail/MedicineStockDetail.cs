@@ -44,12 +44,12 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
             for (int x = 0; x < dataTable.Rows.Count; x++)
             {
-                string amount = dataTable.Rows[x].Field<double>("InvDet_Amount").ToString("0.##").PadLeft(10);
-                string price = ((double)dataTable.Rows[x].Field<decimal>("InvDet_Price")).ToString("0.00").PadLeft(10);
-                string subtotal = dataTable.Rows[x].Field<double>("SUBTOTAL").ToString("0.00").PadLeft(10);
+                string amount = dataTable.Rows[x].Field<double>("InvDet_Amount").ToString("0.##").PadLeft(6);
+                string price = ((double)dataTable.Rows[x].Field<decimal>("InvDet_Price")).ToString("0.00").PadLeft(8);
+                string subtotal = dataTable.Rows[x].Field<double>("SUBTOTAL").ToString("0.00").PadLeft(8);
                 string batchNum = dataTable.Rows[x].Field<string>("InvDet_BatchNumber").PadRight(10);
 
-                tempStockDetail += $"數量:{amount}  單價:{price}  小計:{subtotal}  批號: {batchNum}";
+                tempStockDetail += $"數量:{amount} 單價:{price} 小計:{subtotal} 批號: {batchNum}";
 
                 if (x < dataTable.Rows.Count - 1)
                     tempStockDetail += "\n";

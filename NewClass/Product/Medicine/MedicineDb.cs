@@ -8,15 +8,6 @@ namespace His_Pos.NewClass.Product.Medicine
 {
     public static class MedicineDb
     {
-        public static DataTable GetMedicinesBySearchId(string medicineID, string wareHouseID, DateTime? adjustDate)
-        {
-            if (string.IsNullOrEmpty(medicineID)) return new DataTable();
-            List<SqlParameter> parameterList = new List<SqlParameter>(); 
-            DataBaseFunction.AddSqlParameter(parameterList, "Pro_Id", medicineID);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", wareHouseID);
-            DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate", adjustDate ?? DateTime.Today);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineBySearchId]", parameterList);     
-        }
         public static DataTable GetMedicinesBySearchIds(List<string> MedicineIds,string wareHouseID,DateTime? adjustDate)
         { 
             List<SqlParameter> parameterList = new List<SqlParameter>();

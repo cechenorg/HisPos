@@ -15,11 +15,8 @@
         <DataTemplate x:Key="ReturnSingdeProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <returnDataGridControl:ReturnSingdeProcessingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="ReturnNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <returnDataGridControl:ReturnNormalUnProcessingControl/>
-        </DataTemplate>
-        <DataTemplate x:Key="ReturnSingdeUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <returnDataGridControl:ReturnSingdeUnProcessingControl/>
+        <DataTemplate x:Key="ReturnUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnUnProcessingControl/>
         </DataTemplate>
         <DataTemplate x:Key="ReturnWaitingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <returnDataGridControl:ReturnWaitingControl/>
@@ -72,10 +69,10 @@
         <ContentControl Grid.Row="3">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalUnProcessingControl}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnSingdeUnProcessingControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnWaitingControl}" />

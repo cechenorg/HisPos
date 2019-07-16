@@ -23,7 +23,7 @@
         </StackPanel> 
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False">
+                   CanUserDeleteRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding PrescriptionDetailClickCommand}"/>
@@ -134,7 +134,7 @@
         <Rectangle Grid.Row="3" Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
         <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailMedicineRepotCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailMedicineRepotSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False">
+                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding PrescriptionDetailMedicineDoubleClickCommand}"/>

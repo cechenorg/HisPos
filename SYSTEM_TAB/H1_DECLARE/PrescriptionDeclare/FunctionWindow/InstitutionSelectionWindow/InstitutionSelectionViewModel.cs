@@ -8,10 +8,6 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -115,9 +111,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
             var resultCount = resultList.Count();
             switch (resultCount)
             {
-                case 0 :
+                case 0:
                     ShowDialog = false;
-                    MessageWindow.ShowMessage("查無此院所",MessageType.WARNING);
+                    MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
                     break;
                 case 1:
                     ShowDialog = false;

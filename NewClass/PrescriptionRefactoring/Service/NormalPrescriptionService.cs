@@ -28,6 +28,24 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             return CheckSameDeclare() && PrintConfirm();
         }
 
+        public override bool CheckEditPrescription(bool noCard)
+        {
+            CheckAnonymousPatient();
+            if (!CheckValidCustomer()) return false;
+            if (!CheckAdjustAndTreatDate()) return false;
+            if (Current.IsPrescribe)
+            {
+                if (!CheckPrescribeRules()) return false;
+            }
+            else
+            {
+                if (!CheckNhiRules(noCard)) return false;
+                if (!noCard)
+                    if (!CheckMedicalNumber()) return false;
+            }
+            return CheckMedicines();
+        }
+
         public override bool NormalAdjust()
         {
             if (Current.PrescriptionStatus.IsCreateSign is null) return false;

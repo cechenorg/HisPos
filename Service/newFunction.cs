@@ -356,6 +356,7 @@ namespace His_Pos.Service
                 case "Z000":
                 case "E001":
                 case "Z001":
+                case "J000":
                     return true;
             }
             int number;

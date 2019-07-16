@@ -12,11 +12,11 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl
 {
     /// <summary>
-    /// ReturnSingdeUnProcessingControl.xaml 的互動邏輯
+    /// ReturnUnProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class ReturnSingdeUnProcessingControl : UserControl
+    public partial class ReturnUnProcessingControl : UserControl
     {
-        public ReturnSingdeUnProcessingControl()
+        public ReturnUnProcessingControl()
         {
             InitializeComponent();
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.FunctionWindow;
+using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -20,5 +22,6 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Add(indexReserve);
             }
         }
+       
     }
 }

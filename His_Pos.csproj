@@ -295,11 +295,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\DataGridDragDropBehavior.cs" />
-    <Compile Include="Behaviors\DataGridDragDropDirection.cs" />
-    <Compile Include="Behaviors\DataGridDragDropEventArgs.cs" />
-    <Compile Include="Behaviors\UIHelper.cs" />
-    <Compile Include="Behaviors\WeakEventListener.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
     <Compile Include="NewClass\MedicineRefactoring\BuckleMedicineStruct.cs" />
     <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
@@ -430,6 +425,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitution.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitutions.cs" />
     <Compile Include="NewClass\ProductType\ProductType.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeDB.cs" />
     <Compile Include="NewClass\ProductType\ProductTypeManageDetail.cs" />
@@ -439,6 +436,8 @@
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
+    <Compile Include="NewClass\Product\Inventory.cs" />
+    <Compile Include="NewClass\Product\Inventorys.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
     <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
@@ -533,6 +532,8 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnProductInventoryDetail.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnProductInventoryDetails.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
@@ -722,6 +723,10 @@
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml.cs">
+      <DependentUpon>AdjustedInstitutionSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
@@ -729,12 +734,8 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml.cs">
       <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
-      <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml.cs">
-      <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml.cs">
+      <DependentUpon>ReservePrescriptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchView.xaml.cs">
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
@@ -840,10 +841,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindow.xaml.cs">
-      <DependentUpon>ChooseBatchWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml.cs">
       <DependentUpon>NoDataDetailControl.xaml</DependentUpon>
     </Compile>
@@ -868,14 +865,11 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalProcessingControl.xaml.cs">
       <DependentUpon>ReturnNormalProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalUnProcessingControl.xaml.cs">
-      <DependentUpon>ReturnNormalUnProcessingControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml.cs">
       <DependentUpon>ReturnSingdeProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeUnProcessingControl.xaml.cs">
-      <DependentUpon>ReturnSingdeUnProcessingControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml.cs">
+      <DependentUpon>ReturnUnProcessingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnWaitingControl.xaml.cs">
       <DependentUpon>ReturnWaitingControl.xaml</DependentUpon>
@@ -1161,6 +1155,11 @@
     <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
     <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveEnum.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmWindow.xaml.cs">
+      <DependentUpon>ReserveSendConfirmWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\OfflineOperation\OfflineOperationWindow.xaml.cs">
       <DependentUpon>OfflineOperationWindow.xaml</DependentUpon>
     </Compile>
@@ -1297,6 +1296,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1305,11 +1308,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1441,10 +1440,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ChooseBatchWindow\ChooseBatchWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1477,15 +1472,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalUnProcessingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeUnProcessingControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1770,6 +1761,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\OfflineOperation\OfflineOperationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1830,7 +1825,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\ReserveMedicinesSheet.rdlc" />
+    <EmbeddedResource Include="RDLC\ReserveSheet.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="RDLC\ReserveMedicinesDataSet.xsc">
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
     </None>
@@ -1854,6 +1851,7 @@
     <Resource Include="Images\AccountingReport.png" />
     <Resource Include="Images\SystemManage.png" />
     <Resource Include="Images\Transaction.png" />
+    <Resource Include="Images\PrinterBlue.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

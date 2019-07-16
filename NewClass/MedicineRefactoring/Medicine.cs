@@ -13,7 +13,7 @@ using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.NewClass.MedicineRefactoring
 {
-    public abstract class Medicine:Product.Product,IDeletableProduct,ICloneable
+    public abstract class Medicine : Product.Product, IDeletableProduct, ICloneable
     {
         public Medicine() : base()
         {
@@ -371,7 +371,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         private void CalculateAmount()
         {
-            if(string.IsNullOrEmpty(ID)) return;
+            if (string.IsNullOrEmpty(ID)) return;
             if (Dosage is null || Days is null) return;
             if (Usage is null || string.IsNullOrEmpty(Usage.Name)) return;
             if (ID.EndsWith("00") || ID.EndsWith("G0"))
@@ -473,7 +473,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medNHI;
             }
@@ -504,7 +505,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medSpecialMaterial;
             }
@@ -535,7 +537,8 @@ namespace His_Pos.NewClass.MedicineRefactoring
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
-                    Frozen = clonedMed.Frozen
+                    Frozen = clonedMed.Frozen,
+                    CanEdit = true
                 };
                 return medOtc;
             }

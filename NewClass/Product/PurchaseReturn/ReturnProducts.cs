@@ -9,23 +9,42 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private ReturnProducts() { }
         private ReturnProducts(DataTable dataTable)
         {
+            ReturnProduct tempProduct = null;
+            short tempID = 0;
+
             foreach (DataRow row in dataTable.Rows)
             {
-                switch (row.Field<string>("TYPE"))
+                if (tempID == 0 || tempID != row.Field<short>("StoOrdDet_ID"))
                 {
-                    case "O":
-                        Add(new ReturnOTC(row));
-                        break;
-                    case "M":
-                        Add(new ReturnMedicine(row));
-                        break;
+                    switch (row.Field<string>("TYPE"))
+                    {
+                        case "O":
+                            tempProduct = new ReturnOTC(row);
+                            break;
+                        case "M":
+                            tempProduct = new ReturnMedicine(row);
+                            break;
+                    }
+
+                    Add(tempProduct);
                 }
+                else
+                {
+                    tempProduct.AddInventoryDetail(row);
+                }
+
+                tempID = row.Field<short>("StoOrdDet_ID");
+            }
+
+            foreach (var product in this)
+            {
+                product.SetReturnInventoryDetail();
             }
         }
 
         internal static ReturnProducts GetProductsByStoreOrderID(string orederID)
         {
-            return new ReturnProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
+            return new ReturnProducts(PurchaseReturnProductDB.GetReturnProductsByStoreOrderID(orederID));
         }
 
         public object Clone()

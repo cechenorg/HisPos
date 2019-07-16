@@ -593,4 +593,16 @@
   <data name="Transaction" xml:space="preserve">
     <value>銷售作業</value>
   </data>
+  <data name="處方存檔" xml:space="preserve">
+    <value>處方存檔</value>
+  </data>
+  <data name="PrescriptionFileType" xml:space="preserve">
+    <value>我是處方請存我|*.csv</value>
+  </data>
+  <data name="藥品統計存檔" xml:space="preserve">
+    <value>藥品統計存檔</value>
+  </data>
+  <data name="CSVFileType" xml:space="preserve">
+    <value>Csv檔案|*.csv</value>
+  </data>
 </root>

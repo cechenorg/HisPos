@@ -19,7 +19,7 @@ namespace His_Pos.Properties {
     // 類別透過 ResGen 或 Visual Studio 這類工具。
     // 若要加入或移除成員，請編輯您的 .ResX 檔，然後重新執行 ResGen
     // (利用 /str 選項)，或重建您的 VS 專案。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -243,6 +243,15 @@ namespace His_Pos.Properties {
         internal static string CopaymentError {
             get {
                 return ResourceManager.GetString("CopaymentError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Csv檔案|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string CSVFileType {
+            get {
+                return ResourceManager.GetString("CSVFileType", resourceCulture);
             }
         }
         
@@ -593,6 +602,15 @@ namespace His_Pos.Properties {
         internal static string PrescriptionCaseError {
             get {
                 return ResourceManager.GetString("PrescriptionCaseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 我是處方請存我|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string PrescriptionFileType {
+            get {
+                return ResourceManager.GetString("PrescriptionFileType", resourceCulture);
             }
         }
         
@@ -1230,6 +1248,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥品統計存檔 的當地語系化字串。
+        /// </summary>
+        internal static string 藥品統計存檔 {
+            get {
+                return ResourceManager.GetString("藥品統計存檔", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 藥袋列印中... 的當地語系化字串。
         /// </summary>
         internal static string 藥袋列印 {
@@ -1244,6 +1271,15 @@ namespace His_Pos.Properties {
         internal static string 藥袋列印確認 {
             get {
                 return ResourceManager.GetString("藥袋列印確認", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 處方存檔 的當地語系化字串。
+        /// </summary>
+        internal static string 處方存檔 {
+            get {
+                return ResourceManager.GetString("處方存檔", resourceCulture);
             }
         }
         

@@ -175,7 +175,7 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;
-                AdjustCases = new AdjustCases();
+                AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
                 PaymentCategories = new PaymentCategories();
                 BusyContent = StringRes.取得處方案件;
@@ -334,6 +334,11 @@ namespace His_Pos.ChromeTabViewModel
         {
             BusyContent = StringRes.收據列印;
             Export(r.LocalReport, 25.4, 9.3);
+            ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+        public void StartPrintReserve(ReportViewer r) {
+            BusyContent = "封包列印...";
+            Export(r.LocalReport, 22, 9.3);
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
         public void StartPrintDeposit(ReportViewer r)

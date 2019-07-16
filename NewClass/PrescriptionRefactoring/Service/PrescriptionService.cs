@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.Medicine.MedBag;
@@ -18,19 +17,19 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring;
 using Microsoft.Reporting.WinForms;
-using Newtonsoft.Json;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 
 namespace His_Pos.NewClass.PrescriptionRefactoring.Service
 {
-    public abstract class PrescriptionService:ObservableObject
+    public abstract class PrescriptionService : ObservableObject
     {
         #region AbstractFunctions
         public abstract bool CheckPrescription(bool noCard);
+        public abstract bool CheckEditPrescription(bool noCard);
         public abstract bool NormalAdjust();
         public abstract void ErrorAdjust();
         public abstract void DepositAdjust();
@@ -110,7 +109,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             MainWindow.ServerConnection.CloseConnection();
         }
 
-        public bool SetPharmacist(Employee selectedPharmacist,int prescriptionCount)
+        public bool SetPharmacist(Employee selectedPharmacist, int prescriptionCount)
         {
             if (selectedPharmacist is null || string.IsNullOrEmpty(selectedPharmacist.IDNumber))
             {
@@ -193,7 +192,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                     MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
                     return false;
             }
-            if (DateTime.Compare((DateTime) Current.TreatDate, DateTime.Today) >= 0) return true;
+            if (DateTime.Compare((DateTime)Current.TreatDate, DateTime.Today) >= 0) return true;
             var ts1 = new TimeSpan(DateTime.Today.Ticks);
             var ts2 = new TimeSpan(((DateTime)Current.TreatDate).Ticks);
             var ts = ts1.Subtract(ts2).Duration();
@@ -263,7 +262,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m,Prescription p)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var year = treatmentDate.Split('/')[0];
@@ -387,7 +386,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
                 patientName = " ";
             else
                 patientName = p.Patient.Name;
-            if(string.IsNullOrEmpty(birth))
+            if (string.IsNullOrEmpty(birth))
                 birth = "  /  /  ";
             if (p.AdjustCase.ID.Equals("0"))
             {
@@ -571,75 +570,75 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
-        public static void ShowPrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
+        public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
-            MainWindow.ServerConnection.OpenConnection();
-            NewClass.Prescription.Prescription selected;
-            DataRow r;
-            if (pSource.Equals(PrescriptionSource.Normal))
+            var selected = GetPrescriptionByID(preID, type);
+            switch (type)
             {
-                r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-                MainWindow.ServerConnection.CloseConnection();
-                if (r.Field<string>("IsEnable").Equals("0"))
-                {
-                    MessageWindow.ShowMessage("處方已被刪除。", MessageType.ERROR);
-                    return;
-                }
-                selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.Normal);
+                case PrescriptionType.ChronicReserve:
+                    var title = "預約瀏覽 ResMasID:" + selected.SourceId;
+                    var edit = new ReservePrescriptionWindow(selected, title);
+                    break;
+                default:
+                    CheckAdminLogin(selected);
+                    break;
+            }
+        }
 
-                if (VM.CurrentUser.ID == 1)
-                {
-                    var insertTime = r.Field<DateTime?>("InsertTime");
-                    selected.InsertTime = insertTime;
-                    var edit = new PrescriptionEditWindow(selected);
-                }
-                else
-                {
-                    var insertTime = r.Field<DateTime?>("InsertTime");
-                    selected.InsertTime = insertTime;
-                    if (insertTime != null && DateTime.Compare(((DateTime)insertTime), DateTime.Today) < 0)
-                    {
-                        var edit = new PrescriptionRecordWindow(selected);
-                    }
-                    else
-                    {
-                        var edit = new PrescriptionEditWindow(selected);
-                    }
-                }
+        private static void CheckAdminLogin(Prescription selected)
+        {
+            if (VM.CurrentUser.ID == 1)
+            {
+                var title = "處方修改 PreMasID:" + selected.ID;
+                var edit = new PrescriptionEditWindow(selected, title);
             }
             else
             {
-                r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                MainWindow.ServerConnection.CloseConnection();
-                selected = new NewClass.Prescription.Prescription(r, PrescriptionSource.ChronicReserve);
-                var edit = new PrescriptionEditWindow(selected);
+                if (selected.CheckCanEdit())
+                {
+                    var title = "處方修改 PreMasID:" + selected.ID;
+                    var editWindow = new PrescriptionEditWindow(selected, title);
+                }
+                else
+                {
+                    var title = "處方瀏覽 PreMasID:" + selected.ID;
+                    var recordWindow = new PrescriptionRecordWindow(selected, title);
+                }
             }
         }
 
-        private void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer)
+        private static Prescription GetPrescriptionByID(int preID, PrescriptionType type)
         {
-            var medBagMedicines = new ReserveMedicines();
-            var json = JsonConvert.SerializeObject(medBagMedicines);
-            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveMedicinesSheet.rdlc";
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = CreateReserveMedicinesSheetParameters();
-            rptViewer.LocalReport.SetParameters(parameters);
-            rptViewer.LocalReport.DataSources.Clear();
-            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
-            rptViewer.LocalReport.DataSources.Add(rd);
-            rptViewer.LocalReport.Refresh();
+            MainWindow.ServerConnection.OpenConnection();
+            Prescription selected;
+            DataRow r;
+            switch (type)
+            {
+                case PrescriptionType.ChronicReserve:
+                    r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
+                    MainWindow.ServerConnection.CloseConnection();
+                    selected = new Prescription(r, PrescriptionType.ChronicReserve);
+                    selected.Type = type;
+                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");
+                    return selected;
+                default:
+                    r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+                    selected = new Prescription(r, PrescriptionType.Normal);
+                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
+                    break;
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            return !CheckPrescriptionEnable(r) ? null : selected;
         }
 
-        private static IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        private static bool CheckPrescriptionEnable(DataRow r)
         {
-            return new List<ReportParameter>
+            if (r.Field<string>("IsEnable").Equals("0"))
             {
-                new ReportParameter("PatientName",""),
-                new ReportParameter("PatientBirthday", ""),
-                new ReportParameter("Institution", ""),
-                new ReportParameter("Division", "")
-            };
+                MessageWindow.ShowMessage("處方已被刪除。", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
     }
 }

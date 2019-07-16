@@ -341,7 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SetPrescriptionsSummary(bool reserve)
         {
-            var summary = SearchPrescriptions.GetSummary(reserve, MedicineID);
+            var summary = SearchPrescriptions.GetSummary();
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
             TotalPoint = summary[0];
@@ -390,7 +390,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             if(SelectedPrescription is null) return;
             EditedPrescription = SelectedPrescription;
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            PrescriptionService.ShowPrescriptionEditWindow(preID,SelectedPrescription.Source);
+            PrescriptionService.ShowPrescriptionEditWindow(preID,SelectedPrescription.Type);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
         private void ClearAction()
