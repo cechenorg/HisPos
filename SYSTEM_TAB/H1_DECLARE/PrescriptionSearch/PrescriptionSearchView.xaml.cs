@@ -82,7 +82,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
+            {
                 EndDate.Focus();
+                EndDate.SelectionStart = 0;
+            }
         }
 
         private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -105,6 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             StartDate.Focus();
+            StartDate.SelectionStart = 0;
         }
 
         private void UIElement_OnPreviewKeyDown(object sender, KeyEventArgs e)

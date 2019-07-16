@@ -268,6 +268,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
+        private bool filterNoBuckle;
+        public bool FilterNoBuckle
+        {
+            get => filterNoBuckle;
+            set
+            {
+                Set(() => FilterNoBuckle, ref filterNoBuckle, value);
+                if (PrescriptionCollectionVS != null)
+                    PrescriptionCollectionVS.Filter += NoBuckleFilter;
+            }
+        }
         #endregion
         #region Commands
 
@@ -556,6 +567,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
             }
+            if (PrescriptionCollectionVS != null)
+                PrescriptionCollectionVS.Filter += NoBuckleFilter;
         }
 
         private void Refresh(NotificationMessage msg)
@@ -574,6 +587,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = summary[2];
             ApplyPoint = summary[3];
             TotalPoint = summary[4];
+        }
+
+        private void NoBuckleFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                if (FilterNoBuckle)
+                {
+                    if (src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1))
+                        e.Accepted = true;
+                    else
+                    {
+                        e.Accepted = false;
+                    }
+                }
+                else
+                {
+                    e.Accepted = true;
+                }
+            }
         }
     }
 }

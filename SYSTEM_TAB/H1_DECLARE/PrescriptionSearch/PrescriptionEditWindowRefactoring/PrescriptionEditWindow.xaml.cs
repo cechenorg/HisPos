@@ -31,18 +31,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     Close();
             });
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
-            Messenger.Default.Register<NotificationMessage<int>>("FocusDosage", FocusDosage);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
             DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
-        }
-
-        private void FocusDosage(NotificationMessage<int> msg)
-        {
-            if (msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDosage"))
-                FocusDataGridCell("Dosage", PrescriptionMedicines, msg.Content);
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
@@ -196,14 +189,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private void MedicineTotal_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var focusIndex = GetCurrentRowIndex(sender) + 1;
-                FocusDataGridCell("MedicineID", PrescriptionMedicines, focusIndex);
-            }
-        }
         private int GetCurrentRowIndex(object sender)
         {
             switch (sender)
@@ -221,24 +206,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     }
             }
             return -1;
-        }
-        private void FocusDataGridCell(string controlName, DataGrid focusGrid, int rowIndex)
-        {
-            var dataGridCells = new List<TextBox>();
-            NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
-            if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
-                rowIndex = dataGridCells.Count - 1;
-            if (rowIndex >= dataGridCells.Count) return;
-            dataGridCells[rowIndex].Focus();
-            dataGridCells[rowIndex].SelectAll();
-            focusGrid.SelectedIndex = rowIndex;
-            ((PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
-        }
-
-        private void MedicineID_OnTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var focusIndex = GetCurrentRowIndex(sender);
-            ((PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel)DataContext).previousSelectedIndex = focusIndex;
         }
 
         private void InputTextBox_OnGotFocus(object sender, RoutedEventArgs e)
@@ -263,7 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
-            ((PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
+            ((PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
@@ -275,7 +242,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
-                (DataContext as PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel)?.AddMedicine.Execute(textBox.Text);
+                (DataContext as PrescriptionEditViewModel)?.AddMedicine.Execute(textBox.Text);
                 textBox.Text = string.Empty;
 
                 if (PrescriptionMedicines.Items.Count != itemsCount)
@@ -284,7 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             else if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
             {
                 if (!med.ID.Equals(textBox.Text))
-                    ((PrescriptionSearch.PrescriptionEditWindow.PrescriptionEditViewModel)DataContext).AddMedicine.Execute(textBox.Text);
+                    ((PrescriptionEditViewModel)DataContext).AddMedicine.Execute(textBox.Text);
 
                 var textBoxList = new List<TextBox>();
                 NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);

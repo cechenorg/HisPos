@@ -16,14 +16,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode {
             return table;
         }
 
-        public static DataTable CheckDiseaseValid(string code)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("DiseaseID", code));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDiseaseValid]", parameterList);
-            return table;
-        }
-
         public static DataTable GetICD9DiseaseCodes()
         {
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[OffLineDiseaseCodeMapping]");

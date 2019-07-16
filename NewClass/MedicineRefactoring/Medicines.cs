@@ -284,7 +284,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
         {
-            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId, adjustDate);
+            var table = MedicineDb.GetMedicinesBySearchIds(new List<string> { medicineId }, wareHouseId, adjustDate);
             var medicine = AddMedicineByDataType(table);
             Debug.Assert(medicine != null, nameof(medicine) + " != null");
             medicine.PaySelf = paySelf;

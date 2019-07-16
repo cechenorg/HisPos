@@ -402,7 +402,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
+                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon,UpdateSourceTrigger=PropertyChanged}" ControlLevel="{Binding ControlLevel,UpdateSourceTrigger=PropertyChanged}" IsFrozen="{Binding Frozen,UpdateSourceTrigger=PropertyChanged}"/>
                                     <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0" Height="35"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -495,7 +495,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn MinWidth="40" Header="架上量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

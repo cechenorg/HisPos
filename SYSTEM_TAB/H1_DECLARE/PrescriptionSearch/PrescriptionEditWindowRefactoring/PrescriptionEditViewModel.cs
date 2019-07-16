@@ -195,15 +195,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void InitPrescription()
         {
             if (EditedPrescription.Division != null)
-                EditedPrescription.Division = VM.GetDivision(EditedPrescription.Division?.ID);
+                EditedPrescription.Division = VM.GetDivision(OriginalPrescription.Division?.ID);
             EditedPrescription.Pharmacist =
-                VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(EditedPrescription.Pharmacist.IDNumber));
-            EditedPrescription.AdjustCase = VM.GetAdjustCase(EditedPrescription.AdjustCase.ID);
-            EditedPrescription.Copayment = VM.GetCopayment(EditedPrescription.Copayment?.Id);
-            if (EditedPrescription.PrescriptionCase != null)
-                EditedPrescription.PrescriptionCase = VM.GetPrescriptionCases(EditedPrescription.PrescriptionCase?.ID);
-            if (EditedPrescription.SpecialTreat != null)
-                EditedPrescription.SpecialTreat = VM.GetSpecialTreat(EditedPrescription.SpecialTreat?.ID);
+                VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
+            EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
+            EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
+            if (OriginalPrescription.PrescriptionCase != null)
+                EditedPrescription.PrescriptionCase = VM.GetPrescriptionCases(OriginalPrescription.PrescriptionCase?.ID);
+            if (OriginalPrescription.PaymentCategory != null)
+                EditedPrescription.PaymentCategory = VM.GetPaymentCategory(OriginalPrescription.PaymentCategory?.ID);
+            if (OriginalPrescription.SpecialTreat != null)
+                EditedPrescription.SpecialTreat = VM.GetSpecialTreat(OriginalPrescription.SpecialTreat?.ID);
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription.GetMedicines();
             EditedPrescription.UpdateMedicines();
@@ -419,7 +421,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 var wareHouse = EditedPrescription.WareHouse;
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedMedicine);
-                var addMedicineWindow = wareHouse is null ? new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionDeclare, "0") : new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse.ID);
+                var addMedicineWindow = wareHouse is null ? new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionEdit, "0") : new AddMedicineWindow(medicineID, AddProductEnum.PrescriptionEdit, wareHouse.ID);
                 if (productCount > 1)
                     addMedicineWindow.ShowDialog();
             }
@@ -559,7 +561,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             var wareHouse = EditedPrescription.WareHouse;
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, wareHouse is null ? "0" : wareHouse.ID);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionEdit, wareHouse is null ? "0" : wareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             return productCount;
         }

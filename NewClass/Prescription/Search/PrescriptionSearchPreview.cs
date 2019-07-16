@@ -31,6 +31,10 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
+            if (NewFunction.CheckDataRowContainsColumn(r, "NoBuckleStatus"))
+            {
+                NoBuckleStatus = r.Field<int?>("NoBuckleStatus");
+            }
             if (NewFunction.CheckDataRowContainsColumn(r, "RegisterTime"))
             {
                 TaiwanCalendar tc = new TaiwanCalendar();
@@ -139,6 +143,15 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => IsAdjust, ref isAdjust, value);
+            }
+        }
+        private int? noBuckleStatus;
+        public int? NoBuckleStatus
+        {
+            get => noBuckleStatus;
+            set
+            {
+                Set(() => NoBuckleStatus, ref noBuckleStatus, value);
             }
         }
         private string stoStatus;

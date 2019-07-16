@@ -69,7 +69,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r, PrescriptionType type)
+        public Prescription(DataRow r, PrescriptionType type,bool? reserveSend = null)
         {
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
@@ -114,6 +114,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
                     Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    PrescriptionStatus.ReserveSend = reserveSend;
                     break;
                 default:
                     Medicines = new Medicines();

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -43,41 +44,34 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         [Index(3)]
         public virtual string ICD9_ID { get; set; }
 
-        public void GetData() {
-            if (string.IsNullOrEmpty(ID)) return;
+        public bool GetData() {
+            if (string.IsNullOrEmpty(ID)) return false;
             var table = DiseaseCodeDb.GetDataByCodeId(ID);
-            if (table.Rows.Count <= 0) return;
+            if (table.Rows.Count <= 0)
+            {
+                MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
+                ID = string.Empty;
+                return false;
+            }
+            if (table.Rows.Count > 1)
+            {
+                MessageWindow.ShowMessage("疾病代碼" + ID + "不完整", MessageType.WARNING);
+                ID = string.Empty;
+                return false;
+            }
             var diseaseCode = new DiseaseCode(table.Rows[0]);
             ID = diseaseCode.ID;
             Name = diseaseCode.Name;
             FullName = ID + " " + Name;
+            return true;
         }
         public static DiseaseCode GetDiseaseCodeByID(string id)
         {
             var d = new DiseaseCode {ID = id};
             MainWindow.ServerConnection.OpenConnection();
-            d.GetData();
-            if (!d.CheckDiseaseValid())
-            {
-                MessageWindow.ShowMessage("疾病代碼"+ id + "不完整",MessageType.WARNING);
-                MainWindow.ServerConnection.CloseConnection();
-                return null;
-            }
+            if (!d.GetData()) return null;
             MainWindow.ServerConnection.CloseConnection();
-            if (!string.IsNullOrEmpty(d.ID)) return d;
-            MessageWindow.ShowMessage(StringRes.DiseaseCodeNotFound, MessageType.WARNING);
-            return null;
-        }
-
-        private bool CheckDiseaseValid()
-        {
-            var table = DiseaseCodeDb.CheckDiseaseValid(ID);
-            if (table.Rows.Count > 0)
-            {
-                var count = table.Rows[0].Field<int>("DiseaseCount");
-                return count == 1;
-            }
-            return true;
+            return !string.IsNullOrEmpty(d.ID) ? d : null;
         }
     }
 }

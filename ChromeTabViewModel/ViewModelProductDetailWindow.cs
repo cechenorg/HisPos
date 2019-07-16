@@ -3,11 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.ChromeTabViewModel
