@@ -227,6 +227,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
+        public RelayCommand MedPrepareChangedCommand { get; set; }
         public RelayCommand ShowCustomerDetailWindowCommand { get; set; }
         public RelayCommand CustomerDataSaveCommand { get; set; }
         public RelayCommand ShowCustomerPrescriptionChangedCommand { get; set; }
@@ -242,6 +243,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveMedicineSendCommand = new RelayCommand(ReserveSendAction);
             CommonMedStoreOrderCommand = new RelayCommand(CommonMedStoreOrderAction);
             StatusChangedCommand = new RelayCommand(StatusChangedAction);
+            MedPrepareChangedCommand = new RelayCommand(MedPrepareChangedAction);
             ShowCustomerDetailWindowCommand = new RelayCommand(ShowCustomerDetailWindowAction);
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
@@ -250,7 +252,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             PrintIndexReserveMedbagCommand = new RelayCommand(PrintPackageAction);
             ShowReserveDetailCommand = new RelayCommand(ShowReserveDetailAction);
-            
+            ReserveSearchAction();
         }
         #region Action
         private void DataChangeAction() {
@@ -272,13 +274,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void PrintPackageAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否列印封包明細?","封包明細列印");
-            ReportViewer rptViewer = new ReportViewer();
-            IndexReserveSelectedItem.GetIndexDetail();
-            IndexReserveSelectedItem.SetReserveMedicinesSheetReportViewer(rptViewer);
-            MainWindow.Instance.Dispatcher.Invoke(() =>
-            {
-                ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
-            });
+            if ((bool)confirmWindow.DialogResult) {
+                ReportViewer rptViewer = new ReportViewer();
+                IndexReserveSelectedItem.GetIndexDetail();
+                IndexReserveSelectedItem.SetReserveMedicinesSheetReportViewer(rptViewer);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+                });
+            } 
         }
         private void ShowCustomerPrescriptionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -308,6 +312,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             IndexReserveSelectedItem.SaveStatus();
             CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
+        private void MedPrepareChangedAction() {
+            if (IndexReserveSelectedItem is null) return;
+            if(IndexReserveSelectedItem.PrepareMedStatus == "不備藥")
+                IndexReserveSelectedItem.SaveStatus(); 
+        }
+        
         private void CommonMedStoreOrderAction() {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
             if ((bool)confirmWindow.DialogResult)

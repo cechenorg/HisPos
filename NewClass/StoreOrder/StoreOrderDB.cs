@@ -627,7 +627,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderMedicines = "";
             string cusName = "";
             string planDate = ""; 
-
+            string note
             foreach (var product in indexReserve.IndexReserveDetailCollection)
             {
                 if (product.SendAmount == 0) continue;

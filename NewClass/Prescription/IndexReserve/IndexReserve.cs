@@ -29,7 +29,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
             Profit = Convert.ToInt32(r.Field<double>("Profit"));
-            IsExpensive = r.Field<bool>("IsExpensive"); 
+            IsExpensive = r.Field<bool>("IsExpensive");
+            CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
                 case "N":
                     PrepareMedStatus = "未處理";
@@ -59,6 +60,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public int Id { get; set; }
         public string StoOrdID { get; set; }
         public string CusName { get; set; }
+        public DateTime CusBirth { get; set; } 
         public string InsName { get; set; }
         public string DivName { get; set; }
         public int Profit { get; set; }
@@ -185,12 +187,12 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             return new List<ReportParameter>
             {
                 new ReportParameter("PatientName",CusName),
-                new ReportParameter("PatientBirthday",""),
-                new ReportParameter("PatientTel",""),
+                new ReportParameter("PatientBirthday",CusBirth.AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("StartDate", ""),
-                new ReportParameter("EndDate", "")
+                new ReportParameter("StartDate", AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("EndDate", AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd"))
             };
         }
 
