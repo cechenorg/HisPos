@@ -195,7 +195,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="60" IsReadOnly="True"   >
+                    <DataGridTemplateColumn Width="60" IsReadOnly="True"    >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Width="60" Content="{StaticResource ImgPrinter}" Command="{Binding DataContext.PrintIndexReserveMedbagCommand,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
