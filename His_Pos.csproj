@@ -1867,6 +1867,7 @@
     <Resource Include="Images\AccountingReport.png" />
     <Resource Include="Images\SystemManage.png" />
     <Resource Include="Images\Transaction.png" />
+    <Resource Include="Images\PrinterBlue.png" />
     <Content Include="RDLC\DepositSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

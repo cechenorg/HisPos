@@ -20,6 +20,8 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
+
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
     class Index : TabBase {
@@ -231,7 +233,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand ShowMedicineDetailCommand { get; set; }
         public RelayCommand PrintIndexReserveMedbagCommand { get; set; }
-
+        public RelayCommand ShowReserveDetailCommand { get; set; }
         #endregion
         public Index() {
             InitStatusstring();
@@ -247,6 +249,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             DataChangeCommand = new RelayCommand(DataChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             PrintIndexReserveMedbagCommand = new RelayCommand(PrintPackageAction);
+            ShowReserveDetailCommand = new RelayCommand(ShowReserveDetailAction);
+            
         }
         #region Action
         private void DataChangeAction() {
@@ -267,7 +271,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
            
         }
         private void PrintPackageAction() {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否列印封包明細?","封包明細列印");
             ReportViewer rptViewer = new ReportViewer();
+            IndexReserveSelectedItem.GetIndexDetail();
             IndexReserveSelectedItem.SetReserveMedicinesSheetReportViewer(rptViewer);
             MainWindow.Instance.Dispatcher.Invoke(() =>
             {
@@ -415,6 +421,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void ShowMedicineDetailAction() {
           ProductDetailWindow.ShowProductDetailWindow();
           Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveDetailSelectedItem.ID, "0" }, "ShowProductDetail"));
+        }
+        private void ShowReserveDetailAction() {
+            if (IndexReserveSelectedItem is null) 
+                return; 
+            PrescriptionService.ShowPrescriptionEditWindow(IndexReserveSelectedItem.Id,NewClass.Prescription.PrescriptionSource.ChronicReserve);
         }
         #endregion
     }

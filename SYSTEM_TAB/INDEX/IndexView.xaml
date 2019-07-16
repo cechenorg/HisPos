@@ -13,6 +13,7 @@
         <local:Index/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <Image x:Key="ImgPrinter" Source="/Images/PrinterBlue.png"/>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
             <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
@@ -23,7 +24,7 @@
     </UserControl.Resources>
     <Grid Width="1365" Height="850" Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="900"/>
+            <ColumnDefinition Width="860"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
@@ -78,6 +79,9 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding IndexReserveSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding ShowReserveDetailCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Resources>
@@ -191,13 +195,13 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="110" IsReadOnly="True"   >
+                    <DataGridTemplateColumn Width="60" IsReadOnly="True"   >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Width="100" Command="{Binding DataContext.PrintIndexReserveMedbagCommand,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
-                                            IsEnabled="{Binding IsSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Content="慢箋採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
-                                </StackPanel>
+                                <Button Width="60" Content="{StaticResource ImgPrinter}" Command="{Binding DataContext.PrintIndexReserveMedbagCommand,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                               Visibility="{Binding IsSend,  UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Background="Transparent" Height="35"    />
+                              
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

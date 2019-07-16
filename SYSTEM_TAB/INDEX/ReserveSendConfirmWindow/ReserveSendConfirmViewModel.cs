@@ -76,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             if ((bool)confirmWindow.DialogResult)   
                 SendReserveStoOrder();
             if (IndexReserveCollection.Count == 0) {
-                MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.WARNING);
+                MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
             } 
         }
