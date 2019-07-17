@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
-using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
+using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {

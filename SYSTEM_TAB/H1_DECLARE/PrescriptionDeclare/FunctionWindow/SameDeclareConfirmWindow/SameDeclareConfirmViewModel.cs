@@ -2,7 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.SameDeclarePrescriptions;
+using His_Pos.NewClass.Prescription.SameDeclarePrescriptions;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow
 {

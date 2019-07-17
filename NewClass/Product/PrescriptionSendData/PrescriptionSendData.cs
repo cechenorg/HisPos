@@ -7,7 +7,7 @@ namespace His_Pos.NewClass.Product
         public PrescriptionSendData()
         {
         }
-        public PrescriptionSendData(MedicineRefactoring.Medicine m) {
+        public PrescriptionSendData(Medicine.Base.Medicine m) {
             MedId = m.ID;
             MedName = m.FullName;
             Stock = m.Inventory;

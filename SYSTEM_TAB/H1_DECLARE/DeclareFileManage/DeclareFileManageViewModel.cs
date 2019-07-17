@@ -18,7 +18,7 @@ using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using StringRes = His_Pos.Properties.Resources;

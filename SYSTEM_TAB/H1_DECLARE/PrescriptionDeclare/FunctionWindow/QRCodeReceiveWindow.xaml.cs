@@ -7,12 +7,13 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Medicine;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
-using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
-using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
+using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
 {
@@ -164,15 +165,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                 switch (table.Rows[i].Field<int>("DataType"))
                 {
                     case 1:
-                        medicine = new NewClass.MedicineRefactoring.MedicineNHI(table.Rows[i]);
+                        medicine = new MedicineNHI(table.Rows[i]);
                         p.Medicines.Add(medicine);
                         break;
                     case 2:
-                        medicine = new NewClass.MedicineRefactoring.MedicineOTC(table.Rows[i]);
+                        medicine = new MedicineOTC(table.Rows[i]);
                         p.Medicines.Add(medicine);
                         break;
                     case 3:
-                        medicine = new NewClass.MedicineRefactoring.MedicineSpecialMaterial(table.Rows[i]);
+                        medicine = new MedicineSpecialMaterial(table.Rows[i]);
                         p.Medicines.Add(medicine);
                         break;
                 }

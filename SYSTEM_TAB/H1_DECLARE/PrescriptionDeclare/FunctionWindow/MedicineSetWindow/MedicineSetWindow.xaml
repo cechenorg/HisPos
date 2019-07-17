@@ -25,11 +25,11 @@
             <Label Content="組合名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,10,0"/>
             <TextBox Width="150" Height="35" Text="{Binding CurrentSet.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"/>
         </StackPanel>
-        <declare:MedicineDataGrid Grid.Row="1" x:Name="MedicineSetGrid" Margin="10,0,10,10" DataContext="{Binding CurrentSet,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MedicineSetItems, UpdateSourceTrigger=PropertyChanged}"
+        <DataGrid Grid.Row="1" x:Name="MedicineSetGrid" Margin="10,0,10,10" DataContext="{Binding CurrentSet,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MedicineSetItems, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" HorizontalGridLinesBrush="Transparent"
                                   AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
                                   FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" >
-            <declare:MedicineDataGrid.Resources>
+            <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
                     <Setter Property="OverridesDefaultStyle" Value="False" />
@@ -48,8 +48,8 @@
                     </Style.Triggers>
                 </Style>
                 <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
-            </declare:MedicineDataGrid.Resources>
-            <declare:MedicineDataGrid.RowStyle>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
@@ -62,8 +62,8 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </declare:MedicineDataGrid.RowStyle>
-            <declare:MedicineDataGrid.Columns>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -162,8 +162,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-            </declare:MedicineDataGrid.Columns>
-        </declare:MedicineDataGrid>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Content="儲存" Command="{Binding Save}" Margin="0,0,10,0" Height="35" Width="80" Background="RoyalBlue" BorderBrush="RoyalBlue" FontFamily="Segoe UI Semibold" FontSize="16"/>
             <Button Content="刪除" Command="{Binding Delete}" Margin="0,0,10,0" Height="35" Width="80" BorderBrush="Red" Background="Red" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>

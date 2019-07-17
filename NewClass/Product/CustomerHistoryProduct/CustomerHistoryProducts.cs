@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Class;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Medicine;
 
 namespace His_Pos.NewClass.Product.CustomerHistoryProduct
 {

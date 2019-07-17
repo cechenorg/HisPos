@@ -2,7 +2,6 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashDetailReport;
 using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
@@ -21,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
+using His_Pos.NewClass.Prescription.Service;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {

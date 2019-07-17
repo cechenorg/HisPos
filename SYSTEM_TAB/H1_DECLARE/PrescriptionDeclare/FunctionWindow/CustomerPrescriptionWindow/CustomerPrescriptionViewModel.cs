@@ -8,12 +8,13 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
+using His_Pos.NewClass.Prescription.CustomerPrescriptions;
+using His_Pos.NewClass.Prescription.ICCard;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Properties;
 using His_Pos.Service;
 using Application = System.Windows.Application;
-using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow
 {

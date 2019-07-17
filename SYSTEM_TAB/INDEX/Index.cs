@@ -16,12 +16,12 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
 using His_Pos.NewClass.Product;
 using System.Linq;
-using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {

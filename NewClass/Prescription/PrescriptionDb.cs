@@ -1,5 +1,4 @@
 ﻿using His_Pos.Database;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
@@ -7,24 +6,20 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using System.Linq;
 using System.Xml.Linq;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.StoreOrder;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
-using Medicine = His_Pos.NewClass.MedicineRefactoring.Medicine;
 // ReSharper disable TooManyArguments
 
 namespace His_Pos.NewClass.Prescription
@@ -32,22 +27,6 @@ namespace His_Pos.NewClass.Prescription
     public static class PrescriptionDb
     {  
         public static DataTable InsertPrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        {
-            int warID = 0; 
-            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
-                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
-            DataBaseFunction.AddSqlParameter(parameterList, "IsCooperativeVIP", prescription.PrescriptionStatus.IsCooperativeVIP); 
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", string.IsNullOrEmpty(prescription.SourceId) ? null : prescription.SourceId);
-            DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(prescription.Remark) ? null : prescription.Remark);
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetPrescriptionMaster(prescription));
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
-        }
-
-        public static DataTable InsertPrescriptionByType(PrescriptionRefactoring.Prescription prescription, List<Pdata> prescriptionDetails)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Type.ToString());
@@ -65,44 +44,15 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteReserve]", parameterList);  
         }
-        public static void PredictReserve(int preMasId) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreId", preMasId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[PredictResere]", parameterList);
-        }
-        public static void AdjustPredictReserve(string preMasId) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", preMasId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[AdjustPredictResere]", parameterList);
-        } 
-        public static void UpdateReserve(Prescription prescription, List<Pdata> prescriptionDetails) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataTable resMaster = SetReserveMaster(prescription);
-            resMaster.Rows[0]["ResMas_ID"] = prescription.SourceId;
-            DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", resMaster);
-            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescription, prescriptionDetails));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList); 
-        }
 
-        public static void UpdateReserve(PrescriptionRefactoring.Prescription prescription, List<Pdata> prescriptionDetails)
+        public static void UpdateReserve(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable resMaster = SetReserveMaster(prescription);
             resMaster.Rows[0]["ResMas_ID"] = prescription.SourceId;
             DataBaseFunction.AddSqlParameter(parameterList, "ResMaster", resMaster);
-            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveionDetail(prescriptionDetails));
+            DataBaseFunction.AddSqlParameter(parameterList, "ResDetail", SetReserveDetail(prescriptionDetails));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReserve]", parameterList);
-        }
-
-        public static DataTable ProcessInventory(string productID,double amount,string type,string source,string sourcdId)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
-            DataBaseFunction.AddSqlParameter(parameterList, "BuckleValue", amount);
-            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
-            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductBuckle]", parameterList); 
         }
 
         public static DataTable GetDeposit(int id)
@@ -117,17 +67,6 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "preId", id);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[AmountPaySelfByPreId]", parameterList);
         }
-        
-        public static DataTable ReturnInventory(string productID, double amount, string type, string source, string sourcdId)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "ProId", productID);
-            DataBaseFunction.AddSqlParameter(parameterList, "ReturnValue", amount);
-            DataBaseFunction.AddSqlParameter(parameterList, "typename", type);
-            DataBaseFunction.AddSqlParameter(parameterList, "sourcename", source);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceID", sourcdId);
-           return MainWindow.ServerConnection.ExecuteProc("[Set].[RevertStockValue]", parameterList);
-        }
         public static void ProcessCashFlow(string cashFlowName, string source, int sourceId, double total)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -137,15 +76,6 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCashFlow]", parameterList); 
         }
-        public static void ProcessEntry(string entryName, string source,int sourceId,double total)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Name", entryName);
-            DataBaseFunction.AddSqlParameter(parameterList, "Value", total);
-            DataBaseFunction.AddSqlParameter(parameterList, "Source", source);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockEntry]", parameterList);
-        }
        
         public static DataTable GetPrescriptionCountByID(string pharmacistIdnum)
         {
@@ -153,16 +83,10 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "EmpIdNum", pharmacistIdnum);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCount]", parameterList); 
         }
-        public static DataTable GetPaySelfByID(int preId)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "preId", preId);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[GetPaySelfByID]", parameterList);
-        }
+
         public static DataTable GetPrescriptionId( ) { 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionId]");
         }
-        
         
         public static DataTable GetSearchPrescriptionsDataRe(Dictionary<string, string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adjustCase, List<string> insIDList, Division division)
         {
@@ -304,13 +228,6 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "CusId", cusId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[RegisterPrescriptionByCusId]", parameterList);
         } 
-        public static void InsertCooperAdjust(Prescription prescription, List<Pdata> prescriptionDetails, string remark) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionId", prescription.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "Meds", SetPrescriptionDetail(prescription, prescriptionDetails));
-            DataBaseFunction.AddSqlParameter(parameterList, "Remark", string.IsNullOrEmpty(remark) ? null : remark);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperAdjust]", parameterList);
-        }
         public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles,string fileId) {
             Customers cs = new Customers();
             cs = cs.SetCustomersByPrescriptions(ddatas);
@@ -320,22 +237,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
             MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
         } 
-        public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
-        {
-            int warID = 0;
-            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
-                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataTable prescriptionMater = SetPrescriptionMaster(prescription);
-            prescriptionMater.Rows[0]["PreMas_ID"] = prescription.Id;
-            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", prescriptionMater);
-            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetPrescriptionDetail(prescription, prescriptionDetails));
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionByType]", parameterList);
-        }
 
-        public static DataTable UpdatePrescriptionByType(PrescriptionRefactoring.Prescription prescription, List<Pdata> prescriptionDetails)
+        public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
         {
             int warID = 0;
             if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Institution, prescription.AdjustCase.ID) != null)
@@ -358,19 +261,8 @@ namespace His_Pos.NewClass.Prescription
         public static void PredictThreeMonthPrescription() {
             MainWindow.ServerConnection.ExecuteProc("[Set].[PredictThreeMonthPrescription]");
         }
-        public static DataTable DeletePrescription(Prescription prescription)
-        {
-            int warID = 0;
-            if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID) != null)
-                warID = int.Parse(ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Treatment.Institution, prescription.Treatment.AdjustCase.ID).ID);
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreId", prescription.Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID",warID);
-            DataBaseFunction.AddSqlParameter(parameterList, "type", prescription.Source.ToString());
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeletePrescription]", parameterList);  
-        }
 
-        public static DataTable DeletePrescription(PrescriptionRefactoring.Prescription prescription)
+        public static DataTable DeletePrescription(Prescription prescription)
         {
             int warID = 0;
             if (ViewModelMainWindow.CooperativeClinicSettings.GetWareHouseByPrescription(prescription.Institution, prescription.AdjustCase.ID) != null)
@@ -386,34 +278,12 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PREMAS_ID", preId);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByPrescriptionID]", parameterList);
         }
-        public static void UpdateXmfOfPrescriptionStatus(string sourceId,int id)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", sourceId);
-            DataBaseFunction.AddSqlParameter(parameterList, "PreMasId", id);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateXmfOfPrescriptionStatus]", parameterList);
-        }
+        
         public static bool SendDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData)
-        {
-            return sendOrderAction(storId, p, prescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS";
-        }
-        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData)
-        {
-            switch (sendOrderAction(storId, p, prescriptionSendData, "UpdateDeclareOrder"))
-            {
-                case "SUCCESS":
-                    return 1;
-                case "DONE":
-                    return 2;
-                default:
-                    return 0;
-            }
-        }
-        public static bool SendDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData)
         {
             return SendOrderAction(storId, p, prescriptionSendData, "AddDeclareOrderToPreDrug") == "SUCCESS";
         }
-        public static int UpdateDeclareOrderToSingde(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData) {
+        public static int UpdateDeclareOrderToSingde(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData) {
             switch (SendOrderAction(storId, p, prescriptionSendData, "UpdateDeclareOrder")) {
                 case "SUCCESS":
                     return 1;
@@ -424,7 +294,7 @@ namespace His_Pos.NewClass.Prescription
             } 
         }
 
-        private static string SendOrderAction(string storId, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData,string sql) {
+        private static string SendOrderAction(string storId, Prescription p, PrescriptionSendDatas prescriptionSendData,string sql) {
             var rxOrder = Convert.ToDateTime(p.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
             var dtlData = new StringBuilder(); //  備註text  處方資訊
             AppendPatientData(dtlData,p);
@@ -471,7 +341,7 @@ namespace His_Pos.NewClass.Prescription
             return result;
         }
 
-        private static void AppendPatientData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        private static void AppendPatientData(StringBuilder dtlData, Prescription p)
         {
             //第一行
             dtlData.Append(p.ID.ToString().PadLeft(8, '0')); //藥局病歷號
@@ -501,7 +371,7 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
         }
 
-        private static void AppendInstitutionData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        private static void AppendInstitutionData(StringBuilder dtlData, Prescription p)
         {
             //第二行   
             dtlData.Append(p.Institution.ID.PadRight(10, ' ')); //院所代號
@@ -512,7 +382,7 @@ namespace His_Pos.NewClass.Prescription
             dtlData.AppendLine();
         }
 
-        private static void AppendTreatmentData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        private static void AppendTreatmentData(StringBuilder dtlData, Prescription p)
         {
             //第三行
             Debug.Assert(p.TreatDate != null, "p.TreatDate != null");
@@ -530,12 +400,12 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
         }
 
-        private static void AppendMedicineCost(StringBuilder dtlData, PrescriptionRefactoring.Prescription p)
+        private static void AppendMedicineCost(StringBuilder dtlData, Prescription p)
         {
             double medCost = 0;
             foreach (var declareMedicine in p.Medicines)
             {
-                if (declareMedicine is MedicineRefactoring.MedicineNHI || declareMedicine is MedicineRefactoring.MedicineSpecialMaterial)
+                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                     medCost += declareMedicine.TotalPrice;
             }
             dtlData.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
@@ -552,23 +422,23 @@ namespace His_Pos.NewClass.Prescription
             dtlData.AppendLine();
         }
 
-        private static void AppendMedicinesData(StringBuilder dtlData, PrescriptionRefactoring.Prescription p, PrescriptionSendDatas prescriptionSendData)
+        private static void AppendMedicinesData(StringBuilder dtlData, Prescription p, PrescriptionSendDatas prescriptionSendData)
         {
             //第四行
             var i = 1;
             foreach (var declareMedicine in p.Medicines)
             {
-                if (declareMedicine is MedicineRefactoring.MedicineNHI || declareMedicine is MedicineRefactoring.MedicineSpecialMaterial)
+                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
                     AppendMedicineData(declareMedicine,dtlData,prescriptionSendData);
                 }
-                if (i < p.Medicines.Count(med => med is MedicineRefactoring.MedicineNHI || med is MedicineRefactoring.MedicineSpecialMaterial))
+                if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
                     dtlData.AppendLine();
                 i++;
             }
         }
 
-        private static void AppendMedicineData(Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        private static void AppendMedicineData(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
         {
             dtlData.Append(declareMedicine.ID.Length > 12
                 ? declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')
@@ -583,7 +453,7 @@ namespace His_Pos.NewClass.Prescription
             AppendAmountAndPaySelf(declareMedicine, dtlData, prescriptionSendData);
         }
 
-        private static void AppendAmountAndPaySelf(Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        private static void AppendAmountAndPaySelf(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
         {
             if (!declareMedicine.PaySelf)
                 dtlData.Append(" ");
@@ -600,159 +470,7 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append(amount.PadRight(10, ' ')); //訂購量
         }
 
-        public static string sendOrderAction(string storId, Prescription p, PrescriptionSendDatas PrescriptionSendData, string sql)
-        {
-            string Rx_id = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
-            string Rx_order = Convert.ToDateTime(p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
-            string Pt_name = p.Patient.Name; // 藥袋名稱(病患姓名)
-            string Upload_data = DateTime.Now.ToString(" yyyy - MM - dd hh:mm:ss "); //更新時間( 2014 - 01 - 24 21:13:03 )
-            string Upload_status = string.Empty; //	列印判斷
-            string Prt_date = string.Empty; //列印日期
-            string Inv_flag = "0"; //轉單處理確認0未處理 1已處理 2不處理
-            string Batch_sht = storId; //出貨單號
-            string Inv_chk = "0"; //  庫存確認 是1 否0
-            string Inv_msg = ""; //庫存確認
-
-            string empty = string.Empty;
-            StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
-            //第一行
-            Dtl_data.Append(p.Id.ToString().PadLeft(8, '0')); //藥局病歷號
-            Dtl_data.Append(p.Patient.Name.PadRight(20 - NewFunction.HowManyChinese(p.Patient.Name), ' ')); //病患姓名 
-            Dtl_data.Append(p.Patient.IDNumber.PadRight(10, ' ')); //身分證字號
-            Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday)); //出生年月日
-            string gender = p.Patient.Gender.Substring(0, 1) == "男" ? "1" : "2";
-            Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-
-            string patientTel;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
-                else
-                    patientTel = p.Patient.ContactNote;
-            }
-
-
-            Dtl_data.Append(string.IsNullOrEmpty(patientTel) ? empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
-            Dtl_data.AppendLine();
-            //第二行   
-            Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //院所代號
-            Dtl_data.Append(p.Treatment.Institution.ID.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
-            Dtl_data.Append(empty.PadRight(20, ' ')); //空
-            Dtl_data.Append(ViewModelMainWindow.CurrentUser.ID.ToString().PadRight(10, ' ')); //藥師代號
-            Dtl_data.Append(ViewModelMainWindow.CurrentUser.Name.PadRight(20 - NewFunction.HowManyChinese(ViewModelMainWindow.CurrentUser.Name), ' ')); //藥師姓名 
-            Dtl_data.AppendLine();
-            //第三行
-            Dtl_data.Append(((DateTime)p.Treatment.TreatDate).AddYears(-1911).ToString("yyyMMdd")); //處方日(就診日期)
-            Dtl_data.Append(((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")); //調劑日期
-            Dtl_data.Append(p.Treatment.PrescriptionCase.ID.PadRight(2, ' ')); //案件
-            Dtl_data.Append(p.Treatment.Division.ID.PadRight(2, ' ')); //科別
-            Dtl_data.Append(p.Treatment.MainDisease.ID.PadRight(10, ' ')); //主診斷
-            Dtl_data.Append(string.IsNullOrEmpty(p.Treatment.SubDisease.ID) ? empty.PadRight(10, ' ') : p.Treatment.SubDisease.ID.PadRight(10, ' ')); //次診斷
-            Dtl_data.Append(p.Treatment.TempMedicalNumber == null ? empty.PadRight(4, ' ') : p.Treatment.TempMedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
-            Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
-            Dtl_data.Append(p.Treatment.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
-            Dtl_data.Append(p.Treatment.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
-            Dtl_data.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
-
-            double medCost = 0;
-            foreach (var declareMedicine in p.Medicines)
-            {
-                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
-                    medCost += declareMedicine.TotalPrice;
-            }
-            Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
-            string medicalPay = "0";
-            if (Convert.ToInt32(p.MedicineDays) <= 13)
-                medicalPay = "48";
-            if (Convert.ToInt32(p.MedicineDays) >= 14 && Convert.ToInt32(p.MedicineDays) < 28)
-                medicalPay = "59";
-            if (Convert.ToInt32(p.MedicineDays) >= 28)
-                medicalPay = "69";
-
-            Dtl_data.Append(medicalPay.PadRight(4, ' ')); //藥事費
-            Dtl_data.Append(p.PrescriptionPoint.CopaymentPoint.ToString().PadRight(4, ' ')); //部分負擔
-            Dtl_data.AppendLine();
-            //第四行
-            int i = 1;
-            foreach (var declareMedicine in p.Medicines)
-            {
-                if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
-                {
-                    if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')); //健保碼
-                    else
-                        Dtl_data.Append(declareMedicine.ID.PadRight(12, ' ')); //健保碼
-
-                    Dtl_data.Append(declareMedicine.Dosage == null ? empty.PadRight(8, ' ') : declareMedicine.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
-                    Dtl_data.Append(declareMedicine.Usage.Name == null ? empty.PadRight(16, ' ') : declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
-                    Dtl_data.Append(declareMedicine.Days == null ? empty.PadRight(3, ' ') : declareMedicine.Days.ToString().PadRight(3, ' ')); //使用天數
-                    Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                    if (declareMedicine.ID.Length > 12)
-                        Dtl_data.Append(declareMedicine.ID.Split('-')[1].PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                    else
-                        Dtl_data.Append(declareMedicine.Position.ID.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-
-                    if (!declareMedicine.PaySelf)
-                        Dtl_data.Append(" ");
-                    else
-                        Dtl_data.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
-
-                    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                    string amount = string.Empty;
-                    foreach (PrescriptionSendData row in PrescriptionSendData)
-                    {
-                        if (row.MedId == declareMedicine.ID)
-                        {
-                            amount = row.SendAmount.ToString();
-                            break;
-                        }
-                    }
-                    Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
-
-                }
-                if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
-                    Dtl_data.AppendLine();
-                i++;
-            }
-            string result = "FAIL";
-            DataTable table;
-            switch (sql)
-            {
-                case "AddDeclareOrderToPreDrug":
-                    MainWindow.SingdeConnection.OpenConnection();
-                    table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{p.Patient.Name}','{Dtl_data}','{((DateTime)p.Treatment.AdjustDate).AddYears(-1911).ToString("yyyMMdd")}')");
-                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        result = "SUCCESS";
-                    MainWindow.SingdeConnection.CloseConnection();
-                    break;
-                case "UpdateDeclareOrder":
-                    MainWindow.SingdeConnection.OpenConnection();
-                    table = MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{Rx_id}', '{storId}','{Rx_order}','{Dtl_data}')");
-                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        result = "SUCCESS";
-                    else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
-                        result = "DONE";
-                    MainWindow.SingdeConnection.CloseConnection();
-                    break;
-            }
-            return result;
-        }
-
-        public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus,int id)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PreId", id);
-            DataBaseFunction.AddSqlParameter(parameterList, "IsSendToServer", prescriptionStatus.IsSendToSingde);
-            DataBaseFunction.AddSqlParameter(parameterList, "IsGetCard", prescriptionStatus.IsGetCard);
-            DataBaseFunction.AddSqlParameter(parameterList, "IsDeclare", prescriptionStatus.IsDeclare);
-            DataBaseFunction.AddSqlParameter(parameterList, "IsDeposit", prescriptionStatus.IsDeposit);
-            var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStatus]", parameterList);
-        }
-
-        public static void UpdatePrescriptionStatus(PrescriptionRefactoring.PrescriptionStatus prescriptionStatus, int id)
+        public static void UpdatePrescriptionStatus(PrescriptionStatus prescriptionStatus, int id)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PreId", id);
@@ -828,42 +546,6 @@ namespace His_Pos.NewClass.Prescription
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateXmlStatus", keyValues);
         }
-        public static Prescriptions GetCooperaPrescriptionsDataByCusIdNumber(string pharmcyMedicalNum, string cusIdnum) {
-            Dictionary<string, string> keyValues;
-            keyValues = new Dictionary<string, string> {
-                    {"pharmcyMedicalNum",pharmcyMedicalNum },
-                     {"cusIdnum",cusIdnum }
-            };
-            Prescriptions prescriptions = new Prescriptions();
-            HttpMethod httpMethod = new HttpMethod();
-            List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByMedicalNum", keyValues);
-            XmlSerializer ser = new XmlSerializer(typeof(OrthopedicsPrescription));
-            foreach (XmlDocument xmlDocument in table)
-            {
-                using (TextReader sr = new StringReader(xmlDocument.InnerXml))
-                {
-                    OrthopedicsPrescription response = (OrthopedicsPrescription)ser.Deserialize(sr);
-                    prescriptions.Add(new Prescription(response));
-                }
-            }
-            return prescriptions;
-        }
-        public static Prescriptions GetCooperaPrescriptionsDataByDate(string pharmcyMedicalNum, DateTime sDate, DateTime eDate) {
-            Dictionary<string, string> keyValues;
-            keyValues = new Dictionary<string, string> {
-                    {"pharmcyMedicalNum",pharmcyMedicalNum },
-                     {"sDate",sDate.ToString("yyyy-MM-dd") },
-                     {"eDate",eDate.ToString("yyyy-MM-dd") }
-                };
-            Prescriptions prescriptions = new Prescriptions();
-            HttpMethod httpMethod = new HttpMethod();
-            List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
-            foreach (XmlDocument xmlDocument in table)
-            {
-                prescriptions.Add(new Prescription(XmlService.Deserialize<OrthopedicsPrescription>(xmlDocument.InnerXml)));
-            }
-            return prescriptions;
-        }
         public static List<XmlDocument> GetOrthopedicsPrescriptions(DateTime sDate, DateTime eDate)
         {
             Dictionary<string, string> keyValues;
@@ -883,91 +565,13 @@ namespace His_Pos.NewClass.Prescription
                 {"pharmcyMedicalNum",ViewModelMainWindow.CurrentPharmacy.ID },
                 {"cusIdnum",idNumber }
             };
-            Prescriptions prescriptions = new Prescriptions();
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByMedicalNum", keyValues);
             return table;
         }
         #endregion
         #region TableSet
-        public static DataTable SetPrescriptionMaster(Prescription p) { 
-            DataTable prescriptionMasterTable = PrescriptionMasterTable();
-            DataRow newRow = prescriptionMasterTable.NewRow();
-            newRow["PreMas_ID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_CustomerID", p.Patient.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DeclareFileID", p.DeclareFileID);
-            newRow["PreMas_ImportFileID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
-            newRow["PreMas_SerialNumber"] = DBNull.Value;
-            newRow["PreMas_PharmacyID"] = ViewModelMainWindow.CurrentPharmacy.ID;
-            newRow["PreMas_MakeUpMarkID"] =  DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaymentCategoryID", p.Treatment.PaymentCategory?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalNumber", p.Treatment.MedicalNumber);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MainDiseaseID", p.Treatment.MainDisease?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_SecondDiseaseID", p.Treatment.SubDisease?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DivisionID", p.Treatment.Division?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_TreatmentDate", p.Treatment.TreatDate);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Treatment.Copayment?.Id);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", p.PrescriptionPoint.Deposit);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Treatment.Institution.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PrescriptionCaseID", p.Treatment.PrescriptionCase?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_AdjustDate", p.Treatment.AdjustDate);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_DoctorIDNumber", p.Treatment.Institution.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PharmacistIDNumber", p.Treatment.Pharmacist.IDNumber);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_SpecialTreatID", p.Treatment.SpecialTreat?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicineDays", p.MedicineDays);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_SpecialMaterialPoint", p.PrescriptionPoint.SpecialMaterialPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_TreatmentPoint", p.PrescriptionPoint.TreatmentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicinePoint", p.PrescriptionPoint.MedicinePoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicSequence", p.Treatment.ChronicSeq);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicTotal", p.Treatment.ChronicTotal);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceID);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
-                newRow["PreMas_DeclareContent"] = DBNull.Value;
-            else
-                newRow["PreMas_DeclareContent"] = new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsGetCard", p.PrescriptionStatus.IsGetCard);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", p.PrescriptionStatus.IsDeclare);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", p.PrescriptionStatus.IsDeposit);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", p.PrescriptionStatus.IsAdjust);
-            
-            prescriptionMasterTable.Rows.Add(newRow);
-            return prescriptionMasterTable; 
-        }
-        public static DataTable SetPrescriptionDetail(Prescription p, List<Pdata> prescriptionDetails) { //一般藥費
-            DataTable prescriptionDetailTable = PrescriptionDetailTable();
-            foreach (var pdata in prescriptionDetails)
-            {
-                DataRow newRow = prescriptionDetailTable.NewRow();
-                newRow["PreDet_PrescriptionID"] = DBNull.Value;
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicalOrderID", pdata.P1);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Percentage", pdata.P6);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_SerialNumber", pdata.P10);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Point", pdata.P9);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineID", pdata.P2);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Dosage", pdata.P3);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Usage", pdata.P4);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Position", pdata.P5);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_TotalAmount", pdata.P7);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_Price", pdata.P8);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", pdata.PaySelf);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
-                prescriptionDetailTable.Rows.Add(newRow);
-            }
-            return prescriptionDetailTable;
-        }
-
-        public static DataTable SetPrescriptionMaster(PrescriptionRefactoring.Prescription p)
+        public static DataTable SetPrescriptionMaster(Prescription p)
         {
             DataTable prescriptionMasterTable = PrescriptionMasterTable();
             DataRow newRow = prescriptionMasterTable.NewRow();
@@ -1112,51 +716,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float)); 
             return detailTable;
         }
-        public static DataTable SetReserveMaster(Prescription p) {
-            DataTable reserveMasterTable = ReserveMasterTable();
-            DataRow newRow = reserveMasterTable.NewRow();
-            newRow["ResMas_ID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_CustomerID", p.Patient.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_DeclareFileID", p.DeclareFileID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustCaseID", p.Treatment.AdjustCase.ID);
-            newRow["ResMas_SerialNumber"] = DBNull.Value;
-            newRow["ResMas_MakeUpMarkID"] = DBNull.Value;
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PaymentCategoryID", p.Treatment.PaymentCategory?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalNumber", p.Treatment.MedicalNumber); 
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MainDiseaseID", p.Treatment.MainDisease.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_SecondDiseaseID", p.Treatment.SubDisease.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_DivisionID", p.Treatment.Division.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_TreatmentDate", p.Treatment.TreatDate);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_CopaymentID", p.Treatment.Copayment.Id);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_InstitutionID", p.Treatment.Institution.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PrescriptionCaseID", p.Treatment.PrescriptionCase.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_AdjustDate", p.Treatment.AdjustDate);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_DoctorIDNumber", p.Treatment.Institution.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_PharmacistIDNumber", p.Treatment.Pharmacist.IDNumber);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_SpecialTreatID", p.Treatment.SpecialTreat?.ID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicineDays", p.MedicineDays);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_SpecialMaterialPoint", p.PrescriptionPoint.SpecialMaterialPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_TreatmentPoint", p.PrescriptionPoint.TreatmentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicinePoint", p.PrescriptionPoint.MedicinePoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_ChronicSequence", p.Treatment.ChronicSeq);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_ChronicTotal", p.Treatment.ChronicTotal);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServiceID", p.MedicalServiceID);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_OldMedicalNumber", p.Treatment.OriginalMedicalNumber);
-            if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
-                newRow["ResMas_DeclareContent"] = DBNull.Value;
-            else
-                newRow["ResMas_DeclareContent"] = new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(p.DeclareContent).InnerXml, XmlNodeType.Document, null));
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_IsSendToServer", p.PrescriptionStatus.IsSendToSingde);
-            DataBaseFunction.AddColumnValue(newRow, "ResMas_IsRegister", p.PrescriptionStatus.IsRegister);
-            reserveMasterTable.Rows.Add(newRow);
-            return reserveMasterTable;
-        }
 
-        public static DataTable SetReserveMaster(PrescriptionRefactoring.Prescription p)
+        public static DataTable SetReserveMaster(Prescription p)
         {
             DataTable reserveMasterTable = ReserveMasterTable();
             DataRow newRow = reserveMasterTable.NewRow();
@@ -1201,34 +762,7 @@ namespace His_Pos.NewClass.Prescription
             return reserveMasterTable;
         }
 
-        public static DataTable SetReserveionDetail(Prescription p, List<Pdata> prescriptionDetails) { //一般藥費
-            
-            DataTable reserveDetailTable = ReserveDetailTable();
-
-            foreach (var pdata in prescriptionDetails)
-            {
-                DataRow newRow = reserveDetailTable.NewRow();
-                newRow["ResDet_ReserveID"] = DBNull.Value;
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_MedicalOrderID", pdata.P1);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Percentage", pdata.P6);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_SerialNumber", pdata.P10);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Point", pdata.P9);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_MedicineID", pdata.P2);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Dosage", pdata.P3);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Usage", pdata.P4);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Position", pdata.P5);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_TotalAmount", pdata.P7);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_Price", pdata.P8);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_MedicineDays", pdata.P11);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_PaySelf", pdata.PaySelf);
-                DataBaseFunction.AddColumnValue(newRow, "ResDet_IsBuckle", pdata.IsBuckle);
-                
-                reserveDetailTable.Rows.Add(newRow); 
-            } 
-            return reserveDetailTable;
-        }
-
-        public static DataTable SetReserveionDetail(List<Pdata> prescriptionDetails)
+        public static DataTable SetReserveDetail(List<Pdata> prescriptionDetails)
         { //一般藥費
 
             DataTable reserveDetailTable = ReserveDetailTable();
@@ -1478,7 +1012,7 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionSameDeclare]", parameterList);
         }
 
-        public static DataTable CheckSameDeclarePrescription(PrescriptionRefactoring.Prescription current)
+        public static DataTable CheckSameDeclarePrescription(Prescription current)
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusID", current.Patient.ID);

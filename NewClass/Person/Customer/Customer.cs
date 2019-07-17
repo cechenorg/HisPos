@@ -6,7 +6,7 @@ using System.Windows.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
-using IcCard = His_Pos.NewClass.Prescription.IcCard;
+using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
@@ -75,9 +75,7 @@ namespace His_Pos.NewClass.Person.Customer
         {
             CustomerDb.Save(this);
         }
-        public void Delete()
-        {
-        }
+
         public static Customer GetCustomerByCusId(int cusId)
         {
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
@@ -167,15 +165,12 @@ namespace His_Pos.NewClass.Person.Customer
             CheckIDNumber()+
             CheckName();
         }
-        public int Count()
-        {
-            var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");
-            return count;
-        }
+
         public bool CheckData()
         {
             return (!string.IsNullOrEmpty(IDNumber) && IDNumber.Trim().Length == 10) && Birthday != null && !string.IsNullOrEmpty(Name);
         }
+
         public object Clone()
         {
             var c = new Customer();
@@ -227,12 +222,6 @@ namespace His_Pos.NewClass.Person.Customer
             Histories = new CustomerHistories(ID);
             HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
             HistoryCollectionView =HistoryCollectionViewSource.View;
-        }
-
-        public bool CheckIDNumberExist()
-        {
-            var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
-            return table.Rows[0].Field<int>("Count") > 0;
         }
 
         public void CheckPatientWithCard(Customer patientFromCard)

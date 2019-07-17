@@ -1,7 +1,6 @@
-﻿using His_Pos.NewClass.Product.Medicine;
-using System.Collections.ObjectModel;
-using MedicineOTC = His_Pos.NewClass.MedicineRefactoring.MedicineOTC;
-using Medicines = His_Pos.NewClass.MedicineRefactoring.Medicines;
+﻿using System.Collections.ObjectModel;
+using MedicineOTC = His_Pos.NewClass.Medicine.Base.MedicineOTC;
+using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 
 namespace His_Pos.NewClass.Product
 {

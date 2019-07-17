@@ -8,7 +8,6 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Search
