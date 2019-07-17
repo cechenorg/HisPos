@@ -882,7 +882,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckPatientMatch()
         {
-            if (!CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
+            if (currentCard.IsRead && !CurrentPrescription.Patient.IDNumber.Equals(currentCard.IDNumber))
             {
                 MessageWindow.ShowMessage("卡片資料與目前病患資料不符，請確認。", MessageType.ERROR);
                 IsBusy = false;
