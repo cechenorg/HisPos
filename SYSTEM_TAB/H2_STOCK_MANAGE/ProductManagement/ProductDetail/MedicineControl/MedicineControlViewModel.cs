@@ -382,7 +382,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void SetSingleModeMedTagReportViewer(ReportViewer rptViewer, MedicineTagStruct medicineTagStruct)
         {
-            var json = JsonConvert.SerializeObject(medicineTagStruct);
+            var medicineList = new Collection<MedicineTagStruct>();
+            medicineList.Add(medicineTagStruct);
+            var json = JsonConvert.SerializeObject(medicineList);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
             rptViewer.LocalReport.ReportPath = @"RDLC\MedicineTag.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
