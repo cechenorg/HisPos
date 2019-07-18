@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.PreviewMedicine;
 
@@ -21,7 +22,12 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         public override void Print()
         {
             var printPre = CreatePrescription();
-            printPre.PrintMedBagAndReceipt();
+            var service = PrescriptionService.CreateService(printPre);
+            service.CloneTempPre();
+            if (service.PrintConfirm())
+            {
+                service.Print(false);
+            }
         }
         public override Prescription CreatePrescription()
         {

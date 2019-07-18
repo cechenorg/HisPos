@@ -598,6 +598,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelService.cs" />
@@ -1825,19 +1826,22 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\ReserveSheet.rdlc">
+    <Content Include="RDLC\ReserveSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <None Include="RDLC\ReserveMedicinesDataSet.xsc">
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="RDLC\ReserveMedicinesDataSet.xsd">
+    <Content Include="RDLC\ReserveMedicinesDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ReserveMedicinesDataSet.Designer.cs</LastGenOutput>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="RDLC\ReserveMedicinesDataSet.xss">
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />

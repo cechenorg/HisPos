@@ -809,50 +809,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
         }
 
         #region PrintFunctions
-        public void PrintMedBagAndReceipt()
-        {
-            PrintConfirm();
-        }
-
-        private void PrintConfirm()
-        {
-            var medBagPrint = PrintMedBagConfirm();
-            if (!medBagPrint) return;
-            var printBySingleMode = new MedBagSelectionWindow();
-            var receiptPrint = PrintReceiptConfirm();
-            // ReSharper disable once PossibleInvalidOperationException
-            var singleMode = (bool)printBySingleMode.ShowDialog();
-            if (singleMode)
-                PrintMedBagSingleMode();
-            else
-            {
-                PrintMedBagMultiMode();
-            }
-            if (receiptPrint)
-                PrintReceipt();
-        }
-
-        private bool PrintMedBagConfirm()
-        {
-            var medBagPrint = false;
-            var medBagConfirm = new ConfirmWindow(Resources.藥袋列印確認, Resources.列印確認, true);
-            Debug.Assert(medBagConfirm.DialogResult != null, "medBagPrint.DialogResult != null");
-            if (medBagConfirm.DialogResult != null)
-                medBagPrint = (bool)medBagConfirm.DialogResult;
-            return medBagPrint;
-        }
-
-        private bool PrintReceiptConfirm()
-        {
-            var receiptPrint = false;
-            if (PrescriptionPoint.AmountsPay > 0)
-            {
-                var receiptResult = new ConfirmWindow(Resources.收據列印確認, Resources.列印確認, true);
-                if (receiptResult.DialogResult != null)
-                    receiptPrint = (bool)receiptResult.DialogResult;
-            }
-            return receiptPrint;
-        }
 
         public void PrintMedBagSingleMode()
         {
