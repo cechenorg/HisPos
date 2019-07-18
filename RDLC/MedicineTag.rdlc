@@ -140,7 +140,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>管制藥</Value>
+                                      <Value>管藥</Value>
                                       <Style>
                                         <FontFamily>微軟正黑體</FontFamily>
                                         <FontSize>16pt</FontSize>
@@ -155,7 +155,7 @@
                               <rd:DefaultName>Textbox16</rd:DefaultName>
                               <Top>3.31167cm</Top>
                               <Height>0.68833cm</Height>
-                              <Width>1.79567cm</Width>
+                              <Width>1.18713cm</Width>
                               <ZIndex>4</ZIndex>
                               <Visibility>
                                 <Hidden>=Fields!Control.Value</Hidden>
@@ -187,7 +187,7 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox16</rd:DefaultName>
                               <Top>3.31167cm</Top>
-                              <Left>1.79567cm</Left>
+                              <Left>1.97206cm</Left>
                               <Height>0.68833cm</Height>
                               <Width>1.21359cm</Width>
                               <ZIndex>5</ZIndex>
@@ -208,7 +208,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!EnglishName.Value</Value>
+                                      <Value>=Fields!ID.Value</Value>
                                       <Style>
                                         <FontFamily>Arial Narrow</FontFamily>
                                         <FontSize>15pt</FontSize>
@@ -223,12 +223,43 @@
                               </Paragraphs>
                               <rd:DefaultName>EnglishName</rd:DefaultName>
                               <Top>3.1cm</Top>
-                              <Left>3.04454cm</Left>
+                              <Left>3.18565cm</Left>
                               <Height>0.9cm</Height>
-                              <Width>3.75546cm</Width>
+                              <Width>3.61435cm</Width>
                               <ZIndex>6</ZIndex>
                               <Style>
                                 <Border />
+                                <VerticalAlign>Bottom</VerticalAlign>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox1">
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!ControlLevel.Value</Value>
+                                      <Style>
+                                        <FontFamily>微軟正黑體</FontFamily>
+                                        <FontSize>16pt</FontSize>
+                                        <FontWeight>Bold</FontWeight>
+                                        <Color>Red</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox1</rd:DefaultName>
+                              <Top>3.31167cm</Top>
+                              <Left>1.22241cm</Left>
+                              <Height>0.68833cm</Height>
+                              <Width>0.74965cm</Width>
+                              <ZIndex>7</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
                                 <VerticalAlign>Bottom</VerticalAlign>
                               </Style>
                             </Textbox>
@@ -338,6 +369,10 @@
         </Field>
         <Field Name="ID">
           <DataField>ID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ControlLevel">
+          <DataField>ControlLevel</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

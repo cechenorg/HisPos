@@ -20,6 +20,7 @@ using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Reporting.WinForms;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -364,7 +365,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if (!(bool)confirmWindow.DialogResult) return;
 
             //這邊寫列印的程式
-
             //Medicine.ID;
             //Medicine.EnglishName;
             //Medicine.ChineseName;
@@ -372,6 +372,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             //(MedicineDetail as ProductNHIDetail).ControlLevel;
             //(MedicineDetail as ProductNHIDetail).IsFrozen;
             //(MedicineDetail as ProductNHIDetail).Ingredient;
+        }
+
+        public void PrintMedBagMultiMode()
+        {
+            //var rptViewer = new ReportViewer();
+            //rptViewer.LocalReport.DataSources.Clear();
+            //SetMedicineTag(rptViewer);
+            //MainWindow.Instance.Dispatcher.Invoke(() =>
+            //{
+            //    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
+            //});
         }
         #endregion
 

@@ -12,7 +12,7 @@
   <xs:element name="MedicineTagDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MedicineTagDataSet" msprop:Generator_UserDSName="MedicineTagDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="MedicineTag" msprop:Generator_TableClassName="MedicineTagDataTable" msprop:Generator_TableVarName="tableMedicineTag" msprop:Generator_TablePropName="MedicineTag" msprop:Generator_RowDeletingName="MedicineTagRowDeleting" msprop:Generator_RowChangingName="MedicineTagRowChanging" msprop:Generator_RowEvHandlerName="MedicineTagRowChangeEventHandler" msprop:Generator_RowDeletedName="MedicineTagRowDeleted" msprop:Generator_UserTableName="MedicineTag" msprop:Generator_RowChangedName="MedicineTagRowChanged" msprop:Generator_RowEvArgName="MedicineTagRowChangeEvent" msprop:Generator_RowClassName="MedicineTagRow">
+        <xs:element name="MedicineTag" msprop:Generator_TableClassName="MedicineTagDataTable" msprop:Generator_TableVarName="tableMedicineTag" msprop:Generator_RowChangedName="MedicineTagRowChanged" msprop:Generator_TablePropName="MedicineTag" msprop:Generator_RowDeletingName="MedicineTagRowDeleting" msprop:Generator_RowChangingName="MedicineTagRowChanging" msprop:Generator_RowEvHandlerName="MedicineTagRowChangeEventHandler" msprop:Generator_RowDeletedName="MedicineTagRowDeleted" msprop:Generator_RowClassName="MedicineTagRow" msprop:Generator_UserTableName="MedicineTag" msprop:Generator_RowEvArgName="MedicineTagRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FirstLetter" msprop:Generator_ColumnVarNameInTable="columnFirstLetter" msprop:Generator_ColumnPropNameInRow="FirstLetter" msprop:Generator_ColumnPropNameInTable="FirstLetterColumn" msprop:Generator_UserColumnName="FirstLetter" type="xs:string" minOccurs="0" />
@@ -22,6 +22,7 @@
               <xs:element name="Frozen" msprop:Generator_ColumnVarNameInTable="columnFrozen" msprop:Generator_ColumnPropNameInRow="Frozen" msprop:Generator_ColumnPropNameInTable="FrozenColumn" msprop:Generator_UserColumnName="Frozen" type="xs:boolean" default="false" />
               <xs:element name="Control" msprop:Generator_ColumnVarNameInTable="columnControl" msprop:Generator_ColumnPropNameInRow="Control" msprop:Generator_ColumnPropNameInTable="ControlColumn" msprop:Generator_UserColumnName="Control" type="xs:boolean" default="false" />
               <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:string" minOccurs="0" />
+              <xs:element name="ControlLevel" msprop:Generator_ColumnVarNameInTable="columnControlLevel" msprop:Generator_ColumnPropNameInRow="ControlLevel" msprop:Generator_ColumnPropNameInTable="ControlLevelColumn" msprop:Generator_UserColumnName="ControlLevel" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

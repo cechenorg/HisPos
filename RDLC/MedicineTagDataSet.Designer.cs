@@ -293,6 +293,8 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnID;
             
+            private global::System.Data.DataColumn columnControlLevel;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public MedicineTagDataTable() {
@@ -384,6 +386,14 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ControlLevelColumn {
+                get {
+                    return this.columnControlLevel;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -419,7 +429,7 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool Frozen, bool Control, string ID) {
+            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool Frozen, bool Control, string ID, string ControlLevel) {
                 MedicineTagRow rowMedicineTagRow = ((MedicineTagRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FirstLetter,
@@ -428,7 +438,8 @@ namespace His_Pos.RDLC {
                         Ingredient,
                         Frozen,
                         Control,
-                        ID};
+                        ID,
+                        ControlLevel};
                 rowMedicineTagRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMedicineTagRow);
                 return rowMedicineTagRow;
@@ -458,6 +469,7 @@ namespace His_Pos.RDLC {
                 this.columnFrozen = base.Columns["Frozen"];
                 this.columnControl = base.Columns["Control"];
                 this.columnID = base.Columns["ID"];
+                this.columnControlLevel = base.Columns["ControlLevel"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -477,6 +489,8 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnControl);
                 this.columnID = new global::System.Data.DataColumn("ID", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnID);
+                this.columnControlLevel = new global::System.Data.DataColumn("ControlLevel", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnControlLevel);
                 this.columnFrozen.AllowDBNull = false;
                 this.columnFrozen.DefaultValue = ((bool)(false));
                 this.columnControl.AllowDBNull = false;
@@ -725,6 +739,22 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string ControlLevel {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicineTag.ControlLevelColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'MedicineTag\' 中資料行 \'ControlLevel\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicineTag.ControlLevelColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsFirstLetterNull() {
                 return this.IsNull(this.tableMedicineTag.FirstLetterColumn);
             }
@@ -781,6 +811,18 @@ namespace His_Pos.RDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetIDNull() {
                 this[this.tableMedicineTag.IDColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsControlLevelNull() {
+                return this.IsNull(this.tableMedicineTag.ControlLevelColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetControlLevelNull() {
+                this[this.tableMedicineTag.ControlLevelColumn] = global::System.Convert.DBNull;
             }
         }
         

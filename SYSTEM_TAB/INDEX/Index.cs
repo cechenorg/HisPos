@@ -25,7 +25,7 @@ using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
-    class Index : TabBase {
+    public class Index : TabBase {
         public override TabBase getTab() {
             return this;
         }

@@ -9,9 +9,6 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:Index/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
