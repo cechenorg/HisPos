@@ -129,9 +129,9 @@
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding CurrentStoreOrder.ProductCount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Rectangle Width="390"/>
-            <Button Width="150" Content="未退量補回" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReturnOrderRePurchaseCommand}"/>
-            <Button Width="150" Content="未退量作廢" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ToNextStatusCommand}"/>
+            <Rectangle Width="550"/>
+            <!--<Button Width="150" Content="未退量補回" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReturnOrderRePurchaseCommand}"/>-->
+            <Button Width="150" Content="完成退貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
