@@ -20,7 +20,6 @@ using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Prescription.IcData.Upload;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
