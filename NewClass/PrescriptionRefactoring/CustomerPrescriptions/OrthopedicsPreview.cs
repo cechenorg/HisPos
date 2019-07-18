@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions
         {
             var printPre = CreatePrescription();
             var service = PrescriptionService.CreateService(printPre);
+            service.CloneTempPre();
             if (service.PrintConfirm())
             {
                 service.Print(false);
