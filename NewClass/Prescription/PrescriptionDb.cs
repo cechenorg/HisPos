@@ -19,6 +19,7 @@ using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 // ReSharper disable TooManyArguments
 

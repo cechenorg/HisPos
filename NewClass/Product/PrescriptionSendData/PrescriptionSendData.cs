@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace His_Pos.NewClass.Product
+namespace His_Pos.NewClass.Product.PrescriptionSendData
 {
     public class PrescriptionSendData : ObservableObject
     {

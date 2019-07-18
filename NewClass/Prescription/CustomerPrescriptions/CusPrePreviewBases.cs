@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions

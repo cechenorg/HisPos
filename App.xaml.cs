@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
-using His_Pos.FunctionWindow;  
- 
+using His_Pos.FunctionWindow;
+
 namespace His_Pos
 {
     /// <summary>
@@ -36,7 +36,7 @@ namespace His_Pos
                 }
                 catch (Exception ex)
                 {
-                    MessageWindow.ShowMessage(ex.Message,Class.MessageType.ERROR);
+                    MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
                 }
                 Environment.Exit(0);
             }

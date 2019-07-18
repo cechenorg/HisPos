@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using His_Pos.NewClass.CooperativeInstitution;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.PreviewMedicine;
 using His_Pos.NewClass.Prescription.Service;
@@ -28,9 +28,9 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 service.Print(false);
             }
         }
-        public override NewClass.Prescription.Prescription CreatePrescription()
+        public override Prescription CreatePrescription()
         {
-            var pre = new NewClass.Prescription.Prescription(Content);
+            var pre = new Prescription(Content);
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(pre.SourceId);
             pre.CountPrescriptionPoint();
             pre.CountSelfPay();

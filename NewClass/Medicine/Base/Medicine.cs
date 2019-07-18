@@ -5,7 +5,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.Service;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
-using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 
 namespace His_Pos.NewClass.Medicine.Base
 {

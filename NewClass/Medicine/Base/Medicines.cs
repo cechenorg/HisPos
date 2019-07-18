@@ -10,9 +10,10 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Product;
 using His_Pos.Properties;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
-using OrthopedicsMedicine = His_Pos.NewClass.CooperativeInstitution.Item;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 // ReSharper disable TooManyDeclarations
 
 namespace His_Pos.NewClass.Medicine.Base

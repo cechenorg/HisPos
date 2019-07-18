@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 
 namespace His_Pos.NewClass.Medicine.PreviewMedicine
 {
@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Medicine.PreviewMedicine
 
         }
 
-        public PreviewMedicine(Item m) : base(m)
+        public PreviewMedicine(OrthopedicsMedicine m) : base(m)
         {
             Usage = m.Freq;
             Position = m.Way;

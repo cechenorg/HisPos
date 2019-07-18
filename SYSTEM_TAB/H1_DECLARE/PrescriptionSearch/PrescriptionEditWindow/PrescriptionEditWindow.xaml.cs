@@ -5,12 +5,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.Base;
-using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
     /// <summary>
     /// PrescriptionEditWindow.xaml 的互動邏輯
@@ -229,7 +228,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
-            if (!(sender is DataGridCell cell) || !(cell.DataContext is NewClass.MedicineRefactoring.Medicine med)) return;
+            if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
             ((PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Medicine.PreviewMedicine;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;

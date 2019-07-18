@@ -2,7 +2,7 @@
 using MedicineOTC = His_Pos.NewClass.Medicine.Base.MedicineOTC;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 
-namespace His_Pos.NewClass.Product
+namespace His_Pos.NewClass.Product.PrescriptionSendData
 {
     public class PrescriptionSendDatas : ObservableCollection<PrescriptionSendData>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Data;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Medicine.MedBag;
 
 namespace His_Pos.NewClass.Medicine.Base

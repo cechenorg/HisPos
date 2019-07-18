@@ -17,7 +17,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;

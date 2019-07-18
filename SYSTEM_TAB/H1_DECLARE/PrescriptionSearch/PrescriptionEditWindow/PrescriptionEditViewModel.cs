@@ -11,7 +11,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription;
@@ -32,13 +31,14 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using VM=His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ValueParameterNotUsed
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
     public class PrescriptionEditViewModel:ViewModelBase
     {

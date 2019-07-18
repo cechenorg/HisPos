@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
 
 namespace His_Pos.NewClass.Medicine.PreviewMedicine
 {

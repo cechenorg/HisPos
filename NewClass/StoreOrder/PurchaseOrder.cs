@@ -7,6 +7,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 

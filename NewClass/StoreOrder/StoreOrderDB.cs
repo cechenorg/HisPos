@@ -7,6 +7,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder

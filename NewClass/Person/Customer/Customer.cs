@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         private ICollectionView historyCollectionView;
 
-        public Customer(CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
+        public Customer(Cooperative.CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
         {
             IDNumber = customer.IdNumber;
             Name = customer.Name;

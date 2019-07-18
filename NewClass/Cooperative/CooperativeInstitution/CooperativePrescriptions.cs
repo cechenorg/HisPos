@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace His_Pos.NewClass.CooperativeInstitution
+namespace His_Pos.NewClass.Cooperative.CooperativeInstitution
 {
     public class CooperativePrescriptions:Collection<OrthopedicsPrescription>
     {
