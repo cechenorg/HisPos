@@ -87,16 +87,25 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SendReserveStoOrder() {
             MainWindow.ServerConnection.OpenConnection();
 
-            if (IndexReserveSelectedItem.PrepareMedType != ReserveSendType.AllPrepare ) {
-                if(IndexReserveSelectedItem.StoreOrderToSingde())
-                IndexReserveCollection.Remove(IndexReserveSelectedItem);
+            switch (IndexReserveSelectedItem.PrepareMedType) {
+                case ReserveSendType.AllPrepare:
+                    IndexReserveSelectedItem.IsSend = true;
+                    IndexReserveSelectedItem.SaveStatus();
+                    PrintPackage();
+                    IndexReserveCollection.Remove(IndexReserveSelectedItem);
+                    break;
+                case ReserveSendType.AllSend:
+                case ReserveSendType.CoPrepare:
+                    if (IndexReserveSelectedItem.StoreOrderToSingde()) {
+                        if(IndexReserveSelectedItem.PrepareMedType == ReserveSendType.CoPrepare)
+                            PrintPackage();
+                        IndexReserveCollection.Remove(IndexReserveSelectedItem);
+                    }
+                        
+                    break;
+
             }
-            else {
-                IndexReserveSelectedItem.IsSend = true;
-                IndexReserveSelectedItem.SaveStatus();
-                PrintPackage();
-                IndexReserveCollection.Remove(IndexReserveSelectedItem);
-            }
+             
             if (IndexReserveCollection.Count > 0)
                 IndexReserveSelectedItem = IndexReserveCollection[0];
             MainWindow.ServerConnection.CloseConnection(); 
@@ -163,8 +172,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection) {
                 MedicineIds.Add(med.ID);
             }
-            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-             
+            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds); 
             IndexReserveSelectedItem.GetIndexDetail();
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
             {

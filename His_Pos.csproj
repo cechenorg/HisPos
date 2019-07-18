@@ -1055,6 +1055,7 @@
       <DependentUpon>CustomerPrescriptionChangedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\IndexEnum.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>

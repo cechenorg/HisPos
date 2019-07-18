@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.MedicineRefactoring;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.INDEX;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
@@ -33,14 +34,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
                 case "N":
-                    PrepareMedStatus = "未處理";
-                    break;
-                case "D":
-                    PrepareMedStatus = "備藥";
+                    PrepareMedStatus = IndexPrepareMedType.Unprocess;
                     IsSend = true;
                     break;
+                case "D":
+                    PrepareMedStatus = IndexPrepareMedType.Prepare;
+                    break;
                 case "F":
-                    PrepareMedStatus = "不備藥";
+                    PrepareMedStatus = IndexPrepareMedType.UnPrepare;
                     break; 
             }
             switch (r.Field<string>("CallStatus"))
@@ -125,8 +126,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             }
         }
          
-        private string prepareMedStatus;
-        public string PrepareMedStatus
+        private IndexPrepareMedType prepareMedStatus;
+        public IndexPrepareMedType PrepareMedStatus
         {
             get => prepareMedStatus;
             set

@@ -1,4 +1,5 @@
 ﻿using His_Pos.Database;
+using His_Pos.SYSTEM_TAB.INDEX;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,17 +19,17 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[IndexReserveByDate]", parameterList);
         }
-        public static DataTable Save(int Id,string PhoneCallStatus, string prepareMedStatus,string stoOrdID)
+        public static DataTable Save(int Id,string PhoneCallStatus, IndexPrepareMedType prepareMedStatus,string stoOrdID)
         {
             string PrepareStatus = ""; 
             switch (prepareMedStatus) {
-                case "備藥":
+                case IndexPrepareMedType.Prepare:
                     PrepareStatus = "D";
                     break;
-                case "不備藥":
+                case IndexPrepareMedType.UnPrepare:
                     PrepareStatus = "F";
                     break;
-                case "未處理":
+                case IndexPrepareMedType.Unprocess:
                     PrepareStatus = "N";
                     break; 
             }

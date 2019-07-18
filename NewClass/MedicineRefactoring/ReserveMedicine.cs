@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         {
             ID = indexReserveDetail.ID;
             Name = Strings.StrConv(indexReserveDetail.FullName, VbStrConv.Narrow);  
-            Amount = indexReserveDetail.Amount;
+            Amount = indexReserveDetail.Amount - indexReserveDetail.SendAmount;
         }
         public string ID { get; set; }
         public string Name { get; set; }
