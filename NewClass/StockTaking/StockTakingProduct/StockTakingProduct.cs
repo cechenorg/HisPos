@@ -45,6 +45,9 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             get { return isUpdate; }
             set { Set(() => IsUpdate, ref isUpdate, value); }
         }
+        public double OnTheFrame { get; set; }
+        public bool IsFrozen { get; set; }
+        public byte? IsControl { get; set; }
         public Employee Employee { get; set; } 
         #endregion
 
@@ -52,10 +55,13 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         {
             Inventory = row.Field<double>("StoTakDet_OldValue");
             NewInventory = row.Field<double>("StoTakDet_NewValue");
+            OnTheFrame = row.Field<double>("OnTheFrame");
             Note = row.Field<string>("StoTakDet_Note");
+            IsFrozen = row.Field<bool>("Med_IsFrozen");
+            IsControl = row.Field<byte?>("Med_Control"); 
             IsUpdate = false;
         }
-        
+       
         #region ----- Define Functions -----
         #endregion
     }

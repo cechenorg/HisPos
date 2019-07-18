@@ -8,6 +8,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:local ="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
              xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
+             xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.DataContext>
@@ -160,14 +161,23 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FullName}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                <DataGridTemplateColumn MaxWidth="200" Header="商品名稱" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
+                                                <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="#FF424040" />
                                         </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
+                                    </DataGridTemplateColumn.CellStyle>
+                                </DataGridTemplateColumn>
                                 <DataGridTextColumn Width="80" Header="當下庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">

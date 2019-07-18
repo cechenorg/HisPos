@@ -10,6 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StockTaking.StockTakingPlan;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
 {
@@ -34,6 +35,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan
         private NewClass.StockTaking.StockTakingPlan.StockTakingPlan currentPlan;
         private StockTakingPlanProduct stockTakingPlanSelectProduct;
         private bool isDataChanged;
+        private WareHouses wareHouses;
+        public WareHouses WareHouses
+        {
+            get { return wareHouses; }
+            set { Set(() => WareHouses, ref wareHouses, value); }
+        }
 
         public bool IsDataChanged
         {
