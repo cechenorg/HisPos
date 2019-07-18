@@ -45,6 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand ShowConsumeRecordCommand { get; set; }
         public RelayCommand<string> FilterRecordCommand { get; set; }
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
+        public RelayCommand PrintMedicineLabelCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -357,6 +358,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             SearchProductRecordAction();
         }
+        private void PrintMedicineLabelAction()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認列印藥品標籤?", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            //這邊寫列印的程式
+
+            //Medicine.ID;
+            //Medicine.EnglishName;
+            //Medicine.ChineseName;
+            //(MedicineDetail as ProductNHIDetail).IsControl;
+            //(MedicineDetail as ProductNHIDetail).ControlLevel;
+            //(MedicineDetail as ProductNHIDetail).IsFrozen;
+            //(MedicineDetail as ProductNHIDetail).Ingredient;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -373,6 +390,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
             ScrapCommand = new RelayCommand(ScrapAction, IsScrapHasValue);
             RecycleCommand = new RelayCommand(RecycleAction, IsRecycleHasValue);
+            PrintMedicineLabelCommand = new RelayCommand(PrintMedicineLabelAction);
 
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
