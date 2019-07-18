@@ -299,7 +299,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>MedicineTags</DataSetName>
+        <DataSetName>MedicineTagDataSet</DataSetName>
         <Height>4cm</Height>
         <Width>6.8cm</Width>
         <Style>
@@ -337,7 +337,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="MedicineTags">
+    <DataSet Name="MedicineTagDataSet">
       <Query>
         <DataSourceName>MedicineTagDataSet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>

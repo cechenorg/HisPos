@@ -20,7 +20,10 @@ using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Medicine.MedBag;
+using His_Pos.NewClass.Prescription.Service;
 using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -365,6 +368,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if (!(bool)confirmWindow.DialogResult) return;
 
             MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).IsFrozen, (MedicineDetail as ProductNHIDetail).Ingredient);
+            PrintMedBagSingleMode(medicineTagStruct);
+        }
+        public void PrintMedBagSingleMode(MedicineTagStruct medicineTagStruct)
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            SetSingleModeMedTagReportViewer(rptViewer, medicineTagStruct);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedicineTag(rptViewer);
+            });
+        }
+        private void SetSingleModeMedTagReportViewer(ReportViewer rptViewer, MedicineTagStruct medicineTagStruct)
+        {
+            var json = JsonConvert.SerializeObject(medicineTagStruct);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedicineTag.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("MedicineTagDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
         }
         #endregion
 
