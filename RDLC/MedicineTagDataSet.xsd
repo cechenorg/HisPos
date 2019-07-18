@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MedicineTagDataSet" targetNamespace="http://tempuri.org/MedicineTagDataSet.xsd" xmlns:mstns="http://tempuri.org/MedicineTagDataSet.xsd" xmlns="http://tempuri.org/MedicineTagDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MedicineTagDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MedicineTagDataSet" msprop:Generator_UserDSName="MedicineTagDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MedicineTag" msprop:Generator_TableClassName="MedicineTagDataTable" msprop:Generator_TableVarName="tableMedicineTag" msprop:Generator_TablePropName="MedicineTag" msprop:Generator_RowDeletingName="MedicineTagRowDeleting" msprop:Generator_RowChangingName="MedicineTagRowChanging" msprop:Generator_RowEvHandlerName="MedicineTagRowChangeEventHandler" msprop:Generator_RowDeletedName="MedicineTagRowDeleted" msprop:Generator_UserTableName="MedicineTag" msprop:Generator_RowChangedName="MedicineTagRowChanged" msprop:Generator_RowEvArgName="MedicineTagRowChangeEvent" msprop:Generator_RowClassName="MedicineTagRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FirstLetter" msprop:Generator_ColumnVarNameInTable="columnFirstLetter" msprop:Generator_ColumnPropNameInRow="FirstLetter" msprop:Generator_ColumnPropNameInTable="FirstLetterColumn" msprop:Generator_UserColumnName="FirstLetter" type="xs:string" minOccurs="0" />
+              <xs:element name="EnglishName" msprop:Generator_ColumnVarNameInTable="columnEnglishName" msprop:Generator_ColumnPropNameInRow="EnglishName" msprop:Generator_ColumnPropNameInTable="EnglishNameColumn" msprop:Generator_UserColumnName="EnglishName" type="xs:string" minOccurs="0" />
+              <xs:element name="ChineseName" msprop:Generator_ColumnVarNameInTable="columnChineseName" msprop:Generator_ColumnPropNameInRow="ChineseName" msprop:Generator_ColumnPropNameInTable="ChineseNameColumn" msprop:Generator_UserColumnName="ChineseName" type="xs:string" minOccurs="0" />
+              <xs:element name="Ingredient" msprop:Generator_ColumnVarNameInTable="columnIngredient" msprop:Generator_ColumnPropNameInRow="Ingredient" msprop:Generator_ColumnPropNameInTable="IngredientColumn" msprop:Generator_UserColumnName="Ingredient" type="xs:string" minOccurs="0" />
+              <xs:element name="Frozen" msprop:Generator_ColumnVarNameInTable="columnFrozen" msprop:Generator_ColumnPropNameInRow="Frozen" msprop:Generator_ColumnPropNameInTable="FrozenColumn" msprop:Generator_UserColumnName="Frozen" type="xs:boolean" default="false" />
+              <xs:element name="Control" msprop:Generator_ColumnVarNameInTable="columnControl" msprop:Generator_ColumnPropNameInRow="Control" msprop:Generator_ColumnPropNameInTable="ControlColumn" msprop:Generator_UserColumnName="Control" type="xs:boolean" default="false" />
+              <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

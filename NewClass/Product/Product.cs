@@ -2,7 +2,7 @@
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.NewClass.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {

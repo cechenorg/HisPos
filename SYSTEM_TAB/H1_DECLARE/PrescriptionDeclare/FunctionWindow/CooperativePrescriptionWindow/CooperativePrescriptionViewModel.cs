@@ -6,9 +6,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.CustomerPrescriptions;
+using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.Service;
-using Prescription = His_Pos.NewClass.PrescriptionRefactoring.Prescription;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 // ReSharper disable InconsistentNaming
 
