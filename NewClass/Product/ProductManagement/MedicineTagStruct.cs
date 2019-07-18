@@ -10,6 +10,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         #region ----- Define Variables -----
         public string ID { get; set; }
+        public string FirstLetter { get{ return EnglishName.Length > 1 ? EnglishName.Substring(0,1) : ""; } }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
         public bool IsControl { get; set; }
@@ -22,7 +23,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             ID = iD;
             ChineseName = chineseName;
-            EnglishName = englishName;
+            EnglishName = englishName.Length > 1 ? englishName.Substring(1) : "";
             IsControl = isControl;
             ControlLevel = controlLevel;
             IsFrozen = isFrozen;
