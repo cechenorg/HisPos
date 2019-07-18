@@ -63,6 +63,7 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             SubDisease = new DiseaseCode();
             AdjustCase = new AdjustCase();
             PrescriptionCase = new PrescriptionCase();
+            PrescriptionPoint = new PrescriptionPoint();
             Copayment = new Copayment();
             PaymentCategory = new PaymentCategory();
             SpecialTreat = new SpecialTreat();
@@ -414,8 +415,6 @@ namespace His_Pos.NewClass.PrescriptionRefactoring
             get => copayment;
             set
             {
-                if (value.Id.Equals("I21") && PrescriptionPoint?.MedicinePoint > 100)
-                    value = VM.GetCopayment("I20");
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {

@@ -162,10 +162,10 @@
                             <Style TargetType="{x:Type ContentControl}">
                                 <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding DataContext.EditedPrescription.PrescriptionStatus.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
+                                    <DataTrigger Binding="{Binding DataContext.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
                                         <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding DataContext.EditedPrescription.PrescriptionStatus.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
+                                    <DataTrigger Binding="{Binding DataContext.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
                                         <Setter Property="ContentTemplate" Value="{StaticResource NoCardButtonsArea}" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -356,7 +356,7 @@
                               SelectedItem="{Binding EditedPrescription.Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding DataChanged}"/>
+                                    <command:EventToCommand Command="{Binding CopaymentSelectionChanged}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>

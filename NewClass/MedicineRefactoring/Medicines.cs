@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using His_Pos.Properties;
@@ -598,13 +599,14 @@ namespace His_Pos.NewClass.MedicineRefactoring
                 var buckleAmount = editMed.Sum(m => m.BuckleAmount);
                 buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
             }
+            var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var invTable = MedicineDb.GetInventoryByInvIDs(inventoryIDList);
+            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryList = new List<MedicineInventoryStruct>();
-            foreach (DataRow r in invTable.Rows)
+            foreach (var inv in inventories)
             {
-                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_Inventory")));
+                inventoryList.Add(new MedicineInventoryStruct(inv.InvID, inv.OnTheFrame));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)

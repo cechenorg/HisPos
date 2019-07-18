@@ -204,6 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand ChronicSequenceTextChanged { get; set; }
         public RelayCommand AdjustCaseSelectionChanged { get; set; }
+        public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
@@ -272,6 +273,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
             ChronicSequenceTextChanged = new RelayCommand(ChronicSequenceChangedAction);
             AdjustCaseSelectionChanged = new RelayCommand(AdjustCaseSelectionChangedAction);
+            CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
@@ -288,7 +290,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
         }
-
         #endregion
         #region CommandAction
         private void ScanPrescriptionQRCodeAction()
@@ -524,6 +525,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckDeclareStatus();
             if (CurrentPrescription.AdjustCase.CheckIsPrescribe())
                 CurrentPrescription.Medicines.SetToPaySelf();
+        }
+
+        private void CopaymentSelectionChangedAction()
+        {
+            if(CurrentPrescription.Copayment is null || CurrentPrescription.PrescriptionPoint is null) return;
+            switch (CurrentPrescription.Copayment.Id)
+            {
+                case "I21" when CurrentPrescription.PrescriptionPoint.MedicinePoint > 100:
+                    CurrentPrescription.Copayment = VM.GetCopayment("I20");
+                    break;
+                case "I20" when CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100:
+                    CurrentPrescription.Copayment = VM.GetCopayment("I21");
+                    break;
+            }
         }
 
         private void AddMedicineAction(string medicineID)

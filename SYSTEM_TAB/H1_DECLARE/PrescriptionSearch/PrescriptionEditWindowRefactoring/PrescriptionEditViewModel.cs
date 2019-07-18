@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
@@ -25,7 +24,6 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
@@ -125,10 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => IsPrescribe, ref isPrescribe, value);
             }
         }
-        public bool CanMakeUp
-        {
-            get => !EditedPrescription.PrescriptionStatus.IsGetCard && EditedPrescription.InsertTime != null;
-        }
+        public bool CanMakeUp => !EditedPrescription.PrescriptionStatus.IsGetCard && EditedPrescription.InsertTime != null;
         private BackgroundWorker worker;
         #endregion
         private IcCard currentCard;
@@ -161,6 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand<object> CheckClearDisease { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
+        public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand MedicinePriceChanged { get; set; }
         public RelayCommand RedoEdit { get; set; }
@@ -224,6 +220,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     editMed.BuckleAmount = m.BuckleAmount;
                 }
             }
+            RaisePropertyChanged("CanMakeUp");
         }
 
         private void InitialItemsSources()
@@ -249,6 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
+            CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
@@ -408,6 +406,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         break;
                 }
             }
+        }
+
+        private void CopaymentSelectionChangedAction()
+        {
+            if (EditedPrescription.Copayment is null || EditedPrescription.PrescriptionPoint is null) return;
+            switch (EditedPrescription.Copayment.Id)
+            {
+                case "I21" when EditedPrescription.PrescriptionPoint.MedicinePoint > 100:
+                    EditedPrescription.Copayment = VM.GetCopayment("I20");
+                    break;
+                case "I20" when EditedPrescription.PrescriptionPoint.MedicinePoint <= 100:
+                    EditedPrescription.Copayment = VM.GetCopayment("I21");
+                    break;
+            }
+            DataChangedAction();
         }
 
         private void AddMedicineAction(string medicineID)
@@ -604,6 +617,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (EditedPrescription.InsertTime is null ||
                 EditedPrescription.Type.Equals(PrescriptionSource.ChronicReserve)) return true;
             EditMedicines = new List<BuckleMedicineStruct>();
+            var originMedIDs = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            var editMedIDs = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            var medIDs = originMedIDs.Concat(editMedIDs).Distinct().ToList();
+            MainWindow.ServerConnection.OpenConnection();
+            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs);
+            MainWindow.ServerConnection.CloseConnection();
             var inventoryIDList = new List<int>();
             foreach (var originMed in OriginalPrescription.Medicines)
             {
@@ -619,18 +638,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (buckleDiff > 0)
                     EditMedicines.Add(new BuckleMedicineStruct(inv, buckleDiff));
             }
+            foreach (var editMed in EditedPrescription.Medicines)
+            {
+                if(editMed is MedicineVirtual) continue;
+                if(inventoryIDList.Count(i => i.Equals(editMed.InventoryID)) > 0) continue;
+                if(editMed.BuckleAmount > 0)
+                    EditMedicines.Add(new BuckleMedicineStruct(editMed.InventoryID, editMed.BuckleAmount));
+            }
             var editInvIDList = new List<int>();
             foreach (var edit in EditMedicines)
             {
                 editInvIDList.Add(edit.ID);
             }
-            MainWindow.ServerConnection.OpenConnection();
-            var invTable = MedicineDb.GetInventoryByInvIDs(editInvIDList);
-            MainWindow.ServerConnection.CloseConnection();
             var inventoryList = new List<MedicineInventoryStruct>();
-            foreach (DataRow r in invTable.Rows)
+            foreach (var e in editInvIDList)
             {
-                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_Inventory")));
+                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).OnTheFrame));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
