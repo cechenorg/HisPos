@@ -32,7 +32,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 case "處方調劑":
                     Type = ProductInventoryRecordType.Prescription;
                     break;
-                case "盤點":
+                case "庫存管理":
                     Type = ProductInventoryRecordType.StockTaking;
                     break;
                 default:

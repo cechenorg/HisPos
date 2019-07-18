@@ -71,7 +71,7 @@
             <Image Source="/Images/OrangeDot.png" Width="15"/>
             <RadioButton Content="交易" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="4"/>
             <Image Source="/Images/LightBlueDot.png" Width="15"/>
-            <RadioButton Content="盤點" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
+            <RadioButton Content="庫存管理" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
             <Image Source="/Images/GreenDot.png" Width="15"/>
         </StackPanel>
         <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollectionView, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False"
