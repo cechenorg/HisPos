@@ -412,8 +412,8 @@ namespace His_Pos.NewClass.Prescription
             get => copayment;
             set
             {
-                if (value.Id.Equals("I21") && PrescriptionPoint?.MedicinePoint > 100)
-                    value = VM.GetCopayment("I20");
+                if (value.Id.Equals("I20") && PrescriptionPoint.MedicinePoint <= 100) return;
+                if (value.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100) return;
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {
@@ -426,6 +426,20 @@ namespace His_Pos.NewClass.Prescription
                         PrescriptionPoint.CopaymentPointPayable = PrescriptionPoint.CopaymentPoint;
                     }
                 }
+            }
+        }
+
+        private void CheckCopaymentValid()
+        {
+            if (Copayment is null) return;
+            switch (Copayment.Id)
+            {
+                case "I21" when  PrescriptionPoint.MedicinePoint > 100:
+                    Copayment = VM.GetCopayment("I20");
+                    break;
+                case "I20" when PrescriptionPoint.MedicinePoint <= 100:
+                    Copayment = VM.GetCopayment("I21");
+                    break;
             }
         }
 

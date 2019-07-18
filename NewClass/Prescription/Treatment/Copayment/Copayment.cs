@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Copayment

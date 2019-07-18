@@ -582,6 +582,14 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="RDLC\MedicineTagDataSet.cs">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\MedicineTagDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RDLC\ReserveMedicinesDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1810,9 +1818,21 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\MedicineTag.rdlc" />
     <EmbeddedResource Include="RDLC\ReserveSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="RDLC\MedicineTagDataSet.xsc">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedicineTagDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MedicineTagDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedicineTagDataSet.xss">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </None>
     <None Include="RDLC\ReserveMedicinesDataSet.xsc">
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
     </None>
