@@ -364,25 +364,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             if (!(bool)confirmWindow.DialogResult) return;
 
-            //這邊寫列印的程式
-            //Medicine.ID;
-            //Medicine.EnglishName;
-            //Medicine.ChineseName;
-            //(MedicineDetail as ProductNHIDetail).IsControl;
-            //(MedicineDetail as ProductNHIDetail).ControlLevel;
-            //(MedicineDetail as ProductNHIDetail).IsFrozen;
-            //(MedicineDetail as ProductNHIDetail).Ingredient;
-        }
-
-        public void PrintMedBagMultiMode()
-        {
-            //var rptViewer = new ReportViewer();
-            //rptViewer.LocalReport.DataSources.Clear();
-            //SetMedicineTag(rptViewer);
-            //MainWindow.Instance.Dispatcher.Invoke(() =>
-            //{
-            //    ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
-            //});
+            MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).IsFrozen, (MedicineDetail as ProductNHIDetail).Ingredient);
         }
         #endregion
 
