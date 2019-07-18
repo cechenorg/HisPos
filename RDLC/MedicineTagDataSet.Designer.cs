@@ -287,9 +287,9 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnIngredient;
             
-            private global::System.Data.DataColumn columnFrozen;
+            private global::System.Data.DataColumn columnIsFrozen;
             
-            private global::System.Data.DataColumn columnControl;
+            private global::System.Data.DataColumn columnIsControl;
             
             private global::System.Data.DataColumn columnID;
             
@@ -362,17 +362,17 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FrozenColumn {
+            public global::System.Data.DataColumn IsFrozenColumn {
                 get {
-                    return this.columnFrozen;
+                    return this.columnIsFrozen;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ControlColumn {
+            public global::System.Data.DataColumn IsControlColumn {
                 get {
-                    return this.columnControl;
+                    return this.columnIsControl;
                 }
             }
             
@@ -429,15 +429,15 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool Frozen, bool Control, string ID, string ControlLevel) {
+            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool IsFrozen, bool IsControl, string ID, string ControlLevel) {
                 MedicineTagRow rowMedicineTagRow = ((MedicineTagRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FirstLetter,
                         EnglishName,
                         ChineseName,
                         Ingredient,
-                        Frozen,
-                        Control,
+                        IsFrozen,
+                        IsControl,
                         ID,
                         ControlLevel};
                 rowMedicineTagRow.ItemArray = columnValuesArray;
@@ -466,8 +466,8 @@ namespace His_Pos.RDLC {
                 this.columnEnglishName = base.Columns["EnglishName"];
                 this.columnChineseName = base.Columns["ChineseName"];
                 this.columnIngredient = base.Columns["Ingredient"];
-                this.columnFrozen = base.Columns["Frozen"];
-                this.columnControl = base.Columns["Control"];
+                this.columnIsFrozen = base.Columns["IsFrozen"];
+                this.columnIsControl = base.Columns["IsControl"];
                 this.columnID = base.Columns["ID"];
                 this.columnControlLevel = base.Columns["ControlLevel"];
             }
@@ -483,18 +483,18 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnChineseName);
                 this.columnIngredient = new global::System.Data.DataColumn("Ingredient", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIngredient);
-                this.columnFrozen = new global::System.Data.DataColumn("Frozen", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFrozen);
-                this.columnControl = new global::System.Data.DataColumn("Control", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnControl);
+                this.columnIsFrozen = new global::System.Data.DataColumn("IsFrozen", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsFrozen);
+                this.columnIsControl = new global::System.Data.DataColumn("IsControl", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsControl);
                 this.columnID = new global::System.Data.DataColumn("ID", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnID);
                 this.columnControlLevel = new global::System.Data.DataColumn("ControlLevel", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnControlLevel);
-                this.columnFrozen.AllowDBNull = false;
-                this.columnFrozen.DefaultValue = ((bool)(false));
-                this.columnControl.AllowDBNull = false;
-                this.columnControl.DefaultValue = ((bool)(false));
+                this.columnIsFrozen.AllowDBNull = false;
+                this.columnIsFrozen.DefaultValue = ((bool)(false));
+                this.columnIsControl.AllowDBNull = false;
+                this.columnIsControl.DefaultValue = ((bool)(false));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -701,23 +701,23 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Frozen {
+            public bool IsFrozen {
                 get {
-                    return ((bool)(this[this.tableMedicineTag.FrozenColumn]));
+                    return ((bool)(this[this.tableMedicineTag.IsFrozenColumn]));
                 }
                 set {
-                    this[this.tableMedicineTag.FrozenColumn] = value;
+                    this[this.tableMedicineTag.IsFrozenColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Control {
+            public bool IsControl {
                 get {
-                    return ((bool)(this[this.tableMedicineTag.ControlColumn]));
+                    return ((bool)(this[this.tableMedicineTag.IsControlColumn]));
                 }
                 set {
-                    this[this.tableMedicineTag.ControlColumn] = value;
+                    this[this.tableMedicineTag.IsControlColumn] = value;
                 }
             }
             
