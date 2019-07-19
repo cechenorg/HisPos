@@ -55,6 +55,7 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetPharmacyInfoByRemark", keyValues);
             return table[0];
+
         }
         internal static void UpdatePharmacyMedicalNum(string medicalNum) {
             Dictionary<string, string> keyValues;
