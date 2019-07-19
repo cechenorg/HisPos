@@ -1,5 +1,5 @@
-﻿using His_Pos.NewClass.CooperativeInstitution;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 
 namespace His_Pos.Class
 {

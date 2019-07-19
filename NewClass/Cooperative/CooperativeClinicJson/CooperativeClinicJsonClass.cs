@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace His_Pos.NewClass.CooperativeClinicJson {
+namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
     public class CooperativeClinicJsonClass {
 
         public CooperativeClinicJsonClass(DataRow r) {

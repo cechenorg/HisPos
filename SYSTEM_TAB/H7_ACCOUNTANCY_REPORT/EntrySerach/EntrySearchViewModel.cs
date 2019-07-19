@@ -112,7 +112,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalDailyStock.ReturnValue = DailyStockValueCollection.Sum(d => d.ReturnValue);
                 TotalDailyStock.MedUseValue = DailyStockValueCollection.Sum(d => d.MedUseValue);
                 TotalDailyStock.MinusStockAdjustValue = DailyStockValueCollection.Sum(d => d.MinusStockAdjustValue); 
-                TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue); 
+                TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
+                TotalDailyStock.TrashValue = DailyStockValueCollection.Sum(d => d.TrashValue);
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
        

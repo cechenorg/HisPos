@@ -2,7 +2,6 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
 using His_Pos.NewClass.Report;
 using His_Pos.NewClass.Report.CashDetailReport;
 using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
@@ -21,6 +20,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
+using His_Pos.NewClass.Prescription.Service;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -361,6 +363,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
             if (PrescriptionDetailMedicineRepotSelectItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { PrescriptionDetailMedicineRepotSelectItem.Id, "0" }, "ShowProductDetail"));
         } 
         private void PrescriptionDetailDoubleClickAction() {
             if (PrescriptionDetailReportSelectItem is null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
@@ -32,11 +33,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         #endregion
 
         private ProductManageStructs searchProductCollection;
+        private bool isBusy;
+        private string busyContent;
         private double totalStockValue;
         private WareHouse selectedWareHouse;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
+        public bool IsBusy
+        {
+            get => isBusy;
+            set { Set(() => IsBusy, ref isBusy, value); }
+        }
+        public string BusyContent
+        {
+            get => busyContent;
+            set { Set(() => BusyContent, ref busyContent, value); }
+        }
         public ProductManageStructs SearchProductCollection
         {
             get { return searchProductCollection; }
@@ -77,17 +90,32 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             if (!IsSearchConditionValid()) return;
 
-            MainWindow.ServerConnection.OpenConnection();
-            SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID);
-            DataTable dataTable = ProductDetailDB.GetTotalStockValue(SelectedWareHouse.ID);
-            MainWindow.ServerConnection.CloseConnection();
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
 
-            TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                IsBusy = true;
+                BusyContent = "查詢商品資料中";
 
-            if (SearchProductCollection.Count == 0)
-                MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
+                MainWindow.ServerConnection.OpenConnection();
+                SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID);
+                DataTable dataTable = ProductDetailDB.GetTotalStockValue(SelectedWareHouse.ID);
+                MainWindow.ServerConnection.CloseConnection();
+                
+                TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
+            };
 
-            SearchType = SearchConditionType;
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (SearchProductCollection.Count == 0)
+                    MessageWindow.ShowMessage("無符合條件之品項!", MessageType.ERROR);
+
+                SearchType = SearchConditionType;
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
         private void ChangeSearchTypeAction(string type)
         {

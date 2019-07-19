@@ -16,16 +16,16 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
 using His_Pos.NewClass.Product;
 using System.Linq;
-using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
-    class Index : TabBase {
+    public class Index : TabBase {
         public override TabBase getTab() {
             return this;
         }
@@ -168,7 +168,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => IndexReserveSelectedItem, ref indexReserveSelectedItem, value);
-                if (IndexReserveSelectedItem is null) return;
+                if (IndexReserveSelectedItem is null) return; 
                 IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
                 CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
             }
@@ -199,17 +199,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => PhoneCallStatusString, ref phoneCallStatusString, value);
             }
-        }
-        private List<string> prepareStatusString;
-        public List<string> PrepareStatusString
-        {
-            get => prepareStatusString;
-            set
-            {
-                Set(() => PrepareStatusString, ref prepareStatusString, value);
-            }
-        }
-         
+        } 
         private Customer customerData = new Customer();
         public Customer CustomerData
         {
@@ -218,6 +208,24 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => CustomerData, ref customerData, value);
                 IsDataChanged = false;
+            }
+        }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
             }
         }
         #endregion
@@ -287,7 +295,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void ShowCustomerPrescriptionChangedAction() {
             if (IndexReserveSelectedItem is null) return;
-            CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow customerPrescriptionChangedWindow = new CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow(IndexReserveSelectedItem.CusId); 
+            CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow customerPrescriptionChangedWindow = new CustomerPrescriptionChangedWindow.CustomerPrescriptionChangedWindow(IndexReserveSelectedItem.CusId);
+            ReserveSearchAction();
         }
         private void CustomerDataSaveAction() {
             CustomerData.Save();
@@ -305,8 +314,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDetailWindow.CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow.CustomerDetailWindow(IndexReserveSelectedItem.CusId); 
         }
         private void InitStatusstring() {
-            PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
-            PrepareStatusString = new List<string>() { "未處理", "備藥", "不備藥" };
+            PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" }; 
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -315,7 +323,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         private void MedPrepareChangedAction() {
             if (IndexReserveSelectedItem is null) return;
-            if(IndexReserveSelectedItem.PrepareMedStatus == "不備藥")
+            if(IndexReserveSelectedItem.PrepareMedStatus == IndexPrepareMedType.UnPrepare)
                 IndexReserveSelectedItem.SaveStatus(); 
         }
         
@@ -328,17 +336,28 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
         }
       
-        private void ReserveSendAction() { 
-            IndexReserves indexReserves = CaculateReserveSendAmount();
-            if (indexReserves.Count == 0) {
-                MessageWindow.ShowMessage("未有備藥傳送處方",MessageType.WARNING);
-                ReserveSearchAction();
-                return;
-            } 
-            ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
-           //ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
-           //Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, "", ""));
-           //ReserveSearchAction();
+        private void ReserveSendAction() {
+
+            IndexReserves indexReserves = new IndexReserves();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => {
+                BusyContent = "計算慢箋傳送量...";
+                indexReserves = CaculateReserveSendAmount();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if (indexReserves.Count == 0)
+                {
+                    MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.WARNING);
+                    ReserveSearchAction();
+                    return;
+                }
+                ReserveSendConfirmWindow.ReserveSendConfirmWindow reserveSendConfirmWindow = new ReserveSendConfirmWindow.ReserveSendConfirmWindow(indexReserves);
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            
         }
           
         private void IndexReserveSelectionChangedAction() {
@@ -358,9 +377,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = false; 
             e.Accepted = false; 
             IndexReserve indexitem = ((IndexReserve)e.Item);
-            if (indexitem.PrepareMedStatus == "不備藥" && IsShowUnPrepareReserve)
+            if (indexitem.PrepareMedStatus == IndexPrepareMedType.UnPrepare && IsShowUnPrepareReserve)
                 e.Accepted = true;
-            else if(indexitem.PrepareMedStatus == "備藥" && IsShowPrepareReserve)
+            else if(indexitem.PrepareMedStatus == IndexPrepareMedType.Prepare && IsShowPrepareReserve)
                 e.Accepted = true; 
             else if (indexitem.PhoneCallStatus == "F" && IsShowUnPhoneCall)
                 e.Accepted = true;
@@ -368,7 +387,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = true;
             else if(indexitem.IsExpensive && IsExpensive)
                 e.Accepted = true;
-            else if(!IsShowPrepareReserve && !IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == "未處理")
+            else if(!IsShowPrepareReserve && !IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == IndexPrepareMedType.Unprocess)
                 e.Accepted = true;
             
         }
@@ -377,56 +396,18 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             foreach (var r in ReserveCollectionView) {
                 indexReserves.Add((IndexReserve)r);
             }
-            List<string> MedicineIds = new List<string>();
-            foreach (var indexReserve in indexReserves) {
-                foreach (var med in indexReserve.IndexReserveDetailCollection) {
-                    MedicineIds.Add(med.ID);
-                }
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-
             for (int i = 0; i < indexReserves.Count; i++) {
-                if (indexReserves[i].PrepareMedStatus == "備藥" && !indexReserves[i].IsSend)
-                {
-                    indexReserves[i].GetIndexDetail();
-                    for (int j = 0; j < indexReserves[i].IndexReserveDetailCollection.Count; j++)
-                    {
-                        var pro = indexReserves[i].IndexReserveDetailCollection[j];
-                        if (InventoryCollection.Count(inv => inv.InvID.ToString() == pro.InvID) == 0)
-                            pro.SendAmount = Convert.ToInt32(pro.Amount);
-                        else
-                        {
-                            var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                            pro.SendAmount = target.OnTheFrame - pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
-                        } 
-                    }
-                }
-                else {
-                    if (indexReserves[i].PrepareMedStatus != "未處理")
+                if ( !((indexReserves[i].PrepareMedStatus == IndexPrepareMedType.UnPrepare || indexReserves[i].PrepareMedStatus == IndexPrepareMedType.Unprocess) && indexReserves[i].IsSend))
+                { 
+                    if (indexReserves[i].PrepareMedStatus == IndexPrepareMedType.Unprocess) {
+                        indexReserves[i].PrepareMedStatus = IndexPrepareMedType.UnPrepare;
                         indexReserves[i].SaveStatus();
+                    } 
                     indexReserves.Remove(indexReserves[i]);
                     i--;
                 } 
             }
             MainWindow.ServerConnection.CloseConnection();
-            for (int i = 0; i < indexReserves.Count; i++) {
-                int sameCount = 0;
-                int zeroSendCount = 0;
-                foreach (var s in indexReserves[i].IndexReserveDetailCollection) {
-                    if (s.SendAmount == s.Amount)
-                        sameCount++;
-                    else if (s.SendAmount == 0)
-                        zeroSendCount++; 
-                }
-                if (sameCount == 0 && zeroSendCount == indexReserves[i].IndexReserveDetailCollection.Count)
-                    indexReserves[i].PrepareMedType = ReserveSendType.AllPrepare;
-                else if(sameCount == indexReserves[i].IndexReserveDetailCollection.Count)
-                    indexReserves[i].PrepareMedType = ReserveSendType.AllSend;
-                else
-                    indexReserves[i].PrepareMedType = ReserveSendType.CoPrepare;
-            }
-
             return indexReserves;
         }
         private void ShowMedicineDetailAction() {

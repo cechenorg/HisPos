@@ -1,11 +1,21 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 
-namespace His_Pos.NewClass.Prescription {
+// ReSharper disable InconsistentNaming
+
+namespace His_Pos.NewClass.Prescription
+{
     public class PrescriptionPoint:ObservableObject
     {
-        public PrescriptionPoint() { }
-        public PrescriptionPoint(DataRow r) {
+        public PrescriptionPoint()
+        {
+        }
+
+        public PrescriptionPoint(DataRow r,PrescriptionType type)
+        {
             ApplyPoint = r.Field<int>("ApplyPoint");
             TotalPoint = r.Field<int>("TotalPoint");
             CopaymentPoint = r.Field<short>("CopaymentPoint");
@@ -13,7 +23,13 @@ namespace His_Pos.NewClass.Prescription {
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
             MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            if (type != PrescriptionType.ChronicReserve)
+            {
+                AmountSelfPay = r.Field<int>("PaySelfPoint");
+                Deposit = r.Field<int>("DepositPoint");
+            }
         }
+
         public int ApplyPoint { get; set; }//申請點數 
         private int totalPoint;//總點數
         public int TotalPoint
@@ -23,7 +39,16 @@ namespace His_Pos.NewClass.Prescription {
             {
                 Set(() => TotalPoint, ref totalPoint, value);
             }
-        } 
+        }
+        private int administrativeAssistanceCopaymentPoint;//行政協助部分負擔點數
+        public int AdministrativeAssistanceCopaymentPoint
+        {
+            get => administrativeAssistanceCopaymentPoint;
+            set
+            {
+                Set(() => AdministrativeAssistanceCopaymentPoint, ref administrativeAssistanceCopaymentPoint, value);
+            }
+        }
         private int copaymentPoint;//部分負擔點數
         public int CopaymentPoint
         {
@@ -32,8 +57,26 @@ namespace His_Pos.NewClass.Prescription {
             {
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
-        } 
-        public int SpecialMaterialPoint { get; set; } //特殊材料費用
+        }
+        private int copaymentPointPayable;//應付部分負擔
+        public int CopaymentPointPayable
+        {
+            get => copaymentPointPayable;
+            set
+            {
+                Set(() => CopaymentPointPayable, ref copaymentPointPayable, value);
+                CountAmountsPay();
+            }
+        }
+        private int specialMaterialPoint;//特殊材料費用
+        public int SpecialMaterialPoint
+        {
+            get => specialMaterialPoint;
+            set
+            {
+                Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
+            }
+        }
         public int TreatmentPoint { get; set; } //診療點數
         private int medicinePoint;//藥品點數
         public int MedicinePoint
@@ -113,18 +156,60 @@ namespace His_Pos.NewClass.Prescription {
             Deposit = MedicalServicePoint + MedicinePoint - CopaymentPoint;
         }
 
-        public void GetDeposit(int id)
-        {
-            Deposit = (int)PrescriptionDb.GetDeposit(id).Rows[0].Field<decimal>("Deposit");
-        }
-
         public void CountAmountsPay()
         {
-            AmountsPay = AmountSelfPay + CopaymentPoint;
+            AmountsPay = AmountSelfPay + CopaymentPointPayable;
+            ActualReceive = AmountsPay;
         }
-        public void GetAmountPaySelf(int id) { 
-            AmountSelfPay = (int)PrescriptionDb.GetAmountPaySelf(id).Rows[0].Field<decimal>("AmountPaySelf");
+
+        public void CountTotal()
+        {
+            TotalPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint + CopaymentPoint;
+        }
+
+        public void CountApply()
+        {
+            ApplyPoint = TotalPoint - CopaymentPoint;//計算申請點數
+        }
+
+        public int CopaymentValue
+        {
+            get
+            {
+                switch (MedicinePoint)
+                {
+                    case int n when n <= 100:
+                        return 0;
+                    case int n when n >= 101 && n <= 200:
+                        return 20;
+                    case int n when n >= 201 && n <= 300:
+                        return 40;
+                    case int n when n >= 301 && n <= 400:
+                        return 60;
+                    case int n when n >= 401 && n <= 500:
+                        return 80;
+                    case int n when n >= 501 && n <= 600:
+                        return 100;
+                    case int n when n >= 601 && n <= 700:
+                        return 120;
+                    case int n when n >= 701 && n <= 800:
+                        return 140;
+                    case int n when n >= 801 && n <= 900:
+                        return 160;
+                    case int n when n >= 901 && n <= 1000:
+                        return 180;
+                    default:
+                        return 200;
+                }
+            }
+        }
+
+        public void Count(List<Pdata> details)
+        {
+            MedicinePoint = details.Count(p => p.P1.Equals("1")) > 0 ? details.Where(p => p.P1.Equals("1")).Sum(p => int.Parse(p.P9)) : 0;
+            SpecialMaterialPoint = details.Count(p => p.P1.Equals("3")) > 0 ? details.Where(p => p.P1.Equals("3")).Sum(p => int.Parse(p.P9)) : 0;//計算特殊材料點數
+            ApplyPoint = MedicinePoint + MedicalServicePoint + SpecialMaterialPoint;//計算申請點數
+            TotalPoint = ApplyPoint + CopaymentPoint;
         }
     }
-    
 }

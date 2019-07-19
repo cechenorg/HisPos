@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 {
@@ -136,16 +137,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Dhead.D18 = $"{totalPoint:00000000}";
             Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
-        public Ddata(PrescriptionRefactoring.Prescription p, List<Pdata> details)
-        {
-            Dhead = new Dhead(p);
-            Dbody = new Dbody(p, details);
-            var totalPoint = int.Parse(Dbody.D31) + int.Parse(Dbody.D32) + int.Parse(Dbody.D33);
-            if (Dbody.D38 != null)
-                totalPoint += int.Parse(Dbody.D38);
-            Dhead.D18 = $"{totalPoint:00000000}";
-            Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
-        }
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
         [XmlElement(ElementName = "dbody")]
@@ -157,38 +148,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     {
         public Dhead() { }
         public Dhead(Prescription p)
-        {
-            var t = p.Treatment;
-            var point = p.PrescriptionPoint;
-            D1 = t.AdjustCase.ID;
-            D2 = string.Empty;
-            D3 = p.Patient.IDNumber;
-            D4 = string.Empty;
-            if(!D1.Equals("2") && !D1.Equals("D"))
-                D5 = t.PaymentCategory?.ID;
-            D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
-            D7 = t.MedicalNumber;
-            D8 = t.MainDisease.ID;
-            D9 = t.SubDisease?.ID;
-            D13 = t.Division?.ID;
-            D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate);
-            D15 = t.Copayment.Id;
-            D17 = $"{point.CopaymentPoint:0000}";
-            D20 = p.Patient.Name;
-            D21 = t.Institution.ID;
-            D22 = t.PrescriptionCase?.ID;
-            D23 = DateTimeExtensions.NullableDateToTWCalender(t.AdjustDate, false);
-            if (!t.CheckIsQuitSmoking() && !t.CheckIsHomeCare())
-            {
-                D24 = D21;
-            }
-            else
-            {
-                D24 = string.Empty;
-            }
-            D25 = t.Pharmacist.IDNumber;
-        }
-        public Dhead(PrescriptionRefactoring.Prescription p)
         {
             var point = p.PrescriptionPoint;
             D1 = p.AdjustCase.ID;
@@ -265,36 +224,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public Dbody() { }
         public Dbody(Prescription p, List<Pdata> details)
         {
-            var t = p.Treatment;
-            var point = p.PrescriptionPoint;
-            D26 = t.SpecialTreat?.ID;
-            D30 = p.Treatment.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2,'0');
-            D31 = $"{details.Where(d => d.P1.Equals("3")).Sum(d => int.Parse(d.P9)):0000000}";
-            D32 = "00000000";
-            D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
-            D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
-            D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
-            var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
-            if (medicalService != null)
-            {
-                D37 = p.MedicalServiceID;
-                D38 = medicalService.P9.PadLeft(8, '0');
-            }
-            D43 = t.OriginalMedicalNumber;
-            if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
-                D44 = p.Card.NewBornBirthday;
-            Pdata = new List<Pdata>();
-            foreach (var d in details)
-            {
-                var pdata = new Pdata();
-                pdata = d.DeepCloneViaJson();
-                if (pdata.P1.Equals("3") && pdata.P2.Length > 12)
-                    pdata.P2 = pdata.P2.Substring(0, 12);
-                Pdata.Add(pdata);
-            }
-        }
-        public Dbody(PrescriptionRefactoring.Prescription p, List<Pdata> details)
-        {
             var point = p.PrescriptionPoint;
             D26 = p.SpecialTreat?.ID;
             D30 = p.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2, '0');
@@ -352,7 +281,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     public class Pdata
     {
         public Pdata() { }
-        public Pdata(Medicine m,string serial)
+        public Pdata(Medicine.Base.Medicine m, string serial)
         {
             if (m is MedicineNHI && !m.PaySelf)
             {
@@ -389,81 +318,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
             }
-            else if(m is MedicineVirtual)
-            {
-                P1 = "G";
-                P2 = m.ID;
-                P7 = $"{0.00:00000.0}";
-                P8 = $"{0.00:0000000.00}";
-                P9 = $"{0.00:0000000}";
-                P10 = serial;
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
-                P13 = P12;
-                PaySelf = false;
-                IsBuckle = false;
-                BuckleAmount = 0;
-            }
-            else
-            {
-                P1 = "0";
-                P2 = m.ID;
-                P7 = m.Amount.ToString();
-                var dosage = m.Dosage is null ? string.Empty : m.Dosage.ToString();
-                P3 = dosage;
-                P4 = m.UsageName;
-                P5 = m.PositionID;
-                P8 = string.Empty;
-                P9 = $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
-                P10 = string.Empty;
-                var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
-                P11 = days;
-                P12 = string.Empty;
-                P13 = P12;
-                PaySelf = m.PaySelf;
-                IsBuckle = m.IsBuckle;
-            }
-            PaySelfValue = m.Price;
-            BuckleAmount = m.BuckleAmount;
-        }
-
-        public Pdata(MedicineRefactoring.Medicine m, string serial)
-        {
-            if (m is MedicineRefactoring.MedicineNHI && !m.PaySelf)
-            {
-                P1 = "1";
-                P2 = m.ID;
-                P7 = $"{m.Amount:00000.0}";
-                P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
-                P3 = $"{m.Dosage:0000.00}";
-                P4 = m.UsageName;
-                P5 = m.PositionID;
-                P10 = serial;
-                P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
-                P13 = P12;
-                PaySelf = false;
-                IsBuckle = m.IsBuckle;
-            }
-            else if (m is MedicineRefactoring.MedicineSpecialMaterial && !m.PaySelf)
-            {
-                P1 = "3";
-                P2 = m.ID;
-                P3 = $"{m.Dosage:0000.00}";
-                P4 = m.UsageName;
-                P5 = m.PositionID;
-                P7 = $"{m.Amount:00000.0}";
-                P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
-                P6 = "105";
-                P10 = serial;
-                P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
-                P13 = P12;
-                PaySelf = false;
-                IsBuckle = m.IsBuckle;
-            }
-            else if (m is MedicineRefactoring.MedicineVirtual)
+            else if (m is MedicineVirtual)
             {
                 P1 = "G";
                 P2 = m.ID;

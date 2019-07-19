@@ -296,19 +296,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\BuckleMedicineStruct.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\Medicine.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\MedicineInventoryStruct.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\MedicineNHI.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\MedicineOTC.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\Medicines.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\MedicineSpecialMaterial.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\MedicineVirtual.cs" />
+    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\BuckleMedicineStruct.cs" />
+    <Compile Include="NewClass\Medicine\Base\Medicine.cs" />
+    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStruct.cs" />
+    <Compile Include="NewClass\Medicine\Base\MedicineNHI.cs" />
+    <Compile Include="NewClass\Medicine\Base\MedicineOTC.cs" />
+    <Compile Include="NewClass\Medicine\Base\Medicines.cs" />
+    <Compile Include="NewClass\Medicine\Base\MedicineSpecialMaterial.cs" />
+    <Compile Include="NewClass\Medicine\Base\MedicineVirtual.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoint.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\ReserveMedicine.cs" />
-    <Compile Include="NewClass\MedicineRefactoring\ReserveMedicines.cs" />
+    <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
+    <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -360,7 +360,6 @@
     <Compile Include="NewClass\OfflineDataSet\Product.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChanged.cs" />
@@ -379,22 +378,22 @@
     <Compile Include="NewClass\Person\Genders.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\PharmacistScheduleDb.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\ChronicPreview.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\CusPrePreviewBases.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\CooperativePreview.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\CusPrePreviewBase.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\OrthopedicsPreview.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\CustomerPrescriptions\NoCardPreview.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Prescriptions.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionServiceProvider.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Service\NormalPrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Service\OrthopedicsPrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Prescription.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionPoint.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\Service\PrescriptionService.cs" />
-    <Compile Include="NewClass\PrescriptionRefactoring\PrescriptionStatus.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\ChronicPreview.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\CusPrePreviewBases.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\CooperativePreview.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\CusPrePreviewBase.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\OrthopedicsPreview.cs" />
+    <Compile Include="NewClass\Prescription\CustomerPrescriptions\NoCardPreview.cs" />
+    <Compile Include="NewClass\Prescription\Prescriptions.cs" />
+    <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
+    <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
+    <Compile Include="NewClass\Prescription\Service\PrescriptionServiceProvider.cs" />
+    <Compile Include="NewClass\Prescription\Service\NormalPrescriptionService.cs" />
+    <Compile Include="NewClass\Prescription\Service\OrthopedicsPrescriptionService.cs" />
+    <Compile Include="NewClass\Prescription\Prescription.cs" />
+    <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Prescription\Service\PrescriptionService.cs" />
+    <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescription.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionDb.cs" />
     <Compile Include="NewClass\Prescription\CustomerDetailPrescription\CustomerDetailPrescriptionMedicine\CustomerDetailPrescriptionMedicine.cs" />
@@ -412,8 +411,8 @@
     <Compile Include="NewClass\Prescription\Declare\DeclarePreview\DeclarePreviewOfMonth.cs" />
     <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescription.cs" />
     <Compile Include="NewClass\Prescription\DuplicatePrescription\DuplicatePrescriptions.cs" />
-    <Compile Include="NewClass\Prescription\IcData\TreatRecords.cs" />
-    <Compile Include="NewClass\Prescription\IcData\Upload\UploadFunctions.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\TreatRecords.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\Upload\UploadFunctions.cs" />
     <Compile Include="NewClass\Prescription\ImportDeclareXml\ImportDeclareXml.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserve.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDb.cs" />
@@ -421,10 +420,8 @@
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetailDb.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserveDetail\IndexReserveDetails.cs" />
     <Compile Include="NewClass\Prescription\IndexReserve\IndexReserves.cs" />
-    <Compile Include="NewClass\Prescription\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\Declare\DeclareFile\DeclareFile.cs" />
-    <Compile Include="NewClass\Prescription\IcCard.cs" />
-    <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\IcCard.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitution.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\PrescriptionSearchInstitutions.cs" />
     <Compile Include="NewClass\ProductType\ProductType.cs" />
@@ -438,31 +435,27 @@
     <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
     <Compile Include="NewClass\Product\Inventory.cs" />
     <Compile Include="NewClass\Product\Inventorys.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetail.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetailDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\ControlMedicineDetail\ControlMedicineDetails.cs" />
-    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
-    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDeclare\ControlMedicineDeclareDb.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDeclare\ControlMedicineDeclares.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDetail\ControlMedicineDetail.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDetail\ControlMedicineDetailDb.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineDetail\ControlMedicineDetails.cs" />
+    <Compile Include="NewClass\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicine.cs" />
+    <Compile Include="NewClass\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicineDb.cs" />
+    <Compile Include="NewClass\Medicine\CooperativeAdjustMedicine\CooperativeAdjustMedicines.cs" />
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreview.cs" />
     <Compile Include="NewClass\Prescription\Search\PrescriptionSearchPreviews.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicines.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetItem.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetDb.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetItems.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSetMode.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSet.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSet\MedicineSets.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineSpecialMaterial.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineVirtual.cs" />
-    <Compile Include="NewClass\Product\Medicine\Position\Positions.cs" />
-    <Compile Include="NewClass\Prescription\Prescription.cs" />
+    <Compile Include="NewClass\Medicine\MedBag\MedBagMedicines.cs" />
+    <Compile Include="NewClass\Medicine\MedicineDb.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSetItem.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSetDb.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSetItems.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSetMode.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSet.cs" />
+    <Compile Include="NewClass\Medicine\MedicineSet\MedicineSets.cs" />
+    <Compile Include="NewClass\Medicine\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
-    <Compile Include="NewClass\Prescription\Prescriptions.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCases.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\CopaymentDb.cs" />
@@ -486,14 +479,9 @@
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreat.cs" />
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreatDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreats.cs" />
-    <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
-    <Compile Include="NewClass\Product\Medicine\PreviewMedicine\PreviewMedicine.cs" />
-    <Compile Include="NewClass\Product\Medicine\PreviewMedicine\PreviewMedicines.cs" />
-    <Compile Include="NewClass\Product\Medicine\Usage\Usages.cs" />
-    <Compile Include="NewClass\Product\Medicine\Medicine.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineNHI.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedicineOTC.cs" />
-    <Compile Include="NewClass\Product\Medicine\Medicines.cs" />
+    <Compile Include="NewClass\Medicine\PreviewMedicine\PreviewMedicine.cs" />
+    <Compile Include="NewClass\Medicine\PreviewMedicine\PreviewMedicines.cs" />
+    <Compile Include="NewClass\Medicine\Usage\Usages.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendData.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDataDb.cs" />
     <Compile Include="NewClass\Product\PrescriptionSendData\PrescriptionSendDatas.cs" />
@@ -504,6 +492,7 @@
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\MedicineTagStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecord.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecords.cs" />
@@ -594,6 +583,14 @@
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
+    <Compile Include="RDLC\MedicineTagDataSet.cs">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\MedicineTagDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RDLC\ReserveMedicinesDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -614,9 +611,9 @@
     <Compile Include="Class\Authority\Authority.cs" />
     <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="Class\CooperativeClinicJson.cs" />
-    <Compile Include="NewClass\Prescription\IcData\Upload\ConvertData.cs" />
-    <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadService.cs" />
-    <Compile Include="NewClass\Prescription\IcData\Upload\IcDataUploadDb.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\Upload\ConvertData.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadDb.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -640,7 +637,6 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml.cs">
       <DependentUpon>DuplicatePrescriptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedicineDataGrid.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativePrescriptionWindow\CooperativePrescriptionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml.cs">
       <DependentUpon>CooperativePrescriptionWindow.xaml</DependentUpon>
@@ -668,8 +664,6 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativeRemarkInsertWindow\CooperativeRemarkInsertWindow.xaml.cs">
       <DependentUpon>CooperativeRemarkInsertWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistory.cs" />
-    <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistories.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\InstitutionSelectionWindow\InstitutionSelectionWindow.xaml.cs">
       <DependentUpon>InstitutionSelectionWindow.xaml</DependentUpon>
@@ -694,12 +688,12 @@
     <Compile Include="Class\Location\LocationDetail.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
-    <Compile Include="NewClass\Product\Medicine\Position\Position.cs" />
-    <Compile Include="NewClass\Product\Medicine\Position\PositionDb.cs" />
+    <Compile Include="NewClass\Medicine\Position\Position.cs" />
+    <Compile Include="NewClass\Medicine\Position\PositionDb.cs" />
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
-    <Compile Include="NewClass\Product\Medicine\MedBag\MedBagMedicine.cs" />
+    <Compile Include="NewClass\Medicine\MedBag\MedBagMedicine.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
     <Compile Include="Class\Product\ProductGroup.cs" />
@@ -716,8 +710,8 @@
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
-    <Compile Include="NewClass\Product\Medicine\Usage\Usage.cs" />
-    <Compile Include="NewClass\Product\Medicine\Usage\UsageDb.cs" />
+    <Compile Include="NewClass\Medicine\Usage\Usage.cs" />
+    <Compile Include="NewClass\Medicine\Usage\UsageDb.cs" />
     <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Service\Converters.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
@@ -728,14 +722,14 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml.cs">
       <DependentUpon>AdjustedInstitutionSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml.cs">
       <DependentUpon>PrescriptionEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml.cs">
       <DependentUpon>PrescriptionRecordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\ReservePrescriptionWindow.xaml.cs">
       <DependentUpon>ReservePrescriptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchView.xaml.cs">
@@ -1055,6 +1049,7 @@
       <DependentUpon>CustomerPrescriptionChangedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\IndexEnum.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>
@@ -1151,10 +1146,10 @@
       <DependentUpon>ConfirmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <Compile Include="NewClass\Prescription\IcData\BasicData.cs" />
-    <Compile Include="NewClass\Prescription\IcData\IcPrescriptData.cs" />
-    <Compile Include="NewClass\Prescription\IcData\SeqNumber.cs" />
-    <Compile Include="NewClass\Prescription\IcData\TreatmentDataNoNeedHPC.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\BasicData.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\IcPrescriptData.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\SeqNumber.cs" />
+    <Compile Include="NewClass\Prescription\ICCard\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveEnum.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\ReserveSendConfirmWindow\ReserveSendConfirmViewModel.cs" />
@@ -1301,15 +1296,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionEditWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\PrescriptionRecordWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\PrescriptionRecordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindowRefactoring\ReservePrescriptionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionEditWindow\ReservePrescriptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1826,9 +1821,23 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="RDLC\ReserveSheet.rdlc">
+    <EmbeddedResource Include="RDLC\MedicineTag.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\ReserveSheet.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="RDLC\MedicineTagDataSet.xsc">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedicineTagDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MedicineTagDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedicineTagDataSet.xss">
+      <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
+    </None>
     <None Include="RDLC\ReserveMedicinesDataSet.xsc">
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1937,6 +1946,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewClass\Product\Medicine\ControlMedicineDeclare\" />
+    <Folder Include="NewClass\Product\Medicine\ControlMedicineDetail\" />
+    <Folder Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\" />
+    <Folder Include="NewClass\Product\Medicine\MedBag\" />
+    <Folder Include="NewClass\Product\Medicine\MedicineSet\" />
+    <Folder Include="NewClass\Product\Medicine\Position\" />
+    <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
+    <Folder Include="NewClass\Product\Medicine\Usage\" />
     <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>

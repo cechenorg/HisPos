@@ -13,6 +13,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="100"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="健保價" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
@@ -25,7 +26,7 @@
             <Label Content="劑型" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <Label Content="{Binding MedicineDetail.Form}" Foreground="{StaticResource ForeGround}" Width="130" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <Label Content="{Binding MedicineDetail.SC}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="ATC" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="30,0,0,0"/>
+            <Label Content="ATC" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="35,0,0,0"/>
             <Label Content="{Binding MedicineDetail.ATC}" Foreground="{StaticResource ForeGround}" Width="100" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="0,0,0,0"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
@@ -57,5 +58,6 @@
                 <TextBlock Text="{Binding MedicineDetail.Ingredient}" Foreground="{StaticResource ForeGround}" Width="400" TextWrapping="Wrap" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </ScrollViewer>
         </StackPanel>
+        <Button Content="列印藥品標籤" BorderThickness="0" Grid.Row="5" Foreground="{StaticResource ForeGround}" FontSize="15" Width="455" FontFamily="Segoe UI Semi" Height="36" Background="{StaticResource Shadow}" Command="{Binding PrintMedicineLabelCommand}"/>
     </Grid>
 </UserControl>

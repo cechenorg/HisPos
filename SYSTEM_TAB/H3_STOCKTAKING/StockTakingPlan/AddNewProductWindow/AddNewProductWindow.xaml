@@ -31,6 +31,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <Button Width="120" Command="{Binding GetControlMedicinesCommand}" Margin="10,0,0,0" Content="管制藥品" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
                 <Button Width="120" Command="{Binding GetMonthMedicinesCommand}" Margin="10,0,0,0" Content="月耗用量" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <Button Width="120" Command="{Binding GetOnTheFrameMedicinesCommand}" Margin="10,0,0,0" Content="架上量" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="商品名稱" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" BorderBrush="Black"/>

@@ -1,11 +1,11 @@
 ﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using His_Pos.NewClass.Cooperative.CooperativeClinicJson;
 
 
 namespace His_Pos.NewClass
@@ -14,7 +14,7 @@ namespace His_Pos.NewClass
     {
 
         internal static void SendToCooperClinic() {
-            CooperativeClinicJson.CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson.CooperativeClinicJson();
+            CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson();
             string json = JsonConvert.SerializeObject(cooperativeClinicJson);
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
@@ -67,7 +67,7 @@ namespace His_Pos.NewClass
         }
         internal static bool SendToCooperClinicLoop100()
         {
-            CooperativeClinicJson.CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson.CooperativeClinicJson("Loop");
+            CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson("Loop");
             string json = JsonConvert.SerializeObject(cooperativeClinicJson);
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {

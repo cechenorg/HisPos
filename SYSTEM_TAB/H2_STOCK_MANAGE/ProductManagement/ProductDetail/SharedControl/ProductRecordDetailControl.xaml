@@ -71,7 +71,7 @@
             <Image Source="/Images/OrangeDot.png" Width="15"/>
             <RadioButton Content="交易" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="4"/>
             <Image Source="/Images/LightBlueDot.png" Width="15"/>
-            <RadioButton Content="盤點" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
+            <RadioButton Content="庫存管理" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
             <Image Source="/Images/GreenDot.png" Width="15"/>
         </StackPanel>
         <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding InventoryRecordCollectionView, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False"
@@ -181,11 +181,11 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
             <Label Content="期間進退貨" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding InventoryRecordCollection.RangePurchaseReturnAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangePurchaseReturnAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"/>
             <Label Content="期間耗用" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding InventoryRecordCollection.RangePrescriptionAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="期間盤點" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding InventoryRecordCollection.RangeStockTakingAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangePrescriptionAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"/>
+            <Label Content="期間庫存管理" FontSize="20" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding InventoryRecordCollection.RangeStockTakingAmount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
     </Grid>
 </UserControl>

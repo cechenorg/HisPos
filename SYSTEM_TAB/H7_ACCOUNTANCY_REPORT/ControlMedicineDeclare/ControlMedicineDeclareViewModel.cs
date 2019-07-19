@@ -1,11 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Product.Medicine.ControlMedicineDeclare;
-using His_Pos.NewClass.Product.Medicine.ControlMedicineDetail;
 using His_Pos.NewClass.WareHouse;
 using System;
 using System.ComponentModel;
 using System.Windows.Data;
+using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
+using His_Pos.NewClass.Medicine.ControlMedicineDetail;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 {
@@ -65,8 +65,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 Set(() => ControlMedicineDeclares, ref controlMedicineDeclares, value);
             }
         }
-        private NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare  selectItem;
-        public NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare SelectItem
+        private NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare  selectItem;
+        public NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare SelectItem
         {
             get { return selectItem; }
             set
@@ -147,9 +147,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         }
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
-            if (!(e.Item is NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare src))
+            if (!(e.Item is NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare src))
                 e.Accepted = false;
-            NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = ((NewClass.Product.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item);
+            NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = ((NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item);
             e.Accepted = controlMedicineDeclare.WareHouse.ID == SelectedWareHouse.ID; 
         }
     }

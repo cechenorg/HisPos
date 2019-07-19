@@ -2,73 +2,38 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
-using System.Xml.Linq;
-using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.Service;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescriptions:ObservableCollection<Prescription>
+    public class Prescriptions : ObservableCollection<Prescription>
     {
-        public Prescriptions()
+        public Prescriptions() { }
+
+
+        private void GetOrthopedics(DateTime sDate, DateTime eDate)
         {
+            var table = PrescriptionDb.GetOrthopedicsPrescriptions(sDate, eDate);
+            foreach (var xmlDocument in table)
+            {
+                Add(new NewClass.Prescription.Prescription(XmlService.Deserialize<OrthopedicsPrescription>(xmlDocument.InnerXml)));
+            }
         }
 
-        public void GetCooperativePrescriptions(string pharmacyID, DateTime sDate, DateTime eDate)
+        public void GetCooperative(DateTime sDate, DateTime eDate)
         {
-            Prescriptions prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate(pharmacyID, sDate, eDate);
-            foreach (var p in prescriptions)
-            {
-                Add(p);
-            }
-           
-        }
-        public void GetXmlOfPrescriptions  (DateTime sDate, DateTime eDate) {
-            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByDate( sDate, eDate);
+            NewFunction.GetXmlFiles();
+            GetOrthopedics(sDate, eDate);
+            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByDate(sDate, eDate);
             foreach (DataRow r in table.Rows)
             {
-                XmlDocument xDocument = new XmlDocument();
+                var xDocument = new XmlDocument();
                 xDocument.LoadXml(r["CooCli_XML"].ToString());
-               
-                Add(new Prescription(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml)
-                    ,r.Field<DateTime>("CooCli_InsertTime"),r.Field<int>("CooCli_ID").ToString(),r.Field<bool>("CooCli_IsRead")));
-            }
-
-        }
-        
-        public  void GetPrescriptionsByCusIdNumber(string cusIDNumber) //取得處方
-        {
-            var table = PrescriptionDb.GetPrescriptionsByCusIdNumber(cusIDNumber);
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Prescription(r, PrescriptionSource.Normal));
+                Add(new NewClass.Prescription.Prescription(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
             }
         }
-        
-        public void GetCooperativePrescriptionsByCusIDNumber(string cusIDNum) //取得合作診所
-        {
-            Prescriptions table = PrescriptionDb.GetCooperaPrescriptionsDataByCusIdNumber(ViewModelMainWindow.CurrentPharmacy.ID, cusIDNum);
-            foreach (var r in table)
-            {
-                Add(r);
-            }
-        }
-        public void GetXmlOfPrescriptionsByCusIDNumber(string cusIDNum) //取得合作XML格式處方  
-        {
-            DataTable table = PrescriptionDb.GetXmlOfPrescriptionsByCusIDNumber(cusIDNum);
-            foreach (DataRow r in table.Rows)
-            {
-                XmlDocument xDocument = new XmlDocument();
-                xDocument.LoadXml(r["CooCli_XML"].ToString());
-
-                Add(new Prescription(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml)
-                    , r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
-            }
-        }
-        public static void PredictThreeMonthPrescription() {
-            PrescriptionDb.PredictThreeMonthPrescription();
-        }
-         
     }
 }

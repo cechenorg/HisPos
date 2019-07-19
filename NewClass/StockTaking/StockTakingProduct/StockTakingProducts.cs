@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
 
 namespace His_Pos.NewClass.StockTaking.StockTakingProduct
 {
