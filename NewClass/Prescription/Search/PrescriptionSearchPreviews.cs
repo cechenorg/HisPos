@@ -5,7 +5,6 @@ using System.Data;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.PrescriptionRefactoring;
 
 namespace His_Pos.NewClass.Prescription.Search
 {

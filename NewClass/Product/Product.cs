@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.CooperativeInstitution;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
+using His_Pos.NewClass.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Product
             EnglishName = m.EnglishName;
         }
 
-        protected Product(Item m)
+        protected Product(OrthopedicsMedicine m)
         {
             ID = m.Id;
             ChineseName = m.Desc;

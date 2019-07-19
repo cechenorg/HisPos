@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Database;
+using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
 
 namespace His_Pos.NewClass.StockTaking

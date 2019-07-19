@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 
-namespace His_Pos.SYSTEM_TAB.OfflineOperation
+namespace His_Pos.ChromeTabViewModel
 {
     public class OfflineOperationWindowViewModel : ViewModelBase
     {

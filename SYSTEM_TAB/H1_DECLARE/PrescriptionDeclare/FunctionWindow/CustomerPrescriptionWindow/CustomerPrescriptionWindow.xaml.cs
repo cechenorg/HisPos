@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ICCard;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow
 {

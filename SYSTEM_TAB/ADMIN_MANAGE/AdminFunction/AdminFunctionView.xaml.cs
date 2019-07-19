@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
-using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
-using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
-using His_Pos.NewClass.Prescription.IcData.Upload;
-using His_Pos.NewClass.Prescription.Search;
-using His_Pos.Service;
-using Prescription = His_Pos.NewClass.CooperativeInstitution.Prescription;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
 
 namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
     /// <summary>
@@ -31,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
         }
 
         private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
-            Prescriptions.PredictThreeMonthPrescription();
+            PrescriptionDb.PredictThreeMonthPrescription();
             MessageWindow.ShowMessage("預約慢箋完成!",MessageType.SUCCESS);
         }
 

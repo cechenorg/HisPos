@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace His_Pos.NewClass.CooperativeInstitution {
+namespace His_Pos.NewClass.Cooperative.CooperativeInstitution {
     [XmlRoot("DeclareXml")]
     public class OrthopedicsPrescription
     {

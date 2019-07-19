@@ -6,10 +6,10 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using System.Data;
+using His_Pos.NewClass.Medicine.MedicineSet;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.StockTaking.StockTakingProduct {
+namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
    public class StockTakingPlanProducts : ObservableCollection<StockTakingPlanProduct> {
         public StockTakingPlanProducts() { }
         public StockTakingPlanProducts(DataTable table) {

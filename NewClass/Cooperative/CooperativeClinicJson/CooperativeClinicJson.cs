@@ -1,9 +1,9 @@
-﻿using His_Pos.ChromeTabViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.NewClass.CooperativeClinicJson {
+namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
     public class CooperativeClinicJson {
         public CooperativeClinicJson() { 
             List<CooperativeClinicJsonClass> newCollection = new List<CooperativeClinicJsonClass>();

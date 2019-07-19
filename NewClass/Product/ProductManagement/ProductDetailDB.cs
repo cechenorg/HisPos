@@ -147,6 +147,16 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageSpecialMedicineDetailByID]", parameters);
         }
 
+        internal static DataTable ScrapProductByID(string id, string scrapAmount, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+            parameters.Add(new SqlParameter("SCRAP_AMOUNT", scrapAmount));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductScrap]", parameters);
+        }
+
         internal static DataTable GetMedicineStockDetailByID(string id, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -154,6 +164,16 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("WARE_ID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineStockDetailByID]", parameters);
+        }
+
+        internal static DataTable RecycleProductByID(string id, string recycleAmount, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+            parameters.Add(new SqlParameter("RECYCLE_AMOUNT", recycleAmount));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductRecycle]", parameters);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Product.Medicine.CooperativeAdjustMedicine;
 using System;
+using His_Pos.NewClass.Medicine.CooperativeAdjustMedicine;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport
 {
