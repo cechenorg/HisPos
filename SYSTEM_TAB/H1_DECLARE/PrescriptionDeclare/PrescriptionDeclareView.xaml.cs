@@ -64,8 +64,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (e.Key == Key.Enter)
             {
-                TreatDate.Focus();
-                TreatDate.SelectionStart = 0;
+                TreatDateTextBox.Focus();
+                TreatDateTextBox.SelectionStart = 0;
             }
         }
 
@@ -73,8 +73,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (e.Key == Key.Enter)
             {
-                AdjustDate.Focus();
-                AdjustDate.SelectionStart = 0;
+                AdjustDateTextBox.Focus();
+                AdjustDateTextBox.SelectionStart = 0;
             }
         }
 
