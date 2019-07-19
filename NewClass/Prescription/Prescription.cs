@@ -1526,7 +1526,7 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckMedicinesNegativeStock()
         {
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID);
         }
 
         public void CountSelfPay()

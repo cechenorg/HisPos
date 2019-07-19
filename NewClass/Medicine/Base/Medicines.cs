@@ -583,7 +583,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock()
+        public string CheckNegativeStock(string warID)
         {
             var buckleMedicines = new List<BuckleMedicineStruct>();
             var inventoryIDList = new List<int>();
@@ -601,7 +601,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
             var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs);
+            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs, warID);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryList = new List<MedicineInventoryStruct>();
             foreach (var inv in inventories)

@@ -620,7 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var editMedIDs = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
             var medIDs = originMedIDs.Concat(editMedIDs).Distinct().ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs);
+            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs,EditedPrescription.WareHouse?.ID);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryIDList = new List<int>();
             foreach (var originMed in OriginalPrescription.Medicines)
