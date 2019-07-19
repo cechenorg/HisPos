@@ -228,10 +228,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
                         file.WriteLine("庫名," + CurrentPlan.WareHouse.Name);
-                        file.WriteLine("商品代碼,藥品名稱,庫存,盤點量");
+                        file.WriteLine("商品代碼,藥品名稱,庫存,架上量,盤點量");
                         foreach (var s in StockTakingResult.StockTakingProductCollection)
                         {
-                            file.WriteLine($"{s.ID},{s.FullName},{s.Inventory},");
+                            file.WriteLine($"{s.ID},{s.FullName},{s.Inventory},{s.OnTheFrame},");
                         }
                          
                         file.Close();
