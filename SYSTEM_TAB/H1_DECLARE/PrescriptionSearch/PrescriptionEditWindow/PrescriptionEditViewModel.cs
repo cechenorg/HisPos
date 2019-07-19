@@ -652,7 +652,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var inventoryList = new List<MedicineInventoryStruct>();
             foreach (var e in editInvIDList)
             {
-                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).OnTheFrame));
+                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).InventoryAmount));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)

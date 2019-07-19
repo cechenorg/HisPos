@@ -606,7 +606,7 @@ namespace His_Pos.NewClass.Medicine.Base
             var inventoryList = new List<MedicineInventoryStruct>();
             foreach (var inv in inventories)
             {
-                inventoryList.Add(new MedicineInventoryStruct(inv.InvID, inv.OnTheFrame));
+                inventoryList.Add(new MedicineInventoryStruct(inv.InvID, inv.InventoryAmount));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
