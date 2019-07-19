@@ -66,8 +66,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     CaculateReserveSendAmount();
             });
             IndexReserveCollection = indexReserves;
-            if (IndexReserveCollection.Count > 0)
+            if (IndexReserveCollection.Count > 0) {
                 IndexReserveSelectedItem = IndexReserveCollection[0];
+                CaculateReserveSendAmount();
+            }
+                
         }
         #region Action
         private void SubmitAction() {
@@ -88,8 +91,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             MainWindow.ServerConnection.OpenConnection();
 
             switch (IndexReserveSelectedItem.PrepareMedType) {
-                case ReserveSendType.AllPrepare:
-                    IndexReserveSelectedItem.IsSend = true;
+                case ReserveSendType.AllPrepare: 
+                    IndexReserveSelectedItem.PrepareMedStatus = IndexPrepareMedType.Prepare;
                     IndexReserveSelectedItem.SaveStatus();
                     PrintPackage();
                     IndexReserveCollection.Remove(IndexReserveSelectedItem);
@@ -168,12 +171,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void CaculateReserveSendAmount() {
             if (IndexReserveSelectedItem is null) return;
             MainWindow.ServerConnection.OpenConnection();
+           
+            IndexReserveSelectedItem.GetIndexDetail();
             List<string> MedicineIds = new List<string>();
-            foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection) {
+            foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection)
+            {
                 MedicineIds.Add(med.ID);
             }
-            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds); 
-            IndexReserveSelectedItem.GetIndexDetail();
+            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
             {
                 var pro = IndexReserveSelectedItem.IndexReserveDetailCollection[j];
