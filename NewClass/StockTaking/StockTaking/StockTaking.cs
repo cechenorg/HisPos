@@ -30,12 +30,10 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         public void GetStockTakingProductbyID() {
             StockTakingProductCollection = StockTakingProductCollection.GetStockTakingProductsByID(ID); 
         }
-        public void InsertStockTaking()
+        public void InsertStockTaking(string typeName)
         {
-            StockTakingDB.InsertStockTaking(this);
+            StockTakingDB.InsertStockTaking(this, typeName);
         }
-      
-
-
+       
     }
 }

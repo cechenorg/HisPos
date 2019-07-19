@@ -48,9 +48,11 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         public double OnTheFrame { get; set; }
         public bool IsFrozen { get; set; }
         public byte? IsControl { get; set; }
-        public Employee Employee { get; set; } 
+        public Employee Employee { get; set; }
         #endregion
-
+        public StockTakingProduct() {
+            Employee = ChromeTabViewModel.ViewModelMainWindow.CurrentUser;
+        }
         public StockTakingProduct(DataRow row) : base(row)
         {
             Inventory = row.Field<double>("StoTakDet_OldValue");

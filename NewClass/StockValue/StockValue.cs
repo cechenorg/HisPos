@@ -14,8 +14,9 @@ namespace His_Pos.NewClass.StockValue {
             ReturnValue =  r.Field<double>("退貨");
             StockCheckValue =r.Field<double>("盤點");
             MedUseValue = r.Field<double>("調劑耗用");
-            MinusStockAdjustValue = r.Field<double>("進貨負庫調整"); 
-            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue +  MinusStockAdjustValue;
+            MinusStockAdjustValue = r.Field<double>("進貨負庫調整");
+            TrashValue = r.Field<double>("報廢");
+            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue +  MinusStockAdjustValue + TrashValue;
             FinalStockValue = stock; 
         }
         public DateTime Date { get; set; }
@@ -53,6 +54,12 @@ namespace His_Pos.NewClass.StockValue {
         {
             get { return minusStockAdjustValue; }
             set { Set(() => MinusStockAdjustValue, ref minusStockAdjustValue, value); }
+        }
+        private double trashValue;
+        public double TrashValue
+        {
+            get { return trashValue; }
+            set { Set(() => TrashValue, ref trashValue, value); }
         }
         private double finalStockValue;
         public double FinalStockValue

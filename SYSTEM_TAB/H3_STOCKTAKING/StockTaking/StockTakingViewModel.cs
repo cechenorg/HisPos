@@ -149,7 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 ConfirmWindow confirmWindow = new ConfirmWindow("未有盤差品項 是否直接盤點?","盤點確認");
                 if ((bool)confirmWindow.DialogResult) {
                     StockTakingResult.WareHouse = CurrentPlan.WareHouse;
-                    StockTakingResult.InsertStockTaking();
+                    StockTakingResult.InsertStockTaking("盤點單盤點");
                     MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
                     StockTakingType = StockTakingType.Choose; 
                 } 
@@ -185,7 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 StockTakingResult.StockTakingProductCollection.Single(st => st.ID == s.ID).Note = s.Note;
             }
             StockTakingResult.WareHouse = CurrentPlan.WareHouse;
-            StockTakingResult.InsertStockTaking();
+            StockTakingResult.InsertStockTaking("盤點單盤點");
             MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
             StockTakingType = StockTakingType.Choose;
         }
