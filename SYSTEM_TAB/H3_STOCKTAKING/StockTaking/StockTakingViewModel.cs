@@ -6,6 +6,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.StockTaking.StockTaking.StockTakingPage;
 using His_Pos.NewClass.StockTaking.StockTakingPlan;
+using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow;
