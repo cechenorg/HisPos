@@ -287,11 +287,13 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnIngredient;
             
-            private global::System.Data.DataColumn columnFrozen;
+            private global::System.Data.DataColumn columnIsFrozen;
             
-            private global::System.Data.DataColumn columnControl;
+            private global::System.Data.DataColumn columnIsControl;
             
             private global::System.Data.DataColumn columnID;
+            
+            private global::System.Data.DataColumn columnControlLevel;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -360,17 +362,17 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn FrozenColumn {
+            public global::System.Data.DataColumn IsFrozenColumn {
                 get {
-                    return this.columnFrozen;
+                    return this.columnIsFrozen;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ControlColumn {
+            public global::System.Data.DataColumn IsControlColumn {
                 get {
-                    return this.columnControl;
+                    return this.columnIsControl;
                 }
             }
             
@@ -379,6 +381,14 @@ namespace His_Pos.RDLC {
             public global::System.Data.DataColumn IDColumn {
                 get {
                     return this.columnID;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ControlLevelColumn {
+                get {
+                    return this.columnControlLevel;
                 }
             }
             
@@ -419,16 +429,17 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool Frozen, bool Control, string ID) {
+            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool IsFrozen, bool IsControl, string ID, string ControlLevel) {
                 MedicineTagRow rowMedicineTagRow = ((MedicineTagRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FirstLetter,
                         EnglishName,
                         ChineseName,
                         Ingredient,
-                        Frozen,
-                        Control,
-                        ID};
+                        IsFrozen,
+                        IsControl,
+                        ID,
+                        ControlLevel};
                 rowMedicineTagRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMedicineTagRow);
                 return rowMedicineTagRow;
@@ -455,9 +466,10 @@ namespace His_Pos.RDLC {
                 this.columnEnglishName = base.Columns["EnglishName"];
                 this.columnChineseName = base.Columns["ChineseName"];
                 this.columnIngredient = base.Columns["Ingredient"];
-                this.columnFrozen = base.Columns["Frozen"];
-                this.columnControl = base.Columns["Control"];
+                this.columnIsFrozen = base.Columns["IsFrozen"];
+                this.columnIsControl = base.Columns["IsControl"];
                 this.columnID = base.Columns["ID"];
+                this.columnControlLevel = base.Columns["ControlLevel"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -471,16 +483,18 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnChineseName);
                 this.columnIngredient = new global::System.Data.DataColumn("Ingredient", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIngredient);
-                this.columnFrozen = new global::System.Data.DataColumn("Frozen", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFrozen);
-                this.columnControl = new global::System.Data.DataColumn("Control", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnControl);
+                this.columnIsFrozen = new global::System.Data.DataColumn("IsFrozen", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsFrozen);
+                this.columnIsControl = new global::System.Data.DataColumn("IsControl", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsControl);
                 this.columnID = new global::System.Data.DataColumn("ID", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnID);
-                this.columnFrozen.AllowDBNull = false;
-                this.columnFrozen.DefaultValue = ((bool)(false));
-                this.columnControl.AllowDBNull = false;
-                this.columnControl.DefaultValue = ((bool)(false));
+                this.columnControlLevel = new global::System.Data.DataColumn("ControlLevel", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnControlLevel);
+                this.columnIsFrozen.AllowDBNull = false;
+                this.columnIsFrozen.DefaultValue = ((bool)(false));
+                this.columnIsControl.AllowDBNull = false;
+                this.columnIsControl.DefaultValue = ((bool)(false));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -687,23 +701,23 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Frozen {
+            public bool IsFrozen {
                 get {
-                    return ((bool)(this[this.tableMedicineTag.FrozenColumn]));
+                    return ((bool)(this[this.tableMedicineTag.IsFrozenColumn]));
                 }
                 set {
-                    this[this.tableMedicineTag.FrozenColumn] = value;
+                    this[this.tableMedicineTag.IsFrozenColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Control {
+            public bool IsControl {
                 get {
-                    return ((bool)(this[this.tableMedicineTag.ControlColumn]));
+                    return ((bool)(this[this.tableMedicineTag.IsControlColumn]));
                 }
                 set {
-                    this[this.tableMedicineTag.ControlColumn] = value;
+                    this[this.tableMedicineTag.IsControlColumn] = value;
                 }
             }
             
@@ -720,6 +734,22 @@ namespace His_Pos.RDLC {
                 }
                 set {
                     this[this.tableMedicineTag.IDColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string ControlLevel {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicineTag.ControlLevelColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'MedicineTag\' 中資料行 \'ControlLevel\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicineTag.ControlLevelColumn] = value;
                 }
             }
             
@@ -781,6 +811,18 @@ namespace His_Pos.RDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetIDNull() {
                 this[this.tableMedicineTag.IDColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsControlLevelNull() {
+                return this.IsNull(this.tableMedicineTag.ControlLevelColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetControlLevelNull() {
+                this[this.tableMedicineTag.ControlLevelColumn] = global::System.Convert.DBNull;
             }
         }
         

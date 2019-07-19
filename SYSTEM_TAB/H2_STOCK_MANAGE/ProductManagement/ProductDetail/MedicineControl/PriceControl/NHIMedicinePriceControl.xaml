@@ -58,6 +58,6 @@
                 <TextBlock Text="{Binding MedicineDetail.Ingredient}" Foreground="{StaticResource ForeGround}" Width="400" TextWrapping="Wrap" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </ScrollViewer>
         </StackPanel>
-        <Button Content="列印藥品標籤" BorderThickness="0" Grid.Row="5" Foreground="DimGray" FontSize="15" Width="455" FontFamily="Segoe UI Semi" Height="36" Background="{StaticResource Shadow}" Command="{Binding PrintMedicineLabelCommand}"/>
+        <Button Content="列印藥品標籤" BorderThickness="0" Grid.Row="5" Foreground="{StaticResource ForeGround}" FontSize="15" Width="455" FontFamily="Segoe UI Semi" Height="36" Background="{StaticResource Shadow}" Command="{Binding PrintMedicineLabelCommand}"/>
     </Grid>
 </UserControl>

@@ -336,10 +336,19 @@ namespace His_Pos.ChromeTabViewModel
             Export(r.LocalReport, 25.4, 9.3);
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
+
         public void StartPrintReserve(ReportViewer r) {
             BusyContent = "封包列印...";
             Export(r.LocalReport, 22, 9.3);
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+        public void StartPrintMedicineTag(ReportViewer r)
+        {
+            IsBusy = true;
+            BusyContent = StringRes.MedBagPrinting;
+            Export(r.LocalReport, 21, 29.7);
+            ReportPrint(Properties.Settings.Default.ReportPrinter);
+            IsBusy = false;
         }
         public void StartPrintDeposit(ReportViewer r)
         {

@@ -357,7 +357,7 @@ namespace His_Pos.NewClass.Prescription.Service
         }
         #endregion
 
-        public static IEnumerable<ReportParameter> CreateDepositSheetParameters(NewClass.Prescription.Prescription p)
+        public static IEnumerable<ReportParameter> CreateDepositSheetParameters(Prescription p)
         {
             var adjustDate =
                 DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
@@ -374,7 +374,7 @@ namespace His_Pos.NewClass.Prescription.Service
             };
         }
 
-        public static IEnumerable<ReportParameter> CreateReceiptParameters(NewClass.Prescription.Prescription p)
+        public static IEnumerable<ReportParameter> CreateReceiptParameters(Prescription p)
         {
             var adjustDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var cusGender = p.Patient.CheckGender();
