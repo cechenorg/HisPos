@@ -412,8 +412,6 @@ namespace His_Pos.NewClass.Prescription
             get => copayment;
             set
             {
-                if (value.Id.Equals("I20") && PrescriptionPoint.MedicinePoint <= 100) return;
-                if (value.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100) return;
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {
