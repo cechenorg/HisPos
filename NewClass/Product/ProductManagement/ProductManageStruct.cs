@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             Inventory = row.Field<double>("Inv_Inventory");
+            ShelfAmount = row.Field<double>("SHELF_INV");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
         }
         public double Inventory { get; set; }
+        public double ShelfAmount { get; set; }
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
