@@ -99,8 +99,8 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
-            MedicalNumber = r.Field<string>("MedicalNumber");
-            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+            MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber"))? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
+            OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber"))? r.Field<string>("OldMedicalNumber"): r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
             {
                 TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
@@ -153,14 +153,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -174,7 +174,7 @@ namespace His_Pos.NewClass.Prescription
             OrthopedicsGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
+                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode.Trim();
             #endregion
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
@@ -212,16 +212,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
-                TempMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                TempMedicalNumber = insurance.MedicalNumber;
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -237,7 +235,7 @@ namespace His_Pos.NewClass.Prescription
             CooperativeGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.Insurance.IcErrorCode;
+                TempMedicalNumber = c.Insurance.IcErrorCode.Trim();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;

@@ -214,8 +214,8 @@
                             </i:Interaction.Triggers>
                         </ComboBox>
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                        <TextBox Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="17" MaxLength="4"
-                             Text="{Binding EditedPrescription.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper" Foreground="{StaticResource ForeGround}">
+                        <TextBox Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="17" MaxLength="4" Text="{Binding EditedPrescription.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper" Foreground="{StaticResource ForeGround}" PreviewKeyDown="MedicalNumber_OnPreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding DataChanged}"/>
