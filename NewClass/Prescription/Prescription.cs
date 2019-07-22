@@ -990,9 +990,6 @@ namespace His_Pos.NewClass.Prescription
         {
             IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
-            CountPrescriptionPoint();
-            CountSelfPay();
-            PrescriptionPoint.CountAmountsPay();
             Medicines.ReOrder();
         }
 

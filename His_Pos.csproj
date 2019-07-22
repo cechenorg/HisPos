@@ -1823,6 +1823,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Images\home-address.png" />
+    <Resource Include="Images\email.png" />
+    <Resource Include="Images\line.png" />
     <Content Include="RDLC\MedicineTag.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
