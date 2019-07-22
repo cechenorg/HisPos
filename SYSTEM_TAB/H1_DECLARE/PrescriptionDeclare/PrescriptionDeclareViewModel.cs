@@ -182,6 +182,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
+        private string selectedRadioButton;
+        public string SelectedRadioButton
+        {
+            get => selectedRadioButton;
+            set
+            {
+                Set(() => SelectedRadioButton, ref selectedRadioButton, value);
+            }
+        }
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;

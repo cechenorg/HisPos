@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using His_Pos.NewClass.Medicine.MedBag;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Medicine.Base
 {
@@ -10,8 +11,10 @@ namespace His_Pos.NewClass.Medicine.Base
             Ingredient = r.Field<string>("Med_Ingredient");
             SideEffect = r.Field<string>("Med_SideEffect");
             Indication = r.Field<string>("Med_Indication");
-            ATCCode = r.Field<string>("Med_ATC");
-            SingleCompound = r.Field<string>("Med_SingleCompound");
+            if(NewFunction.CheckDataRowContainsColumn(r,"Med_ATC"))
+                ATCCode = r.Field<string>("Med_ATC");
+            if (NewFunction.CheckDataRowContainsColumn(r, "Med_SingleCompound"))
+                SingleCompound = r.Field<string>("Med_SingleCompound");
             Form = r.Field<string>("Med_Form");
             ControlLevel = r.Field<byte?>("Med_Control");
             Note = r.Field<string>("Med_NhiNote");

@@ -110,12 +110,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     PrescriptionStatus.ReserveSend = reserveSend;
                     break;
                 default:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
             if (type.Equals(PrescriptionType.ChronicReserve))
@@ -993,6 +993,7 @@ namespace His_Pos.NewClass.Prescription
             CountPrescriptionPoint();
             CountSelfPay();
             PrescriptionPoint.CountAmountsPay();
+            Medicines.ReOrder();
         }
 
         private void CheckVariableByDivision()
@@ -1573,11 +1574,11 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines.Clear();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
                 default:
                     Medicines.Clear();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
         }
