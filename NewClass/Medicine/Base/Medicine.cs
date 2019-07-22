@@ -23,8 +23,8 @@ namespace His_Pos.NewClass.Medicine.Base
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
             if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID") && r.Field<int?>("Inv_ID") != null)
                 InventoryID = r.Field<int>("Inv_ID");
-            if (NewFunction.CheckDataRowContainsColumn(r, "Order") && r.Field<int?>("Order") != null)
-                Order = r.Field<int>("Order");
+            if (NewFunction.CheckDataRowContainsColumn(r, "OrderNumber") && r.Field<int?>("OrderNumber") != null)
+                Order = r.Field<int>("OrderNumber");
         }
 
         public Medicine(CooperativeMedicine m)
