@@ -771,10 +771,10 @@
                                 <Style TargetType="{x:Type ContentControl}">
                                     <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetail}" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.SelectedRadioButton, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option1">
+                                        <DataTrigger Binding="{Binding DataContext.SelectedPatientDetailType, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option1">
                                             <Setter Property="ContentTemplate" Value="{StaticResource CustomerHistories}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding DataContext.SelectedRadioButton, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option2">
+                                        <DataTrigger Binding="{Binding DataContext.SelectedPatientDetailType, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option2">
                                             <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetail}" />
                                         </DataTrigger>
                                     </Style.Triggers>

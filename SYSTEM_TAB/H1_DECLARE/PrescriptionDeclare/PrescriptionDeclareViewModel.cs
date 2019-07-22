@@ -182,13 +182,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
-        private string selectedRadioButton;
-        public string SelectedRadioButton
+        private string selectedPatientDetailType;
+        public string SelectedPatientDetailType
         {
-            get => selectedRadioButton;
+            get => selectedPatientDetailType;
             set
             {
-                Set(() => SelectedRadioButton, ref selectedRadioButton, value);
+                Set(() => SelectedPatientDetailType, ref selectedPatientDetailType, value);
             }
         }
         private IcCard currentCard;
