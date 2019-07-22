@@ -68,8 +68,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                    TreatDate.Focus();
-                    TreatDate.SelectionStart = 0;
+                    TreatDateTextBox.Focus();
+                    TreatDateTextBox.SelectionStart = 0;
                     break;
             }
         }
