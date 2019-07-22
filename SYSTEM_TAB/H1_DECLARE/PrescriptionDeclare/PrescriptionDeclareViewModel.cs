@@ -571,6 +571,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DeleteMedicineAction()
         {
             CurrentPrescription.DeleteMedicine();
+            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountSelfPay();
+            CurrentPrescription.PrescriptionPoint.CountAmountsPay();
         }
 
         private void ShowMedicineDetailAction(string medicineID)
