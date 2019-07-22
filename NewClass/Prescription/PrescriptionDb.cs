@@ -628,6 +628,11 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable SetPrescriptionDetail(List<Pdata> prescriptionDetails)
         { //一般藥費
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
+            for (var i = 0; i < prescriptionDetails.Count; i++)
+            {
+                if (prescriptionDetails[i].Order == 0)
+                    prescriptionDetails[i].Order = i + 1;
+            }
             foreach (var pdata in prescriptionDetails)
             {
                 DataRow newRow = prescriptionDetailTable.NewRow();
@@ -647,6 +652,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;

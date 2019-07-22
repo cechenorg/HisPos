@@ -38,6 +38,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Items.Add(item);
             }
             SetBuckleAmount(isBuckle);
+            ReOrder();
         }
         private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
         {
@@ -111,6 +112,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Items.Add(item);
             }
             SetBuckleAmount(isBuckle);
+            ReOrder();
         }
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
@@ -172,59 +174,36 @@ namespace His_Pos.NewClass.Medicine.Base
 
         #endregion
 
-        public void GetDataByPrescriptionId(int id,string wareHouseID, DateTime? adjustDate)
+        public void GetDataByPrescriptionId(int id)
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
-            CreateMedicines(table, wareHouseID, adjustDate);
+            CreateMedicines(table);
         }
 
-        public void GetDataByReserveId(int id,string wareHouseID, DateTime? adjustDate)
+        public void GetDataByReserveId(int id)
         {
             var table = MedicineDb.GetDataByReserveId(id);
-            CreateMedicines(table, wareHouseID, adjustDate);
+            CreateMedicines(table);
         }
 
-        private void CreateMedicines(DataTable table,string wareHouseID,DateTime? adjustDate)
+        private void CreateMedicines(DataTable table)
         {
-            var idList = new List<string>();
-            foreach (DataRow r in table.Rows)
-            {
-                if(!idList.Contains(r.Field<string>("Pro_ID")))
-                    idList.Add(r.Field<string>("Pro_ID"));
-            }
-            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
-            var medicineRows = new List<DataRow>();
-            foreach (DataRow r in medicinesTable.Rows)
-            {
-                medicineRows.Add(r);
-            }
             foreach (DataRow r in table.Rows)
             {
                 Medicine medicine;
-                var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
-                if(medicineRow is null)
+                switch (r.Field<int>("DataType"))
                 {
-                    switch (r.Field<string>("Pro_ID"))
-                    {
-                        case "R001":
-                        case "R002":
-                        case "R003":
-                        case "R004":
-                            medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
-                            Add(medicine);
-                            continue;
-                    }
-                }
-                switch (medicineRow.Field<int>("DataType"))
-                {
+                    case 0:
+                        medicine = new MedicineVirtual(r);
+                        break;
                     case 1:
-                        medicine = new MedicineNHI(medicineRow);
+                        medicine = new MedicineNHI(r);
                         break;
                     case 2:
-                        medicine = new MedicineOTC(medicineRow);
+                        medicine = new MedicineOTC(r);
                         break;
                     case 3:
-                        medicine = new MedicineSpecialMaterial(medicineRow);
+                        medicine = new MedicineSpecialMaterial(r);
                         break;
                     default:
                         continue;
@@ -232,6 +211,51 @@ namespace His_Pos.NewClass.Medicine.Base
                 medicine.SetValueByDataRow(r);
                 Add(medicine);
             }
+            //foreach (DataRow r in table.Rows)
+            //{
+            //    if(!idList.Contains(r.Field<string>("Pro_ID")))
+            //        idList.Add(r.Field<string>("Pro_ID"));
+            //}
+            //var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
+            //var medicineRows = new List<DataRow>();
+            //foreach (DataRow r in medicinesTable.Rows)
+            //{
+            //    medicineRows.Add(r);
+            //}
+            //foreach (DataRow r in table.Rows)
+            //{
+            //    Medicine medicine;
+            //    var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
+            //    if(medicineRow is null)
+            //    {
+            //        switch (r.Field<string>("Pro_ID"))
+            //        {
+            //            case "R001":
+            //            case "R002":
+            //            case "R003":
+            //            case "R004":
+            //                medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
+            //                Add(medicine);
+            //                continue;
+            //        }
+            //    }
+            //    switch (medicineRow.Field<int>("DataType"))
+            //    {
+            //        case 1:
+            //            medicine = new MedicineNHI(medicineRow);
+            //            break;
+            //        case 2:
+            //            medicine = new MedicineOTC(medicineRow);
+            //            break;
+            //        case 3:
+            //            medicine = new MedicineSpecialMaterial(medicineRow);
+            //            break;
+            //        default:
+            //            continue;
+            //    }
+            //    medicine.SetValueByDataRow(r);
+            //    Add(medicine);
+            //}
         }
 
         public int CountMedicinePoint()
@@ -297,6 +321,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (selectedMedicinesIndex > 0)
                     medicine.CopyPrevious(this[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
+                medicine.Order = (int)selectedMedicinesIndex + 1;
                 this[(int)selectedMedicinesIndex] = medicine;
             }
             else
@@ -304,6 +329,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (Count > 0)
                     medicine.CopyPrevious(this[Count - 1]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
+                medicine.Order = Count + 1;
                 Add(medicine);
             }
         }
@@ -632,6 +658,14 @@ namespace His_Pos.NewClass.Medicine.Base
         public bool DeclareMedicalService()
         {
             return this.Count(m => m is MedicineNHI && !m.PaySelf) > 0;
+        }
+
+        public void ReOrder()
+        {
+            for (var i = 1; i <= Count; i++)
+            {
+                this[i-1].Order = i;
+            }
         }
     }
 }

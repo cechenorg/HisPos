@@ -30,7 +30,6 @@ using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
-using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 using Resources = His_Pos.Properties.Resources;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
@@ -111,12 +110,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     PrescriptionStatus.ReserveSend = reserveSend;
                     break;
                 default:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
             if (type.Equals(PrescriptionType.ChronicReserve))
@@ -992,6 +991,7 @@ namespace His_Pos.NewClass.Prescription
             CountPrescriptionPoint();
             CountSelfPay();
             PrescriptionPoint.CountAmountsPay();
+            Medicines.ReOrder();
         }
 
         private void CheckVariableByDivision()
@@ -1572,11 +1572,11 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines.Clear();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
                 default:
                     Medicines.Clear();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
         }
