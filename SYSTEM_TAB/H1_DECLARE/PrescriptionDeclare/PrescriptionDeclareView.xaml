@@ -216,10 +216,10 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,5,0,5">
                     <Image Width="25" Height="25" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientCellPhone" Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
                     <Image Width="20" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientTel" Width="120" Height="35" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientTel" Width="130" Height="35" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,5">
