@@ -41,13 +41,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         }
 
-        protected PrescriptionService(NewClass.Prescription.Prescription p)
-        {
-            Current = p;
-            PrintResult = new List<bool?>();
-        }
-        protected NewClass.Prescription.Prescription Current { get; set; }
-        protected NewClass.Prescription.Prescription TempPre { get; set; }
+        protected Prescription Current { get; set; }
+        protected Prescription TempPre { get; set; }
         protected List<bool?> PrintResult { get; set; }
         #region Functions
         public static PrescriptionService CreateService(NewClass.Prescription.Prescription p)
