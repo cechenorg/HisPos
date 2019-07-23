@@ -499,10 +499,6 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             result += "4";
             result += med.ID.Substring(0, 12).PadLeft(12, ' ');
-            if (med.Days != null)
-                result += med.Days.ToString().PadLeft(2, ' ');
-            else
-                result += string.Empty.PadLeft(2, ' ');
             result += string.Empty.PadLeft(6, ' ');
             result += string.Empty.PadLeft(18, ' ');
             if (med.Days != null)
