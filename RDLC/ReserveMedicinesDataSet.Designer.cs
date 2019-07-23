@@ -285,6 +285,8 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnAmount;
             
+            private global::System.Data.DataColumn columnPrepareAmount;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public ReserveMedicinesDataSetDataTable() {
@@ -344,6 +346,14 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn PrepareAmountColumn {
+                get {
+                    return this.columnPrepareAmount;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -379,12 +389,13 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ReserveMedicinesDataSetRow AddReserveMedicinesDataSetRow(string ID, string Name, double Amount) {
+            public ReserveMedicinesDataSetRow AddReserveMedicinesDataSetRow(string ID, string Name, double Amount, string PrepareAmount) {
                 ReserveMedicinesDataSetRow rowReserveMedicinesDataSetRow = ((ReserveMedicinesDataSetRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID,
                         Name,
-                        Amount};
+                        Amount,
+                        PrepareAmount};
                 rowReserveMedicinesDataSetRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowReserveMedicinesDataSetRow);
                 return rowReserveMedicinesDataSetRow;
@@ -410,6 +421,7 @@ namespace His_Pos.RDLC {
                 this.columnID = base.Columns["ID"];
                 this.columnName = base.Columns["Name"];
                 this.columnAmount = base.Columns["Amount"];
+                this.columnPrepareAmount = base.Columns["PrepareAmount"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -421,6 +433,8 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnName);
                 this.columnAmount = new global::System.Data.DataColumn("Amount", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAmount);
+                this.columnPrepareAmount = new global::System.Data.DataColumn("PrepareAmount", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPrepareAmount);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ReserveMedicinesDataSet");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ReserveMedicinesDataSet");
             }
@@ -613,6 +627,22 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string PrepareAmount {
+                get {
+                    try {
+                        return ((string)(this[this.tableReserveMedicinesDataSet.PrepareAmountColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'ReserveMedicinesDataSet\' 中資料行 \'PrepareAmount\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableReserveMedicinesDataSet.PrepareAmountColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableReserveMedicinesDataSet.IDColumn);
             }
@@ -645,6 +675,18 @@ namespace His_Pos.RDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetAmountNull() {
                 this[this.tableReserveMedicinesDataSet.AmountColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPrepareAmountNull() {
+                return this.IsNull(this.tableReserveMedicinesDataSet.PrepareAmountColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPrepareAmountNull() {
+                this[this.tableReserveMedicinesDataSet.PrepareAmountColumn] = global::System.Convert.DBNull;
             }
         }
         
