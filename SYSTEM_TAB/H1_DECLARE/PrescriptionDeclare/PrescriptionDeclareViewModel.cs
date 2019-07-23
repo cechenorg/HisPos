@@ -105,6 +105,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private bool customerEdited;
+        public bool CustomerEdited
+        {
+            get => customerEdited;
+            private set
+            {
+                Set(() => CustomerEdited, ref customerEdited, value);
+            }
+        }
         private Prescription currentPrescription;
         public Prescription CurrentPrescription
         {
@@ -239,6 +248,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
+        public RelayCommand CustomerRedoEdited { get; set; }
+        public RelayCommand SavePatientData { get; set; }
         public RelayCommand SendOrder { get; set; }
         public RelayCommand Clear { get; set; }
         public RelayCommand ErrorAdjust { get; set; }
@@ -254,7 +265,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region InitFunctions
         private void Init()
         {
-            SelectedPatientDetail = "Option1";
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
@@ -266,6 +276,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void InitLocalVariables()
         {
+            SelectedPatientDetail = "Option1";
+            CustomerEdited = false;
             DeclareStatus = PrescriptionDeclareStatus.Adjust;
             CanSendOrder = false;
             isAdjusting = false;
@@ -309,6 +321,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
+            CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
+            SavePatientData = new RelayCommand(SavePatientDataAction);
             SendOrder = new RelayCommand(SendOrderAction);
             Clear = new RelayCommand(ClearAction);
             ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
@@ -659,6 +673,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
             }
             MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void CustomerRedoEditedAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CustomerEdited = false;
+        }
+
+        private void SavePatientDataAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CurrentPrescription.Patient.Save();
+            MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
+            CustomerEdited = false;
         }
 
         private void SendOrderAction()
