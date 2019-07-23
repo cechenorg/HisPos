@@ -23,6 +23,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -187,7 +188,9 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得用法;
                 Usages = new Usages();
                 BusyContent = StringRes.取得用藥途徑;
-                Positions = new Positions(); 
+                Positions = new Positions();
+                BusyContent = "藥袋量計算中";
+                ProductDB.UpdateAllInventoryMedBagAmount();
                 BusyContent = "同步員工資料";
                 EmployeeDb.SyncData();
                 BusyContent = "取得員工";

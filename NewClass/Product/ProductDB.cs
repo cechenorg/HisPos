@@ -1,5 +1,6 @@
 ﻿using His_Pos.Database;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -109,6 +110,9 @@ namespace His_Pos.NewClass.Product
             masterTable.Columns.Add("MedicineID", typeof(string));
             return masterTable;
         }
-
+        public static void UpdateAllInventoryMedBagAmount() { 
+           MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateAllInventoryMedBagAmount]");
+        }
+        
     }
 }

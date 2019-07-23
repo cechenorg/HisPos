@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Add(new PrescriptionSendData(m));
             } 
         }
+        
 
     }
 }

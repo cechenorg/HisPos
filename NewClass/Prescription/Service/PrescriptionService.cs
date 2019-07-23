@@ -510,7 +510,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                } //更新傳送藥健康
+                } //更新傳送藥健康 
             }
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }

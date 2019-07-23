@@ -359,14 +359,14 @@ namespace His_Pos.NewClass.Prescription
 
         private static void AppendPatientTel(StringBuilder dtlData, Customer patient)
         {
-            string patientTel;
+            string patientTel = string.Empty;
             if (!string.IsNullOrEmpty(patient.CellPhone))
                 patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.CellPhone : patient.CellPhone + "(註)";
             else
             {
                 if (!string.IsNullOrEmpty(patient.Tel))
                     patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
-                else
+                else if (!string.IsNullOrEmpty(patient.ContactNote))
                     patientTel = patient.ContactNote.Replace("\r\n","/");
             }
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
