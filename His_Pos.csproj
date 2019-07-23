@@ -1163,6 +1163,15 @@
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml.cs">
+      <DependentUpon>CustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml.cs">
+      <DependentUpon>NoCustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml.cs">
+      <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml.cs">
       <DependentUpon>ProductTransactionView.xaml</DependentUpon>
     </Compile>
@@ -1769,6 +1778,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
