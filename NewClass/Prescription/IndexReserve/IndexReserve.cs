@@ -191,6 +191,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters() {
             return new List<ReportParameter>
             {
+                new ReportParameter("Type","預約"),
                 new ReportParameter("PatientName",CusName),
                 new ReportParameter("PatientBirthday",CusBirth.AddYears(-1911).ToString("yyy-MM-dd")),
                 new ReportParameter("PatientTel",PhoneNote),

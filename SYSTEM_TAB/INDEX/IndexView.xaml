@@ -132,7 +132,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox  IsChecked="{Binding IsSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                                        <CheckBox  IsChecked="{Binding IsSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
