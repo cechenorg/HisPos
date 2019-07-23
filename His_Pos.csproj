@@ -1169,6 +1169,24 @@
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml.cs">
       <DependentUpon>NoCustomerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\CustomerDetailBase.xaml.cs">
+      <DependentUpon>CustomerDetailBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\LeaveProductRecordControl.xaml.cs">
+      <DependentUpon>LeaveProductRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PointRecordControl.xaml.cs">
+      <DependentUpon>PointRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PrescriptionRecordControl.xaml.cs">
+      <DependentUpon>PrescriptionRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\ProductRecordControl.xaml.cs">
+      <DependentUpon>ProductRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml.cs">
+      <DependentUpon>TransactionRecordControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml.cs">
       <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
     </Compile>
@@ -1786,6 +1804,30 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\CustomerDetailBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\LeaveProductRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PointRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PrescriptionRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\ProductRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

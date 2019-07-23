@@ -22,6 +22,9 @@
         <DataTemplate x:Key="NoCustomerDetailControl" DataType="UserControl">
             <customerDetailControl:NoCustomerDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="CustomerDetailBase" DataType="UserControl">
+            <customerDetailControl:CustomerDetailBase/>
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1345" Height="850" Margin="10">
@@ -49,10 +52,10 @@
             <ContentControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerDetailControl}"/>
+                        <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CustomerControl, UpdateSourceTrigger=PropertyChanged}" Value="Medicine">
-                                <Setter Property="ContentTemplate" Value="{StaticResource CustomerControl}"/>
+                                <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
