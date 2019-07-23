@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using His_Pos.NewClass.Product.Medicine.Usage;
+using His_Pos.NewClass.Medicine.Usage;
 
 namespace His_Pos.Service
 {

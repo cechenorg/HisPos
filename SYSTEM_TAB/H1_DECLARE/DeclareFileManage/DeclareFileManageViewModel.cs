@@ -18,7 +18,7 @@ using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using StringRes = His_Pos.Properties.Resources;
@@ -375,6 +375,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
                 file.WriteLine("院所申報統計表");
                 file.WriteLine("月份 " + decDate.Month + "月");
+                file.WriteLine("院所,藥品點,特材點,藥服費,小計,部分負擔,申報額,筆數");
                 foreach (var ins in institutionDeclarePoints)
                 {
                     file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");

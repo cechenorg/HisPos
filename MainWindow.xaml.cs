@@ -16,7 +16,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
-using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.StockValue;

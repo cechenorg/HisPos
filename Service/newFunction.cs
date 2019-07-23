@@ -15,11 +15,11 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -222,37 +222,7 @@ namespace His_Pos.Service
             result = fullName.Substring(lastBackSlash + 1); 
         return result;
         }
-
         public static List<bool?> CheckPrint(Prescription p)
-        {
-            var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
-            var printMedBag = medBagPrint.DialogResult;
-            bool? printSingle = null;
-            bool? receiptPrint = null;
-            if (printMedBag != null)
-            {
-                if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
-                {
-                    var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
-                    receiptPrint = receiptResult.DialogResult;
-                }
-                else
-                    receiptPrint = false;
-                if ((bool)printMedBag)
-                {
-                    var printBySingleMode = new SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedBagSelectionWindow();
-                    printBySingleMode.ShowDialog();
-                    printSingle = printBySingleMode.result;
-                }
-            }
-            result.Add(printMedBag);
-            result.Add(printSingle);
-            result.Add(receiptPrint);
-            return result;
-        }
-
-        public static List<bool?> CheckPrint(NewClass.PrescriptionRefactoring.Prescription p)
         {
             var result = new List<bool?>();
             var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
@@ -356,6 +326,7 @@ namespace His_Pos.Service
                 case "Z000":
                 case "E001":
                 case "Z001":
+                case "J000":
                     return true;
             }
             int number;

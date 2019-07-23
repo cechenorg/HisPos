@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 

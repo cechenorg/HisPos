@@ -14,12 +14,12 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Prescription.Search;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.PrescriptionRefactoring.Service;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -563,12 +563,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            if (PrescriptionCollectionVS != null)
+                PrescriptionCollectionVS.Filter += NoBuckleFilter;
             if (EditedPrescription != null && SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)) != null)
             {
                 PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
             }
-            if (PrescriptionCollectionVS != null)
-                PrescriptionCollectionVS.Filter += NoBuckleFilter;
         }
 
         private void Refresh(NotificationMessage msg)

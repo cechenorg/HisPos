@@ -9,6 +9,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StockTaking.StockTakingPlan;
+using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
 
 namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan

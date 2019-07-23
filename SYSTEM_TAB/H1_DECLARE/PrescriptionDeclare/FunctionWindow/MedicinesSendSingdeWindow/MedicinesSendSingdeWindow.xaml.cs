@@ -17,18 +17,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 if (notificationMessage.Notification.Equals("CloseMedicinesSendSingde"))
                     Close();
             });
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
-            DataContext = new MedicinesSendSingdeViewModel(p);
-            ShowDialog();
-        }
-        public MedicinesSendSingdeWindow(NewClass.PrescriptionRefactoring.Prescription p)
-        {
-            InitializeComponent();
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals("CloseMedicinesSendSingde"))
-                    Close();
-            });
             this.Closing += (sender, e) => Messenger.Default.Unregister(this);
             DataContext = new MedicinesSendSingdeViewModel(p);
             ShowDialog();

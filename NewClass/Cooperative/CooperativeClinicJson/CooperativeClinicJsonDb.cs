@@ -1,9 +1,9 @@
-﻿using His_Pos.Database;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using His_Pos.Database;
 
-namespace His_Pos.NewClass.CooperativeClinicJson {
+namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
     public static class CooperativeClinicJsonDb {
         public static void UpdateCooperAdjustMedcinesStatus() {
             var table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCooperAdjustStatus]");

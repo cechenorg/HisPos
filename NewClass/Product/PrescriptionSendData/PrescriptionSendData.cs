@@ -1,13 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace His_Pos.NewClass.Product
+namespace His_Pos.NewClass.Product.PrescriptionSendData
 {
     public class PrescriptionSendData : ObservableObject
     {
         public PrescriptionSendData()
         {
         }
-        public PrescriptionSendData(MedicineRefactoring.Medicine m) {
+        public PrescriptionSendData(Medicine.Base.Medicine m) {
             MedId = m.ID;
             MedName = m.FullName;
             Stock = m.Inventory;

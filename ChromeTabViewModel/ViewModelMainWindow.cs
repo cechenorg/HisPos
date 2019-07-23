@@ -13,6 +13,8 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Medicine.Position;
+using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -21,8 +23,6 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Product.Medicine.Position;
-using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -335,6 +335,20 @@ namespace His_Pos.ChromeTabViewModel
             BusyContent = StringRes.收據列印;
             Export(r.LocalReport, 25.4, 9.3);
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+
+        public void StartPrintReserve(ReportViewer r) {
+            BusyContent = "封包列印...";
+            Export(r.LocalReport, 22, 9.3);
+            ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+        public void StartPrintMedicineTag(ReportViewer r)
+        {
+            IsBusy = true;
+            BusyContent = StringRes.MedBagPrinting;
+            Export(r.LocalReport, 21, 29.7);
+            ReportPrint(Properties.Settings.Default.ReportPrinter);
+            IsBusy = false;
         }
         public void StartPrintDeposit(ReportViewer r)
         {

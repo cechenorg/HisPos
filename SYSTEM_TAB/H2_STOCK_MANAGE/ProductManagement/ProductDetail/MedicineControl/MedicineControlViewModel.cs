@@ -19,6 +19,11 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Medicine.MedBag;
+using His_Pos.NewClass.Prescription.Service;
+using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -34,6 +39,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand CancelChangeCommand { get; set; }
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand StockTakingCommand { get; set; }
+        public RelayCommand RecycleCommand { get; set; }
+        public RelayCommand ScrapCommand { get; set; }
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand SearchProductRecordCommand { get; set; }
@@ -41,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand ShowConsumeRecordCommand { get; set; }
         public RelayCommand<string> FilterRecordCommand { get; set; }
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
+        public RelayCommand PrintMedicineLabelCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -103,6 +111,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #endregion
 
         private string newInventory = "";
+        private string recycleAmount = "";
+        private string scrapAmount = "";
         private WareHouse selectedWareHouse;
         private ProductGroupSettings productGroupSettingCollection;
         private ProductRegisterPrescriptions productRegisterPrescriptionCollection;
@@ -116,6 +126,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             {
                 Set(() => NewInventory, ref newInventory, value);
                 StockTakingCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public string RecycleAmount
+        {
+            get { return recycleAmount; }
+            set
+            {
+                Set(() => RecycleAmount, ref recycleAmount, value);
+                RecycleCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public string ScrapAmount
+        {
+            get { return scrapAmount; }
+            set
+            {
+                Set(() => ScrapAmount, ref scrapAmount, value);
+                ScrapCommand.RaiseCanExecuteChanged();
             }
         }
         public ProductGroupSettings ProductGroupSettingCollection
@@ -158,6 +186,44 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         
         #region ----- Define Actions -----
+        private void ScrapAction()
+        {
+            if (!IsScrapValid()) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認報廢數量為 {ScrapAmount} ?\n(報廢後庫存量為 {(StockDetail.TotalInventory - double.Parse(ScrapAmount)).ToString("0.##")} )", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductDetailDB.ScrapProductByID(Medicine.ID, ScrapAmount, SelectedWareHouse.ID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if(!(dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS")))
+                MessageWindow.ShowMessage("報廢失敗 請稍後再試", MessageType.ERROR);
+
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
+
+            ScrapAmount = "";
+        }
+        private void RecycleAction()
+        {
+            if (!IsRecycleValid()) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認回收數量為 {RecycleAmount} ?\n(回收後庫存量為 {(StockDetail.TotalInventory + double.Parse(RecycleAmount)).ToString("0.##")} )", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductDetailDB.RecycleProductByID(Medicine.ID, RecycleAmount, SelectedWareHouse.ID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (!(dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS")))
+                MessageWindow.ShowMessage("回收失敗 請稍後再試", MessageType.ERROR);
+
+            InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
+
+            RecycleAmount = "";
+        }
         private void ConfirmChangeAction()
         {
             if(!IsMedicineDataValid()) return;
@@ -215,6 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CaculateReserveSendAmount"));
         }
         private void ViewHistoryPriceAction()
         {
@@ -294,6 +361,38 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             SearchProductRecordAction();
         }
+        private void PrintMedicineLabelAction()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認列印藥品標籤?", "");
+
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).IsFrozen, (MedicineDetail as ProductNHIDetail).Ingredient);
+            PrintMedBagSingleMode(medicineTagStruct);
+        }
+        public void PrintMedBagSingleMode(MedicineTagStruct medicineTagStruct)
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            SetSingleModeMedTagReportViewer(rptViewer, medicineTagStruct);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedicineTag(rptViewer);
+            });
+        }
+        private void SetSingleModeMedTagReportViewer(ReportViewer rptViewer, MedicineTagStruct medicineTagStruct)
+        {
+            var medicineList = new Collection<MedicineTagStruct>();
+            medicineList.Add(medicineTagStruct);
+            var json = JsonConvert.SerializeObject(medicineList);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedicineTag.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("MedicineTagDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -308,6 +407,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
             FilterRecordCommand = new RelayCommand<string>(FilterRecordAction);
             ShowProductGroupWindowCommand = new RelayCommand(ShowProductGroupWindowAction);
+            ScrapCommand = new RelayCommand(ScrapAction, IsScrapHasValue);
+            RecycleCommand = new RelayCommand(RecycleAction, IsRecycleHasValue);
+            PrintMedicineLabelCommand = new RelayCommand(PrintMedicineLabelAction);
 
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
             ShowConsumeRecordCommand = new RelayCommand(ShowConsumeRecordAction);
@@ -357,8 +459,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     break;
             }
 
-            ReloadStockDetail();
-            ReloadProductGroupAndPrescription();
+            SearchProductRecordAction();
         }
         private bool IsMedicineDataChanged()
         {
@@ -367,6 +468,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private bool IsNewInventoryHasValue()
         {
             return !NewInventory.Equals(string.Empty);
+        }
+        private bool IsScrapHasValue()
+        {
+            return !ScrapAmount.Equals(string.Empty);
+        }
+        private bool IsRecycleHasValue()
+        {
+            return !RecycleAmount.Equals(string.Empty);
         }
         private bool IsNewInventoryValid()
         {
@@ -441,9 +550,53 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
                 if (Medicine.SafeAmount < 0)
                 {
-                    MessageWindow.ShowMessage("安全量必須大於0", MessageType.ERROR);
+                    MessageWindow.ShowMessage("安全量不可小於0", MessageType.ERROR);
                     return false;
                 }
+            }
+
+            return true;
+        }
+        private bool IsScrapValid()
+        {
+            double tempScrap = 0;
+            bool isDouble = double.TryParse(ScrapAmount, out tempScrap);
+
+            if (!isDouble)
+            {
+                MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                return false;
+            }
+
+            if (tempScrap < 0)
+            {
+                MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
+                return false;
+            }
+
+            if(tempScrap > StockDetail.TotalInventory)
+            {
+                MessageWindow.ShowMessage("報廢數量不可大於庫存量!", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
+        private bool IsRecycleValid()
+        {
+            double tempRecycle = 0;
+            bool isDouble = double.TryParse(RecycleAmount, out tempRecycle);
+
+            if (!isDouble)
+            {
+                MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                return false;
+            }
+
+            if (tempRecycle < 0)
+            {
+                MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
+                return false;
             }
 
             return true;

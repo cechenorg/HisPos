@@ -50,8 +50,6 @@
             <CheckBox Width="133" Height="35" Content="傳送杏德" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0"
                       IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrder, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
-        <declare:MedicineDataGrid x:Key="MedicineDataGrid" x:Name="MedicineDataGrid"/>
-        <Style TargetType="declare:MedicineDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -301,11 +299,6 @@
                         <ComboBox x:Name="CopaymentCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" StaysOpenOnEdit="True" ItemsSource="{Binding Copayments}" PreviewKeyDown="CopaymentCombo_PreviewKeyDown"
                               SelectedItem="{Binding CurrentPrescription.Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <command:EventToCommand Command="{Binding CopaymentSelectionChanged}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="3" Margin="8,0,8,0" Orientation="Horizontal">

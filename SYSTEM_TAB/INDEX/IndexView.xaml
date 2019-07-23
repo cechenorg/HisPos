@@ -9,9 +9,6 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:Index/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
@@ -66,17 +63,22 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="備藥狀態" FontSize="25" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding IsShowPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="已備藥" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsShowUnPrepareReserve,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsShowUnPhoneProcess,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未處理" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
                 <CheckBox IsChecked="{Binding IsExpensive,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="高貴藥" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                <Button Width="120" Command="{Binding PrintIndexReserveMedbagCommand}" Margin="108,0,0,0" Content="列印明細" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" Visibility="{Binding IsShowPrepareReserve, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </StackPanel>
             <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding ReserveCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding IndexReserveSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                      SelectedItem="{Binding IndexReserveSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding IndexReserveSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding ShowReserveDetailCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Resources>
@@ -105,7 +107,7 @@
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger> 
                             <DataTrigger Binding="{Binding IsExpensive}" Value="True">
-                                <Setter Property="Background" Value="GreenYellow"></Setter>
+                                <Setter Property="Background" Value="Khaki"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
@@ -175,7 +177,14 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <CheckBox Width="80" Content="不備藥" Margin="15,0,0,0" IsChecked="{Binding IsNoPrepareMed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Command="{Binding DataContext.StatusChangedCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                    <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrepareMedStatus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding DataContext.PrepareStatusString,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedPrepareChangedCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -194,9 +203,9 @@
                 <Label Content="處方" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <Label Content="{Binding IndexReserveCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
                 <Label Content="張" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                <Button Width="130" Command="{Binding CommonMedStoreOrderCommand}" Margin="305,0,0,0" Content="常備藥採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
-                <Button Width="100" Command="{Binding ReserveMedicineBackCommand}" Margin="10,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
-                <Button Width="100" Command="{Binding ReserveMedicineSendCommand}" Margin="10,0,0,0" Content="慢箋採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <Button Width="130" Command="{Binding CommonMedStoreOrderCommand}" Margin="285,0,0,0" Content="常備藥採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
+                <Button Width="110" Command="{Binding ReserveMedicineBackCommand}" Margin="10,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
+                <Button Width="110" Command="{Binding ReserveMedicineSendCommand}" Margin="10,0,0,0" Content="慢箋採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
             </StackPanel>
             <Grid Grid.Row="4" Grid.Column="0" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
@@ -261,7 +270,13 @@
                     <Button Width="100" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" IsEnabled="{Binding IsDataChanged, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ConfirmChangeCommand}"/>
                 </StackPanel>
                 <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,10,10,10"
-                    CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding IndexReserveDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                          CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False"
+                          ItemsSource="{Binding IndexReserveDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding IndexReserveDetailSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataContext.ShowMedicineDetailCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -302,7 +317,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn MaxWidth="300" Width="300" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
+                        <DataGridTemplateColumn MaxWidth="320" Width="320" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
@@ -312,7 +327,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn  Width="100" Header="庫存(藥袋)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Stock}">
+                        <DataGridTextColumn  Width="110" Header="庫存(藥袋)" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Stock}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -320,7 +335,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn  Width="100" Header="載途量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OntheWay}">
+                        <DataGridTextColumn  Width="80" Header="載途量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OntheWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -328,7 +343,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn  Width="100" Header="調劑量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                        <DataGridTextColumn  Width="80" Header="調劑量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
