@@ -127,12 +127,16 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-            <TextBlock Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding ProductCount, FallbackValue=0}" HorizontalContentAlignment="Center" Width="50" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-            <Label Content="完成時間:" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="400,0,0,0"/>
+            <Label Content="應收 $" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" HorizontalAlignment="Left" Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="實收 $" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <TextBlock Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}"  Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="退貨價差 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <TextBlock Text="{Binding ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="完成時間:" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding DoneDateTime, Converter={StaticResource DateTimeConverter}}" Width="225" HorizontalContentAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <!--<Button Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Margin="10,0,0,0" Foreground="White" Background="IndianRed" Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
                 <Button.Style>

@@ -124,14 +124,17 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
             <Label Content="{Binding CurrentStoreOrder.ProductCount, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-            <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Rectangle Width="550"/>
+            <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="應收 $" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" HorizontalAlignment="Left" Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="實收 $" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}"  Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="退貨價差 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <TextBlock Text="{Binding CurrentStoreOrder.ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <!--<Button Width="150" Content="未退量補回" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReturnOrderRePurchaseCommand}"/>-->
-            <Button Width="150" Content="完成退貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="150" Content="完成退貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="155,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
