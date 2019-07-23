@@ -15,14 +15,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
             OntheWay = r.Field<string>("OntheWay");
             Amount = r.Field<double>("TotalAmount");
             IsFrozen = r.Field<bool>("Med_IsFrozen");
-            ControlLevel = r.Field<byte?>("Med_Control");
+            IsControl = r.Field<byte?>("Med_Control");
             SendAmount = 0;
         }
         public string StoOrdID { get; set; }
         public string Stock { get; set; }
         public string OntheWay { get; set; }
         public bool IsFrozen { get; set; }
-        public byte? ControlLevel { get; set; }
+        public byte? IsControl { get; set; }
         public double Amount { get; set; }
         public string InvID { get; set; }
         private double frameAmount;

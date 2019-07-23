@@ -62,10 +62,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                TreatDate.Focus();
-                TreatDate.SelectionStart = 0;
+                case Key.Space:
+                    e.Handled = true;
+                    break;
+                case Key.Enter:
+                    TreatDateTextBox.Focus();
+                    TreatDateTextBox.SelectionStart = 0;
+                    break;
             }
         }
 
@@ -73,8 +78,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (e.Key == Key.Enter)
             {
-                AdjustDate.Focus();
-                AdjustDate.SelectionStart = 0;
+                AdjustDateTextBox.Focus();
+                AdjustDateTextBox.SelectionStart = 0;
             }
         }
 

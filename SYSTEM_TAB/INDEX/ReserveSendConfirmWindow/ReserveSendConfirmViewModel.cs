@@ -66,8 +66,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     CaculateReserveSendAmount();
             });
             IndexReserveCollection = indexReserves;
-            if (IndexReserveCollection.Count > 0)
+            if (IndexReserveCollection.Count > 0) {
                 IndexReserveSelectedItem = IndexReserveCollection[0];
+                CaculateReserveSendAmount();
+            }
+                
         }
         #region Action
         private void SubmitAction() {
@@ -87,16 +90,25 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SendReserveStoOrder() {
             MainWindow.ServerConnection.OpenConnection();
 
-            if (IndexReserveSelectedItem.PrepareMedType != ReserveSendType.AllPrepare ) {
-                if(IndexReserveSelectedItem.StoreOrderToSingde())
-                IndexReserveCollection.Remove(IndexReserveSelectedItem);
+            switch (IndexReserveSelectedItem.PrepareMedType) {
+                case ReserveSendType.AllPrepare: 
+                    IndexReserveSelectedItem.PrepareMedStatus = IndexPrepareMedType.Prepare;
+                    IndexReserveSelectedItem.SaveStatus();
+                    PrintPackage();
+                    IndexReserveCollection.Remove(IndexReserveSelectedItem);
+                    break;
+                case ReserveSendType.AllSend:
+                case ReserveSendType.CoPrepare:
+                    if (IndexReserveSelectedItem.StoreOrderToSingde()) {
+                        if(IndexReserveSelectedItem.PrepareMedType == ReserveSendType.CoPrepare)
+                            PrintPackage();
+                        IndexReserveCollection.Remove(IndexReserveSelectedItem);
+                    }
+                        
+                    break;
+
             }
-            else {
-                IndexReserveSelectedItem.IsSend = true;
-                IndexReserveSelectedItem.SaveStatus();
-                PrintPackage();
-                IndexReserveCollection.Remove(IndexReserveSelectedItem);
-            }
+             
             if (IndexReserveCollection.Count > 0)
                 IndexReserveSelectedItem = IndexReserveCollection[0];
             MainWindow.ServerConnection.CloseConnection(); 
@@ -159,13 +171,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void CaculateReserveSendAmount() {
             if (IndexReserveSelectedItem is null) return;
             MainWindow.ServerConnection.OpenConnection();
+           
+            IndexReserveSelectedItem.GetIndexDetail();
             List<string> MedicineIds = new List<string>();
-            foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection) {
+            foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection)
+            {
                 MedicineIds.Add(med.ID);
             }
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-             
-            IndexReserveSelectedItem.GetIndexDetail();
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
             {
                 var pro = IndexReserveSelectedItem.IndexReserveDetailCollection[j];

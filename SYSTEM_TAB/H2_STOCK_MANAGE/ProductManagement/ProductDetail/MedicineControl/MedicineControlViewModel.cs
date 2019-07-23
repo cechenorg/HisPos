@@ -24,6 +24,8 @@ using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.NewClass.Prescription.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using His_Pos.NewClass.StockTaking.StockTaking;
+using His_Pos.NewClass.StockTaking.StockTakingProduct;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -275,7 +277,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
+            StockTaking stockTaking = new StockTaking();
+            stockTaking.WareHouse = SelectedWareHouse;
+            StockTakingProduct stockTakingProduct = new StockTakingProduct();
+             
+            stockTakingProduct.ID = Medicine.ID;
+            stockTakingProduct.Inventory = StockDetail.TotalInventory;
+            stockTakingProduct.NewInventory = double.Parse(NewInventory); 
+            stockTaking.StockTakingProductCollection.Add(stockTakingProduct);
+            stockTaking.InsertStockTaking("單品盤點");
+            //ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);

@@ -66,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         public RelayCommand GetControlMedicinesCommand { get; set; }
         public RelayCommand GetStockLessProductsCommand { get; set; }
         public RelayCommand GetMonthMedicinesCommand { get; set; }
+        public RelayCommand GetOnTheFrameMedicinesCommand { get; set; }  
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand ProductSubmitCommand { get; set; }
@@ -76,11 +77,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         public AddNewProductWindowViewModel(string warID, StockTakingPlanProducts takingPlanProducts) {
             GetControlMedicinesCommand = new RelayCommand(GetControlMedicinesAction);
             GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
+            GetOnTheFrameMedicinesCommand = new RelayCommand(GetOnTheFrameMedicinesAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             ProductSubmitCommand = new RelayCommand(ProductSubmitAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
-            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
+            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction); 
             WarID = warID;
             TargetStockTakingProducts.Clear();
             foreach (var t in takingPlanProducts) {
@@ -122,10 +124,17 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             SourceStockTakingProducts = SourceStockTakingProducts.GetMonthMedicines(WarID);
             RemoveSourceProInTarget(); 
         }
+        private void GetOnTheFrameMedicinesAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetOnTheFrameMedicines(WarID);
+            RemoveSourceProInTarget();
+        }
+        
         private void GetStockTakingProductByProNameAction() {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName);
             RemoveSourceProInTarget();
         }
+         
         private void RemoveSourceProInTarget() {
             for (int i = 0; i < SourceStockTakingProducts.Count; i++) {
                 if (TargetStockTakingProducts.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0) {

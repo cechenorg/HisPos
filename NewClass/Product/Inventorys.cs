@@ -15,8 +15,8 @@ namespace His_Pos.NewClass.Product
                 Add(new Inventory(r));
             }
         }
-        public static Inventorys GetAllInventoryByProIDs(List<string> MedicineIds) {
-            return new Inventorys(ProductDB.GetAllInventoryByProIDs(MedicineIds));
+        public static Inventorys GetAllInventoryByProIDs(List<string> MedicineIds, string warID = "0") {
+            return new Inventorys(ProductDB.GetAllInventoryByProIDs(MedicineIds, warID));
         }
     }
 }

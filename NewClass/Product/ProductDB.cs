@@ -87,9 +87,10 @@ namespace His_Pos.NewClass.Product
             }
              
         }
-        internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds) {
+        internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Products", SetMedicines(MedicineIds));
+            DataBaseFunction.AddSqlParameter(parameterList, "Ware_ID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[AllInventoryByProIDs]", parameterList); 
         }
 

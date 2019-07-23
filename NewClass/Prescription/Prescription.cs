@@ -30,7 +30,6 @@ using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
-using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 using Resources = His_Pos.Properties.Resources;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
@@ -99,8 +98,8 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
-            MedicalNumber = r.Field<string>("MedicalNumber");
-            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+            MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber"))? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
+            OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber"))? r.Field<string>("OldMedicalNumber"): r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
             {
                 TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
@@ -111,12 +110,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     PrescriptionStatus.ReserveSend = reserveSend;
                     break;
                 default:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
             if (type.Equals(PrescriptionType.ChronicReserve))
@@ -153,14 +152,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -174,7 +173,7 @@ namespace His_Pos.NewClass.Prescription
             OrthopedicsGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
+                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode.Trim();
             #endregion
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
@@ -212,16 +211,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
-                TempMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                TempMedicalNumber = insurance.MedicalNumber;
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -237,7 +234,7 @@ namespace His_Pos.NewClass.Prescription
             CooperativeGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.Insurance.IcErrorCode;
+                TempMedicalNumber = c.Insurance.IcErrorCode.Trim();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
@@ -412,8 +409,6 @@ namespace His_Pos.NewClass.Prescription
             get => copayment;
             set
             {
-                if (value.Id.Equals("I20") && PrescriptionPoint.MedicinePoint <= 100) return;
-                if (value.Id.Equals("I21") && PrescriptionPoint.MedicinePoint > 100) return;
                 Set(() => Copayment, ref copayment, value);
                 if (Copayment != null)
                 {
@@ -993,9 +988,7 @@ namespace His_Pos.NewClass.Prescription
         {
             IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
-            CountPrescriptionPoint();
-            CountSelfPay();
-            PrescriptionPoint.CountAmountsPay();
+            Medicines.ReOrder();
         }
 
         private void CheckVariableByDivision()
@@ -1526,7 +1519,7 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckMedicinesNegativeStock()
         {
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock();
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID);
         }
 
         public void CountSelfPay()
@@ -1576,11 +1569,11 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines.Clear();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
                 default:
                     Medicines.Clear();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
         }

@@ -628,6 +628,11 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable SetPrescriptionDetail(List<Pdata> prescriptionDetails)
         { //一般藥費
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
+            for (var i = 0; i < prescriptionDetails.Count; i++)
+            {
+                if (prescriptionDetails[i].Order == 0)
+                    prescriptionDetails[i].Order = i + 1;
+            }
             foreach (var pdata in prescriptionDetails)
             {
                 DataRow newRow = prescriptionDetailTable.NewRow();
@@ -647,6 +652,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -714,7 +720,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
             detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
-            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float)); 
+            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float));
+            detailTable.Columns.Add("PreDet_Order", typeof(int)); 
             return detailTable;
         }
 
@@ -847,7 +854,8 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable SetImportDeclareXmlDetail(List<ImportDeclareXml.ImportDeclareXml.Ddata> Ddatas, int preId) { 
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
             foreach(var d in Ddatas)
-            { 
+            {
+                int count = 1;
                 foreach (var pdata in d.Pdatas)
                 {
                     DataRow newRow = prescriptionDetailTable.NewRow();
@@ -865,7 +873,9 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", false);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", false);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count); 
                     prescriptionDetailTable.Rows.Add(newRow);
+                    count++;
                 }
                 preId++;
             } 

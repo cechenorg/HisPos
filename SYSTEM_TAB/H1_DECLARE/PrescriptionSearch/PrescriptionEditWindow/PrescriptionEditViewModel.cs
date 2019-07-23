@@ -620,7 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var editMedIDs = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
             var medIDs = originMedIDs.Concat(editMedIDs).Distinct().ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs);
+            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs,EditedPrescription.WareHouse?.ID);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryIDList = new List<int>();
             foreach (var originMed in OriginalPrescription.Medicines)
@@ -652,7 +652,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var inventoryList = new List<MedicineInventoryStruct>();
             foreach (var e in editInvIDList)
             {
-                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).OnTheFrame));
+                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).InventoryAmount));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)

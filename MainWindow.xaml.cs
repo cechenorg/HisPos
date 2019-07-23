@@ -63,6 +63,7 @@ namespace His_Pos
         private void InitialUserBlock()
         {
             UserName.Content = ViewModelMainWindow.CurrentUser.Name;
+            PharmacyName.Content = ViewModelMainWindow.CurrentPharmacy.Name;
         }
 
         private void FeatureFactory()

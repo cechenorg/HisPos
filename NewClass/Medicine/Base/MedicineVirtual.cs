@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
         public MedicineVirtual(DataRow r)
         {
-            ID = r.Field<string>("");
+            ID = r.Field<string>("Pro_ID");
             switch (ID)
             {
                 case "R001":

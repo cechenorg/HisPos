@@ -182,6 +182,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
+        private string selectedPatientDetailType;
+        public string SelectedPatientDetailType
+        {
+            get => selectedPatientDetailType;
+            set
+            {
+                Set(() => SelectedPatientDetailType, ref selectedPatientDetailType, value);
+            }
+        }
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -562,6 +571,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DeleteMedicineAction()
         {
             CurrentPrescription.DeleteMedicine();
+            CurrentPrescription.CountPrescriptionPoint();
+            CurrentPrescription.CountSelfPay();
+            CurrentPrescription.PrescriptionPoint.CountAmountsPay();
         }
 
         private void ShowMedicineDetailAction(string medicineID)

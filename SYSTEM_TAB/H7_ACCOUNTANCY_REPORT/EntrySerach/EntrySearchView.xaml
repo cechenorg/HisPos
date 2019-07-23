@@ -63,36 +63,38 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="11">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="12">
                 <Label Content="{Binding StartDate,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="30"/>
                 <Label Content="~" FontFamily="Segoe UI Semibold" FontSize="30"/>
                 <Label Content="{Binding EndDate,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="30"/>
             </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="8" Background="DarkSeaGreen"/>
-            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Background="GhostWhite"/>
-            <Border Grid.Row="1" Grid.Column="0" BorderThickness="2" Grid.ColumnSpan="7" Grid.RowSpan="2" BorderBrush="DarkSeaGreen"/>
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="2" Grid.ColumnSpan="8" Grid.RowSpan="2" BorderBrush="DarkSeaGreen"/>
             <Label Content="期初現值" Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="進貨" Grid.Row="1" Grid.Column="1" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="退貨" Grid.Row="1" Grid.Column="2" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="調劑耗用" Grid.Row="1" Grid.Column="3" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="進貨負庫調整" Grid.Row="1" Grid.Column="4" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="盤點差異" Grid.Row="1" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="期末現值" Grid.Row="1" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="報廢" Grid.Row="1" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="期末現值" Grid.Row="1" Grid.Column="7" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="5" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding  FinalStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="6" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            
+            <TextBlock Text="{Binding TrashValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="6" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             <TextBlock Text="{Binding  FinalStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,StringFormat=N2}" Grid.Row="2" Grid.Column="7" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid> 
         <DataGrid  Grid.Row="2" ItemsSource="{Binding DailyStockValueCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 SelectedItem="{Binding SelectStockValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10">
@@ -138,7 +140,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="退貨" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ReturnValue,StringFormat=N2}">
+                <DataGridTextColumn Width="100" Header="退貨" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ReturnValue,StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -162,7 +164,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="盤點差異" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding StockCheckValue,StringFormat=N2}">
+                <DataGridTextColumn Width="100" Header="盤點差異" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding StockCheckValue,StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="100" Header="報廢" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TrashValue,StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

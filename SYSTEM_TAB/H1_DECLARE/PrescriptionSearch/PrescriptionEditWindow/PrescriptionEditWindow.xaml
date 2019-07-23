@@ -214,8 +214,8 @@
                             </i:Interaction.Triggers>
                         </ComboBox>
                         <Label Content="就醫序號" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                        <TextBox Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="17" MaxLength="4"
-                             Text="{Binding EditedPrescription.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper" Foreground="{StaticResource ForeGround}">
+                        <TextBox Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="17" MaxLength="4" Text="{Binding EditedPrescription.TempMedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 BorderThickness="0,0,0,1" BorderBrush="DimGray" CharacterCasing="Upper" Foreground="{StaticResource ForeGround}" PreviewKeyDown="MedicalNumber_OnPreviewKeyDown">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding DataChanged}"/>
@@ -430,6 +430,14 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="20" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Order,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -521,7 +529,7 @@
                                     <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.CountPrescriptionPoint,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedicinePriceChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </CheckBox>
@@ -545,7 +553,7 @@
                                          Text="{Binding TotalPrice, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding PaySelf,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="TextChanged">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.CountPrescriptionPoint,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MedicinePriceChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
@@ -560,7 +568,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="40" Header="架上量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.EditedPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}, FallbackValue=Collapsed}">
+                        <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.EditedPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}, FallbackValue=Collapsed}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -573,7 +581,13 @@
                                 <DataTemplate>
                                     <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
                                              FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"
-                                             Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                             Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="TextChanged">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.DataChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

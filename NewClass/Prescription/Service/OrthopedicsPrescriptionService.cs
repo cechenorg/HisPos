@@ -38,7 +38,6 @@ namespace His_Pos.NewClass.Prescription.Service
         public override bool CheckEditPrescription(bool noCard)
         {
             CheckAnonymousPatient();
-            if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (Current.IsPrescribe)
