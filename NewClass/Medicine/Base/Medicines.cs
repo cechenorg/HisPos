@@ -621,14 +621,14 @@ namespace His_Pos.NewClass.Medicine.Base
                 var buckleAmount = editMed.Sum(m => m.BuckleAmount);
                 buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
             }
-            var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.InventoryID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs, warID);
+            var inventories = MedicineDb.GetInventoryByInvIDs(medIDs);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryList = new List<MedicineInventoryStruct>();
-            foreach (var inv in inventories)
+            foreach (DataRow r in inventories.Rows)
             {
-                inventoryList.Add(new MedicineInventoryStruct(inv.InvID, inv.InventoryAmount));
+                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_Inventory")));
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)

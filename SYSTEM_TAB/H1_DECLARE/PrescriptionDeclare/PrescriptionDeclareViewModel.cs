@@ -182,13 +182,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
-        private string selectedPatientDetailType;
-        public string SelectedPatientDetailType
+        private string selectedPatientDetail;
+        public string SelectedPatientDetail
         {
-            get => selectedPatientDetailType;
+            get => selectedPatientDetail;
             set
             {
-                Set(() => SelectedPatientDetailType, ref selectedPatientDetailType, value);
+                if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
+                {
+                    if (CurrentPrescription.Patient is null || !CurrentPrescription.Patient.CheckData())
+                    {
+                        MessageWindow.ShowMessage("尚未選擇客戶", MessageType.WARNING);
+                        value = "Option1";
+                    }
+                    else
+                    {
+                        if (CurrentPrescription.Patient.Name.Equals("匿名"))
+                        {
+                            MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.WARNING);
+                            value = "Option1";
+                        }
+                    }
+                }
+                Set(() => SelectedPatientDetail, ref selectedPatientDetail, value);
             }
         }
         private IcCard currentCard;
@@ -238,6 +254,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region InitFunctions
         private void Init()
         {
+            SelectedPatientDetail = "Option1";
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
@@ -722,6 +739,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isAdjusting = false;
                 return;
             }
+            CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
             CurrentPrescription.SetDetail();
             StartRegister();
         }

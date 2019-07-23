@@ -424,20 +424,6 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private void CheckCopaymentValid()
-        {
-            if (Copayment is null) return;
-            switch (Copayment.Id)
-            {
-                case "I21" when  PrescriptionPoint.MedicinePoint > 100:
-                    Copayment = VM.GetCopayment("I20");
-                    break;
-                case "I20" when PrescriptionPoint.MedicinePoint <= 100:
-                    Copayment = VM.GetCopayment("I21");
-                    break;
-            }
-        }
-
         private PaymentCategory paymentCategory;//給付類別 D5
         public PaymentCategory PaymentCategory
         {
