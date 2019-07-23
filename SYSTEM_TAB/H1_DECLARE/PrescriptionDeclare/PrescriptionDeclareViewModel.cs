@@ -40,7 +40,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerP
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using Application = System.Windows.Application;
@@ -222,7 +221,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
         public RelayCommand PrescribeAdjust { get; set; }
-        public RelayCommand<DataGridDragDropEventArgs> ItemsDragDropCommand { get; private set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -284,50 +282,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
-            SendOrder = new RelayCommand(CheckDeclareStatus);
+            SendOrder = new RelayCommand(SendOrderAction);
             Clear = new RelayCommand(ClearAction);
             ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
             DepositAdjust = new RelayCommand(DepositAdjustAction, CheckDepositAdjustEnable);
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
-            ItemsDragDropCommand = new RelayCommand<DataGridDragDropEventArgs>((args) => DragDropItem(args), (args) => args != null && args.TargetObject != null && args.DroppedObject != null && args.Effects != System.Windows.DragDropEffects.None);
-        }
-
-        private void EditMedicineSetAction(string mode)
-        {
-            if (CurrentSet is null && !mode.Equals("Add"))
-            {
-                MessageWindow.ShowMessage("尚未選擇藥品組合", MessageType.ERROR);
-                return;
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            switch (mode)
-            {
-                case "Get":
-                    GetMedicinesFromMedicineSet();
-                    break;
-                case "Add":
-                    AddMedicineSet();
-                    break;
-                case "Edit":
-                    EditCurrentMedicineSet();
-                    break;
-            }
-            MainWindow.ServerConnection.CloseConnection();
-        }
-
-        private void ChronicSequenceChangedAction()
-        {
-            CurrentPrescription.CheckPrescriptionVariable();
-            CheckDeclareStatus();
-        }
-
-        private void AdjustCaseSelectionChangedAction()
-        {
-            CheckDeclareStatus();
-            if(CurrentPrescription.AdjustCase.CheckIsPrescribe())
-                CurrentPrescription.Medicines.SetToPaySelf();
         }
 
         #endregion
@@ -554,6 +515,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Send(new NotificationMessage(this, "FocusChronicTotal"));
         }
 
+        private void ChronicSequenceChangedAction()
+        {
+            CurrentPrescription.CheckPrescriptionVariable();
+            CheckDeclareStatus();
+        }
+
+        private void AdjustCaseSelectionChangedAction()
+        {
+            CheckDeclareStatus();
+            if (CurrentPrescription.AdjustCase.CheckIsPrescribe())
+                CurrentPrescription.Medicines.SetToPaySelf();
+        }
+
         private void AddMedicineAction(string medicineID)
         {
             if (string.IsNullOrEmpty(medicineID)) return;
@@ -583,6 +557,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, wareID }, "ShowProductDetail"));
         }
 
+        private void MedicineAmountChangedAction()
+        {
+            CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
+        }
+
         private void CountMedicinePointAction()
         {
             CurrentPrescription.CheckPrescriptionVariable();
@@ -595,15 +574,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ShowPrescriptionEditWindowAction()
         {
             if (SelectedHistory is null) return;
-            var pSource = SelectedHistory.GetPrescriptionSourceFromHistoryType();
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            var prescriptionEdit = new PrescriptionEditWindow(SelectedHistory.SourceId, pSource);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedHistory.SourceId);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
-        }
-
-        private void MedicineAmountChangedAction()
-        {
-            CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
         }
 
         private void CopyPrescriptionAction()
@@ -620,6 +593,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.ID = 0;
             CheckDeclareStatus();
             CountMedicinePointAction();
+        }
+
+        private void EditMedicineSetAction(string mode)
+        {
+            if (CurrentSet is null && !mode.Equals("Add"))
+            {
+                MessageWindow.ShowMessage("尚未選擇藥品組合", MessageType.ERROR);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            switch (mode)
+            {
+                case "Get":
+                    GetMedicinesFromMedicineSet();
+                    break;
+                case "Add":
+                    AddMedicineSet();
+                    break;
+                case "Edit":
+                    EditCurrentMedicineSet();
+                    break;
+            }
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void SendOrderAction()
+        {
+            CheckMedicinePrepared();
+            CheckDeclareStatus();
+        }
+
+        private void CheckMedicinePrepared()
+        {
+            if (!CurrentPrescription.PrescriptionStatus.IsSendOrder) return;
+            if (CurrentPrescription.PrescriptionStatus.ReserveSend != null && (bool)CurrentPrescription.PrescriptionStatus.ReserveSend)
+                MessageWindow.ShowMessage("此預約處方已備藥。", MessageType.ONLYMESSAGE);
         }
 
         private void ErrorAdjustAction()
@@ -670,6 +679,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isAdjusting = false;
                 return;
             }
+            if (!CheckAdjustDatePast10Days())
+            {
+                isAdjusting = false;
+                return;
+            }
             CurrentPrescription.SetDetail();
             CheckIsReadCard();
         }
@@ -701,29 +715,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             CurrentPrescription.SetDetail();
             StartPrescribeAdjust();
-        }
-
-        public void DragDropItem(DataGridDragDropEventArgs args)
-        {
-            if(!(args.TargetObject is Medicine)) return;
-            var targetIndex = CurrentPrescription.Medicines.IndexOf((Medicine)args.TargetObject);
-            if (args.Direction == DataGridDragDropDirection.Down) targetIndex++;
-
-            switch (args.Effects)
-            {
-                case System.Windows.DragDropEffects.Move when args.DroppedObject is Medicine m:
-                {
-                    var sourceIndex = CurrentPrescription.Medicines.IndexOf(m);
-                    if (sourceIndex < targetIndex) targetIndex--;
-                    CurrentPrescription.Medicines.Remove(m);
-
-                    CurrentPrescription.Medicines.Insert(targetIndex, m);
-                    break;
-                }
-                case System.Windows.DragDropEffects.Copy:
-                    CurrentPrescription.Medicines.Insert(targetIndex, (Medicine)((Medicine)args.DroppedObject).Clone());
-                    break;
-            }
         }
         #endregion
         #region MessengerFunctions
@@ -1214,6 +1205,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             var result = CurrentPrescription.CheckMedicinesNegativeStock();
             return string.IsNullOrEmpty(result);
+        }
+
+        private bool CheckAdjustDatePast10Days()
+        {
+            if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
+            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
+            if (timeDiff > 10)
+            {
+                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

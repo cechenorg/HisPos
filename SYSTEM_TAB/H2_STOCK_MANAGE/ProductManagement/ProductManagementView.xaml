@@ -97,7 +97,7 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridBackGround}">
             <Button Content="+ 新增商品" Background="IndianRed" Height="35" FontSize="18" FontWeight="Bold" Width="150" BorderThickness="0" Command="{Binding InsertProductCommand}" Margin="10,0,0,0"/>
             <Label Content="查詢結果  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Label Content="{Binding SearchProductCollection.Count, FallbackValue=0}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>

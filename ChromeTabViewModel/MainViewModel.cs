@@ -11,15 +11,11 @@ using His_Pos.Class;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan;
@@ -263,15 +259,15 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.處方查詢):
-                    newTab = new PrescriptionSearchViewModel() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionSearchViewModelRe() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.匯出申報檔):
-                    newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.額外收入登錄):
-                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[5], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 //銷售作業

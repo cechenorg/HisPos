@@ -262,6 +262,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
+                Refresh();
             };
             IsBusy = true;
             worker.RunWorkerAsync();

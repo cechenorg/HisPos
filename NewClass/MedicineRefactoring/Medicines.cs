@@ -284,7 +284,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
 
         public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
         {
-            var table = MedicineDb.GetMedicinesBySearchId(medicineId, wareHouseId, adjustDate);
+            var table = MedicineDb.GetMedicinesBySearchIds(new List<string> { medicineId }, wareHouseId, adjustDate);
             var medicine = AddMedicineByDataType(table);
             Debug.Assert(medicine != null, nameof(medicine) + " != null");
             medicine.PaySelf = paySelf;
@@ -394,7 +394,7 @@ namespace His_Pos.NewClass.MedicineRefactoring
         [SuppressMessage("ReSharper", "FlagArgument")]
         private void SetBuckleAmount(bool buckle)
         {
-            foreach (var m in Items)
+            foreach (var m in this)
             {
                 switch (m)
                 {

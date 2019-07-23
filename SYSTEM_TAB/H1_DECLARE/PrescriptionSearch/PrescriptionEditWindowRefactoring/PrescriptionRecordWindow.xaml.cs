@@ -1,20 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.MedicineRefactoring;
+using His_Pos.NewClass.PrescriptionRefactoring;
 using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindowRefactoring
 {
     /// <summary>
     /// PrescriptionRecordWindow.xaml 的互動邏輯
     /// </summary>
     public partial class PrescriptionRecordWindow : Window
     {
-        public PrescriptionRecordWindow(Prescription p)
+        public PrescriptionRecordWindow()
+        {
+            InitializeComponent();
+        }
+        public PrescriptionRecordWindow(Prescription p, string title)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -22,11 +36,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            DataContext = new PrescriptionEditViewModel(p);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
+            DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
         }
-
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
@@ -58,6 +71,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 e.Handled = true;
                 t.CaretIndex++;
             }
+        }
+        private void DateControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }
     }
 }

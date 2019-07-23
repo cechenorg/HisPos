@@ -29,11 +29,30 @@ namespace His_Pos.NewClass.PrescriptionRefactoring.Service
             else
             {
                 if (!CheckNhiRules(noCard)) return false;
-                if (noCard)
+                if (!noCard)
                     if (!CheckMedicalNumber()) return false;
             }
             if (!CheckPrescribeRules()) return false;
             return CheckSameDeclare() && PrintConfirm();
+        }
+
+        public override bool CheckEditPrescription(bool noCard)
+        {
+            CheckAnonymousPatient();
+            if (!CheckRemarkEmpty()) return false;
+            if (!CheckValidCustomer()) return false;
+            if (!CheckAdjustAndTreatDate()) return false;
+            if (Current.IsPrescribe)
+            {
+                if (!CheckPrescribeRules()) return false;
+            }
+            else
+            {
+                if (!CheckNhiRules(noCard)) return false;
+                if (!noCard)
+                    if (!CheckMedicalNumber()) return false;
+            }
+            return CheckPrescribeRules();
         }
 
         public override bool NormalAdjust()

@@ -17,10 +17,8 @@
     xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:customerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
-    xmlns:medFrequencyManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
     xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
-    xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
     xmlns:declareFile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage"
     xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
@@ -61,7 +59,7 @@
         <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclareViewModel}">
             <prescriptionDeclare:PrescriptionDeclareView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModel}">
+        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModelRe}">
             <prescriptionSearch:PrescriptionSearchView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productManagement:ProductManagementViewModel}">
@@ -94,17 +92,11 @@
         <DataTemplate DataType="{x:Type customerManage:CustomerManageViewModel}">
             <customerManage:CustomerManageView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type medFrequencyManage:MedFrequencyManage}">
-            <medFrequencyManage:MedFrequencyManageView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
             <workScheduleManage:WorkScheduleManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type authenticationManage:AuthenticationManage}">
             <authenticationManage:AuthenticationManageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type medBagManage:MedBagManage}">
-            <medBagManage:MedBagManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type index:Index}">
             <index:IndexView/>

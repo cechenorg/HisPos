@@ -499,7 +499,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.CurrentPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}, FallbackValue=Collapsed}">
+                        <DataGridTextColumn MinWidth="40" Header="架上量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.CurrentPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}, FallbackValue=Collapsed}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />

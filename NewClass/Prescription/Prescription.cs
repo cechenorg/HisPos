@@ -411,7 +411,7 @@ namespace His_Pos.NewClass.Prescription
         public void AddMedicineBySearch(string proId,DateTime? adjustDate)
         {
             IsBuckle = WareHouse != null;
-            DataTable table = MedicineDb.GetMedicinesBySearchId(proId, WareHouse is null ? "0" : WareHouse.ID, adjustDate);
+            DataTable table = MedicineDb.GetMedicinesBySearchIds(new List<string> { proId }, WareHouse is null ? "0" : WareHouse.ID, adjustDate);
             var medicine = new Medicine();
             foreach (DataRow r in table.Rows) 
             {
@@ -463,7 +463,7 @@ namespace His_Pos.NewClass.Prescription
         #endregion
         public void AdjustMedicinesType() {
             for(var medCount = 0; medCount < Medicines.Count; medCount++){
-                var table = MedicineDb.GetMedicinesBySearchId(Medicines[medCount].ID,WareHouse is null ? "0": WareHouse.ID,Treatment.AdjustDate);
+                var table = MedicineDb.GetMedicinesBySearchIds(new List<string>{ Medicines[medCount].ID },WareHouse is null ? "0": WareHouse.ID,Treatment.AdjustDate);
                 var temp = new Medicine();
                 if (Medicines[medCount].ID.Equals("R001") || Medicines[medCount].ID.Equals("R002") ||
                     Medicines[medCount].ID.Equals("R003") || Medicines[medCount].ID.Equals("R004"))

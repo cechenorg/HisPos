@@ -175,7 +175,7 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;
-                AdjustCases = new AdjustCases();
+                AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
                 PaymentCategories = new PaymentCategories();
                 BusyContent = StringRes.取得處方案件;

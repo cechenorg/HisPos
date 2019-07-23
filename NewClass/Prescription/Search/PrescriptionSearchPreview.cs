@@ -8,6 +8,8 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.PrescriptionRefactoring;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
@@ -15,9 +17,9 @@ namespace His_Pos.NewClass.Prescription.Search
     {
         public PrescriptionSearchPreview() { }
 
-        public PrescriptionSearchPreview(DataRow r,PrescriptionSource s)
+        public PrescriptionSearchPreview(DataRow r,PrescriptionType s)
         {
-            Source = s;
+            Type = s;
             ID = r.Field<int>("ID");
             Patient = new Customer();
             Patient.Name = r.Field<string>("Cus_Name");
@@ -29,13 +31,26 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
-            if (s == PrescriptionSource.Normal)
+            if (NewFunction.CheckDataRowContainsColumn(r, "NoBuckleStatus"))
+            {
+                NoBuckleStatus = r.Field<int?>("NoBuckleStatus");
+            }
+            if (NewFunction.CheckDataRowContainsColumn(r, "RegisterTime"))
+            {
+                TaiwanCalendar tc = new TaiwanCalendar();
+                if (r.Field<DateTime?>("RegisterTime") != null)
+                {
+                    var istime = r.Field<DateTime>("RegisterTime");
+                    RegisterDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
+                }
+            }
+            if (s == PrescriptionType.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
-                TaiwanCalendar tc = new TaiwanCalendar();
+                var tc = new TaiwanCalendar();
                 if (r.Field<DateTime?>("InsertTime") != null) {
-                    DateTime istime = r.Field<DateTime>("InsertTime");
-                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
+                    var istime = r.Field<DateTime>("InsertTime");
+                    InsertDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
                 } 
                 
                 switch (r.Field<string>("StoOrd_Status")) {
@@ -130,6 +145,15 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => IsAdjust, ref isAdjust, value);
             }
         }
+        private int? noBuckleStatus;
+        public int? NoBuckleStatus
+        {
+            get => noBuckleStatus;
+            set
+            {
+                Set(() => NoBuckleStatus, ref noBuckleStatus, value);
+            }
+        }
         private string stoStatus;
         public string StoStatus
         {
@@ -157,15 +181,15 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => InsertDate, ref insertDate, value);
             }
         }
-        public PrescriptionSource Source { get; set; }
-        public Prescription GetPrescriptionByID()
+        private string registerDate;
+        public string RegisterDate
         {
-            return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0],PrescriptionSource.Normal);
+            get => registerDate;
+            set
+            {
+                Set(() => RegisterDate, ref registerDate, value);
+            }
         }
-
-        public Prescription GetReservePrescriptionByID()
-        {
-            return new Prescription(PrescriptionDb.GetReservePrescriptionByID(ID).Rows[0], PrescriptionSource.ChronicReserve);
-        }
+        public PrescriptionType Type { get; set; }
     }
 }
