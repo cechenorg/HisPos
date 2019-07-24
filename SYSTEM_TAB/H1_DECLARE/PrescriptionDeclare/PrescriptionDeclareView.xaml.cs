@@ -298,7 +298,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 textBox.Text = string.Empty;
 
                 if (PrescriptionMedicines.Items.Count != itemsCount)
-                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[PrescriptionMedicines.Items.Count - 2], PrescriptionMedicines.Columns[3]);
+                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[PrescriptionMedicines.Items.Count - 2], PrescriptionMedicines.Columns[4]);
             }
             else if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
             {
@@ -311,7 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (!((Medicine)PrescriptionMedicines.Items[index]).ID.Equals(textBox.Text))
                     textBox.Text = ((Medicine)PrescriptionMedicines.Items[index]).ID;
 
-                PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[3]);
+                PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[4]);
             }
             PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
 
