@@ -398,7 +398,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 indexReserves.Add((IndexReserve)r);
             }
             for (int i = 0; i < indexReserves.Count; i++) {
-                if ( !((indexReserves[i].PrepareMedStatus == IndexPrepareMedType.UnPrepare || indexReserves[i].PrepareMedStatus == IndexPrepareMedType.Unprocess) && indexReserves[i].IsSend))
+                if ( indexReserves[i].IsNoSend || indexReserves[i].PrepareMedStatus == IndexPrepareMedType.Prepare)
                 { 
                     if (indexReserves[i].PrepareMedStatus == IndexPrepareMedType.Unprocess) {
                         indexReserves[i].PrepareMedStatus = IndexPrepareMedType.UnPrepare;

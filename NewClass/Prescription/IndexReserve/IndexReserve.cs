@@ -34,14 +34,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
                 case "N":
-                    PrepareMedStatus = IndexPrepareMedType.Unprocess;
-                    IsSend = true;
+                    PrepareMedStatus = IndexPrepareMedType.Unprocess; 
                     break;
                 case "D":
                     PrepareMedStatus = IndexPrepareMedType.Prepare;
                     break;
                 case "F":
                     PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                    IsNoSend = true;
                     break; 
             }
             switch (r.Field<string>("CallStatus"))
@@ -77,13 +77,13 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => PrepareMedType, ref prepareMedType, value);
             }
         }
-        private bool isSend;
-        public bool IsSend
+        private bool isNoSend;
+        public bool IsNoSend
         {
-            get => isSend;
+            get => isNoSend;
             set
             {
-                Set(() => IsSend, ref isSend, value);
+                Set(() => IsNoSend, ref isNoSend, value);
             }
         }
 
