@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
         public string ID { get; set; }
         public DateTime DoneTime { get; set; }
         private double InitialPrice { get; set; }
+        public double ReturnStockValue { get; set; }
         public double UnTaxPrice
         {
             get { return unTaxPrice; }
@@ -34,6 +35,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
             get { return taxPrice; }
             set { Set(() => TaxPrice, ref taxPrice, value); }
         }
+        public double ReturnDiff { get { return TaxPrice - ReturnStockValue; } }
         #endregion
 
         public ManufactoryOrderDetail(DataRow dataRow)
@@ -42,6 +44,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
             ID = dataRow.Field<string>("StoOrd_ID");
             DoneTime = dataRow.Field<DateTime>("StoOrd_ReceiveTime");
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
+            ReturnStockValue = (double)dataRow.Field<decimal>("RETURN_PRICE");
 
             CalculateTax();
         }

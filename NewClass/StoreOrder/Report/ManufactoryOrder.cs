@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
@@ -16,6 +18,9 @@ namespace His_Pos.NewClass.StoreOrder.Report
     {
         #region ----- Define Variables -----
         private bool includeTax;
+        private ManufactoryOrderDetails orderDetails;
+        private ICollectionView purchaseOrderCollectionView;
+        private ICollectionView returnOrderCollectionView;
 
         public int ManufactoryID { get; set; }
         public string ManufactoryName { get; set; }
@@ -23,7 +28,22 @@ namespace His_Pos.NewClass.StoreOrder.Report
         public double PurchasePrice { get; set; }
         public int ReturnCount { get; set; }
         public double ReturnPrice { get; set; }
-        public ManufactoryOrderDetails OrderDetails { get; set; }
+        public ICollectionView PurchaseOrderCollectionView
+        {
+            get => purchaseOrderCollectionView;
+            set
+            {
+                Set(() => PurchaseOrderCollectionView, ref purchaseOrderCollectionView, value);
+            }
+        }
+        public ICollectionView ReturnOrderCollectionView
+        {
+            get => returnOrderCollectionView;
+            set
+            {
+                Set(() => ReturnOrderCollectionView, ref returnOrderCollectionView, value);
+            }
+        }
         #endregion
 
         public ManufactoryOrder(DataRow dataRow)
@@ -39,7 +59,10 @@ namespace His_Pos.NewClass.StoreOrder.Report
         #region ----- Define Functions -----
         public void GetOrderDetails(DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
-            OrderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate, wareID);
+            orderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate, wareID);
+
+            PurchaseOrderCollectionView = CollectionViewSource.GetDefaultView(orderDetails.Where(o => o.Type == OrderTypeEnum.PURCHASE));
+            ReturnOrderCollectionView = CollectionViewSource.GetDefaultView(orderDetails.Where(o => o.Type == OrderTypeEnum.RETURN));
         }
         public void ExportToCSV(DateTime searchStartDate, DateTime searchEndDate)
         {
@@ -57,7 +80,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
                         file.WriteLine("訂單類型,訂單編號,結案時間,未稅金額,稅額(5%),含稅金額");
-                        foreach (var order in OrderDetails)
+                        foreach (var order in orderDetails)
                         {
                             string typeName = order.Type == OrderTypeEnum.PURCHASE ? "進貨" : "退貨";
                             file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
