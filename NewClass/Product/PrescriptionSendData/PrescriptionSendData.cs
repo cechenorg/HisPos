@@ -11,8 +11,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             MedId = m.ID;
             MedName = m.FullName;
             Stock = m.Inventory;
-            TreatAmount = m.Amount;
-            SendAmount = TreatAmount;
+            TreatAmount = m.Amount; 
+            SendAmount = m.Amount;
         }
         public string MedId { get; set; }
         public string MedName { get; set; }

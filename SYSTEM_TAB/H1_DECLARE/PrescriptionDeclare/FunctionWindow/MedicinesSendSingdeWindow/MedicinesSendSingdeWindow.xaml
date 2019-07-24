@@ -76,14 +76,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="80" Header="傳輸量" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate x:Name="DosageDataTemplate">
-                            <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" 
-                                         FontSize="14" FontWeight="Bold"  Text="{Binding SendAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="80" Binding="{Binding SendAmount}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="調劑量" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn> 
             </DataGrid.Columns>
         </DataGrid>
  
