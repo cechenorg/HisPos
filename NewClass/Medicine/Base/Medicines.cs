@@ -178,12 +178,14 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
             CreateMedicines(table);
+            ReOrder();
         }
 
         public void GetDataByReserveId(int id)
         {
             var table = MedicineDb.GetDataByReserveId(id);
             CreateMedicines(table);
+            ReOrder();
         }
 
         private void CreateMedicines(DataTable table)
