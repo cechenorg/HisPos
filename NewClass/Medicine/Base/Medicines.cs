@@ -665,5 +665,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 this[i-1].Order = i;
             }
         }
+        
     }
 }

@@ -526,6 +526,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "@PointList", SetPrescriptionDeclarePointAdjust(declarePrescriptions));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionDeclarePoint]", parameterList);
         }
+      
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;
@@ -653,6 +654,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", pdata.SendAmount);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -721,7 +723,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
             detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float));
-            detailTable.Columns.Add("PreDet_Order", typeof(int)); 
+            detailTable.Columns.Add("PreDet_Order", typeof(int));
+            detailTable.Columns.Add("PreDet_SendAmount", typeof(float)); 
             return detailTable;
         }
 
@@ -873,7 +876,8 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", false);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", false);
-                    DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count); 
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", 0);
                     prescriptionDetailTable.Rows.Add(newRow);
                     count++;
                 }

@@ -22,10 +22,13 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                     PrescriptionSendData prescriptionSendData = new PrescriptionSendData(m);
                     if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) == 1) {
                         var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
+                        if(prescriptionSendData.OldSendAmount > 0)
+                            temp.OnTheFrame += prescriptionSendData.TreatAmount - prescriptionSendData.OldSendAmount;
                         prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount > 0
                             ? prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount : 0;
                         prescriptionSendData.OntheFrame = temp.OnTheFrame;
                         prescriptionSendData.OntheWay = temp.OnTheWayAmount;
+                        prescriptionSendData.PrepareAmount = prescriptionSendData.TreatAmount - prescriptionSendData.SendAmount;
                     }
                     Add(prescriptionSendData);
                 }

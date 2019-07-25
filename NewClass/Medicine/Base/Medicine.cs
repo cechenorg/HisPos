@@ -355,8 +355,8 @@ namespace His_Pos.NewClass.Medicine.Base
             get => order;
             set { Set(() => Order, ref order, value); }
         }
-        private int sendAmount;
-        public int SendAmount
+        private double sendAmount;
+        public double SendAmount
         {
             get => sendAmount;
             set { Set(() => SendAmount, ref sendAmount, value); }
@@ -577,7 +577,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 TotalPrice = r.Field<int>("Point");
             }
             Order = r.Field<int>("OrderNumber");
-            SendAmount = r.Field<int>("SendAmount");
+            SendAmount = r.Field<double>("SendAmount");
         }
     }
 }

@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             MedName = m.FullName; 
             TreatAmount = m.Amount; 
             SendAmount = m.Amount;
+            OldSendAmount = m.SendAmount;
         }
         public string MedId { get; set; }
         public string MedName { get; set; } 
@@ -34,6 +35,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             }
         } 
         public double TreatAmount { get; set; }
+        public double OldSendAmount { get; set; }
         private double sendAmount;
         public double SendAmount 
         {
@@ -43,6 +45,14 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => SendAmount, ref sendAmount, value);
             }
         }
-
+        private double prepareAmount;
+        public double PrepareAmount
+        {
+            get => prepareAmount;
+            set
+            {
+                Set(() => PrepareAmount, ref prepareAmount, value);
+            }
+        }
     }
 }
