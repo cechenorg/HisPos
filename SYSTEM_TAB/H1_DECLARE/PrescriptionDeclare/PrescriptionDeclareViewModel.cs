@@ -1080,7 +1080,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartRegister()
         {
-            if (!currentService.StartRegister()) return;
+            if (!currentService.StartRegister())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();

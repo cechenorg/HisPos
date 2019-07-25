@@ -510,12 +510,12 @@ namespace His_Pos.NewClass.Prescription.Service
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康 
               
-                  ReportViewer rptViewer = new ReportViewer(); 
-                  SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
-                  MainWindow.Instance.Dispatcher.Invoke(() =>
-                  {
-                      ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
-                  });
+                ReportViewer rptViewer = new ReportViewer(); 
+                SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+                });
                 
             }
             Current.PrescriptionStatus.UpdateStatus(Current.ID);

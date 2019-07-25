@@ -355,6 +355,12 @@ namespace His_Pos.NewClass.Medicine.Base
             get => order;
             set { Set(() => Order, ref order, value); }
         }
+        private int sendAmount;
+        public int SendAmount
+        {
+            get => sendAmount;
+            set { Set(() => SendAmount, ref sendAmount, value); }
+        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()
@@ -571,6 +577,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 TotalPrice = r.Field<int>("Point");
             }
             Order = r.Field<int>("OrderNumber");
+            SendAmount = r.Field<int>("SendAmount");
         }
     }
 }

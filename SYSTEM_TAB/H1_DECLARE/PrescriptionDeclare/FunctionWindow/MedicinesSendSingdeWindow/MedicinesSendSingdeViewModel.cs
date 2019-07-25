@@ -10,7 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
    public class MedicinesSendSingdeViewModel : ViewModelBase
     {
         #region Commad
-        public RelayCommand SubmmitCommand { get; set; }
+        public RelayCommand SubmitCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
         #endregion
         #region Var
@@ -32,19 +32,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             Prescription = p;
             Init();
         }
-        public void Init() {
+
+        private void Init() {
             PrescriptionSendData = new PrescriptionSendDatas();
             PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines);
             IsReturn = false;
-            SubmmitCommand = new RelayCommand(SubmmitAction);
+            SubmitCommand = new RelayCommand(SubmitAction);
             CancelCommand = new RelayCommand(CancelAction);
         }
         #region Action 
-        public void SubmmitAction() { 
+
+        private void SubmitAction() { 
            // PrescriptionDb.SendDeclareOrderToSingde("test",Prescription,PrescriptionSendData);
             Messenger.Default.Send(new NotificationMessage("CloseMedicinesSendSingde"));
         }
-        public void CancelAction() {
+
+        private void CancelAction() {
             IsReturn = true;
             Messenger.Default.Send(new NotificationMessage("CloseMedicinesSendSingde"));
         }

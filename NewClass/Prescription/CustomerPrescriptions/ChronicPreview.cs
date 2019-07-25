@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             {
                 case PrescriptionType.ChronicRegister:
                     table = PrescriptionDb.GetPrescriptionByID(ID);
-                    return table.Rows.Count > 0 ? new NewClass.Prescription.Prescription(table.Rows[0],Type) : null;
+                    return table.Rows.Count > 0 ? new Prescription(table.Rows[0],Type) : null;
                 case PrescriptionType.ChronicReserve:
                     var reserveSend = IsSend.Equals("已備藥");
                     table = PrescriptionDb.GetReservePrescriptionByID(ID);

@@ -83,14 +83,14 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="過卡" Width="45" IsReadOnly="True">
+                        <DataGridTemplateColumn Header="過卡" Width="45" MaxWidth="45" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image Source="/Images/Declared.png" Width="15" Visibility="{Binding Status,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="70" Header="就醫日" IsReadOnly="True">
+                        <DataGridTextColumn MinWidth="70" Header="就醫日" MaxWidth="70" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -100,7 +100,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="70" Header="調劑日" IsReadOnly="True">
+                        <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="調劑日" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -110,7 +110,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="45" Header="案件" IsReadOnly="True" >
+                        <DataGridTextColumn Width="45" MaxWidth="45" Header="案件" IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -120,7 +120,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" MaxWidth="120" Header="院所" IsReadOnly="True">
+                        <DataGridTextColumn Width="110" MaxWidth="110" Header="院所" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -130,7 +130,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="Auto" MaxWidth="110" Header="科別" IsReadOnly="True">
+                        <DataGridTextColumn Width="90" MaxWidth="90" Header="科別" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -158,7 +158,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="120" Binding="{Binding ID, Mode=OneWay}" Header="代碼" >
+                        <DataGridTextColumn Width="120" MaxWidth="120" Binding="{Binding ID, Mode=OneWay}" Header="代碼" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -166,7 +166,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="375" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" >
+                        <DataGridTextColumn Width="340" MaxWidth="340" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -174,7 +174,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="25" Binding="{Binding Days, Mode=OneWay}" Header="天數" >
+                        <DataGridTextColumn MinWidth="50" MaxWidth="50"  Binding="{Binding Days, Mode=OneWay}" Header="天數" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -182,7 +182,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="50" Binding="{Binding Amount, Mode=OneWay}" Header="總量" >
+                        <DataGridTextColumn MinWidth="50" MaxWidth="50"  Binding="{Binding Amount, Mode=OneWay}" Header="總量" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
