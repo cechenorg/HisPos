@@ -13,13 +13,19 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             List<string> MedicineIds = new List<string>();
             foreach (var med in ms)
             {
-                MedicineIds.Add(med.ID);
+                if (MedicineIds.Count(M => M == med.ID) == 0)
+                    MedicineIds.Add(med.ID);
             }
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
            
             foreach (var m in ms) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) { 
                     PrescriptionSendData prescriptionSendData = new PrescriptionSendData(m);
+                    if (this.Count(M => M.MedId == prescriptionSendData.MedId) == 1) {
+                        prescriptionSendData.TreatAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).TreatAmount;
+                        prescriptionSendData.OldSendAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).OldSendAmount;
+                        this.Remove(this.Single(M => M.MedId == prescriptionSendData.MedId));
+                    }
                     if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) == 1) {
                         var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
                         if(prescriptionSendData.OldSendAmount > 0)

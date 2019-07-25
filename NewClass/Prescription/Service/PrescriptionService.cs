@@ -26,6 +26,7 @@ using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -510,18 +511,28 @@ namespace His_Pos.NewClass.Prescription.Service
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康 
-
-                for (int i = 0; i < Current.Medicines.Count; i++) {
-                    if (sendData.Count(s => s.MedId == Current.Medicines[i].ID) == 1)
-                        Current.Medicines[i].SendAmount = sendData.Single(s => s.MedId == Current.Medicines[i].ID).SendAmount;
+             
+                for (int i = 0; i < Current.Medicines.Count; i++)
+                {
+                    var temp = sendData.Single(s => s.MedId == Current.Medicines[i].ID);
+                    if (temp.SendAmount > Current.Medicines[i].SendAmount)
+                    {
+                        Current.Medicines[i].SendAmount = Current.Medicines[i].Amount;
+                        temp.SendAmount -= Current.Medicines[i].Amount;
+                    }
+                    else {
+                        Current.Medicines[i].SendAmount = temp.SendAmount;
+                        temp.SendAmount = 0;
+                    }
+                   
                 }
+                
                 ReportViewer rptViewer = new ReportViewer(); 
                 SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
                 });
-                
             }
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
