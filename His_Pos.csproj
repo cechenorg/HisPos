@@ -594,6 +594,7 @@
     <Compile Include="NewClass\Trade\TradeService.cs" />
     <Compile Include="NewClass\Trade\TradeTabEnum.cs" />
     <Compile Include="NewClass\Trade\Transaction.cs" />
+    <Compile Include="NewClass\Trade\TransactionTypeEnum.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />

@@ -21,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         #endregion
 
         #region ----- Define Variables -----
+        public string SearchString { get; set; }
         public TradeCustomer Customer { get; set; }
         public TradeTabEnum TabEnum { get; set; }
 

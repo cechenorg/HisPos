@@ -35,6 +35,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         public ProductTransactionViewModel()
         {
+            CustomerViewModel = new ProductTransactionCustomerViewModel();
+
             RegisterCommands();
         }
 

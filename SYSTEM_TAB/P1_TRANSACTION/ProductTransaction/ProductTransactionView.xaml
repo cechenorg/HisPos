@@ -40,9 +40,9 @@
             <ContentControl Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource CustomerControl}"/>
+                        <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerControl}"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding CustomerControl, UpdateSourceTrigger=PropertyChanged}" Value="Medicine">
+                            <DataTrigger Binding="{Binding HasCustomer, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CustomerControl}"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -52,9 +52,9 @@
             <ContentControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Content="{Binding CustomerViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
+                        <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerDetailControl}"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding CustomerControl, UpdateSourceTrigger=PropertyChanged}" Value="Medicine">
+                            <DataTrigger Binding="{Binding HasCustomer, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -264,48 +264,50 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="總金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label Content="10000" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="{Binding TotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="10000" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding DiscountPrice, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="點數折抵" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="10000" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="-$100" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <TextBox Text="{Binding DiscountPoint, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <Label Content="{Binding DiscountPointPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
                     <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="8.5" Width="50" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding DiscountPercent, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Label Content="-$100" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <Label Content="{Binding DiscountPercentPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="現金 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="10000" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding Cash, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="訂金" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0"/>
-                    <TextBox Text="10000" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding OrderCash, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="290,0,0,0"/>
-                    <TextBox Text="AS-00045678" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="刷卡 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="10000" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding CardPrice, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0"/>
-                    <TextBox Text="1000-0000-0000-0000" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding CardNumber, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                 </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="實際售價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label Content="100000" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
+                    <Label Content="{Binding FinalTotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
                     <Label Content="已付 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="120,0,0,0"/>
-                    <Label Content="100000" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
+                    <Label Content="{Binding PayPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
                     <Label Content="餘 $" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Red"/>
-                    <Label Content="10000" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Red"/>
+                    <Label Content="{Binding LeftPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Red"/>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
                     <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="10000" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding TaxIDNumber, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="結帳人員" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="125,0,0,0"/>
                     <ComboBox Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Button Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Command="{Binding DeleteOrderCommand}"/>
-                    <Button Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ToNextStatusCommand}"/>
+                    <Button Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Command="{Binding ClearTradeCommand}"/>
+                    <Button Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding TradeCommand}"/>
                 </StackPanel> 
             </Grid>
         </Grid>
