@@ -3,22 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using His_Pos.ChromeTabViewModel;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
-    public class ProductTransactionViewModel : TabBase
+    public class ProductTransactionCustomerViewModel : ViewModelBase
     {
-        public override TabBase getTab()
-        {
-            return this;
-        }
-
-        #region ----- Define ViewModels -----
-        public ProductTransactionTradeViewModel TradeViewModel { get; set; }
-        public ProductTransactionCustomerViewModel CustomerViewModel { get; set; }
-        #endregion
-
         #region ----- Define Commands -----
         #endregion
 

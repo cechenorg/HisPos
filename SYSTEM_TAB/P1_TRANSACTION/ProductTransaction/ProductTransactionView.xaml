@@ -37,7 +37,7 @@
                 <ColumnDefinition Width="500"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ContentControl Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Content="{Binding}">
+            <ContentControl Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource CustomerControl}"/>
@@ -49,7 +49,7 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <ContentControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Content="{Binding}">
+            <ContentControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Content="{Binding CustomerViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
@@ -61,8 +61,10 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.ReturnProducts}" FrozenColumnCount="3" SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
+            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
+                      ItemsSource="{Binding CurrentStoreOrder.ReturnProducts}" FrozenColumnCount="3" DataContext="{Binding TradeViewModel}"
+                      SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -191,7 +193,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0">
+            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding TradeViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="160"/>
                     <RowDefinition/>
@@ -254,7 +256,7 @@
                     <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+            <Grid Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" DataContext="{Binding TradeViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
