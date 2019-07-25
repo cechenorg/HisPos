@@ -24,6 +24,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                         var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
                         prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount > 0
                             ? prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount : 0;
+                        prescriptionSendData.OntheFrame = temp.OnTheFrame;
+                        prescriptionSendData.OntheWay = temp.OnTheWayAmount;
                     }
                     Add(prescriptionSendData);
                 }

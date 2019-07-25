@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" WindowStyle="None"
-    Title="傳送藥健康" Height="450" Width="800"> 
+    Title="傳送藥健康" Height="450" Width="900" WindowStartupLocation="CenterScreen"> 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -60,7 +60,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="100" Binding="{Binding Stock}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="可用庫存" IsReadOnly="True">
+                <DataGridTextColumn MinWidth="100" Binding="{Binding OntheFrame}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="架上量" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn MinWidth="100" Binding="{Binding OntheWay}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="載途量" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -76,7 +84,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" Binding="{Binding SendAmount}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="調劑量" IsReadOnly="True">
+                <DataGridTextColumn MinWidth="80" Binding="{Binding SendAmount}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="傳送量" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -88,7 +96,7 @@
         </DataGrid>
  
         <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
-            <Rectangle Width="490"/> 
+            <Rectangle Width="600"/> 
             <Button Command="{Binding CancelCommand}" Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" />
             <Button Command="{Binding SubmmitCommand}" Width="125" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0"   Content="送出" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
