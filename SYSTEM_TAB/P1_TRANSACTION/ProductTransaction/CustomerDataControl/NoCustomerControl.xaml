@@ -11,7 +11,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <TextBox Text="" Width="470" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black" Margin="10,0,0,2"/>
+            <TextBox Text="" Width="350" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black" Margin="10,0,0,2"/>
+            <Button Width="110" Content="新增客戶" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}"/>
         <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" Grid.Row="1"/>

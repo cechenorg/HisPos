@@ -309,6 +309,8 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerGroupTags.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -366,9 +368,12 @@
     <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangedDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangeds.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
+    <Compile Include="NewClass\Person\Customer\ProductTransactionCustomer\GenderEnum.cs" />
+    <Compile Include="NewClass\Person\Customer\ProductTransactionCustomer\TradeCustomer.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employee\Employees.cs" />
+    <Compile Include="NewClass\Person\Employee\ProductTransaction\TradeEmployee.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPosition.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositionDb.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositions.cs" />
@@ -578,6 +583,17 @@
     <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetail.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetails.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordMaster.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordMasters.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordDetail.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordDetails.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordMaster.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordMasters.cs" />
+    <Compile Include="NewClass\Trade\TradeService.cs" />
+    <Compile Include="NewClass\Trade\TradeTabEnum.cs" />
+    <Compile Include="NewClass\Trade\Transaction.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
@@ -1201,7 +1217,6 @@
       <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionCustomerViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionTradeViewModel.cs" />
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml.cs">
       <DependentUpon>ProductTransactionView.xaml</DependentUpon>
     </Compile>
@@ -2034,6 +2049,9 @@
     <Folder Include="NewClass\Product\Medicine\Position\" />
     <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
     <Folder Include="NewClass\Product\Medicine\Usage\" />
+    <Folder Include="NewClass\Product\ProductTransaction\" />
+    <Folder Include="NewClass\Trade\LeavingProductRecord\" />
+    <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>
