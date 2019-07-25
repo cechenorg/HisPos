@@ -12,8 +12,10 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.EditRecords;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -51,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         public double WindowHeight
         {
-            get => SystemParameters.WorkArea.Height * 0.85;
+            get => SystemParameters.WorkArea.Height * 0.95;
             set { }
         }
         public double StartTop
@@ -63,18 +65,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             get => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
             set { }
-        }
-        public double TotalMedPoint
-        {
-            get
-            {
-                if (EditedPrescription != null)
-                {
-                    return EditedPrescription.PrescriptionPoint.MedicinePoint +
-                           EditedPrescription.PrescriptionPoint.SpecialMaterialPoint;
-                }
-                return 0;
-            }
         }
         private bool isBusy;
         public bool IsBusy
@@ -114,6 +104,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => IsEdit, ref isEdit, value);
             }
         }
+        private bool customerEdited;
+        public bool CustomerEdited
+        {
+            get => customerEdited;
+            private set
+            {
+                Set(() => CustomerEdited, ref customerEdited, value);
+            }
+        }
         private bool isPrescribe;
         public bool IsPrescribe
         {
@@ -125,6 +124,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         }
         public bool CanMakeUp => !EditedPrescription.PrescriptionStatus.IsGetCard && EditedPrescription.InsertTime != null;
         private BackgroundWorker worker;
+        private string selectedDetail;
+        public string SelectedDetail
+        {
+            get => selectedDetail;
+            set
+            {
+                if(value is null) return;
+                if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
+                {
+                    if (EditedPrescription.Patient.Name.Equals("匿名"))
+                    {
+                        MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.WARNING);
+                        value = "Option1";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(value) && value.Equals("Option1"))
+                {
+                    CheckCustomerEdited();
+                }
+                Set(() => SelectedDetail, ref selectedDetail, value);
+            }
+        }
         #endregion
         private IcCard currentCard;
         private PrescriptionService currentService;
@@ -149,6 +170,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public PrescriptionCases PrescriptionCases { get; set; }
         public Copayments Copayments { get; set; }
         public SpecialTreats SpecialTreats { get; set; }
+        public PrescriptionEditRecords EditRecords { get; set; }
+        private PrescriptionEditRecord selectedRecord;
+        public PrescriptionEditRecord SelectedRecord 
+        { 
+            get => selectedRecord;
+            set
+            {
+                Set(() => SelectedRecord, ref selectedRecord, value);
+            }
+        }
         #endregion
         #region Commands
         public RelayCommand PrintMedBag { get; set; }
@@ -168,6 +199,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintReceipt { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand CustomerRedoEdited { get; set; }
+        public RelayCommand SavePatientData { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
         #endregion
@@ -186,6 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             InitialItemsSources();
             InitialCommandActions();
             InitPrescription();
+            SelectedDetail = "Option1";
         }
 
         private void InitPrescription()
@@ -233,6 +267,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrescriptionCases = VM.PrescriptionCases;
             Copayments = VM.Copayments;
             SpecialTreats = VM.SpecialTreats;
+            EditRecords = new PrescriptionEditRecords();
+            EditRecords.GetData(EditedPrescription.ID.ToString());
         }
 
         private void InitialCommandActions()
@@ -252,6 +288,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
+            CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
+            SavePatientData = new RelayCommand(SavePatientDataAction);
             Delete = new RelayCommand(DeleteAction);
             RedoEdit = new RelayCommand(RedoEditAction);
             EditComplete = new RelayCommand(EditCompleteAction);
@@ -457,6 +495,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             EditedPrescription.IsBuckle = EditedPrescription.WareHouse != null;
             DataChangedAction();
+        }
+
+        private void CustomerRedoEditedAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            EditedPrescription.Patient = Customer.GetCustomerByCusId(EditedPrescription.Patient.ID);
+            MainWindow.ServerConnection.CloseConnection();
+            CustomerEdited = false;
+        }
+
+        private void SavePatientDataAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            EditedPrescription.Patient.Save();
+            MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
+            CustomerEdited = false;
         }
 
         private void CountMedicinePoint()
@@ -669,6 +724,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             negativeStock += "扣庫量變化造成負庫，請修改扣庫量。";
             MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
             return false;
+        }
+
+        private void CheckCustomerEdited()
+        {
+            if (CustomerEdited)
+            {
+                var savePatientData = new ConfirmWindow("顧客資料已被編輯，是否儲存變更?","顧客編輯確認");
+                if ((bool)savePatientData.DialogResult)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    EditedPrescription.Patient.Save();
+                    MainWindow.ServerConnection.CloseConnection();
+                    CustomerEdited = false;
+                }
+                else
+                {
+                    CustomerRedoEditedAction();
+                    CustomerEdited = false;
+                }
+            }
         }
         #region 補卡
 
