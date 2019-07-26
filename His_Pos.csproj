@@ -505,6 +505,7 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescription.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptions.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptionTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductSearchTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\MedicineStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\ProductStockDetail.cs" />
