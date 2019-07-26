@@ -517,6 +517,8 @@
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
+    <Compile Include="NewClass\Product\ProductTransaction\TradeProduct.cs" />
+    <Compile Include="NewClass\Product\ProductTransaction\TradeProducts.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ProductStartInputVariableEnum.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
@@ -2057,7 +2059,6 @@
     <Folder Include="NewClass\Product\Medicine\Position\" />
     <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
     <Folder Include="NewClass\Product\Medicine\Usage\" />
-    <Folder Include="NewClass\Product\ProductTransaction\" />
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
