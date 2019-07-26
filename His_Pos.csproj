@@ -1198,6 +1198,9 @@
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml.cs">
       <DependentUpon>CustomerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\GetCustomerWindow.xaml.cs">
+      <DependentUpon>GetCustomerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml.cs">
       <DependentUpon>NoCustomerControl.xaml</DependentUpon>
     </Compile>
@@ -1837,6 +1840,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\GetCustomerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

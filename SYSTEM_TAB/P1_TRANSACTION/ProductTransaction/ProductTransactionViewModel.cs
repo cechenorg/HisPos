@@ -42,8 +42,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public ProductTransactionViewModel()
         {
             CustomerViewModel = new ProductTransactionCustomerViewModel();
-
             RegisterCommands();
+            NewTransaction = new Transaction();
         }
 
         #region ----- Define Actions -----
@@ -114,7 +114,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void ClearAll()
         {
             CustomerViewModel.Clear();
-            NewTransaction.Clear();
+            NewTransaction = new Transaction();
         }
 
         #region ///// Messenger Functions /////
