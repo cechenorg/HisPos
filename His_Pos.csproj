@@ -1222,6 +1222,12 @@
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml.cs">
       <DependentUpon>TransactionRecordControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\ReturnMoneyWindow.xaml.cs">
+      <DependentUpon>ReturnMoneyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\TakeLeavingProductWindow.xaml.cs">
+      <DependentUpon>TakeLeavingProductWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml.cs">
       <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
     </Compile>
@@ -1872,6 +1878,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\ReturnMoneyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\TakeLeavingProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

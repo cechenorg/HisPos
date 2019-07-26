@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.NewClass.Person.Customer.ProductTransactionCustomer;
 using His_Pos.NewClass.Trade;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.FunctionWindows;
 using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
@@ -53,7 +54,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         #region ----- Define Actions -----
         private void ReturnMoneyAction()
         {
-
+            ReturnMoneyWindow returnMoneyWindow = new ReturnMoneyWindow();
+            returnMoneyWindow.ShowDialog();
         }
         private void GetCustomerAction()
         {
@@ -71,7 +73,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
         private void TakeLeavingProductAction()
         {
-
+            TakeLeavingProductWindow takeLeavingProductWindow = new TakeLeavingProductWindow();
+            takeLeavingProductWindow.ShowDialog();
         }
         #endregion
 
