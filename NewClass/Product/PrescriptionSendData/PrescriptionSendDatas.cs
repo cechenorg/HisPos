@@ -20,9 +20,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             foreach (var m in ms) {
                 var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
                 temp.OnTheFrame += m.Amount - m.SendAmount;
-            }
-
-            foreach (var m in ms) {
+            } 
+            foreach (var m in ms) { 
             if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) { 
                 PrescriptionSendData prescriptionSendData = new PrescriptionSendData(m);
                 if (this.Count(M => M.MedId == prescriptionSendData.MedId) == 1) {
