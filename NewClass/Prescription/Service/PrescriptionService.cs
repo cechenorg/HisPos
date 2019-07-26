@@ -512,20 +512,21 @@ namespace His_Pos.NewClass.Prescription.Service
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康 
              
-                for (int i = 0; i < Current.Medicines.Count; i++)
-                {
-                    var temp = sendData.Single(s => s.MedId == Current.Medicines[i].ID);
-                    if (temp.SendAmount > Current.Medicines[i].SendAmount)
-                    {
-                        Current.Medicines[i].SendAmount = Current.Medicines[i].Amount;
-                        temp.SendAmount -= Current.Medicines[i].Amount;
-                    }
-                    else {
-                        Current.Medicines[i].SendAmount = temp.SendAmount;
-                        temp.SendAmount = 0;
-                    }
+                //for (int i = 0; i < Current.Medicines.Count; i++)
+                //{
+                //    var temp = sendData.Single(s => s.MedId == Current.Medicines[i].ID);
+                //    if (temp.SendAmount > Current.Medicines[i].Amount)
+                //    {
+                //        Current.Medicines[i].SendAmount = Current.Medicines[i].Amount;
+                //        temp.SendAmount -= Current.Medicines[i].Amount;
+                //    }
+                //    else {
+                //        double sendamount = temp.SendAmount;
+                //        Current.Medicines[i].SendAmount = sendamount;
+                //        temp.SendAmount = 0;
+                //    }
                    
-                }
+                //}
                 
                 ReportViewer rptViewer = new ReportViewer(); 
                 SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
