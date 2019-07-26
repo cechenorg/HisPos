@@ -22,6 +22,11 @@ using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
+using His_Pos.NewClass.Product.PrescriptionSendData;
+using His_Pos.NewClass.Medicine.ReserveMedicine;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -505,11 +510,61 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                } //更新傳送藥健康
+                } //更新傳送藥健康 
+             
+                //for (int i = 0; i < Current.Medicines.Count; i++)
+                //{
+                //    var temp = sendData.Single(s => s.MedId == Current.Medicines[i].ID);
+                //    if (temp.SendAmount > Current.Medicines[i].Amount)
+                //    {
+                //        Current.Medicines[i].SendAmount = Current.Medicines[i].Amount;
+                //        temp.SendAmount -= Current.Medicines[i].Amount;
+                //    }
+                //    else {
+                //        double sendamount = temp.SendAmount;
+                //        Current.Medicines[i].SendAmount = sendamount;
+                //        temp.SendAmount = 0;
+                //    }
+                   
+                //}
+                
+                ReportViewer rptViewer = new ReportViewer(); 
+                SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+                });
             }
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
-
+        public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
+        {
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new ReserveMedicines(prescriptionSendDatas);
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = CreateReserveMedicinesSheetParameters();
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
+        private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("Type","登錄"),
+                new ReportParameter("PatientName",Current.Patient.Name),
+                new ReportParameter("PatientBirthday",((DateTime)Current.Patient.Birthday).AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("PatientTel",Current.Patient.ContactNote),
+                new ReportParameter("Institution", Current.Institution.Name),
+                new ReportParameter("Division", Current.Division.Name),
+                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
+            };
+        }
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
             Current.TempMedicalNumber = errorCode.ID;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 
 namespace His_Pos.NewClass.Medicine.ReserveMedicine
 {
@@ -10,6 +11,14 @@ namespace His_Pos.NewClass.Medicine.ReserveMedicine
             Clear();
             foreach (var i in indexReserveDetails) {
                 Add(new ReserveMedicine(i));
+            }
+        }
+        public ReserveMedicines(PrescriptionSendDatas prescriptionSendDatas)
+        {
+            Clear();
+            foreach (var p in prescriptionSendDatas)
+            {
+                Add(new ReserveMedicine(p));
             }
         }
     }

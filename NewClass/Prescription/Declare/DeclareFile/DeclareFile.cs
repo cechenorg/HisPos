@@ -300,6 +300,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -319,6 +320,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else if (m is MedicineVirtual)
             {
@@ -334,6 +336,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 IsBuckle = false;
                 BuckleAmount = 0;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else
             {
@@ -354,6 +357,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
@@ -464,5 +468,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public double? PaySelfValue { get; set; }
         [XmlIgnore]
         public int Order { get; set; }
+        [XmlIgnore]
+        public double SendAmount { get; set; }
     }
 }
