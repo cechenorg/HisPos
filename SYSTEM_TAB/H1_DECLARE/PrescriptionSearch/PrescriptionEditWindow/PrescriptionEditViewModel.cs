@@ -33,7 +33,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
-using VM=His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -131,7 +131,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             set
             {
                 if(value is null) return;
-                if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
+                if (!string.IsNullOrEmpty(value) && value.Equals("Option1"))
                 {
                     if (EditedPrescription.Patient.Name.Equals("匿名"))
                     {
@@ -139,7 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         value = "Option1";
                     }
                 }
-                else if (!string.IsNullOrEmpty(value) && value.Equals("Option1"))
+                else if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
                 {
                     CheckCustomerEdited();
                 }
@@ -199,6 +199,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintReceipt { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
         public RelayCommand SavePatientData { get; set; }
         public RelayCommand AdjustDateLostFocus { get; set; }
@@ -288,6 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
+            CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
             Delete = new RelayCommand(DeleteAction);
@@ -495,6 +497,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             EditedPrescription.IsBuckle = EditedPrescription.WareHouse != null;
             DataChangedAction();
+        }
+
+        private void CustomerDetailEditedAction()
+        {
+            CustomerEdited = true;
         }
 
         private void CustomerRedoEditedAction()

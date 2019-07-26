@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.Prescription.EditRecords
 {
@@ -14,6 +15,7 @@ namespace His_Pos.NewClass.Prescription.EditRecords
             {
                 Add(new PrescriptionEditRecord(r));
             }
+            //this.OrderBy(r => r.ProductID).ThenBy(r => r.Time);
         }
     }
 }

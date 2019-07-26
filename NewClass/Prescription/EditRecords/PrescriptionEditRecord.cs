@@ -19,8 +19,8 @@ namespace His_Pos.NewClass.Prescription.EditRecords
             Amount = r.Field<double>("Amount");
             Note = r.Field<string>("Note");
             var tc = new TaiwanCalendar();
-            var recTime = r.Field<DateTime>("RecTime");
-            Time = $"{tc.GetYear(recTime)}/{recTime:MM/dd HH:mm}";
+            Time = r.Field<DateTime>("RecTime");
+            TimeString = $"{tc.GetYear(Time)}/{Time:MM/dd HH:mm}";
         }
 
         #region Properties
@@ -62,13 +62,22 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => Note, ref note, value);
             }
         }
-        private string time;
-        public string Time
+        private DateTime time;
+        public DateTime Time
         {
             get => time;
             set
             {
                 Set(() => Time, ref time, value);
+            }
+        }
+        private string timeString;
+        public string TimeString
+        {
+            get => timeString;
+            set
+            {
+                Set(() => TimeString, ref timeString, value);
             }
         }
         #endregion
