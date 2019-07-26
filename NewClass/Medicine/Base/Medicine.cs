@@ -230,6 +230,10 @@ namespace His_Pos.NewClass.Medicine.Base
             get => paySelf;
             set
             {
+                if (value != null && !value)
+                {
+                    if(this is MedicineOTC) return;
+                }
                 Set(() => PaySelf, ref paySelf, value);
                 CountTotalPrice();
             }

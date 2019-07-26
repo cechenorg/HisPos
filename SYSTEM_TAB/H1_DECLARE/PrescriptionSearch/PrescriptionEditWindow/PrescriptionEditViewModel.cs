@@ -255,6 +255,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     editMed.BuckleAmount = m.BuckleAmount;
                 }
             }
+            EditedPrescription.OrderContent = OriginalPrescription.OrderContent;
             RaisePropertyChanged("CanMakeUp");
         }
 

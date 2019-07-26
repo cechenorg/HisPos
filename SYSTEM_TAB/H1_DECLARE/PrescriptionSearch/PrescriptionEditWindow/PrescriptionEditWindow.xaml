@@ -39,7 +39,7 @@
         </DataTemplate>
         <DataTemplate x:Key="GetCardButtonsArea" DataType="{x:Type local:PrescriptionEditWindow}">
             <StackPanel Orientation="Horizontal">
-                <Label Height="35" Margin="279,0,0,0" Style="{StaticResource BoldLabelContent18}" Content="列印 : " Foreground="DimGray"/>
+                <Label Height="35" Margin="10,0,0,0" Style="{StaticResource BoldLabelContent18}" Content="列印 : " Foreground="DimGray"/>
                 <Button Content="收據" Height="35" Command="{Binding DataContext.PrintReceipt,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                 <Button Content="藥袋" Height="35" Command="{Binding DataContext.PrintMedBag,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
             </StackPanel>
@@ -414,10 +414,11 @@
                     <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,0,0"/>
                     <Label Width="100" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
                     <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,0,0"/>
-                    <Label Width="110" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.CellPhone, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Width="110" Height="30" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.CellPhone, UpdateSourceTrigger=PropertyChanged}"/>
                     <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,0,0"/>
                     <Label Width="120" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
-                    <ContentControl Content="{Binding}" Margin="10,10,10,0">
+                    <Label Content="{Binding EditedPrescription.OrderContent,UpdateSourceTrigger=PropertyChanged}" Height="35" Width="270" Style="{StaticResource BoldLabelContent16}"/>
+                    <ContentControl Content="{Binding}" Margin="10,0,0,0">
                         <ContentControl.Style>
                             <Style TargetType="{x:Type ContentControl}">
                                 <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
