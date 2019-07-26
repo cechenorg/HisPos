@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
             foreach (var m in ms) {
                 var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
+                if(m.SendAmount >= 0)
                 temp.OnTheFrame += m.Amount - m.SendAmount;
             } 
             foreach (var m in ms) { 

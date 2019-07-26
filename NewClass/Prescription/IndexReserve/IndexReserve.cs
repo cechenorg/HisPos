@@ -142,6 +142,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);
         }
+        public void GetIndexSendDetail() {
+            IndexReserveDetailCollection.GetSendDataById(Id); 
+        }
         public bool StoreOrderToSingde() {
             int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
             bool result = false;

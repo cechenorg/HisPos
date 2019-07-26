@@ -464,6 +464,7 @@ namespace His_Pos.NewClass.Prescription
             var amount = string.Empty;
             foreach (var row in prescriptionSendData)
             {
+                    
                 if (row.MedId != declareMedicine.ID) continue;
                 amount = row.SendAmount.ToString();
                 break;
