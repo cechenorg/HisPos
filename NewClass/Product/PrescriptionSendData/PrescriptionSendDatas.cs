@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using His_Pos.NewClass.Medicine;
+using His_Pos.NewClass.Prescription;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using MedicineOTC = His_Pos.NewClass.Medicine.Base.MedicineOTC;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -9,7 +12,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
     public class PrescriptionSendDatas : ObservableCollection<PrescriptionSendData>
     {
         public PrescriptionSendDatas() { }
-        public void ConvertMedToSendData(Medicines ms) {
+        public void ConvertMedToSendData(Medicines ms,int preID) {
             List<string> MedicineIds = new List<string>();
             foreach (var med in ms)
             {
@@ -17,7 +20,10 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                     MedicineIds.Add(med.ID);
             }
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-            foreach (var m in ms) {
+
+            Medicines medicines = new Medicines();
+            medicines.GetDataByPrescriptionId(preID);
+            foreach (var m in medicines) {
                 var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
                 if(m.SendAmount >= 0)
                 temp.OnTheFrame += m.Amount - m.SendAmount;

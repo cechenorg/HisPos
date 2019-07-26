@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
 
         private void Init() {
             PrescriptionSendData = new PrescriptionSendDatas();
-            PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines);
+            PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines,Prescription.ID);
             IsReturn = false;
             SubmitCommand = new RelayCommand(SubmitAction);
             CancelCommand = new RelayCommand(CancelAction);
