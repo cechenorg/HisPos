@@ -1190,6 +1190,9 @@
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\AddNewCustomerWindow.xaml.cs">
+      <DependentUpon>AddNewCustomerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml.cs">
       <DependentUpon>CustomerControl.xaml</DependentUpon>
     </Compile>
@@ -1824,6 +1827,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\AddNewCustomerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
