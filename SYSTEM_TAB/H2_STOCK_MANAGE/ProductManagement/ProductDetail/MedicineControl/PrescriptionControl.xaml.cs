@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Product.ProductManagement;
 
@@ -33,9 +34,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             if (!(row?.Item is ProductRegisterPrescription)) return;
 
-            if(((ProductRegisterPrescription)row.Item).ID == 0) return;
+            switch (((ProductRegisterPrescription)row.Item).Type)
+            {
+                case ProductRegisterPrescriptionTypeEnum.REGISTER:
+                    PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID, PrescriptionType.ChronicReserve);
+                    break;
+                case ProductRegisterPrescriptionTypeEnum.PRESCRIPTION:
+                    PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID);
+                    break;
+            }
 
-            PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID);
         }
     }
 }
