@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     break;
                 case "F":
                     PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                    IsNoSend = true;
+                    isNoSend = true;
                     break; 
             }
             switch (r.Field<string>("CallStatus"))
@@ -84,6 +84,20 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             set
             {
                 Set(() => IsNoSend, ref isNoSend, value);
+                if (IsNoSend) {
+                    if (PrepareMedStatus == IndexPrepareMedType.Prepare)
+                    {
+                        ConfirmWindow confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
+                        if ((bool)confirmWindow.DialogResult)
+                        {
+                            PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                            this.SaveStatus();
+                        }
+                    }
+                    else
+                        PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                    this.SaveStatus(); 
+                } 
             }
         }
 
@@ -154,7 +168,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                note += $"{IndexReserveDetailCollection[j].ID} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
+                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
