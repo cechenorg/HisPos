@@ -177,18 +177,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //按 Enter 下一欄
             if (e.Key != Key.Enter) return;
             e.Handled = true;
+            if(sender is null) return;
             MoveFocusNext(sender);
         }
         private void MoveFocusNext(object sender)
         {
-            if (sender is TextBox box)
-                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            if (PrescriptionMedicines.CurrentCell.Column is null) return;
-
-            var focusedCell =
-                PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            switch (sender)
+            {
+                case null:
+                    return;
+                case TextBox box:
+                    box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    break;
+            }
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             if (focusedCell is null) return;
-
             while (true)
             {
                 if (focusedCell is ContentPresenter)
@@ -204,11 +207,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
 
                 focusedCell?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                focusedCell =
-                    PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+                focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             }
 
-            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             while (firstChild is ContentPresenter)
             {
                 firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
@@ -290,7 +292,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
