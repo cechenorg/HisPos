@@ -41,6 +41,7 @@
     xmlns:productTransaction="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
     xmlns:productTransactionRecord="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
     xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
+    xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -142,6 +143,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type activityManage:ActivityManageViewModel}">
             <activityManage:ActivityManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type medBagManage:MedBagViewModel}">
+            <medBagManage:MedBagView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>

@@ -7,6 +7,7 @@
         PrescriptionEdit = 3,
         ProductReturn = 4,
         MedicineSetWindow = 5,
-        ProductGroupSetting = 6
+        ProductGroupSetting = 6,
+        Trade = 7
     }
 }
