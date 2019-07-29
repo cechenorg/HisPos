@@ -909,7 +909,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateReceiptParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);

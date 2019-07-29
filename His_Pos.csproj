@@ -1889,6 +1889,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\HisReceipt_A6.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Resource Include="Images\home-address.png" />
     <Resource Include="Images\email.png" />
     <Resource Include="Images\line.png" />

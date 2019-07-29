@@ -73,40 +73,49 @@ namespace His_Pos.FunctionWindow
         #endregion
 
         #region ----- Define Functions -----
-        private bool IsConnectionDataValid()
-        {
-            CheckSettingFiles();
-            SQLServerConnection localConnection = new SQLServerConnection();
-            return localConnection.CheckConnection();
-        }
         public static void ReadSettingFile() {
-            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+            var filePath = "C:\\Program Files\\HISPOS\\settings.singde";
 
-            string verifynum = "";
-
-            using (StreamReader fileReader = new StreamReader(filePath))
+            using (var fileReader = new StreamReader(filePath))
             {
-               verifynum = fileReader.ReadLine();
-                verifynum = verifynum.Substring(2,verifynum.Length-2);
-               XmlDocument xml = WebApi.GetPharmacyInfoByVerify(verifynum);
-               string PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
-               string MedicalNum = xml.SelectSingleNode("CurrentPharmacyInfo/MedicalNum").InnerText;
-               string PharmacyTel = xml.SelectSingleNode("CurrentPharmacyInfo/Telphone").InnerText;
-               string PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
-               string dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
+                var medReg = new Regex(@"M (.*)");
+                var recReg = new Regex(@"Rc (.*)");
+                var recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
+                var repReg = new Regex(@"Rp (.*)");
+                var verifyKey = fileReader.ReadLine();
+                verifyKey = verifyKey.Substring(2,verifyKey.Length-2);
+                var xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
+                var PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
+                var MedicalNum = xml.SelectSingleNode("CurrentPharmacyInfo/MedicalNum").InnerText;
+                var PharmacyTel = xml.SelectSingleNode("CurrentPharmacyInfo/Telphone").InnerText;
+                var PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
+                var dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
                 Properties.Settings.Default.SQL_local =
-                string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
+                    $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword";
                 Properties.Settings.Default.SQL_global =
-                   string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
-                Properties.Settings.Default.SystemSerialNumber = verifynum;
-                string MedBagPrinter = fileReader.ReadLine();
-                string ReceiptPrinter = fileReader.ReadLine();
-                string ReportPrinter = fileReader.ReadLine();
-                string Comport = fileReader.ReadLine();
-                Properties.Settings.Default.MedBagPrinter = MedBagPrinter.Substring(2, MedBagPrinter.Length - 2); 
-                Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter.Substring(3, ReceiptPrinter.Length - 3);
-                Properties.Settings.Default.ReportPrinter = ReportPrinter.Substring(3, ReportPrinter.Length - 3);
-                Properties.Settings.Default.ReaderComPort = string.IsNullOrEmpty(Comport) ? "" : Comport.Substring(4, Comport.Length - 4);
+                    $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword";
+                Properties.Settings.Default.SystemSerialNumber = verifyKey;
+                var medBagPrinter = fileReader.ReadLine();
+                var receiptPrinter = fileReader.ReadLine();
+                var reportPrinter = fileReader.ReadLine();
+                var comport = fileReader.ReadLine();
+                var match = medReg.Match(medBagPrinter);
+                Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
+                if (receiptPrinter.Contains("$"))
+                {
+                    match = recRegWithForm.Match(receiptPrinter);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = match.Groups[2].Value;
+                }
+                else
+                {
+                    match = recReg.Match(receiptPrinter);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = "點陣";
+                }
+                match = repReg.Match(reportPrinter);
+                Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
+                Properties.Settings.Default.ReaderComPort = string.IsNullOrEmpty(comport) ? "" : comport.Substring(4, comport.Length - 4);
                 Properties.Settings.Default.Save();
             }
         }
@@ -116,79 +125,7 @@ namespace His_Pos.FunctionWindow
 
             return File.Exists("C:\\Program Files\\HISPOS\\settings.singde"); 
         }
-        private static void CheckSettingFiles()
-        {
-            string folderPath = "C:\\Program Files\\HISPOS";
-
-            bool folderExist = Directory.Exists(folderPath);
-
-            if (!folderExist)
-                Directory.CreateDirectory(folderPath);
-
-            string filePath = folderPath + "\\settings.singde";
-
-            bool fileExist = File.Exists(filePath);
-
-            if (!fileExist)
-            {
-                File.Create(filePath).Dispose();
-
-                using (TextWriter fileWriter = new StreamWriter(filePath))
-                {
-                    fileWriter.WriteLine("L Data Source=,;Persist Security Info=True;User ID=;Password=");
-                    fileWriter.WriteLine("G Data Source=,;Persist Security Info=True;User ID=;Password=");
-
-                    fileWriter.WriteLine("M ");
-                    fileWriter.WriteLine("Rc ");
-                    fileWriter.WriteLine("Rp ");
-                    fileWriter.WriteLine("Com ");
-                }
-
-                Properties.Settings.Default.SQL_local =
-                    "Data Source=,;Persist Security Info=True;User ID=;Password=";
-                Properties.Settings.Default.SQL_global =
-                    "Data Source=,;Persist Security Info=True;User ID=;Password=";
-
-                Properties.Settings.Default.MedBagPrinter = "";
-                Properties.Settings.Default.ReceiptPrinter = "";
-                Properties.Settings.Default.ReportPrinter = "";
-                Properties.Settings.Default.ReaderComPort = "";
-                Properties.Settings.Default.Save();
-            }
-            else
-            {
-                using (StreamReader fileReader = new StreamReader(filePath))
-                {
-                    Regex connReg = new Regex(@"[LG] Data Source=([0-9.]*),([0-9]*);Persist Security Info=True;User ID=([a-zA-Z0-9]*);Password=([a-zA-Z0-9]*)");
-                    Regex printReg = new Regex(@"[MR][cp]* (.*)");
-                    Regex comport = new Regex(@"[C][o][m]* (.*)");
-                    Match match;
-
-                    match = connReg.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.SQL_local =
-                        $"Data Source={match.Groups[1].Value},{match.Groups[2].Value};Persist Security Info=True;User ID={match.Groups[3].Value};Password={match.Groups[4].Value}";
-
-                    match = connReg.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.SQL_global =
-                        $"Data Source={match.Groups[1].Value},{match.Groups[2].Value};Persist Security Info=True;User ID={match.Groups[3].Value};Password={match.Groups[4].Value}";
-
-                    match = printReg.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
-
-                    match = printReg.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
-
-                    match = printReg.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
-
-                    match = comport.Match(fileReader.ReadLine());
-                    Properties.Settings.Default.ReaderComPort = match.Groups[1].Value;
-                    
-                    Properties.Settings.Default.Save();
-                }
-            }
-            #endregion
-        }
+        #endregion
         private static void CheckCsHis()
         {
             try

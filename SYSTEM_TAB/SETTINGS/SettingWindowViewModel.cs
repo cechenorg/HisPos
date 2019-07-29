@@ -57,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         {
             Regex medReg = new Regex(@"M (.*)");
             Regex recReg = new Regex(@"Rc (.*)");
+            Regex recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
             Regex repReg = new Regex(@"Rp (.*)");
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -70,8 +71,18 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
 
                 newLine = fileReader.ReadLine();
-                match = recReg.Match(newLine);
-                Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                if (newLine.Contains("$"))
+                {
+                    match = recRegWithForm.Match(newLine);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = match.Groups[2].Value;
+                }
+                else
+                {
+                    match = recReg.Match(newLine);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = "點陣";
+                }
 
                 newLine = fileReader.ReadLine();
                 match = repReg.Match(newLine);
