@@ -702,7 +702,7 @@ namespace His_Pos.NewClass.Prescription.Service
             selected.Type = PrescriptionType.ChronicReserve;
             selected.AdjustDate = r.Field<DateTime>("AdjustDate");
             MainWindow.ServerConnection.CloseConnection();
-            return !CheckPrescriptionEnable(r) ? null : selected;
+            return selected;
         }
 
         private static bool CheckPrescriptionEnable(DataRow r)

@@ -155,7 +155,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand AddNewProductCommand { get; set; }
         public RelayCommand ShowStockResultMedicineDetailCommand { get; set; }
         public RelayCommand ShowStockPlanMedicineDetailCommand { get; set; }
-         
+        public RelayCommand DeleteProductCommand { get; set; }
+        
+
         public StockTakingViewModel() {
             RegisterCommand();
             WareHouses = VM.WareHouses;
@@ -217,8 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         private void NextToResultPageAction() {
             StockTakingPageCollection.AssignPages(CurrentPlan);
             StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
-             
-            SetDiffInventoryAmountAction();
+            ResultFinalTotalPrice = StockTakingResult.StockTakingProductCollection.Sum(s => s.NewInventoryTotalPrice);
             StockTakingType = StockTakingType.Result;
         }
         private void CompleteStockTakingAction() {
@@ -335,6 +336,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingResultProductSelected.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
         }
+        private void DeleteProductAction() {
+            if (StockTakingPlanProductSelected is null) return;
+            CurrentPlan.StockTakingProductCollection.Remove(StockTakingPlanProductSelected);
+            ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
+        }
+        
         private void RegisterCommand() {
             AssignPageCommand = new RelayCommand(AssignPageAction);
             ClearStockTakingProductCommand = new RelayCommand(ClearStockTakingProductAction);
@@ -349,6 +356,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             AddNewProductCommand = new RelayCommand(AddNewProductAction);
             ShowStockPlanMedicineDetailCommand = new RelayCommand(ShowStockPlanMedicineDetailAction);
             ShowStockResultMedicineDetailCommand = new RelayCommand(ShowStockResultMedicineDetailAction);
+            DeleteProductCommand = new RelayCommand(DeleteProductAction);
         }
     }
 }
