@@ -396,8 +396,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 foreach (var m in medList)
                 {
                     m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                    m.OnTheFrameAmount = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
+                    m.OnTheFrameAmount = r.Field<double?>("Inv_OnTheFrame") is null ? 0 : r.Field<double>("Inv_OnTheFrame");
                 }
+
             }
         }
 
