@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Medicine.Base
         public Medicine(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
-            Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
+            OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
             InventoryID = r.Field<int>("Inv_ID");
             SendAmount = -1;
@@ -194,15 +194,16 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        private double inventory;//庫存
-        public double Inventory
+        private double onTheFrameAmount;//庫存
+        public double OnTheFrameAmount
         {
-            get => inventory;
+            get => onTheFrameAmount;
             set
             {
-                Set(() => Inventory, ref inventory, value);
+                Set(() => OnTheFrameAmount, ref onTheFrameAmount, value);
             }
         }
+
         private int inventoryID;//庫存編號
         public int InventoryID
         {
@@ -481,7 +482,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = clonedMed.NHIPrice,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
@@ -513,7 +514,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = clonedMed.NHIPrice,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
@@ -545,7 +546,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = 0,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
