@@ -70,8 +70,8 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         {
             InvID = row.Field<int>("Inv_ID");
             Inventory = row.Field<double>("StoTakDet_OldValue");
-            NewInventory = row.Field<double>("StoTakDet_NewValue");
             OnTheFrame = row.Field<double>("OnTheFrame");
+            NewInventory = row.Field<double>("StoTakDet_NewValue");
             Note = row.Field<string>("StoTakDet_Note");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             IsControl = row.Field<byte?>("Med_Control");
@@ -79,13 +79,15 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             MedBagAmount = row.Field<double>("MedBagAmount");
             AveragePrice = TotalPrice / Inventory;
             IsUpdate = false;
-            NewInventoryTotalPrice = 0; 
+            NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice; 
         }
 
         #region ----- Define Functions -----
        
         public void GetStockTakingTotalPrice(string warID) {
-            NewInventoryTotalPrice = StockTakingDB.GetStockTakingTotalPrice(this, warID).Rows[0].Field<double>("TotalPrice");
+            NewInventoryTotalPrice = StockTakingDB.GetStockTakingTotalPrice(this, warID).Rows[0].Field<double>("TotalPrice")  ;
+            if (( NewInventory + MedBagAmount - Inventory) > 0)
+                NewInventoryTotalPrice += (NewInventory + MedBagAmount - Inventory) * AveragePrice;
         }
         #endregion
     }

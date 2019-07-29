@@ -125,7 +125,7 @@ namespace His_Pos.NewClass.StockTaking
           
             DataRow newRow = productListTable.NewRow();
             DataBaseFunction.AddColumnValue(newRow, "ID", productId.InvID);
-            DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory); 
+            DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory + productId.MedBagAmount); 
             productListTable.Rows.Add(newRow); 
             return productListTable;
         }
