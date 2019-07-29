@@ -319,6 +319,7 @@ namespace His_Pos.NewClass.Medicine.Base
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
             medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
+            medicine.UsableAmount = medicine.OnTheFrameAmount;
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
@@ -684,7 +685,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 foreach (var m in this)
                 {
                     if (!m.InventoryID.Equals(usableMedicine.ID)) continue;
-                    m.UsableAmount = usableMedicine.Amount;
+                        m.UsableAmount = usableMedicine.Amount;
                 }
             }
         }
