@@ -389,6 +389,8 @@
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\CusPrePreviewBase.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\OrthopedicsPreview.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\NoCardPreview.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStruct.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStructs.cs" />
     <Compile Include="NewClass\Prescription\Prescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
@@ -770,6 +772,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml.cs">
+      <DependentUpon>MedBagView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml.cs">
       <DependentUpon>InsertProductWindow.xaml</DependentUpon>
     </Compile>
@@ -1389,6 +1395,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

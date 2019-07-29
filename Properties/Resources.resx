@@ -202,7 +202,7 @@
     <value>審核管理</value>
   </data>
   <data name="MedBagManage" xml:space="preserve">
-    <value>藥袋管理</value>
+    <value>藥袋查詢</value>
   </data>
   <data name="ImageSelectorsFileTpyes" xml:space="preserve">
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>

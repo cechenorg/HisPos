@@ -40,6 +40,14 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
+        internal static DataTable GetMedBagPrescriptionStructsByType(string type)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "TYPE", type);
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedBagPrescriptionStructsByType]", parameterList);
+        }
+
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
