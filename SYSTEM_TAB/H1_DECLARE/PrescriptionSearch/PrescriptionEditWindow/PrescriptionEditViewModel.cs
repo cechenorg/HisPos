@@ -720,7 +720,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
-                if (inv.Inventory - EditMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+                if (inv.Amount - EditMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
                 foreach (var med in EditedPrescription.Medicines)
                 {
                     if (med is MedicineVirtual) continue;

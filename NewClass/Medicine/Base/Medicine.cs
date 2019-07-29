@@ -367,6 +367,15 @@ namespace His_Pos.NewClass.Medicine.Base
             get => sendAmount;
             set { Set(() => SendAmount, ref sendAmount, value); }
         }
+        private double usableAmount;
+        public double UsableAmount
+        {
+            get => usableAmount;
+            set
+            {
+                Set(() => UsableAmount, ref usableAmount, value);
+            }
+        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()

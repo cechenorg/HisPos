@@ -12,6 +12,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -69,7 +70,6 @@ namespace His_Pos.NewClass.Prescription
 
         public Prescription(DataRow r, PrescriptionType type)
         {
-            Type = type;
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 ID = 0;
@@ -140,6 +140,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 AdjustDate = null;
             }
+            Type = type;
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -500,9 +501,11 @@ namespace His_Pos.NewClass.Prescription
             {
                 Set(() => IsBuckle, ref isBuckle, value);
                 if (Medicines is null || !Medicines.Any()) return;
-                var usableMedicines = CheckUsableMedicinesByType();
+                MainWindow.ServerConnection.OpenConnection();
+                var usableAmountList = CheckUsableMedicinesByType();
                 Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
-                Medicines.CheckUsableAmount(usableMedicines);
+                MainWindow.ServerConnection.CloseConnection();
+                Medicines.CheckUsableAmount(usableAmountList);
             }
         }
 
@@ -1544,7 +1547,11 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckMedicinesNegativeStock()
         {
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            var usableAmountList = CheckUsableMedicinesByType();
+            MainWindow.ServerConnection.CloseConnection();
+            Medicines.CheckUsableAmount(usableAmountList);
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList);
         }
 
         public void CountSelfPay()
@@ -1603,9 +1610,10 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private Medicines CheckUsableMedicinesByType()
+        private List<MedicineInventoryStruct> CheckUsableMedicinesByType()
         {
             var usableMedicines = new Medicines();
+            var usableInventoryStructs = new List<MedicineInventoryStruct>();
             switch (Type)
             {
                 case PrescriptionType.ChronicRegister:
@@ -1615,7 +1623,16 @@ namespace His_Pos.NewClass.Prescription
                     usableMedicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
             }
-            return usableMedicines;
+            var groupInvIDResult = usableMedicines.GroupBy(m => m.InventoryID);
+            foreach (var g in groupInvIDResult)
+            {
+                var adjustAmount = g.Sum(m => m.Amount);
+                var sendAmount = g.Sum(m => m.SendAmount);
+                var onTheFrameAmount = g.ElementAt(0).OnTheFrameAmount;
+                var usableAmount = adjustAmount - sendAmount + onTheFrameAmount;
+                usableInventoryStructs.Add(new MedicineInventoryStruct(g.Key, usableAmount));
+            }
+            return usableInventoryStructs;
         }
     }
 }
