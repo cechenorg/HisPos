@@ -10,6 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.Properties;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
@@ -666,6 +667,18 @@ namespace His_Pos.NewClass.Medicine.Base
                 this[i-1].Order = i;
             }
         }
-        
+
+        public void CheckUsableAmount(Medicines usableMedicines)
+        {
+            if (usableMedicines.Count <= 0) return;
+            foreach (var usableMedicine in usableMedicines)
+            {
+                foreach (var m in this)
+                {
+                    if (!m.ID.Equals(usableMedicine.ID)) continue;
+                    m.OnTheFrameAmount = usableMedicine.Amount - usableMedicine.SendAmount + usableMedicine.OnTheFrameAmount;
+                }
+            }
+        }
     }
 }

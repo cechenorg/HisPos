@@ -28,6 +28,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -68,6 +69,7 @@ namespace His_Pos.NewClass.Prescription
 
         public Prescription(DataRow r, PrescriptionType type)
         {
+            Type = type;
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 ID = 0;
@@ -498,9 +500,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 Set(() => IsBuckle, ref isBuckle, value);
                 if (Medicines is null || !Medicines.Any()) return;
+                var usableMedicines = CheckUsableMedicinesByType();
                 Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
+                Medicines.CheckUsableAmount(usableMedicines);
             }
         }
+
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
@@ -1597,6 +1602,20 @@ namespace His_Pos.NewClass.Prescription
                     break;
             }
         }
-       
+
+        private Medicines CheckUsableMedicinesByType()
+        {
+            var usableMedicines = new Medicines();
+            switch (Type)
+            {
+                case PrescriptionType.ChronicRegister:
+                    usableMedicines.GetDataByPrescriptionId(ID);
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    usableMedicines.GetDataByReserveId(int.Parse(SourceId));
+                    break;
+            }
+            return usableMedicines;
+        }
     }
 }
