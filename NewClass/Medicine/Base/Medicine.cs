@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.Medicine.Base
             Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
             InventoryID = r.Field<int>("Inv_ID");
+            SendAmount = -1;
         }
 
         public Medicine(CooperativeMedicine m)

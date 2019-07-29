@@ -21,7 +21,7 @@
             <Label Content="未處理" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"   FontSize="20"/>
         </DataTemplate>
         <DataTemplate x:Key="PrepareMed" DataType="UserControl">
-            <Label Content="已備藥" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"  FontSize="20"/>
+            <Label Content="已備藥" HorizontalContentAlignment="Center" VerticalAlignment="Center" Foreground="Green" FontFamily="Segoe UI Semibold"  FontSize="20"/>
         </DataTemplate>
         <DataTemplate x:Key="NoPrepareMed" DataType="UserControl">
             <Label Content="不備藥" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
@@ -132,7 +132,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox  IsChecked="{Binding IsNoSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                                        <CheckBox  IsChecked="{Binding IsNoSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Content="不備藥"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

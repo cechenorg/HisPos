@@ -172,13 +172,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             if (IndexReserveSelectedItem is null) return;
             MainWindow.ServerConnection.OpenConnection();
            
-            IndexReserveSelectedItem.GetIndexDetail();
+            IndexReserveSelectedItem.GetIndexSendDetail();
             List<string> MedicineIds = new List<string>();
             foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection)
             {
                 MedicineIds.Add(med.ID);
             }
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
+            
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
             {
                 var pro = IndexReserveSelectedItem.IndexReserveDetailCollection[j];
