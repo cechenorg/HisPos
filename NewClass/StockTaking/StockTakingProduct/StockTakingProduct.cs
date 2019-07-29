@@ -61,6 +61,15 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
                 Set(() => NewInventoryTotalPrice, ref newInventoryTotalPrice, value);
             }
         }
+        private double priceValueDiff;
+        public double PriceValueDiff
+        {
+            get { return priceValueDiff; }
+            set
+            {
+                Set(() => PriceValueDiff, ref priceValueDiff, value);
+            }
+        }
         public Employee Employee { get; set; }
         #endregion
         public StockTakingProduct() {
@@ -77,6 +86,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             IsControl = row.Field<byte?>("Med_Control");
             TotalPrice = row.Field<double>("TotalPrice");
             MedBagAmount = row.Field<double>("MedBagAmount");
+            PriceValueDiff = row.Field<double>("ValueDiff");
             AveragePrice = TotalPrice / Inventory;
             IsUpdate = false;
             NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice; 

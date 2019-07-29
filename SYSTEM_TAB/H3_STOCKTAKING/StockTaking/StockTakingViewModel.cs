@@ -198,13 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             if (DiffInventoryAmount == 0)  {
                 ConfirmWindow confirmWindow = new ConfirmWindow("未有盤差品項 是否直接盤點?","盤點確認");
                 if ((bool)confirmWindow.DialogResult) {
-                    StockTakingResult.WareHouse = CurrentPlan.WareHouse;
-                    for(int i = 0; i< StockTakingResult.StockTakingProductCollection.Count;i ++) {
-                        StockTakingResult.StockTakingProductCollection[i].NewInventory += StockTakingResult.StockTakingProductCollection[i].MedBagAmount;
-                    }
-                    StockTakingResult.InsertStockTaking("盤點單盤點");
-                    MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
-                    StockTakingType = StockTakingType.Choose; 
+                    CompleteStockTakingAction();
                 } 
                 return;
             }
