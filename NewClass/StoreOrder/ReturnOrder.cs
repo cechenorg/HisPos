@@ -34,12 +34,14 @@ namespace His_Pos.NewClass.StoreOrder
             get { return returnStockValue; }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
+        public double ReturnDiff { get { return TotalPrice - ReturnStockValue; } }
         #endregion
 
         private ReturnOrder() { }
         public ReturnOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.RETURN;
+            ReturnStockValue = (double)row.Field<decimal>("RETURN_PRICE");
         }
 
         #region ----- Override Function -----
@@ -99,8 +101,12 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Product Function /////
         public override void CalculateTotalPrice()
         {
-            ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
+            if(OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
+
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
+
+            RaisePropertyChanged(nameof(ReturnDiff));
         }
         public override void GetOrderProducts()
         {

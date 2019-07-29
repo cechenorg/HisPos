@@ -25,6 +25,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             switch (((ProductInventoryRecord)(sender as DataGridRow).Item).Type)
             {
                 case ProductInventoryRecordType.PurchaseReturn:
+                    if(((ProductInventoryRecord)(sender as DataGridRow).Item).Name is null) return;
+
                     ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
 
                     Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, ((ProductInventoryRecord)(sender as DataGridRow).Item).Name, ""));

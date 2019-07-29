@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>
@@ -11,7 +12,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <TextBox Text="" Width="470" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black" Margin="10,0,0,2"/>
+            <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="匿名/流水客" Width="350" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,2">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding GetCustomerCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Width="110" Content="新增客戶" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding AddCustomerCommand}"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}"/>
         <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" Grid.Row="1"/>
