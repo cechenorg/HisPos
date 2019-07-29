@@ -93,6 +93,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                             PrepareMedStatus = IndexPrepareMedType.UnPrepare;
                             this.SaveStatus();
                         }
+                        else
+                            IsNoSend = false;
                     }
                     else
                         PrepareMedStatus = IndexPrepareMedType.UnPrepare;
