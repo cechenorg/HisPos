@@ -26,9 +26,9 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
         }
         
 
-        public StockTakingPlanProducts GetStockTakingPlanProductByProName(string name)
+        public StockTakingPlanProducts GetStockTakingPlanProductByProName(string name, string warID)
         {
-            return new StockTakingPlanProducts(StockTakingDB.GetStockTakingPlanProductByProName(name));
+            return new StockTakingPlanProducts(StockTakingDB.GetStockTakingPlanProductByProName(name,warID));
         }
         
     }

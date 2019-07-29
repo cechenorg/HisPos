@@ -36,10 +36,11 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductByType]", parameterList);
         }
-        internal static DataTable GetStockTakingPlanProductByProName(string name)
+        internal static DataTable GetStockTakingPlanProductByProName(string name,string warID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Name", name); 
+            DataBaseFunction.AddSqlParameter(parameterList, "Name", name);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductByProName]", parameterList);
         }
         internal static DataTable GetStockTakingPlanProductsByID(int planID)
@@ -87,14 +88,26 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "warID", stockTaking.WareHouse.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "TypeName", typeName);
             DataBaseFunction.AddSqlParameter(parameterList, "ProductIDs", SetStockTakingPlanProducts(stockTaking.StockTakingProductCollection));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockTaking]", parameterList);
-          
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockTaking]", parameterList); 
         }
+        internal static DataTable GetStockTakingTotalPrice(StockTakingProduct.StockTakingProduct stockTakingProduct,string warID) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "IDAmount", SetProductAmount(stockTakingProduct)); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductAmountTotalPrice]", parameterList);
+        }
+        
         #region TableSet
         public static DataTable ProductListTable()
         {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("MedicineID", typeof(string));
+            return masterTable;
+        }
+        public static DataTable ProductAmountTable() {
+            DataTable masterTable = new DataTable();
+            masterTable.Columns.Add("ID", typeof(int));
+            masterTable.Columns.Add("Amount", typeof(double)); 
             return masterTable;
         }
         public static DataTable StockTakingProductListTable()
@@ -106,6 +119,15 @@ namespace His_Pos.NewClass.StockTaking
             masterTable.Columns.Add("StoTakDet_NewValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_Note", typeof(string));
             return masterTable; 
+        }
+        public static DataTable SetProductAmount(StockTakingProduct.StockTakingProduct productId) {
+            DataTable productListTable = ProductAmountTable();
+          
+            DataRow newRow = productListTable.NewRow();
+            DataBaseFunction.AddColumnValue(newRow, "ID", productId.InvID);
+            DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory); 
+            productListTable.Rows.Add(newRow); 
+            return productListTable;
         }
         public static DataTable SetStockTakingPlanProducts(StockTakingProducts productIds)
         {

@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
             WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("StoTakMas_WarehouseID").ToString());
             Employee =  ChromeTabViewModel.ViewModelMainWindow.GetEmployeeByID(r.Field<int>("Emp_ID"));
             Time = r.Field<DateTime>("StoTakMas_Time");
-            StockTakingProductCollection = new StockTakingProduct.StockTakingProducts();
+            StockTakingProductCollection = new StockTakingProducts();
         }
         public string ID { get; set; }
         public WareHouse.WareHouse WareHouse { get; set; }

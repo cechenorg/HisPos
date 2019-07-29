@@ -12,8 +12,13 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Margin="10"
-                SelectedItem="{Binding StockTakingResultProductSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" GridLinesVisibility="Horizontal"  CanUserDeleteRows="False" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StockTakingResult.StockTakingProductCollection}">
+        <DataGrid Name="ResultDataGrid" Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Margin="10"
+                SelectedItem="{Binding StockTakingResultProductSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" GridLinesVisibility="Horizontal"  CanUserDeleteRows="False" FrozenColumnCount="2"  CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StockTakingResult.StockTakingProductCollection}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding Path=DataContext.ShowStockResultMedicineDetailCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -61,6 +66,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}" ControlLevel="{Binding IsControl}" IsFrozen="{Binding IsFrozen}"/>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                          
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -88,10 +94,18 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Width="100" Header="盤點量" IsReadOnly="True">
+                <DataGridTextColumn Header="平均價格" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AveragePrice,StringFormat=N2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="100" Header="盤點架上量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding DataContext.SetDiffInventoryAmountCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
@@ -121,9 +135,15 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <Button Width="120" Content="上一步" Command="{Binding LastToChoosePageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" Background="DimGray" BorderThickness="0"/>
             <Label Content="盤差品項  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="{Binding DiffInventoryAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding DiffInventoryAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
             <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Rectangle Width="665"/>
+            <Label Content="庫存淨值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding ResultInitTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Label Content="盤點值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding ResultFinalTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Label Content="盤差值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Text="{Binding ResultDiffTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <Rectangle Width="90"/> 
             <Button Width="150" Content="自動補齊未填寫" Command="{Binding FillUnTakingInventoryCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" Background="DimGray" BorderThickness="0"/>
             <Button Width="150" Content="完成盤點" Command="{Binding NextToReasonPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0"/>
         </StackPanel>
