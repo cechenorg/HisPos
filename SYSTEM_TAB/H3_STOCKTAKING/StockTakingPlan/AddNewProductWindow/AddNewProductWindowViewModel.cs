@@ -131,7 +131,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         }
         
         private void GetStockTakingProductByProNameAction() {
-            SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName);
+            SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName,WarID);
             RemoveSourceProInTarget();
         }
          

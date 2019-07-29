@@ -26,5 +26,6 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         {
             return new StockTakingProducts(StockTakingDB.GetStockTakingProductsInventory(stockTakingPlanProducts, warID)); 
         }
+        
     }
 }

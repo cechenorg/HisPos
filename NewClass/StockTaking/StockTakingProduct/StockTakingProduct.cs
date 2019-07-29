@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         public double Inventory {
             get { return inventory; }
             set { Set(() => Inventory, ref inventory, value);
-                ValueDiff = NewInventory - Inventory;
+                ValueDiff = NewInventory - OnTheFrame;
             }
         }
         private double newInventory;
@@ -24,7 +24,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             get { return newInventory; }
             set {
                 Set(() => NewInventory, ref newInventory, value);
-                ValueDiff = NewInventory - Inventory; 
+                ValueDiff = NewInventory - OnTheFrame; 
             }
         }
         private double valueDiff;
@@ -48,6 +48,19 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         public double OnTheFrame { get; set; }
         public bool IsFrozen { get; set; }
         public byte? IsControl { get; set; }
+        public double TotalPrice { get; set; }
+        public double AveragePrice { get; set; }
+        public double MedBagAmount { get; set; }
+        public int InvID { get; set; }
+        private double newInventoryTotalPrice;
+        public double NewInventoryTotalPrice
+        {
+            get { return newInventoryTotalPrice; }
+            set
+            {
+                Set(() => NewInventoryTotalPrice, ref newInventoryTotalPrice, value);
+            }
+        }
         public Employee Employee { get; set; }
         #endregion
         public StockTakingProduct() {
@@ -55,16 +68,25 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
         }
         public StockTakingProduct(DataRow row) : base(row)
         {
+            InvID = row.Field<int>("Inv_ID");
             Inventory = row.Field<double>("StoTakDet_OldValue");
             NewInventory = row.Field<double>("StoTakDet_NewValue");
             OnTheFrame = row.Field<double>("OnTheFrame");
             Note = row.Field<string>("StoTakDet_Note");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
-            IsControl = row.Field<byte?>("Med_Control"); 
+            IsControl = row.Field<byte?>("Med_Control");
+            TotalPrice = row.Field<double>("TotalPrice");
+            MedBagAmount = row.Field<double>("MedBagAmount");
+            AveragePrice = TotalPrice / Inventory;
             IsUpdate = false;
+            NewInventoryTotalPrice = 0; 
         }
-       
+
         #region ----- Define Functions -----
+       
+        public void GetStockTakingTotalPrice(string warID) {
+            NewInventoryTotalPrice = StockTakingDB.GetStockTakingTotalPrice(this, warID).Rows[0].Field<double>("TotalPrice");
+        }
         #endregion
     }
 }
