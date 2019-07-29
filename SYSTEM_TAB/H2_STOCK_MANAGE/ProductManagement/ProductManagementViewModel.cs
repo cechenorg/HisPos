@@ -36,6 +36,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private bool isBusy;
         private string busyContent;
         private double totalStockValue;
+        private double medBagStockValue;
+        private double shelfStockValue;
         private WareHouse selectedWareHouse;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
@@ -59,6 +61,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             get { return totalStockValue; }
             set { Set(() => TotalStockValue, ref totalStockValue, value); }
+        }
+        public double MedBagStockValue
+        {
+            get { return medBagStockValue; }
+            set { Set(() => MedBagStockValue, ref medBagStockValue, value); }
+        }
+        public double ShelfStockValue
+        {
+            get { return shelfStockValue; }
+            set { Set(() => ShelfStockValue, ref shelfStockValue, value); }
         }
         public ProductSearchTypeEnum SearchType
         {
@@ -103,6 +115,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 MainWindow.ServerConnection.CloseConnection();
                 
                 TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
+                ShelfStockValue = dataTable.Rows[0].Field<double>("SHELF_STOCK");
+                MedBagStockValue = dataTable.Rows[0].Field<double>("MEDBAG_STOCK");
             };
 
             backgroundWorker.RunWorkerCompleted += (sender, args) =>

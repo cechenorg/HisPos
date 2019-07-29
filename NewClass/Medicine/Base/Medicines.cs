@@ -405,6 +405,7 @@ namespace His_Pos.NewClass.Medicine.Base
         private List<string> CreateIdList()
         {
             var idList = new List<string>();
+
             foreach (var m in Items)
             {
                 switch (m)
