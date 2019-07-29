@@ -237,7 +237,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;

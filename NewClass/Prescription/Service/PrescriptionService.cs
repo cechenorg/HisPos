@@ -50,7 +50,7 @@ namespace His_Pos.NewClass.Prescription.Service
         protected Prescription TempPre { get; set; }
         protected List<bool?> PrintResult { get; set; }
         #region Functions
-        public static PrescriptionService CreateService(NewClass.Prescription.Prescription p)
+        public static PrescriptionService CreateService(Prescription p)
         {
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.Current = p;
@@ -312,7 +312,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("PatientTel", patientTel)
                     };
         }
-        public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(NewClass.Prescription.Prescription p)
+        public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(Prescription p)
         {
             var treatmentDate =
                 DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
@@ -616,26 +616,28 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void CloneTempPre()
         {
-            TempPre = (NewClass.Prescription.Prescription)Current.Clone();
+            TempPre = (Prescription)Current.Clone();
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
-            var selected = GetPrescriptionByID(preID, type);
+            Prescription selected;
             switch (type)
             {
                 case PrescriptionType.ChronicReserve:
+                    selected = GetReserveByID(preID);
                     var title = "預約瀏覽 ResMasID:" + selected.SourceId;
                     var edit = new ReservePrescriptionWindow(selected, title);
                     break;
                 default:
+                    selected = GetPrescriptionByID(preID);
                     CheckAdminLogin(selected);
                     break;
             }
         }
 
-        private static void CheckAdminLogin(NewClass.Prescription.Prescription selected)
+        private static void CheckAdminLogin(Prescription selected)
         {
             if (VM.CurrentUser.ID == 1)
             {
@@ -657,26 +659,48 @@ namespace His_Pos.NewClass.Prescription.Service
             }
         }
 
-        private static NewClass.Prescription.Prescription GetPrescriptionByID(int preID, PrescriptionType type)
+        private static Prescription GetPrescriptionByID(int preID)
         {
             MainWindow.ServerConnection.OpenConnection();
-            NewClass.Prescription.Prescription selected;
-            DataRow r;
-            switch (type)
+            var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+            var selected = new Prescription(r, PrescriptionType.Normal);
+            selected.InsertTime = r.Field<DateTime?>("InsertTime");
+            SetOrder(preID,selected);
+            MainWindow.ServerConnection.CloseConnection();
+            return !CheckPrescriptionEnable(r) ? null : selected;
+        }
+
+        private static void SetOrder(int preID,Prescription selected)
+        {
+            var orderTable = PrescriptionDb.GetOrderByPrescriptionID(preID);
+            if (orderTable.Rows.Count > 0)
             {
-                case PrescriptionType.ChronicReserve:
-                    r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                    MainWindow.ServerConnection.CloseConnection();
-                    selected = new NewClass.Prescription.Prescription(r, PrescriptionType.ChronicReserve);
-                    selected.Type = type;
-                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");
-                    return selected;
-                default:
-                    r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-                    selected = new NewClass.Prescription.Prescription(r, PrescriptionType.Normal);
-                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
-                    break;
+                var order = orderTable.Rows[0];
+                selected.PrescriptionStatus.OrderStatus = "備藥狀態:";
+                switch (order.Field<string>("StoOrd_Status"))
+                {
+                    case "W":
+                        selected.PrescriptionStatus.OrderStatus += "等待確認";
+                        break;
+                    case "P":
+                        selected.PrescriptionStatus.OrderStatus += "待收貨";
+                        break;
+                    default:
+                        selected.PrescriptionStatus.OrderStatus += "已收貨";
+                        break;
+                }
+                selected.OrderContent = selected.PrescriptionStatus.OrderStatus + " 單號:" + order.Field<string>("OrderID");
             }
+        }
+
+        private static Prescription GetReserveByID(int reserveID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var r = PrescriptionDb.GetReservePrescriptionByID(reserveID).Rows[0];
+            MainWindow.ServerConnection.CloseConnection();
+            var selected = new Prescription(r, PrescriptionType.ChronicReserve);
+            selected.Type = PrescriptionType.ChronicReserve;
+            selected.AdjustDate = r.Field<DateTime>("AdjustDate");
             MainWindow.ServerConnection.CloseConnection();
             return !CheckPrescriptionEnable(r) ? null : selected;
         }

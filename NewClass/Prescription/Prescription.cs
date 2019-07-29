@@ -66,7 +66,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r, PrescriptionType type, bool? reserveSend = null)
+        public Prescription(DataRow r, PrescriptionType type)
         {
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
@@ -111,7 +111,23 @@ namespace His_Pos.NewClass.Prescription
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
                     Medicines.GetDataByReserveId(int.Parse(SourceId));
-                    PrescriptionStatus.ReserveSend = reserveSend;
+                    PrescriptionStatus.OrderStatus = "備藥狀態:";
+                    switch (r.Field<string>("MedPrepareStatus"))
+                    {
+                        case "N":
+                            PrescriptionStatus.OrderStatus += "未處理";
+                            break;
+                        case "D":
+                            PrescriptionStatus.OrderStatus += "已備藥";
+                            break;
+                        default:
+                            PrescriptionStatus.OrderStatus += "不備藥";
+                            break;
+                    }
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Equals("已備藥");
+                    OrderContent = PrescriptionStatus.OrderStatus;
+                    if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
+                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
                     break;
                 default:
                     Medicines = new Medicines();
@@ -489,6 +505,16 @@ namespace His_Pos.NewClass.Prescription
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
         public DateTime? InsertTime { get; set; }
+
+        private string orderContent;
+        public string OrderContent
+        {
+            get => orderContent;
+            set
+            {
+                Set(() => OrderContent, ref orderContent, value);
+            }
+        }
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -883,7 +909,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateReceiptParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);

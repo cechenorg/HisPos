@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="藥袋印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
                       SelectedItem="{Binding MedBagPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
@@ -40,8 +40,17 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="收據印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
                       SelectedItem="{Binding ReceiptPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Content="格式" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="110" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding PrintForms}"
+                      SelectedItem="{Binding ReceiptForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <command:EventToCommand Command="{Binding DataChangedCommand}"/>
@@ -51,7 +60,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="報表印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
                       SelectedItem="{Binding ReportPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">

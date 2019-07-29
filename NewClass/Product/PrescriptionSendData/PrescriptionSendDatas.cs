@@ -13,43 +13,39 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
     {
         public PrescriptionSendDatas() { }
         public void ConvertMedToSendData(Medicines ms,int preID) {
-            List<string> MedicineIds = new List<string>();
+            var MedicineIds = new List<string>();
             foreach (var med in ms)
             {
                 if (MedicineIds.Count(M => M == med.ID) == 0)
                     MedicineIds.Add(med.ID);
             }
-            Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-
-            Medicines medicines = new Medicines();
+            var InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
+            var medicines = new Medicines();
             medicines.GetDataByPrescriptionId(preID);
             foreach (var m in medicines) {
                 var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
                 if(m.SendAmount >= 0)
-                temp.OnTheFrame += m.Amount - m.SendAmount;
-            } 
-            foreach (var m in ms) { 
-            if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) { 
-                PrescriptionSendData prescriptionSendData = new PrescriptionSendData(m);
-                if (this.Count(M => M.MedId == prescriptionSendData.MedId) == 1) {
-                    prescriptionSendData.TreatAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).TreatAmount;
-                    prescriptionSendData.OldSendAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).OldSendAmount;
-                    this.Remove(this.Single(M => M.MedId == prescriptionSendData.MedId));
-                }
-                if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) == 1) {
-                    var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
-                    
-                    prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount > 0
-                        ? prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount : 0;
-                    prescriptionSendData.OntheFrame = temp.OnTheFrame;
-                    prescriptionSendData.OntheWay = temp.OnTheWayAmount;
-                    prescriptionSendData.PrepareAmount = prescriptionSendData.TreatAmount - prescriptionSendData.SendAmount;
-                }
-                Add(prescriptionSendData);
+                    temp.OnTheFrame += m.Amount - m.SendAmount;
+            }
+            foreach (var m in ms) {
+                if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
+                    var prescriptionSendData = new PrescriptionSendData(m);
+                    if (this.Count(M => M.MedId == prescriptionSendData.MedId) == 1) {
+                        prescriptionSendData.TreatAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).TreatAmount;
+                        prescriptionSendData.OldSendAmount += this.Single(M => M.MedId == prescriptionSendData.MedId).OldSendAmount;
+                        this.Remove(this.Single(M => M.MedId == prescriptionSendData.MedId));
+                    }
+                    if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) == 1) {
+                        var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
+                        prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount > 0
+                            ? prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount : 0;
+                        prescriptionSendData.OntheFrame = temp.OnTheFrame;
+                        prescriptionSendData.OntheWay = temp.OnTheWayAmount;
+                        prescriptionSendData.PrepareAmount = prescriptionSendData.TreatAmount - prescriptionSendData.SendAmount;
+                    }
+                    Add(prescriptionSendData);
                 }
             } 
         }
-        
-
     }
 }

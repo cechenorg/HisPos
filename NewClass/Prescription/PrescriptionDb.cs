@@ -1048,5 +1048,19 @@ namespace His_Pos.NewClass.Prescription
             }
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CountSameDeclarePrescription]", parameterList);
         }
+
+        public static DataTable GetEditedRecords(string prescriptionID)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", prescriptionID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionEditRecord]", parameterList);
+        }
+
+        public static DataTable GetOrderByPrescriptionID(int preID)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", preID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionOrderByPrescriptionID]", parameterList);
+        }
     }
 }

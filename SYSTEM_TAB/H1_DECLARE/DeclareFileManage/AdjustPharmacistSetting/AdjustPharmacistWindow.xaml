@@ -12,7 +12,10 @@
         xmlns:vsm="clr-namespace:System.Windows;assembly=WPFToolkit"
         xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="申報藥師調整設定" Height="920" Width="1440">
+        Title="申報藥師調整設定" Height="{Binding WindowHeight, Mode=TwoWay}" 
+        Width="{Binding WindowWidth, Mode=TwoWay}" 
+        Top="{Binding StartTop, Mode=TwoWay}"
+        Left="{Binding StartLeft, Mode=TwoWay}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <command:EventToCommand Command="{Binding CloseCommand}" />
@@ -295,29 +298,31 @@
     <Window.Background >
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
-    <xctk:BusyIndicator IsBusy="{Binding DataContext.IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+    <Viewbox Stretch="Uniform">
+        <xctk:BusyIndicator IsBusy="{Binding DataContext.IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                         BusyContent="{Binding DataContext.BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-        <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <Button Grid.Row="0" Command="{Binding AddAllPharmacists}" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="加入全部" HorizontalAlignment="Right" Margin="0,0,100,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="110"/>
-        <Button Grid.Row="0" Command="{Binding DeletePharmacistScheduleItem}" Content="刪除" HorizontalAlignment="Right" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80" />
-        <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}" MouseLeave="MonthViewCalendar_MouseLeave">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction
+            <Grid Width="1650" Height="900">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{Binding DeclareMonth,UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <Button Grid.Row="0" Command="{Binding AddAllPharmacists}" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="加入全部" HorizontalAlignment="Right" Margin="0,0,100,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="110"/>
+                <Button Grid.Row="0" Command="{Binding DeletePharmacistScheduleItem}" Content="刪除" HorizontalAlignment="Right" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80" />
+                <adjustPharmacistSetting:MonthViewCalendar Grid.Row="1" Style="{StaticResource MonthViewCalendarStyle}" SelectedDate="{Binding MySelectedDate,UpdateSourceTrigger=PropertyChanged}" DisplayDate="{Binding MyDisplayDate,UpdateSourceTrigger=PropertyChanged}" MouseLeave="MonthViewCalendar_MouseLeave">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction
                         Command="{Binding DataContext.AddPharmacistScheduleItem,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </adjustPharmacistSetting:MonthViewCalendar>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0">
-            <Button Command="{Binding SavePharmacistScheduleItem}" Content="儲存" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
-            <Button Command="{Binding Close}" Content="關閉" Background="DimGray" BorderBrush="DimGray" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
-        </StackPanel>
-    </Grid>
-    </xctk:BusyIndicator>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </adjustPharmacistSetting:MonthViewCalendar>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Button Command="{Binding SavePharmacistScheduleItem}" Content="儲存" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="0,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
+                    <Button Command="{Binding Close}" Content="關閉" Background="DimGray" BorderBrush="DimGray" FontSize="18" FontFamily="Segoe UI Semibold" Width="80"/>
+                </StackPanel>
+            </Grid>
+        </xctk:BusyIndicator>
+    </Viewbox>
 </Window>

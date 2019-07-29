@@ -384,6 +384,8 @@
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\CusPrePreviewBase.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\OrthopedicsPreview.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\NoCardPreview.cs" />
+    <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecord.cs" />
+    <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecords.cs" />
     <Compile Include="NewClass\Prescription\Prescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
@@ -1886,6 +1888,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\HisReceipt_A6.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Images\home-address.png" />
     <Resource Include="Images\email.png" />

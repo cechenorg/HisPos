@@ -348,6 +348,7 @@ namespace His_Pos.NewClass.Medicine.Base
                         break;
                     case 2:
                         medicine = new MedicineOTC(r);
+                        medicine.PaySelf = true;
                         break;
                     case 3:
                         medicine = new MedicineSpecialMaterial(r);
