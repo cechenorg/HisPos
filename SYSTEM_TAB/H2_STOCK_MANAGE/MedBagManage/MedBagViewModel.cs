@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         #endregion
 
         #region ----- Define Variables -----
+        private bool isBusy;
+        private string busyContent;
         private MedBagPrescriptionStructs reserveCollection;
         private MedBagPrescriptionStructs registerCollection;
+        private BackgroundWorker initBackgroundWorker;
 
+        public bool IsBusy
+        {
+            get => isBusy;
+            set { Set(() => IsBusy, ref isBusy, value); }
+        }
+        public string BusyContent
+        {
+            get => busyContent;
+            set { Set(() => BusyContent, ref busyContent, value); }
+        }
         public MedBagPrescriptionStructs ReserveCollection
         {
             get => reserveCollection;
@@ -41,22 +55,40 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
 
         public MedBagViewModel()
         {
+            InitBackgroundWorker();
             RegisterCommands();
         }
 
         #region ----- Define Actions -----
+        private void InitBackgroundWorker()
+        {
+            initBackgroundWorker = new BackgroundWorker();
+
+            initBackgroundWorker.DoWork += (sender, args) =>
+            {
+                IsBusy = true;
+                BusyContent = "藥袋資料查詢中";
+
+                MainWindow.ServerConnection.OpenConnection();
+                ReserveCollection = MedBagPrescriptionStructs.GetReserveMedBagPrescriptions();
+                RegisterCollection = MedBagPrescriptionStructs.GetRegisterMedBagPrescriptions();
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                RaisePropertyChanged(nameof(TotalStockValue));
+
+                IsBusy = false;
+            };
+        }
         private void ExportAction()
         {
 
         }
         private void ReloadAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            ReserveCollection = MedBagPrescriptionStructs.GetReserveMedBagPrescriptions();
-            RegisterCollection = MedBagPrescriptionStructs.GetRegisterMedBagPrescriptions();
-            MainWindow.ServerConnection.CloseConnection();
-
-            RaisePropertyChanged(nameof(TotalStockValue));
+            initBackgroundWorker.RunWorkerAsync();
         }
         #endregion
 
