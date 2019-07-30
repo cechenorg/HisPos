@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -21,6 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand<string> ChangeSearchTypeCommand { get; set; }
         public RelayCommand InsertProductCommand { get; set; }
+        public RelayCommand<string> FilterCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -40,6 +43,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private double shelfStockValue;
         private double errorStockValue;
         private WareHouse selectedWareHouse;
+        private ICollectionView productCollectionView;
+        private ProductManageFilterEnum filterType = ProductManageFilterEnum.ALL;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
@@ -93,8 +98,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
+        public ICollectionView ProductCollectionView
+        {
+            get => productCollectionView;
+            set { Set(() => ProductCollectionView, ref productCollectionView, value); }
+        }
         public WareHouses WareHouseCollection { get; set; }
         public bool HasError => ((int) ErrorStockValue).Equals(0);
+        public double CurrentStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.StockValue);
         #endregion
 
         public ProductManagementViewModel()
@@ -120,7 +131,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID);
                 DataTable dataTable = ProductDetailDB.GetTotalStockValue(SelectedWareHouse.ID);
                 MainWindow.ServerConnection.CloseConnection();
-                
+
+                ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
+                ProductCollectionView.Filter += ProductFilter;
+                RaisePropertyChanged(nameof(CurrentStockValue));
+
                 TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
                 ShelfStockValue = dataTable.Rows[0].Field<double>("SHELF_STOCK");
                 MedBagStockValue = dataTable.Rows[0].Field<double>("MEDBAG_STOCK");
@@ -156,6 +171,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     break;
             }
         }
+        private void FilterAction(string type)
+        {
+            filterType = (ProductManageFilterEnum) int.Parse(type);
+
+            ProductCollectionView.Filter += ProductFilter;
+            RaisePropertyChanged(nameof(CurrentStockValue));
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -164,6 +186,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             SearchCommand = new RelayCommand(SearchAction);
             ChangeSearchTypeCommand = new RelayCommand<string>(ChangeSearchTypeAction);
             InsertProductCommand = new RelayCommand(InsertProductAction);
+            FilterCommand = new RelayCommand<string>(FilterAction);
         }
         private void InsertProductAction() {
             InsertProductWindow.InsertProductWindow insertProductWindow = new InsertProductWindow.InsertProductWindow();
@@ -185,6 +208,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             }
 
             SelectedWareHouse = WareHouseCollection[0];
+        }
+        private bool ProductFilter(object product)
+        {
+            var tempProduct = product as ProductManageStruct;
+
+            switch (filterType)
+            {
+                case ProductManageFilterEnum.ALL:
+                    return true;
+                case ProductManageFilterEnum.COMMON:
+                    return tempProduct.IsCommon;
+                case ProductManageFilterEnum.CONTROL:
+                    return tempProduct.ControlLevel != null;
+                case ProductManageFilterEnum.FROZE:
+                    return tempProduct.IsFrozen;
+                case ProductManageFilterEnum.INV_ERROR:
+                    return tempProduct.InventoryError;
+            }
+
+            return false;
         }
         #endregion
     }

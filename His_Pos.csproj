@@ -509,6 +509,7 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductManageDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHIDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHISpecialDetail.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageFilterEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
