@@ -10,6 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.Properties;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
@@ -318,6 +319,7 @@ namespace His_Pos.NewClass.Medicine.Base
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
             medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
+            medicine.UsableAmount = medicine.OnTheFrameAmount;
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
@@ -387,9 +389,7 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             var idList = CreateIdList();
             SetBuckleAmount(buckle);
-            MainWindow.ServerConnection.OpenConnection();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
-            MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {
                 var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
@@ -610,7 +610,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID)
+        public string CheckNegativeStock(string warID,List<MedicineInventoryStruct> usableAmountList)
         {
             var buckleMedicines = new List<BuckleMedicineStruct>();
             var inventoryIDList = new List<int>();
@@ -633,14 +633,22 @@ namespace His_Pos.NewClass.Medicine.Base
             var inventoryList = new List<MedicineInventoryStruct>();
             foreach (DataRow r in inventories.Rows)
             {
-                inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_Inventory")));
+                if (usableAmountList.Count(u => u.ID.Equals(r.Field<int>("Inv_ID"))) == 1)
+                {
+                    var usable = usableAmountList.SingleOrDefault(u => u.ID.Equals(r.Field<int>("Inv_ID")));
+                    inventoryList.Add(new MedicineInventoryStruct(usable.ID, usable.Amount));
+                }
+                else
+                {
+                    inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_OnTheFrame")));
+                }
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
                 if(buckle.BuckleAmount == 0) continue;
-                if (inv.Inventory - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+                if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
                 foreach (var med in this)
                 {
                     if (med is MedicineVirtual) continue;
@@ -668,6 +676,18 @@ namespace His_Pos.NewClass.Medicine.Base
                 this[i-1].Order = i;
             }
         }
-        
+
+        public void CheckUsableAmount(List<MedicineInventoryStruct> usableMedicines)
+        {
+            if (usableMedicines.Count <= 0) return;
+            foreach (var usableMedicine in usableMedicines)
+            {
+                foreach (var m in this)
+                {
+                    if (!m.InventoryID.Equals(usableMedicine.ID)) continue;
+                        m.UsableAmount = usableMedicine.Amount;
+                }
+            }
+        }
     }
 }

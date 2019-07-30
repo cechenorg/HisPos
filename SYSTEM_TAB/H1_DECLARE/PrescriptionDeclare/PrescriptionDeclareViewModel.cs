@@ -84,6 +84,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => MedicineSets, ref medicineSets, value);
             }
         }
+        private Medicines usableMedicines { get; set; }
         #endregion
         #region Variables
         private BackgroundWorker worker;
@@ -366,6 +367,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
             CheckNewCustomer();
             CountMedicinePointAction();
+            CurrentPrescription.UpdateMedicines();
             setBuckleAmount = true;
             isNotInit = true;
         }
