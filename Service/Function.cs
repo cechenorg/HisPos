@@ -95,7 +95,7 @@ namespace His_Pos.Service
             {
                 path = "C:\\Program Files\\HISPOS\\DailyUpload";
                 path_ymd = path + "\\" + year + month.PadLeft(2, '0') + day;
-                path_file = path_ymd + "\\" + year + month + day;
+                path_file = path_ymd + "\\" + year + month + day + +DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second;
             }
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             xml.Declaration = new XDeclaration("1.0", "Big5", string.Empty);
@@ -198,6 +198,37 @@ namespace His_Pos.Service
             catch (Exception ex)
             {
                 MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
+            }
+        }
+
+        public void DailyUploadWithoutMessage(XDocument dailyUpload, string recCount)
+        {
+            try
+            {
+                var filePath = ExportXml(dailyUpload, "DailyUpload");
+                var fileName = filePath + ".xml";
+                var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
+                var fileInfo = new FileInfo(fileName);//每日上傳檔案
+                var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+                var count = ConvertData.StringToBytes(recCount, recCount.Length);
+                var pBuffer = new byte[50];
+                var iBufferLength = 50;
+                if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
+                {
+                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                    if (res == 0)
+                    {
+                        MainWindow.ServerConnection.OpenConnection();
+                        IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
+                        MainWindow.ServerConnection.CloseConnection();
+                        IcDataUploadDb.UpdateDailyUploadData();
+                    }
+                }
+                HisApiFunction.CloseCom();
+            }
+            catch (Exception)
+            {
+
             }
         }
 

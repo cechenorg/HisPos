@@ -230,12 +230,21 @@ namespace His_Pos.HisApi
         public static void CheckDailyUpload()
         {
             var uploadTable = UploadFunctions.CheckUpload();
-            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            if (uploadTable.Rows.Count >= 100 && ViewModelMainWindow.IsVerifySamDc)
             {
                 var dailyUploadConfirm = new ConfirmWindow("尚有" + uploadTable.Rows.Count + "筆健保資料未上傳，是否執行上傳作業", "每日上傳確認",true);
                 bool upload = (bool)dailyUploadConfirm.DialogResult;
                 if (upload)
                     UploadFunctions.StartDailyUpload(uploadTable);
+            }
+        }
+
+        public static void CheckDailyUpload100()
+        {
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            {
+                UploadFunctions.StartDailyUpload100(uploadTable);
             }
         }
 

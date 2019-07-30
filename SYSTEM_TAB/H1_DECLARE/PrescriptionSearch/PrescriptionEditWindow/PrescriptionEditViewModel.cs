@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -679,44 +680,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.InsertTime is null || EditedPrescription.Type.Equals(PrescriptionType.ChronicReserve)) return true;
             EditMedicines = new List<BuckleMedicineStruct>();
-            var originMedIDs = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
-            var editMedIDs = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
-            var medIDs = originMedIDs.Concat(editMedIDs).Distinct().ToList();
-            MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs,EditedPrescription.WareHouse?.ID);
-            MainWindow.ServerConnection.CloseConnection();
-            var inventoryIDList = new List<int>();
-            foreach (var originMed in OriginalPrescription.Medicines)
-            {
-                if (originMed is MedicineVirtual) continue;
-                if (!inventoryIDList.Contains(originMed.InventoryID) && originMed.InventoryID != 0)
-                    inventoryIDList.Add(originMed.InventoryID);
-            }
-            foreach (var inv in inventoryIDList)
-            {
-                var editMed = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
-                var originMed = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
-                var buckleDiff = editMed.Sum(m => m.BuckleAmount) - originMed.Sum(m => m.BuckleAmount);
-                if (buckleDiff > 0)
-                    EditMedicines.Add(new BuckleMedicineStruct(inv, buckleDiff));
-            }
-            foreach (var editMed in EditedPrescription.Medicines)
-            {
-                if(editMed is MedicineVirtual) continue;
-                if(inventoryIDList.Count(i => i.Equals(editMed.InventoryID)) > 0) continue;
-                if(editMed.BuckleAmount > 0)
-                    EditMedicines.Add(new BuckleMedicineStruct(editMed.InventoryID, editMed.BuckleAmount));
-            }
-            var editInvIDList = new List<int>();
-            foreach (var edit in EditMedicines)
-            {
-                editInvIDList.Add(edit.ID);
-            }
-            var inventoryList = new List<MedicineInventoryStruct>();
-            foreach (var e in editInvIDList)
-            {
-                inventoryList.Add(new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).InventoryAmount));
-            }
+            var inventoryList = GetInventoryOfEditedInvIDs();
+            var negativeStock = GetNegativeStockMessage(inventoryList);
+            if (string.IsNullOrEmpty(negativeStock)) return true;
+            negativeStock += "扣庫量變化造成負庫，請修改扣庫量。";
+            MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
+            return false;
+        }
+
+        private string GetNegativeStockMessage(List<MedicineInventoryStruct> inventoryList)
+        {
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
@@ -728,10 +701,74 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         negativeStock += "藥品" + med.ID + "\n";
                 }
             }
-            if (string.IsNullOrEmpty(negativeStock)) return true;
-            negativeStock += "扣庫量變化造成負庫，請修改扣庫量。";
-            MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
-            return false;
+            return negativeStock;
+        }
+
+        private List<MedicineInventoryStruct> GetInventoryOfEditedInvIDs()
+        {
+            var inventoryList = new List<MedicineInventoryStruct>();
+            var inventoryIDList = GetMedicinesInvIDs();
+            var editInvIDList = GetEditedInvIDs(inventoryIDList);
+            MainWindow.ServerConnection.OpenConnection();
+            var inventories = Inventorys.GetAllInventoryByProIDs(GetMedicinesIDsConcatenated(), EditedPrescription.WareHouse?.ID);
+            var usableAmount = EditedPrescription.CheckUsableMedicinesByType();
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (var e in editInvIDList)
+            {
+                inventoryList.Add(usableAmount.Count(u => u.ID.Equals(e)) == 0
+                    ? new MedicineInventoryStruct(e, inventories.Single(i => i.InvID.Equals(e)).OnTheFrame)
+                    : new MedicineInventoryStruct(e, usableAmount.Single(u => u.ID.Equals(e)).Amount));
+            }
+            return inventoryList;
+        }
+
+        private List<int> GetMedicinesInvIDs()
+        {
+            var inventoryIDList = new List<int>();
+            foreach (var originMed in OriginalPrescription.Medicines)
+            {
+                if (originMed is MedicineVirtual) continue;
+                if (!inventoryIDList.Contains(originMed.InventoryID) && originMed.InventoryID != 0)
+                    inventoryIDList.Add(originMed.InventoryID);
+            }
+            return inventoryIDList;
+        }
+
+        private List<int> GetEditedInvIDs(List<int> inventoryIDList)
+        {
+            MergeBuckleAmount(inventoryIDList);
+            foreach (var editMed in EditedPrescription.Medicines)
+            {
+                if (editMed is MedicineVirtual) continue;
+                if (inventoryIDList.Count(i => i.Equals(editMed.InventoryID)) > 0) continue;
+                if (editMed.BuckleAmount > 0)
+                    EditMedicines.Add(new BuckleMedicineStruct(editMed.InventoryID, editMed.BuckleAmount));
+            }
+            var editInvIDList = new List<int>();
+            foreach (var edit in EditMedicines)
+            {
+                editInvIDList.Add(edit.ID);
+            }
+            return editInvIDList;
+        }
+
+        private List<string> GetMedicinesIDsConcatenated()
+        {
+            var originMedIDs = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            var editMedIDs = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            return originMedIDs.Concat(editMedIDs).Distinct().ToList();
+        }
+
+        private void MergeBuckleAmount(List<int> inventoryIDList)
+        {
+            foreach (var inv in inventoryIDList)
+            {
+                var editMed = EditedPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
+                var originMed = OriginalPrescription.Medicines.Where(m => !(m is MedicineVirtual) && m.InventoryID.Equals(inv));
+                var buckleDiff = editMed.Sum(m => m.BuckleAmount) - originMed.Sum(m => m.BuckleAmount);
+                if (buckleDiff > 0)
+                    EditMedicines.Add(new BuckleMedicineStruct(inv, buckleDiff));
+            }
         }
 
         private void CheckCustomerEdited()

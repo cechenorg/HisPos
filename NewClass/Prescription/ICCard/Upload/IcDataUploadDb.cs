@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Content", new SqlXml(new XmlTextReader(XmlService.ToXmlDocument(xml).InnerXml, XmlNodeType.Document, null)));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertUploadDataHisotry]", parameterList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertUploadDataHistory]", parameterList);
         }
     }
 }
