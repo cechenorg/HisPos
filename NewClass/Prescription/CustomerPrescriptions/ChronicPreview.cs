@@ -39,18 +39,17 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             throw new NotImplementedException();
         }
 
-        public override NewClass.Prescription.Prescription CreatePrescription()
+        public override Prescription CreatePrescription()
         {
             DataTable table;
             switch (Type)
             {
                 case PrescriptionType.ChronicRegister:
                     table = PrescriptionDb.GetPrescriptionByID(ID);
-                    return table.Rows.Count > 0 ? new NewClass.Prescription.Prescription(table.Rows[0],Type) : null;
+                    return table.Rows.Count > 0 ? new Prescription(table.Rows[0],Type) : null;
                 case PrescriptionType.ChronicReserve:
-                    var reserveSend = IsSend.Equals("已備藥");
                     table = PrescriptionDb.GetReservePrescriptionByID(ID);
-                    return table.Rows.Count > 0 ? new NewClass.Prescription.Prescription(table.Rows[0],Type, reserveSend) : null;
+                    return table.Rows.Count > 0 ? new Prescription(table.Rows[0],Type) : null;
                 default:
                     return null;
             }

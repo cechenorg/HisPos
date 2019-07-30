@@ -19,10 +19,10 @@ namespace His_Pos.NewClass.Medicine.Base
         public Medicine(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
-            Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
+            OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
-            if (NewFunction.CheckDataRowContainsColumn(r, "Inv_ID") && r.Field<int?>("Inv_ID") != null)
-                InventoryID = r.Field<int>("Inv_ID");
+            InventoryID = r.Field<int>("Inv_ID");
+            SendAmount = -1;
         }
 
         public Medicine(CooperativeMedicine m)
@@ -194,15 +194,16 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        private double inventory;//庫存
-        public double Inventory
+        private double onTheFrameAmount;//庫存
+        public double OnTheFrameAmount
         {
-            get => inventory;
+            get => onTheFrameAmount;
             set
             {
-                Set(() => Inventory, ref inventory, value);
+                Set(() => OnTheFrameAmount, ref onTheFrameAmount, value);
             }
         }
+
         private int inventoryID;//庫存編號
         public int InventoryID
         {
@@ -231,6 +232,10 @@ namespace His_Pos.NewClass.Medicine.Base
             get => paySelf;
             set
             {
+                if (value != null && !value)
+                {
+                    if(this is MedicineOTC) return;
+                }
                 Set(() => PaySelf, ref paySelf, value);
                 CountTotalPrice();
             }
@@ -349,6 +354,28 @@ namespace His_Pos.NewClass.Medicine.Base
             get => isSelected;
             set { Set(() => IsSelected, ref isSelected, value); }
         }
+
+        private int order;
+        public int Order
+        {
+            get => order;
+            set { Set(() => Order, ref order, value); }
+        }
+        private double sendAmount;
+        public double SendAmount
+        {
+            get => sendAmount;
+            set { Set(() => SendAmount, ref sendAmount, value); }
+        }
+        private double usableAmount;
+        public double UsableAmount
+        {
+            get => usableAmount;
+            set
+            {
+                Set(() => UsableAmount, ref usableAmount, value);
+            }
+        }
         #endregion
 
         public bool CheckIsBloodGlucoseTestStrip()
@@ -464,7 +491,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = clonedMed.NHIPrice,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
@@ -496,7 +523,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = clonedMed.NHIPrice,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
@@ -528,7 +555,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Ingredient = clonedMed.Ingredient,
                     Price = clonedMed.Price,
                     NHIPrice = 0,
-                    Inventory = clonedMed.Inventory,
+                    OnTheFrameAmount = clonedMed.OnTheFrameAmount,
                     IsCommon = clonedMed.IsCommon,
                     SideEffect = clonedMed.SideEffect,
                     TotalPrice = clonedMed.TotalPrice,
@@ -564,6 +591,8 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 TotalPrice = r.Field<int>("Point");
             }
+            Order = r.Field<int>("OrderNumber");
+            SendAmount = r.Field<double>("SendAmount");
         }
     }
 }

@@ -83,7 +83,7 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             {
                 fileWriter.WriteLine("V " + VerifyNumber);
                 fileWriter.WriteLine("M ");
-                fileWriter.WriteLine("Rc ");
+                fileWriter.WriteLine("Rc $點陣");
                 fileWriter.WriteLine("Rp ");
                 fileWriter.WriteLine("Com ");
             }
@@ -96,6 +96,7 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             Properties.Settings.Default.ReceiptPrinter = "";
             Properties.Settings.Default.ReportPrinter = "";
             Properties.Settings.Default.ReaderComPort = "";
+            Properties.Settings.Default.ReceiptForm = "點陣";
             Properties.Settings.Default.Save();
 
             Pharmacy p = new Pharmacy();

@@ -34,14 +34,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
                 case "N":
-                    PrepareMedStatus = IndexPrepareMedType.Unprocess;
-                    IsSend = true;
+                    PrepareMedStatus = IndexPrepareMedType.Unprocess; 
                     break;
                 case "D":
                     PrepareMedStatus = IndexPrepareMedType.Prepare;
                     break;
                 case "F":
                     PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                    isNoSend = true;
                     break; 
             }
             switch (r.Field<string>("CallStatus"))
@@ -77,13 +77,29 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => PrepareMedType, ref prepareMedType, value);
             }
         }
-        private bool isSend;
-        public bool IsSend
+        private bool isNoSend;
+        public bool IsNoSend
         {
-            get => isSend;
+            get => isNoSend;
             set
             {
-                Set(() => IsSend, ref isSend, value);
+                Set(() => IsNoSend, ref isNoSend, value);
+                if (IsNoSend) {
+                    if (PrepareMedStatus == IndexPrepareMedType.Prepare)
+                    {
+                        ConfirmWindow confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
+                        if ((bool)confirmWindow.DialogResult)
+                        {
+                            PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                            this.SaveStatus();
+                        }
+                        else
+                            IsNoSend = false;
+                    }
+                    else
+                        PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                    this.SaveStatus(); 
+                } 
             }
         }
 
@@ -142,6 +158,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);
         }
+        public void GetIndexSendDetail() {
+            IndexReserveDetailCollection.GetSendDataById(Id); 
+        }
         public bool StoreOrderToSingde() {
             int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
             bool result = false;
@@ -151,7 +170,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                note += $"{IndexReserveDetailCollection[j].ID} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
+                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.PadRight(20).Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
@@ -191,6 +210,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters() {
             return new List<ReportParameter>
             {
+                new ReportParameter("Type","預約"),
                 new ReportParameter("PatientName",CusName),
                 new ReportParameter("PatientBirthday",CusBirth.AddYears(-1911).ToString("yyy-MM-dd")),
                 new ReportParameter("PatientTel",PhoneNote),

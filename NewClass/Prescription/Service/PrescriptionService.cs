@@ -22,6 +22,11 @@ using Microsoft.Reporting.WinForms;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
+using His_Pos.NewClass.Product.PrescriptionSendData;
+using His_Pos.NewClass.Medicine.ReserveMedicine;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -41,16 +46,11 @@ namespace His_Pos.NewClass.Prescription.Service
 
         }
 
-        protected PrescriptionService(NewClass.Prescription.Prescription p)
-        {
-            Current = p;
-            PrintResult = new List<bool?>();
-        }
-        protected NewClass.Prescription.Prescription Current { get; set; }
-        protected NewClass.Prescription.Prescription TempPre { get; set; }
+        protected Prescription Current { get; set; }
+        protected Prescription TempPre { get; set; }
         protected List<bool?> PrintResult { get; set; }
         #region Functions
-        public static PrescriptionService CreateService(NewClass.Prescription.Prescription p)
+        public static PrescriptionService CreateService(Prescription p)
         {
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
             ps.Current = p;
@@ -312,7 +312,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("PatientTel", patientTel)
                     };
         }
-        public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(NewClass.Prescription.Prescription p)
+        public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(Prescription p)
         {
             var treatmentDate =
                 DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
@@ -499,22 +499,55 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        protected void SendOrder(MedicinesSendSingdeViewModel vm)
+        public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            if (Current.PrescriptionStatus.IsSendOrder)
-            {
-                var sendData = vm.PrescriptionSendData;
+           
+            var sendData = vm.PrescriptionSendData;
+            if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
                 if (!Current.PrescriptionStatus.IsSendToSingde)
                     Current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(Current, sendData);
                 //紀錄訂單and送單
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                } //更新傳送藥健康
+                } //更新傳送藥健康  
             }
+            ReportViewer rptViewer = new ReportViewer();
+            SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+            });
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
-
+        public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
+        {
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new ReserveMedicines(prescriptionSendDatas);
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = CreateReserveMedicinesSheetParameters();
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
+            rptViewer.LocalReport.Refresh();
+        }
+        private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("Type","登錄"),
+                new ReportParameter("PatientName",Current.Patient.Name),
+                new ReportParameter("PatientBirthday",((DateTime)Current.Patient.Birthday).AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("PatientTel",Current.Patient.ContactNote),
+                new ReportParameter("Institution", Current.Institution.Name),
+                new ReportParameter("Division", Current.Division.Name),
+                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
+            };
+        }
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
             Current.TempMedicalNumber = errorCode.ID;
@@ -566,26 +599,28 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void CloneTempPre()
         {
-            TempPre = (NewClass.Prescription.Prescription)Current.Clone();
+            TempPre = (Prescription)Current.Clone();
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public static void ShowPrescriptionEditWindow(int preID, PrescriptionType type = PrescriptionType.Normal)
         {
-            var selected = GetPrescriptionByID(preID, type);
+            Prescription selected;
             switch (type)
             {
                 case PrescriptionType.ChronicReserve:
+                    selected = GetReserveByID(preID);
                     var title = "預約瀏覽 ResMasID:" + selected.SourceId;
                     var edit = new ReservePrescriptionWindow(selected, title);
                     break;
                 default:
+                    selected = GetPrescriptionByID(preID, type);
                     CheckAdminLogin(selected);
                     break;
             }
         }
 
-        private static void CheckAdminLogin(NewClass.Prescription.Prescription selected)
+        private static void CheckAdminLogin(Prescription selected)
         {
             if (VM.CurrentUser.ID == 1)
             {
@@ -607,28 +642,50 @@ namespace His_Pos.NewClass.Prescription.Service
             }
         }
 
-        private static NewClass.Prescription.Prescription GetPrescriptionByID(int preID, PrescriptionType type)
+        private static Prescription GetPrescriptionByID(int preID,PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
-            NewClass.Prescription.Prescription selected;
-            DataRow r;
-            switch (type)
-            {
-                case PrescriptionType.ChronicReserve:
-                    r = PrescriptionDb.GetReservePrescriptionByID(preID).Rows[0];
-                    MainWindow.ServerConnection.CloseConnection();
-                    selected = new NewClass.Prescription.Prescription(r, PrescriptionType.ChronicReserve);
-                    selected.Type = type;
-                    selected.AdjustDate = r.Field<DateTime>("AdjustDate");
-                    return selected;
-                default:
-                    r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-                    selected = new NewClass.Prescription.Prescription(r, PrescriptionType.Normal);
-                    selected.InsertTime = r.Field<DateTime?>("InsertTime");
-                    break;
-            }
+            var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+            var selected = new Prescription(r, type);
+            selected.InsertTime = r.Field<DateTime?>("InsertTime");
+            SetOrder(preID,selected);
             MainWindow.ServerConnection.CloseConnection();
             return !CheckPrescriptionEnable(r) ? null : selected;
+        }
+
+        private static void SetOrder(int preID,Prescription selected)
+        {
+            var orderTable = PrescriptionDb.GetOrderByPrescriptionID(preID);
+            if (orderTable.Rows.Count > 0)
+            {
+                var order = orderTable.Rows[0];
+                selected.PrescriptionStatus.OrderStatus = "備藥狀態:";
+                switch (order.Field<string>("StoOrd_Status"))
+                {
+                    case "W":
+                        selected.PrescriptionStatus.OrderStatus += "等待確認";
+                        break;
+                    case "P":
+                        selected.PrescriptionStatus.OrderStatus += "待收貨";
+                        break;
+                    default:
+                        selected.PrescriptionStatus.OrderStatus += "已收貨";
+                        break;
+                }
+                selected.OrderContent = selected.PrescriptionStatus.OrderStatus + " 單號:" + order.Field<string>("OrderID");
+            }
+        }
+
+        private static Prescription GetReserveByID(int reserveID)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var r = PrescriptionDb.GetReservePrescriptionByID(reserveID).Rows[0];
+            MainWindow.ServerConnection.CloseConnection();
+            var selected = new Prescription(r, PrescriptionType.ChronicReserve);
+            selected.Type = PrescriptionType.ChronicReserve;
+            selected.AdjustDate = r.Field<DateTime>("AdjustDate");
+            MainWindow.ServerConnection.CloseConnection();
+            return selected;
         }
 
         private static bool CheckPrescriptionEnable(DataRow r)

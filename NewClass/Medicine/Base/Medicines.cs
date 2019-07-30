@@ -10,6 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.Properties;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Items.Add(item);
             }
             SetBuckleAmount(isBuckle);
+            ReOrder();
         }
         private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
         {
@@ -111,6 +113,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Items.Add(item);
             }
             SetBuckleAmount(isBuckle);
+            ReOrder();
         }
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
@@ -172,59 +175,38 @@ namespace His_Pos.NewClass.Medicine.Base
 
         #endregion
 
-        public void GetDataByPrescriptionId(int id,string wareHouseID, DateTime? adjustDate)
+        public void GetDataByPrescriptionId(int id)
         {
             var table = MedicineDb.GetDataByPrescriptionId(id);
-            CreateMedicines(table, wareHouseID, adjustDate);
+            CreateMedicines(table);
+            ReOrder();
         }
 
-        public void GetDataByReserveId(int id,string wareHouseID, DateTime? adjustDate)
+        public void GetDataByReserveId(int id)
         {
             var table = MedicineDb.GetDataByReserveId(id);
-            CreateMedicines(table, wareHouseID, adjustDate);
+            CreateMedicines(table);
+            ReOrder();
         }
 
-        private void CreateMedicines(DataTable table,string wareHouseID,DateTime? adjustDate)
+        private void CreateMedicines(DataTable table)
         {
-            var idList = new List<string>();
-            foreach (DataRow r in table.Rows)
-            {
-                if(!idList.Contains(r.Field<string>("Pro_ID")))
-                    idList.Add(r.Field<string>("Pro_ID"));
-            }
-            var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
-            var medicineRows = new List<DataRow>();
-            foreach (DataRow r in medicinesTable.Rows)
-            {
-                medicineRows.Add(r);
-            }
             foreach (DataRow r in table.Rows)
             {
                 Medicine medicine;
-                var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
-                if(medicineRow is null)
+                switch (r.Field<int>("DataType"))
                 {
-                    switch (r.Field<string>("Pro_ID"))
-                    {
-                        case "R001":
-                        case "R002":
-                        case "R003":
-                        case "R004":
-                            medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
-                            Add(medicine);
-                            continue;
-                    }
-                }
-                switch (medicineRow.Field<int>("DataType"))
-                {
+                    case 0:
+                        medicine = new MedicineVirtual(r);
+                        break;
                     case 1:
-                        medicine = new MedicineNHI(medicineRow);
+                        medicine = new MedicineNHI(r);
                         break;
                     case 2:
-                        medicine = new MedicineOTC(medicineRow);
+                        medicine = new MedicineOTC(r);
                         break;
                     case 3:
-                        medicine = new MedicineSpecialMaterial(medicineRow);
+                        medicine = new MedicineSpecialMaterial(r);
                         break;
                     default:
                         continue;
@@ -232,6 +214,51 @@ namespace His_Pos.NewClass.Medicine.Base
                 medicine.SetValueByDataRow(r);
                 Add(medicine);
             }
+            //foreach (DataRow r in table.Rows)
+            //{
+            //    if(!idList.Contains(r.Field<string>("Pro_ID")))
+            //        idList.Add(r.Field<string>("Pro_ID"));
+            //}
+            //var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
+            //var medicineRows = new List<DataRow>();
+            //foreach (DataRow r in medicinesTable.Rows)
+            //{
+            //    medicineRows.Add(r);
+            //}
+            //foreach (DataRow r in table.Rows)
+            //{
+            //    Medicine medicine;
+            //    var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
+            //    if(medicineRow is null)
+            //    {
+            //        switch (r.Field<string>("Pro_ID"))
+            //        {
+            //            case "R001":
+            //            case "R002":
+            //            case "R003":
+            //            case "R004":
+            //                medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
+            //                Add(medicine);
+            //                continue;
+            //        }
+            //    }
+            //    switch (medicineRow.Field<int>("DataType"))
+            //    {
+            //        case 1:
+            //            medicine = new MedicineNHI(medicineRow);
+            //            break;
+            //        case 2:
+            //            medicine = new MedicineOTC(medicineRow);
+            //            break;
+            //        case 3:
+            //            medicine = new MedicineSpecialMaterial(medicineRow);
+            //            break;
+            //        default:
+            //            continue;
+            //    }
+            //    medicine.SetValueByDataRow(r);
+            //    Add(medicine);
+            //}
         }
 
         public int CountMedicinePoint()
@@ -292,11 +319,13 @@ namespace His_Pos.NewClass.Medicine.Base
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
             medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
+            medicine.UsableAmount = medicine.OnTheFrameAmount;
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex > 0)
                     medicine.CopyPrevious(this[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
+                medicine.Order = (int)selectedMedicinesIndex + 1;
                 this[(int)selectedMedicinesIndex] = medicine;
             }
             else
@@ -304,6 +333,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (Count > 0)
                     medicine.CopyPrevious(this[Count - 1]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
+                medicine.Order = Count + 1;
                 Add(medicine);
             }
         }
@@ -320,6 +350,7 @@ namespace His_Pos.NewClass.Medicine.Base
                         break;
                     case 2:
                         medicine = new MedicineOTC(r);
+                        medicine.PaySelf = true;
                         break;
                     case 3:
                         medicine = new MedicineSpecialMaterial(r);
@@ -358,23 +389,23 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             var idList = CreateIdList();
             SetBuckleAmount(buckle);
-            MainWindow.ServerConnection.OpenConnection();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseId, adjustDate);
-            MainWindow.ServerConnection.CloseConnection();
             foreach (DataRow r in table.Rows)
             {
                 var medList = Items.Where(m => m.ID.Equals(r.Field<string>("Pro_ID")));
                 foreach (var m in medList)
                 {
                     m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                    m.Inventory = r.Field<double?>("Inv_Inventory") is null ? 0 : r.Field<double>("Inv_Inventory");
+                    m.OnTheFrameAmount = r.Field<double?>("Inv_OnTheFrame") is null ? 0 : r.Field<double>("Inv_OnTheFrame");
                 }
+
             }
         }
 
         private List<string> CreateIdList()
         {
             var idList = new List<string>();
+
             foreach (var m in Items)
             {
                 switch (m)
@@ -473,10 +504,6 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             result += "4";
             result += med.ID.Substring(0, 12).PadLeft(12, ' ');
-            if (med.Days != null)
-                result += med.Days.ToString().PadLeft(2, ' ');
-            else
-                result += string.Empty.PadLeft(2, ' ');
             result += string.Empty.PadLeft(6, ' ');
             result += string.Empty.PadLeft(18, ' ');
             if (med.Days != null)
@@ -583,7 +610,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID)
+        public string CheckNegativeStock(string warID,List<MedicineInventoryStruct> usableAmountList)
         {
             var buckleMedicines = new List<BuckleMedicineStruct>();
             var inventoryIDList = new List<int>();
@@ -599,21 +626,29 @@ namespace His_Pos.NewClass.Medicine.Base
                 var buckleAmount = editMed.Sum(m => m.BuckleAmount);
                 buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
             }
-            var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.ID).ToList();
+            var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.InventoryID).ToList();
             MainWindow.ServerConnection.OpenConnection();
-            var inventories = Inventorys.GetAllInventoryByProIDs(medIDs, warID);
+            var inventories = MedicineDb.GetInventoryByInvIDs(medIDs);
             MainWindow.ServerConnection.CloseConnection();
             var inventoryList = new List<MedicineInventoryStruct>();
-            foreach (var inv in inventories)
+            foreach (DataRow r in inventories.Rows)
             {
-                inventoryList.Add(new MedicineInventoryStruct(inv.InvID, inv.InventoryAmount));
+                if (usableAmountList.Count(u => u.ID.Equals(r.Field<int>("Inv_ID"))) == 1)
+                {
+                    var usable = usableAmountList.SingleOrDefault(u => u.ID.Equals(r.Field<int>("Inv_ID")));
+                    inventoryList.Add(new MedicineInventoryStruct(usable.ID, usable.Amount));
+                }
+                else
+                {
+                    inventoryList.Add(new MedicineInventoryStruct(r.Field<int>("Inv_ID"), r.Field<double>("Inv_OnTheFrame")));
+                }
             }
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
                 if(buckle.BuckleAmount == 0) continue;
-                if (inv.Inventory - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+                if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
                 foreach (var med in this)
                 {
                     if (med is MedicineVirtual) continue;
@@ -632,6 +667,27 @@ namespace His_Pos.NewClass.Medicine.Base
         public bool DeclareMedicalService()
         {
             return this.Count(m => m is MedicineNHI && !m.PaySelf) > 0;
+        }
+
+        public void ReOrder()
+        {
+            for (var i = 1; i <= Count; i++)
+            {
+                this[i-1].Order = i;
+            }
+        }
+
+        public void CheckUsableAmount(List<MedicineInventoryStruct> usableMedicines)
+        {
+            if (usableMedicines.Count <= 0) return;
+            foreach (var usableMedicine in usableMedicines)
+            {
+                foreach (var m in this)
+                {
+                    if (!m.InventoryID.Equals(usableMedicine.ID)) continue;
+                        m.UsableAmount = usableMedicine.Amount;
+                }
+            }
         }
     }
 }

@@ -40,6 +40,14 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
+        internal static DataTable GetMedBagPrescriptionStructsByType(string type)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "TYPE", type);
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedBagPrescriptionStructsByType]", parameterList);
+        }
+
         public static void DeleteReserve(string recMasId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "RecMas_Id", recMasId); 
@@ -359,14 +367,14 @@ namespace His_Pos.NewClass.Prescription
 
         private static void AppendPatientTel(StringBuilder dtlData, Customer patient)
         {
-            string patientTel;
+            string patientTel = string.Empty;
             if (!string.IsNullOrEmpty(patient.CellPhone))
                 patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.CellPhone : patient.CellPhone + "(註)";
             else
             {
                 if (!string.IsNullOrEmpty(patient.Tel))
                     patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
-                else
+                else if (!string.IsNullOrEmpty(patient.ContactNote))
                     patientTel = patient.ContactNote.Replace("\r\n","/");
             }
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
@@ -464,6 +472,7 @@ namespace His_Pos.NewClass.Prescription
             var amount = string.Empty;
             foreach (var row in prescriptionSendData)
             {
+                    
                 if (row.MedId != declareMedicine.ID) continue;
                 amount = row.SendAmount.ToString();
                 break;
@@ -526,6 +535,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "@PointList", SetPrescriptionDeclarePointAdjust(declarePrescriptions));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionDeclarePoint]", parameterList);
         }
+      
         #region WepApi
         internal static void UpdateCooperativePrescriptionIsRead(string DeclareId) {
             Dictionary<string, string> keyValues;
@@ -628,6 +638,11 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable SetPrescriptionDetail(List<Pdata> prescriptionDetails)
         { //一般藥費
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
+            for (var i = 0; i < prescriptionDetails.Count; i++)
+            {
+                if (prescriptionDetails[i].Order == 0)
+                    prescriptionDetails[i].Order = i + 1;
+            }
             foreach (var pdata in prescriptionDetails)
             {
                 DataRow newRow = prescriptionDetailTable.NewRow();
@@ -647,6 +662,8 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", pdata.IsBuckle);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", pdata.SendAmount);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
@@ -714,7 +731,9 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_PaySelf", typeof(int));
             detailTable.Columns.Add("PreDet_IsBuckle", typeof(int));
             detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
-            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float)); 
+            detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float));
+            detailTable.Columns.Add("PreDet_Order", typeof(int));
+            detailTable.Columns.Add("PreDet_SendAmount", typeof(float)); 
             return detailTable;
         }
 
@@ -847,7 +866,8 @@ namespace His_Pos.NewClass.Prescription
         public static DataTable SetImportDeclareXmlDetail(List<ImportDeclareXml.ImportDeclareXml.Ddata> Ddatas, int preId) { 
             DataTable prescriptionDetailTable = PrescriptionDetailTable();
             foreach(var d in Ddatas)
-            { 
+            {
+                int count = 1;
                 foreach (var pdata in d.Pdatas)
                 {
                     DataRow newRow = prescriptionDetailTable.NewRow();
@@ -865,7 +885,10 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_MedicineDays", pdata.P11);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelf", false);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", false);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", 0);
                     prescriptionDetailTable.Rows.Add(newRow);
+                    count++;
                 }
                 preId++;
             } 
@@ -1032,6 +1055,20 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddSqlParameter(parameterList, "ChronicSeq", current.ChronicSeq);
             }
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CountSameDeclarePrescription]", parameterList);
+        }
+
+        public static DataTable GetEditedRecords(string prescriptionID)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", prescriptionID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionEditRecord]", parameterList);
+        }
+
+        public static DataTable GetOrderByPrescriptionID(int preID)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", preID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionOrderByPrescriptionID]", parameterList);
         }
     }
 }

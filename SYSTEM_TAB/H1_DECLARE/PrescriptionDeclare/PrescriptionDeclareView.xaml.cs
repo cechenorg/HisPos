@@ -62,10 +62,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                TreatDate.Focus();
-                TreatDate.SelectionStart = 0;
+                case Key.Space:
+                    e.Handled = true;
+                    break;
+                case Key.Enter:
+                    TreatDateTextBox.Focus();
+                    TreatDateTextBox.SelectionStart = 0;
+                    break;
             }
         }
 
@@ -73,8 +78,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (e.Key == Key.Enter)
             {
-                AdjustDate.Focus();
-                AdjustDate.SelectionStart = 0;
+                AdjustDateTextBox.Focus();
+                AdjustDateTextBox.SelectionStart = 0;
             }
         }
 
@@ -172,18 +177,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //按 Enter 下一欄
             if (e.Key != Key.Enter) return;
             e.Handled = true;
+            if(sender is null) return;
             MoveFocusNext(sender);
         }
         private void MoveFocusNext(object sender)
         {
-            if (sender is TextBox box)
-                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            if (PrescriptionMedicines.CurrentCell.Column is null) return;
-
-            var focusedCell =
-                PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            switch (sender)
+            {
+                case null:
+                    return;
+                case TextBox box:
+                    box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    break;
+            }
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             if (focusedCell is null) return;
-
             while (true)
             {
                 if (focusedCell is ContentPresenter)
@@ -199,11 +207,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
 
                 focusedCell?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                focusedCell =
-                    PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+                focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             }
 
-            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             while (firstChild is ContentPresenter)
             {
                 firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
@@ -285,7 +292,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
@@ -293,7 +300,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 textBox.Text = string.Empty;
 
                 if (PrescriptionMedicines.Items.Count != itemsCount)
-                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[PrescriptionMedicines.Items.Count - 2], PrescriptionMedicines.Columns[3]);
+                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[PrescriptionMedicines.Items.Count - 2], PrescriptionMedicines.Columns[4]);
             }
             else if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
             {
@@ -306,7 +313,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (!((Medicine)PrescriptionMedicines.Items[index]).ID.Equals(textBox.Text))
                     textBox.Text = ((Medicine)PrescriptionMedicines.Items[index]).ID;
 
-                PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[3]);
+                PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[4]);
             }
             PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
 

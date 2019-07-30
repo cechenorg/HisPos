@@ -309,6 +309,8 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerGroupTags.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -366,9 +368,12 @@
     <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangedDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerPrescriptionChanged\CustomerPrescriptionChangeds.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
+    <Compile Include="NewClass\Person\Customer\ProductTransactionCustomer\GenderEnum.cs" />
+    <Compile Include="NewClass\Person\Customer\ProductTransactionCustomer\TradeCustomer.cs" />
     <Compile Include="NewClass\Person\Employee\Employee.cs" />
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employee\Employees.cs" />
+    <Compile Include="NewClass\Person\Employee\ProductTransaction\TradeEmployee.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPosition.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositionDb.cs" />
     <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositions.cs" />
@@ -384,6 +389,11 @@
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\CusPrePreviewBase.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\OrthopedicsPreview.cs" />
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\NoCardPreview.cs" />
+    <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecord.cs" />
+    <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecords.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\ExportMedBagTemplate.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStruct.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStructs.cs" />
     <Compile Include="NewClass\Prescription\Prescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescriptions.cs" />
     <Compile Include="NewClass\Prescription\SameDeclarePrescriptions\SameDeclarePrescription.cs" />
@@ -500,11 +510,13 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductManageDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHIDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHISpecialDetail.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageFilterEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescription.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptions.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptionTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductSearchTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\MedicineStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\ProductStockDetail.cs" />
@@ -512,6 +524,8 @@
     <Compile Include="NewClass\Product\Products.cs" />
     <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\ProductStructs.cs" />
+    <Compile Include="NewClass\Product\ProductTransaction\TradeProduct.cs" />
+    <Compile Include="NewClass\Product\ProductTransaction\TradeProducts.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\ProductStartInputVariableEnum.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
@@ -578,6 +592,18 @@
     <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetail.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetails.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordMaster.cs" />
+    <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordMasters.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordDetail.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordDetails.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordMaster.cs" />
+    <Compile Include="NewClass\Trade\TradeRecord\TradeRecordMasters.cs" />
+    <Compile Include="NewClass\Trade\TradeService.cs" />
+    <Compile Include="NewClass\Trade\TradeTabEnum.cs" />
+    <Compile Include="NewClass\Trade\Transaction.cs" />
+    <Compile Include="NewClass\Trade\TransactionTypeEnum.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
@@ -599,6 +625,7 @@
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Service\ExportService\ExportClassExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelService.cs" />
     <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
@@ -738,7 +765,6 @@
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModelRe.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
       <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
     </Compile>
@@ -751,6 +777,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml.cs">
+      <DependentUpon>MedBagView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\InsertProductWindow\InsertProductWindow.xaml.cs">
       <DependentUpon>InsertProductWindow.xaml</DependentUpon>
     </Compile>
@@ -1029,6 +1059,9 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportControl.xaml.cs">
+      <DependentUpon>PurchaseReturnReportControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
       <DependentUpon>PurchaseReturnReportView.xaml</DependentUpon>
@@ -1170,6 +1203,46 @@
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\AddNewCustomerWindow.xaml.cs">
+      <DependentUpon>AddNewCustomerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml.cs">
+      <DependentUpon>CustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\GetCustomerWindow.xaml.cs">
+      <DependentUpon>GetCustomerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml.cs">
+      <DependentUpon>NoCustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\CustomerDetailBase.xaml.cs">
+      <DependentUpon>CustomerDetailBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\LeaveProductRecordControl.xaml.cs">
+      <DependentUpon>LeaveProductRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PointRecordControl.xaml.cs">
+      <DependentUpon>PointRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PrescriptionRecordControl.xaml.cs">
+      <DependentUpon>PrescriptionRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\ProductRecordControl.xaml.cs">
+      <DependentUpon>ProductRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml.cs">
+      <DependentUpon>TransactionRecordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\ReturnMoneyWindow.xaml.cs">
+      <DependentUpon>ReturnMoneyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\TakeLeavingProductWindow.xaml.cs">
+      <DependentUpon>TakeLeavingProductWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml.cs">
+      <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionCustomerViewModel.cs" />
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml.cs">
       <DependentUpon>ProductTransactionView.xaml</DependentUpon>
     </Compile>
@@ -1327,6 +1400,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1662,6 +1739,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1775,6 +1856,58 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\AddNewCustomerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\CustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\GetCustomerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDataControl\NoCustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\CustomerDetailBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\LeaveProductRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PointRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\PrescriptionRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\ProductRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\DetailBaseControls\TransactionRecordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\ReturnMoneyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\FunctionWindows\TakeLeavingProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1823,6 +1956,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\HisReceipt_A6.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Images\home-address.png" />
+    <Resource Include="Images\email.png" />
+    <Resource Include="Images\line.png" />
     <Content Include="RDLC\MedicineTag.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1959,6 +2098,8 @@
     <Folder Include="NewClass\Product\Medicine\Position\" />
     <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
     <Folder Include="NewClass\Product\Medicine\Usage\" />
+    <Folder Include="NewClass\Trade\LeavingProductRecord\" />
+    <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>

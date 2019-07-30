@@ -112,7 +112,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ----- Set DataTable ----- 
         #region ///// StoreOrderMasterTable /////
-        public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve,string note)
+        public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve)
         {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
             
@@ -126,7 +126,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", note.Replace("\r\n","/"));
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note","");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID",null);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true); 
             storeOrderMasterTable.Rows.Add(newRow); 
@@ -181,7 +181,7 @@ namespace His_Pos.NewClass.StoreOrder
                 detailId++;  
             }  
             return storeOrderDetailTable;
-        }
+        } 
         public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
         {
             int detailId = 1;
@@ -569,7 +569,7 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve,string note)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve, note));
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", indexReserve.CusName);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
@@ -760,6 +760,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
         }
-
+        internal static void UpdateDetailByStoOrdID(PrescriptionSendDatas prescriptionSendDatas,string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>(); 
+            DataBaseFunction.AddSqlParameter(parameters, "STOORD_ID", storeOrderID);
+            DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetPrescriptionOrderDetail(prescriptionSendDatas));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
+        }
+         
     }
 }

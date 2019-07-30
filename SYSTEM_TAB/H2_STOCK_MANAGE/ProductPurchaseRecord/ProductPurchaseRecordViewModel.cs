@@ -113,7 +113,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         public ProductPurchaseRecordViewModel()
         {
-            TabName = MainWindow.HisFeatures[2].Functions[2];
+            TabName = MainWindow.HisFeatures[2].Functions[3];
             Icon = MainWindow.HisFeatures[2].Icon;
             RegisterCommands();
             RegisterMessengers();

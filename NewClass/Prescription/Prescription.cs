@@ -12,6 +12,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -28,9 +29,9 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
-using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 using Resources = His_Pos.Properties.Resources;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
@@ -67,7 +68,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r, PrescriptionType type, bool? reserveSend = null)
+        public Prescription(DataRow r, PrescriptionType type)
         {
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
@@ -99,8 +100,8 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
-            MedicalNumber = r.Field<string>("MedicalNumber");
-            OriginalMedicalNumber = r.Field<string>("OldMedicalNumber");
+            MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber"))? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
+            OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber"))? r.Field<string>("OldMedicalNumber"): r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
             {
                 TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
@@ -111,18 +112,35 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
-                    PrescriptionStatus.ReserveSend = reserveSend;
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
+                    PrescriptionStatus.OrderStatus = "備藥狀態:";
+                    switch (r.Field<string>("MedPrepareStatus"))
+                    {
+                        case "N":
+                            PrescriptionStatus.OrderStatus += "未處理";
+                            break;
+                        case "D":
+                            PrescriptionStatus.OrderStatus += "已備藥";
+                            break;
+                        default:
+                            PrescriptionStatus.OrderStatus += "不備藥";
+                            break;
+                    }
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Equals("已備藥");
+                    OrderContent = PrescriptionStatus.OrderStatus;
+                    if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
+                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
                     break;
                 default:
                     Medicines = new Medicines();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
                 AdjustDate = null;
             }
+            Type = type;
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -153,14 +171,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -174,7 +192,7 @@ namespace His_Pos.NewClass.Prescription
             OrthopedicsGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode;
+                TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode.Trim();
             #endregion
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
@@ -212,16 +230,14 @@ namespace His_Pos.NewClass.Prescription
                 ChronicTotal = total;
             if (ChronicSeq != null)
             {
-                OriginalMedicalNumber = insurance.MedicalNumber;
-                TempMedicalNumber = insurance.MedicalNumber;
+                OriginalMedicalNumber = insurance.MedicalNumber.Trim();
                 MedicalNumber = "IC0" + ChronicSeq;
                 AdjustCase = VM.GetAdjustCase("2");
                 TempMedicalNumber = OriginalMedicalNumber;
             }
             else
             {
-                TempMedicalNumber = insurance.MedicalNumber;
-                MedicalNumber = insurance.MedicalNumber;
+                MedicalNumber = insurance.MedicalNumber.Trim();
                 AdjustCase = VM.GetAdjustCase("1");
                 TempMedicalNumber = MedicalNumber;
             }
@@ -237,7 +253,7 @@ namespace His_Pos.NewClass.Prescription
             CooperativeGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.Insurance.IcErrorCode)) //例外就醫
-                TempMedicalNumber = c.Insurance.IcErrorCode;
+                TempMedicalNumber = c.Insurance.IcErrorCode.Trim();
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
@@ -427,20 +443,6 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private void CheckCopaymentValid()
-        {
-            if (Copayment is null) return;
-            switch (Copayment.Id)
-            {
-                case "I21" when  PrescriptionPoint.MedicinePoint > 100:
-                    Copayment = VM.GetCopayment("I20");
-                    break;
-                case "I20" when PrescriptionPoint.MedicinePoint <= 100:
-                    Copayment = VM.GetCopayment("I21");
-                    break;
-            }
-        }
-
         private PaymentCategory paymentCategory;//給付類別 D5
         public PaymentCategory PaymentCategory
         {
@@ -499,13 +501,28 @@ namespace His_Pos.NewClass.Prescription
             {
                 Set(() => IsBuckle, ref isBuckle, value);
                 if (Medicines is null || !Medicines.Any()) return;
+                MainWindow.ServerConnection.OpenConnection();
+                var usableAmountList = CheckUsableMedicinesByType();
                 Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
+                MainWindow.ServerConnection.CloseConnection();
+                Medicines.CheckUsableAmount(usableAmountList);
             }
         }
+
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
         public DateTime? InsertTime { get; set; }
+
+        private string orderContent;
+        public string OrderContent
+        {
+            get => orderContent;
+            set
+            {
+                Set(() => OrderContent, ref orderContent, value);
+            }
+        }
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -900,7 +917,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateReceiptParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);
@@ -991,9 +1016,7 @@ namespace His_Pos.NewClass.Prescription
         {
             IsBuckle = WareHouse != null;
             Medicines.Remove(SelectedMedicine);
-            CountPrescriptionPoint();
-            CountSelfPay();
-            PrescriptionPoint.CountAmountsPay();
+            Medicines.ReOrder();
         }
 
         private void CheckVariableByDivision()
@@ -1524,7 +1547,11 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckMedicinesNegativeStock()
         {
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            var usableAmountList = CheckUsableMedicinesByType();
+            MainWindow.ServerConnection.CloseConnection();
+            Medicines.CheckUsableAmount(usableAmountList);
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList);
         }
 
         public void CountSelfPay()
@@ -1574,13 +1601,38 @@ namespace His_Pos.NewClass.Prescription
             {
                 case PrescriptionType.ChronicReserve:
                     Medicines.Clear();
-                    Medicines.GetDataByReserveId(int.Parse(SourceId), WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
                 default:
                     Medicines.Clear();
-                    Medicines.GetDataByPrescriptionId(ID, WareHouse?.ID, AdjustDate);
+                    Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
+        }
+
+        public List<MedicineInventoryStruct> CheckUsableMedicinesByType()
+        {
+            var usableMedicines = new Medicines();
+            var usableInventoryStructs = new List<MedicineInventoryStruct>();
+            switch (Type)
+            {
+                case PrescriptionType.ChronicRegister:
+                    usableMedicines.GetDataByPrescriptionId(ID);
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    usableMedicines.GetDataByReserveId(int.Parse(SourceId));
+                    break;
+            }
+            var groupInvIDResult = usableMedicines.GroupBy(m => m.InventoryID);
+            foreach (var g in groupInvIDResult)
+            {
+                var adjustAmount = g.Sum(m => m.Amount);
+                var sendAmount = g.Sum(m => m.SendAmount);
+                var onTheFrameAmount = g.ElementAt(0).OnTheFrameAmount;
+                var usableAmount = adjustAmount - sendAmount + onTheFrameAmount;
+                usableInventoryStructs.Add(new MedicineInventoryStruct(g.Key, usableAmount));
+            }
+            return usableInventoryStructs;
         }
     }
 }

@@ -58,6 +58,15 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => ReserveSend, ref reserveSend, value);
             }
         }
+        private string orderStatus;
+        public string OrderStatus
+        {
+            get => orderStatus;
+            set
+            {
+                Set(() => OrderStatus, ref orderStatus, value);
+            }
+        }
         #endregion
 
         public void SetPrescribeStatus()

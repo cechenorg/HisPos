@@ -23,6 +23,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -187,7 +188,9 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = StringRes.取得用法;
                 Usages = new Usages();
                 BusyContent = StringRes.取得用藥途徑;
-                Positions = new Positions(); 
+                Positions = new Positions();
+                BusyContent = "藥袋量計算中";
+                ProductDB.UpdateAllInventoryMedBagAmount();
                 BusyContent = "同步員工資料";
                 EmployeeDb.SyncData();
                 BusyContent = "取得員工";
@@ -330,10 +333,19 @@ namespace His_Pos.ChromeTabViewModel
             ReportPrint(Properties.Settings.Default.MedBagPrinter);
             IsBusy = false;
         }
+
         public void StartPrintReceipt(ReportViewer r)
         {
             BusyContent = StringRes.收據列印;
-            Export(r.LocalReport, 25.4, 9.3);
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 14.8, 10.5);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
 
@@ -491,27 +503,6 @@ namespace His_Pos.ChromeTabViewModel
             //        MessageWindow.ShowMessage("printDoc_PrintPage" + ex.Message, MessageType.ERROR);
             //    });
             //}
-        }
-        private void SaveSettingFile()
-        {
-            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
-
-            string leftLines = "";
-
-            using (StreamReader fileReader = new StreamReader(filePath))
-            {
-                leftLines = fileReader.ReadLine();
-            }
-
-            using (TextWriter fileWriter = new StreamWriter(filePath, false))
-            {
-                fileWriter.WriteLine(leftLines);
-
-                fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
-                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
-                fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
-                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
-            }
         }
     }
 }

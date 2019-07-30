@@ -45,12 +45,12 @@
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding Type}" Value="REGISTER">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </DataTrigger>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
-                        <DataTrigger Binding="{Binding ID}" Value="0">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </DataTrigger>
                     </Style.Triggers>
                     <EventSetter Event="MouseDoubleClick" Handler="Prescription_OnClick"/>
                     <Setter Property="Background" Value="DarkSeaGreen"/>
