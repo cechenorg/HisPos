@@ -14,7 +14,7 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <DataGrid Name="ProductDataGrid" ItemsSource="{Binding SearchProductCollection, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+        <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ProductCollectionView, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" CanUserDeleteRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
