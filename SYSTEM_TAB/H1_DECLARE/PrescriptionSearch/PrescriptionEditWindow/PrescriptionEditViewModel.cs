@@ -31,6 +31,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
@@ -566,6 +567,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription.Update();
+            if (EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister))
+            {
+                MedicinesSendSingdeViewModel vm = null;
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(EditedPrescription);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
+                    return;
+                currentService.SendOrder(vm);
+            }
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));

@@ -89,18 +89,6 @@ namespace His_Pos.NewClass.Prescription.Service
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
-            CheckCovertType();
-            MedicinesSendSingdeViewModel vm = null;
-            if (Current.PrescriptionStatus.IsSendOrder)
-            {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
-                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
-                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
-                    return false;
-            }
-            Current.PrescriptionStatus.SetRegisterStatus();
-            Current.InsertDb();
-            SendOrder(vm);
             return true;
         }
 

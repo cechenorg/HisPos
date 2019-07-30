@@ -72,6 +72,11 @@ namespace His_Pos.NewClass.Prescription.Search
                         break;
                 }
             }
+
+            if (string.IsNullOrEmpty(InsertDate) && !string.IsNullOrEmpty(RegisterDate))
+            {
+                Type = PrescriptionType.ChronicRegister;
+            }
         }
 
         private Customer patient;

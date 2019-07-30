@@ -499,7 +499,7 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        protected void SendOrder(MedicinesSendSingdeViewModel vm)
+        public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
             if (Current.PrescriptionStatus.IsSendOrder)
             {
@@ -616,7 +616,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     var edit = new ReservePrescriptionWindow(selected, title);
                     break;
                 default:
-                    selected = GetPrescriptionByID(preID);
+                    selected = GetPrescriptionByID(preID, type);
                     CheckAdminLogin(selected);
                     break;
             }
@@ -644,11 +644,11 @@ namespace His_Pos.NewClass.Prescription.Service
             }
         }
 
-        private static Prescription GetPrescriptionByID(int preID)
+        private static Prescription GetPrescriptionByID(int preID,PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-            var selected = new Prescription(r, PrescriptionType.Normal);
+            var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
             SetOrder(preID,selected);
             MainWindow.ServerConnection.CloseConnection();
