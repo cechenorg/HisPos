@@ -32,13 +32,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingControl
             if (textBox is null) return;
 
             textBox.SelectAll();
-
-            List<TextBox> textBoxs = new List<TextBox>();
-            NewFunction.FindChildGroup(ResultDataGrid, textBox.Name, ref textBoxs);
-
-            int index = textBoxs.IndexOf(sender as TextBox);
-
-            ResultDataGrid.SelectedItem = (ResultDataGrid.Items[index] as StockTakingProduct);
+             
+            ResultDataGrid.SelectedItem = (textBox.DataContext as StockTakingProduct);
         }
         private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             TextBox textBox = sender as TextBox;

@@ -23,9 +23,11 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             var medicines = new Medicines();
             medicines.GetDataByPrescriptionId(preID);
             foreach (var m in medicines) {
-                var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
-                if(m.SendAmount >= 0)
-                    temp.OnTheFrame += m.Amount - m.SendAmount;
+                if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) > 0) {
+                    var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
+                    if (m.SendAmount >= 0)
+                        temp.OnTheFrame += m.Amount - m.SendAmount;
+                } 
             }
             foreach (var m in ms) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {

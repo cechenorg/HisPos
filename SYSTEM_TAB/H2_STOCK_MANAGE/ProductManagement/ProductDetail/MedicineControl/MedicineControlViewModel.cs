@@ -504,6 +504,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
                 return false;
             }
+            
+            if (StockDetail.MedBagInventory - double.Parse(NewInventory) > 0 && StockDetail.OnTheWayAmount < StockDetail.MedBagInventory - double.Parse(NewInventory))
+            {
+                MessageWindow.ShowMessage("若欲盤點使庫存量低於藥袋量，請先建立採購單補足藥袋量!", MessageType.ERROR);
+                return false;
+            }
 
             return true;
         }

@@ -118,6 +118,8 @@ namespace His_Pos.NewClass.StockTaking
             masterTable.Columns.Add("StoTakDet_OldValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_NewValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_Note", typeof(string));
+            masterTable.Columns.Add("StoTakDet_ValueDiff", typeof(double));
+            
             return masterTable; 
         }
         public static DataTable SetProductAmount(StockTakingProduct.StockTakingProduct productId) {
@@ -125,7 +127,7 @@ namespace His_Pos.NewClass.StockTaking
           
             DataRow newRow = productListTable.NewRow();
             DataBaseFunction.AddColumnValue(newRow, "ID", productId.InvID);
-            DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory); 
+            DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory + productId.MedBagAmount); 
             productListTable.Rows.Add(newRow); 
             return productListTable;
         }
@@ -136,10 +138,11 @@ namespace His_Pos.NewClass.StockTaking
             {
                 DataRow newRow = productListTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_ProductID", m.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_EmployeeID",m.Employee.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_EmployeeID",ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_OldValue", m.Inventory);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_NewValue", m.NewInventory);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_Note", m.Note);
+                DataBaseFunction.AddColumnValue(newRow, "StoTakDet_ValueDiff",  m.NewInventoryTotalPrice - m.TotalPrice);
                 productListTable.Rows.Add(newRow);
             }
             return productListTable;

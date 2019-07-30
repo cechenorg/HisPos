@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
             OnTheFrame = r.Field<double>("InvOnTheFrame");
             TotalPrice = r.Field<double>("TotalPrice");
             AveragePrice = TotalPrice / Inventory;
+            IsError = MedBagAmount > Inventory;
         }
         public bool IsFrozen { get; set; }
         public byte? IsControl { get; set; }
@@ -20,6 +21,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
         public double OnTheFrame { get; set; }
         public double TotalPrice { get; set; }
         public double AveragePrice { get; set; }
+        public bool IsError { get; set; }
         private bool isSelected;
         public bool IsSelected {
             get { return isSelected; }
