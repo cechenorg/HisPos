@@ -499,27 +499,25 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        protected void SendOrder(MedicinesSendSingdeViewModel vm)
+        public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            if (Current.PrescriptionStatus.IsSendOrder)
-            {
-                var sendData = vm.PrescriptionSendData;
-                if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
-                    if (!Current.PrescriptionStatus.IsSendToSingde)
-                        Current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(Current, sendData);
-                    //紀錄訂單and送單
-                    else if (Current.PrescriptionStatus.IsSendToSingde)
-                    {
-                        PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                    } //更新傳送藥健康  
-                }
-                ReportViewer rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
-                MainWindow.Instance.Dispatcher.Invoke(() =>
+           
+            var sendData = vm.PrescriptionSendData;
+            if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
+                if (!Current.PrescriptionStatus.IsSendToSingde)
+                    Current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(Current, sendData);
+                //紀錄訂單and送單
+                else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
-                    ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
-                });
+                    PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
+                } //更新傳送藥健康  
             }
+            ReportViewer rptViewer = new ReportViewer();
+            SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
+            MainWindow.Instance.Dispatcher.Invoke(() =>
+            {
+                ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+            });
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
@@ -616,7 +614,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     var edit = new ReservePrescriptionWindow(selected, title);
                     break;
                 default:
-                    selected = GetPrescriptionByID(preID);
+                    selected = GetPrescriptionByID(preID, type);
                     CheckAdminLogin(selected);
                     break;
             }
@@ -644,11 +642,11 @@ namespace His_Pos.NewClass.Prescription.Service
             }
         }
 
-        private static Prescription GetPrescriptionByID(int preID)
+        private static Prescription GetPrescriptionByID(int preID,PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
-            var selected = new Prescription(r, PrescriptionType.Normal);
+            var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
             SetOrder(preID,selected);
             MainWindow.ServerConnection.CloseConnection();

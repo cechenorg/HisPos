@@ -60,7 +60,7 @@
         <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclareViewModel}">
             <prescriptionDeclare:PrescriptionDeclareView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModelRe}">
+        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModel}">
             <prescriptionSearch:PrescriptionSearchView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productManagement:ProductManagementViewModel}">

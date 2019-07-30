@@ -56,7 +56,7 @@
                     <Label Content="生日" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
                     <xctk:MaskedTextBox x:Name="Birthday" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="Birthday_OnPreviewKeyDown">
-                        <Binding Path="Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                        <Binding Path="PatientBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                             <Binding.ValidationRules>
                                 <service:DateValidationRule/>

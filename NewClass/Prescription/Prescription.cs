@@ -1610,7 +1610,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private List<MedicineInventoryStruct> CheckUsableMedicinesByType()
+        public List<MedicineInventoryStruct> CheckUsableMedicinesByType()
         {
             var usableMedicines = new Medicines();
             var usableInventoryStructs = new List<MedicineInventoryStruct>();

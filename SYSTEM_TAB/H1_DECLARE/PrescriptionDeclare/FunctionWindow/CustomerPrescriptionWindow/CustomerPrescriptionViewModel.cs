@@ -320,7 +320,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 GetMedicalNumber(pre);
                 return true;
             }
-            return AskErrorUpload();
+            var result = false;
+            Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
+            return result;
         }
 
         private void GetMedicalNumber(Prescription pre)

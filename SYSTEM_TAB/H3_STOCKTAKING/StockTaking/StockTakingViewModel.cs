@@ -197,7 +197,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             foreach (var s in StockTakingResult.StockTakingProductCollection) {
                 if (s.ValueDiff != 0)
                     StockTakingReason.StockTakingProductCollection.Add(s);
-            } 
+            }
+            CurrentPlan.StockTakingProductCollection.Clear();
             StockTakingType = StockTakingType.Reason;
         }  
         private void NextToResultPageAction() {

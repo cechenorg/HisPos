@@ -13,6 +13,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Person.Customer;
@@ -1051,6 +1052,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
+            HisApiFunction.CheckDailyUpload100();
         }
 
         private void StartErrorAdjust()
