@@ -118,7 +118,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="250" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="250" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
