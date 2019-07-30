@@ -79,7 +79,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MaxWidth="740" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn MaxWidth="740" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
