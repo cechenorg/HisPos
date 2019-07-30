@@ -59,15 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => EmployeeCollection, ref employeeCollection, value);
             }
         }
-        private StockTakingPages stockTakingPageCollection = new StockTakingPages();
-        public StockTakingPages StockTakingPageCollection
-        {
-            get { return stockTakingPageCollection; }
-            set {
-                Set(() => StockTakingPageCollection, ref stockTakingPageCollection, value);
-            }
-        }
-       
+   
         private NewClass.StockTaking.StockTakingPlan.StockTakingPlan currentPlan = new NewClass.StockTaking.StockTakingPlan.StockTakingPlan();
         public NewClass.StockTaking.StockTakingPlan.StockTakingPlan CurrentPlan
         {
@@ -141,8 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 ResultDiffTotalPrice = ResultFinalTotalPrice - ResultInitTotalPrice;
             }
         }
-
-        public RelayCommand AssignPageCommand { get; set; }
+       
         public RelayCommand ClearStockTakingProductCommand { get; set; }
         public RelayCommand NextToResultPageCommand { get; set; }
         public RelayCommand NextToReasonPageCommand { get; set; }
@@ -181,7 +172,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingType = StockTakingType.Result;
         }
         private void LastToChoosePageAction() {
-            StockTakingPageCollection.AssignPages(CurrentPlan);
             StockTakingType = StockTakingType.Choose;
         }
         private void NextToReasonPageAction() {
@@ -211,7 +201,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingType = StockTakingType.Reason;
         }  
         private void NextToResultPageAction() {
-            StockTakingPageCollection.AssignPages(CurrentPlan);
+            if (CurrentPlan.StockTakingProductCollection.Count(s => s.IsError == true) > 0) {
+               MessageWindow.ShowMessage("有橘底商品為異常品項 藥袋量大於總庫存 不可盤點",MessageType.ERROR);
+               return;
+            }
             StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
             ResultFinalTotalPrice = StockTakingResult.StockTakingProductCollection.Sum(s => s.NewInventoryTotalPrice);
             StockTakingType = StockTakingType.Result;
@@ -251,14 +244,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             DiffInventoryAmount = StockTakingResult.StockTakingProductCollection.Count(s => s.NewInventory != s.OnTheFrame);
             ResultFinalTotalPrice = StockTakingResult.StockTakingProductCollection.Sum(s => s.NewInventoryTotalPrice); 
         }
-        private void AssignPageAction()
-        { 
-            StockTakingPageCollection.AssignPages(CurrentPlan);
-        }
         private void ClearStockTakingProductAction()
         {
             CurrentPlan.StockTakingProductCollection.Clear();
-            StockTakingPageCollection.AssignPages(CurrentPlan); 
         }
         private void ExportCsvAction() {
             StockTakingResult.StockTakingProductCollection = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
@@ -323,10 +311,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ResultFinalTotalPrice = StockTakingResult.StockTakingProductCollection.Sum(s => s.NewInventoryTotalPrice);
         }
         private void ShowStockPlanMedicineDetailAction() {
+            if (StockTakingPlanProductSelected is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingPlanProductSelected.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
         }
         private void ShowStockResultMedicineDetailAction() {
+            if (StockTakingResultProductSelected is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingResultProductSelected.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
         }
@@ -337,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         }
         
         private void RegisterCommand() {
-            AssignPageCommand = new RelayCommand(AssignPageAction);
+           
             ClearStockTakingProductCommand = new RelayCommand(ClearStockTakingProductAction);
             NextToResultPageCommand = new RelayCommand(NextToResultPageAction);
             FillUnTakingInventoryCommand = new RelayCommand(FillUnTakingInventoryAction);
