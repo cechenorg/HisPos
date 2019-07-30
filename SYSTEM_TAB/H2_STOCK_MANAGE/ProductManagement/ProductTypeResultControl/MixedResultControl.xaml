@@ -37,16 +37,19 @@
             </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <EventSetter Event="MouseEnter" Handler="DataGridRow_OnMouseEnter"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_OnMouseDoubleClick"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="40"/>
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding InventoryError, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="Background" Value="LightSalmon"/>
+                        </DataTrigger>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="MouseEnter" Handler="DataGridRow_OnMouseEnter"/>
-                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_OnMouseDoubleClick"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="40"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
@@ -80,7 +83,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding IsFrozen}"/>
+                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding IsFrozen}" IsInventoryError="{Binding InventoryError}"/>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" FontSize="18" Margin="-5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
@@ -95,6 +98,14 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="架上量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ShelfAmount, StringFormat=0.##}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="藥袋量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedBagAmount, StringFormat=0.##}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center" />
