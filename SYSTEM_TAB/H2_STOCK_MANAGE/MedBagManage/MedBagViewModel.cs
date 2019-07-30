@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,10 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.MedBagManage;
+using His_Pos.Service.ExportService;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
 {
@@ -84,7 +88,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         }
         private void ExportAction()
         {
+            IsBusy = true;
+            BusyContent = "匯出資料";
 
+            bool isSuccess = false;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                Collection<object> tempCollection = new Collection<object>(){ ReserveCollection, RegisterCollection };
+
+                MainWindow.ServerConnection.OpenConnection();
+                ExportExcelService service = new ExportExcelService(tempCollection, new ExportMedBagTemplate());
+                isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\藥袋資料{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isSuccess)
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                else
+                    MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
         private void ReloadAction()
         {

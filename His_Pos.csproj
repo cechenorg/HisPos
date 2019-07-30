@@ -391,6 +391,7 @@
     <Compile Include="NewClass\Prescription\CustomerPrescriptions\NoCardPreview.cs" />
     <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecord.cs" />
     <Compile Include="NewClass\Prescription\EditRecords\PrescriptionEditRecords.cs" />
+    <Compile Include="NewClass\Prescription\MedBagManage\ExportMedBagTemplate.cs" />
     <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStruct.cs" />
     <Compile Include="NewClass\Prescription\MedBagManage\MedBagPrescriptionStructs.cs" />
     <Compile Include="NewClass\Prescription\Prescriptions.cs" />
@@ -624,6 +625,7 @@
       <DependentUpon>ReserveMedicinesDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Service\ExportService\ExportClassExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportDataTableExcelSetting.cs" />
     <Compile Include="Service\ExportService\ExportExcelService.cs" />
     <Compile Include="Service\ExportService\ExportExcelSetting.cs" />
