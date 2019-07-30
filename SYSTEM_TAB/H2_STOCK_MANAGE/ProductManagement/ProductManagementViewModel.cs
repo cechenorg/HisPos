@@ -94,6 +94,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
         public WareHouses WareHouseCollection { get; set; }
+        public bool HasError => ((int) ErrorStockValue).Equals(0);
         #endregion
 
         public ProductManagementViewModel()
@@ -125,6 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 MedBagStockValue = dataTable.Rows[0].Field<double>("MEDBAG_STOCK");
 
                 ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                RaisePropertyChanged(nameof(HasError));
             };
 
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
