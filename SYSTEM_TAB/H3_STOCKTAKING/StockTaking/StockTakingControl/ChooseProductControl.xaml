@@ -54,6 +54,9 @@
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource Shadow}"/>
                             </Trigger>
+                            <DataTrigger Binding="{Binding IsError}" Value="True">
+                                <Setter Property="Background" Value="LightSalmon"></Setter>
+                            </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -149,7 +152,7 @@
                 <Label Content="{Binding CurrentPlan.StockTakingProductCollection.Count}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="庫存淨值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="{Binding ResultInitTotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <TextBlock Text="{Binding ResultInitTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Rectangle Width="650"/>
                 <Button Width="150" Content="列印盤點單" Command="{Binding ExportCsvCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0"/>
             </StackPanel>
