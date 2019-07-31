@@ -165,7 +165,6 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.商品查詢):
                     break;
-
                 case nameof(FeatureItem.進退貨管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
@@ -173,43 +172,26 @@ namespace His_Pos.ChromeTabViewModel
                     //    return;
                     //}
                     break;
-
                 case nameof(FeatureItem.進退貨紀錄):
                     break;
-
                 case nameof(FeatureItem.新增盤點):
                     break;
-
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
-
                 case nameof(FeatureItem.商品類別管理):
                     break;
-
                 case nameof(FeatureItem.供應商管理):
                     break;
-
                 case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
-
                 case nameof(FeatureItem.員工管理):
                     break;
                 case nameof(FeatureItem.顧客管理):
                     break;
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
-
-                case nameof(FeatureItem.上下班打卡):
-                    break;
-
-                case nameof(FeatureItem.排班管理):
-                    break;
-
                 case nameof(FeatureItem.審核管理):
-                    break;
-
-                case nameof(FeatureItem.藥袋管理):
                     break;
                 case nameof(FeatureItem.藥局管理):
                     break;
@@ -232,6 +214,8 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.申報院所點數總表):
                     break;
                 case nameof(FeatureItem.盤點計畫):
+                    break;
+                case nameof(FeatureItem.藥袋查詢):
                     break;
                 default:
                     return;
