@@ -87,10 +87,10 @@
                                     <ContentControl.Style>
                                         <Style TargetType="{x:Type ContentControl}">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Value="處方調劑修改">
+                                                <DataTrigger Binding="{Binding IconType, UpdateSourceTrigger=PropertyChanged}" Value="Edit">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource EditIcon}" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Value="處方調劑">
+                                                <DataTrigger Binding="{Binding IconType, UpdateSourceTrigger=PropertyChanged}" Value="Adjust">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource AdjustIcon}" />
                                                 </DataTrigger>
                                             </Style.Triggers>

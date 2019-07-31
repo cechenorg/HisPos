@@ -18,6 +18,16 @@ namespace His_Pos.NewClass.Prescription.EditRecords
             chineseName = r.Field<string>("ChineseName");
             Amount = r.Field<double>("Amount");
             Note = r.Field<string>("Note");
+            switch (Note)
+            {
+                case "處方調劑":
+                case "自費調劑":
+                    IconType = "Adjust";
+                    break;
+                default:
+                    IconType = "Edit";
+                    break;
+            }
             var tc = new TaiwanCalendar();
             Time = r.Field<DateTime>("RecTime");
             TimeString = $"{tc.GetYear(Time)}/{Time:MM/dd HH:mm}";
@@ -60,6 +70,15 @@ namespace His_Pos.NewClass.Prescription.EditRecords
             set
             {
                 Set(() => Note, ref note, value);
+            }
+        }
+        private string iconType;
+        public string IconType
+        {
+            get => iconType;
+            set
+            {
+                Set(() => IconType, ref iconType, value);
             }
         }
         private DateTime time;
