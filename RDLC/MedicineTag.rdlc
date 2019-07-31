@@ -42,7 +42,7 @@
                                   </Paragraphs>
                                   <rd:DefaultName>EnglishName</rd:DefaultName>
                                   <Left>0.77173cm</Left>
-                                  <Height>0.9cm</Height>
+                                  <Height>0.9684cm</Height>
                                   <Width>5.8099cm</Width>
                                   <Style>
                                     <Border />
@@ -71,7 +71,7 @@
                                   </Paragraphs>
                                   <rd:DefaultName>FirstLetter</rd:DefaultName>
                                   <Left>0.09173cm</Left>
-                                  <Height>0.86472cm</Height>
+                                  <Height>0.9684cm</Height>
                                   <Width>0.7361cm</Width>
                                   <ZIndex>1</ZIndex>
                                   <Style>
@@ -100,9 +100,9 @@
                                     </Paragraph>
                                   </Paragraphs>
                                   <rd:DefaultName>ChineseName</rd:DefaultName>
-                                  <Top>0.9cm</Top>
+                                  <Top>0.9684cm</Top>
                                   <Left>0.09173cm</Left>
-                                  <Height>0.5384cm</Height>
+                                  <Height>0.45cm</Height>
                                   <Width>6.4899cm</Width>
                                   <ZIndex>2</ZIndex>
                                   <Style>

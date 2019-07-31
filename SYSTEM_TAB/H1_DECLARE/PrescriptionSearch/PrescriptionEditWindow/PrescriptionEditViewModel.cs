@@ -141,7 +141,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         value = "Option2";
                     }
                 }
-                else if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
+                else if (!string.IsNullOrEmpty(value) && value.Equals("Option1"))
                 {
                     CheckCustomerEdited();
                 }
