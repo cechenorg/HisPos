@@ -378,7 +378,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             if (!(bool)confirmWindow.DialogResult) return;
 
-            MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).IsFrozen, (MedicineDetail as ProductNHIDetail).Ingredient);
+            MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).Ingredient);
             PrintMedBagSingleMode(medicineTagStruct);
         }
         public void PrintMedBagSingleMode(MedicineTagStruct medicineTagStruct)
