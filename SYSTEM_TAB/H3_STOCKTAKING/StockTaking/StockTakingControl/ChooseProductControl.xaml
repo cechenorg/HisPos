@@ -84,7 +84,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MaxWidth="400" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn MaxWidth="400" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -153,7 +153,7 @@
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="庫存淨值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <TextBlock Text="{Binding ResultInitTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Rectangle Width="650"/>
+                <Rectangle Width="450"/>
                 <Button Width="150" Content="列印盤點單" Command="{Binding ExportCsvCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0"/>
             </StackPanel>
         </Grid>
