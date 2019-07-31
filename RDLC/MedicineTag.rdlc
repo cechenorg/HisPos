@@ -173,39 +173,6 @@
                                     <PaddingLeft>4pt</PaddingLeft>
                                   </Style>
                                 </Textbox>
-                                <Textbox Name="Textbox3">
-                                  <CanGrow>true</CanGrow>
-                                  <KeepTogether>true</KeepTogether>
-                                  <Paragraphs>
-                                    <Paragraph>
-                                      <TextRuns>
-                                        <TextRun>
-                                          <Value />
-                                          <Style />
-                                        </TextRun>
-                                      </TextRuns>
-                                      <Style />
-                                    </Paragraph>
-                                  </Paragraphs>
-                                  <rd:DefaultName>Textbox3</rd:DefaultName>
-                                  <Top>2.70675cm</Top>
-                                  <Left>1.95124cm</Left>
-                                  <Height>0.57631cm</Height>
-                                  <Width>1.21359cm</Width>
-                                  <ZIndex>5</ZIndex>
-                                  <Visibility>
-                                    <Hidden>=Fields!IsFrozen.Value = true</Hidden>
-                                  </Visibility>
-                                  <Style>
-                                    <Border>
-                                      <Style>None</Style>
-                                    </Border>
-                                    <PaddingLeft>2pt</PaddingLeft>
-                                    <PaddingRight>2pt</PaddingRight>
-                                    <PaddingTop>2pt</PaddingTop>
-                                    <PaddingBottom>2pt</PaddingBottom>
-                                  </Style>
-                                </Textbox>
                                 <Textbox Name="Textbox1">
                                   <KeepTogether>true</KeepTogether>
                                   <Paragraphs>
@@ -229,7 +196,7 @@
                                   <Left>1.20159cm</Left>
                                   <Height>0.57631cm</Height>
                                   <Width>0.71437cm</Width>
-                                  <ZIndex>6</ZIndex>
+                                  <ZIndex>5</ZIndex>
                                   <Visibility>
                                     <Hidden>=Fields!IsControl.Value = false</Hidden>
                                   </Visibility>
@@ -260,10 +227,9 @@
                                   </Paragraphs>
                                   <rd:DefaultName>Textbox16</rd:DefaultName>
                                   <Top>2.70675cm</Top>
-                                  <Left>0cm</Left>
                                   <Height>0.57631cm</Height>
                                   <Width>1.20159cm</Width>
-                                  <ZIndex>7</ZIndex>
+                                  <ZIndex>6</ZIndex>
                                   <Visibility>
                                     <Hidden>=Fields!IsControl.Value = false</Hidden>
                                   </Visibility>
@@ -295,82 +261,15 @@
                                   </Paragraphs>
                                   <rd:DefaultName>Textbox28</rd:DefaultName>
                                   <Top>2.70675cm</Top>
-                                  <Left>3.16483cm</Left>
+                                  <Left>1.95124cm</Left>
                                   <Height>0.6cm</Height>
-                                  <Width>3.39563cm</Width>
-                                  <ZIndex>8</ZIndex>
+                                  <Width>4.60922cm</Width>
+                                  <ZIndex>7</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
                                     </Border>
                                     <VerticalAlign>Bottom</VerticalAlign>
-                                  </Style>
-                                </Textbox>
-                                <Textbox Name="Textbox17">
-                                  <KeepTogether>true</KeepTogether>
-                                  <Paragraphs>
-                                    <Paragraph>
-                                      <TextRuns>
-                                        <TextRun>
-                                          <Value>冰品</Value>
-                                          <Style>
-                                            <FontFamily>微軟正黑體</FontFamily>
-                                            <FontSize>14pt</FontSize>
-                                            <FontWeight>Bold</FontWeight>
-                                            <Color>Blue</Color>
-                                          </Style>
-                                        </TextRun>
-                                      </TextRuns>
-                                      <Style />
-                                    </Paragraph>
-                                  </Paragraphs>
-                                  <rd:DefaultName>Textbox16</rd:DefaultName>
-                                  <Top>2.70675cm</Top>
-                                  <Left>1.95124cm</Left>
-                                  <Height>0.57631cm</Height>
-                                  <Width>1.21359cm</Width>
-                                  <ZIndex>9</ZIndex>
-                                  <Visibility>
-                                    <Hidden>=Fields!IsFrozen.Value = false</Hidden>
-                                  </Visibility>
-                                  <Style>
-                                    <Border>
-                                      <Style>None</Style>
-                                    </Border>
-                                    <VerticalAlign>Bottom</VerticalAlign>
-                                  </Style>
-                                </Textbox>
-                                <Textbox Name="Textbox4">
-                                  <CanGrow>true</CanGrow>
-                                  <KeepTogether>true</KeepTogether>
-                                  <Paragraphs>
-                                    <Paragraph>
-                                      <TextRuns>
-                                        <TextRun>
-                                          <Value />
-                                          <Style />
-                                        </TextRun>
-                                      </TextRuns>
-                                      <Style />
-                                    </Paragraph>
-                                  </Paragraphs>
-                                  <rd:DefaultName>Textbox2</rd:DefaultName>
-                                  <Top>2.70675cm</Top>
-                                  <Left>1.95124cm</Left>
-                                  <Height>0.57631cm</Height>
-                                  <Width>1.21359cm</Width>
-                                  <ZIndex>10</ZIndex>
-                                  <Visibility>
-                                    <Hidden>=Fields!IsFrozen.Value = True</Hidden>
-                                  </Visibility>
-                                  <Style>
-                                    <Border>
-                                      <Style>None</Style>
-                                    </Border>
-                                    <PaddingLeft>2pt</PaddingLeft>
-                                    <PaddingRight>2pt</PaddingRight>
-                                    <PaddingTop>2pt</PaddingTop>
-                                    <PaddingBottom>2pt</PaddingBottom>
                                   </Style>
                                 </Textbox>
                                 <Textbox Name="Textbox2">
@@ -392,7 +291,7 @@
                                   <Left>0.03528cm</Left>
                                   <Height>0.57631cm</Height>
                                   <Width>1.91596cm</Width>
-                                  <ZIndex>11</ZIndex>
+                                  <ZIndex>8</ZIndex>
                                   <Visibility>
                                     <Hidden>=Fields!IsControl.Value = true</Hidden>
                                   </Visibility>
@@ -421,7 +320,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Height>3.73619cm</Height>
-                          <Width>6.92944cm</Width>
+                          <Width>6.92945cm</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -455,7 +354,6 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>MedicineTagDataSet</DataSetName>
-        <Left>0cm</Left>
         <Height>3.78739cm</Height>
         <Width>7.05645cm</Width>
         <Style>
