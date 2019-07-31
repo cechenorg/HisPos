@@ -242,7 +242,7 @@ namespace His_Pos.HisApi
         public static void CheckDailyUpload100()
         {
             var uploadTable = UploadFunctions.CheckUpload();
-            if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
+            if (uploadTable.Rows.Count >= 100 && ViewModelMainWindow.IsVerifySamDc)
             {
                 UploadFunctions.StartDailyUpload100(uploadTable);
             }

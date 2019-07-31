@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
     public class MedBagPrescriptionStructs : Collection<MedBagPrescriptionStruct>
     {
         #region ----- Define Variables -----
+        public string Type { get; set; }
         public double TotalStockValue => this.Sum(p => p.StockValue);
         #endregion
 
@@ -33,7 +34,11 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
         }
         private static MedBagPrescriptionStructs GetMedBagPrescriptionStructs(string type)
         {
-            return new MedBagPrescriptionStructs(PrescriptionDb.GetMedBagPrescriptionStructsByType(type));
+            var temp = new MedBagPrescriptionStructs(PrescriptionDb.GetMedBagPrescriptionStructsByType(type));
+
+            temp.Type = type;
+
+            return temp;
         }
         #endregion
     }

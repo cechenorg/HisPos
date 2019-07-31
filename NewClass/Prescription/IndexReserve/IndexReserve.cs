@@ -170,7 +170,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
+                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.PadRight(20).Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
