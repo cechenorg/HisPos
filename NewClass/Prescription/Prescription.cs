@@ -1534,7 +1534,6 @@ namespace His_Pos.NewClass.Prescription
         public void SetDetail()
         {
             CountPrescriptionPoint();
-            CountSelfPay();
             PrescriptionPoint.CountAmountsPay();
             SetPrescriptionDetail();//產生藥品資料
             SetValue();
@@ -1557,7 +1556,7 @@ namespace His_Pos.NewClass.Prescription
         public void CountSelfPay()
         {
             var selfPay = Medicines.CountSelfPay();
-            if (selfPay > 0)
+            if (selfPay >= 0)
                 PrescriptionPoint.AmountSelfPay = selfPay;
         }
 

@@ -406,7 +406,7 @@ namespace His_Pos.NewClass.Medicine.Base
 
         private void CountTotalPrice()
         {
-            if (Amount <= 0) return;
+            if (Amount < 0) return;
             var tempPrice = (PaySelf ? Price : NHIPrice) * Amount;
             TotalPrice = Math.Round(Convert.ToDouble(tempPrice.ToString()), 0, MidpointRounding.AwayFromZero);
         }

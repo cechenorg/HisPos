@@ -138,7 +138,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     if (EditedPrescription.Patient.Name.Equals("匿名"))
                     {
                         MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.WARNING);
-                        value = "Option1";
+                        value = "Option2";
                     }
                 }
                 else if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
@@ -221,7 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             InitialItemsSources();
             InitialCommandActions();
             InitPrescription();
-            SelectedDetail = "Option1";
+            SelectedDetail = EditedPrescription.Patient.Name.Equals("匿名")? "Option2" : "Option1";
         }
 
         private void InitPrescription()
