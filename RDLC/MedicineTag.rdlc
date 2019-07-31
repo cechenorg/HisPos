@@ -6,376 +6,425 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.8cm</Width>
+              <Width>7.05645cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>4cm</Height>
+              <Height>3.78739cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
                     <Rectangle Name="Rectangle2">
                       <ReportItems>
-                        <Rectangle Name="Rectangle3">
+                        <Rectangle Name="Rectangle4">
                           <ReportItems>
-                            <Textbox Name="FirstLetter">
-                              <CanShrink>true</CanShrink>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!FirstLetter.Value</Value>
+                            <Rectangle Name="Rectangle3">
+                              <ReportItems>
+                                <Textbox Name="EnglishName">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!EnglishName.Value</Value>
+                                          <Style>
+                                            <FontFamily>Arial Narrow</FontFamily>
+                                            <FontSize>20pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
                                       <Style>
-                                        <FontFamily>Arial Narrow</FontFamily>
-                                        <FontSize>24pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                        <Color>DarkRed</Color>
+                                        <TextAlign>Left</TextAlign>
                                       </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>FirstLetter</rd:DefaultName>
-                              <Height>1.07639cm</Height>
-                              <Width>0.7361cm</Width>
-                              <Style>
-                                <Border />
-                                <VerticalAlign>Bottom</VerticalAlign>
-                                <PaddingLeft>4pt</PaddingLeft>
-                                <PaddingTop>2pt</PaddingTop>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="EnglishName">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!EnglishName.Value</Value>
-                                      <Style>
-                                        <FontFamily>Arial Narrow</FontFamily>
-                                        <FontSize>20pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>EnglishName</rd:DefaultName>
+                                  <Left>0.77173cm</Left>
+                                  <Height>0.9cm</Height>
+                                  <Width>5.8099cm</Width>
                                   <Style>
-                                    <TextAlign>Left</TextAlign>
+                                    <Border />
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                    <PaddingTop>5pt</PaddingTop>
                                   </Style>
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>EnglishName</rd:DefaultName>
-                              <Left>0.68cm</Left>
-                              <Height>1.07639cm</Height>
-                              <Width>6.0639cm</Width>
-                              <ZIndex>1</ZIndex>
-                              <Style>
-                                <Border />
-                                <VerticalAlign>Bottom</VerticalAlign>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="ChineseName">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!ChineseName.Value</Value>
-                                      <Style>
-                                        <FontFamily>標楷體</FontFamily>
-                                        <FontSize>12pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style>
-                                    <TextAlign>Left</TextAlign>
-                                  </Style>
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>ChineseName</rd:DefaultName>
-                              <Top>1.14694cm</Top>
-                              <Left>0.00001cm</Left>
-                              <Height>0.5384cm</Height>
-                              <Width>6.79999cm</Width>
-                              <ZIndex>2</ZIndex>
-                              <Style>
-                                <Border />
-                                <VerticalAlign>Bottom</VerticalAlign>
-                                <PaddingLeft>4pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Ingredient">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!Ingredient.Value</Value>
-                                      <Style>
-                                        <FontFamily>Arial Narrow</FontFamily>
-                                        <FontSize>12pt</FontSize>
-                                        <Color>DimGray</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Ingredient</rd:DefaultName>
-                              <Top>1.68534cm</Top>
-                              <Left>0.00001cm</Left>
-                              <Height>0.95cm</Height>
-                              <Width>6.79999cm</Width>
-                              <ZIndex>3</ZIndex>
-                              <Style>
-                                <Border />
-                                <PaddingLeft>4pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox16">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>管藥</Value>
-                                      <Style>
-                                        <FontFamily>微軟正黑體</FontFamily>
-                                        <FontSize>16pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                        <Color>Red</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox16</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Height>0.68833cm</Height>
-                              <Width>1.18713cm</Width>
-                              <ZIndex>4</ZIndex>
-                              <Visibility>
-                                <Hidden>=Fields!IsControl.Value = false</Hidden>
-                              </Visibility>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Bottom</VerticalAlign>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox17">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>冰品</Value>
-                                      <Style>
-                                        <FontFamily>微軟正黑體</FontFamily>
-                                        <FontSize>16pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                        <Color>Blue</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox16</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Left>1.97206cm</Left>
-                              <Height>0.68833cm</Height>
-                              <Width>1.21359cm</Width>
-                              <ZIndex>5</ZIndex>
-                              <Visibility>
-                                <Hidden>=Fields!IsFrozen.Value = false</Hidden>
-                              </Visibility>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Bottom</VerticalAlign>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="EnglishName2">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!ID.Value</Value>
-                                      <Style>
-                                        <FontFamily>Arial Narrow</FontFamily>
-                                        <FontSize>15pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style>
-                                    <TextAlign>Right</TextAlign>
-                                  </Style>
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>EnglishName</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Left>3.18565cm</Left>
-                              <Height>0.68833cm</Height>
-                              <Width>3.61435cm</Width>
-                              <ZIndex>6</ZIndex>
-                              <Style>
-                                <Border />
-                                <VerticalAlign>Bottom</VerticalAlign>
-                                <PaddingRight>4pt</PaddingRight>
-                                <PaddingBottom>3pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox1">
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!ControlLevel.Value</Value>
-                                      <Style>
-                                        <FontFamily>微軟正黑體</FontFamily>
-                                        <FontSize>16pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                        <Color>Red</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Left>1.22241cm</Left>
-                              <Height>0.68833cm</Height>
-                              <Width>0.74965cm</Width>
-                              <ZIndex>7</ZIndex>
-                              <Visibility>
-                                <Hidden>=Fields!IsControl.Value = false</Hidden>
-                              </Visibility>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Bottom</VerticalAlign>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox2">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value />
+                                </Textbox>
+                                <Textbox Name="FirstLetter">
+                                  <CanShrink>true</CanShrink>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!FirstLetter.Value</Value>
+                                          <Style>
+                                            <FontFamily>Arial Narrow</FontFamily>
+                                            <FontSize>24pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                            <Color>DarkRed</Color>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
                                       <Style />
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox2</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Left>0.00001cm</Left>
-                              <Height>0.68833cm</Height>
-                              <Width>1.97205cm</Width>
-                              <ZIndex>8</ZIndex>
-                              <Visibility>
-                                <Hidden>=Fields!IsControl.Value = true</Hidden>
-                              </Visibility>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox3">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value />
-                                      <Style />
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>3.31167cm</Top>
-                              <Left>1.97206cm</Left>
-                              <Height>0.68833cm</Height>
-                              <Width>1.21359cm</Width>
-                              <ZIndex>9</ZIndex>
-                              <Visibility>
-                                <Hidden>=Fields!IsFrozen.Value = true</Hidden>
-                              </Visibility>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Unit">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!Unit.Value</Value>
-                                      <Style>
-                                        <FontFamily>微軟正黑體</FontFamily>
-                                        <FontSize>11pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>FirstLetter</rd:DefaultName>
+                                  <Left>0.09173cm</Left>
+                                  <Height>0.86472cm</Height>
+                                  <Width>0.7361cm</Width>
+                                  <ZIndex>1</ZIndex>
                                   <Style>
-                                    <TextAlign>Left</TextAlign>
+                                    <Border />
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                    <PaddingLeft>4pt</PaddingLeft>
+                                    <PaddingTop>2pt</PaddingTop>
                                   </Style>
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Unit</rd:DefaultName>
-                              <Top>2.63534cm</Top>
-                              <Height>0.61196cm</Height>
-                              <Width>6.8cm</Width>
-                              <ZIndex>10</ZIndex>
+                                </Textbox>
+                                <Textbox Name="ChineseName">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!ChineseName.Value</Value>
+                                          <Style>
+                                            <FontFamily>標楷體</FontFamily>
+                                            <FontSize>12pt</FontSize>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style>
+                                        <TextAlign>Left</TextAlign>
+                                      </Style>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>ChineseName</rd:DefaultName>
+                                  <Top>0.9cm</Top>
+                                  <Left>0.09173cm</Left>
+                                  <Height>0.5384cm</Height>
+                                  <Width>6.4899cm</Width>
+                                  <ZIndex>2</ZIndex>
+                                  <Style>
+                                    <Border />
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                    <PaddingLeft>4pt</PaddingLeft>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Ingredient">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!Ingredient.Value</Value>
+                                          <Style>
+                                            <FontFamily>Arial Narrow</FontFamily>
+                                            <FontSize>12pt</FontSize>
+                                            <Color>DimGray</Color>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Ingredient</rd:DefaultName>
+                                  <Top>1.4384cm</Top>
+                                  <Left>0.07056cm</Left>
+                                  <Height>0.48cm</Height>
+                                  <Width>6.4899cm</Width>
+                                  <ZIndex>3</ZIndex>
+                                  <Style>
+                                    <Border />
+                                    <PaddingLeft>4pt</PaddingLeft>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Unit">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!Unit.Value</Value>
+                                          <Style>
+                                            <FontFamily>微軟正黑體</FontFamily>
+                                            <FontSize>15pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style>
+                                        <TextAlign>Left</TextAlign>
+                                      </Style>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Unit</rd:DefaultName>
+                                  <Top>1.9184cm</Top>
+                                  <Left>0.07056cm</Left>
+                                  <Height>0.78835cm</Height>
+                                  <Width>6.4899cm</Width>
+                                  <ZIndex>4</ZIndex>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                    <PaddingLeft>4pt</PaddingLeft>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox3">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value />
+                                          <Style />
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox3</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>1.95124cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>1.21359cm</Width>
+                                  <ZIndex>5</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsFrozen.Value = true</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <PaddingLeft>2pt</PaddingLeft>
+                                    <PaddingRight>2pt</PaddingRight>
+                                    <PaddingTop>2pt</PaddingTop>
+                                    <PaddingBottom>2pt</PaddingBottom>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox1">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!ControlLevel.Value</Value>
+                                          <Style>
+                                            <FontFamily>微軟正黑體</FontFamily>
+                                            <FontSize>14pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                            <Color>Red</Color>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox1</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>1.20159cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>0.71437cm</Width>
+                                  <ZIndex>6</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsControl.Value = false</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox16">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>管藥</Value>
+                                          <Style>
+                                            <FontFamily>微軟正黑體</FontFamily>
+                                            <FontSize>14pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                            <Color>Red</Color>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox16</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>0cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>1.20159cm</Width>
+                                  <ZIndex>7</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsControl.Value = false</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox28">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!ID.Value</Value>
+                                          <Style>
+                                            <FontSize>16pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style>
+                                        <TextAlign>Right</TextAlign>
+                                      </Style>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox28</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>3.16483cm</Left>
+                                  <Height>0.6cm</Height>
+                                  <Width>3.39563cm</Width>
+                                  <ZIndex>8</ZIndex>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox17">
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>冰品</Value>
+                                          <Style>
+                                            <FontFamily>微軟正黑體</FontFamily>
+                                            <FontSize>14pt</FontSize>
+                                            <FontWeight>Bold</FontWeight>
+                                            <Color>Blue</Color>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox16</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>1.95124cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>1.21359cm</Width>
+                                  <ZIndex>9</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsFrozen.Value = false</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <VerticalAlign>Bottom</VerticalAlign>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox4">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value />
+                                          <Style />
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox2</rd:DefaultName>
+                                  <Top>2.70675cm</Top>
+                                  <Left>1.95124cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>1.21359cm</Width>
+                                  <ZIndex>10</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsFrozen.Value = True</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <PaddingLeft>2pt</PaddingLeft>
+                                    <PaddingRight>2pt</PaddingRight>
+                                    <PaddingTop>2pt</PaddingTop>
+                                    <PaddingBottom>2pt</PaddingBottom>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox2">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value />
+                                          <Style />
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style />
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox2</rd:DefaultName>
+                                  <Top>2.73044cm</Top>
+                                  <Left>0.03528cm</Left>
+                                  <Height>0.57631cm</Height>
+                                  <Width>1.91596cm</Width>
+                                  <ZIndex>11</ZIndex>
+                                  <Visibility>
+                                    <Hidden>=Fields!IsControl.Value = true</Hidden>
+                                  </Visibility>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                    <PaddingLeft>2pt</PaddingLeft>
+                                    <PaddingRight>2pt</PaddingRight>
+                                    <PaddingTop>2pt</PaddingTop>
+                                    <PaddingBottom>2pt</PaddingBottom>
+                                  </Style>
+                                </Textbox>
+                              </ReportItems>
+                              <KeepTogether>true</KeepTogether>
+                              <Top>0.42944cm</Top>
+                              <Left>0.34782cm</Left>
+                              <Height>3.30675cm</Height>
+                              <Width>6.58163cm</Width>
                               <Style>
                                 <Border>
-                                  <Style>None</Style>
+                                  <Style>Solid</Style>
                                 </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>4pt</PaddingLeft>
                               </Style>
-                            </Textbox>
+                            </Rectangle>
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
-                          <Height>4cm</Height>
-                          <Width>6.8cm</Width>
+                          <Height>3.73619cm</Height>
+                          <Width>6.92944cm</Width>
                           <Style>
                             <Border>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                             </Border>
                           </Style>
                         </Rectangle>
@@ -406,8 +455,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>MedicineTagDataSet</DataSetName>
-        <Height>4cm</Height>
-        <Width>6.8cm</Width>
+        <Left>0cm</Left>
+        <Height>3.78739cm</Height>
+        <Width>7.05645cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -418,7 +468,7 @@
     <Height>28cm</Height>
     <Style />
   </Body>
-  <Width>6.8cm</Width>
+  <Width>7.05645cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
