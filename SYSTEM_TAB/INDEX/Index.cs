@@ -261,8 +261,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             PrintIndexReserveMedbagCommand = new RelayCommand(PrintPackageAction);
             ShowReserveDetailCommand = new RelayCommand(ShowReserveDetailAction);
-            //ReserveSearchAction();
-
+            ReserveSearchAction();
         }
         #region Action
         private void DataChangeAction() {
