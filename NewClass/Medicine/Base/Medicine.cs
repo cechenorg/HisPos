@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Medicine.Base
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
-            InventoryID = r.Field<int>("Inv_ID") ;
+            InventoryID = r.Field<int>("Inv_ID");
             SendAmount = -1;
         }
 

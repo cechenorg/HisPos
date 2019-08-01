@@ -80,5 +80,19 @@ namespace His_Pos.NewClass.Medicine
             DataBaseFunction.AddSqlParameter(parameterList, "InvIDs", SetIDTable(editInvIDList));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineInventoryByInvIDs]", parameterList);
         }
+
+        public static DataTable GetUsableAmountByPrescriptionID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreMas_ID", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CanUseAmountByPreMas_ID]", parameterList);
+        }
+
+        public static DataTable GetUsableAmountByReserveID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ResMas_ID", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CanUseAmountByResMas_ID]", parameterList);
+        }
     }
 }

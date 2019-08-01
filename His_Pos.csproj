@@ -307,6 +307,7 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoint.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
+    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStructs.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
