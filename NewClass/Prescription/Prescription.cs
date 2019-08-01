@@ -1609,29 +1609,24 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public List<MedicineInventoryStruct> CheckUsableMedicinesByType()
+        public MedicineInventoryStructs CheckUsableMedicinesByType()
         {
-            var usableMedicines = new Medicines();
-            var usableInventoryStructs = new List<MedicineInventoryStruct>();
+            var usableInventoryStructs = new MedicineInventoryStructs();
             switch (Type)
             {
                 case PrescriptionType.ChronicRegister:
-                    usableMedicines.GetDataByPrescriptionId(ID);
+                    usableInventoryStructs.GetUsableAmountByPrescriptionID(ID);
                     break;
                 case PrescriptionType.ChronicReserve:
-                    usableMedicines.GetDataByReserveId(int.Parse(SourceId));
+                    usableInventoryStructs.GetUsableAmountByReserveID(int.Parse(SourceId));
                     break;
             }
-            var groupInvIDResult = usableMedicines.GroupBy(m => m.InventoryID);
-            foreach (var g in groupInvIDResult)
-            {
-                var adjustAmount = g.Sum(m => m.Amount);
-                var sendAmount = g.Sum(m => m.SendAmount);
-                var onTheFrameAmount = g.ElementAt(0).OnTheFrameAmount;
-                var usableAmount = adjustAmount - sendAmount + onTheFrameAmount;
-                usableInventoryStructs.Add(new MedicineInventoryStruct(g.Key, usableAmount));
-            }
             return usableInventoryStructs;
+        }
+
+        public string CheckChronicMedicinesNegativeStock()
+        {
+            throw new NotImplementedException();
         }
     }
 }

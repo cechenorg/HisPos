@@ -610,7 +610,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID,List<MedicineInventoryStruct> usableAmountList)
+        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList)
         {
             var buckleMedicines = new List<BuckleMedicineStruct>();
             var inventoryIDList = new List<int>();
@@ -677,7 +677,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public void CheckUsableAmount(List<MedicineInventoryStruct> usableMedicines)
+        public void CheckUsableAmount(MedicineInventoryStructs usableMedicines)
         {
             if (usableMedicines.Count <= 0) return;
             foreach (var usableMedicine in usableMedicines)

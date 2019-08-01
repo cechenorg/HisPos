@@ -82,13 +82,16 @@ namespace His_Pos.NewClass
             {
                 CooperativeClinicJsonDb.InsertCooperJson(json);
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatusTop100();
+                return true;
             }
-            else
+            else {
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
                 {
                     MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員", Class.MessageType.ERROR);
                 });
-            return true;
+                return false;
+            }
+             
         }
     }
 }

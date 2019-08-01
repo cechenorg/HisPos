@@ -53,7 +53,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             foreach (var i in splitIngredient)
             {
                 match = regex.Match(i.Trim());
-
+                if(string.IsNullOrEmpty(match.Groups[1].Value)) continue;
                 double amount = double.Parse(match.Groups[1].Value);
 
                 if (!Unit.Equals("")) Unit += "/";

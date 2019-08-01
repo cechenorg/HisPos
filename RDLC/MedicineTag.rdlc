@@ -140,7 +140,6 @@
                                   </Style>
                                 </Textbox>
                                 <Textbox Name="Unit">
-                                  <CanGrow>true</CanGrow>
                                   <KeepTogether>true</KeepTogether>
                                   <Paragraphs>
                                     <Paragraph>
