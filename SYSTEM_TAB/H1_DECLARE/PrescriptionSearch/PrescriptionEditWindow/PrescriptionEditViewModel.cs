@@ -485,6 +485,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void DeleteMedicineAction()
         {
             EditedPrescription.DeleteMedicine();
+            EditedPrescription.CountPrescriptionPoint();
+            EditedPrescription.CountSelfPay();
+            EditedPrescription.PrescriptionPoint.CountAmountsPay();
             DataChangedAction();
         }
 
@@ -714,7 +717,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
-                if (inv.OnTheFrame - EditedPrescription.Medicines.Single(m => m.InventoryID.Equals(inv.InvID)).BuckleAmount >= 0) continue;
+                if (inv.OnTheFrame - EditedPrescription.Medicines.SingleOrDefault(m => m.InventoryID.Equals(inv.InvID))?.BuckleAmount >= 0) continue;
                 foreach (var med in EditedPrescription.Medicines)
                 {
                     if (med is MedicineVirtual) continue;
