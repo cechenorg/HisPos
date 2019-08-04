@@ -1289,18 +1289,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool CheckMedicinesNegativeStock()
         {
             string result = string.Empty;
-            switch (CurrentPrescription.Type)
-            {
-                case PrescriptionType.ChronicRegister:
-                case PrescriptionType.ChronicReserve:
-                    result = CurrentPrescription.CheckChronicMedicinesNegativeStock();
-                    break;
-                default:
-                    result = CurrentPrescription.CheckMedicinesNegativeStock();
-                    break;
-
-            }
-            if(!string.IsNullOrEmpty(result))
+            result = CurrentPrescription.CheckMedicinesNegativeStock();
+            if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;
             return string.IsNullOrEmpty(result);
         }

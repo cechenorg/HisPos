@@ -166,7 +166,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             bool result = false;
             string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
             this.StoOrdID = newStoOrdID;
-            string note = "";
+            string note = "調劑日:" + AdjustDate.AddYears(-1911).ToString("yyy-MM-dd") + "\r\n";
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;

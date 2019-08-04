@@ -545,7 +545,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientTel",Current.Patient.ContactNote),
                 new ReportParameter("Institution", Current.Institution.Name),
                 new ReportParameter("Division", Current.Division.Name),
-                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
+                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(19).ToString("yyy-MM-dd")}")
             };
         }
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
