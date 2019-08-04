@@ -174,7 +174,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
                 return (bool)medicalNumberEmptyConfirm.DialogResult;
             }
-            return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber);
+            return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
         }
 
         protected bool CheckAdjustAndTreatDate()

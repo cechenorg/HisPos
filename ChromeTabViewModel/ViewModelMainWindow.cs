@@ -351,7 +351,15 @@ namespace His_Pos.ChromeTabViewModel
 
         public void StartPrintReserve(ReportViewer r) {
             BusyContent = "封包列印...";
-            Export(r.LocalReport, 22, 9.3);
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 14.8, 10.5);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
         public void StartPrintMedicineTag(ReportViewer r)
@@ -365,7 +373,15 @@ namespace His_Pos.ChromeTabViewModel
         public void StartPrintDeposit(ReportViewer r)
         {
             BusyContent = StringRes.押金單據列印;
-            Export(r.LocalReport, 25.4, 9.3);
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 14.8, 10.5);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
         private void Export(LocalReport report, double width, double height)

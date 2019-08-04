@@ -29,7 +29,6 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -750,7 +749,7 @@ namespace His_Pos.NewClass.Prescription
             CreateMedicinesDetail();
             if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
-            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
+            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1,(DateTime)AdjustDate);
             Details.Add(medicalService);
             if (CheckNotNormalPrescription()) return;
             var dailyPrice = CheckIfSimpleFormDeclare();
@@ -767,7 +766,7 @@ namespace His_Pos.NewClass.Prescription
                 d.P8 = $"{0.00:0000000.00}";
                 d.P9 = "00000000";
             }
-            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
+            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays,(DateTime)AdjustDate);
             Details.Add(simpleForm);
         }
 
@@ -776,10 +775,10 @@ namespace His_Pos.NewClass.Prescription
             var serialNumber = 1;
             foreach (var med in Medicines.GetDeclare())
             {
-                Details.Add(new Pdata(med, serialNumber.ToString()));
+                Details.Add(new Pdata(med, serialNumber.ToString(),(DateTime)AdjustDate));
                 serialNumber++;
             }
-            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
+            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty,(DateTime)AdjustDate)));
         }
 
         private bool CheckNotNormalPrescription()
@@ -934,7 +933,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetDepositReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateDepositSheetParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
@@ -16,6 +17,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionEditWindow : Window
     {
+        int prevRowIndex = -1;
+        public delegate Point GetDragDropPosition(IInputElement theElement);
         public PrescriptionEditWindow()
         {
             InitializeComponent();
@@ -33,6 +36,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
+            PrescriptionMedicines.PreviewMouseLeftButtonDown += PrescriptionMedicines_PreviewMouseLeftButtonDown;
+            PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
             DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
         }
@@ -188,25 +193,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private int GetCurrentRowIndex(object sender)
-        {
-            switch (sender)
-            {
-                case TextBox textBox:
-                    {
-                        var temp = new List<TextBox>();
-                        NewFunction.FindChildGroup(PrescriptionMedicines, textBox.Name, ref temp);
-                        for (var x = 0; x < temp.Count; x++)
-                        {
-                            if (temp[x].Equals(textBox))
-                                return x;
-                        }
-                        break;
-                    }
-            }
-            return -1;
-        }
-
         private void InputTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
@@ -304,6 +290,76 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if(e.Key == Key.Space)
                 e.Handled = true;
+        }
+
+        private void PrescriptionMedicines_Drop(object sender, DragEventArgs e)
+        {
+            if (prevRowIndex < 0)
+                return;
+           
+            var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (index < 0)
+                return;
+            if (index == prevRowIndex)
+                return;
+            if (index == PrescriptionMedicines.Items.Count-1)
+                return;
+
+            var medicines = ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines;
+            var movedMedicine = medicines[prevRowIndex];
+            medicines.RemoveAt(prevRowIndex);
+            medicines.Insert(index, movedMedicine);
+            ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines.ReOrder();
+            ((PrescriptionEditViewModel) DataContext).IsEdit = true;
+        }
+
+        private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            prevRowIndex = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (prevRowIndex < 0)
+                return;
+            PrescriptionMedicines.SelectedIndex = prevRowIndex;
+
+            if (!(PrescriptionMedicines.Items[prevRowIndex] is Medicine selectedEmp))
+                return;
+
+            var dragDropEffects = DragDropEffects.Move;
+
+            if (DragDrop.DoDragDrop(PrescriptionMedicines, selectedEmp, dragDropEffects) != DragDropEffects.None)
+            {
+                PrescriptionMedicines.SelectedItem = selectedEmp;
+            }
+        }
+
+        private bool IsTheMouseOnTargetRow(Visual theTarget, GetDragDropPosition pos)
+        {
+            var posBounds = VisualTreeHelper.GetDescendantBounds(theTarget);
+            var theMousePos = pos((IInputElement)theTarget);
+            return posBounds.Contains(theMousePos);
+        }
+
+        private DataGridRow GetDataGridRowItem(int index)
+        {
+            if (PrescriptionMedicines.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+            return PrescriptionMedicines.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+        }
+
+        private int GetDataGridItemCurrentRowIndex(GetDragDropPosition pos)
+        {
+            var curIndex = -1;
+            for (var i = 0; i < PrescriptionMedicines.Items.Count; i++)
+            {
+                var itm = GetDataGridRowItem(i);
+                if (IsTheMouseOnTargetRow(itm, pos))
+                {
+                    curIndex = i;
+                    break;
+                }
+            }
+            return curIndex;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -12,7 +11,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription;
@@ -162,6 +160,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+
+        private bool chronicTimesCanEdit;
+        public bool ChronicTimesCanEdit
+        {
+            get => chronicTimesCanEdit;
+            set
+            {
+                Set(() => ChronicTimesCanEdit, ref chronicTimesCanEdit, value);
+            }
+        }
         #region ItemsSources
         public Institutions Institutions { get; set; }
         public Divisions Divisions { get; set; }
@@ -215,6 +223,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Title = title;
             IsEdit = false;
             OriginalPrescription = p;
+            ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
@@ -792,7 +801,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 GetMedicalNumber(pre);
                 return true;
             }
-            return AskErrorUpload();
+
+            var result = false;
+            Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
+            return result;
         }
 
         private void GetMedicalNumber(Prescription pre)

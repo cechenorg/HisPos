@@ -299,7 +299,7 @@ namespace His_Pos.Service
             return table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result");
         }
 
-        public static bool CheckNotIntMedicalNumber(string medicalNumber)
+        public static bool CheckNotIntMedicalNumber(string medicalNumber,string adjustCaseID,int? chronicSeq)
         {
             if (medicalNumber.StartsWith("IC")) return true;
             switch (medicalNumber)
@@ -326,8 +326,11 @@ namespace His_Pos.Service
                 case "Z000":
                 case "E001":
                 case "Z001":
-                case "J000":
+                case "J000" when adjustCaseID.Equals("2") && chronicSeq != null && chronicSeq >= 2:
                     return true;
+                case "J000" when !adjustCaseID.Equals("2") || chronicSeq is null || chronicSeq < 2:
+                    MessageWindow.ShowMessage("卡序:J000 僅可使用於慢箋第二次以後調劑處方無填載就醫序號",MessageType.ERROR);
+                    return false;
             }
             int number;
             var conversionSuccessful = int.TryParse(medicalNumber, out number);

@@ -217,8 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            if (CheckCardNotNull())
-                NoCardPres.GetNoCardByCusId(Patient.ID);
+            NoCardPres.GetNoCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
 

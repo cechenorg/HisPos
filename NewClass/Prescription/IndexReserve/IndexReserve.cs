@@ -197,7 +197,15 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = CreateReserveMedicinesSheetParameters();
             rptViewer.LocalReport.SetParameters(parameters);
@@ -216,7 +224,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
+                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }
 
