@@ -76,13 +76,14 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
         }
 
-        public void GetNoCardByCusId(int cusID) //取得預約慢箋
+        public void GetNoCardByCusId(int cusID) //取得未過卡處方
         {
             Clear();
             var table = PrescriptionDb.GetPrescriptionsNoGetCardByCusId(cusID);
             foreach (DataRow r in table.Rows)
             {
-                Add(new NoCardPreview(r));
+                if (DateTimeExtensions.CountTimeDifferenceWithoutHoliday(DateTime.Today, r.Field<DateTime>("Adj_Date")) <= 10)
+                    Add(new NoCardPreview(r));
             }
         }
     }
