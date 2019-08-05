@@ -32,7 +32,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     Close();
             });
             Closing += (sender, e) => Messenger.Default.Unregister(this);
-            PrescriptionMedicines.PreviewMouseLeftButtonDown += PrescriptionMedicines_PreviewMouseLeftButtonDown;
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
             DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();

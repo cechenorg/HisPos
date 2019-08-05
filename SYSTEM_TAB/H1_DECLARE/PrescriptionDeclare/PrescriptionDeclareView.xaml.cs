@@ -28,7 +28,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
-            PrescriptionMedicines.PreviewMouseLeftButtonDown += PrescriptionMedicines_PreviewMouseLeftButtonDown;
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
         }
 
