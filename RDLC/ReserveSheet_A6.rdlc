@@ -723,7 +723,7 @@
             <Top>4.43727cm</Top>
             <Left>0.17038cm</Left>
             <Height>1.2cm</Height>
-            <Width>14.45925cm</Width>
+            <Width>14.45923cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -827,7 +827,6 @@
             </Style>
           </Textbox>
           <Textbox Name="PatientName">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>

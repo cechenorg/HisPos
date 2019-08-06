@@ -829,7 +829,6 @@
             </Style>
           </Textbox>
           <Textbox Name="Textbox2">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>

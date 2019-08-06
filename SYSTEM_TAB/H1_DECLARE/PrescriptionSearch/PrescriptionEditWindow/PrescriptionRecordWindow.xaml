@@ -176,7 +176,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
                     <Image Width="25" Height="25" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientCellPhone" Width="130" Height="30"  HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}"
+                    <TextBox Name="PatientCellPhone" Width="140" Height="30"  HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}"
                              Text="{Binding DataContext.EditedPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
@@ -185,10 +185,10 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                     <Image Width="20" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientTel" Width="130" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                    <TextBox Name="PatientTel" Width="140" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.EditedPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextInput">
+                            <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
@@ -199,7 +199,7 @@
                     <TextBox Name="PatientAddress" Width="325" Height="30" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="地址" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.EditedPrescription.Patient.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextInput">
+                            <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
@@ -210,7 +210,7 @@
                     <TextBox Name="PatientEmail" Width="325" Height="30" Margin="1,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="電子信箱" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.EditedPrescription.Patient.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextInput">
+                            <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
@@ -221,7 +221,7 @@
                     <TextBox Name="PatientLine" Width="325" Height="30" Margin="1,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="Line ID" FontSize="16" Foreground="{StaticResource ForeGround}" 
                              Text="{Binding DataContext.EditedPrescription.Patient.Line, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextInput">
+                            <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
@@ -233,7 +233,7 @@
                         <TextBox Height="165" Width="265" VerticalContentAlignment="Top" Text="{Binding DataContext.EditedPrescription.Patient.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap" 
                                  AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="TextInput">
+                                <i:EventTrigger EventName="PreviewKeyDown">
                                     <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
@@ -246,7 +246,7 @@
                         <TextBox Height="165" Width="265" VerticalContentAlignment="Top"  Text="{Binding DataContext.EditedPrescription.Patient.Note,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap"  
                                  AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="TextInput">
+                                <i:EventTrigger EventName="PreviewKeyDown">
                                     <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
@@ -586,10 +586,22 @@
                     </TextBox>
                     <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
                     <TextBox x:Name="ChronicTotal" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1" IsReadOnly="{Binding ChronicTimesCanEdit,UpdateSourceTrigger=PropertyChanged}" IsReadOnlyCaretVisible="False"
-                             Text="{Binding EditedPrescription.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputMethod.IsInputMethodEnabled="False"/>
+                             Text="{Binding EditedPrescription.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputMethod.IsInputMethodEnabled="False">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                     <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
                     <TextBox x:Name="ChronicSequence" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1" 
-                             IsReadOnly="{Binding ChronicTimesCanEdit,UpdateSourceTrigger=PropertyChanged}" IsReadOnlyCaretVisible="False" Text="{Binding EditedPrescription.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" />
+                             IsReadOnly="{Binding ChronicTimesCanEdit,UpdateSourceTrigger=PropertyChanged}" IsReadOnlyCaretVisible="False" Text="{Binding EditedPrescription.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="10" Orientation="Horizontal">
                     <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Height="35" />
