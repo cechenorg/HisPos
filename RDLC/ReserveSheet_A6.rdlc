@@ -698,24 +698,7 @@
               <TablixMembers>
                 <TablixMember />
                 <TablixMember>
-                  <Group Name="ID">
-                    <GroupExpressions>
-                      <GroupExpression>=Int((RowNumber(Nothing)-1)/7)</GroupExpression>
-                    </GroupExpressions>
-                    <PageBreak>
-                      <BreakLocation>Between</BreakLocation>
-                    </PageBreak>
-                  </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!ID.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
-                  <TablixMembers>
-                    <TablixMember>
-                      <Group Name="詳細資料" />
-                    </TablixMember>
-                  </TablixMembers>
+                  <Group Name="詳細資料" />
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
