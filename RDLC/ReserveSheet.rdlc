@@ -755,7 +755,7 @@
                     <Value>=Parameters!AdjustRange.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>19pt</FontSize>
+                      <FontSize>24pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -765,7 +765,7 @@
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>0.17639cm</Top>
             <Left>7.22543cm</Left>
-            <Height>1.00568cm</Height>
+            <Height>1.31473cm</Height>
             <Width>9.74203cm</Width>
             <ZIndex>10</ZIndex>
             <Style>

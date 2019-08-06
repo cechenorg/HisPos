@@ -732,13 +732,14 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>1.66715cm</Top>
+            <Top>1.59661cm</Top>
             <Left>0.17038cm</Left>
-            <Height>0.97041cm</Height>
+            <Height>1.1115cm</Height>
             <Width>2.8314cm</Width>
             <ZIndex>9</ZIndex>
             <Style>
               <Border />
+              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -754,7 +755,7 @@
                     <Value>=Parameters!AdjustRange.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>19pt</FontSize>
+                      <FontSize>24pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -762,17 +763,14 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.66715cm</Top>
+            <Top>1.59661cm</Top>
             <Left>3.00178cm</Left>
-            <Height>1.00568cm</Height>
+            <Height>1.1115cm</Height>
             <Width>7.62955cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
               <Border />
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
+              <VerticalAlign>Top</VerticalAlign>
             </Style>
           </Textbox>
           <Textbox Name="Type">
