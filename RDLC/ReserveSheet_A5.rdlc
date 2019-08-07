@@ -705,7 +705,7 @@
             <DataSetName>ReserveMedicinesDataSet</DataSetName>
             <Top>4.62355cm</Top>
             <Left>0.27609cm</Left>
-            <Height>1.35875cm</Height>
+            <Height>1.35876cm</Height>
             <Width>20.38077cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -806,7 +806,7 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>5.9823cm</Height>
+        <Height>5.98231cm</Height>
         <Style>
           <Border>
             <Style>None</Style>
