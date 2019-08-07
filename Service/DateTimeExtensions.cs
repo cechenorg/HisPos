@@ -37,6 +37,14 @@ namespace His_Pos.Service
             return year + month + day + hour + minute;
         }
 
+        public static string ConvertToTaiwanCalenderWithTimeZero(DateTime d)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            return year + month + day + "0000";
+        }
+
         public struct Age
         {
             public int Years;

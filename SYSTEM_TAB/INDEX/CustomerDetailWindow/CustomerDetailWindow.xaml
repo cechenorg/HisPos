@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Title="顧客資料詳細" Height="630" Width="1350">
+        Title="顧客資料編輯" Height="630" Width="1350">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -18,40 +18,46 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="375"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0"  DataContext="{Binding CustomerData}">
-                <Label Content="{Binding Name}"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
-                <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="30,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Label Content="{Binding IDNumber}"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+                <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Content="{Binding IDNumber}"  VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="22" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+                <Image Width="30" Height="30" Source="/Images/User_48px.png" Margin="30,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="22" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="30,0,0,0"/>
-                <Label Content="{Binding Birthday,Converter={StaticResource NullableDateConverter}}"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+                <Label Content="{Binding Birthday,Converter={StaticResource NullableDateConverter}}"  VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="22" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1"  DataContext="{Binding CustomerData}">
-                <Image Width="30" Height="30" Source="/Images/Ph.png" Margin="10,0,0,0"/>
-                <TextBox Width="180" Text="{Binding Tel}"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-                <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="20,0,0,0"/>
-                <TextBox Width="180"  Text="{Binding CellPhone}"   VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1"  DataContext="{Binding CustomerData}"  Margin="10,0,0,0">
+                <Image Width="30" Height="30" Source="/Images/Phone.png"/>
+                <TextBox Text="{Binding CellPhone}" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="22" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Left" Margin="10,0,0,0" Width="255"/>
+                <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="15,0,0,0"/>
+                <TextBox Text="{Binding Tel}"  VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="22" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Left" Margin="10,0,0,0" Width="255"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="2"  DataContext="{Binding CustomerData}">
-                <Label Content="住址" Width="130" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-                <TextBox Text="{Binding Address}" Width="450"  Background="{StaticResource LightForeGround}"  Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2"  DataContext="{Binding CustomerData}"  Margin="10,0,0,0">
+                <Label Content="地址" Style="{StaticResource BoldLabelHeader25}"/>
+                <TextBox Text="{Binding Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="530" Foreground="{StaticResource ForeGround}" FontSize="22" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Left" Margin="10"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="3"  DataContext="{Binding CustomerData}"> 
-                <Label Content="聯絡備註"  VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-                <TextBox  Height="180" Width="450"  VerticalContentAlignment="Top"  Text="{Binding ContactNote}" Background="{StaticResource LightForeGround}" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="Black" FontSize="24" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0,0,0">
+                <StackPanel Orientation="Vertical" DataContext="{Binding CustomerData}" Width="300">
+                    <Label Content="聯絡備註"  VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
+                    <TextBox Height="330" Width="290" VerticalContentAlignment="Top" Text="{Binding ContactNote}" Background="{StaticResource LightForeGround}" VerticalAlignment="Center" 
+                             TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="{StaticResource ForeGround}" FontSize="22" Margin="5,0,0,0"
+                             FontFamily="Segoe UI Semibold" BorderThickness="0" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" DataContext="{Binding CustomerData}" Width="300" Margin="10,0,0,0">
+                    <Label Content="備註" Width="130" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left"/>
+                    <TextBox VerticalContentAlignment="Top" Height="330" Width="290" Text="{Binding Note}" Background="{StaticResource LightForeGround}"
+                             TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Foreground="{StaticResource ForeGround}" FontSize="22" 
+                             FontFamily="Segoe UI Semibold" BorderThickness="0" HorizontalAlignment="Left"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="4"  DataContext="{Binding CustomerData}">
-                <Label Content="備註" Width="130" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-                <TextBox VerticalContentAlignment="Top" Width="450" Height="180" Text="{Binding Note}" Background="{StaticResource LightForeGround}"  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="5">
-                <Button Command="{Binding SaveCommand}" Width="120" Height="30" Content="存檔" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="420,0,0,0" />
+            <StackPanel Orientation="Horizontal" Grid.Row="4">
+                <Button Command="{Binding SaveCommand}" Width="120" Height="30" Content="存檔" FontSize="16" Background="CornflowerBlue" BorderThickness="0" Margin="490,10,0,10" />
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
@@ -61,10 +67,9 @@
                 <RowDefinition Height="250"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Label Content="處方歷程"  VerticalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
-                <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrescriptionCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                            ItemsSource="{Binding PrescriptionCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
-                </ComboBox>
+                <Label Content="處方歷程" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
+                <ComboBox Width="100" FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding PrescriptionCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding PrescriptionCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
             </StackPanel>
             <DataGrid   Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,0,0,10"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding PrescriptionDetailView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -129,7 +134,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid   Grid.Row="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,10,0,10"
+            <DataGrid Grid.Row="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Margin="10,10,0,10"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding CustomerDetailPrescriptionMedicines,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">

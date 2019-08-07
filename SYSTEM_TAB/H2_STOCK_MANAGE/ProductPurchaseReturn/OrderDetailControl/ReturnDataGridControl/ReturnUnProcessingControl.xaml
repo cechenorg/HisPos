@@ -73,7 +73,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="200" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn MinWidth="200" MaxWidth="580" Header="商品名稱" SortMemberPath="EnglishName" CanUserSort="True" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

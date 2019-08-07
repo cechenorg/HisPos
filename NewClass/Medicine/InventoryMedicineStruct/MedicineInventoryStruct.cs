@@ -3,12 +3,12 @@
     public struct MedicineInventoryStruct
     {
         public int ID { get; set; }
-        public double Inventory { get; set; }
+        public double Amount { get; set; }
 
-        public MedicineInventoryStruct(int id, double inventory)
+        public MedicineInventoryStruct(int id, double amount)
         {
             ID = id;
-            Inventory = inventory;
+            Amount = amount;
         }
     }
 }

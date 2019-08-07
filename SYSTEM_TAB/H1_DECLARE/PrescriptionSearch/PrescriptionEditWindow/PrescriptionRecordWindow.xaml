@@ -10,6 +10,7 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         FontFamily="Segoe UI Semibold"
         Title="{Binding Title}" Height="{Binding WindowHeight, Mode=TwoWay}" 
@@ -24,8 +25,9 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:SentinelConverter x:Key="SentinelConverter"/>
+        <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
         <service:MultiCommandParametersConverter x:Key="MultiCommandParametersConverter"/>
-        <DataTemplate x:Key="NoCardButtonsArea" DataType="{x:Type local:PrescriptionEditWindow}">
+        <DataTemplate x:Key="NoCardButtonsArea" DataType="{x:Type local:PrescriptionRecordWindow}">
             <StackPanel Orientation="Horizontal">
                 <Label Width="65" Height="35" Margin="40,0,10,0" Style="{StaticResource BoldLabelContent18}" Content="未過卡" Foreground="Red"/>
                 <Button Content="補卡" Height="35" Command="{Binding DataContext.MakeUp,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" />
@@ -35,58 +37,315 @@
                 <Button Content="藥袋" Height="35" Command="{Binding DataContext.PrintMedBag,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
             </StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="GetCardButtonsArea" DataType="{x:Type local:PrescriptionEditWindow}">
+        <DataTemplate x:Key="GetCardButtonsArea" DataType="{x:Type local:PrescriptionRecordWindow}">
             <StackPanel Orientation="Horizontal">
                 <Label Height="35" Margin="279,0,0,0" Style="{StaticResource BoldLabelContent18}" Content="列印 : " Foreground="DimGray"/>
                 <Button Content="收據" Height="35" Command="{Binding DataContext.PrintReceipt,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
                 <Button Content="藥袋" Height="35" Command="{Binding DataContext.PrintMedBag,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="10,0,0,0"/>
             </StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="NotPrescribeSummary" DataType="{x:Type local:PrescriptionEditWindow}">
+        <DataTemplate x:Key="PrescriptionEditRecord" DataType="{x:Type local:PrescriptionEditWindow}" >
             <DataTemplate.Resources>
-                <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionEditWindow}">
-                    <StackPanel Orientation="Horizontal">
-                        <Label  Content="已修改" Style="{StaticResource BoldLabelContent18}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding DataContext.IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                    </StackPanel>
+                <Style x:Key="CusHistoryColumnHeaderStyle" TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Margin" Value="8,5,5,5" />
+                </Style>
+                <DataTemplate x:Key="EditIcon" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <Image Source="/Images/BlueDot.png" Width="18" Margin="10,0,5,0"/>
                 </DataTemplate>
-                <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionEditWindow}">
-                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding DataContext.IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                <DataTemplate x:Key="AdjustIcon" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <Image Source="/Images/OrangeDot.png" Width="18" Margin="10,0,5,0"/>
                 </DataTemplate>
             </DataTemplate.Resources>
-            <StackPanel Orientation="Horizontal" Width="1330">
-                <Label Content="藥品點數" Style="{StaticResource BoldLabelContent18}" Margin="0,0,0,0" />
-                <Label Content="{Binding DataContext.TotalMedPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                <Label Content="部分負擔" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.CopaymentPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="40" />
-                <Label Content="藥服費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.MedicalServicePoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="30"/>
-                <Label Content="總點數" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                <Label Content="自費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="10,0,0,0" Width="70" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}"/>
-                <Label Content="押金" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="60" Visibility="{Binding NotPrescribe, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Foreground="{StaticResource ForeGround}"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                <Rectangle Width="60" Margin="0,0,10,0"/>
-                <ContentControl Content="{Binding}" Margin="10,0,0,0">
-                    <ContentControl.Style>
-                        <Style TargetType="{x:Type ContentControl}">
-                            <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentControl.Style>
-                </ContentControl>
-                <Button Content="復原編輯" Command="{Binding DataContext.RedoEdit,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="編輯完成" Command="{Binding DataContext.EditComplete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
+            <DataGrid x:Name="EditRecord" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DataContext.EditRecords,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                      CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" 
+                      CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=Window}}" Height="255" Width="955">
+                <DataGrid.Resources>
+                    <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Height" Value="35"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn IsReadOnly="True" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding}">
+                                    <ContentControl.Style>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IconType, UpdateSourceTrigger=PropertyChanged}" Value="Edit">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource EditIcon}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IconType, UpdateSourceTrigger=PropertyChanged}" Value="Adjust">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource AdjustIcon}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="120" MaxWidth="120" Header="藥品代碼" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Text" Value="{Binding ProductID}" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="400" Header="藥品名稱" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Text" Value="{Binding FullName}" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="80" Header="變化量" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Text" Value="{Binding Amount}" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="120" Header="備註" IsReadOnly="True" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Text" Value="{Binding Note}" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="120" MaxWidth="120" Header="時間" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Text" Value="{Binding TimeString}" />
+                                <Setter Property="Margin" Value="5,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DataTemplate>
+        <DataTemplate x:Key="CustomerDetail" DataType="{x:Type local:PrescriptionRecordWindow}">
+            <DataTemplate.Resources>
+                <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent16}" Foreground="Red" Margin="40,0,0,10"/>
+                </DataTemplate>
+                <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent16}" Foreground="DimGray" Margin="40,0,0,10"/>
+                </DataTemplate>
+            </DataTemplate.Resources>
+            <Grid Height="200" Background="{StaticResource GridBackGround}" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="390"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                    <Image Width="25" Height="25" Source="/Images/Phone.png" Margin="10,0,10,0"/>
+                    <TextBox Name="PatientCellPhone" Width="140" Height="30"  HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}"
+                             Text="{Binding DataContext.EditedPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Image Width="20" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
+                    <TextBox Name="PatientTel" Width="140" Height="30" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                             Text="{Binding DataContext.EditedPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+                    <Image Width="25" Height="25" Source="/Images/home-address.png" Margin="10,0,10,0"/>
+                    <TextBox Name="PatientAddress" Width="325" Height="30" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="地址" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                             Text="{Binding DataContext.EditedPrescription.Patient.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal">
+                    <Image Width="21" Height="25" Source="/Images/email.png" Margin="12,0,10,0"/>
+                    <TextBox Name="PatientEmail" Width="325" Height="30" Margin="1,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="電子信箱" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                             Text="{Binding DataContext.EditedPrescription.Patient.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
+                    <Image Width="21" Height="25" Source="/Images/line.png" Margin="12,0,10,0"/>
+                    <TextBox Name="PatientLine" Width="325" Height="30" Margin="1,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="Line ID" FontSize="16" Foreground="{StaticResource ForeGround}" 
+                             Text="{Binding DataContext.EditedPrescription.Patient.Line, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel  Orientation="Vertical" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Margin="10,0,0,0">
+                    <Label Content="聯絡備註" FontSize="16" Foreground="{StaticResource ForeGround}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBox Height="165" Width="265" VerticalContentAlignment="Top" Text="{Binding DataContext.EditedPrescription.Patient.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap" 
+                                 AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="PreviewKeyDown">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel  Orientation="Vertical" Margin="10,0,0,0"  Grid.Row="0" Grid.RowSpan="3" Grid.Column="2">
+                    <Label Content="備註" FontSize="16" Foreground="{StaticResource ForeGround}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Height="165" Width="265" VerticalContentAlignment="Top"  Text="{Binding DataContext.EditedPrescription.Patient.Note,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap"  
+                                 AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="PreviewKeyDown">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                    <ContentControl Content="{Binding}" Margin="280,0,0,0">
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    <Button Width="80" Height="30" Margin="10,0,0,10" Content="取消" Background="DimGray" BorderBrush="DimGray" Command="{Binding DataContext.CustomerRedoEdited,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    <Button Width="80" Height="30" Margin="10,0,0,10" Content="存檔" Background="IndianRed" BorderBrush="IndianRed" Command="{Binding DataContext.SavePatientData,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="NotPrescribeSummary" DataType="{x:Type local:PrescriptionRecordWindow}">
+            <DataTemplate.Resources>
+                <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label  Content="已修改" Style="{StaticResource BoldLabelContent16}" Foreground="Red" Margin="10,0,0,0" Visibility="{Binding DataContext.IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionRecordWindow}">
+                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent16}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding DataContext.IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                </DataTemplate>
+            </DataTemplate.Resources>
+            <Grid Background="{StaticResource GridBackGround}" Width="355">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label Content="藥品點數" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.MedicinePoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                    <Label Content="特材點數" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.SpecialMaterialPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="5,0,0,0" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Label Content="部分負擔" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.CopaymentPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="5,0,0,0" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                    <Label Content="藥事服務" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.MedicalServicePoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="5,0,0,0" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Label Content="申請點數" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ApplyPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="5,0,0,0" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                    <Label Content="總計點數" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.TotalPoint,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="5,0,0,0" Width="75" HorizontalContentAlignment="Right" Height="35"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Label Content="自費" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="30"/>
+                    <TextBox Text="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="70" Height="35" HorizontalContentAlignment="Right" FontSize="16" CaretBrush="Red" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Label Content="押金" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" Width="40" Height="35" HorizontalContentAlignment="Right"/>
+                    <Label Content="實收" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" Width="42" Height="35" HorizontalContentAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                    <ContentControl Content="{Binding}" Margin="10,0,0,0">
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    <Button Content="刪除" Command="{Binding DataContext.Delete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="Red" BorderBrush="Red" Margin="10,5,0,0"/>
+                    <Button Content="復原編輯" Command="{Binding DataContext.RedoEdit,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="DimGray" BorderBrush="DimGray" Margin="10,5,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="編輯完成" Command="{Binding DataContext.EditComplete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,5,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="PrescribeSummary" DataType="{x:Type local:PrescriptionEditWindow}">
             <DataTemplate.Resources>
@@ -99,60 +358,81 @@
                     <Label  Content="未修改" Style="{StaticResource BoldLabelContent18}" Foreground="DimGray" Margin="10,0,0,0" Visibility="{Binding DataContext.IsEdit,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter},RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 </DataTemplate>
             </DataTemplate.Resources>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="自費" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="10,0,0,0" Width="70" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}"/>
-                <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70"/>
-                <Rectangle Width="60" Margin="697,0,10,0"/>
-                <ContentControl Content="{Binding}" Margin="10,0,0,0">
-                    <ContentControl.Style>
-                        <Style TargetType="{x:Type ContentControl}">
-                            <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentControl.Style>
-                </ContentControl>
-                <Button Content="復原編輯" Command="{Binding DataContext.RedoEdit,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="編輯完成" Command="{Binding DataContext.EditComplete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
+            <Grid Background="{StaticResource GridBackGround}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,0,0">
+                    <Label Content="自費" Style="{StaticResource BoldLabelContent18}" Height="35"/>
+                    <TextBox Text="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="130" Height="35" HorizontalContentAlignment="Right" FontSize="16" CaretBrush="Red" Foreground="{StaticResource ForeGround}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Label Content="實收" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Foreground="{StaticResource ForeGround}"/>
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.ActualReceive,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0" Width="70" HorizontalContentAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="4">
+                    <ContentControl Content="{Binding}" Margin="20,0,10,0">
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.IsEdit, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    <Button Content="刪除" Command="{Binding DataContext.Delete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="Red" BorderBrush="Red" Margin="10,0,0,0"/>
+                    <Button Content="復原編輯" Command="{Binding DataContext.RedoEdit,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="DimGray" BorderBrush="DimGray" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="編輯完成" Command="{Binding DataContext.EditComplete,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Background="IndianRed" BorderBrush="IndianRed" Margin="10,0,0,0" IsEnabled="{Binding IsEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
-        <Grid Width="1340" Height="675">
+        <Grid Width="1340" Height="800">
             <Grid.RowDefinitions>
-                <RowDefinition Height="55"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition Height="165"/>
-                <RowDefinition Height="400"/>
-                <RowDefinition Height="55"/>
+                <RowDefinition />
+                <RowDefinition Height="250"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="965"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" Orientation="Horizontal">
                 <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,0,0"/>
-                <Label Width="115" Height="35" Margin="0,10,10,10" Content="{Binding EditedPrescription.Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                <Label Width="115" Height="35" Margin="0,0,10,0" Content="{Binding EditedPrescription.Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                 <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,0,0"/>
-                <Label Width="120" Height="35" Margin="0,10,10,10"  Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Name,UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Width="120" Height="35" Margin="0,0,10,0"  Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Name,UpdateSourceTrigger=PropertyChanged}"/>
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,0,0"/>
-                <Label Width="100" Height="35" Margin="0,10,10,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
+                <Label Width="100" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
                 <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,0,0"/>
-                <Label Width="110" Height="35" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.CellPhone, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Width="110" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.CellPhone, UpdateSourceTrigger=PropertyChanged}"/>
                 <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,0,0"/>
-                <Label Width="120" Height="35" Margin="0,10,20,10" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Width="120" Height="35" Margin="0,0,20,0" Style="{StaticResource BoldLabelContent18}" Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"/>
                 <ContentControl Content="{Binding}" Margin="10,10,10,0">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding DataContext.EditedPrescription.PrescriptionStatus.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
+                                <DataTrigger Binding="{Binding DataContext.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="false">
                                     <Setter Property="ContentTemplate" Value="{StaticResource GetCardButtonsArea}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding DataContext.EditedPrescription.PrescriptionStatus.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
+                                <DataTrigger Binding="{Binding DataContext.CanMakeUp, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="true">
                                     <Setter Property="ContentTemplate" Value="{StaticResource NoCardButtonsArea}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -160,7 +440,7 @@
                     </ContentControl.Style>
                 </ContentControl>
             </StackPanel>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -305,13 +585,22 @@
                         </TextBox.InputBindings>
                     </TextBox>
                     <Label Content="領藥次數" Style="{StaticResource BoldLabelContent18}" Margin="15,0,0,0"/>
-                    <TextBox x:Name="ChronicTotal" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1"
+                    <TextBox x:Name="ChronicTotal" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1" IsReadOnly="{Binding ChronicTimesCanEdit,UpdateSourceTrigger=PropertyChanged}" IsReadOnlyCaretVisible="False"
                              Text="{Binding EditedPrescription.ChronicTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputMethod.IsInputMethodEnabled="False">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </TextBox>
                     <Label Content=" 一 " Style="{StaticResource BoldLabelContent18}"/>
-                    <TextBox x:Name="ChronicSequence" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1"
-                             Text="{Binding EditedPrescription.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" >
-                        
+                    <TextBox x:Name="ChronicSequence" Width="66" Height="35" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Red" MaxLength="1" 
+                             IsReadOnly="{Binding ChronicTimesCanEdit,UpdateSourceTrigger=PropertyChanged}" IsReadOnlyCaretVisible="False" Text="{Binding EditedPrescription.ChronicSeq, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <command:EventToCommand Command="{Binding DataChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="10" Orientation="Horizontal">
@@ -352,8 +641,8 @@
                     </ComboBox>
                 </StackPanel>
             </Grid>
-            <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" SelectedItem="{Binding EditedPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" CanUserAddRows="False"
-                          AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
+            <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" SelectedItem="{Binding EditedPrescription.SelectedMedicine, Mode=TwoWay, Converter={StaticResource SentinelConverter}}" CanUserAddRows="False" Width="1320"
+                          AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AllowDrop="True"
                           FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding EditedPrescription.Medicines, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -418,6 +707,7 @@
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="PrescriptionMedicines_PreviewMouseLeftButtonDown"/>
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="Foreground" Value="#FF424040" />
@@ -503,7 +793,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="40" Header="庫存" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Inventory,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn MinWidth="40" Header="可用量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding UsableAmount,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -528,16 +818,37 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <ContentControl Grid.Row="3" Content="{Binding}" Margin="10,0,10,0">
+            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" Margin="10,10,0,10">
+                <StackPanel Orientation="Horizontal" Height="35" Background="{StaticResource GridBackGround}">
+                    <RadioButton GroupName="CusHistoryGroup" Content="顧客資料" IsChecked="{Binding Path=SelectedDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <RadioButton GroupName="CusHistoryGroup" Content="藥品修改紀錄" IsChecked="{Binding Path=SelectedDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+                <ContentControl Content="{Binding}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetail}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataContext.SelectedDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option1">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetail}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DataContext.SelectedDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option2">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionEditRecord}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </StackPanel>
+            <ContentControl Content="{Binding}" Grid.Row="3" Grid.Column="1" Margin="0,10,0,10">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NotPrescribeSummary}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding EditedPrescription.IsPrescribe, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PrescribeSummary}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding EditedPrescription.IsPrescribe, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                            <DataTrigger Binding="{Binding DataContext.SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option1">
                                 <Setter Property="ContentTemplate" Value="{StaticResource NotPrescribeSummary}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Option2">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PrescribeSummary}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

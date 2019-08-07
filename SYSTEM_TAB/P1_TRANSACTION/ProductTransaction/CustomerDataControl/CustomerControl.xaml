@@ -15,28 +15,30 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <Label Content="AAAA" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="16" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" FontSize="25" Foreground="Black" Margin="10,0,0,5"/>
+            <Label Content="{Binding Customer.Name}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black" Margin="10,0,0,0"/>
+            <Label Content="{Binding Customer.Old}" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" FontSize="25" Foreground="Black" Margin="10,0,0,5"/>
             <Label Content="歲" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" FontSize="25" Foreground="Black" Margin="0,0,0,5"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="生日" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="生日" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+            <Label Content="{Binding Customer.Birth}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
             <Label Content="身分證" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="A123456789" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+            <Label Content="{Binding Customer.IDNumber}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="家電" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="03-1234567" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+            <Label Content="{Binding Customer.Phone}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
             <Label Content="手機" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="0912345678" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+            <Label Content="{Binding Customer.CellPhone}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="點數" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="1000" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <Label Content="欠款 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="IndianRed" Margin="10,0,0,0"/>
-            <Label Content="200" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="IndianRed" Margin="10,0,0,0"/>
-            <Button Width="80" Content="還款" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ToNextStatusCommand}"/>
+            <Label Content="{Binding Customer.Point}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Customer.HasOwnMoney, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Label Content="欠款 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="IndianRed" Margin="10,0,0,0"/>
+                <Label Content="{Binding Customer.Birth}" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="IndianRed" Margin="10,0,0,0"/>
+                <Button Width="80" Content="還款" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ReturnMoneyCommand}"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="客群" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
@@ -44,7 +46,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="備註" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-            <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="410" Margin="10,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
+            <TextBox Text="{Binding Customer.Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="410" Margin="10,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
         </StackPanel>
     </Grid>
 </UserControl>

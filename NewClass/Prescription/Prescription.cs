@@ -12,6 +12,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
@@ -66,7 +67,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = new Customer();
         }
 
-        public Prescription(DataRow r, PrescriptionType type, bool? reserveSend = null)
+        public Prescription(DataRow r, PrescriptionType type)
         {
             if (type.Equals(PrescriptionType.ChronicReserve))
             {
@@ -111,7 +112,23 @@ namespace His_Pos.NewClass.Prescription
                 case PrescriptionType.ChronicReserve:
                     Medicines = new Medicines();
                     Medicines.GetDataByReserveId(int.Parse(SourceId));
-                    PrescriptionStatus.ReserveSend = reserveSend;
+                    PrescriptionStatus.OrderStatus = "備藥狀態:";
+                    switch (r.Field<string>("MedPrepareStatus"))
+                    {
+                        case "N":
+                            PrescriptionStatus.OrderStatus += "未處理";
+                            break;
+                        case "D":
+                            PrescriptionStatus.OrderStatus += "已備藥";
+                            break;
+                        default:
+                            PrescriptionStatus.OrderStatus += "不備藥";
+                            break;
+                    }
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Equals("已備藥");
+                    OrderContent = PrescriptionStatus.OrderStatus;
+                    if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
+                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
                     break;
                 default:
                     Medicines = new Medicines();
@@ -122,6 +139,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 AdjustDate = null;
             }
+            Type = type;
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -482,13 +500,34 @@ namespace His_Pos.NewClass.Prescription
             {
                 Set(() => IsBuckle, ref isBuckle, value);
                 if (Medicines is null || !Medicines.Any()) return;
-                Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
+                MainWindow.ServerConnection.OpenConnection();
+                switch (Type)
+                {
+                    case PrescriptionType.ChronicReserve:
+                        Medicines.Update(IsBuckle, int.Parse(SourceId));
+                        break;
+                    default:
+                        Medicines.Update(IsBuckle, ID);
+                        break;
+                }
+                MainWindow.ServerConnection.CloseConnection();
             }
         }
+
         public int DeclareFileID { get; }
         public int WriteCardSuccess { get; set; }
         private List<Pdata> Details { get; set; }
         public DateTime? InsertTime { get; set; }
+
+        private string orderContent;
+        public string OrderContent
+        {
+            get => orderContent;
+            set
+            {
+                Set(() => OrderContent, ref orderContent, value);
+            }
+        }
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -620,6 +659,7 @@ namespace His_Pos.NewClass.Prescription
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
         }
+
         private bool CheckIsChronic()
         {
             if (AdjustCase is null) return false;
@@ -716,7 +756,7 @@ namespace His_Pos.NewClass.Prescription
             CreateMedicinesDetail();
             if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
-            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1);
+            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1,(DateTime)AdjustDate);
             Details.Add(medicalService);
             if (CheckNotNormalPrescription()) return;
             var dailyPrice = CheckIfSimpleFormDeclare();
@@ -733,7 +773,7 @@ namespace His_Pos.NewClass.Prescription
                 d.P8 = $"{0.00:0000000.00}";
                 d.P9 = "00000000";
             }
-            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays);
+            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays,(DateTime)AdjustDate);
             Details.Add(simpleForm);
         }
 
@@ -742,10 +782,10 @@ namespace His_Pos.NewClass.Prescription
             var serialNumber = 1;
             foreach (var med in Medicines.GetDeclare())
             {
-                Details.Add(new Pdata(med, serialNumber.ToString()));
+                Details.Add(new Pdata(med, serialNumber.ToString(),(DateTime)AdjustDate));
                 serialNumber++;
             }
-            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty)));
+            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty,(DateTime)AdjustDate)));
         }
 
         private bool CheckNotNormalPrescription()
@@ -883,7 +923,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateReceiptParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);
@@ -892,7 +940,15 @@ namespace His_Pos.NewClass.Prescription
         }
         private void SetDepositReportViewer(ReportViewer rptViewer)
         {
-            rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = PrescriptionService.CreateDepositSheetParameters(this);
             rptViewer.LocalReport.SetParameters(parameters);
@@ -1492,7 +1548,6 @@ namespace His_Pos.NewClass.Prescription
         public void SetDetail()
         {
             CountPrescriptionPoint();
-            CountSelfPay();
             PrescriptionPoint.CountAmountsPay();
             SetPrescriptionDetail();//產生藥品資料
             SetValue();
@@ -1505,13 +1560,17 @@ namespace His_Pos.NewClass.Prescription
 
         public string CheckMedicinesNegativeStock()
         {
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID);
+            MainWindow.ServerConnection.OpenConnection();
+            var usableAmountList = CheckUsableMedicinesByType();
+            MainWindow.ServerConnection.CloseConnection();
+            Medicines.CheckUsableAmount(usableAmountList);
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList);
         }
 
         public void CountSelfPay()
         {
             var selfPay = Medicines.CountSelfPay();
-            if (selfPay > 0)
+            if (selfPay >= 0)
                 PrescriptionPoint.AmountSelfPay = selfPay;
         }
 
@@ -1562,6 +1621,26 @@ namespace His_Pos.NewClass.Prescription
                     Medicines.GetDataByPrescriptionId(ID);
                     break;
             }
+        }
+
+        public MedicineInventoryStructs CheckUsableMedicinesByType()
+        {
+            var usableInventoryStructs = new MedicineInventoryStructs();
+            switch (Type)
+            {
+                case PrescriptionType.ChronicRegister:
+                    usableInventoryStructs.GetUsableAmountByPrescriptionID(ID);
+                    break;
+                case PrescriptionType.ChronicReserve:
+                    usableInventoryStructs.GetUsableAmountByReserveID(int.Parse(SourceId));
+                    break;
+            }
+            return usableInventoryStructs;
+        }
+
+        public string CheckChronicMedicinesNegativeStock()
+        {
+            throw new NotImplementedException();
         }
     }
 }

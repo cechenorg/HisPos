@@ -15,6 +15,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
@@ -164,7 +165,6 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.商品查詢):
                     break;
-
                 case nameof(FeatureItem.進退貨管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
@@ -172,43 +172,26 @@ namespace His_Pos.ChromeTabViewModel
                     //    return;
                     //}
                     break;
-
                 case nameof(FeatureItem.進退貨紀錄):
                     break;
-
                 case nameof(FeatureItem.新增盤點):
                     break;
-
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
-
                 case nameof(FeatureItem.商品類別管理):
                     break;
-
                 case nameof(FeatureItem.供應商管理):
                     break;
-
                 case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
-
                 case nameof(FeatureItem.員工管理):
                     break;
                 case nameof(FeatureItem.顧客管理):
                     break;
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
-
-                case nameof(FeatureItem.上下班打卡):
-                    break;
-
-                case nameof(FeatureItem.排班管理):
-                    break;
-
                 case nameof(FeatureItem.審核管理):
-                    break;
-
-                case nameof(FeatureItem.藥袋管理):
                     break;
                 case nameof(FeatureItem.藥局管理):
                     break;
@@ -231,6 +214,8 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.申報院所點數總表):
                     break;
                 case nameof(FeatureItem.盤點計畫):
+                    break;
+                case nameof(FeatureItem.藥袋查詢):
                     break;
                 default:
                     return;
@@ -259,7 +244,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.處方查詢):
-                    newTab = new PrescriptionSearchViewModelRe() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionSearchViewModel() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.匯出申報檔):
@@ -288,6 +273,10 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
+                case nameof(FeatureItem.藥袋查詢):
+                    newTab = new MedBagViewModel() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
+                    break;
+
                 case nameof(FeatureItem.進退貨管理):
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseReturn;
                     break;
@@ -297,11 +286,11 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
-                    newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[3], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[4], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.櫃位管理):
-                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[2].Functions[4], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[2].Functions[5], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 //盤點

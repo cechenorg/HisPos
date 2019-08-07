@@ -42,7 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(MedicineSetGrid.CurrentCell.Item is null) return;
             if (MedicineSetGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = MedicineSetGrid.Items.Count;

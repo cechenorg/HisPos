@@ -287,13 +287,13 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnIngredient;
             
-            private global::System.Data.DataColumn columnIsFrozen;
-            
             private global::System.Data.DataColumn columnIsControl;
             
             private global::System.Data.DataColumn columnID;
             
             private global::System.Data.DataColumn columnControlLevel;
+            
+            private global::System.Data.DataColumn columnUnit;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -362,14 +362,6 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn IsFrozenColumn {
-                get {
-                    return this.columnIsFrozen;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn IsControlColumn {
                 get {
                     return this.columnIsControl;
@@ -389,6 +381,14 @@ namespace His_Pos.RDLC {
             public global::System.Data.DataColumn ControlLevelColumn {
                 get {
                     return this.columnControlLevel;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn UnitColumn {
+                get {
+                    return this.columnUnit;
                 }
             }
             
@@ -429,17 +429,17 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool IsFrozen, bool IsControl, string ID, string ControlLevel) {
+            public MedicineTagRow AddMedicineTagRow(string FirstLetter, string EnglishName, string ChineseName, string Ingredient, bool IsControl, string ID, string ControlLevel, string Unit) {
                 MedicineTagRow rowMedicineTagRow = ((MedicineTagRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FirstLetter,
                         EnglishName,
                         ChineseName,
                         Ingredient,
-                        IsFrozen,
                         IsControl,
                         ID,
-                        ControlLevel};
+                        ControlLevel,
+                        Unit};
                 rowMedicineTagRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMedicineTagRow);
                 return rowMedicineTagRow;
@@ -466,10 +466,10 @@ namespace His_Pos.RDLC {
                 this.columnEnglishName = base.Columns["EnglishName"];
                 this.columnChineseName = base.Columns["ChineseName"];
                 this.columnIngredient = base.Columns["Ingredient"];
-                this.columnIsFrozen = base.Columns["IsFrozen"];
                 this.columnIsControl = base.Columns["IsControl"];
                 this.columnID = base.Columns["ID"];
                 this.columnControlLevel = base.Columns["ControlLevel"];
+                this.columnUnit = base.Columns["Unit"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -483,16 +483,14 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnChineseName);
                 this.columnIngredient = new global::System.Data.DataColumn("Ingredient", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIngredient);
-                this.columnIsFrozen = new global::System.Data.DataColumn("IsFrozen", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIsFrozen);
                 this.columnIsControl = new global::System.Data.DataColumn("IsControl", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIsControl);
                 this.columnID = new global::System.Data.DataColumn("ID", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnID);
                 this.columnControlLevel = new global::System.Data.DataColumn("ControlLevel", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnControlLevel);
-                this.columnIsFrozen.AllowDBNull = false;
-                this.columnIsFrozen.DefaultValue = ((bool)(false));
+                this.columnUnit = new global::System.Data.DataColumn("Unit", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUnit);
                 this.columnIsControl.AllowDBNull = false;
                 this.columnIsControl.DefaultValue = ((bool)(false));
             }
@@ -701,17 +699,6 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsFrozen {
-                get {
-                    return ((bool)(this[this.tableMedicineTag.IsFrozenColumn]));
-                }
-                set {
-                    this[this.tableMedicineTag.IsFrozenColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsControl {
                 get {
                     return ((bool)(this[this.tableMedicineTag.IsControlColumn]));
@@ -750,6 +737,22 @@ namespace His_Pos.RDLC {
                 }
                 set {
                     this[this.tableMedicineTag.ControlLevelColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Unit {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicineTag.UnitColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'MedicineTag\' 中資料行 \'Unit\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicineTag.UnitColumn] = value;
                 }
             }
             
@@ -823,6 +826,18 @@ namespace His_Pos.RDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetControlLevelNull() {
                 this[this.tableMedicineTag.ControlLevelColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsUnitNull() {
+                return this.IsNull(this.tableMedicineTag.UnitColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetUnitNull() {
+                this[this.tableMedicineTag.UnitColumn] = global::System.Convert.DBNull;
             }
         }
         

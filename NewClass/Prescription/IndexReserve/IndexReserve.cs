@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     break;
                 case "F":
                     PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                    IsNoSend = true;
+                    isNoSend = true;
                     break; 
             }
             switch (r.Field<string>("CallStatus"))
@@ -84,6 +84,22 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             set
             {
                 Set(() => IsNoSend, ref isNoSend, value);
+                if (IsNoSend) {
+                    if (PrepareMedStatus == IndexPrepareMedType.Prepare)
+                    {
+                        ConfirmWindow confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
+                        if ((bool)confirmWindow.DialogResult)
+                        {
+                            PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                            this.SaveStatus();
+                        }
+                        else
+                            IsNoSend = false;
+                    }
+                    else
+                        PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                    this.SaveStatus(); 
+                } 
             }
         }
 
@@ -142,16 +158,19 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public void GetIndexDetail() {
             IndexReserveDetailCollection.GetDataById(Id);
         }
+        public void GetIndexSendDetail() {
+            IndexReserveDetailCollection.GetSendDataById(Id); 
+        }
         public bool StoreOrderToSingde() {
             int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
             bool result = false;
             string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
             this.StoOrdID = newStoOrdID;
-            string note = "";
+            string note = "調劑日:" + AdjustDate.AddYears(-1911).ToString("yyy-MM-dd") + "\r\n";
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                note += $"{IndexReserveDetailCollection[j].ID} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
+                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.PadRight(20).Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
@@ -178,7 +197,15 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A6.rdlc";
+                    break;
+                default:
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+                    break;
+            }
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = CreateReserveMedicinesSheetParameters();
             rptViewer.LocalReport.SetParameters(parameters);
@@ -197,7 +224,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}")
+                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }
 

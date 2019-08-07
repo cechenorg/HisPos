@@ -217,8 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            if (CheckCardNotNull())
-                NoCardPres.GetNoCardByCusId(Patient.ID);
+            NoCardPres.GetNoCardByCusId(Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -320,7 +319,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 GetMedicalNumber(pre);
                 return true;
             }
-            return AskErrorUpload();
+            var result = false;
+            Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
+            return result;
         }
 
         private void GetMedicalNumber(Prescription pre)

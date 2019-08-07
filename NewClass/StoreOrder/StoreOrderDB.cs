@@ -181,7 +181,7 @@ namespace His_Pos.NewClass.StoreOrder
                 detailId++;  
             }  
             return storeOrderDetailTable;
-        }
+        } 
         public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
         {
             int detailId = 1;
@@ -760,6 +760,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
         }
-
+        internal static void UpdateDetailByStoOrdID(PrescriptionSendDatas prescriptionSendDatas,string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>(); 
+            DataBaseFunction.AddSqlParameter(parameters, "STOORD_ID", storeOrderID);
+            DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetPrescriptionOrderDetail(prescriptionSendDatas));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
+        }
+         
     }
 }

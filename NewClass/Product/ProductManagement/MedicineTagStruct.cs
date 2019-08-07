@@ -17,11 +17,11 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public string EnglishName { get; set; }
         public bool IsControl { get; set; }
         public int? ControlLevel { get; set; }
-        public bool IsFrozen { get; set; }
         public string Ingredient { get; set; }
+        public string Unit { get; set; }
         #endregion
 
-        public MedicineTagStruct(string iD, string chineseName, string englishName, bool isControl, int? controlLevel, bool isFrozen, string ingredient)
+        public MedicineTagStruct(string iD, string chineseName, string englishName, bool isControl, int? controlLevel, string ingredient)
         {
             var temp = Strings.StrConv(englishName, VbStrConv.Narrow, 0).Replace("\"", "");
 
@@ -38,13 +38,29 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 FirstLetter = "";
                 EnglishName = "";
             }
-
+            
             ID = iD;
             ChineseName = Strings.StrConv(chineseName, VbStrConv.Narrow, 0).Replace("\"", "");
             IsControl = isControl;
             ControlLevel = controlLevel;
-            IsFrozen = isFrozen;
             Ingredient = ingredient;
+            Unit = "";
+
+            regex = new Regex("[a-zA-Z()= ]* ([0-9.]+) ([a-zA-Z/]*)");
+
+            var splitIngredient = ingredient.Split('+');
+
+            foreach (var i in splitIngredient)
+            {
+                match = regex.Match(i.Trim());
+                if(string.IsNullOrEmpty(match.Groups[1].Value)) continue;
+                double amount = double.Parse(match.Groups[1].Value);
+
+                if (!Unit.Equals("")) Unit += "/";
+                Unit += amount.ToString("0.##");
+            }
+
+            Unit += " " + match.Groups[2].Value;
         }
     }
 }

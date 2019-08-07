@@ -77,7 +77,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public DateTime AdjustDate { get; set; }
         public bool IsRead { get; set; }
         public abstract void Print();
-        public abstract NewClass.Prescription.Prescription CreatePrescription();
+        public abstract Prescription CreatePrescription();
         public abstract void GetMedicines();
     }
 }

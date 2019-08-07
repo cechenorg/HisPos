@@ -63,6 +63,7 @@ namespace His_Pos.Class
         結帳作業 = 32,
         銷售紀錄 = 33,
         促銷管理 = 34,
+        藥袋查詢 = 35,
     }
 
     public enum StoreOrderProductType

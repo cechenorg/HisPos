@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -24,8 +25,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
         private string medBagPrinter;
         private string receiptPrinter;
         private string reportPrinter;
-
+        private string receiptForm;
         public Collection<string> Printers { get; set; }
+        public Collection<string> PrintForms { get; set; }
         public bool IsDataChanged
         {
             get { return isDataChanged; }
@@ -46,7 +48,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             get => receiptPrinter;
             set { Set(() => ReceiptPrinter, ref receiptPrinter, value); }
         }
-
+        public string ReceiptForm
+        {
+            get => receiptForm;
+            set { Set(() => ReceiptForm, ref receiptForm, value); }
+        }
         public string ReportPrinter
         {
             get => reportPrinter;
@@ -64,10 +70,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
         #region ----- Define Actions -----
         private void ConfirmChangeAction()
         {
+
             Properties.Settings.Default.MedBagPrinter = MedBagPrinter;
             Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter;
             Properties.Settings.Default.ReportPrinter = ReportPrinter;
-
+            Properties.Settings.Default.ReceiptForm = ReceiptForm;
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -84,7 +91,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
                 fileWriter.WriteLine(leftLines);
 
                 fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
-                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
+                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter + "$" + ReceiptForm);
                 fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
                 fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
             }
@@ -111,6 +118,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             {
                 Printers.Add(PrinterSettings.InstalledPrinters[i]);
             }
+
+            PrintForms = new BindingList<string> { "點陣" , "一般" };
         }
         private void RegisterCommands()
         {
@@ -127,6 +136,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             MedBagPrinter = Properties.Settings.Default.MedBagPrinter;
             ReceiptPrinter = Properties.Settings.Default.ReceiptPrinter;
             ReportPrinter = Properties.Settings.Default.ReportPrinter;
+            ReceiptForm = Properties.Settings.Default.ReceiptForm;
         }
         #endregion
     }

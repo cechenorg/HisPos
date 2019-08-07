@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -16,6 +17,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 {
     public class AdjustPharmacistViewModel : ViewModelBase
     {
+        public double WindowWidth
+        {
+            get => SystemParameters.WorkArea.Width * 0.85;
+            set { }
+        }
+        public double WindowHeight
+        {
+            get => SystemParameters.WorkArea.Height * 0.85;
+            set { }
+        }
+        public double StartTop
+        {
+            get => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
+            set { }
+        }
+        public double StartLeft
+        {
+            get => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
+            set { }
+        }
         private bool isBusy;
         public bool IsBusy
         {

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
@@ -16,6 +18,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     /// </summary>
     public partial class PrescriptionDeclareView : UserControl
     {
+        int prevRowIndex = -1;
+        public delegate Point GetDragDropPosition(IInputElement theElement);
         public PrescriptionDeclareView()
         {
             InitializeComponent();
@@ -24,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
         }
 
         private void FocusDivision(NotificationMessage msg)
@@ -177,18 +182,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             //按 Enter 下一欄
             if (e.Key != Key.Enter) return;
             e.Handled = true;
+            if(sender is null) return;
             MoveFocusNext(sender);
         }
         private void MoveFocusNext(object sender)
         {
-            if (sender is TextBox box)
-                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            if (PrescriptionMedicines.CurrentCell.Column is null) return;
-
-            var focusedCell =
-                PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            switch (sender)
+            {
+                case null:
+                    return;
+                case TextBox box:
+                    box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    break;
+            }
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             if (focusedCell is null) return;
-
             while (true)
             {
                 if (focusedCell is ContentPresenter)
@@ -204,11 +212,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
 
                 focusedCell?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                focusedCell =
-                    PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+                focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             }
 
-            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             while (firstChild is ContentPresenter)
             {
                 firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
@@ -290,7 +297,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
@@ -362,8 +369,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
-            TextBox tb = (sender as TextBox);
-            if (tb != null)
+            if (sender is TextBox tb)
             {
                 if (!tb.IsKeyboardFocusWithin)
                 {
@@ -372,6 +378,75 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
                 }
             }
+        }
+
+        private void PrescriptionMedicines_Drop(object sender, DragEventArgs e)
+        {
+            if (prevRowIndex < 0)
+                return;
+           
+            var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (index < 0)
+                return;
+            if (index == prevRowIndex)
+                return;
+            if (index == PrescriptionMedicines.Items.Count-1)
+                return;
+
+            var medicines = ((PrescriptionDeclareViewModel)DataContext).CurrentPrescription.Medicines;
+            var movedMedicine = medicines[prevRowIndex];
+            medicines.RemoveAt(prevRowIndex);
+            medicines.Insert(index, movedMedicine);
+            ((PrescriptionDeclareViewModel)DataContext).CurrentPrescription.Medicines.ReOrder();
+        }
+
+        private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            prevRowIndex = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (prevRowIndex < 0)
+                return;
+            PrescriptionMedicines.SelectedIndex = prevRowIndex;
+
+            if (!(PrescriptionMedicines.Items[prevRowIndex] is Medicine selectedEmp))
+                return;
+
+            var dragDropEffects = DragDropEffects.Move;
+
+            if (DragDrop.DoDragDrop(PrescriptionMedicines, selectedEmp, dragDropEffects) != DragDropEffects.None)
+            {
+                PrescriptionMedicines.SelectedItem = selectedEmp;
+            }
+        }
+
+        private bool IsTheMouseOnTargetRow(Visual theTarget, GetDragDropPosition pos)
+        {
+            var posBounds = VisualTreeHelper.GetDescendantBounds(theTarget);
+            var theMousePos = pos((IInputElement)theTarget);
+            return posBounds.Contains(theMousePos);
+        }
+
+        private DataGridRow GetDataGridRowItem(int index)
+        {
+            if (PrescriptionMedicines.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+            return PrescriptionMedicines.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+        }
+
+        private int GetDataGridItemCurrentRowIndex(GetDragDropPosition pos)
+        {
+            var curIndex = -1;
+            for (var i = 0; i < PrescriptionMedicines.Items.Count; i++)
+            {
+                var itm = GetDataGridRowItem(i);
+                if (IsTheMouseOnTargetRow(itm, pos))
+                {
+                    curIndex = i;
+                    break;
+                }
+            }
+            return curIndex;
         }
     }
 }

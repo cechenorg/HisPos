@@ -281,7 +281,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     public class Pdata
     {
         public Pdata() { }
-        public Pdata(Medicine.Base.Medicine m, string serial)
+        public Pdata(Medicine.Base.Medicine m, string serial,DateTime adjustDate)
         {
             if (m is MedicineNHI && !m.PaySelf)
             {
@@ -295,11 +295,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P5 = m.PositionID;
                 P10 = serial;
                 P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -314,11 +315,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P6 = "105";
                 P10 = serial;
                 P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else if (m is MedicineVirtual)
             {
@@ -328,12 +330,13 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P8 = $"{0.00:0000000.00}";
                 P9 = $"{0.00:0000000}";
                 P10 = serial;
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = false;
                 BuckleAmount = 0;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             else
             {
@@ -354,12 +357,13 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
+                SendAmount = m.SendAmount;
             }
             PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
         }
 
-        public Pdata(PDataType type,string code,int percentage,int amount)
+        public Pdata(PDataType type,string code,int percentage,int amount,DateTime adjustDate)
         {
             switch (type)
             {
@@ -387,7 +391,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                             P9 = $"{59 * percentage * 0.01:00000000}";
                             break;
                     }
-                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
+                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                     P13 = P12;
                     PaySelf = false;
                     IsBuckle = true;
@@ -417,8 +421,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     P8 = $"{int.Parse(code):00000.0}";
                     P9 = $"{int.Parse(code) * amount:00000000}";
                     P11 = amount.ToString().PadLeft(2,'0');
-                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
-                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today.AddDays(amount-1));
+                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
+                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate.AddDays(amount-1));
                     PaySelf = false;
                     IsBuckle = true;
                     break;
@@ -464,5 +468,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public double? PaySelfValue { get; set; }
         [XmlIgnore]
         public int Order { get; set; }
+        [XmlIgnore]
+        public double SendAmount { get; set; }
     }
 }
