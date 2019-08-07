@@ -663,7 +663,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_PaySelfValue", pdata.PaySelfValue);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_BuckleAmount", pdata.BuckleAmount);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
-                DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", pdata.SendAmount);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", pdata.SendAmount < 0 ? 0 : pdata.SendAmount);
                 prescriptionDetailTable.Rows.Add(newRow);
             }
             return prescriptionDetailTable;
