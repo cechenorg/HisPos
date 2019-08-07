@@ -385,11 +385,19 @@ namespace His_Pos.NewClass.Medicine.Base
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
 
-        public void Update(bool buckle, int id)
+        public void Update(bool buckle, int id,PrescriptionType type)
         {
-            var idList = CreateIdList();
             SetBuckleAmount(buckle);
-            var table = MedicineDb.GetUsableAmountByPrescriptionID(id);
+            DataTable table;
+            switch (type)
+            {
+                case PrescriptionType.ChronicReserve:
+                    table = MedicineDb.GetUsableAmountByReserveID(id);
+                    break;
+                default:
+                    table = MedicineDb.GetUsableAmountByPrescriptionID(id);
+                    break;
+            }
             foreach (DataRow r in table.Rows)
             {
                 var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));

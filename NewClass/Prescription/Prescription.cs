@@ -504,10 +504,10 @@ namespace His_Pos.NewClass.Prescription
                 switch (Type)
                 {
                     case PrescriptionType.ChronicReserve:
-                        Medicines.Update(IsBuckle, int.Parse(SourceId));
+                        Medicines.Update(IsBuckle, int.Parse(SourceId),Type);
                         break;
                     default:
-                        Medicines.Update(IsBuckle, ID);
+                        Medicines.Update(IsBuckle, ID, Type);
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
@@ -926,7 +926,7 @@ namespace His_Pos.NewClass.Prescription
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A6.rdlc";
+                    rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A5.rdlc";
                     break;
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
@@ -943,7 +943,7 @@ namespace His_Pos.NewClass.Prescription
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet_A6.rdlc";
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet_A5.rdlc";
                     break;
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
