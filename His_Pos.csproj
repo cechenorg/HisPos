@@ -1957,13 +1957,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\DepositSheet_A6.rdlc">
+    <EmbeddedResource Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\HisReceipt_A6.rdlc">
+    <EmbeddedResource Include="RDLC\HisReceipt_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\ReserveSheet_A6.rdlc">
+    <EmbeddedResource Include="RDLC\ReserveSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Images\home-address.png" />

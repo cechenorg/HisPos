@@ -197,17 +197,19 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            List<ReportParameter> parameters;
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A6.rdlc";
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A5.rdlc";
+                    parameters = CreateReserveMedicinesSheetParametersA5();
                     break;
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+                    parameters = CreateReserveMedicinesSheetParameters();
                     break;
             }
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = CreateReserveMedicinesSheetParameters();
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
@@ -215,7 +217,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             rptViewer.LocalReport.Refresh();
         }
 
-        private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters() {
+        private List<ReportParameter> CreateReserveMedicinesSheetParameters() {
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -229,5 +231,19 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             };
         }
 
+        private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
+        {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("Type","預約"),
+                new ReportParameter("PatientName",CusName),
+                new ReportParameter("PatientBirthday",CusBirth.AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("PatientTel",PhoneNote),
+                new ReportParameter("Institution", InsName),
+                new ReportParameter("Division", DivName),
+                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustDay", AdjustDate.AddYears(-1911).ToString("yyy-MM-dd"))
+            };
+        }
     }
 }
