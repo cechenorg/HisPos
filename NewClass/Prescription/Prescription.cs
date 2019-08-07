@@ -501,10 +501,16 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => IsBuckle, ref isBuckle, value);
                 if (Medicines is null || !Medicines.Any()) return;
                 MainWindow.ServerConnection.OpenConnection();
-                var usableAmountList = CheckUsableMedicinesByType();
-                Medicines.Update(IsBuckle, WareHouse?.ID, AdjustDate);
+                switch (Type)
+                {
+                    case PrescriptionType.ChronicReserve:
+                        Medicines.Update(IsBuckle, int.Parse(SourceId));
+                        break;
+                    default:
+                        Medicines.Update(IsBuckle, ID);
+                        break;
+                }
                 MainWindow.ServerConnection.CloseConnection();
-                Medicines.CheckUsableAmount(usableAmountList);
             }
         }
 
@@ -653,6 +659,7 @@ namespace His_Pos.NewClass.Prescription
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
         }
+
         private bool CheckIsChronic()
         {
             if (AdjustCase is null) return false;

@@ -99,8 +99,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     break;
                 case ReserveSendType.AllSend:
                 case ReserveSendType.CoPrepare:
-                    if (IndexReserveSelectedItem.StoreOrderToSingde()) {
-                        if(IndexReserveSelectedItem.PrepareMedType == ReserveSendType.CoPrepare)
+                    if (IndexReserveSelectedItem.StoreOrderToSingde()) { 
                             PrintPackage();
                         IndexReserveCollection.Remove(IndexReserveSelectedItem);
                     }
