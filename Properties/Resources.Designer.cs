@@ -201,6 +201,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥健康網頁 的當地語系化字串。
+        /// </summary>
+        internal static string CompanyWeb {
+            get {
+                return ResourceManager.GetString("CompanyWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 管制藥品簿冊申報 的當地語系化字串。
         /// </summary>
         internal static string ControlMedicineDeclare {
@@ -760,6 +769,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 系統教學文件 的當地語系化字串。
+        /// </summary>
+        internal static string SystemTutorial {
+            get {
+                return ResourceManager.GetString("SystemTutorial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 銷售作業 的當地語系化字串。
         /// </summary>
         internal static string Transaction {
@@ -774,6 +792,15 @@ namespace His_Pos.Properties {
         internal static string TreatDateError {
             get {
                 return ResourceManager.GetString("TreatDateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 網頁連結 的當地語系化字串。
+        /// </summary>
+        internal static string Web {
+            get {
+                return ResourceManager.GetString("Web", resourceCulture);
             }
         }
         

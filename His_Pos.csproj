@@ -19,6 +19,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>C:\ClickOnceTest\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -38,8 +40,6 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -650,6 +650,10 @@
     <Compile Include="NewClass\Prescription\ICCard\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadDb.cs" />
+    <Compile Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWeb.xaml.cs">
+      <DependentUpon>CompanyWeb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWebViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -1307,6 +1311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWeb.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2114,6 +2122,7 @@
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
+    <Folder Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

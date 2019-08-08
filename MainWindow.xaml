@@ -42,6 +42,7 @@
     xmlns:productTransactionRecord="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
     xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
+    xmlns:companyWeb="clr-namespace:His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -147,6 +148,10 @@
         <DataTemplate DataType="{x:Type medBagManage:MedBagViewModel}">
             <medBagManage:MedBagView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type  companyWeb:CompanyWebViewModel}">
+            <companyWeb:CompanyWeb/>
+        </DataTemplate>
+        
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -248,6 +253,8 @@
                         <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature10" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature11" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         </StackPanel>
                 </ScrollViewer>
             </StackPanel>
