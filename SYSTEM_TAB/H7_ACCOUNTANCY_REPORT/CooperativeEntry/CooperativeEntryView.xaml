@@ -17,7 +17,7 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <Grid > 
-        <cefSharp:ChromiumWebBrowser Grid.Row="0" Address="https://github.com/cefsharp/CefSharp/wiki/Frequently-asked-questions" />
+    <Grid >
+        <cefSharp:ChromiumWebBrowser Grid.Row="0" Address="http://kaokaodepon.singde.com.tw:60000/PDF/1.pdf" />
     </Grid>
 </UserControl>
