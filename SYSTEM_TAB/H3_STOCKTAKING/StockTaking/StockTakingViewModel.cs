@@ -215,7 +215,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingProducts temp = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
             for (int i = 0; i < StockTakingResult.StockTakingProductCollection.Count; i++)
             {
-                StockTakingResult.StockTakingProductCollection[i].MedBagAmount = temp.Single(t => t.ID == StockTakingResult.StockTakingProductCollection[i].ID).MedBagAmount;
+                if(temp.Count(t => t.InvID == StockTakingResult.StockTakingProductCollection[i].InvID) == 1)
+                StockTakingResult.StockTakingProductCollection[i].MedBagAmount = temp.Single(t => t.InvID == StockTakingResult.StockTakingProductCollection[i].InvID).MedBagAmount;
             }
             //更新盤點原因
             foreach (var s in StockTakingReason.StockTakingProductCollection)

@@ -16,7 +16,8 @@
                         <Value>請於十日內持本單與健保卡、身分證明文件回藥局退費。</Value>
                         <Style>
                           <FontFamily>微軟正黑體</FontFamily>
-                          <FontSize>11pt</FontSize>
+                          <FontSize>16pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
                         </Style>
                       </TextRun>
                     </TextRuns>
@@ -26,10 +27,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox35</rd:DefaultName>
-                <Top>0.275cm</Top>
+                <Top>0.2cm</Top>
                 <Left>0.2cm</Left>
-                <Height>1.7cm</Height>
-                <Width>3.8cm</Width>
+                <Height>2.28cm</Height>
+                <Width>5.37cm</Width>
                 <Style>
                   <Border>
                     <Style>Solid</Style>
@@ -43,10 +44,10 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>2.0207cm</Top>
-            <Left>9.34803cm</Left>
-            <Height>2.25cm</Height>
-            <Width>4.2cm</Width>
+            <Top>2.53275cm</Top>
+            <Left>14.40077cm</Left>
+            <Height>2.68cm</Height>
+            <Width>5.77cm</Width>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -75,7 +76,8 @@
                     <Value>健保藥品調劑押金單</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -84,9 +86,9 @@
             </Paragraphs>
             <rd:DefaultName>Pharmacy</rd:DefaultName>
             <Top>0.32479cm</Top>
-            <Left>6.89095cm</Left>
-            <Height>0.6cm</Height>
-            <Width>4.76444cm</Width>
+            <Left>10.9cm</Left>
+            <Height>0.73229cm</Height>
+            <Width>5.2cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -103,17 +105,17 @@
                     <Value>姓名 : </Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.98624cm</Top>
-            <Left>0.97417cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.4cm</Width>
+            <Top>2.53275cm</Top>
+            <Left>1.3967cm</Left>
+            <Height>0.7cm</Height>
+            <Width>1.5cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -130,16 +132,16 @@
                     <Value>=Parameters!PatientName.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.98624cm</Top>
-            <Left>2.37417cm</Left>
-            <Height>0.6cm</Height>
+            <Top>2.53275cm</Top>
+            <Left>2.8967cm</Left>
+            <Height>0.7cm</Height>
             <Width>5.0859cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
@@ -157,17 +159,17 @@
                     <Value>調劑日期 :</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.21263cm</Top>
-            <Left>0.97417cm</Left>
-            <Height>0.57361cm</Height>
-            <Width>2.42083cm</Width>
+            <Top>4.15602cm</Top>
+            <Left>1.3967cm</Left>
+            <Height>0.7cm</Height>
+            <Width>2.66777cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border />
@@ -182,17 +184,17 @@
                     <Value>=Parameters!AdjustDate.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>16pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.21263cm</Top>
-            <Left>3.395cm</Left>
-            <Height>0.57361cm</Height>
-            <Width>4.06507cm</Width>
+            <Top>4.15602cm</Top>
+            <Left>4.13503cm</Left>
+            <Height>0.7cm</Height>
+            <Width>5.12604cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border />
@@ -207,7 +209,8 @@
                     <Value>=Parameters!Pharmacy.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -217,9 +220,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>0.32479cm</Top>
-            <Left>2.37417cm</Left>
-            <Height>0.6cm</Height>
-            <Width>4.4509cm</Width>
+            <Left>4.9cm</Left>
+            <Height>0.73229cm</Height>
+            <Width>6cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border>
@@ -236,16 +239,16 @@
                     <Value>押金金額 :</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>16pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.35788cm</Top>
-            <Left>0.97417cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>5.83044cm</Top>
+            <Left>1.3967cm</Left>
+            <Height>0.7cm</Height>
             <Width>2.42083cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
@@ -268,9 +271,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.64551cm</Top>
-            <Left>0.97417cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>7.62077cm</Top>
+            <Left>1.3967cm</Left>
+            <Height>0.7cm</Height>
             <Width>1.4cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -286,7 +289,8 @@
                     <Value>※本收據未加蓋收訖章者無效。※</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -296,10 +300,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>8.90281cm</Top>
-            <Left>3.75cm</Left>
-            <Height>0.68cm</Height>
-            <Width>7cm</Width>
+            <Top>11.77766cm</Top>
+            <Left>4.9cm</Left>
+            <Height>0.91167cm</Height>
+            <Width>11.2cm</Width>
             <ZIndex>9</ZIndex>
             <Style>
               <Border>
@@ -329,9 +333,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>PrintTime</rd:DefaultName>
-            <Top>7.00982cm</Top>
-            <Left>3.51847cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>9.46133cm</Top>
+            <Left>3.89989cm</Left>
+            <Height>0.7cm</Height>
             <Width>5.00257cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
@@ -358,9 +362,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Deposit1</rd:DefaultName>
-            <Top>5.64551cm</Top>
-            <Left>2.37417cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>7.62077cm</Top>
+            <Left>2.7967cm</Left>
+            <Height>0.7cm</Height>
             <Width>3.07567cm</Width>
             <ZIndex>11</ZIndex>
             <Style>
@@ -388,10 +392,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Deposit1</rd:DefaultName>
-            <Top>4.35788cm</Top>
-            <Left>3.395cm</Left>
-            <Height>0.57361cm</Height>
-            <Width>4.06507cm</Width>
+            <Top>5.83044cm</Top>
+            <Left>3.81753cm</Left>
+            <Height>0.7cm</Height>
+            <Width>3.56236cm</Width>
             <ZIndex>12</ZIndex>
             <Style>
               <Border>
@@ -416,9 +420,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>7.00982cm</Top>
-            <Left>0.97417cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>9.46133cm</Top>
+            <Left>1.35559cm</Left>
+            <Height>0.7cm</Height>
             <Width>2.5443cm</Width>
             <ZIndex>13</ZIndex>
             <Style>
@@ -444,9 +448,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>5.64551cm</Top>
-            <Left>5.44984cm</Left>
-            <Height>0.57361cm</Height>
+            <Top>7.64723cm</Top>
+            <Left>5.87237cm</Left>
+            <Height>0.7cm</Height>
             <Width>5.81885cm</Width>
             <ZIndex>14</ZIndex>
             <Style>
@@ -457,17 +461,17 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>9.58281cm</Height>
+        <Height>14.8cm</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
           </Border>
         </Style>
       </Body>
-      <Width>14.8cm</Width>
+      <Width>21cm</Width>
       <Page>
-        <PageHeight>10.5cm</PageHeight>
-        <PageWidth>14.8cm</PageWidth>
+        <PageHeight>14.8cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
         <LeftMargin>0cm</LeftMargin>
         <RightMargin>0cm</RightMargin>
         <TopMargin>0cm</TopMargin>

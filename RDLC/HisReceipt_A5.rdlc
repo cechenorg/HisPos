@@ -14,7 +14,8 @@
                     <Value>藥費負擔收費收據</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -23,9 +24,9 @@
             </Paragraphs>
             <rd:DefaultName>Pharmacy</rd:DefaultName>
             <Top>1cm</Top>
-            <Left>8.8cm</Left>
-            <Height>0.6cm</Height>
-            <Width>4.2cm</Width>
+            <Left>11.85cm</Left>
+            <Height>0.8cm</Height>
+            <Width>5.3cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -41,7 +42,8 @@
                     <Value>姓名 : </Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -50,8 +52,8 @@
             </Paragraphs>
             <Top>2.6cm</Top>
             <Left>1.8cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.4cm</Width>
+            <Height>0.8cm</Height>
+            <Width>1.71082cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -68,7 +70,8 @@
                     <Value>=Parameters!PatientName.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -76,9 +79,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>2.6cm</Top>
-            <Left>3.2cm</Left>
-            <Height>0.6cm</Height>
-            <Width>3.40459cm</Width>
+            <Left>3.58138cm</Left>
+            <Height>0.8cm</Height>
+            <Width>5.42578cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -95,7 +98,8 @@
                     <Value>性別:</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -103,9 +107,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>2.6cm</Top>
-            <Left>6.60459cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.2cm</Width>
+            <Left>9.00716cm</Left>
+            <Height>0.8cm</Height>
+            <Width>1.3cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -122,7 +126,8 @@
                     <Value>=Parameters!Gender.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -130,9 +135,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>2.6cm</Top>
-            <Left>7.80459cm</Left>
-            <Height>0.6cm</Height>
-            <Width>0.64792cm</Width>
+            <Left>10.30716cm</Left>
+            <Height>0.8cm</Height>
+            <Width>1.2cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -149,7 +154,8 @@
                     <Value>出生日期:</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -157,9 +163,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>2.6cm</Top>
-            <Left>8.48779cm</Left>
-            <Height>0.6cm</Height>
-            <Width>2.1825cm</Width>
+            <Left>11.50716cm</Left>
+            <Height>0.8cm</Height>
+            <Width>2.81395cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -176,7 +182,8 @@
                     <Value>=Parameters!Birthday.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -184,9 +191,9 @@
               </Paragraph>
             </Paragraphs>
             <Top>2.6cm</Top>
-            <Left>10.67029cm</Left>
-            <Height>0.6cm</Height>
-            <Width>2.42077cm</Width>
+            <Left>14.32111cm</Left>
+            <Height>0.8cm</Height>
+            <Width>3.82306cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border />
@@ -199,58 +206,46 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>調劑日期</Value>
+                    <Value>調劑日期：</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.8cm</Top>
-            <Left>1.73657cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.95cm</Width>
+            <Top>4.72333cm</Top>
+            <Left>1.8cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>2.22188cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border />
             </Style>
           </Textbox>
-          <Line Name="Line1">
-            <Top>4.4cm</Top>
-            <Left>0.99728cm</Left>
-            <Height>0cm</Height>
-            <Width>13.00272cm</Width>
-            <ZIndex>8</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Line>
           <Textbox Name="HospitalLabel">
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>釋出處方院所</Value>
+                    <Value>釋出院所：</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.8cm</Top>
-            <Left>4.18657cm</Left>
-            <Height>0.6cm</Height>
-            <Width>2.84958cm</Width>
-            <ZIndex>9</ZIndex>
+            <Top>6.17938cm</Top>
+            <Left>1.8cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>2.22188cm</Width>
+            <ZIndex>8</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -261,21 +256,21 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>釋出醫師</Value>
+                    <Value>醫師：</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.8cm</Top>
-            <Left>8.72029cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.95cm</Width>
-            <ZIndex>10</ZIndex>
+            <Top>6.17938cm</Top>
+            <Left>14.01438cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>1.27083cm</Width>
+            <ZIndex>9</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -286,21 +281,21 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>就醫卡序</Value>
+                    <Value>就醫序號：</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.76472cm</Top>
-            <Left>11.14106cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.95cm</Width>
-            <ZIndex>11</ZIndex>
+            <Top>4.72334cm</Top>
+            <Left>9.73535cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>2.2cm</Width>
+            <ZIndex>10</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -314,7 +309,8 @@
                     <Value>=Parameters!Pharmacy.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>14pt</FontSize>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -324,10 +320,10 @@
               </Paragraph>
             </Paragraphs>
             <Top>1cm</Top>
-            <Left>1.8cm</Left>
-            <Height>0.6cm</Height>
-            <Width>7cm</Width>
-            <ZIndex>12</ZIndex>
+            <Left>3.85cm</Left>
+            <Height>0.8cm</Height>
+            <Width>8cm</Width>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -340,9 +336,11 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>※此明細表茲證明該病患至本藥局繳費明細，未加蓋收訖章者無效。</Value>
+                    <Value>※此明細表茲證明該病患至本藥局繳費明細，未加蓋收訖章者無效。※</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -350,11 +348,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>9cm</Top>
-            <Left>1.9cm</Left>
-            <Height>0.6cm</Height>
-            <Width>11cm</Width>
-            <ZIndex>13</ZIndex>
+            <Top>13.00701cm</Top>
+            <Left>1.85cm</Left>
+            <Height>0.75875cm</Height>
+            <Width>17.3cm</Width>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -374,43 +372,18 @@
                     <Value>=Parameters!AdjustDate.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.4cm</Top>
-            <Left>1.5cm</Left>
-            <Height>0.57361cm</Height>
-            <Width>2.45cm</Width>
-            <ZIndex>14</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="Hospital">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!Hospital.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>4.43528cm</Top>
-            <Left>4.18657cm</Left>
-            <Height>0.57361cm</Height>
-            <Width>4.43921cm</Width>
-            <ZIndex>15</ZIndex>
+            <Top>4.72334cm</Top>
+            <Left>4.05716cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>5.67819cm</Width>
+            <ZIndex>13</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -424,18 +397,18 @@
                     <Value>=Parameters!Doctor.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.43528cm</Top>
-            <Left>8.62578cm</Left>
-            <Height>0.55305cm</Height>
-            <Width>2.48cm</Width>
-            <ZIndex>16</ZIndex>
+            <Top>6.17938cm</Top>
+            <Left>15.28521cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>3.46631cm</Width>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -449,31 +422,6 @@
                     <Value>=Parameters!MedicalNumber.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>13pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>4.43528cm</Top>
-            <Left>11.14106cm</Left>
-            <Height>0.55305cm</Height>
-            <Width>1.96751cm</Width>
-            <ZIndex>17</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="MedicineCostLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>藥品費</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
                       <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
@@ -481,357 +429,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.94458cm</Top>
-            <Left>1.70671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.36521cm</Width>
-            <ZIndex>18</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="MedicalServiceLabel1">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>藥事</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.43291cm</Top>
-            <Left>4.00671cm</Left>
-            <Height>0.5175cm</Height>
-            <Width>0.80667cm</Width>
-            <ZIndex>19</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="MedicalServiceLabel2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>服務費</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.95042cm</Top>
-            <Left>3.80671cm</Left>
-            <Height>0.49416cm</Height>
-            <Width>1.23cm</Width>
-            <ZIndex>20</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="TotalMedicalCostLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>總醫療費</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.94458cm</Top>
-            <Left>5.20671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.82944cm</Width>
-            <ZIndex>21</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="CopaymentCostLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>部分負擔</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.94458cm</Top>
-            <Left>7.10671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.7409cm</Width>
-            <ZIndex>22</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="HcPayLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>健保支付</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.94458cm</Top>
-            <Left>9.00671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.76375cm</Width>
-            <ZIndex>23</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="PaySelfLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>自費藥</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>5.94458cm</Top>
-            <Left>11.00671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.36521cm</Width>
-            <ZIndex>24</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="MedicineCost">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!MedicineCost.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>1.5cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.7cm</Width>
-            <ZIndex>25</ZIndex>
-            <Style>
-              <Border />
-            </Style>
-          </Textbox>
-          <Textbox Name="MedicalService">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!MedicalServiceCost.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>3.80671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.23cm</Width>
-            <ZIndex>26</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="TotalMedicalCost">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!TotalMedicalCost.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>5.20671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.82944cm</Width>
-            <ZIndex>27</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="Copayment">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!CopaymentCost.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>7.10671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.7409cm</Width>
-            <ZIndex>28</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="Copayment2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!HcPay.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>9.02956cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.7409cm</Width>
-            <ZIndex>29</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="SelfCost">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!SelfCost.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>6.47986cm</Top>
-            <Left>11.00671cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.36521cm</Width>
-            <ZIndex>30</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Top</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="ActualReceiveLabel">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value> 實收:</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>7.77496cm</Top>
-            <Left>2.48138cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.1cm</Width>
-            <ZIndex>31</ZIndex>
+            <Top>4.72333cm</Top>
+            <Left>11.93535cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>4.48093cm</Width>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border />
             </Style>
@@ -844,36 +446,146 @@
                   <TextRun>
                     <Value>=Parameters!ActualReceive.Value</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>7.77496cm</Top>
-            <Left>3.58138cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.96423cm</Width>
-            <ZIndex>32</ZIndex>
+            <Top>11.11167cm</Top>
+            <Left>3.5cm</Left>
+            <Height>0.8cm</Height>
+            <Width>5.02173cm</Width>
+            <ZIndex>16</ZIndex>
             <Style>
               <Border />
               <VerticalAlign>Top</VerticalAlign>
             </Style>
           </Textbox>
-          <Rectangle Name="Rectangle1">
+          <Textbox Name="Hospital">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!Hospital.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>12pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.17938cm</Top>
+            <Left>4.05716cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>9.95722cm</Width>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border />
+            </Style>
+          </Textbox>
+          <Textbox Name="HospitalLabel2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>費用明細：</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>12pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.55604cm</Top>
+            <Left>1.85cm</Left>
+            <Height>0.52361cm</Height>
+            <Width>2.22188cm</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border />
+            </Style>
+          </Textbox>
+          <Textbox Name="ActualReceiveLabel">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value> 實收:</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.11167cm</Top>
+            <Left>1.8cm</Left>
+            <Height>0.8cm</Height>
+            <Width>1.7cm</Width>
+            <ZIndex>19</ZIndex>
+            <Style>
+              <Border />
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox35">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ActualReceiveChinese.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>18pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox35</rd:DefaultName>
+            <Top>11.11167cm</Top>
+            <Left>8.52173cm</Left>
+            <Height>0.8cm</Height>
+            <Width>7.02806cm</Width>
+            <ZIndex>20</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Rectangle Name="Rectangle4">
             <ReportItems>
-              <Textbox Name="Textbox35">
+              <Textbox Name="Textbox12">
+                <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=Parameters!ActualReceiveChinese.Value</Value>
+                        <Value>藥品費</Value>
                         <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>11pt</FontSize>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
                         </Style>
                       </TextRun>
                     </TextRuns>
@@ -882,67 +594,383 @@
                     </Style>
                   </Paragraph>
                 </Paragraphs>
-                <rd:DefaultName>Textbox35</rd:DefaultName>
-                <Left>0.1cm</Left>
-                <Height>0.5cm</Height>
-                <Width>5.8cm</Width>
+                <rd:DefaultName>Textbox12</rd:DefaultName>
+                <Height>0.65292cm</Height>
+                <Width>1.87792cm</Width>
                 <Style>
                   <Border>
-                    <Style>None</Style>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox18">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>藥事服務費</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox18</rd:DefaultName>
+                <Left>1.87792cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.39417cm</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox14">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>總醫療費</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox14</rd:DefaultName>
+                <Left>4.27209cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.09722cm</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox16">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>健保支付</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox16</rd:DefaultName>
+                <Left>6.36931cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.15542cm</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox22">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>部分負擔</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox22</rd:DefaultName>
+                <Left>8.52473cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>1.91792cm</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="MedicineCost">
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!MedicineCost.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <Top>0.65292cm</Top>
+                <Height>0.65292cm</Height>
+                <Width>1.87792cm</Width>
+                <ZIndex>5</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="MedicalService">
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!MedicalServiceCost.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <Top>0.65292cm</Top>
+                <Left>1.87792cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.39417cm</Width>
+                <ZIndex>6</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox15">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!TotalMedicalCost.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox15</rd:DefaultName>
+                <Top>0.65292cm</Top>
+                <Left>4.27209cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.09722cm</Width>
+                <ZIndex>7</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox17">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!HcPay.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox17</rd:DefaultName>
+                <Top>0.65292cm</Top>
+                <Left>6.36931cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>2.15542cm</Width>
+                <ZIndex>8</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox51">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!CopaymentCost.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox51</rd:DefaultName>
+                <Top>0.65292cm</Top>
+                <Left>8.52473cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>1.91792cm</Width>
+                <ZIndex>9</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox25">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!SelfCost.Value</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox25</rd:DefaultName>
+                <Top>0.65292cm</Top>
+                <Left>10.44265cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>1.56954cm</Width>
+                <ZIndex>10</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox24">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>自費</Value>
+                        <Style>
+                          <FontFamily>微軟正黑體</FontFamily>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox24</rd:DefaultName>
+                <Left>10.44265cm</Left>
+                <Height>0.65292cm</Height>
+                <Width>1.56954cm</Width>
+                <ZIndex>11</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
                   </Border>
                   <VerticalAlign>Middle</VerticalAlign>
                 </Style>
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>7.77496cm</Top>
-            <Left>5.61617cm</Left>
-            <Height>0.5cm</Height>
-            <Width>5.9cm</Width>
-            <ZIndex>33</ZIndex>
+            <Top>8.18548cm</Top>
+            <Left>1.85cm</Left>
+            <Height>1.30584cm</Height>
+            <Width>12.01218cm</Width>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
-                <Width>0.5pt</Width>
               </Border>
-              <TopBorder>
-                <Width>0.5pt</Width>
-              </TopBorder>
-              <BottomBorder>
-                <Width>0.5pt</Width>
-              </BottomBorder>
-              <LeftBorder>
-                <Width>0.5pt</Width>
-              </LeftBorder>
-              <RightBorder>
-                <Width>0.5pt</Width>
-              </RightBorder>
             </Style>
           </Rectangle>
-          <Line Name="Line3">
-            <Top>6.47986cm</Top>
-            <Left>0.89864cm</Left>
-            <Height>0cm</Height>
-            <Width>13.00272cm</Width>
-            <ZIndex>34</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Line>
         </ReportItems>
-        <Height>10.5cm</Height>
+        <Height>14.8cm</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
           </Border>
         </Style>
       </Body>
-      <Width>14.8cm</Width>
+      <Width>21cm</Width>
       <Page>
-        <PageHeight>10.5cm</PageHeight>
-        <PageWidth>14.8cm</PageWidth>
+        <PageHeight>14.8cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
         <LeftMargin>0cm</LeftMargin>
         <RightMargin>0cm</RightMargin>
         <TopMargin>0cm</TopMargin>

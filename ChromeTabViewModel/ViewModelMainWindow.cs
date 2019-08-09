@@ -340,7 +340,7 @@ namespace His_Pos.ChromeTabViewModel
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    Export(r.LocalReport, 14.8, 10.5);
+                    Export(r.LocalReport, 21, 14.8);
                     break;
                 default:
                     Export(r.LocalReport, 25.4, 9.3);
@@ -354,7 +354,7 @@ namespace His_Pos.ChromeTabViewModel
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    Export(r.LocalReport, 14.8, 10.5);
+                    Export(r.LocalReport, 21, 14.8);
                     break;
                 default:
                     Export(r.LocalReport, 25.4, 9.3);
@@ -376,7 +376,7 @@ namespace His_Pos.ChromeTabViewModel
             switch (Properties.Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    Export(r.LocalReport, 14.8, 10.5);
+                    Export(r.LocalReport, 21, 14.8);
                     break;
                 default:
                     Export(r.LocalReport, 25.4, 9.3);

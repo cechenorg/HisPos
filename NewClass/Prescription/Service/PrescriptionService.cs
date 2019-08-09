@@ -526,24 +526,26 @@ namespace His_Pos.NewClass.Prescription.Service
             var medBagMedicines = new ReserveMedicines(prescriptionSendDatas);
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            List<ReportParameter> parameters;
             switch (Settings.Default.ReceiptForm)
             {
                 case "一般":
-                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A6.rdlc";
+                    rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A5.rdlc";
+                    parameters = CreateReserveMedicinesSheetParametersA5();
                     break;
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
+                    parameters = CreateReserveMedicinesSheetParameters();
                     break;
             }
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = CreateReserveMedicinesSheetParameters();
             rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.ProcessingMode = ProcessingMode.Local;
             rptViewer.LocalReport.DataSources.Clear();
             var rd = new ReportDataSource("ReserveMedicinesDataSet", dataTable);
             rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
         }
-        private IEnumerable<ReportParameter> CreateReserveMedicinesSheetParameters()
+        private List<ReportParameter> CreateReserveMedicinesSheetParameters()
         {
             return new List<ReportParameter>
             {
@@ -555,6 +557,20 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("Division", Current.Division.Name),
                 new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(19).ToString("yyy-MM-dd")}"),
                 new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).Day.ToString())
+            };
+        }
+        private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
+        {
+            return new List<ReportParameter>
+            {
+                new ReportParameter("Type","登錄"),
+                new ReportParameter("PatientName",Current.Patient.Name),
+                new ReportParameter("PatientBirthday",((DateTime)Current.Patient.Birthday).AddYears(-1911).ToString("yyy-MM-dd")),
+                new ReportParameter("PatientTel",Current.Patient.ContactNote),
+                new ReportParameter("Institution", Current.Institution.Name),
+                new ReportParameter("Division", Current.Division.Name),
+                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(19).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd"))
             };
         }
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
