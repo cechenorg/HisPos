@@ -2122,7 +2122,7 @@
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
-    <Folder Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\" />
+    <Folder Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\AdjustTutorial\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
