@@ -611,6 +611,9 @@
     <Compile Include="NewClass\Trade\TradeTabEnum.cs" />
     <Compile Include="NewClass\Trade\Transaction.cs" />
     <Compile Include="NewClass\Trade\TransactionTypeEnum.cs" />
+    <Compile Include="NewClass\Tutorial\Tutorial.cs" />
+    <Compile Include="NewClass\Tutorial\TutorialDb.cs" />
+    <Compile Include="NewClass\Tutorial\Tutorials.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
@@ -1086,6 +1089,11 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\SampleExcelTemplate\DefaultDataTableTemplate.cs" />
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\TutorialEnum.cs" />
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\Tutorial.xaml.cs">
+      <DependentUpon>Tutorial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\TutorialViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1786,6 +1794,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\Tutorial.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2122,7 +2134,6 @@
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
-    <Folder Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\AdjustTutorial\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
