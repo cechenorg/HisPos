@@ -107,10 +107,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             }
         }
 
-        public IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)
+        private IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)
         {
             var size = source.Count / pharmacistCount;
-            for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
+            for (var i = 0; i < Math.Ceiling(source.Count / (double)size); i++)
                 yield return new List<T>(source.Skip(size * i).Take(size));
         }
 

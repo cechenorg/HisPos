@@ -94,6 +94,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DeclarePharmacies, ref declarePharmacies, value);
             }
         }
+        private PharmacistSchedule pharmacistScheduleWithPrescriptionCount;
+        public PharmacistSchedule PharmacistScheduleWithPrescriptionCount
+        {
+            get => pharmacistScheduleWithPrescriptionCount;
+            set
+            {
+                Set(() => PharmacistScheduleWithPrescriptionCount, ref pharmacistScheduleWithPrescriptionCount, value);
+            }
+        }
+
         private PharmacistSchedule pharmacistSchedule;
         public PharmacistSchedule PharmacistSchedule
         {
@@ -236,7 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void StartAdjustPharmacistsOfDay()
         {
-            var pharmacists = GetAdjustPharmacist(false);
+            var pharmacists = GetAdjustPharmacistsOfDay();
             if (pharmacists.Count == 0)
             {
                 MessageWindow.ShowMessage("尚未設定本日藥師", MessageType.WARNING);
@@ -249,6 +259,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             BusyContent = StringRes.取得歷史處方;
             GetPrescriptions();
             MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private List<PharmacistScheduleItem> GetAdjustPharmacistsOfDay()
+        {
+            var schedule = PharmacistSchedule.Where(p => p.Date.Equals(DeclareFile.SelectedDayPreview.Date)).ToList();
+            return schedule.ToList();
         }
 
         private void AdjustPharmacistOfMonthAction()
@@ -271,7 +287,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void StartAdjustPharmacistsOfMonth()
         {
             var adjustList = CreateAdjustList();
-            var pharmacistList = GetAdjustPharmacist(true);
+            var pharmacistList = GetAdjustPharmacistsOfMonth();
             if (pharmacistList.Count == 0)
             {
                 MessageWindow.ShowMessage("尚未設定本月藥師", MessageType.WARNING);
@@ -286,6 +302,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 pre.CheckAdjustOutOfRange();
             }
             DeclareFile.SetSummary();
+        }
+
+        private List<PharmacistScheduleItem> GetAdjustPharmacistsOfMonth()
+        {
+            var schedule = PharmacistSchedule.ToList();
+            return schedule.ToList();
         }
 
         private DeclarePrescriptions CreateAdjustList()
@@ -441,31 +463,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, startDay);
             var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
+            MainWindow.ServerConnection.OpenConnection();
             PharmacistSchedule = new PharmacistSchedule();
-            PharmacistSchedule.GetPharmacistScheduleWithCount(start, last);
-        }
-
-        private List<PharmacistScheduleItem> GetAdjustPharmacist(bool month)
-        {
-            var pharmacistList = new List<PharmacistScheduleItem>();
-            var schedule = new List<PharmacistScheduleItem>();
-            if (month)
-            {
-                schedule = PharmacistSchedule.ToList();
-                foreach (var s in schedule)
-                {
-                    pharmacistList.Add(s);
-                }
-            }
-            else
-            {
-                schedule = PharmacistSchedule.Where(p => p.Date.Equals(DeclareFile.SelectedDayPreview.Date)).ToList();
-                foreach (var s in schedule)
-                {
-                    pharmacistList.Add(s);
-                }
-            }
-            return pharmacistList;
+            PharmacistSchedule.GetPharmacistSchedule(start, last);
+            PharmacistScheduleWithPrescriptionCount = new PharmacistSchedule();
+            PharmacistScheduleWithPrescriptionCount.GetPharmacistScheduleWithCount(start, last);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void Refresh()
