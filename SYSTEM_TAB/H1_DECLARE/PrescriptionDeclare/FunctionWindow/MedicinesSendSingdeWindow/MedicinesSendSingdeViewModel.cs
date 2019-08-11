@@ -15,6 +15,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         #endregion
         #region Var
         public bool IsReturn = false;
+        private bool isAllSend;
+        public bool IsAllSend
+        {
+            get => isAllSend;
+            set
+            {
+                Set(() => IsAllSend, ref isAllSend, value);
+                if (PrescriptionSendData is null) return;
+                PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines, Prescription.ID, IsAllSend);
+            }
+        }
         private PrescriptionSendDatas prescriptionSendData;
         public PrescriptionSendDatas PrescriptionSendData
         {
@@ -35,7 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
 
         private void Init() {
             PrescriptionSendData = new PrescriptionSendDatas();
-            PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines,Prescription.ID);
+            PrescriptionSendData.ConvertMedToSendData(Prescription.Medicines,Prescription.ID,IsAllSend);
             IsReturn = false;
             SubmitCommand = new RelayCommand(SubmitAction);
             CancelCommand = new RelayCommand(CancelAction);

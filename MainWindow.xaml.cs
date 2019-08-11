@@ -90,11 +90,13 @@ namespace His_Pos
                             new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport, StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport,StringRes.CooperativeEntryReport }));
             
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
-                            new[] { StringRes.InstitutionDeclarePointReport }));
-
+                            new[] { StringRes.InstitutionDeclarePointReport })); 
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
-                            new[] { StringRes.AdminFunction }));
-
+                            new[] { StringRes.AdminManage }));
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
+                            new[] { StringRes.SystemTutorial }));
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
+                            new[] { StringRes.CompanyWeb }));
         }
         
         private void InitializeMenu()
