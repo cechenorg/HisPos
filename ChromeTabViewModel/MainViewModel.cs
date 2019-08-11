@@ -13,6 +13,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
+using His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
@@ -34,6 +35,7 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
+using His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial;
 using His_Pos.SYSTEM_TAB.INDEX;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
@@ -217,6 +219,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.藥袋查詢):
                     break;
+                case nameof(FeatureItem.藥健康網頁):
+                    break;
                 default:
                     return;
             }
@@ -353,6 +357,14 @@ namespace His_Pos.ChromeTabViewModel
                 //會計報表
                 case nameof(FeatureItem.申報院所點數總表):
                     newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[0], Icon = MainWindow.HisFeatures[7].Icon };
+                    break;
+                //系統教學
+                case nameof(FeatureItem.系統教學文件): 
+                    newTab = new TutorialViewModel() { TabName = MainWindow.HisFeatures[9].Functions[0], Icon = MainWindow.HisFeatures[9].Icon };
+                    break;
+                //公司網站
+                case nameof(FeatureItem.藥健康網頁):
+                    newTab = new CompanyWebViewModel() { TabName = MainWindow.HisFeatures[10].Functions[0], Icon = MainWindow.HisFeatures[10].Icon };
                     break;
 
                 //系統函式

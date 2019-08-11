@@ -605,4 +605,13 @@
   <data name="CSVFileType" xml:space="preserve">
     <value>Csv檔案|*.csv</value>
   </data>
+  <data name="CompanyWeb" xml:space="preserve">
+    <value>藥健康網頁</value>
+  </data>
+  <data name="SystemTutorial" xml:space="preserve">
+    <value>系統教學文件</value>
+  </data>
+  <data name="Web" xml:space="preserve">
+    <value>網頁連結</value>
+  </data>
 </root>

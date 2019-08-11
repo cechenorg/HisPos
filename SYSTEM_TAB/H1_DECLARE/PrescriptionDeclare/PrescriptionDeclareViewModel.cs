@@ -1051,8 +1051,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             currentService.CheckDailyUpload(ErrorCode);
             currentService.CloneTempPre();
             StartPrint(false);
-            DeclareSuccess();
             HisApiFunction.CheckDailyUpload100();
+            DeclareSuccess();
         }
 
         private void StartErrorAdjust()
@@ -1121,12 +1121,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void DeclareSuccess()
         {
-            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             MainWindow.ServerConnection.OpenConnection();
-            NewFunction.GetXmlFiles();
             PrescriptionCount = UpdatePrescriptionCount();
             MainWindow.ServerConnection.CloseConnection();
             ClearAction();
+            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             isAdjusting = false;
         }
         private void StartPrint(bool noCard)
@@ -1297,6 +1296,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckAdjustDatePast10Days()
         {
+            if (CurrentPrescription.AdjustDate is null)
+            {
+                MessageWindow.ShowMessage(" 調劑日不可為空", MessageType.ERROR);
+                isAdjusting = false;
+                return false;
+            }
             if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
             var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
             if (timeDiff > 10)

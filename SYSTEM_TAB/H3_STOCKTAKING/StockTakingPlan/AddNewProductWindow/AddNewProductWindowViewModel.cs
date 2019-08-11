@@ -136,6 +136,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
         }
          
         private void RemoveSourceProInTarget() {
+            SourceallItemsAreChecked = false;
             for (int i = 0; i < SourceStockTakingProducts.Count; i++) {
                 if (TargetStockTakingProducts.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0) {
                     SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);

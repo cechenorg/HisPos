@@ -1136,7 +1136,6 @@ namespace His_Pos.NewClass.Prescription
             var errorMsg = string.Empty;
             errorMsg += CheckInstitution();
             errorMsg += CheckAdjustCase();
-            errorMsg += CheckPrescriptionCase();
             errorMsg += CheckPharmacist();
             errorMsg += CheckMedicalNumber(noCard);
             errorMsg += CheckCopayment();
@@ -1144,6 +1143,7 @@ namespace His_Pos.NewClass.Prescription
             errorMsg += CheckPaymentCategory();
             errorMsg += CheckDiseaseCode();
             errorMsg += CheckChronicTimes();
+            errorMsg += CheckPrescriptionCase();
             return errorMsg;
         }
 

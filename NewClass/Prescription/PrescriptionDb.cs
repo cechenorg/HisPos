@@ -470,13 +470,13 @@ namespace His_Pos.NewClass.Prescription
                 dtlData.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
             dtlData.Append(string.Empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
             var amount = string.Empty;
-            foreach (var row in prescriptionSendData)
-            {
-                    
-                if (row.MedId != declareMedicine.ID) continue;
-                amount = row.SendAmount.ToString();
-                break;
+            for (int i = 0; i < prescriptionSendData.Count; i++) {
+                if (prescriptionSendData[i].MedId != declareMedicine.ID) continue;
+                amount = prescriptionSendData[i].SendAmount.ToString();
+                prescriptionSendData[i].SendAmount = 0;
+                break; 
             }
+            
             dtlData.Append(amount.PadRight(10, ' ')); //訂購量
         }
 
