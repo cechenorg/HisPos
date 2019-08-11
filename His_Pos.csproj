@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props" Condition="Exists('packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props')" />
+  <Import Project="packages\CefSharp.Common.73.1.130\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.73.1.130\build\CefSharp.Common.props')" />
+  <Import Project="packages\cef.redist.x86.73.1.13\build\cef.redist.x86.props" Condition="Exists('packages\cef.redist.x86.73.1.13\build\cef.redist.x86.props')" />
+  <Import Project="packages\cef.redist.x64.73.1.13\build\cef.redist.x64.props" Condition="Exists('packages\cef.redist.x64.73.1.13\build\cef.redist.x64.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,6 +19,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>C:\ClickOnceTest\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -605,6 +611,9 @@
     <Compile Include="NewClass\Trade\TradeTabEnum.cs" />
     <Compile Include="NewClass\Trade\Transaction.cs" />
     <Compile Include="NewClass\Trade\TransactionTypeEnum.cs" />
+    <Compile Include="NewClass\Tutorial\Tutorial.cs" />
+    <Compile Include="NewClass\Tutorial\TutorialDb.cs" />
+    <Compile Include="NewClass\Tutorial\Tutorials.cs" />
     <Compile Include="NewClass\WareHouse\WareHouse.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
     <Compile Include="NewClass\WareHouse\WareHouses.cs" />
@@ -644,6 +653,10 @@
     <Compile Include="NewClass\Prescription\ICCard\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadDb.cs" />
+    <Compile Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWeb.xaml.cs">
+      <DependentUpon>CompanyWeb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWebViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml.cs">
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
@@ -1076,6 +1089,11 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\SampleExcelTemplate\DefaultDataTableTemplate.cs" />
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\TutorialEnum.cs" />
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\Tutorial.xaml.cs">
+      <DependentUpon>Tutorial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\TutorialViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1301,6 +1319,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H10_WEB\CompanyWeb\CompanyWeb.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1769,6 +1791,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\InstitutionDeclarePointReport\InstitutionDeclarePointReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\Tutorial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2491,4 +2517,17 @@
     <Analyzer Include="packages\ZeroFormatter.Analyzer.1.1.1\analyzers\dotnet\cs\ZeroFormatterAnalyzer.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此專案參考這部電腦上所缺少的 NuGet 套件。請啟用 NuGet 套件還原，以下載該套件。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\cef.redist.x64.73.1.13\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x64.73.1.13\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('packages\cef.redist.x86.73.1.13\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x86.73.1.13\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.73.1.130\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.73.1.130\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets'))" />
+  </Target>
+  <Import Project="packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.73.1.130\build\CefSharp.Common.targets')" />
+  <Import Project="packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets" Condition="Exists('packages\CefSharp.Wpf.73.1.130\build\CefSharp.Wpf.targets')" />
 </Project>

@@ -1297,6 +1297,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckAdjustDatePast10Days()
         {
+            if (CurrentPrescription.AdjustDate is null)
+            {
+                MessageWindow.ShowMessage(" 調劑日不可為空", MessageType.ERROR);
+                isAdjusting = false;
+                return false;
+            }
             if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
             var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
             if (timeDiff > 10)

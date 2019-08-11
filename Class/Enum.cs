@@ -64,6 +64,8 @@ namespace His_Pos.Class
         銷售紀錄 = 33,
         促銷管理 = 34,
         藥袋查詢 = 35,
+        藥健康網頁 = 36,
+        系統教學文件 = 37
     }
 
     public enum StoreOrderProductType

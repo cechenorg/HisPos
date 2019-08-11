@@ -12,7 +12,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
     public class PrescriptionSendDatas : ObservableCollection<PrescriptionSendData>
     {
         public PrescriptionSendDatas() { }
-        public void ConvertMedToSendData(Medicines ms,int preID) {
+        public void ConvertMedToSendData(Medicines ms,int preID,bool isAllSend) {
+            Clear();
             var MedicineIds = new List<string>();
             foreach (var med in ms)
             {
@@ -39,6 +40,9 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                     }
                     if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) == 1) {
                         var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
+                        if (isAllSend)
+                            prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount;
+                        else
                         prescriptionSendData.SendAmount = prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount > 0
                             ? prescriptionSendData.TreatAmount - temp.OnTheFrame - temp.OnTheWayAmount : 0;
                         prescriptionSendData.OntheFrame = temp.OnTheFrame;
