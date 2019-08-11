@@ -43,6 +43,7 @@
     xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
     xmlns:companyWeb="clr-namespace:His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb"
+    xmlns:systemtutorial="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -150,6 +151,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type  companyWeb:CompanyWebViewModel}">
             <companyWeb:CompanyWeb/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type  systemtutorial:TutorialViewModel}">
+            <systemtutorial:Tutorial/>
         </DataTemplate>
         
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">

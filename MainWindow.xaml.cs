@@ -94,7 +94,7 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
                             new[] { StringRes.AdminManage }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
-                            new[] { "" }));
+                            new[] { StringRes.SystemTutorial }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
                             new[] { StringRes.CompanyWeb }));
         }
