@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             ControlLevel = row.Field<byte?>("Med_Control");
             StockValue = row.Field<double>("STOCK_VALUE");
             IsEnable = row.Field<bool>("Pro_IsEnable");
+            InventoryError = row.Field<bool>("ERROR_FLAG");
         }
 
         public ProductTypeEnum ProductType { get; set; }
@@ -51,7 +52,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public bool IsCommon { get; set; }
         public bool IsFrozen { get; set; }
         public bool IsEnable { get; set; }
-
-        public bool InventoryError => MedBagAmount > Inventory;
+        public bool InventoryError { get; set; }
     }
 }
