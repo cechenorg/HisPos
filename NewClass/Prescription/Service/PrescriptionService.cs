@@ -501,7 +501,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-           
+            PrescriptionSendDatas printsendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
                 if (!Current.PrescriptionStatus.IsSendToSingde)
@@ -512,12 +512,15 @@ namespace His_Pos.NewClass.Prescription.Service
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康  
             }
-            ReportViewer rptViewer = new ReportViewer();
-            SetReserveMedicinesSheetReportViewer(rptViewer, sendData);
-            MainWindow.Instance.Dispatcher.Invoke(() =>
-            {
-                ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
-            });
+            if (printsendData.Count(p => p.PrepareAmount > 0) > 0) {
+                ReportViewer rptViewer = new ReportViewer();
+                SetReserveMedicinesSheetReportViewer(rptViewer, printsendData);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
+                });
+            }
+          
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
