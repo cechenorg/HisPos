@@ -5,6 +5,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate x:Key="NormalBackground" DataType="UserControl">
+            <Rectangle Fill="{StaticResource Shadow}" Margin="10,0,5,10"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ErrorBackground" DataType="UserControl">
+            <Rectangle Fill="IndianRed" Margin="10,0,5,10"/>
+        </DataTemplate>
+        <DataTemplate x:Key="NormalData" DataType="UserControl">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <Label Content="架上" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,10" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ErrorData" DataType="UserControl">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="架上" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="17" Margin="15,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Grid.Row="0" Grid.Column="1" Width="80" Foreground="WhiteSmoke" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="藥袋" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="17" Margin="15,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Grid.Row="1" Grid.Column="1" Width="80" Foreground="WhiteSmoke" Margin="0,0,0,0" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Content="藥袋需求" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="20" Margin="15,0,0,10" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="60" Foreground="WhiteSmoke" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -19,7 +64,18 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Fill="{StaticResource Shadow}" Margin="10,10,5,10"/>
-        <Rectangle Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" Fill="{StaticResource Shadow}" Margin="10,0,5,10"/>
+        <ContentControl Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource NormalBackground}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ErrorBackground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
         <Rectangle Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Fill="{StaticResource Shadow}" Margin="5,10,10,10"/>
         <Rectangle Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Fill="{StaticResource Shadow}" Margin="5,0,10,10"/>
         <Label Content="庫存總量" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" Margin="0,10,0,0" VerticalAlignment="Center"/>
@@ -35,14 +91,18 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
-            <Label Content="架上" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
-            <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,10" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
+        <ContentControl Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource NormalData}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ErrorData}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
         <Label Content="載途量" Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" Margin="0,10,0,0" VerticalAlignment="Center"/>
         <TextBlock Text="{Binding StockDetail.TotalOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Grid.Row="1" Grid.Column="1" Width="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
