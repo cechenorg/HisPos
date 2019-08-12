@@ -2029,9 +2029,6 @@
     </None>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
-    <Content Include="CsHis.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Images\clinic.png" />
     <Resource Include="Images\pharmacy.png" />
     <Resource Include="Images\Cooperate.png" />
@@ -2217,9 +2214,6 @@
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
     <Resource Include="Images\Report.png" />
-    <Content Include="reader.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
