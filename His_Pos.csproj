@@ -2031,7 +2031,9 @@
     </None>
     <Resource Include="Images\closeButton.png" />
     <Resource Include="Images\refresh.png" />
-    <Content Include="CsHis.dll" />
+    <Content Include="CsHis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Images\clinic.png" />
     <Resource Include="Images\pharmacy.png" />
     <Resource Include="Images\Cooperate.png" />
