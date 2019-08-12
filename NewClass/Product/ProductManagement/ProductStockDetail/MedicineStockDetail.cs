@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
+        public bool IsInventoryError => MedBagInventory > TotalInventory;
         #endregion
 
         public MedicineStockDetail(DataRow row) : base(row)

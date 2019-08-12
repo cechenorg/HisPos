@@ -31,21 +31,21 @@
         <DataTemplate x:Key="ErrorData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="架上" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="17" Margin="15,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Grid.Row="0" Grid.Column="1" Width="80" Foreground="WhiteSmoke" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
-                <Label Grid.Row="1" Grid.Column="0" Content="藥袋" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="17" Margin="15,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Grid.Row="1" Grid.Column="1" Width="80" Foreground="WhiteSmoke" Margin="0,0,0,0" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
-                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Label Content="藥袋需求" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="20" Margin="15,0,0,10" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="60" Foreground="WhiteSmoke" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <Label Content="架上" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="18" Margin="25,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="90" Foreground="WhiteSmoke" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Label Content="藥袋" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="18" Margin="25,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="90" Foreground="WhiteSmoke" Margin="0,0,0,0" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <Label Content="需求" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="18" Margin="25,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="90" Foreground="WhiteSmoke" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -69,7 +69,7 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NormalBackground}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding StockDetail.IsInventoryError, UpdateSourceTrigger=PropertyChanged}" Value="True">
                             <Setter Property="ContentTemplate" Value="{StaticResource ErrorBackground}" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -96,7 +96,7 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NormalData}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding StockDetail.IsInventoryError, UpdateSourceTrigger=PropertyChanged}" Value="True">
                             <Setter Property="ContentTemplate" Value="{StaticResource ErrorData}" />
                         </DataTrigger>
                     </Style.Triggers>
