@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
              mc:Ignorable="d" 
-             xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -54,7 +53,7 @@
                 </i:Interaction.Triggers>
             </DataGrid>
             <Grid Grid.Column="1">
-                <cefSharp:ChromiumWebBrowser Grid.Row="0" Address="{Binding TutorialSelectedItem.FileName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+               
             </Grid>
         </Grid>
        

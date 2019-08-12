@@ -8,7 +8,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry" 
-             xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+             
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.DataContext>
@@ -18,6 +18,6 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <Grid >
-        <cefSharp:ChromiumWebBrowser Grid.Row="0" Address="http://kaokaodepon.singde.com.tw:60000/PDF/1.pdf" />
+      
     </Grid>
 </UserControl>
