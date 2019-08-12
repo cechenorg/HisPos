@@ -130,7 +130,7 @@ namespace His_Pos.FunctionWindow
         {
             try
             {
-                var csHisSource = "C:\\NHI\\VPN\\CSHIS.dll";
+                var csHisSource = "C:\\NHI\\LIB\\CSHIS.dll";
                 var csHisMed2Source = "C:\\NHI\\VPN\\CSHISMED2.dll";
                 var csHisMed3Source = "C:\\NHI\\VPN\\CSHISMED3.dll";
                 var csHisTarget = Environment.Is64BitOperatingSystem ? "C:\\Windows\\SysWOW64\\CSHIS.dll" : "C:\\Windows\\System32\\CSHIS.dll";
