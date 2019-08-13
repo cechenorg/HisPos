@@ -1,6 +1,6 @@
 ﻿namespace His_Pos.NewClass.Medicine.InventoryMedicineStruct
 {
-    public struct MedicineInventoryStruct
+    public class MedicineInventoryStruct
     {
         public int ID { get; set; }
         public double Amount { get; set; }
@@ -10,5 +10,6 @@
             ID = id;
             Amount = amount;
         }
+         
     }
 }
