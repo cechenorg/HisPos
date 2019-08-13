@@ -14,17 +14,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
     {
         public PrescriptionSendDatas() { }
         public void ConvertMedToSendData(Prescription.Prescription prescription, bool isAllSend) {
-            Clear();
-            DataTable table;
-            switch (prescription.Type)
-            {
-                case PrescriptionType.ChronicReserve:
-                    table = MedicineDb.GetUsableAmountByReserveID(int.Parse(prescription.SourceId));
-                    break;
-                default:
-                    table = MedicineDb.GetUsableAmountByPrescriptionID(prescription.ID);
-                    break;
-            }
+            Clear(); 
             List<MedicineInventoryStruct> tempMeds = new List<MedicineInventoryStruct>();
             foreach (var m in prescription.Medicines) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
