@@ -12,23 +12,24 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
     public class PrescriptionSendDatas : ObservableCollection<PrescriptionSendData>
     {
         public PrescriptionSendDatas() { }
-        public void ConvertMedToSendData(Medicines ms,int preID,bool isAllSend) {
+        public void ConvertMedToSendData(Prescription.Prescription prescription, bool isAllSend) {
             Clear();
-            var MedicineIds = new List<string>();
-            foreach (var med in ms)
+            DataTable table;
+            switch (prescription.Type)
             {
-                if (MedicineIds.Count(M => M == med.ID) == 0)
-                    MedicineIds.Add(med.ID);
+                case PrescriptionType.ChronicReserve:
+                    table = MedicineDb.GetUsableAmountByReserveID(int.Parse(prescription.SourceId));
+                    break;
+                default:
+                    table = MedicineDb.GetUsableAmountByPrescriptionID(prescription.ID);
+                    break;
             }
-            var InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-            var medicines = new Medicines();
-            medicines.GetDataByPrescriptionId(preID);
-            foreach (var m in medicines) {
-                if (InventoryCollection.Count(inv => inv.InvID == m.InventoryID) > 0) {
-                    var temp = InventoryCollection.Single(inv => inv.InvID == m.InventoryID);
-                    if (m.SendAmount >= 0)
-                        temp.OnTheFrame += m.Amount - m.SendAmount;
-                } 
+            
+            foreach (var m in prescription.Medicines) {
+                if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
+                    var prescriptionSendData = new PrescriptionSendData(m);
+
+                }
             }
             foreach (var m in ms) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
