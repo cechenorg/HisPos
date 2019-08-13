@@ -24,7 +24,18 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,10" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" ToolTipService.ShowDuration="600000" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <ToolTip Content="{Binding StockDetail.MedBagDetail, UpdateSourceTrigger=PropertyChanged}" FontFamily="Courier New" FontSize="18"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -45,7 +56,18 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2">
                     <Label Content="需求" Foreground="WhiteSmoke" FontFamily="Segoe UI Semibold" FontSize="18" Margin="25,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="90" Foreground="WhiteSmoke" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="90" ToolTipService.ShowDuration="600000" Foreground="WhiteSmoke" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="17" TextAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <ToolTip Content="{Binding StockDetail.MedBagDetail, UpdateSourceTrigger=PropertyChanged}" FontFamily="Courier New" FontSize="18"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
             </Grid>
         </DataTemplate>

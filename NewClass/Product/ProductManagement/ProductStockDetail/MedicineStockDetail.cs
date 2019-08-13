@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
     {
         #region ----- Define Variables -----
         private string stockDetail = "";
+        private string medBagDetail = "";
 
         public double MedBagOnTheWayAmount { get; set; }
         public double TotalOnTheWayAmount
@@ -25,6 +26,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
+        public string MedBagDetail
+        {
+            get { return medBagDetail; }
+            set { Set(() => MedBagDetail, ref medBagDetail, value); }
+        }
         public bool IsInventoryError => MedBagInventory > TotalInventory;
         #endregion
 
@@ -36,7 +42,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             ConsumeIn90Days = row.Field<double>("CONSUME_AMOUNT");
         }
 
-        #region ----- Define Variables -----
+        #region ----- Define Functions -----
         public void GetStockDetailByID(string proID, string wareID)
         {
             DataTable dataTable = ProductDetailDB.GetStockDetailByID(proID, wareID);
@@ -57,6 +63,22 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             }
             
             StockDetail = tempStockDetail;
+        }
+        internal void GetMedBagDetailByID(string proID, string wareID)
+        {
+            DataTable dataTable = ProductDetailDB.GetMedBagDetailByID(proID, wareID);
+
+            string tempMedBagDetail = "";
+
+            for (int x = 0; x < dataTable.Rows.Count; x++)
+            {
+                tempMedBagDetail += dataTable.Rows[x].Field<string>("TYPE").PadRight(4) + dataTable.Rows[x].Field<string>("Cus_Name").PadRight(6) + dataTable.Rows[x].Field<string>("ADJUST_DATE").PadRight(10) + dataTable.Rows[x].Field<double>("MEDBAG_AMOUNT").ToString("N1").PadLeft(8);
+
+                if (x < dataTable.Rows.Count - 1)
+                    tempMedBagDetail += "\n";
+            }
+
+            MedBagDetail = tempMedBagDetail;
         }
         #endregion
     }

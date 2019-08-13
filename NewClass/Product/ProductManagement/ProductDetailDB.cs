@@ -57,6 +57,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductInventoryRecordByID]", parameters);
         }
 
+        internal static DataTable GetMedBagDetailByID(string proID, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductMedBagDetailByID]", parameters);
+        }
+
         internal static DataTable GetProductManageMedicineDataByID(string id)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
