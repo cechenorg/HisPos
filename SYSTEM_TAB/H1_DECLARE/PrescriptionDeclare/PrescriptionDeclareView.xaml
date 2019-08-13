@@ -349,13 +349,7 @@
                             <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding ShowCustomerDetail}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Image>
+                    <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0"/>
                     <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
                              Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
@@ -803,7 +797,7 @@
                             <RadioButton GroupName="CusHistoryGroup" Content="顧客資料" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" FontSize="14"/>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                            <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="135,0,10,0"/>
+                            <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="140,0,10,0"/>
                             <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="18" FontFamily="Segoe UI SemiBold" HorizontalContentAlignment="Center"/>
                             <Button Content="代入" BorderBrush="Transparent" Background="DarkCyan" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Get"/>
                             <Button Content="設定" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
