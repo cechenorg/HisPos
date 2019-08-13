@@ -53,13 +53,16 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="庫存異常">
+                                <Setter Property="Background" Value="LightSalmon"/>
+                            </DataTrigger>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
-                        <EventSetter Event="MouseDoubleClick" Handler="Reserve_Click"></EventSetter>
+                        <EventSetter Event="MouseDoubleClick" Handler="Reserve_Click"/>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="FontSize" Value="15"/>
                         <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
@@ -72,7 +75,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="120" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CustomerName}">
+                    <DataGridTextColumn Width="120" Header="姓名" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CustomerName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -96,7 +99,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="120" Header="調劑日" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}">
+                    <DataGridTextColumn Width="120" Header="調劑日" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -146,13 +149,16 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="庫存異常">
+                                <Setter Property="Background" Value="LightSalmon"/>
+                            </DataTrigger>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
                         <EventSetter Event="MouseDoubleClick" Handler="Register_Click"></EventSetter>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="FontSize" Value="15"/>
                         <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
@@ -165,7 +171,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="120" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CustomerName}">
+                    <DataGridTextColumn Width="120" Header="姓名" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CustomerName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -189,7 +195,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="120" Header="調劑日" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}">
+                    <DataGridTextColumn Width="120" Header="調劑日" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
