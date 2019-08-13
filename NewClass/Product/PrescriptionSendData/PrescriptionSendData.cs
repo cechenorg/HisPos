@@ -12,17 +12,19 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             MedName = m.FullName; 
             TreatAmount = m.Amount; 
             SendAmount = m.Amount;
-            OldSendAmount = m.SendAmount;
+            InvID = m.InventoryID;
+            CanUseAmount = m.UsableAmount;
         }
         public string MedId { get; set; }
-        public string MedName { get; set; } 
-        private double ontheFrame;
-        public double OntheFrame
+        public string MedName { get; set; }
+        public int InvID { get; set; }
+        private double canUseAmount;
+        public double CanUseAmount
         {
-            get => ontheFrame;
+            get => canUseAmount;
             set
             {
-                Set(() => OntheFrame, ref ontheFrame, value);
+                Set(() => CanUseAmount, ref canUseAmount, value);
             }
         }
         private double ontheWay;
@@ -34,8 +36,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => OntheWay, ref ontheWay, value);
             }
         } 
-        public double TreatAmount { get; set; }
-        public double OldSendAmount { get; set; }
+        public double TreatAmount { get; set; } 
         private double sendAmount;
         public double SendAmount 
         {

@@ -12,7 +12,6 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Width="120" Margin="10,0,0,0" Content="申報檔慢箋" Background="RoyalBlue" BorderThickness="0" Click="ButtonPredictChronic_Click"/>
-            <Button Width="120" Margin="10,0,0,0" Content="每日上傳" Background="RoyalBlue" BorderThickness="0" Click="DayliUpload_Click"/>
             <Button Width="120" Margin="10,0,0,0" Content="重做申報檔" Background="RoyalBlue" BorderThickness="0" Click="ChangeCus_Click"/>
             <Button Width="120" Margin="10,0,0,0" Content="骨科拋單" Background="RoyalBlue" BorderThickness="0" Click="CooperApi_Click"/>
             <Button Width="120" Margin="10,0,0,0" Content="合併同類藥品" Background="RoyalBlue" BorderThickness="0" Click="MergeProduct_OnClick"/>

@@ -1979,6 +1979,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="CSHIS.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -60,7 +60,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" Binding="{Binding OntheFrame}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="架上量" IsReadOnly="True">
+                <DataGridTextColumn MinWidth="80" Binding="{Binding CanUseAmount}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="架上量" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

@@ -439,7 +439,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
-                    AppendMedicineData(declareMedicine,dtlData,prescriptionSendData);
+                    AppendMedicineData(declareMedicine,dtlData,prescriptionSendData,i-1);
                 }
                 if (i < p.Medicines.Count(med => med is MedicineNHI || med is MedicineSpecialMaterial))
                     dtlData.AppendLine();
@@ -447,7 +447,7 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        private static void AppendMedicineData(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        private static void AppendMedicineData(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData,int index)
         {
             dtlData.Append(declareMedicine.ID.Length > 12
                 ? declareMedicine.ID.Substring(0, 12).PadRight(12, ' ')
@@ -459,24 +459,17 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append(declareMedicine.ID.Length > 12
                 ? declareMedicine.ID.Split('-')[1].PadRight(6, ' ')
                 : declareMedicine.Position?.ID.PadRight(6, ' '));
-            AppendAmountAndPaySelf(declareMedicine, dtlData, prescriptionSendData);
+            AppendAmountAndPaySelf(declareMedicine, dtlData, prescriptionSendData,index);
         }
 
-        private static void AppendAmountAndPaySelf(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData)
+        private static void AppendAmountAndPaySelf(Medicine.Base.Medicine declareMedicine, StringBuilder dtlData, PrescriptionSendDatas prescriptionSendData, int index)
         {
             if (!declareMedicine.PaySelf)
                 dtlData.Append(" ");
             else
                 dtlData.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
             dtlData.Append(string.Empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-            var amount = string.Empty;
-            for (int i = 0; i < prescriptionSendData.Count; i++) {
-                if (prescriptionSendData[i].MedId != declareMedicine.ID) continue;
-                amount = prescriptionSendData[i].SendAmount.ToString();
-                prescriptionSendData[i].SendAmount = 0;
-                break; 
-            }
-            
+            var amount = prescriptionSendData[index].SendAmount.ToString();  
             dtlData.Append(amount.PadRight(10, ' ')); //訂購量
         }
 

@@ -699,7 +699,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon,UpdateSourceTrigger=PropertyChanged}" ControlLevel="{Binding ControlLevel,UpdateSourceTrigger=PropertyChanged}" IsFrozen="{Binding Frozen,UpdateSourceTrigger=PropertyChanged}"/>
+                                    <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon,UpdateSourceTrigger=PropertyChanged}" ControlLevel="{Binding ControlLevel,UpdateSourceTrigger=PropertyChanged}" IsFrozen="{Binding Frozen,UpdateSourceTrigger=PropertyChanged}" IsInventoryError="{Binding InventoryError,UpdateSourceTrigger=PropertyChanged}"/>
                                     <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0" Height="35"/>
                                 </StackPanel>
                             </DataTemplate>

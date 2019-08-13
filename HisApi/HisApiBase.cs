@@ -11,7 +11,7 @@ namespace His_Pos.HisApi
     public class HisApiBase
     {
         // 1.1 讀取不需個人PIN碼資料
-        [DllImport("C:\\Windows\\SysWOW64\\CSHIS.dll", EntryPoint = "hisGetBasicData")]
+        [DllImport("CSHIS.dll", EntryPoint = "hisGetBasicData")]
         public static extern int hisGetBasicData(byte[] pBuffer, ref int iBufferLen);
         // 1.2 掛號或報到時讀取基本資料
         [DllImport("CSHIS.dll", EntryPoint = "hisGetRegisterBasic")]

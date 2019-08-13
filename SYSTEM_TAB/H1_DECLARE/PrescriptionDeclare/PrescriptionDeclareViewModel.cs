@@ -273,13 +273,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region InitFunctions
         private void Init()
         {
+            InitCommands();
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MainWindow.ServerConnection.OpenConnection();
             MedicineSets = new MedicineSets();
-            MainWindow.ServerConnection.CloseConnection();
-            InitLocalVariables();
             ClearAction();
-            InitCommands();
+            SetPharmacist();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void SetPharmacist()
+        {
+            if (MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID)) != null)
+            {
+                SelectedPharmacist = MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID));
+                PrescriptionCount = UpdatePrescriptionCount();
+            }
         }
 
         private void InitLocalVariables()
