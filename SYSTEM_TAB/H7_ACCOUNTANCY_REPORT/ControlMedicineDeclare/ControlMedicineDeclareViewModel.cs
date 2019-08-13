@@ -6,6 +6,11 @@ using System.ComponentModel;
 using System.Windows.Data;
 using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
 using His_Pos.NewClass.Medicine.ControlMedicineDetail;
+using System.Windows.Forms;
+using System.IO;
+using System.Text;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 {
@@ -106,14 +111,91 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; } 
         public RelayCommand WareHouseSelectionChangedCommand { get; set; }
+        public RelayCommand PrintMaserCommand { get; set; }
+        public RelayCommand PrintDetailCommand { get; set; }
         public ControlMedicineDeclareViewModel()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
             SearchCommand = new RelayCommand(SearchAction);
             WareHouseSelectionChangedCommand = new RelayCommand(WareHouseSelectionChangedAction);
+            PrintMaserCommand = new RelayCommand(PrintMaserAction);
+            PrintDetailCommand = new RelayCommand(PrintDetailAction);
             SelectedWareHouse = WareHouseCollection[0];
             SearchAction();
+        }
+        private void PrintDetailAction() {
+            if (ControlMedicineDetailsCollection is null) return;
+
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "管制藥品收支結存簿冊";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = SDateTime.ToString("yyyyMMdd") + "_" + EDateTime.ToString("yyyyMMdd") + "_" + SelectItem.ID + "管制藥品收支結存簿冊";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("管制藥品收支結存簿冊");
+                        file.WriteLine($"健保碼,{SelectItem.ID}");
+                        file.WriteLine($"藥品名稱,{SelectItem.FullName}");
+                        file.WriteLine("日期,收支原因,收入數量,批號,支出數量,結存數量,備註");
+                        foreach (var c in ControlMedicineDetailsCollection)
+                        { 
+                            file.WriteLine($"{c.Date},{c.TypeName},{c.InputAmount},{c.BatchNumber},{c.OutputAmount},{c.FinalStock},{c.Description}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+        }
+        private void PrintMaserAction() {
+            if (ControlCollectionView is null) return; 
+
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "管制藥品收支結存簿冊";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = SDateTime.ToString("yyyyMMdd") + "_" + EDateTime.ToString("yyyyMMdd") + ViewModelMainWindow.CurrentPharmacy.Name + "管制藥品收支結存簿冊主檔";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine(SDateTime.ToString("yyyyMMdd") + "_" + EDateTime.ToString("yyyyMMdd") + ViewModelMainWindow.CurrentPharmacy.Name + "管制藥品收支結存簿冊");
+                        file.WriteLine($"庫別:{SelectedWareHouse.Name}");
+                        file.WriteLine("級別,健保碼,名稱,進貨,支出,結存");
+                        foreach (var c in ControlCollectionView) {
+                            var conMed = ((NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)c);
+                            file.WriteLine($"{conMed.IsControl},{conMed.ID},{conMed.FullName},{conMed.GetValue},{conMed.PayValue},{conMed.FinalValue}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
         private void WareHouseSelectionChangedAction() {
             ControlCollectionViewSource.Filter += Filter;
