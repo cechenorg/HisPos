@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             DataBaseFunction.AddSqlParameter(parameterList, "DoneDate", uploadTime);
             DataBaseFunction.AddSqlParameter(parameterList, "ReceiveTime", receiveTime);
             DataBaseFunction.AddSqlParameter(parameterList, "RandomCode", randomCode);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateUploadData]");
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateUploadData]", parameterList);
         }
         public static void InsertDailyUploadFile(XDocument xml)
         {

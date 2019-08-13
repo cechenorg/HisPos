@@ -181,7 +181,6 @@ namespace His_Pos.Service
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
                     var res = HisApiBase.csUploadDataPrec(fileNameArr, fileSize, count, pPrecNumber,pBuffer, ref iBufferLength);
-                    //var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                     if (res == 0)
                     {
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
@@ -206,7 +205,6 @@ namespace His_Pos.Service
                         var uploadTime = new DateTime(int.Parse(uploadYear),int.Parse(uploadMonth),int.Parse(uploadDay),int.Parse(uploadHour),int.Parse(uploadMinute),int.Parse(uploadSecond));
                         var receiveTime = new DateTime(int.Parse(receiveYear),int.Parse(receiveMonth),int.Parse(receiveDay),int.Parse(receiveHour),int.Parse(receiveMinute),int.Parse(receiveSecond));
                         MessageWindow.ShowMessage("上傳成功\n上傳時間:"+ uploadDateStr + "\n接收時間:"+ receiveDateStr, MessageType.SUCCESS);
-                        Console.WriteLine("SAM:"+ samCode + "\nInsID:" + insID + "\nRandomCode:" +randomCode);
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
                         MainWindow.ServerConnection.CloseConnection();
@@ -214,14 +212,14 @@ namespace His_Pos.Service
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
+                        MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
                     }
                 }
                 HisApiFunction.CloseCom();
             }
             catch (Exception ex)
             {
-                MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
+                MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
             }
         }
 
