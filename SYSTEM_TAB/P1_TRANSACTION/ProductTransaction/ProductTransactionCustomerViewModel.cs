@@ -59,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
         private void GetCustomerAction()
         {
-            GetCustomerWindow getCustomerWindow = new GetCustomerWindow();
+            GetCustomerWindow getCustomerWindow = new GetCustomerWindow(SearchString);
             getCustomerWindow.ShowDialog();
         }
         private void AddCustomerAction()

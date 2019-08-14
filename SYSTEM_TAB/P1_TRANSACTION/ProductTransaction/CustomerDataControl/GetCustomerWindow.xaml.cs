@@ -19,9 +19,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     /// </summary>
     public partial class GetCustomerWindow : Window
     {
-        public GetCustomerWindow()
+        #region ----- Define Variables -----
+        public string SearchString { get; set; }
+        #endregion
+
+        public GetCustomerWindow(string searchString)
         {
             InitializeComponent();
+
+            SearchString = searchString;
         }
+
+        #region ----- Define Functions -----
+
+        #endregion
     }
 }

@@ -221,6 +221,12 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.藥健康網頁):
                     break;
+                case nameof(FeatureItem.促銷管理):
+                    break;
+                case nameof(FeatureItem.銷售紀錄):
+                    break;
+                case nameof(FeatureItem.結帳作業):
+                    break;
                 default:
                     return;
             }
