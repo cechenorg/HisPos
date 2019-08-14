@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using His_Pos.Class.Person;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -15,6 +17,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public ProductPurchaseRecordView()
         {
             InitializeComponent();
+        }
+
+        private void StartDate_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            MaskedTextBox maskedTextBox = sender as MaskedTextBox;
+
+            if(maskedTextBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                EndDate.Focus();
+                EndDate.Select(0, 0);
+            }
         }
     }
 }
