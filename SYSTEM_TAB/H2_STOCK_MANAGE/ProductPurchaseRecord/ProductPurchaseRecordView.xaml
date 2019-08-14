@@ -69,8 +69,8 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
                 <Label Content="日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <xctk:MaskedTextBox Width="100" Height="30" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                <xctk:MaskedTextBox Name="StartDate" Width="100" Height="30" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" KeyDown="StartDate_OnKeyDown">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="SearchStartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -81,7 +81,7 @@
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
                 <Label Content="~" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
-                <xctk:MaskedTextBox Width="100" Height="30" Margin="0,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                <xctk:MaskedTextBox Name="EndDate" Width="100" Height="30" Margin="0,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="SearchEndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
