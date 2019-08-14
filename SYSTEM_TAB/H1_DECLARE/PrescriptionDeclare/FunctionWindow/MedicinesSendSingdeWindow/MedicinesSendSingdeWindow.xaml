@@ -105,7 +105,7 @@
  
         <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
             <CheckBox Content="全傳送"  IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Rectangle Width="530" /> 
+            <Rectangle Width="522" /> 
             <Button Command="{Binding CancelCommand}" Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" />
             <Button Command="{Binding SubmitCommand}" Width="125" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0"   Content="送出" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
