@@ -245,7 +245,7 @@
             </ContentControl>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="170"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions> 
                 <sharedControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0"/>
