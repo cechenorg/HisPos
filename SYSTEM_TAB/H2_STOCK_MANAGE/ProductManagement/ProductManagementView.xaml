@@ -92,7 +92,7 @@
                 <RadioButton Content="常備" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="2"/>
                 <RadioButton Content="管制" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="3"/>
                 <RadioButton Content="冰品" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="4"/>
-                <RadioButton Content="庫存異常" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
+                <RadioButton Content="藥袋量不足" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
             </StackPanel>
             <ContentControl Grid.Row="3" Content="{Binding}">
                 <ContentControl.Style>
@@ -119,7 +119,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridBackGround}">
                 <Button Content="新增商品" Background="IndianRed" Height="35" FontSize="18" FontWeight="Bold" Width="120" BorderThickness="0" Command="{Binding InsertProductCommand}" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}">
-                    <Label Content="庫存異常淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="234,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    <Label Content="藥袋量不足品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="174,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <TextBlock Text="{Binding ErrorStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 </StackPanel>
                 <Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>

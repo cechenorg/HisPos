@@ -26,7 +26,6 @@ using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 using Newtonsoft.Json;
 using System.Linq;
-using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -45,7 +44,7 @@ namespace His_Pos.NewClass.Prescription.Service
         {
 
         }
-
+        protected MedicinesSendSingdeViewModel vm { get; set; } = null;
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected List<bool?> PrintResult { get; set; }
@@ -179,7 +178,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         protected bool CheckAdjustAndTreatDate()
         {
-            return CheckTreatDate() && CheckAdjustDate();
+            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
         }
 
         private bool CheckTreatDate()
@@ -217,6 +216,18 @@ namespace His_Pos.NewClass.Prescription.Service
                 var adjustDateOutOfRange = new ConfirmWindow(Resources.PrescriptoinOutOfDate, "");
                 Debug.Assert(adjustDateOutOfRange.DialogResult != null, "adjustDateOutOfRange.DialogResult != null");
                 return (bool)adjustDateOutOfRange.DialogResult;
+            }
+            return true;
+        }
+
+        private bool CheckAdjustDatePast10Days()
+        {
+            if (DateTime.Compare(((DateTime)Current.AdjustDate).Date, DateTime.Today) >= 0) return true;
+            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)Current.AdjustDate).Ticks).TotalDays;
+            if (timeDiff > 10)
+            {
+                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
+                return false;
             }
             return true;
         }
@@ -520,7 +531,6 @@ namespace His_Pos.NewClass.Prescription.Service
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
                 });
             }
-          
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)

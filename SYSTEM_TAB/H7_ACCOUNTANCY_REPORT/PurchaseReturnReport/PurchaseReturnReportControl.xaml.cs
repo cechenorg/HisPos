@@ -12,6 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.StoreOrder.Report;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 {
@@ -23,6 +28,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         public PurchaseReturnReportControl()
         {
             InitializeComponent();
+        }
+
+        private void ShowDetail(object sender, MouseButtonEventArgs e)
+        {
+            if (((ManufactoryOrderDetail)(sender as DataGridRow).Item).ID is null) return;
+
+            ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
+
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, ((ManufactoryOrderDetail)(sender as DataGridRow).Item).ID, ""));
         }
     }
 }

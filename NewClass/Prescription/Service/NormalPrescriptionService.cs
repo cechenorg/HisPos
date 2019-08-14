@@ -1,4 +1,6 @@
-﻿using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+﻿using System.Collections.Generic;
+using System.Linq;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -25,7 +27,20 @@ namespace His_Pos.NewClass.Prescription.Service
                     if (!CheckMedicalNumber()) return false;
             }
             if (!CheckMedicines()) return false;
-            return CheckSameDeclare() && PrintConfirm();
+            if (!CheckSameDeclare()) return false;
+            if (!CheckSendOrder()) return false;
+            return PrintConfirm();
+        }
+
+        private bool CheckSendOrder()
+        {
+            if (Current.PrescriptionStatus.IsSendOrder)
+            {
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
+            }
+            return true;
         }
 
         public override bool CheckEditPrescription(bool noCard)
@@ -75,14 +90,6 @@ namespace His_Pos.NewClass.Prescription.Service
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
-            MedicinesSendSingdeViewModel vm = null;
-            if (Current.PrescriptionStatus.IsSendOrder)
-            {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
-                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
-                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
-                    return false;
-            }
             Current.PrescriptionStatus.SetRegisterStatus();
             Current.InsertDb();
             SendOrder(vm);

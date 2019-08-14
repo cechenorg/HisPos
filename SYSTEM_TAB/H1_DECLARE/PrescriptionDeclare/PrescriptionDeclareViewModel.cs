@@ -85,7 +85,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => MedicineSets, ref medicineSets, value);
             }
         }
-        private Medicines usableMedicines { get; set; }
         #endregion
         #region Variables
         private BackgroundWorker worker;
@@ -753,7 +752,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckAdjustDatePast10Days()) return;
             if (!CheckPrescription(false)) return;
             CheckIsReadCard();
         }
@@ -762,8 +760,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CheckCustomerEdited();
             isAdjusting = true;
-            if (!CheckPrescription(false)) return;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
+            if (!CheckPrescription(false))
+            {
+                CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
+                return;
+            }
             StartRegister();
         }
 
@@ -1301,25 +1303,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;
             return string.IsNullOrEmpty(result);
-        }
-
-        private bool CheckAdjustDatePast10Days()
-        {
-            if (CurrentPrescription.AdjustDate is null)
-            {
-                MessageWindow.ShowMessage(" 調劑日不可為空", MessageType.ERROR);
-                isAdjusting = false;
-                return false;
-            }
-            if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
-            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
-            if (timeDiff > 10)
-            {
-                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
-                isAdjusting = false;
-                return false;
-            }
-            return true;
         }
         #endregion
     }

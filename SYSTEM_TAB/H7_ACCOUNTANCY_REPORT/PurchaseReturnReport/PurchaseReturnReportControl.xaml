@@ -50,6 +50,7 @@
                             <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowDetail"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>
@@ -146,6 +147,7 @@
                             <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowDetail"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>
@@ -214,7 +216,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-            <Button Content="結果輸出 CSV" FontFamily="Segoe UI Semibold" BorderThickness="0" Margin="10,0,0,0" Background="IndianRed" Command="{Binding ExportCSVCommand}"/>
+            <Button Content="匯出結果" FontFamily="Segoe UI Semibold" BorderThickness="0" Margin="10,0,0,0" Background="IndianRed" Command="{Binding ExportCSVCommand}"/>
             <TextBlock Text="進貨含稅 $" FontSize="20" FontFamily="Segoe UI Semibold" TextAlignment="Center" VerticalAlignment="Center" Margin="480,0,0,0"/>
             <TextBlock Text="{Binding CurrentManufactoryOrder.PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="20" Width="120" FontFamily="Segoe UI Semi" TextAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBlock Text="退貨含稅 $" FontSize="20" FontFamily="Segoe UI Semibold" TextAlignment="Center" VerticalAlignment="Center"/>
