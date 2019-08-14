@@ -16,12 +16,27 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
         public void ConvertMedToSendData(Prescription.Prescription prescription, bool isAllSend) {
             Clear(); 
             List<MedicineInventoryStruct> tempMeds = new List<MedicineInventoryStruct>();
+            List<string> meds = new List<string>();
             foreach (var m in prescription.Medicines) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
                     Add(new PrescriptionSendData(m));
-                    if(tempMeds.Count(t => t.ID == m.InventoryID) == 0)
-                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID,m.UsableAmount));
+                    if (tempMeds.Count(t => t.ID == m.InventoryID) == 0) {
+                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, m.UsableAmount));
+                        meds.Add(m.ID);
+                    }
                 } 
+            }
+            Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
+            foreach (var inv in inventories) {
+                for (int i = 0; i < this.Count; i++) {
+                    if (this[i].InvID == inv.InvID)
+                        this[i].OntheWay = inv.OnTheWayAmount;
+                }
+                for (int i = 0; i < tempMeds.Count; i++)
+                {
+                    if (tempMeds[i].ID == inv.InvID)
+                        tempMeds[i].Amount += inv.OnTheWayAmount;
+                }
             }
             for (int i = 0; i < this.Count; i++) {
                 for (int j = 0; j < tempMeds.Count; j++) {
