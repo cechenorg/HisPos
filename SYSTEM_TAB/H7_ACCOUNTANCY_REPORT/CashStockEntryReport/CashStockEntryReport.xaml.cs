@@ -20,6 +20,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public partial class CashStockEntryReport : UserControl {
         public CashStockEntryReport() {
             InitializeComponent();
+            StartDate.Focus();
+            StartDate.SelectionStart = 0;
         }
+
+        private void StartDate_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                EndDate.Focus();
+                EndDate.SelectionStart = 0;
+            }
+        }
+
+        private void EndDate_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchButton.Focus();
+            }
+        }
+
+      
     }
 }
