@@ -59,7 +59,37 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => EmployeeCollection, ref employeeCollection, value);
             }
         }
-   
+        private string productSearchName;
+        public string ProductSearchName
+        {
+            get { return productSearchName; }
+            set
+            {
+                Set(() => ProductSearchName, ref productSearchName, value);
+            }
+        }
+        private bool sourceallItemsAreChecked;
+        public bool SourceallItemsAreChecked
+        {
+            get { return sourceallItemsAreChecked; }
+            set
+            {
+                Set(() => SourceallItemsAreChecked, ref sourceallItemsAreChecked, value);
+                for (int i = 0; i < SourceStockTakingProducts.Count; i++)
+                {
+                    SourceStockTakingProducts[i].IsSelected = value;
+                }
+            }
+        }
+        private StockTakingPlanProducts sourceStockTakingProducts = new StockTakingPlanProducts();
+        public StockTakingPlanProducts SourceStockTakingProducts
+        {
+            get { return sourceStockTakingProducts; }
+            set
+            {
+                Set(() => SourceStockTakingProducts, ref sourceStockTakingProducts, value);
+            }
+        }
         private NewClass.StockTaking.StockTakingPlan.StockTakingPlan currentPlan = new NewClass.StockTaking.StockTakingPlan.StockTakingPlan();
         public NewClass.StockTaking.StockTakingPlan.StockTakingPlan CurrentPlan
         {
@@ -147,6 +177,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand ShowStockResultMedicineDetailCommand { get; set; }
         public RelayCommand ShowStockPlanMedicineDetailCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
+        public RelayCommand AddProductCommand { get; set; }
+        public RelayCommand GetControlMedicinesCommand { get; set; }
+        public RelayCommand GetStockLessProductsCommand { get; set; }
+        public RelayCommand GetMonthMedicinesCommand { get; set; }
+        public RelayCommand GetOnTheFrameMedicinesCommand { get; set; }
+        public RelayCommand ProductSearchCommand { get; set; } 
         
 
         public StockTakingViewModel() {
@@ -327,6 +363,61 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             CurrentPlan.StockTakingProductCollection.Remove(StockTakingPlanProductSelected);
             ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
         }
+        private void GetControlMedicinesAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetControlMedincines(CurrentPlan.WareHouse.ID);
+            RemoveSourceProInTarget();
+        }
+        private void GetStockLessProductsAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetStockLessProducts(CurrentPlan.WareHouse.ID);
+            RemoveSourceProInTarget();
+        }
+        private void GetMonthMedicinesAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetMonthMedicines(CurrentPlan.WareHouse.ID);
+            RemoveSourceProInTarget();
+        }
+        private void GetOnTheFrameMedicinesAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetOnTheFrameMedicines(CurrentPlan.WareHouse.ID);
+            RemoveSourceProInTarget();
+        }
+
+        private void GetStockTakingProductByProNameAction()
+        {
+            SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName, CurrentPlan.WareHouse.ID);
+            RemoveSourceProInTarget();
+        }
+
+        private void RemoveSourceProInTarget()
+        {
+            SourceallItemsAreChecked = false;
+            for (int i = 0; i < SourceStockTakingProducts.Count; i++)
+            {
+                if (CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0)
+                {
+                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    i--;
+                }
+            }
+        }
+        private void AddProductAction()
+        {
+            for (int i = 0; i < SourceStockTakingProducts.Count; i++)
+            {
+                if (SourceStockTakingProducts[i].IsSelected && CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) == 0)
+                {
+                    if (!SourceStockTakingProducts[i].IsError) {
+                        SourceStockTakingProducts[i].IsSelected = false;
+                        continue;
+                    } 
+                    CurrentPlan.StockTakingProductCollection.Add(SourceStockTakingProducts[i]);
+                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    i--;
+                }
+            }
+        }
         
         private void RegisterCommand() {
            
@@ -343,6 +434,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ShowStockPlanMedicineDetailCommand = new RelayCommand(ShowStockPlanMedicineDetailAction);
             ShowStockResultMedicineDetailCommand = new RelayCommand(ShowStockResultMedicineDetailAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
+            AddProductCommand = new RelayCommand(AddProductAction);
+            GetControlMedicinesCommand = new RelayCommand(GetControlMedicinesAction);
+            GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
+            GetOnTheFrameMedicinesCommand = new RelayCommand(GetOnTheFrameMedicinesAction);
+            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
+            ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction); 
         }
     }
 }

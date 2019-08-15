@@ -130,20 +130,23 @@
             <Label Content="輸入盤點結果" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Label Content="盤差" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </Grid>
-        <ContentControl Grid.Row="2" Content="{Binding}">
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Result">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Reason">
-                            <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+        <Grid  Grid.Row="2"> 
+            <ContentControl Grid.Column="1" Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Result">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Reason">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+       
     </Grid>
 </UserControl>
