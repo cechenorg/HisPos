@@ -100,7 +100,7 @@
             <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoData}" />
+                        <Setter Property="ContentTemplate" Value="{StaticResource NoEditControl}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding UpdateSourceTrigger=PropertyChanged}" Value="NoEdit">
                                 <Setter Property="ContentTemplate" Value="{StaticResource NoEditControl}" />
