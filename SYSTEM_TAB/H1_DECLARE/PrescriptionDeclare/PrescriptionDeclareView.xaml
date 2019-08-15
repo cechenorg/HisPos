@@ -53,13 +53,13 @@
         <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
-            <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="125" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonRegister" DataType="{x:Type Button}">
-            <Button Content="登錄" Command="{Binding DataContext.Register, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="125" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="登錄" Command="{Binding DataContext.Register, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonPrescribe" DataType="{x:Type Button}">
-            <Button Content="自費調劑" Command="{Binding DataContext.PrescribeAdjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="145" Height="30" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
+            <Button Content="自費調劑" Command="{Binding DataContext.PrescribeAdjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16"/>
         </DataTemplate>
         <DataTemplate x:Key="UpdateSendToSingde" DataType="{x:Type CheckBox}">
             <CheckBox Width="133" Height="35" Content="修改傳送杏德"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="IndianRed" Margin="10,0,0,0" Visibility="Hidden"
@@ -70,28 +70,28 @@
                       IsEnabled="{Binding DataContext.CanSendOrder,Mode=OneWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsChecked="{Binding DataContext.CurrentPrescription.PrescriptionStatus.IsSendOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.SendOrder, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelNotSend" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="備藥狀態:未處理" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="140" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="40"/>
+            <Label Content="備藥狀態 : 未處理" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelIsSend" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="備藥狀態:已備藥" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green"  Width="140" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="40"/>
+            <Label Content="備藥狀態 : 已備藥" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green"  Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelNotPrepare" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="備藥狀態:不備藥" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray"  Width="140" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="40"/>
+            <Label Content="備藥狀態 : 不備藥" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray"  Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelWaitingConfirm" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="訂單狀態:等待確認" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="OrangeRed" Foreground="OrangeRed" Width="145" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="40"/>
+            <Label Content="訂單狀態 : 等待確認" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="OrangeRed" Foreground="OrangeRed" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelWaiting" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="訂單狀態:等待收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="RoyalBlue" Foreground="RoyalBlue" Width="145" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="40"/>
+            <Label Content="訂單狀態 : 等待收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="RoyalBlue" Foreground="RoyalBlue" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelNoOrder" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="訂單狀態:無訂單" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="140" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="40"/>
+            <Label Content="訂單狀態 : 無訂單" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelReceived" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="訂單狀態:已收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green" Width="140" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="40"/>
+            <Label Content="訂單狀態 : 已收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="LabelObsolete" DataType="{x:Type local:PrescriptionDeclareView}">
-            <Label Content="訂單狀態:訂單作廢" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="145" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="40"/>
+            <Label Content="訂單狀態 : 訂單作廢" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
         <DataTemplate x:Key="CustomerHistories" DataType="{x:Type local:PrescriptionDeclareView}">
             <DataTemplate.Resources>
@@ -187,9 +187,9 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Height="250" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
-                                  ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"
-                                  CanUserReorderColumns="False">
+                <DataGrid Height="250" Width="550" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
+                          ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"
+                          CanUserReorderColumns="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -211,7 +211,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="340" MaxWidth="340" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" CanUserResize="False">
+                        <DataGridTextColumn Width="310" MaxWidth="310" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" CanUserResize="False">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -430,7 +430,7 @@
                     </TextBox>
                     <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Background="#378AE5" Content="{StaticResource QrCode}" Margin="15,0,0,0" BorderBrush="Transparent" Height="35" Width="40" Padding="8" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
+                    <Button Background="#378AE5" Content="{StaticResource QrCode}" Margin="20,0,0,0" BorderBrush="Transparent" Height="35" Width="40" Padding="8" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
                     <Button Content="合作診所處方" Background="DarkCyan" Height="35" BorderThickness="0" Margin="10,0,0,0" Command="{Binding GetCooperativePres}" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="取得病患資料" Background="RoyalBlue" Height="35" BorderThickness="0"  Margin="10,0,0,0" Command="{Binding GetPatientData}"/>
                 </StackPanel>
@@ -928,7 +928,7 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>-->
-                            <ContentControl Width="173" Margin="0,0,0,0">
+                            <ContentControl Width="173" Margin="10,0,0,0">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Style.Triggers>
@@ -960,11 +960,11 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                            <Button Width="125" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding Clear}" Margin="20,0,0,0"/>
+                            <Button Width="135" Height="35" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding Clear}" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">
-                            <Button Width="95" Height="30" Background="DimGray" BorderThickness="0" Content="異常結案" FontSize="16" Command="{Binding ErrorAdjust}" />
-                            <Button Width="70" Height="30" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding DepositAdjust}" Margin="10,0,0,0"/>
+                            <Button Width="95" Height="35" Background="DimGray" BorderThickness="0" Content="異常結案" FontSize="16" Command="{Binding ErrorAdjust}" />
+                            <Button Width="70" Height="35" Background="IndianRed" BorderThickness="0" Content="欠卡" FontSize="16" Command="{Binding DepositAdjust}" Margin="10,0,0,0"/>
                             <ContentControl>
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
