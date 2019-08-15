@@ -534,7 +534,10 @@ namespace His_Pos.NewClass.Prescription
                         Medicines.Update(IsBuckle, int.Parse(SourceId),Type);
                         break;
                     default:
-                        Medicines.Update(IsBuckle, ID, Type);
+                        if (ID == 0)
+                            Medicines.Update(IsBuckle, ID, Type,AdjustDate,WareHouse?.ID);
+                        else
+                            Medicines.Update(IsBuckle, ID, Type);
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
