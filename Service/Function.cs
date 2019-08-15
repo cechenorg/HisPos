@@ -165,7 +165,7 @@ namespace His_Pos.Service
             return result;
         }
 
-        public void DailyUpload(XDocument dailyUpload,string recCount,string pPrecCount)
+        public void DailyUpload(XDocument dailyUpload,string recCount)
         {
             try
             {
@@ -175,12 +175,11 @@ namespace His_Pos.Service
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
                 var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
                 var count = ConvertData.StringToBytes(recCount, recCount.Length);
-                var pPrecNumber = ConvertData.StringToBytes(pPrecCount, pPrecCount.Length);
-                var pBuffer = new byte[180];
-                var iBufferLength = 180;
+                var pBuffer = new byte[50];
+                var iBufferLength = 50;
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
-                    var res = HisApiBase.csUploadDataPrec(fileNameArr, fileSize, count, pPrecNumber,pBuffer, ref iBufferLength);
+                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                     if (res == 0)
                     {
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
@@ -201,14 +200,13 @@ namespace His_Pos.Service
                         var receiveMinute = receiveDateTime.Substring(10, 2);
                         var receiveSecond = receiveDateTime.Substring(12, 2);
                         var receiveDateStr = $"{receiveYear}/{receiveMonth}/{receiveDay} {receiveHour}:{receiveMinute}:{receiveSecond}";
-                        var randomCode = ConvertData.ByToString(pBuffer, 50, 130);
                         var uploadTime = new DateTime(int.Parse(uploadYear),int.Parse(uploadMonth),int.Parse(uploadDay),int.Parse(uploadHour),int.Parse(uploadMinute),int.Parse(uploadSecond));
                         var receiveTime = new DateTime(int.Parse(receiveYear),int.Parse(receiveMonth),int.Parse(receiveDay),int.Parse(receiveHour),int.Parse(receiveMinute),int.Parse(receiveSecond));
                         MessageWindow.ShowMessage("上傳成功\n上傳時間:"+ uploadDateStr + "\n接收時間:"+ receiveDateStr, MessageType.SUCCESS);
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
+                        IcDataUploadDb.UpdateDailyUploadData(samCode,insID, uploadTime,receiveTime);
                         MainWindow.ServerConnection.CloseConnection();
-                        IcDataUploadDb.UpdateDailyUploadData(samCode,insID, uploadTime,receiveTime,randomCode);
                     }
                     else
                     {
@@ -223,7 +221,7 @@ namespace His_Pos.Service
             }
         }
 
-        public void DailyUploadWithoutMessage(XDocument dailyUpload, string recCount,string pPrecCount)
+        public void DailyUploadWithoutMessage(XDocument dailyUpload, string recCount)
         {
             try
             {
@@ -233,12 +231,11 @@ namespace His_Pos.Service
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
                 var fileSize = ConvertData.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
                 var count = ConvertData.StringToBytes(recCount, recCount.Length);
-                var pPrecNumber = ConvertData.StringToBytes(pPrecCount, pPrecCount.Length);
-                var pBuffer = new byte[180];
-                var iBufferLength = 180;
+                var pBuffer = new byte[50];
+                var iBufferLength = 50;
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
-                    var res = HisApiBase.csUploadDataPrec(fileNameArr, fileSize, count, pPrecNumber,pBuffer, ref iBufferLength);
+                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count ,pBuffer, ref iBufferLength);
                     if (res == 0)
                     {
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
@@ -257,12 +254,11 @@ namespace His_Pos.Service
                         var receiveHour = receiveDateTime.Substring(8, 2);
                         var receiveMinute = receiveDateTime.Substring(10, 2);
                         var receiveSecond = receiveDateTime.Substring(12, 2);
-                        var randomCode = ConvertData.ByToString(pBuffer, 50, 130);
                         var uploadTime = new DateTime(int.Parse(uploadYear), int.Parse(uploadMonth), int.Parse(uploadDay), int.Parse(uploadHour), int.Parse(uploadMinute), int.Parse(uploadSecond));
                         var receiveTime = new DateTime(int.Parse(receiveYear), int.Parse(receiveMonth), int.Parse(receiveDay), int.Parse(receiveHour), int.Parse(receiveMinute), int.Parse(receiveSecond));
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
-                        IcDataUploadDb.UpdateDailyUploadData(samCode, insID, uploadTime, receiveTime, randomCode);
+                        IcDataUploadDb.UpdateDailyUploadData(samCode, insID, uploadTime, receiveTime);
                         MainWindow.ServerConnection.CloseConnection();
                     }
                 }

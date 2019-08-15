@@ -15,6 +15,12 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Image x:Key="Add" Source="/Images/cross.png"/>
+        <DataTemplate x:Key="PrescriptionSearch" DataType="{x:Type Button}">
+            <Button Command="{Binding DataContext.Search, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="96" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="處方查詢" Margin="30,0,0,0" FontSize="16"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReserveSearch" DataType="{x:Type Button}">
+            <Button Command="{Binding DataContext.Search, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="96" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="預約查詢" Margin="30,0,0,0" FontSize="16"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Viewbox Stretch="Fill" Width="1363">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
@@ -64,12 +70,23 @@
                         </Binding>
                     </xctk:MaskedTextBox>
                     <Label Content="調劑案件" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
-                    <ComboBox Name="AdjustCase" Height="35" Width="170" ItemsSource="{Binding AdjustCases,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAdjustCase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" DisplayMemberPath="Name"
+                    <ComboBox Name="AdjustCase" Height="35" Width="155" ItemsSource="{Binding AdjustCases,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAdjustCase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" DisplayMemberPath="Name"
                               ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" SelectionChanged="AdjustCase_OnSelectionChanged"/>
                     <Label Content="科別" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
-                    <ComboBox Name="Division" Height="35" Width="170" ItemsSource="{Binding Divisions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDivision,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" DisplayMemberPath="Name"
+                    <ComboBox Name="Division" Height="35" Width="148" ItemsSource="{Binding Divisions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDivision,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" DisplayMemberPath="Name"
                               ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" SelectionChanged="Division_OnSelectionChanged"/>
-                    <Button Command="{Binding Search}" Height="35" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="30,0,0,0" FontSize="16"/>
+                    <ContentControl>
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionSearch}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedTimeIntervalType}" Value="預約日">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource ReserveSearch}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
                     <Button Command="{Binding Clear}" Height="35" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="10,0,0,0" FontSize="16"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">

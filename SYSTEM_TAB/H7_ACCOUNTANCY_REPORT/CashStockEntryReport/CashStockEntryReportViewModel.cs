@@ -290,6 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand PrintCashPerDayCommand { get; set; }
+        public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
@@ -301,10 +302,58 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
+            PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
             GetData();
             InitCollection();
         }
         #region Action
+        private void PrintPrescriptionProfitDetailAction()
+        {
+            if (PrescriptionDetailReportView is null) return;
+
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "處方毛利明細";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "_" + EndDate.ToString("yyyyMMdd") + "處方毛利明細";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {  
+                        file.WriteLine("姓名,醫療院所,藥服(估),藥品,自費,耗用,毛利");
+                        double sumMedicalServicePoint = 0;
+                        double sumMedicalPoint = 0;
+                        double sumPaySelfPoint = 0;
+                        double sumMeduse = 0;
+                        double sumProfit = 0;
+                        foreach (var c in PrescriptionDetailReportView)
+                        {
+                            PrescriptionDetailReport presc = (PrescriptionDetailReport)c;
+                            file.WriteLine($"{presc.CusName},{presc.InsName},{presc.MedicalServicePoint},{presc.MedicalPoint},{presc.PaySelfPoint},{presc.Meduse},{presc.Profit}");
+                            sumMedicalServicePoint += presc.MedicalServicePoint;
+                            sumMedicalPoint += presc.MedicalPoint;
+                            sumPaySelfPoint += presc.PaySelfPoint;
+                            sumMeduse += presc.Meduse;
+                            sumProfit += presc.Profit;
+                        } 
+                        file.WriteLine($"合計,,{sumMedicalServicePoint},{sumMedicalPoint},{sumPaySelfPoint},{sumMeduse},{sumProfit}");
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+        }
         private void InitCollection() {
             AdjustCaseString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" }; 
         }

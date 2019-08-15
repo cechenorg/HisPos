@@ -222,6 +222,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => SelectedPatientDetail, ref selectedPatientDetail, value);
             }
         }
+        private string reserveStatus;
+        public string ReserveStatus
+        {
+            get => reserveStatus;
+            set
+            {
+                Set(() => ReserveStatus, ref reserveStatus, value);
+            }
+        }
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -734,7 +743,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,true)) return;
             StartErrorAdjust();
         }
 
@@ -743,7 +752,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(true)) return;
+            if (!CheckPrescription(true,false)) return;
             StartDepositAdjust();
         }
 
@@ -752,7 +761,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,false)) return;
             CheckIsReadCard();
         }
 
@@ -761,7 +770,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
-            if (!CheckPrescription(false))
+            if (!CheckPrescription(false,false))
             {
                 CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
                 return;
@@ -774,7 +783,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,false)) return;
             StartPrescribeAdjust();
         }
         #endregion
@@ -1068,7 +1077,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartErrorAdjust()
         {
-            currentService.StartErrorAdjust();
+            if (!currentService.StartErrorAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
@@ -1077,7 +1090,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartDepositAdjust()
         {
             CurrentPrescription.CountDeposit();
-            currentService.StartDepositAdjust();
+            if (!currentService.StartDepositAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(true);
             DeclareSuccess();
@@ -1098,7 +1115,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartPrescribeAdjust()
         {
             CurrentPrescription.SetDetail();
-            currentService.StartPrescribeAdjust();
+            if (!currentService.StartPrescribeAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
@@ -1111,7 +1132,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return (bool)errorAdjustConfirm.DialogResult;
         }
 
-        private bool CheckPrescription(bool noCard)
+        private bool CheckPrescription(bool noCard,bool errorAdjust)
         {
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
@@ -1121,7 +1142,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return false;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var checkPrescription = currentService.CheckPrescription(noCard);
+            var checkPrescription = currentService.CheckPrescription(noCard,errorAdjust);
             MainWindow.ServerConnection.CloseConnection();
             if(!checkPrescription)
                 isAdjusting = false;

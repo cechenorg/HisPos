@@ -95,16 +95,81 @@
                         </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <Style  x:Key="MyLabelStyle" TargetType="Label">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Label}">
+                                                    <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                                                             BorderThickness="{TemplateBinding BorderThickness}" 
+                                                             Background="{TemplateBinding Background}" 
+                                                             Padding="{TemplateBinding Padding}" 
+                                                             SnapsToDevicePixels="true" 
+                                                             CornerRadius="3">
+                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsEnabled" Value="false">
+                                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                    <DataTemplate x:Key="LabelWaitingConfirm" DataType="{x:Type local:CustomerPrescriptionWindow}">
+                                        <Label Content="等待確認" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="OrangeRed" Foreground="OrangeRed" Width="80" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="LabelWaiting" DataType="{x:Type local:CustomerPrescriptionWindow}">
+                                        <Label Content="等待收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="RoyalBlue" Foreground="RoyalBlue" Width="80" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="LabelNotSend" DataType="{x:Type local:CustomerPrescriptionWindow}">
+                                        <Label Content="無訂單" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="62" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="LabelReceived" DataType="{x:Type local:CustomerPrescriptionWindow}">
+                                        <Label Content="已收貨" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green" Width="62" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="LabelObsolete" DataType="{x:Type local:CustomerPrescriptionWindow}">
+                                        <Label Content="訂單作廢" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="80" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataTemplate.Resources>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,5">
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                        <ContentControl Content="{Binding}" Margin="10,2,0,0">
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="訂單作廢">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelObsolete}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="無訂單">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="等待確認">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelWaitingConfirm}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="等待收貨">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelWaiting}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已收貨">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelReceived}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                        <Label Content="{Binding OrderID}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,5">
                                         <Label Content="{Binding Institution.Name}" Width="245" FontSize="19" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                                         <Label Content="{Binding Division.Name}" FontSize="19" HorizontalContentAlignment="Left" VerticalAlignment="Center" Width="81"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5" >
+                                    <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,5" >
                                         <Label Content="就醫:" FontSize="18" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI"/>
                                         <Label Content="{Binding TreatDate,Converter={StaticResource DateConverter}}" FontSize="18" VerticalAlignment="Center" Width="100" FontFamily="Segoe UI"/>
                                         <Label Content="調劑:" FontSize="18" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI"/>
@@ -187,25 +252,28 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <ContentControl Content="{Binding}" Grid.Row="0" Margin="0,2,0,0" HorizontalAlignment="Right">
-                                        <ContentControl.Style>
-                                            <Style TargetType="{x:Type ContentControl}">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已備藥">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource LabelIsSend}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="不備藥">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource LabelNotPrepare}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ContentControl.Style>
-                                    </ContentControl>
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                        <ContentControl Content="{Binding}" Margin="10,2,0,0">
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="未處理">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="已備藥">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelIsSend}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DataContext.IsSend, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" Value="不備藥">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource LabelNotPrepare}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                        <Label Content="{Binding OrderID}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
                                         <Label Content="{Binding Institution.Name}" Width="245" FontSize="18" HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                                         <Label Content="{Binding Division.Name}" FontSize="18" HorizontalContentAlignment="Left" VerticalAlignment="Center" Width="81"/>
                                     </StackPanel>

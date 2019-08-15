@@ -36,9 +36,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <xctk:MaskedTextBox Width="150" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
+                <xctk:MaskedTextBox x:Name="StartDate" Width="150" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
-                                InsertKeyMode="Overwrite" >
+                                InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_PreviewKeyDown" >
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -49,9 +49,9 @@
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
                 <Label Content="~" FontSize="25" VerticalAlignment="Center"/>
-                <xctk:MaskedTextBox Width="150" Margin="10,0,0,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
+                <xctk:MaskedTextBox x:Name="EndDate" Width="150" Margin="10,0,0,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
-                                InsertKeyMode="Overwrite" >
+                                InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_PreviewKeyDown">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -61,7 +61,7 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Button Width="120" Command="{Binding SearchCommand}" Margin="850,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                <Button x:Name="SearchButton" Width="120" Command="{Binding SearchCommand}" Margin="860,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
             <Label Grid.Row="1" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Grid Grid.Row="2" Grid.Column="0">
@@ -115,7 +115,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="110" Header="" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TypeName}">
+                        <DataGridTextColumn Width="100" Header="" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TypeName}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Left"/>

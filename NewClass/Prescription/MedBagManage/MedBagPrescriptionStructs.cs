@@ -32,6 +32,10 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
         {
             return GetMedBagPrescriptionStructs("Reg");
         }
+        internal static MedBagPrescriptionStructs GetPastReserveMedBagPrescriptions()
+        {
+            return GetMedBagPrescriptionStructs("PastRes");
+        }
         private static MedBagPrescriptionStructs GetMedBagPrescriptionStructs(string type)
         {
             var temp = new MedBagPrescriptionStructs(PrescriptionDb.GetMedBagPrescriptionStructsByType(type));
@@ -40,6 +44,7 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
 
             return temp;
         }
+
         #endregion
     }
 }

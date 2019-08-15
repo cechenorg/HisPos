@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using OfficeOpenXml.ConditionalFormatting;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSelectionWindow
 {
@@ -63,9 +64,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
+        public string SelectedCount
+        {
+            get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
+        }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand SelectAll { get; set; }
         public RelayCommand CancelSelectAll { get; set; }
+        public RelayCommand SelectedChanged { get; set; }
         public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions)
         {
             Institutions = adjustedInstitutions;
@@ -74,7 +80,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             SelectAll = new RelayCommand(SelectAllAction);
             CancelSelectAll = new RelayCommand(CancelSelectAllAction);
+            SelectedChanged = new RelayCommand(SelectedCountChangedAction);
         }
+
+        private void SelectedCountChangedAction()
+        {
+            RaisePropertyChanged("SelectedCount");
+        }
+
         private void SelectAllAction()
         {
             foreach (var i in Institutions)

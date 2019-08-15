@@ -7,7 +7,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="已調劑院所篩選" Height="400" Width="800">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
@@ -54,7 +54,7 @@
                     <DataGridTemplateColumn MinWidth="40" Header="加入" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding DataContext.SelectedChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -79,6 +79,7 @@
                 </TextBox>
                 <Button Content="全選" Margin="10" FontFamily="Segoe UI Semibold" FontSize="18" Command="{Binding SelectAll}" Background="RoyalBlue" BorderBrush="RoyalBlue"/>
                 <Button Content="取消全選" Margin="0,10,10,10" FontFamily="Segoe UI Semibold" FontSize="18" Command="{Binding CancelSelectAll}" Background="IndianRed" BorderBrush="IndianRed"/>
+                <Label Content="{Binding SelectedCount,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalContentAlignment="Center"/>
             </StackPanel>
             <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}" Margin="10">
                 <ContentControl.Style>

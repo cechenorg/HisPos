@@ -785,7 +785,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="80" Header="上次進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding CostPrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" >
+                    <DataGridTextColumn MinWidth="60" Header="進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding AveragePrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

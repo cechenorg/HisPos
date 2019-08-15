@@ -32,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         private string busyContent;
         private MedBagPrescriptionStructs reserveCollection;
         private MedBagPrescriptionStructs registerCollection;
+        private MedBagPrescriptionStructs pastReserveCollection;
         private BackgroundWorker initBackgroundWorker;
 
         public bool IsBusy
@@ -53,6 +54,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         {
             get => registerCollection;
             set { Set(() => RegisterCollection, ref registerCollection, value); }
+        }
+        public MedBagPrescriptionStructs PastReserveCollection
+        {
+            get => pastReserveCollection;
+            set { Set(() => PastReserveCollection, ref pastReserveCollection, value); }
         }
         public double TotalStockValue => (ReserveCollection is null || RegisterCollection is null)? 0 : ReserveCollection.TotalStockValue + RegisterCollection.TotalStockValue;
         #endregion
@@ -76,6 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
                 MainWindow.ServerConnection.OpenConnection();
                 ReserveCollection = MedBagPrescriptionStructs.GetReserveMedBagPrescriptions();
                 RegisterCollection = MedBagPrescriptionStructs.GetRegisterMedBagPrescriptions();
+                PastReserveCollection = MedBagPrescriptionStructs.GetPastReserveMedBagPrescriptions();
                 MainWindow.ServerConnection.CloseConnection();
             };
 
