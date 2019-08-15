@@ -50,7 +50,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
@@ -86,7 +86,7 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <StackPanel Orientation="Horizontal" Margin="10,10,10,0" Grid.Row="2" Background="{StaticResource GridBackGround}">
+            <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Grid.Row="2" Background="{StaticResource GridBackGround}">
                 <Label Content="篩選條件" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <RadioButton Content="全部" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding FilterCommand}" CommandParameter="1"/>
                 <RadioButton Content="常備" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="2"/>
