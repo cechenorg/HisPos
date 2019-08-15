@@ -125,7 +125,34 @@ namespace His_Pos.NewClass.Prescription
                             PrescriptionStatus.OrderStatus += "不備藥";
                             break;
                     }
-                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Equals("已備藥");
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
+                    OrderContent = PrescriptionStatus.OrderStatus;
+                    if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
+                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
+                    break;
+                case PrescriptionType.ChronicRegister:
+                    Medicines = new Medicines();
+                    Medicines.GetDataByPrescriptionId(ID);
+                    PrescriptionStatus.OrderStatus = "訂單狀態:";
+                    switch (r.Field<string>("StoOrd_Status"))
+                    {
+                        case "W":
+                            PrescriptionStatus.OrderStatus += "等待確認";
+                            break;
+                        case "P":
+                            PrescriptionStatus.OrderStatus += "等待收貨";
+                            break;
+                        case "D":
+                            PrescriptionStatus.OrderStatus += "已收貨";
+                            break;
+                        case "S":
+                            PrescriptionStatus.OrderStatus += "訂單做廢";
+                            break;
+                        default:
+                            PrescriptionStatus.OrderStatus += "無訂單";
+                            break;
+                    }
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
                     OrderContent = PrescriptionStatus.OrderStatus;
                     if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
                         OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
@@ -1172,15 +1199,12 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.SetDepositAdjustStatus();
         }
 
-        public void InsertDb()
+        public bool InsertDb()
         {
-            if (ID == 0)
-                InsertPrescription();
-            else
-                Update();
+            return ID == 0 ? InsertPrescription() : Update();
         }
 
-        public void InsertPrescription()
+        public bool InsertPrescription()
         {
             CreateDeclareFileContent();//產生申報資料
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
@@ -1190,11 +1214,16 @@ namespace His_Pos.NewClass.Prescription
                 Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
                 if ((bool)retry.DialogResult)
                     resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
+                else
+                {
+                    return false;
+                }
             }
             ID = resultTable.Rows[0].Field<int>("DecMasId");
+            return true;
         }
 
-        public void Update()
+        public bool Update()
         {
             switch (Type)
             {
@@ -1203,15 +1232,21 @@ namespace His_Pos.NewClass.Prescription
                     var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
                     while (NewFunction.CheckTransaction(resultTable))
                     {
-                        MessageWindow.ShowMessage("處方登錄異常，按下OK重試", MessageType.WARNING);
-                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
+                        var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
+                        Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
+                        if ((bool)retry.DialogResult)
+                            resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
+                        else
+                        {
+                            return false;
+                        }
                     }
                     break;
                 case PrescriptionType.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, Details);
                     break;
-
             }
+            return true;
         }
 
         private void SetValue()

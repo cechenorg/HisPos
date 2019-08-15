@@ -32,13 +32,13 @@ namespace His_Pos.NewClass.Prescription.Service
     public abstract class PrescriptionService : ObservableObject
     {
         #region AbstractFunctions
-        public abstract bool CheckPrescription(bool noCard);
+        public abstract bool CheckPrescription(bool noCard,bool errorAdjust);
         public abstract bool CheckEditPrescription(bool noCard);
         public abstract bool NormalAdjust();
-        public abstract void ErrorAdjust();
-        public abstract void DepositAdjust();
+        public abstract bool ErrorAdjust();
+        public abstract bool DepositAdjust();
         public abstract bool Register();
-        public abstract void PrescribeAdjust();
+        public abstract bool PrescribeAdjust();
         #endregion
         public PrescriptionService()
         {
@@ -79,18 +79,20 @@ namespace His_Pos.NewClass.Prescription.Service
             return result;
         }
 
-        public void StartErrorAdjust()
+        public bool StartErrorAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            ErrorAdjust();
+            var result = ErrorAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
-        public void StartDepositAdjust()
+        public bool StartDepositAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            DepositAdjust();
+            var result = DepositAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public bool StartRegister()
@@ -101,11 +103,12 @@ namespace His_Pos.NewClass.Prescription.Service
             return result;
         }
 
-        public void StartPrescribeAdjust()
+        public bool StartPrescribeAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            PrescribeAdjust();
+            var result = PrescribeAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public bool SetPharmacist(Employee selectedPharmacist, int prescriptionCount)
@@ -176,8 +179,10 @@ namespace His_Pos.NewClass.Prescription.Service
             return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
         }
 
-        protected bool CheckAdjustAndTreatDate()
+        protected bool CheckAdjustAndTreatDate(bool notCheckPast10Days)
         {
+            if (notCheckPast10Days)
+                return CheckTreatDate() && CheckAdjustDate();
             return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
         }
 
