@@ -183,8 +183,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand GetMonthMedicinesCommand { get; set; }
         public RelayCommand GetOnTheFrameMedicinesCommand { get; set; }
         public RelayCommand ProductSearchCommand { get; set; } 
-        
-
+        public RelayCommand WarHouseChangedCommand { get; set; }
+         
         public StockTakingViewModel() {
             RegisterCommand();
             WareHouses = VM.WareHouses;
@@ -408,7 +408,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 if (SourceStockTakingProducts[i].IsSelected && CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) == 0)
                 {
-                    if (!SourceStockTakingProducts[i].IsError) {
+                    if (SourceStockTakingProducts[i].IsError) {
                         SourceStockTakingProducts[i].IsSelected = false;
                         continue;
                     } 
@@ -417,6 +417,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                     i--;
                 }
             }
+        }
+        private void WarHouseChangedAction()
+        {
+            
         }
         
         private void RegisterCommand() {
@@ -439,7 +443,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
             GetOnTheFrameMedicinesCommand = new RelayCommand(GetOnTheFrameMedicinesAction);
             GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
-            ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction); 
+            ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
+            WarHouseChangedCommand = new RelayCommand(WarHouseChangedAction);
         }
     }
 }

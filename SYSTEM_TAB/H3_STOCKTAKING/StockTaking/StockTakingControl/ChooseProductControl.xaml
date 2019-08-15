@@ -138,7 +138,12 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                     <Label Content="庫別" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="25" FontFamily="Segoe UI Semibold"/>
                     <ComboBox Grid.Row="0" Width="100"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding CurrentPlan.WareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding WareHouses}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                          ItemsSource="{Binding WareHouses}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding Path=DataContext.WarHouseChangedCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
                 </StackPanel> 
                 <DataGrid Grid.Column="0" Grid.Row="1" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Margin="10,10,10,0"
