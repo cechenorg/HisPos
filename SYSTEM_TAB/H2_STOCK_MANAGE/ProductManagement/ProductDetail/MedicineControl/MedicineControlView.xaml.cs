@@ -32,5 +32,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 MessageWindow.ShowMessage("架上安全量: 架上量小於安全量時，會在常備採購時轉出採購\r\n\r\n基準量: 架上量小於安全量時，會採購至基準量\r\n\r\n包裝量: 常備採購時，會採購包裝量的倍數", MessageType.WARNING);
             }
         }
+        private void TextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if(textBox is null) return;
+
+            textBox.Focus();
+        }
+
+        private void TextBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+        }
     }
 }
