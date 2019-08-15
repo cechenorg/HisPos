@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>22</ApplicationRevision>
+    <ApplicationRevision>24</ApplicationRevision>
     <ApplicationVersion>2.0.10.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -970,6 +970,15 @@
       <DependentUpon>EmployeeInsertWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\AllEditableControl.xaml.cs">
+      <DependentUpon>AllEditableControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoEditControl.xaml.cs">
+      <DependentUpon>NoEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\SelfEditControl.xaml.cs">
+      <DependentUpon>SelfEditControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
     </Compile>
@@ -1639,6 +1648,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\AllEditableControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\SelfEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -115,26 +115,26 @@
                 </TextBox>-->
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
-                <CheckBox Content="常備藥" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" Click="IsCommon_OnClick"/>
+                <CheckBox Content="常備" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" Click="IsCommon_OnClick"/>
                 <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
+                    <Label Content="架上安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
+                    <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <Label Content="包裝量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding MinOrderAmount, Mode=TwoWay}" Width="60" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center">
+                    <Label Content="包裝量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <TextBox Text="{Binding MinOrderAmount, Mode=TwoWay}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -214,12 +214,12 @@
             <Label Content="商品相關資料" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0"/>
             <Label Content="庫別" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0"/>
             <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="18" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="75,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="10,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="40,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="25,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
             <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="ForestGreen" Margin="10,0,0,0" Command="{Binding StockTakingCommand}"/>
-            <TextBox Text="{Binding RecycleAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="20,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <TextBox Text="{Binding RecycleAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="30,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
             <Button Content="回收" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="RoyalBlue" Margin="10,0,0,0" Command="{Binding RecycleCommand}"/>
-            <TextBox Text="{Binding ScrapAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="20,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <TextBox Text="{Binding ScrapAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="30,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
             <Button Content="報廢" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="IndianRed" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>
         </StackPanel>
         <Grid Grid.Row="2" Grid.Column="1">
