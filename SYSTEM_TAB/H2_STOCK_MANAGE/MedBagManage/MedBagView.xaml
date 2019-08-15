@@ -57,9 +57,6 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="藥袋量不足">
-                                <Setter Property="Background" Value="LightSalmon"/>
-                            </DataTrigger>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
@@ -228,9 +225,6 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="藥袋量不足">
-                                <Setter Property="Background" Value="LightSalmon"/>
-                            </DataTrigger>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
