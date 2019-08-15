@@ -147,7 +147,7 @@
         </StackPanel>
         <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="6" Grid.Row="4" Grid.Column="0" Margin="10">
             <Label Content="備註" Margin="0,0,10,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox Background="{StaticResource LightForeGround}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding Employee.Note,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="16"   Width="840"  >
+            <TextBox Background="{StaticResource LightForeGround}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding Employee.Note,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="16" VerticalContentAlignment="Top" Width="840"  >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
