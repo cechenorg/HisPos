@@ -125,7 +125,34 @@ namespace His_Pos.NewClass.Prescription
                             PrescriptionStatus.OrderStatus += "不備藥";
                             break;
                     }
-                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Equals("已備藥");
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
+                    OrderContent = PrescriptionStatus.OrderStatus;
+                    if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
+                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
+                    break;
+                case PrescriptionType.ChronicRegister:
+                    Medicines = new Medicines();
+                    Medicines.GetDataByPrescriptionId(ID);
+                    PrescriptionStatus.OrderStatus = "訂單狀態:";
+                    switch (r.Field<string>("StoOrd_Status"))
+                    {
+                        case "W":
+                            PrescriptionStatus.OrderStatus += "等待確認";
+                            break;
+                        case "P":
+                            PrescriptionStatus.OrderStatus += "等待收貨";
+                            break;
+                        case "D":
+                            PrescriptionStatus.OrderStatus += "已收貨";
+                            break;
+                        case "S":
+                            PrescriptionStatus.OrderStatus += "訂單做廢";
+                            break;
+                        default:
+                            PrescriptionStatus.OrderStatus += "無訂單";
+                            break;
+                    }
+                    PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
                     OrderContent = PrescriptionStatus.OrderStatus;
                     if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
                         OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
@@ -140,6 +167,7 @@ namespace His_Pos.NewClass.Prescription
                 AdjustDate = null;
             }
             Type = type;
+            MedicineDays = Medicines.CountMedicineDays();
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -387,10 +415,10 @@ namespace His_Pos.NewClass.Prescription
                     if ((value.IsChronic() && !adjustCase.IsChronic()) || (!value.IsChronic() && adjustCase.IsChronic()))
                         IsBuckle = WareHouse != null;
                 }
-                var isChronic = CheckIsChronic();
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
-                if (isChronic && !CheckIsChronic())
+                var isChronic = CheckIsChronic();
+                if (!isChronic || MedicineDays < 28)
                     Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                 CheckVariableByAdjustCase();
             }
@@ -507,7 +535,10 @@ namespace His_Pos.NewClass.Prescription
                         Medicines.Update(IsBuckle, int.Parse(SourceId),Type);
                         break;
                     default:
-                        Medicines.Update(IsBuckle, ID, Type);
+                        if (ID == 0)
+                            Medicines.Update(IsBuckle, ID, Type,AdjustDate,WareHouse?.ID);
+                        else
+                            Medicines.Update(IsBuckle, ID, Type);
                         break;
                 }
                 MainWindow.ServerConnection.CloseConnection();
@@ -654,7 +685,7 @@ namespace His_Pos.NewClass.Prescription
 
         private void GetCopayment()
         {
-            if (CheckIsChronic())
+            if (CheckIsChronic() && MedicineDays >= 28)
                 Copayment = VM.GetCopayment("I22");
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
@@ -663,8 +694,7 @@ namespace His_Pos.NewClass.Prescription
         private bool CheckIsChronic()
         {
             if (AdjustCase is null) return false;
-            return AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0 &&
-                   ChronicTotal != null && ChronicTotal > 0);
+            return AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0 && ChronicTotal != null && ChronicTotal > 0);
         }
 
         private bool CheckNotFreeCopayment()
@@ -1011,7 +1041,10 @@ namespace His_Pos.NewClass.Prescription
 
         private void SetChronicVariables()
         {
-            Copayment = VM.GetCopayment("I22");
+            if (CheckIsChronic() && MedicineDays >= 28)
+                Copayment = VM.GetCopayment("I22");
+            else
+                Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
             PrescriptionCase = VM.GetPrescriptionCases("04");
             PaymentCategory = null;
         }
@@ -1172,15 +1205,12 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.SetDepositAdjustStatus();
         }
 
-        public void InsertDb()
+        public bool InsertDb()
         {
-            if (ID == 0)
-                InsertPrescription();
-            else
-                Update();
+            return ID == 0 ? InsertPrescription() : Update();
         }
 
-        public void InsertPrescription()
+        public bool InsertPrescription()
         {
             CreateDeclareFileContent();//產生申報資料
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
@@ -1190,11 +1220,16 @@ namespace His_Pos.NewClass.Prescription
                 Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
                 if ((bool)retry.DialogResult)
                     resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
+                else
+                {
+                    return false;
+                }
             }
             ID = resultTable.Rows[0].Field<int>("DecMasId");
+            return true;
         }
 
-        public void Update()
+        public bool Update()
         {
             switch (Type)
             {
@@ -1203,15 +1238,21 @@ namespace His_Pos.NewClass.Prescription
                     var resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
                     while (NewFunction.CheckTransaction(resultTable))
                     {
-                        MessageWindow.ShowMessage("處方登錄異常，按下OK重試", MessageType.WARNING);
-                        resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
+                        var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
+                        Debug.Assert(retry.DialogResult != null, "retry.DialogResult != null");
+                        if ((bool)retry.DialogResult)
+                            resultTable = PrescriptionDb.UpdatePrescriptionByType(this, Details);
+                        else
+                        {
+                            return false;
+                        }
                     }
                     break;
                 case PrescriptionType.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, Details);
                     break;
-
             }
+            return true;
         }
 
         private void SetValue()

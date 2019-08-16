@@ -21,7 +21,6 @@
     xmlns:declareFile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage"
     xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
     xmlns:purchaseReturnReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
-    xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
     xmlns:cooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
@@ -110,9 +109,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
             <purchaseReturnReport:PurchaseReturnReportView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type cooperativeAdjustReport:CooperativeAdjustReport}">
-            <cooperativeAdjustReport:CooperativeAdjustReportView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeEntry:CooperativeEntry}">
             <cooperativeEntry:CooperativeEntryView/>

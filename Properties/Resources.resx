@@ -220,19 +220,13 @@
     <value>&lt;? xml version = "1.0" encoding = "Big5" ?&gt;</value>
   </data>
   <data name="ReportSystem" xml:space="preserve">
-    <value>報表系統</value>
+    <value>報表</value>
   </data>
   <data name="EntrySearch" xml:space="preserve">
-    <value>庫存現值查詢</value>
+    <value>庫存現值報表</value>
   </data>
   <data name="PurchaseReturnReport" xml:space="preserve">
-    <value>進退貨報表查詢</value>
-  </data>
-  <data name="CooperativeAdjustReport" xml:space="preserve">
-    <value>合作診所藥品耗用</value>
-  </data>
-  <data name="CooperativeEntry" xml:space="preserve">
-    <value>部分負擔自費報表</value>
+    <value>進退貨報表</value>
   </data>
   <data name="AdminFunction" xml:space="preserve">
     <value>系統函式</value>

@@ -11,11 +11,11 @@ namespace His_Pos.NewClass.Prescription.Service
             
         }
 
-        public override bool CheckPrescription(bool noCard)
+        public override bool CheckPrescription(bool noCard,bool errorAdjust)
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(errorAdjust)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -47,7 +47,7 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(true)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -65,35 +65,37 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.PrescriptionStatus.IsCreateSign is null) return false;
             Current.SetNormalAdjustStatus();//設定處方狀態
-            Current.InsertDb();
-            return true;
+            return Current.InsertDb();
         }
 
-        public override void ErrorAdjust()
+        public override bool ErrorAdjust()
         {
             Current.SetErrorAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
-        public override void DepositAdjust()
+        public override bool DepositAdjust()
         {
             Current.SetDepositAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
-        public override void PrescribeAdjust()
+        public override bool PrescribeAdjust()
         {
             Current.SetPrescribeAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
             Current.PrescriptionStatus.SetRegisterStatus();
-            Current.InsertDb();
-            SendOrder(vm);
-            return true;
+            if (Current.InsertDb())
+            {
+                SendOrder(vm);
+                return true;
+            }
+            return false;
         }
     }
 }

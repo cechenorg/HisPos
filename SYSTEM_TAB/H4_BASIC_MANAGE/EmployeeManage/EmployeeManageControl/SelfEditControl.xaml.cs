@@ -10,28 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeManageControl
 {
     /// <summary>
-    /// GetCustomerWindow.xaml 的互動邏輯
+    /// SelfEditControl.xaml 的互動邏輯
     /// </summary>
-    public partial class GetCustomerWindow : Window
+    public partial class SelfEditControl : UserControl
     {
-        #region ----- Define Variables -----
-        public string SearchString { get; set; }
-        #endregion
-
-        public GetCustomerWindow(string searchString)
+        public SelfEditControl()
         {
             InitializeComponent();
-
-            SearchString = searchString;
         }
-
-        #region ----- Define Functions -----
-
-        #endregion
     }
 }

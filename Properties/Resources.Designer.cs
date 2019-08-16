@@ -219,24 +219,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 合作診所藥品耗用 的當地語系化字串。
-        /// </summary>
-        internal static string CooperativeAdjustReport {
-            get {
-                return ResourceManager.GetString("CooperativeAdjustReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 部分負擔自費報表 的當地語系化字串。
-        /// </summary>
-        internal static string CooperativeEntry {
-            get {
-                return ResourceManager.GetString("CooperativeEntry", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 合作診所結帳報表 的當地語系化字串。
         /// </summary>
         internal static string CooperativeEntryReport {
@@ -375,7 +357,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 庫存現值查詢 的當地語系化字串。
+        ///   查詢類似 庫存現值報表 的當地語系化字串。
         /// </summary>
         internal static string EntrySearch {
             get {
@@ -679,7 +661,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 進退貨報表查詢 的當地語系化字串。
+        ///   查詢類似 進退貨報表 的當地語系化字串。
         /// </summary>
         internal static string PurchaseReturnReport {
             get {
@@ -688,7 +670,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 報表系統 的當地語系化字串。
+        ///   查詢類似 報表 的當地語系化字串。
         /// </summary>
         internal static string ReportSystem {
             get {

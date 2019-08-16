@@ -15,12 +15,12 @@ namespace His_Pos.NewClass.Prescription.Service
         }
 
         [SuppressMessage("ReSharper", "FlagArgument")]
-        public override bool CheckPrescription(bool noCard)
+        public override bool CheckPrescription(bool noCard,bool errorAdjust)
         {
             CheckAnonymousPatient();
             if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(errorAdjust)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(true)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -63,27 +63,39 @@ namespace His_Pos.NewClass.Prescription.Service
             return true;
         }
 
-        public override void ErrorAdjust()
+        public override bool ErrorAdjust()
         {
             CheckCovertType();
             Current.SetErrorAdjustStatus();
-            Current.InsertDb();
-            CheckUpdateOrthopedicsStatus();
+            if (Current.InsertDb())
+            {
+                CheckUpdateOrthopedicsStatus();
+                return true;
+            }
+            return false;
         }
 
-        public override void DepositAdjust()
+        public override bool DepositAdjust()
         {
             CheckCovertType();
             Current.SetDepositAdjustStatus();
-            Current.InsertDb();
-            CheckUpdateOrthopedicsStatus();
+            if (Current.InsertDb())
+            {
+                CheckUpdateOrthopedicsStatus();
+                return true;
+            }
+            return false;
         }
 
-        public override void PrescribeAdjust()
+        public override bool PrescribeAdjust()
         {
             Current.SetPrescribeAdjustStatus();
-            Current.InsertDb();
-            CheckUpdateOrthopedicsStatus();
+            if (Current.InsertDb())
+            {
+                CheckUpdateOrthopedicsStatus();
+                return true;
+            }
+            return false;
         }
 
         public override bool Register()

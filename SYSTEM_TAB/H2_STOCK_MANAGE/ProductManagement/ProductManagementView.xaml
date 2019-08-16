@@ -50,7 +50,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
@@ -86,13 +86,13 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <StackPanel Orientation="Horizontal" Margin="10,10,10,0" Grid.Row="2" Background="{StaticResource GridBackGround}">
+            <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Grid.Row="2" Background="{StaticResource GridBackGround}">
                 <Label Content="篩選條件" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <RadioButton Content="全部" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding FilterCommand}" CommandParameter="1"/>
                 <RadioButton Content="常備" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="2"/>
                 <RadioButton Content="管制" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="3"/>
                 <RadioButton Content="冰品" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="4"/>
-                <RadioButton Content="藥袋量不足" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
+                <RadioButton Content="不足需求" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
             </StackPanel>
             <ContentControl Grid.Row="3" Content="{Binding}">
                 <ContentControl.Style>
@@ -119,7 +119,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridBackGround}">
                 <Button Content="新增商品" Background="IndianRed" Height="35" FontSize="18" FontWeight="Bold" Width="120" BorderThickness="0" Command="{Binding InsertProductCommand}" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}">
-                    <Label Content="藥袋量不足品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="174,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    <Label Content="不足需求品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="195,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <TextBlock Text="{Binding ErrorStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 </StackPanel>
                 <Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>

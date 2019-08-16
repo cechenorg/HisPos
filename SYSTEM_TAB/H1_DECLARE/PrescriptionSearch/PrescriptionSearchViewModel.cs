@@ -113,6 +113,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             get => selectedAdjustCase;
             set
             {
+                if (string.IsNullOrEmpty(value.ID))
+                    value = null;
                 Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
             }
         }
@@ -122,6 +124,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             get => selectedDivision;
             set
             {
+                if (string.IsNullOrEmpty(value.ID))
+                    value = null;
                 Set(() => SelectedDivision, ref selectedDivision, value);
             }
         }
@@ -300,12 +304,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #region InitFunctions
         private void InitProperties()
         {
-            AdjustCases = new AdjustCases(false) { null };
+            AdjustCases = new AdjustCases(false) { new AdjustCase() };
             foreach (var adjust in ViewModelMainWindow.AdjustCases)
             {
                 AdjustCases.Add(adjust);
             }
-            Divisions = new Divisions { null };
+            Divisions = new Divisions { new Division() };
             foreach (var division in ViewModelMainWindow.Divisions)
             {
                 Divisions.Add(division);
