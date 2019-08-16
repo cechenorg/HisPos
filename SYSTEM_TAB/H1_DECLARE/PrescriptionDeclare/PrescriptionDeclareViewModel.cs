@@ -85,7 +85,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => MedicineSets, ref medicineSets, value);
             }
         }
-        private Medicines usableMedicines { get; set; }
         #endregion
         #region Variables
         private BackgroundWorker worker;
@@ -221,6 +220,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CheckCustomerEdited();
                 }
                 Set(() => SelectedPatientDetail, ref selectedPatientDetail, value);
+            }
+        }
+        private string reserveStatus;
+        public string ReserveStatus
+        {
+            get => reserveStatus;
+            set
+            {
+                Set(() => ReserveStatus, ref reserveStatus, value);
             }
         }
         private IcCard currentCard;
@@ -735,7 +743,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,true)) return;
             StartErrorAdjust();
         }
 
@@ -744,7 +752,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(true)) return;
+            if (!CheckPrescription(true,false)) return;
             StartDepositAdjust();
         }
 
@@ -753,8 +761,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckAdjustDatePast10Days()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,false)) return;
             CheckIsReadCard();
         }
 
@@ -762,8 +769,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CheckCustomerEdited();
             isAdjusting = true;
-            if (!CheckPrescription(false)) return;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
+            if (!CheckPrescription(false,false))
+            {
+                CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
+                return;
+            }
             StartRegister();
         }
 
@@ -772,7 +783,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false)) return;
+            if (!CheckPrescription(false,false)) return;
             StartPrescribeAdjust();
         }
         #endregion
@@ -1066,7 +1077,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartErrorAdjust()
         {
-            currentService.StartErrorAdjust();
+            if (!currentService.StartErrorAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
@@ -1075,7 +1090,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartDepositAdjust()
         {
             CurrentPrescription.CountDeposit();
-            currentService.StartDepositAdjust();
+            if (!currentService.StartDepositAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(true);
             DeclareSuccess();
@@ -1096,7 +1115,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void StartPrescribeAdjust()
         {
             CurrentPrescription.SetDetail();
-            currentService.StartPrescribeAdjust();
+            if (!currentService.StartPrescribeAdjust())
+            {
+                isAdjusting = false;
+                return;
+            }
             currentService.CloneTempPre();
             StartPrint(false);
             DeclareSuccess();
@@ -1109,7 +1132,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return (bool)errorAdjustConfirm.DialogResult;
         }
 
-        private bool CheckPrescription(bool noCard)
+        private bool CheckPrescription(bool noCard,bool errorAdjust)
         {
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
@@ -1119,7 +1142,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return false;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var checkPrescription = currentService.CheckPrescription(noCard);
+            var checkPrescription = currentService.CheckPrescription(noCard,errorAdjust);
             MainWindow.ServerConnection.CloseConnection();
             if(!checkPrescription)
                 isAdjusting = false;
@@ -1301,25 +1324,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;
             return string.IsNullOrEmpty(result);
-        }
-
-        private bool CheckAdjustDatePast10Days()
-        {
-            if (CurrentPrescription.AdjustDate is null)
-            {
-                MessageWindow.ShowMessage(" 調劑日不可為空", MessageType.ERROR);
-                isAdjusting = false;
-                return false;
-            }
-            if (DateTime.Compare(((DateTime)CurrentPrescription.AdjustDate).Date, DateTime.Today) >= 0) return true;
-            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)CurrentPrescription.AdjustDate).Ticks).TotalDays;
-            if (timeDiff > 10)
-            {
-                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
-                isAdjusting = false;
-                return false;
-            }
-            return true;
         }
         #endregion
     }

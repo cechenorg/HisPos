@@ -1,4 +1,6 @@
-﻿using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+﻿using System.Collections.Generic;
+using System.Linq;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -9,11 +11,11 @@ namespace His_Pos.NewClass.Prescription.Service
             
         }
 
-        public override bool CheckPrescription(bool noCard)
+        public override bool CheckPrescription(bool noCard,bool errorAdjust)
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(errorAdjust)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -25,14 +27,27 @@ namespace His_Pos.NewClass.Prescription.Service
                     if (!CheckMedicalNumber()) return false;
             }
             if (!CheckMedicines()) return false;
-            return CheckSameDeclare() && PrintConfirm();
+            if (!CheckSameDeclare()) return false;
+            if (!CheckSendOrder()) return false;
+            return PrintConfirm();
+        }
+
+        private bool CheckSendOrder()
+        {
+            if (Current.PrescriptionStatus.IsSendOrder)
+            {
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
+            }
+            return true;
         }
 
         public override bool CheckEditPrescription(bool noCard)
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDate(true)) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
@@ -50,43 +65,37 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.PrescriptionStatus.IsCreateSign is null) return false;
             Current.SetNormalAdjustStatus();//設定處方狀態
-            Current.InsertDb();
-            return true;
+            return Current.InsertDb();
         }
 
-        public override void ErrorAdjust()
+        public override bool ErrorAdjust()
         {
             Current.SetErrorAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
-        public override void DepositAdjust()
+        public override bool DepositAdjust()
         {
             Current.SetDepositAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
-        public override void PrescribeAdjust()
+        public override bool PrescribeAdjust()
         {
             Current.SetPrescribeAdjustStatus();
-            Current.InsertDb();
+            return Current.InsertDb();
         }
 
         public override bool Register()
         {
             if (!CheckChronicRegister()) return false;
-            MedicinesSendSingdeViewModel vm = null;
-            if (Current.PrescriptionStatus.IsSendOrder)
-            {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
-                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
-                if (((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn)
-                    return false;
-            }
             Current.PrescriptionStatus.SetRegisterStatus();
-            Current.InsertDb();
-            SendOrder(vm);
-            return true;
+            if (Current.InsertDb())
+            {
+                SendOrder(vm);
+                return true;
+            }
+            return false;
         }
     }
 }

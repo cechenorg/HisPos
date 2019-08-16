@@ -22,6 +22,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
 {
     public class ReserveSendConfirmViewModel : ViewModelBase
     {
+        private bool isAllSend;
+        public bool IsAllSend
+        {
+            get => isAllSend;
+            set
+            {
+                Set(() => IsAllSend, ref isAllSend, value);
+                CaculateReserveSendAmount();
+            }
+        }
         private IndexReserves indexReserveCollection;
         public IndexReserves IndexReserveCollection
         {
@@ -187,7 +197,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 else
                 {
                     var target = InventoryCollection.Single(inv => inv.InvID.ToString() == pro.InvID);
-                    pro.SendAmount = target.OnTheFrame - pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
+                    pro.SendAmount = IsAllSend ? pro.Amount : target.OnTheFrame - pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
                     pro.FrameAmount = target.OnTheFrame;
                 }
             } 

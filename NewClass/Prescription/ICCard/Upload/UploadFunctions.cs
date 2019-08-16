@@ -14,9 +14,8 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             icDataUpload += "</RECS>";
             var f = new Function();
             var result = XDocument.Parse(icDataUpload);
-            var count = result.Root.Descendants("MB2").Count();
             //匯出xml檔案
-            f.DailyUpload(result, dailyUploadTable.Rows.Count.ToString(),count.ToString());
+            f.DailyUpload(result, dailyUploadTable.Rows.Count.ToString());
         }
 
         public static void StartDailyUpload100(DataTable dailyUploadTable)
@@ -25,9 +24,8 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             icDataUpload += "</RECS>";
             var f = new Function();
             var result = XDocument.Parse(icDataUpload);
-            var count = result.Root.Descendants("MB2").Count();
             //匯出xml檔案
-            f.DailyUploadWithoutMessage(result, dailyUploadTable.Rows.Count.ToString(),count.ToString());
+            f.DailyUploadWithoutMessage(result, dailyUploadTable.Rows.Count.ToString());
         }
 
         public static DataTable CheckUpload()

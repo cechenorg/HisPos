@@ -385,7 +385,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
 
-        public void Update(bool buckle, int id,PrescriptionType type)
+        public void Update(bool buckle, int id,PrescriptionType type,DateTime? adjustDate = null,string wareHouseID = null)
         {
             SetBuckleAmount(buckle);
             DataTable table;
@@ -395,39 +395,39 @@ namespace His_Pos.NewClass.Medicine.Base
                     table = MedicineDb.GetUsableAmountByReserveID(id);
                     break;
                 default:
-                    table = MedicineDb.GetUsableAmountByPrescriptionID(id);
+                    if (id == 0)
+                    {
+                        var idList = this.Select(m => m.ID).ToList();
+                        table = MedicineDb.GetMedicinesBySearchIds(idList,wareHouseID,adjustDate);
+                    }
+                    else
+                        table = MedicineDb.GetUsableAmountByPrescriptionID(id);
                     break;
             }
-            foreach (DataRow r in table.Rows)
+            if (id == 0 && type != PrescriptionType.ChronicReserve)
             {
-                var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
-                foreach (var m in medList)
+                foreach (DataRow r in table.Rows)
                 {
-                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                    m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
-                }
-            }
-        }
-
-        private List<string> CreateIdList()
-        {
-            var idList = new List<string>();
-
-            foreach (var m in Items)
-            {
-                switch (m)
-                {
-                    case MedicineNHI _:
-                    case MedicineOTC _:
-                    case MedicineSpecialMaterial _:
+                    var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
+                    foreach (var m in medList)
                     {
-                        if (!idList.Contains(m.ID))
-                            idList.Add(m.ID);
-                        break;
+                        m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                        m.UsableAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
                     }
                 }
             }
-            return idList;
+            else
+            {
+                foreach (DataRow r in table.Rows)
+                {
+                    var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
+                    foreach (var m in medList)
+                    {
+                        m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                        m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
+                    }
+                }
+            }
         }
 
         [SuppressMessage("ReSharper", "FlagArgument")]

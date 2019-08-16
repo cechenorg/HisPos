@@ -21,7 +21,10 @@ namespace His_Pos.NewClass.Medicine.Base
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
             CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
+            AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
             InventoryID = r.Field<int>("Inv_ID");
+            if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
+                InventoryError = r.Field<int>("MedbagAmountLack") == 1;
             SendAmount = -1;
         }
 
@@ -226,6 +229,16 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
+        private double averagePrice;//均價
+        public double AveragePrice
+        {
+            get => averagePrice;
+            set
+            {
+                Set(() => AveragePrice, ref averagePrice, value);
+            }
+        }
+
         private bool paySelf;//是否自費
         public bool PaySelf
         {
@@ -375,6 +388,12 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 Set(() => UsableAmount, ref usableAmount, value);
             }
+        }
+        private bool inventoryError;
+        public bool InventoryError
+        {
+            get => inventoryError;
+            set { Set(() => InventoryError, ref inventoryError, value); }
         }
         #endregion
 

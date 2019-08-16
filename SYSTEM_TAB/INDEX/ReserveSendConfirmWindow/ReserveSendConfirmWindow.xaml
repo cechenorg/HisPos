@@ -186,25 +186,21 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn  Width="100" Header="傳送量" IsReadOnly="True" CanUserResize="False">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Width="80" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding SendAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="TextChanged">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.SendAmountChangeCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn  Width="100" Header="傳送量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SendAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn> 
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <StackPanel Orientation="Horizontal" Grid.Row="4"> 
                 <Label Content="毛利 $" Foreground="Black" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
                 <TextBlock Text="{Binding IndexReserveSelectedItem.Profit,UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Foreground="Black" Margin="10,0,0,0" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Width="200"/>
-                <Button Width="120" Command="{Binding SubmitCommand}" Margin="321,0,0,0" Content="傳送處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                <CheckBox Content="全傳送" Foreground="Black" IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="230,0,0,0" />
+                <Button Width="120" Command="{Binding SubmitCommand}" Margin="10,0,0,0" Content="傳送處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
         </Grid>
     </Grid>

@@ -26,26 +26,25 @@ using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 using Newtonsoft.Json;
 using System.Linq;
-using System.Collections.ObjectModel;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
     public abstract class PrescriptionService : ObservableObject
     {
         #region AbstractFunctions
-        public abstract bool CheckPrescription(bool noCard);
+        public abstract bool CheckPrescription(bool noCard,bool errorAdjust);
         public abstract bool CheckEditPrescription(bool noCard);
         public abstract bool NormalAdjust();
-        public abstract void ErrorAdjust();
-        public abstract void DepositAdjust();
+        public abstract bool ErrorAdjust();
+        public abstract bool DepositAdjust();
         public abstract bool Register();
-        public abstract void PrescribeAdjust();
+        public abstract bool PrescribeAdjust();
         #endregion
         public PrescriptionService()
         {
 
         }
-
+        protected MedicinesSendSingdeViewModel vm { get; set; } = null;
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected List<bool?> PrintResult { get; set; }
@@ -80,18 +79,20 @@ namespace His_Pos.NewClass.Prescription.Service
             return result;
         }
 
-        public void StartErrorAdjust()
+        public bool StartErrorAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            ErrorAdjust();
+            var result = ErrorAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
-        public void StartDepositAdjust()
+        public bool StartDepositAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            DepositAdjust();
+            var result = DepositAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public bool StartRegister()
@@ -102,11 +103,12 @@ namespace His_Pos.NewClass.Prescription.Service
             return result;
         }
 
-        public void StartPrescribeAdjust()
+        public bool StartPrescribeAdjust()
         {
             MainWindow.ServerConnection.OpenConnection();
-            PrescribeAdjust();
+            var result = PrescribeAdjust();
             MainWindow.ServerConnection.CloseConnection();
+            return result;
         }
 
         public bool SetPharmacist(Employee selectedPharmacist, int prescriptionCount)
@@ -177,9 +179,11 @@ namespace His_Pos.NewClass.Prescription.Service
             return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
         }
 
-        protected bool CheckAdjustAndTreatDate()
+        protected bool CheckAdjustAndTreatDate(bool notCheckPast10Days)
         {
-            return CheckTreatDate() && CheckAdjustDate();
+            if (notCheckPast10Days)
+                return CheckTreatDate() && CheckAdjustDate();
+            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
         }
 
         private bool CheckTreatDate()
@@ -217,6 +221,18 @@ namespace His_Pos.NewClass.Prescription.Service
                 var adjustDateOutOfRange = new ConfirmWindow(Resources.PrescriptoinOutOfDate, "");
                 Debug.Assert(adjustDateOutOfRange.DialogResult != null, "adjustDateOutOfRange.DialogResult != null");
                 return (bool)adjustDateOutOfRange.DialogResult;
+            }
+            return true;
+        }
+
+        private bool CheckAdjustDatePast10Days()
+        {
+            if (DateTime.Compare(((DateTime)Current.AdjustDate).Date, DateTime.Today) >= 0) return true;
+            var timeDiff = new TimeSpan(DateTime.Today.Ticks - ((DateTime)Current.AdjustDate).Ticks).TotalDays;
+            if (timeDiff > 10)
+            {
+                MessageWindow.ShowMessage("處方調劑日已超過可過卡日(10日)，處方會被核刪，若是慢箋將影響病人下次看診領藥。如需以目前調劑日申報此處方或請使用異常結案或將調劑日改為今日以前十日內。", MessageType.ERROR);
+                return false;
             }
             return true;
         }
@@ -520,7 +536,6 @@ namespace His_Pos.NewClass.Prescription.Service
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
                 });
             }
-          
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
