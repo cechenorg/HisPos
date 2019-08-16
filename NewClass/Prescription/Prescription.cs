@@ -167,6 +167,7 @@ namespace His_Pos.NewClass.Prescription
                 AdjustDate = null;
             }
             Type = type;
+            MedicineDays = Medicines.CountMedicineDays();
         }
 
         public Prescription(OrthopedicsPrescription c)
@@ -414,10 +415,10 @@ namespace His_Pos.NewClass.Prescription
                     if ((value.IsChronic() && !adjustCase.IsChronic()) || (!value.IsChronic() && adjustCase.IsChronic()))
                         IsBuckle = WareHouse != null;
                 }
-                var isChronic = CheckIsChronic();
                 Set(() => AdjustCase, ref adjustCase, value);
                 if (adjustCase == null) return;
-                if (isChronic && !CheckIsChronic())
+                var isChronic = CheckIsChronic();
+                if (!isChronic || MedicineDays < 28)
                     Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                 CheckVariableByAdjustCase();
             }
@@ -684,7 +685,7 @@ namespace His_Pos.NewClass.Prescription
 
         private void GetCopayment()
         {
-            if (CheckIsChronic())
+            if (CheckIsChronic() && MedicineDays >= 28)
                 Copayment = VM.GetCopayment("I22");
             if (!CheckFreeCopayment())
                 Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
@@ -693,8 +694,7 @@ namespace His_Pos.NewClass.Prescription
         private bool CheckIsChronic()
         {
             if (AdjustCase is null) return false;
-            return AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0 &&
-                   ChronicTotal != null && ChronicTotal > 0);
+            return AdjustCase.ID.Equals("2") || (ChronicSeq != null && ChronicSeq > 0 && ChronicTotal != null && ChronicTotal > 0);
         }
 
         private bool CheckNotFreeCopayment()
@@ -1041,7 +1041,10 @@ namespace His_Pos.NewClass.Prescription
 
         private void SetChronicVariables()
         {
-            Copayment = VM.GetCopayment("I22");
+            if (CheckIsChronic() && MedicineDays >= 28)
+                Copayment = VM.GetCopayment("I22");
+            else
+                Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
             PrescriptionCase = VM.GetPrescriptionCases("04");
             PaymentCategory = null;
         }
