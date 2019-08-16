@@ -140,11 +140,11 @@
         <Label Content="上次進價" Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" Margin="0,10,0,0"/>
         <TextBlock Text="{Binding StockDetail.LastPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged, StringFormat=$0.00}" Grid.Row="1" Grid.Column="3" Width="120" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" FontSize="25" TextAlignment="Center" VerticalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Label Content="近90天耗用量" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <Label Content="近3個月耗用量" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
             <Image Source="/Images/chart.png" Width="25" VerticalAlignment="Center" Margin="0,2,0,0">
-                <Image.InputBindings>
+                <!--<Image.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding ShowConsumeRecordCommand}"/>
-                </Image.InputBindings>
+                </Image.InputBindings>-->
             </Image>
         </StackPanel>
         <TextBlock Text="{Binding StockDetail.ConsumeIn90Days, FallbackValue=0, UpdateSourceTrigger=PropertyChanged, StringFormat=0}" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" FontSize="25" TextAlignment="Center" VerticalAlignment="Center"/>
