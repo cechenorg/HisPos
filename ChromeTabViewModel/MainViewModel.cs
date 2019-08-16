@@ -29,7 +29,6 @@ using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
-using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
@@ -197,9 +196,9 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.藥局管理):
                     break;
-                case nameof(FeatureItem.庫存現值查詢):
+                case nameof(FeatureItem.庫存現值報表):
                     break;
-                case nameof(FeatureItem.進退貨報表查詢):
+                case nameof(FeatureItem.進退貨報表):
                     break;
                 case nameof(FeatureItem.部分負擔自費報表):
                     break;
@@ -338,17 +337,11 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 //報表
-                case nameof(FeatureItem.庫存現值查詢):
+                case nameof(FeatureItem.庫存現值報表):
                     newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
-                case nameof(FeatureItem.進退貨報表查詢):
+                case nameof(FeatureItem.進退貨報表):
                     newTab = new PurchaseReturnReportViewModel() { TabName = MainWindow.HisFeatures[6].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
-                    break;
-                case nameof(FeatureItem.合作診所藥品耗用):
-                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[6].Functions[2], Icon = MainWindow.HisFeatures[6].Icon };
-                    break;
-                case nameof(FeatureItem.部分負擔自費報表):
-                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[6].Functions[3], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
                     newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[6].Functions[4], Icon = MainWindow.HisFeatures[6].Icon };
