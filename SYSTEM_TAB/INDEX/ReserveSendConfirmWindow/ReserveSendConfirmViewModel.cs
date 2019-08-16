@@ -62,7 +62,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
-                if (notificationMessage.Notification == "CaculateReserveSendAmount")
+                if (notificationMessage.Notification == "UpdateUsableAmountMessage")
                     CaculateReserveSendAmount();
             });
             IndexReserveCollection = indexReserves;

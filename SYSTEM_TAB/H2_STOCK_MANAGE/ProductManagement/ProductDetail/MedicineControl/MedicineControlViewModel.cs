@@ -292,7 +292,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);
 
             NewInventory = "";
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CaculateReserveSendAmount"));
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
         }
         private void ViewHistoryPriceAction()
         {

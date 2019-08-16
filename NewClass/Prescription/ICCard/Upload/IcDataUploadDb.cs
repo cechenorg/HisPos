@@ -28,9 +28,15 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             table = MainWindow.ServerConnection.ExecuteProc("[Get].[UploadData]");
             return table;
         }
-        public static void UpdateDailyUploadData()
+        public static void UpdateDailyUploadData(string samID,string insID,DateTime uploadTime,DateTime receiveTime,string randomCode)
         {
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateUploadData]");
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SAMID", samID);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsID", insID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DoneDate", uploadTime);
+            DataBaseFunction.AddSqlParameter(parameterList, "ReceiveTime", receiveTime);
+            DataBaseFunction.AddSqlParameter(parameterList, "RandomCode", randomCode);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateUploadData]", parameterList);
         }
         public static void InsertDailyUploadFile(XDocument xml)
         {

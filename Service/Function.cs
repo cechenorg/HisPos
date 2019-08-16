@@ -181,7 +181,6 @@ namespace His_Pos.Service
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
                     var res = HisApiBase.csUploadDataPrec(fileNameArr, fileSize, count, pPrecNumber,pBuffer, ref iBufferLength);
-                    //var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                     if (res == 0)
                     {
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
@@ -203,23 +202,24 @@ namespace His_Pos.Service
                         var receiveSecond = receiveDateTime.Substring(12, 2);
                         var receiveDateStr = $"{receiveYear}/{receiveMonth}/{receiveDay} {receiveHour}:{receiveMinute}:{receiveSecond}";
                         var randomCode = ConvertData.ByToString(pBuffer, 50, 130);
+                        var uploadTime = new DateTime(int.Parse(uploadYear),int.Parse(uploadMonth),int.Parse(uploadDay),int.Parse(uploadHour),int.Parse(uploadMinute),int.Parse(uploadSecond));
+                        var receiveTime = new DateTime(int.Parse(receiveYear),int.Parse(receiveMonth),int.Parse(receiveDay),int.Parse(receiveHour),int.Parse(receiveMinute),int.Parse(receiveSecond));
                         MessageWindow.ShowMessage("上傳成功\n上傳時間:"+ uploadDateStr + "\n接收時間:"+ receiveDateStr, MessageType.SUCCESS);
-                        Console.WriteLine("SAM:"+ samCode + "\nInsID:" + insID + "\nRandomCode:" +randomCode);
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
                         MainWindow.ServerConnection.CloseConnection();
-                        IcDataUploadDb.UpdateDailyUploadData();
+                        IcDataUploadDb.UpdateDailyUploadData(samCode,insID, uploadTime,receiveTime,randomCode);
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("上傳異常，請稍後再試，", MessageType.ERROR);
+                        MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
                     }
                 }
                 HisApiFunction.CloseCom();
             }
             catch (Exception ex)
             {
-                MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
+                MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
             }
         }
 
@@ -244,12 +244,26 @@ namespace His_Pos.Service
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
                         var insID = ConvertData.ByToString(pBuffer, 12, 10);
                         var uploadDateTime = ConvertData.ByToString(pBuffer, 22, 14);
+                        var uploadYear = uploadDateTime.Substring(0, 4);
+                        var uploadMonth = uploadDateTime.Substring(4, 2);
+                        var uploadDay = uploadDateTime.Substring(6, 2);
+                        var uploadHour = uploadDateTime.Substring(8, 2);
+                        var uploadMinute = uploadDateTime.Substring(10, 2);
+                        var uploadSecond = uploadDateTime.Substring(12, 2);
                         var receiveDateTime = ConvertData.ByToString(pBuffer, 36, 14);
+                        var receiveYear = receiveDateTime.Substring(0, 4);
+                        var receiveMonth = receiveDateTime.Substring(4, 2);
+                        var receiveDay = receiveDateTime.Substring(6, 2);
+                        var receiveHour = receiveDateTime.Substring(8, 2);
+                        var receiveMinute = receiveDateTime.Substring(10, 2);
+                        var receiveSecond = receiveDateTime.Substring(12, 2);
                         var randomCode = ConvertData.ByToString(pBuffer, 50, 130);
+                        var uploadTime = new DateTime(int.Parse(uploadYear), int.Parse(uploadMonth), int.Parse(uploadDay), int.Parse(uploadHour), int.Parse(uploadMinute), int.Parse(uploadSecond));
+                        var receiveTime = new DateTime(int.Parse(receiveYear), int.Parse(receiveMonth), int.Parse(receiveDay), int.Parse(receiveHour), int.Parse(receiveMinute), int.Parse(receiveSecond));
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
+                        IcDataUploadDb.UpdateDailyUploadData(samCode, insID, uploadTime, receiveTime, randomCode);
                         MainWindow.ServerConnection.CloseConnection();
-                        IcDataUploadDb.UpdateDailyUploadData();
                     }
                 }
                 HisApiFunction.CloseCom();
