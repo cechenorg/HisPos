@@ -126,7 +126,7 @@
                 <DataGridTemplateColumn Width="100" Header="已盤點" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="/Images/GreenDot.png" Visibility="{Binding IsUpdate,Converter={StaticResource BooleanToVisibilityConverter}}" Width="15"/>
+                            <Image Source="/Images/Declared.png" Visibility="{Binding IsUpdate,Converter={StaticResource BooleanToVisibilityConverter}}" Width="15"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

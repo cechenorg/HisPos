@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
@@ -9,7 +10,9 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
                 Add(new StockTakingPlanProduct(r));
             }
         }
-
+        public StockTakingPlanProducts GetProductByWarID(string warID) { 
+            return new StockTakingPlanProducts( StockTakingDB.StockTakingPlanProductByWarID(this, warID));
+        }
         public StockTakingPlanProducts GetControlMedincines(string warID) {
           return new StockTakingPlanProducts( StockTakingDB.GetStockTakingPlanProductByType("ControlMedicines", warID));
         }

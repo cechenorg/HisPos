@@ -12,6 +12,7 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,24 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public override TabBase getTab()
         {
             return this;
+        }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
         }
         private StockTakingType stockTakingType = StockTakingType.Choose;
         public StockTakingType StockTakingType
@@ -105,6 +124,11 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             set
             {
                 Set(() => StockTakingPlanProductSelected, ref stockTakingPlanProductSelected, value);
+                for (int i = 0; i < CurrentPlan.StockTakingProductCollection.Count; i++) {
+                    CurrentPlan.StockTakingProductCollection[i].IsSelected = false; 
+                }
+                if (value is null) return;
+                value.IsSelected = true;
             }
         }
         private NewClass.StockTaking.StockTaking.StockTaking stockTakingResult = new NewClass.StockTaking.StockTaking.StockTaking();
@@ -131,7 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             get { return stockTakingResultProductSelected; }
             set
             {
-                Set(() => StockTakingResultProductSelected, ref stockTakingResultProductSelected, value);
+                Set(() => StockTakingResultProductSelected, ref stockTakingResultProductSelected, value); 
             }
         }
         private double resultInitTotalPrice;
@@ -247,23 +271,19 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingType = StockTakingType.Result;
         }
         private void CompleteStockTakingAction() {
-            //重新確認藥袋量
+            
             StockTakingProducts temp = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
             for (int i = 0; i < StockTakingResult.StockTakingProductCollection.Count; i++)
             {
                 if(temp.Count(t => t.InvID == StockTakingResult.StockTakingProductCollection[i].InvID) == 1)
-                StockTakingResult.StockTakingProductCollection[i].MedBagAmount = temp.Single(t => t.InvID == StockTakingResult.StockTakingProductCollection[i].InvID).MedBagAmount;
-            }
+                StockTakingResult.StockTakingProductCollection[i].MedBagAmount = temp.Single(t => t.InvID == StockTakingResult.StockTakingProductCollection[i].InvID).MedBagAmount;//重新確認藥袋量
+                StockTakingResult.StockTakingProductCollection[i].NewInventory += StockTakingResult.StockTakingProductCollection[i].MedBagAmount;  //架上量 + 藥袋量 = 總盤點量
+            } 
             //更新盤點原因
             foreach (var s in StockTakingReason.StockTakingProductCollection)
             {
                 StockTakingResult.StockTakingProductCollection.Single(st => st.ID == s.ID).Note = s.Note;
-            }
-            //架上量 + 藥袋量 = 總盤點量
-            for (int i = 0; i < StockTakingResult.StockTakingProductCollection.Count; i++)
-            {
-                StockTakingResult.StockTakingProductCollection[i].NewInventory += StockTakingResult.StockTakingProductCollection[i].MedBagAmount;
-            }
+            } 
             StockTakingResult.WareHouse = CurrentPlan.WareHouse;
             StockTakingResult.InsertStockTaking("盤點單盤點");
             MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
@@ -408,19 +428,34 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 if (SourceStockTakingProducts[i].IsSelected && CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) == 0)
                 {
-                    if (SourceStockTakingProducts[i].IsError) {
-                        SourceStockTakingProducts[i].IsSelected = false;
+                    SourceStockTakingProducts[i].IsSelected = false;
+                    if (SourceStockTakingProducts[i].IsError)  {
+                        MessageWindow.ShowMessage($"{SourceStockTakingProducts[i].FullName} 庫存不足藥袋需求量 架上量為0 不可盤點",MessageType.ERROR);
                         continue;
-                    } 
+                    }
+                         
                     CurrentPlan.StockTakingProductCollection.Add(SourceStockTakingProducts[i]);
                     SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }
             }
+            ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
         }
         private void WarHouseChangedAction()
         {
-            
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => {
+                BusyContent = "切換庫別中...";
+                CurrentPlan.StockTakingProductCollection = CurrentPlan.StockTakingProductCollection.GetProductByWarID(CurrentPlan.WareHouse.ID);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false; 
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+
+           
         }
         
         private void RegisterCommand() {

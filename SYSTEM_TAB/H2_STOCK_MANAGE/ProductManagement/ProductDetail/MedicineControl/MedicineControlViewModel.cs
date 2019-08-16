@@ -283,7 +283,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
              
             stockTakingProduct.ID = Medicine.ID;
             stockTakingProduct.Inventory = StockDetail.TotalInventory;
-            stockTakingProduct.NewInventory = double.Parse(NewInventory); 
+            stockTakingProduct.NewInventory = double.Parse(NewInventory);
+            stockTakingProduct.TakingPrice = 0;//盤盈品項金額
             stockTaking.StockTakingProductCollection.Add(stockTakingProduct);
             stockTaking.InsertStockTaking("單品盤點");
             //ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);

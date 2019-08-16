@@ -6,17 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.StockTaking.StockTakingPlan
 {
-    public class StockTakingPlan
+    public class StockTakingPlan : ObservableObject
     {
         #region ----- Define Variables -----
         public int ID { get; set; }
         public string Name { get; set; }
         public string Note { get; set; }
         public WareHouse.WareHouse WareHouse { get; set; }
-        public  StockTakingPlanProducts StockTakingProductCollection { get; set; }
+        public StockTakingPlanProducts stockTakingProductCollection;
+        public  StockTakingPlanProducts StockTakingProductCollection
+        {
+            get => stockTakingProductCollection;
+            set
+            {
+                Set(() => StockTakingProductCollection, ref stockTakingProductCollection, value);
+            }
+        }
         #endregion
         public StockTakingPlan() {
             StockTakingProductCollection = new StockTakingPlanProducts();
