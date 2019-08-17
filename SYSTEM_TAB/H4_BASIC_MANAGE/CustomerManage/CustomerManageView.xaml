@@ -12,9 +12,14 @@
              mc:Ignorable="d"  
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
     <UserControl.Resources>
-        <service:NullableDateConverter x:Key="NullableDateConverter" /> 
-        <DataTemplate x:Key="CustomerManageViewModel" DataType="{x:Type local:CustomerManageViewModel}">
-            <local:CustomerManageView/>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <DataTemplate x:Key="CusControl" DataType="UserControl">
+            <local:CustomerManageControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="NoData" DataType="UserControl">
+            <Grid Background="{StaticResource GridDarkerBackGround}">
+                <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+            </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -82,7 +87,18 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </DataGrid>
-            
+            <ContentControl Grid.Column="1" Margin="0,0,10,10" Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource CusControl}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding UpdateSourceTrigger=PropertyChanged}" Value="NoEdit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource CusControl}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
         </Grid>
     </Grid>
 </UserControl>
