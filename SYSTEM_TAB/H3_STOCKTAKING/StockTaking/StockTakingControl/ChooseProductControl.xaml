@@ -30,10 +30,17 @@
                 <Label Content="商品名稱" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" BorderBrush="Black"/>
                 <TextBox Text="{Binding ProductSearchName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="18" FontFamily="Segoe UI Semibold" Margin="5,0,0,0"/>
                 <Button Width="80" Command="{Binding ProductSearchCommand}" Margin="10,8,0,8" Content="查詢" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                <CheckBox Margin="10,0,0,0" Content="字首查詢" IsChecked="{Binding IsAlphabetCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" BorderBrush="Black"/>
             </StackPanel>
             <DataGrid Margin="10,0,0,10" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2"
-                   ItemsSource="{Binding SourceStockTakingProducts,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                   ItemsSource="{Binding SourceStockTakingProducts,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                   SelectedItem="{Binding SourceStockTakingProductSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.ShowSourceMedicineDetailCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -274,9 +281,9 @@
                     <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <Label Content="庫存淨值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <TextBlock Text="{Binding ResultInitTotalPrice,StringFormat=N2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
-                    <Rectangle Width="70"/>
-                    <Button Width="150" Content="匯出盤點單" Command="{Binding ExportCsvCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DarkCyan" BorderThickness="0" Margin="10,0,0,0"/>
-                    <Button Width="150" Content="下一步" Command="{Binding NextToResultPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="15,0,0,0"/>
+                    <Button Width="140" Content="匯出盤點單" Command="{Binding ExportCsvCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DarkCyan" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Button Width="70" Content="清除" Command="{Binding PlanProductCommand}" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Button Width="150" Content="下一步" Command="{Binding NextToResultPageCommand}" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="10,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Grid>  
