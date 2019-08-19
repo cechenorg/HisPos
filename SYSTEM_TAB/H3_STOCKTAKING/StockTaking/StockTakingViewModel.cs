@@ -87,6 +87,15 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => ProductSearchName, ref productSearchName, value);
             }
         }
+        private bool isAlphabetCheck;
+        public bool IsAlphabetCheck
+        {
+            get { return isAlphabetCheck; }
+            set
+            {
+                Set(() => IsAlphabetCheck, ref isAlphabetCheck, value);
+            }
+        }
         private bool sourceallItemsAreChecked;
         public bool SourceallItemsAreChecked
         {
@@ -98,6 +107,15 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 {
                     SourceStockTakingProducts[i].IsSelected = value;
                 }
+            }
+        }
+        private StockTakingPlanProduct sourceStockTakingProductSelectedItem ;
+        public StockTakingPlanProduct SourceStockTakingProductSelectedItem
+        {
+            get { return sourceStockTakingProductSelectedItem; }
+            set
+            {
+                Set(() => SourceStockTakingProductSelectedItem, ref sourceStockTakingProductSelectedItem, value);
             }
         }
         private StockTakingPlanProducts sourceStockTakingProducts = new StockTakingPlanProducts();
@@ -200,6 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand AddNewProductCommand { get; set; }
         public RelayCommand ShowStockResultMedicineDetailCommand { get; set; }
         public RelayCommand ShowStockPlanMedicineDetailCommand { get; set; }
+        public RelayCommand ShowSourceMedicineDetailCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand GetControlMedicinesCommand { get; set; }
@@ -208,7 +227,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand GetOnTheFrameMedicinesCommand { get; set; }
         public RelayCommand ProductSearchCommand { get; set; } 
         public RelayCommand WarHouseChangedCommand { get; set; }
-         
+        public RelayCommand PlanProductCommand { get; set; }
+
+
         public StockTakingViewModel() {
             RegisterCommand();
             WareHouses = VM.WareHouses;
@@ -373,6 +394,12 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingPlanProductSelected.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
         }
+        private void ShowSourceMedicineDetailAction() {
+            if (SourceStockTakingProductSelectedItem is null) return;
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { SourceStockTakingProductSelectedItem.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
+        }
+        
         private void ShowStockResultMedicineDetailAction() {
             if (StockTakingResultProductSelected is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
@@ -406,7 +433,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 
         private void GetStockTakingProductByProNameAction()
         {
-            SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName, CurrentPlan.WareHouse.ID);
+            if(IsAlphabetCheck)
+                SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName(ProductSearchName + "%", CurrentPlan.WareHouse.ID);
+            else
+                SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName("%" + ProductSearchName + "%", CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
         }
 
@@ -441,6 +471,10 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             }
             ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
         }
+        private void PlanProductAction() {
+            CurrentPlan.StockTakingProductCollection.Clear();
+            ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
+        }
         private void WarHouseChangedAction()
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -450,12 +484,11 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
+                ResultInitTotalPrice = CurrentPlan.StockTakingProductCollection.Sum(s => s.TotalPrice);
                 IsBusy = false; 
             };
             IsBusy = true;
-            worker.RunWorkerAsync();
-
-           
+            worker.RunWorkerAsync(); 
         }
         
         private void RegisterCommand() {
@@ -472,6 +505,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             AddNewProductCommand = new RelayCommand(AddNewProductAction);
             ShowStockPlanMedicineDetailCommand = new RelayCommand(ShowStockPlanMedicineDetailAction);
             ShowStockResultMedicineDetailCommand = new RelayCommand(ShowStockResultMedicineDetailAction);
+            ShowSourceMedicineDetailCommand = new RelayCommand(ShowSourceMedicineDetailAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             GetControlMedicinesCommand = new RelayCommand(GetControlMedicinesAction);
@@ -480,6 +514,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
             WarHouseChangedCommand = new RelayCommand(WarHouseChangedAction);
+            PlanProductCommand = new RelayCommand(PlanProductAction);
         }
     }
 }

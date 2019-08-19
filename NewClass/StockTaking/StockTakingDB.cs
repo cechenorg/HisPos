@@ -124,7 +124,7 @@ namespace His_Pos.NewClass.StockTaking
             masterTable.Columns.Add("StoTakDet_NewValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_Note", typeof(string));
             masterTable.Columns.Add("StoTakDet_ValueDiff", typeof(double));
-            
+            masterTable.Columns.Add("TakingPrice", typeof(double));
             return masterTable; 
         }
         public static DataTable SetProductAmount(StockTakingProduct.StockTakingProduct productId) {

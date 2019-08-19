@@ -10,9 +10,6 @@
              mc:Ignorable="d" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.DataContext>
-        <local:CashStockEntryReportViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="CashDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
