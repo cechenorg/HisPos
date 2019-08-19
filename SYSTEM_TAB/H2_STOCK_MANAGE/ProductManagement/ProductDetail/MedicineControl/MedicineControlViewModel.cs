@@ -277,17 +277,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            StockTaking stockTaking = new StockTaking();
-            stockTaking.WareHouse = SelectedWareHouse;
-            StockTakingProduct stockTakingProduct = new StockTakingProduct();
-             
-            stockTakingProduct.ID = Medicine.ID;
-            stockTakingProduct.Inventory = StockDetail.TotalInventory;
-            stockTakingProduct.NewInventory = double.Parse(NewInventory);
-            stockTakingProduct.TakingPrice = 0;//盤盈品項金額
-            stockTaking.StockTakingProductCollection.Add(stockTakingProduct);
-            stockTaking.InsertStockTaking("單品盤點");
-            //ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
+            StockTaking stockTaking = new StockTaking(); 
+            stockTaking.SingleStockTaking(Medicine.ID, StockDetail.TotalInventory, double.Parse(NewInventory), 0, SelectedWareHouse); // 0 改成盤盈金額
+            
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);

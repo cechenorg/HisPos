@@ -119,6 +119,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             if (( NewInventory + MedBagAmount - Inventory) > 0)
                 NewInventoryTotalPrice += (NewInventory + MedBagAmount - Inventory) * AveragePrice;
         }
+       
         #endregion
     }
 }
