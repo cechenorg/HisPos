@@ -256,21 +256,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void StockTakingAction()
         {
             if(!IsNewInventoryValid()) return;
-
-            if (StockDetail.LastPrice == 0.0)
-            {
-                StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
+            StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
+            if (double.Parse(NewInventory) > StockDetail.TotalInventory) { 
                 stockTakingNoLastPriceWindow.ShowDialog();
 
                 if (stockTakingNoLastPriceWindow.ConfirmClicked)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
+                    //  ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
                     MainWindow.ServerConnection.CloseConnection();
                 }
                 else
-                    return;
+                    return; 
             }
+           
             
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
 
@@ -278,7 +277,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking(); 
-            stockTaking.SingleStockTaking(Medicine.ID, StockDetail.TotalInventory, double.Parse(NewInventory), 0, SelectedWareHouse); // 0 改成盤盈金額
+            stockTaking.SingleStockTaking(Medicine.ID, StockDetail.TotalInventory, double.Parse(NewInventory), stockTakingNoLastPriceWindow.Price, SelectedWareHouse); // 0 改成盤盈金額
             
             MainWindow.ServerConnection.CloseConnection();
 
