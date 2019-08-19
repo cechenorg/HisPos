@@ -416,8 +416,9 @@ namespace His_Pos.NewClass.Prescription
                         IsBuckle = WareHouse != null;
                 }
                 Set(() => AdjustCase, ref adjustCase, value);
-                if (adjustCase == null) return;
+                if (adjustCase == null || Medicines is null) return;
                 var isChronic = CheckIsChronic();
+                MedicineDays = Medicines.CountMedicineDays();
                 if (!isChronic || MedicineDays < 28)
                     Copayment = VM.GetCopayment(PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                 CheckVariableByAdjustCase();
@@ -1617,7 +1618,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool CheckCanEdit()
         {
-            return InsertTime != null && DateTime.Compare(((DateTime)InsertTime), DateTime.Today) >= 0;
+            return InsertTime != null && DateTime.Compare((DateTime)InsertTime, DateTime.Today) >= 0 || !PrescriptionStatus.IsAdjust;
         }
 
         public string CheckMedicinesRule()
