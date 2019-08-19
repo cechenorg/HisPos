@@ -7,6 +7,7 @@
              xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
              xmlns:stockTakingControl="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingControl"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
     <UserControl.DataContext>
         <local:StockTakingViewModel/>
@@ -22,128 +23,134 @@
             <stockTakingControl:DifferenceReasonControl/>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="870">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="150,20,150,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="25"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="25"/>
-            </Grid.ColumnDefinitions>
-            <Ellipse Grid.Column="0" Width="25" Height="25" Fill="GreenYellow"/>
-            <Polyline Grid.Column="1" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashCap="Round">
-                <Polyline.Style>
-                    <Style TargetType="Polyline">
-                        <Setter Property="Stroke" Value="LightSlateGray"/>
-                        <Setter Property="StrokeDashArray" Value="5"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
-                                <Setter Property="Stroke" Value="LightSlateGray"/>
-                                <Setter Property="StrokeDashArray" Value="5"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
-                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
-                                <Setter Property="StrokeDashArray" Value="100"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
-                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
-                                <Setter Property="StrokeDashArray" Value="100"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Polyline.Style>
-            </Polyline>
-            <Ellipse Grid.Column="2" Width="25" Height="25">
-                <Ellipse.Style>
-                    <Style TargetType="Ellipse">
-                        <Setter Property="Fill" Value="LightSlateGray"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
-                                <Setter Property="Fill" Value="LightSlateGray"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
-                                <Setter Property="Fill" Value="GreenYellow"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
-                                <Setter Property="Fill" Value="GreenYellow"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Ellipse.Style>
-            </Ellipse>
-            <Polyline Grid.Column="3" Stroke="LightSlateGray" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="5" StrokeDashCap="Round">
-                <Polyline.Style>
-                    <Style TargetType="Polyline">
-                        <Setter Property="Stroke" Value="LightSlateGray"/>
-                        <Setter Property="StrokeDashArray" Value="5"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
-                                <Setter Property="Stroke" Value="LightSlateGray"/>
-                                <Setter Property="StrokeDashArray" Value="5"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
-                                <Setter Property="Stroke" Value="LightSlateGray"/>
-                                <Setter Property="StrokeDashArray" Value="5"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
-                                <Setter Property="Stroke" Value="DeepSkyBlue"/>
-                                <Setter Property="StrokeDashArray" Value="100"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Polyline.Style>
-            </Polyline>
-            <Ellipse Grid.Column="4" Width="25" Height="25">
-                <Ellipse.Style>
-                    <Style TargetType="Ellipse">
-                        <Setter Property="Fill" Value="LightSlateGray"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
-                                <Setter Property="Fill" Value="LightSlateGray"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
-                                <Setter Property="Fill" Value="LightSlateGray"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
-                                <Setter Property="Fill" Value="GreenYellow"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Ellipse.Style>
-            </Ellipse>
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Width="1365" Height="870">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="150,20,150,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="25"/>
+                </Grid.ColumnDefinitions>
+                <Ellipse Grid.Column="0" Width="25" Height="25" Fill="GreenYellow"/>
+                <Polyline Grid.Column="1" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashCap="Round">
+                    <Polyline.Style>
+                        <Style TargetType="Polyline">
+                            <Setter Property="Stroke" Value="LightSlateGray"/>
+                            <Setter Property="StrokeDashArray" Value="5"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
+                                    <Setter Property="Stroke" Value="LightSlateGray"/>
+                                    <Setter Property="StrokeDashArray" Value="5"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
+                                    <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                    <Setter Property="StrokeDashArray" Value="100"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
+                                    <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                    <Setter Property="StrokeDashArray" Value="100"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Polyline.Style>
+                </Polyline>
+                <Ellipse Grid.Column="2" Width="25" Height="25">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="LightSlateGray"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
+                                    <Setter Property="Fill" Value="LightSlateGray"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
+                                    <Setter Property="Fill" Value="GreenYellow"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
+                                    <Setter Property="Fill" Value="GreenYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <Polyline Grid.Column="3" Stroke="LightSlateGray" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="5" StrokeDashCap="Round">
+                    <Polyline.Style>
+                        <Style TargetType="Polyline">
+                            <Setter Property="Stroke" Value="LightSlateGray"/>
+                            <Setter Property="StrokeDashArray" Value="5"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
+                                    <Setter Property="Stroke" Value="LightSlateGray"/>
+                                    <Setter Property="StrokeDashArray" Value="5"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
+                                    <Setter Property="Stroke" Value="LightSlateGray"/>
+                                    <Setter Property="StrokeDashArray" Value="5"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
+                                    <Setter Property="Stroke" Value="DeepSkyBlue"/>
+                                    <Setter Property="StrokeDashArray" Value="100"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Polyline.Style>
+                </Polyline>
+                <Ellipse Grid.Column="4" Width="25" Height="25">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="LightSlateGray"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Choose">
+                                    <Setter Property="Fill" Value="LightSlateGray"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Result">
+                                    <Setter Property="Fill" Value="LightSlateGray"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType}" Value="Reason">
+                                    <Setter Property="Fill" Value="GreenYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </Grid>
+            <Grid Grid.Row="1" Margin="87,0,87,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="新增盤點品項" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="輸入盤點結果" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="盤差" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            </Grid>
+            <Grid  Grid.Row="2">
+                <ContentControl Grid.Column="1" Content="{Binding}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Result">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Reason">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </Grid>
+
         </Grid>
-        <Grid Grid.Row="1" Margin="87,0,87,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="150"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="新增盤點品項" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="輸入盤點結果" Grid.Column="2" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Content="盤差" Grid.Column="4" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-        </Grid>
-        <ContentControl Grid.Row="2" Content="{Binding}">
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource ChooseProductControl}"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Result">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ResultInputControl}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding StockTakingType, UpdateSourceTrigger=PropertyChanged}" Value="Reason">
-                            <Setter Property="ContentTemplate" Value="{StaticResource DifferenceReasonControl}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-    </Grid>
+    </xctk:BusyIndicator>
 </UserControl>

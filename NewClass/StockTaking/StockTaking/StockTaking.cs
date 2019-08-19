@@ -36,6 +36,16 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         {
             StockTakingDB.InsertStockTaking(this, typeName);
         }
-       
+        public void SingleStockTaking(string id, double inventory, double newInventory, double takingPrice,WareHouse.WareHouse wareHouse)
+        {
+            WareHouse = wareHouse;
+            StockTakingProduct.StockTakingProduct stockTakingProduct = new StockTakingProduct.StockTakingProduct();
+            stockTakingProduct.ID = id;
+            stockTakingProduct.Inventory = inventory;
+            stockTakingProduct.NewInventory = newInventory;
+            stockTakingProduct.TakingPrice = takingPrice;//盤盈品項金額
+            StockTakingProductCollection.Add(stockTakingProduct);
+            InsertStockTaking("單品盤點");
+        }
     }
 }

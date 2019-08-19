@@ -14,11 +14,11 @@
         </Grid.RowDefinitions>
         <DataGrid Name="ResultDataGrid" Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Margin="10"
                 SelectedItem="{Binding StockTakingResultProductSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" GridLinesVisibility="Horizontal"  CanUserDeleteRows="False" FrozenColumnCount="2"  CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StockTakingResult.StockTakingProductCollection}">
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding Path=DataContext.ShowStockResultMedicineDetailCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -126,7 +126,7 @@
                 <DataGridTemplateColumn Width="100" Header="已盤點" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="/Images/GreenDot.png" Visibility="{Binding IsUpdate,Converter={StaticResource BooleanToVisibilityConverter}}" Width="15"/>
+                            <Image Source="/Images/Declared.png" Visibility="{Binding IsUpdate,Converter={StaticResource BooleanToVisibilityConverter}}" Width="15"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
