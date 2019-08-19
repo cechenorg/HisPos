@@ -743,6 +743,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
+            CheckChronicCopayment();
             if (!CheckPrescription(false,true)) return;
             StartErrorAdjust();
         }
@@ -761,8 +762,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
+            CheckChronicCopayment();
             if (!CheckPrescription(false,false)) return;
             CheckIsReadCard();
+        }
+
+        private void CheckChronicCopayment()
+        {
+            CurrentPrescription.MedicineDays = CurrentPrescription.Medicines.CountMedicineDays();
+            CurrentPrescription.PrescriptionPoint.MedicinePoint = CurrentPrescription.Medicines.CountMedicinePoint();
+            if (CurrentPrescription.AdjustCase.IsChronic() && CurrentPrescription.MedicineDays < 28)
+            {
+                var confirm = new ConfirmWindow("此處方為28天以下之慢性病處方箋，請確認藥品是否為同一療程(如荷爾蒙製劑)。如為同一療程免收部分負擔，是否計算部分負擔?","部分負擔確認");
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                if ((bool) confirm.DialogResult)
+                {
+                    CurrentPrescription.Copayment = VM.GetCopayment(CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
+                }
+                else
+                {
+                    CurrentPrescription.Copayment = VM.GetCopayment("I22");
+                }
+            }
         }
 
         private void RegisterAction()

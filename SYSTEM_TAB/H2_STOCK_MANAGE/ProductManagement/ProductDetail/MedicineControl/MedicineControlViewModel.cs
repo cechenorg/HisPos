@@ -256,37 +256,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         private void StockTakingAction()
         {
             if(!IsNewInventoryValid()) return;
-
-            if (StockDetail.LastPrice == 0.0)
-            {
-                StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
+            StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
+            if (double.Parse(NewInventory) > StockDetail.TotalInventory) { 
                 stockTakingNoLastPriceWindow.ShowDialog();
 
                 if (stockTakingNoLastPriceWindow.ConfirmClicked)
                 {
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
+                    //  ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
                     MainWindow.ServerConnection.CloseConnection();
                 }
                 else
-                    return;
+                    return; 
             }
+           
             
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
 
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            StockTaking stockTaking = new StockTaking();
-            stockTaking.WareHouse = SelectedWareHouse;
-            StockTakingProduct stockTakingProduct = new StockTakingProduct();
-             
-            stockTakingProduct.ID = Medicine.ID;
-            stockTakingProduct.Inventory = StockDetail.TotalInventory;
-            stockTakingProduct.NewInventory = double.Parse(NewInventory); 
-            stockTaking.StockTakingProductCollection.Add(stockTakingProduct);
-            stockTaking.InsertStockTaking("單品盤點");
-            //ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
+            StockTaking stockTaking = new StockTaking(); 
+            stockTaking.SingleStockTaking(Medicine.ID, StockDetail.TotalInventory, double.Parse(NewInventory), stockTakingNoLastPriceWindow.Price, SelectedWareHouse); // 0 改成盤盈金額
+            
             MainWindow.ServerConnection.CloseConnection();
 
             InitMedicineData(Medicine.ID, SelectedWareHouse.ID);

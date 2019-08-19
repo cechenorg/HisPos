@@ -24,7 +24,8 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             get { return newInventory; }
             set {
                 Set(() => NewInventory, ref newInventory, value);
-                ValueDiff = NewInventory - OnTheFrame; 
+                ValueDiff = NewInventory - OnTheFrame;
+                IsTakingPriceEditable = ValueDiff > 0;
             }
         }
         private double valueDiff;
@@ -70,6 +71,24 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
                 Set(() => PriceValueDiff, ref priceValueDiff, value);
             }
         }
+        private double takingPrice;
+        public double TakingPrice
+        {
+            get { return takingPrice; }
+            set
+            {
+                Set(() => TakingPrice, ref takingPrice, value);
+            }
+        }
+        private bool isTakingPriceEditable;
+        public bool IsTakingPriceEditable
+        {
+            get { return isTakingPriceEditable; }
+            set
+            {
+                Set(() => IsTakingPriceEditable, ref isTakingPriceEditable, value);
+            }
+        }
         public Employee Employee { get; set; }
         #endregion
         public StockTakingProduct() {
@@ -88,6 +107,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             MedBagAmount = row.Field<double>("MedBagAmount");
             PriceValueDiff = row.Field<double>("ValueDiff");
             AveragePrice = TotalPrice / Inventory;
+            TakingPrice = Math.Round(AveragePrice, 2, MidpointRounding.AwayFromZero) ;
             IsUpdate = false;
             NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice; 
         }
@@ -99,6 +119,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             if (( NewInventory + MedBagAmount - Inventory) > 0)
                 NewInventoryTotalPrice += (NewInventory + MedBagAmount - Inventory) * AveragePrice;
         }
+       
         #endregion
     }
 }

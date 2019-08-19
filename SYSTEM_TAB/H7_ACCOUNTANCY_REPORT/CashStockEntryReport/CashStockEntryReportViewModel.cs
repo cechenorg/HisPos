@@ -537,8 +537,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
+            { 
                 foreach (var r in TotalPrescriptionProfitReportCollection)
                 {
                     if (r.TypeId.Length == 1)
@@ -550,6 +549,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 CaculateTotalPrescriptionProfit();
                 CaculateSelfPrescriptionProfit();
                 CaculateCooperativePrescriptionProfit();
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();

@@ -10,7 +10,7 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct {
             MedBagAmount = r.Field<double>("Inv_MedBagAmount");
             OnTheFrame = r.Field<double>("InvOnTheFrame");
             TotalPrice = r.Field<double>("TotalPrice");
-            AveragePrice = TotalPrice / Inventory;
+            AveragePrice = Inventory == 0 ? 0 : TotalPrice / Inventory;
             IsError = MedBagAmount > Inventory;
         }
         public bool IsFrozen { get; set; }

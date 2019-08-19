@@ -146,7 +146,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => SelectedDetail, ref selectedDetail, value);
             }
         }
-        public bool CanDelete => !EditedPrescription.PrescriptionStatus.IsAdjust || (EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today);
+        public bool CanDelete => !EditedPrescription.PrescriptionStatus.IsAdjust || (EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today) || VM.CurrentUser.WorkPosition.WorkPositionId == 3;
         #endregion
         private IcCard currentCard;
         private PrescriptionService currentService;
