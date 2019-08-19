@@ -80,7 +80,7 @@
                         </Style>
                     </Ellipse.Style>
                 </Ellipse>
-                <Polyline Grid.Column="3" Stroke="LightSlateGray" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="5" StrokeDashCap="Round">
+                <Polyline Grid.Column="3" StrokeThickness="5" Points="13,15 482,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashCap="Round">
                     <Polyline.Style>
                         <Style TargetType="Polyline">
                             <Setter Property="Stroke" Value="LightSlateGray"/>

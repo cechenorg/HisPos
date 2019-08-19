@@ -71,7 +71,7 @@
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="原庫存量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
+                <DataGridTextColumn Header="架上量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OnTheFrame}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -79,7 +79,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="盤點量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NewInventory}">
+                <DataGridTextColumn Header="架上盤點量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NewInventory}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

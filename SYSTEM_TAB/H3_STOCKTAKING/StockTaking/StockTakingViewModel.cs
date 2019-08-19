@@ -292,6 +292,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingType = StockTakingType.Result;
         }
         private void CompleteStockTakingAction() {
+            ConfirmWindow confirmWindow = new ConfirmWindow("確認是否盤點?","盤點最後確認");
+            if (!(bool)confirmWindow.DialogResult) return;
             
             StockTakingProducts temp = StockTakingProducts.GetStockTakingPlanProducts(CurrentPlan.StockTakingProductCollection, CurrentPlan.WareHouse.ID);
             for (int i = 0; i < StockTakingResult.StockTakingProductCollection.Count; i++)
