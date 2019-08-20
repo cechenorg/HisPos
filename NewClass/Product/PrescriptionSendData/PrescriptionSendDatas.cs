@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
                     Add(new PrescriptionSendData(m));
                     if (tempMeds.Count(t => t.ID == m.InventoryID) == 0) {
-                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, m.UsableAmount));
+                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID,m.Amount - m.SendAmount));
                         meds.Add(m.ID);
                     }
                 } 
@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 for (int i = 0; i < tempMeds.Count; i++)
                 {
                     if (tempMeds[i].ID == inv.InvID)
-                        tempMeds[i].Amount += inv.OnTheWayAmount;
+                        tempMeds[i].Amount += inv.InventoryAmount + inv.OnTheWayAmount - inv.MegBagAmount;
                 }
             }
             for (int i = 0; i < this.Count; i++) {
