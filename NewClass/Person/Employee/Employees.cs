@@ -34,6 +34,11 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 if(emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Equals("藥師") && emp.IsLocal)
                     Add(emp);
+                else
+                {
+                    if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.WorkPosition.WorkPositionName.Equals("藥師"))
+                        Add(emp);
+                }
             }
             //var table = EmployeeDb.GetEnableMedicalPersonnels(selectedDate);
             //foreach (DataRow r in table.Rows)
