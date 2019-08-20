@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PriceControl"
              xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
+             xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
              mc:Ignorable="d" >
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions>
@@ -19,7 +20,7 @@
             <!--<generalCustomControl:DecimalControl Decimal="{Binding MedicineDetail.NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>-->
             <Button Content="歷史健保價" BorderThickness="0"  FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="DimGray" Margin="50,0,0,0" Command="{Binding ViewHistoryPriceCommand}"/>
         </StackPanel>
-        <sharedControl:SingdePriceControl Grid.Row="1"/>
+        <priceControl:SingdePriceControl Grid.Row="1"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="大分類" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <Label Content="{Binding MedicineDetail.Form}" Foreground="{StaticResource ForeGround}" Width="120" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
