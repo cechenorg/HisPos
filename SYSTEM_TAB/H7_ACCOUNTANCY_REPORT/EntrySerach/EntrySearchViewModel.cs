@@ -77,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
         }
         #region Function 
         private void ShowEntryDetailAction() {
-           EntryDetailWindow entryDetailWindow = new EntryDetailWindow(SelectStockValue.Date); 
+           EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date); 
         }
         private void ExportCsv() { 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();

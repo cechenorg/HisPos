@@ -78,11 +78,11 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow 
             GetControlMedicinesCommand = new RelayCommand(GetControlMedicinesAction);
             GetStockLessProductsCommand = new RelayCommand(GetStockLessProductsAction);
             GetOnTheFrameMedicinesCommand = new RelayCommand(GetOnTheFrameMedicinesAction);
+            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
             AddProductCommand = new RelayCommand(AddProductAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             ProductSubmitCommand = new RelayCommand(ProductSubmitAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
-            GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction); 
             WarID = warID;
             TargetStockTakingProducts.Clear();
             foreach (var t in takingPlanProducts) {

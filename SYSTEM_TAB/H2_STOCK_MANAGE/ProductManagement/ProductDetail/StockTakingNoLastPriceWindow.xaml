@@ -12,7 +12,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="商品無進貨紀錄 請輸入商品單價以計算庫存現值" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom"/>
+            <Label Content="請輸入商品單價以計算庫存現值" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom"/>
             <TextBox Width="120" FontSize="18" Text="{Binding Price, Mode=TwoWay, Delay=600, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" GotFocus="Textbox_OnGotFocus" PreviewMouseLeftButtonDown="Textbox_OnPreviewMouseLeftButtonDown"/>
         </StackPanel>
         <Button Content="確認" Grid.Row="1" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="150" BorderThickness="0" Click="Confirm_OnClick"/>

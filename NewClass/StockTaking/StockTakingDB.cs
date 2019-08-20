@@ -96,7 +96,12 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "IDAmount", SetProductAmount(stockTakingProduct)); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductAmountTotalPrice]", parameterList);
         }
-        
+        internal static DataTable StockTakingPlanProductByWarID(StockTakingPlanProducts stockTakingPlanProducts, string warID) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            DataBaseFunction.AddSqlParameter(parameterList, "products", SetStockTakingPlanProducts(stockTakingPlanProducts));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingPlanProductByWarID]", parameterList);
+        }
         #region TableSet
         public static DataTable ProductListTable()
         {
@@ -119,7 +124,7 @@ namespace His_Pos.NewClass.StockTaking
             masterTable.Columns.Add("StoTakDet_NewValue", typeof(double));
             masterTable.Columns.Add("StoTakDet_Note", typeof(string));
             masterTable.Columns.Add("StoTakDet_ValueDiff", typeof(double));
-            
+            masterTable.Columns.Add("TakingPrice", typeof(double));
             return masterTable; 
         }
         public static DataTable SetProductAmount(StockTakingProduct.StockTakingProduct productId) {
@@ -130,7 +135,7 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddColumnValue(newRow, "Amount", productId.NewInventory + productId.MedBagAmount); 
             productListTable.Rows.Add(newRow); 
             return productListTable;
-        }
+        } 
         public static DataTable SetStockTakingPlanProducts(StockTakingProducts productIds)
         {
             DataTable productListTable = StockTakingProductListTable();
@@ -143,6 +148,7 @@ namespace His_Pos.NewClass.StockTaking
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_NewValue", m.NewInventory);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_Note", m.Note);
                 DataBaseFunction.AddColumnValue(newRow, "StoTakDet_ValueDiff",  m.NewInventoryTotalPrice - m.TotalPrice);
+                DataBaseFunction.AddColumnValue(newRow, "TakingPrice", m.TakingPrice);
                 productListTable.Rows.Add(newRow);
             }
             return productListTable;
