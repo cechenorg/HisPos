@@ -34,6 +34,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckSendOrder()
         {
+            if (string.IsNullOrEmpty(Current.PrescriptionStatus.OrderStatus))
+                Current.PrescriptionStatus.OrderStatus = "訂單狀態:無訂單";
             if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
             {
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
