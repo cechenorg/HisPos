@@ -153,5 +153,10 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerByCard]", parameterList);
         }
+
+        public static DataTable GetTodayEdited()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[TodayEditedCustomers]");
+        }
     }
 }

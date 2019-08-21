@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckSendOrder()
         {
-            if (Current.PrescriptionStatus.IsSendOrder)
+            if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
             {
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
                 vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
@@ -92,7 +92,8 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.PrescriptionStatus.SetRegisterStatus();
             if (Current.InsertDb())
             {
-                SendOrder(vm);
+                if(Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
+                    SendOrder(vm);
                 return true;
             }
             return false;
