@@ -1145,6 +1145,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartRegister()
         {
+            if (string.IsNullOrEmpty(CurrentPrescription.PrescriptionStatus.OrderStatus))
+                CurrentPrescription.PrescriptionStatus.OrderStatus = "訂單狀態:無訂單";
             if (!currentService.StartRegister())
             {
                 isAdjusting = false;
