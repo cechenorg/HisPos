@@ -292,6 +292,11 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             StockTakingType = StockTakingType.Result;
         }
         private void CompleteStockTakingAction() {
+            if (StockTakingReason.StockTakingProductCollection.Count(s => string.IsNullOrEmpty(s.Note.Trim())) > 0) {
+                MessageWindow.ShowMessage("盤差原因不可為空!",MessageType.WARNING);
+                return;
+            }
+            
             ConfirmWindow confirmWindow = new ConfirmWindow("確認是否盤點?","盤點最後確認");
             if (!(bool)confirmWindow.DialogResult) return;
             

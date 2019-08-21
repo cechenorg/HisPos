@@ -60,22 +60,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" Binding="{Binding CanUseAmount}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="可用量" IsReadOnly="True">
+                <DataGridTextColumn MinWidth="100" Binding="{Binding CanUseAmount}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="總可用量(含載途)" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" Binding="{Binding OntheWay}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="載途量" IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn> 
                 <DataGridTextColumn MinWidth="80" Binding="{Binding TreatAmount}" Foreground="Gray" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="調劑量" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -105,7 +97,7 @@
  
         <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
             <!--<CheckBox Content="全傳送"  IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
-            <Rectangle Width="603" /> 
+            <Rectangle Width="615" /> 
             <Button Command="{Binding CancelCommand}" Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" />
             <Button Command="{Binding SubmitCommand}" Width="125" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0"   Content="送出" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
