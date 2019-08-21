@@ -21,21 +21,26 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
                     Add(new PrescriptionSendData(m));
                     if (tempMeds.Count(t => t.ID == m.InventoryID) == 0) {
-                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID,m.Amount - m.SendAmount));
+                        double selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, selfPrepareAmount));
                         meds.Add(m.ID);
                     }
                 } 
             }
-            Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds);
-            foreach (var inv in inventories) {
-                for (int i = 0; i < this.Count; i++) {
-                    if (this[i].InvID == inv.InvID)
-                        this[i].OntheWay = inv.OnTheWayAmount;
-                }
+            Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds); 
+            foreach (var inv in inventories) { 
                 for (int i = 0; i < tempMeds.Count; i++)
                 {
                     if (tempMeds[i].ID == inv.InvID)
                         tempMeds[i].Amount += inv.InventoryAmount + inv.OnTheWayAmount - inv.MegBagAmount;
+                }
+            }
+            for (int i = 0; i < tempMeds.Count; i++) {
+                for (int j = 0; j < this.Count; j++) {
+                    if (this[j].InvID == tempMeds[i].ID) {
+                        double canUseAmount = tempMeds[i].Amount;
+                        this[j].CanUseAmount = canUseAmount;
+                    } 
                 }
             }
             for (int i = 0; i < this.Count; i++) {
