@@ -69,7 +69,7 @@
                     <DataGridTextColumn Header="身分證" Width="150" MaxWidth="120" Binding="{Binding IDNumber}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="手機" Width="150" MaxWidth="120" Binding="{Binding CellPhone}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="家電" Width="150" MaxWidth="120" Binding="{Binding Tel}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="編輯時間" Width="150" MaxWidth="120" Binding="{Binding LastEdit ,StringFormat='{}{0:MM/dd hh:mm}'}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="編輯時間" Width="150" MaxWidth="120" Binding="{Binding LastEdit ,StringFormat='{}{0:MM/dd HH:mm}'}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DataTemplate>

@@ -104,29 +104,51 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             Customers = new Customers();
             SearchCondition = condition;
-            switch (SearchCondition)
-            {
-                case CustomerSearchCondition.IDNumber:
-                    SelectedRadioButton = "Option1";
-                    Customers.SearchCustomers(search,null,null,null,null);
-                    break;
-                case CustomerSearchCondition.Name:
-                    SelectedRadioButton = "Option2";
-                    Customers.SearchCustomers(null, search, null, null,null);
-                    break;
-                case CustomerSearchCondition.CellPhone:
-                    SelectedRadioButton = "Option4";
-                    Customers.SearchCustomers(null, null, search, null,null);
-                    break;
-                case CustomerSearchCondition.Tel:
-                    SelectedRadioButton = "Option5";
-                    Customers.SearchCustomers(null, null,  null,search, null);
-                    break;
-            }
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             StartEditingCommand = new RelayCommand(StartEditingAction);
+            if (string.IsNullOrEmpty(search))
+            {
+                switch (SearchCondition)
+                {
+                    case CustomerSearchCondition.IDNumber:
+                        SelectedRadioButton = "Option1";
+                        break;
+                    case CustomerSearchCondition.Name:
+                        SelectedRadioButton = "Option2";
+                        break;
+                    case CustomerSearchCondition.CellPhone:
+                        SelectedRadioButton = "Option4";
+                        break;
+                    case CustomerSearchCondition.Tel:
+                        SelectedRadioButton = "Option5";
+                        break;
+                }
+                Customers.GetTodayEdited();
+            }
+            else
+            {
+                switch (SearchCondition)
+                {
+                    case CustomerSearchCondition.IDNumber:
+                        SelectedRadioButton = "Option1";
+                        Customers.SearchCustomers(search,null,null,null,null);
+                        break;
+                    case CustomerSearchCondition.Name:
+                        SelectedRadioButton = "Option2";
+                        Customers.SearchCustomers(null, search, null, null,null);
+                        break;
+                    case CustomerSearchCondition.CellPhone:
+                        SelectedRadioButton = "Option4";
+                        Customers.SearchCustomers(null, null, search, null,null);
+                        break;
+                    case CustomerSearchCondition.Tel:
+                        SelectedRadioButton = "Option5";
+                        Customers.SearchCustomers(null, null,  null,search, null);
+                        break;
+                }
+            }
             switch (Customers.Count)
             {
                 case 0:
@@ -146,16 +168,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CustomerCollectionViewSource = new CollectionViewSource { Source = Customers };
             CustomerCollectionView = CustomerCollectionViewSource.View;
             Search = search;
-            ExecuteSearchTextChanged();
+            if (!string.IsNullOrEmpty(search))
+                ExecuteSearchTextChanged();
+            else
+                IsEditing = false;
         }
 
-        public CustomerSearchViewModel(DateTime birth)
+        public CustomerSearchViewModel(DateTime? birth)
         {
             SearchCondition = CustomerSearchCondition.Birthday;
             SelectedRadioButton = "Option3";
-            Search = DateTimeExtensions.ConvertToTaiwanCalender(birth);
             Customers = new Customers();
-            Customers.SearchCustomers(null, null, null,null, birth);
+            if (birth is null)
+            {
+                Customers.GetTodayEdited();
+            }
+            else
+            {
+                Search = DateTimeExtensions.ConvertToTaiwanCalender((DateTime)birth);
+                Customers.SearchCustomers(null, null, null,null, birth);
+            }
+            
             SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
             CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
@@ -177,7 +210,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CustomerCollectionViewSource = new CollectionViewSource { Source = Customers };
             CustomerCollectionView = CustomerCollectionViewSource.View;
             Search = search;
-            ExecuteSearchTextChanged();
+            if (birth != null)
+                ExecuteSearchTextChanged();
+            else
+                IsEditing = false;
         }
 
         private void ExecuteCustomerSelected()

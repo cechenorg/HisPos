@@ -580,7 +580,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription.Update();
-            if (EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister))
+            if (EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
             {
                 MedicinesSendSingdeViewModel vm = null;
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(EditedPrescription);
