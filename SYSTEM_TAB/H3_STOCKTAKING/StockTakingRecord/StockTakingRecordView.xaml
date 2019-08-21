@@ -11,9 +11,6 @@
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.DataContext>
-        <local:StockTakingRecord/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <service:DateConverter x:Key="DateConverter" /> 
     </UserControl.Resources>
@@ -24,7 +21,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
-                <Label Content="盤點日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox  Width="120" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat"  InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
@@ -48,12 +45,12 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Label Content="盤點商品編號" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="商品編號" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Text="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Label Content="盤點商品名稱" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="商品名稱" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox  Text="{Binding ProName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
               
-                <Rectangle Width="290"/>
+                <Rectangle Width="400"/>
                 <Button  Grid.Column="1" Grid.Row="0" Command="{Binding SearchCommand}" Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" />
             </StackPanel>
             <Grid Grid.Row="1">

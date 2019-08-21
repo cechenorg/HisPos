@@ -108,6 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord
         public RelayCommand SearchCommand { get; set; }
         public StockTakingRecord() {
             SearchCommand = new RelayCommand(SearchAction);
+            SearchAction();
         }
         #region Function
         private void SearchAction() {

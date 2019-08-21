@@ -30,6 +30,27 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             return this;
         }
         #region Var
+
+        private List<string> medPrepareStatusCollection;
+        public List<string> MedPrepareStatusCollection
+        {
+            get => medPrepareStatusCollection;
+            set
+            {
+                Set(() => MedPrepareStatusCollection, ref medPrepareStatusCollection, value); 
+            }
+        }
+        private string medPrepareStatusSelectedItem = "未處理";
+        public string MedPrepareStatusSelectedItem
+        {
+            get => medPrepareStatusSelectedItem;
+            set
+            {
+                Set(() => MedPrepareStatusSelectedItem, ref medPrepareStatusSelectedItem, value);
+                ReserveCollectionViewSource.Filter += Filter;
+                SetPhoneCount();
+            }
+        }
         private CollectionViewSource reserveCollectionViewSource;
         private CollectionViewSource ReserveCollectionViewSource
         {
@@ -76,30 +97,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => IndexReserveCount, ref indexReserveCount, value); 
             }
-        }
-        private bool isShowUnPrepareReserve = false;
-        public bool IsShowUnPrepareReserve
-        {
-            get => isShowUnPrepareReserve;
-            set
-            {
-                Set(() => IsShowUnPrepareReserve, ref isShowUnPrepareReserve, value);
-                ReserveCollectionViewSource.Filter += Filter;
-                SetPhoneCount();
-            }
-        }
-        private bool isShowPrepareReserve = false;
-        public bool IsShowPrepareReserve
-        {
-            get => isShowPrepareReserve;
-            set
-            {
-                Set(() => IsShowPrepareReserve, ref isShowPrepareReserve, value);
-                ReserveCollectionViewSource.Filter += Filter;
-                SetPhoneCount();
-            }
-        }
-        
+        } 
         private bool isShowUnPhoneCall = false;
         public bool IsShowUnPhoneCall
         {
@@ -314,7 +312,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDetailWindow.CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow.CustomerDetailWindow(IndexReserveSelectedItem.CusId); 
         }
         private void InitStatusstring() {
-            PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" }; 
+            PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
+            MedPrepareStatusCollection = new List<string>() { "未處理","已備藥","不備藥" }; 
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -377,9 +376,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = false; 
             e.Accepted = false; 
             IndexReserve indexitem = ((IndexReserve)e.Item);
-            if (indexitem.PrepareMedStatus == IndexPrepareMedType.UnPrepare && IsShowUnPrepareReserve)
+            if (indexitem.PrepareMedStatus == IndexPrepareMedType.UnPrepare && MedPrepareStatusSelectedItem == "不備藥")
                 e.Accepted = true;
-            else if(indexitem.PrepareMedStatus == IndexPrepareMedType.Prepare && IsShowPrepareReserve)
+            else if(indexitem.PrepareMedStatus == IndexPrepareMedType.Prepare && MedPrepareStatusSelectedItem == "已備藥")
                 e.Accepted = true; 
             else if (indexitem.PhoneCallStatus == "F" && IsShowUnPhoneCall)
                 e.Accepted = true;
@@ -387,7 +386,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = true;
             else if(indexitem.IsExpensive && IsExpensive)
                 e.Accepted = true;
-            else if(!IsShowPrepareReserve && !IsShowUnPrepareReserve && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == IndexPrepareMedType.Unprocess)
+            else if(MedPrepareStatusSelectedItem != "已備藥" && MedPrepareStatusSelectedItem != "不備藥" && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == IndexPrepareMedType.Unprocess)
                 e.Accepted = true;
             
         }

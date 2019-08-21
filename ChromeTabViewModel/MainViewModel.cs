@@ -8,6 +8,7 @@ using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
@@ -176,6 +177,9 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.進退貨紀錄):
                     break;
                 case nameof(FeatureItem.新增盤點):
+                    ConfirmWindow confirmWindow = new ConfirmWindow("關閉視窗後盤點單不會儲存 是否關閉?","關閉新增盤點確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
                     break;
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
