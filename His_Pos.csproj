@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>2.0.11.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -1084,9 +1084,11 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow\EntryDetailEnum.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow\EntryDetailWindowViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
@@ -1792,9 +1794,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow\EntryDetailWindow.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
       <Generator>MSBuild:Compile</Generator>

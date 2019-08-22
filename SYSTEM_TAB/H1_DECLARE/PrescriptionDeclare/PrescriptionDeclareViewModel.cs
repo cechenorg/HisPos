@@ -288,6 +288,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ClearAction();
             SetPharmacist();
             MainWindow.ServerConnection.CloseConnection();
+            Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+        }
+
+        private void UpdateInventories(NotificationMessage msg)
+        {
+            if (msg.Notification == "UpdateUsableAmountMessage" && CurrentPrescription != null)
+            {
+                if(CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count > 0)
+                    CurrentPrescription.UpdateMedicines();
+            }
         }
 
         private void SetPharmacist()
@@ -414,11 +424,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             if (!CheckConditionEmpty(condition.Name))
-            {
-                Messenger.Default.Unregister<NotificationMessage<Customer>>(this, GetSelectedCustomer);
-                return;
-            }
-            ShowCustomerSearch(condition.Name);
+                ShowCustomerSearchEditedToday(condition.Name);
+            else
+                ShowCustomerSearch(condition.Name);
         }
 
         [SuppressMessage("ReSharper", "NotAccessedVariable")]
@@ -430,11 +438,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (conditionName)
             {
                 case "PatientIDNumber":
-                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.IDNumber, CustomerSearchCondition.IDNumber);
+                    customerSearch = new CustomerSearchWindow( CustomerSearchCondition.IDNumber,CurrentPrescription.Patient.IDNumber.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientName":
-                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Name, CustomerSearchCondition.Name);
+                    customerSearch = new CustomerSearchWindow( CustomerSearchCondition.Name,CurrentPrescription.Patient.Name.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientBirthday":
@@ -442,11 +450,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientTel":
-                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.Tel, CustomerSearchCondition.Tel);
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel,CurrentPrescription.Patient.Tel.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
                 case "PatientCellPhone":
-                    customerSearch = new CustomerSearchWindow(CurrentPrescription.Patient.CellPhone, CustomerSearchCondition.Tel);
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone,CurrentPrescription.Patient.CellPhone.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                    break;
+            }
+        }
+
+        private void ShowCustomerSearchEditedToday(string conditionName)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CustomerSearchWindow customerSearch;
+            switch (conditionName)
+            {
+                case "PatientIDNumber":
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.IDNumber);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                    break;
+                case "PatientName":
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Name);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                    break;
+                case "PatientBirthday":
+                    customerSearch = new CustomerSearchWindow(null);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                    break;
+                case "PatientTel":
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel);
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                    break;
+                case "PatientCellPhone":
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
             }
@@ -457,19 +494,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (conditionName)
             {
                 case "PatientIDNumber" when CurrentPrescription.CheckPatientDataEmpty("IDNumber"):
-                    MessageWindow.ShowMessage(Resources.身分證空值, MessageType.WARNING);
                     return false;
                 case "PatientName" when CurrentPrescription.CheckPatientDataEmpty("Name"):
-                    MessageWindow.ShowMessage(Resources.姓名空值, MessageType.WARNING);
                     return false;
                 case "PatientBirthday" when CurrentPrescription.CheckPatientDataEmpty("Birthday"):
-                    MessageWindow.ShowMessage(Resources.生日空值, MessageType.WARNING);
                     return false;
                 case "PatientTel" when CurrentPrescription.CheckPatientDataEmpty("Tel"):
-                    MessageWindow.ShowMessage(Resources.電話空值, MessageType.WARNING);
                     return false;
                 case "PatientCellPhone" when CurrentPrescription.CheckPatientDataEmpty("CellPhone"):
-                    MessageWindow.ShowMessage(Resources.電話空值, MessageType.WARNING);
                     return false;
                 default:
                     return true;
@@ -1266,6 +1298,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentSet.MedicineSetItems.GetItems(CurrentSet.ID);
             CurrentPrescription.GetMedicinesBySet(CurrentSet);
             CurrentPrescription.UpdateMedicines();
+            CurrentPrescription.Medicines.ReOrder();
             CountMedicinePointAction();
         }
 

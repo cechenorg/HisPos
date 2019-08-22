@@ -10,7 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomerSearchWindow : Window
     {
         private CustomerSearchViewModel customerSearchViewModel { get; set; }
-        public CustomerSearchWindow(string search,CustomerSearchCondition condition)
+        public CustomerSearchWindow(CustomerSearchCondition condition,string search = null)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) => 
@@ -25,7 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 ShowDialog();
         }
 
-        public CustomerSearchWindow(DateTime birth)
+        public CustomerSearchWindow(DateTime? birth)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>

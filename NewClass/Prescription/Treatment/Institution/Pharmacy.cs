@@ -77,8 +77,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             var pharmacists = new Employees();
             foreach (var e in MedicalPersonnels)
             {
-                if(e.CheckLeave(date) && e.IsLocal)
-                    pharmacists.Add(e);
+                if(e.CheckLeave(date))
+                {
+                    if(e.IsLocal)
+                        pharmacists.Add(e);
+                    else if(e.ID.Equals(ViewModelMainWindow.CurrentUser.ID))
+                        pharmacists.Add(e);
+                }
             }
             return pharmacists;
         }

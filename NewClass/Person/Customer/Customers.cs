@@ -45,5 +45,13 @@ namespace His_Pos.NewClass.Person.Customer
             }
             return customers;
         }
+
+        public void GetTodayEdited()
+        {
+            var table = CustomerDb.GetTodayEdited();
+            foreach (DataRow r in table.Rows) {
+                Add(new Customer(r));
+            }
+        }
     }
 }
