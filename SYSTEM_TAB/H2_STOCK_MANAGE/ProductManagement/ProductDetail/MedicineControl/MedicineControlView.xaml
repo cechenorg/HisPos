@@ -8,7 +8,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
-             xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PriceControl"
              xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
              xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl"
              xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl"
@@ -23,10 +22,10 @@
             <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="18"/>
         </DataTemplate>
         <DataTemplate x:Key="NHIMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <priceControl:NHIMedicinePriceControl/>
+            <priceControl1:NHIMedicinePriceControl/>
         </DataTemplate>
         <DataTemplate x:Key="NHISpecialMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <priceControl:NHISpecialMedicinePriceControl/>
+            <priceControl1:NHISpecialMedicinePriceControl/>
         </DataTemplate>
         <DataTemplate x:Key="OTCMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <StackPanel Background="{StaticResource GridBackGround}">

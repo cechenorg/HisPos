@@ -52,6 +52,14 @@ namespace His_Pos.NewClass.Medicine
             }
             return medicineListTable;
         }
+
+        internal static DataTable GetTagDataByID(string productID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", productID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineTagDataByID]", parameterList);
+        }
+
         public static DataTable GetPrescriptionMedicineSumById(List<int> idList,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(idList));
