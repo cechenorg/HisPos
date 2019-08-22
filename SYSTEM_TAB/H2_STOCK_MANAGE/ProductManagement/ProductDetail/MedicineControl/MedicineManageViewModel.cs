@@ -82,8 +82,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ScrapWindow scrapWindow = new ScrapWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
             scrapWindow.ShowDialog();
 
-            if (scrapWindow.DialogResult != null && (bool)scrapWindow.DialogResult)
+            if (scrapWindow.DialogResult != null && (bool) scrapWindow.DialogResult)
+            {
                 ReloadData();
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
+            }
         }
         private void RecycleAction()
         {
@@ -91,15 +94,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             recycleWindow.ShowDialog();
 
             if (recycleWindow.DialogResult != null && (bool)recycleWindow.DialogResult)
+            {
                 ReloadData();
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
+            }
         }
         private void StockTakingAction()
         {
-            StockTakingWindow stockTakingWindow = new StockTakingWindow();
+            StockTakingWindow stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail);
             stockTakingWindow.ShowDialog();
 
             if(stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
+            {
                 ReloadData();
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
+            }
         }
         #endregion
 
