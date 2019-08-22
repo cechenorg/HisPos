@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,55 +19,99 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.StockTaking.StockTaking;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
+using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows
 {
     /// <summary>
     /// StockTakingWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class StockTakingWindow : Window
+    public partial class StockTakingWindow : Window, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
         private string productID;
-        private string wareHouseID;
+        private WareHouse wareHouse;
         private MedicineStockDetail stockDetail;
+        private string newInventory;
 
-        public string NewInventory { get; set; }
+        public string NewPrice { get; set; }
+        public string NewInventory
+        {
+            get { return newInventory; }
+            set
+            {
+                newInventory = value;
+                OnPropertyChanged(nameof(IsOverage));
+            }
+        }
+        public bool IsOverage
+        {
+            get
+            {
+                double newCheckedInventory = 0;
+                bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
+
+                if (!isDouble) return false;
+
+                if (newCheckedInventory > stockDetail.ShelfInventory) return true;
+                else return false;
+            }
+        }
         #endregion
 
-        public StockTakingWindow(string proID, string wareID, MedicineStockDetail stock)
+        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock)
         {
             InitializeComponent();
 
             DataContext = this;
 
             productID = proID;
-            wareHouseID = wareID;
+            wareHouse = ware;
             stockDetail = stock;
+            NewPrice = stock.LastPrice.ToString("0.##");
         }
 
         #region ----- Define Functions -----
         private bool IsNewInventoryValid()
         {
-            double newCheckedInventory = 0;
-            bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
-
-            if (!isDouble)
+            if (NewInventory.Equals(""))
             {
-                MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                MessageWindow.ShowMessage("盤點架上量不得為空!", MessageType.ERROR);
                 return false;
             }
-
-            if (newCheckedInventory < 0)
+            else
             {
-                MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
-                return false;
+                double newCheckedInventory = 0;
+                bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
+
+                if (!isDouble)
+                {
+                    MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                    return false;
+                }
+
+                if (newCheckedInventory < 0)
+                {
+                    MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
+                    return false;
+                }
             }
 
-            if (stockDetail.MedBagInventory - double.Parse(NewInventory) > 0 && stockDetail.OnTheWayAmount < stockDetail.MedBagInventory - double.Parse(NewInventory))
+            if (NewPrice.Equals("") && IsOverage)
             {
-                MessageWindow.ShowMessage("若欲盤點使庫存量低於藥袋量，請先建立採購單補足藥袋量!", MessageType.ERROR);
+                MessageWindow.ShowMessage("盤點單價不得為空!", MessageType.ERROR);
                 return false;
+            }
+            else if(IsOverage)
+            {
+                double newCheckedPrice = 0;
+                bool isDouble = double.TryParse(NewPrice, out newCheckedPrice);
+
+                if (!isDouble)
+                {
+                    MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
+                    return false;
+                }
             }
 
             return true;
@@ -75,44 +120,32 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             if (!IsNewInventoryValid()) return;
 
-            //if (StockDetail.LastPrice == 0.0)
-            //{
-            //    StockTakingNoLastPriceWindow stockTakingNoLastPriceWindow = new StockTakingNoLastPriceWindow();
-            //    stockTakingNoLastPriceWindow.ShowDialog();
+            double finalInv = (stockDetail.MedBagInventory > stockDetail.TotalInventory) ? stockDetail.TotalInventory + double.Parse(NewInventory) : stockDetail.MedBagInventory + double.Parse(NewInventory);
 
-            //    if (stockTakingNoLastPriceWindow.ConfirmClicked)
-            //    {
-            //        MainWindow.ServerConnection.OpenConnection();
-            //        ProductDetailDB.UpdateProductLastPrice(Medicine.ID, stockTakingNoLastPriceWindow.Price, SelectedWareHouse.ID);
-            //        MainWindow.ServerConnection.CloseConnection();
-            //    }
-            //    else
-            //        return;
-            //}
-
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將庫存調整為 {NewInventory} ?", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv} ?", "");
 
             if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking();
-            stockTaking.WareHouse = SelectedWareHouse;
-            StockTakingProduct stockTakingProduct = new StockTakingProduct();
-
-            stockTakingProduct.ID = medicineID;
-            stockTakingProduct.Inventory = StockViewModel.StockDetail.TotalInventory;
-            stockTakingProduct.NewInventory = double.Parse(NewInventory);
-            stockTaking.StockTakingProductCollection.Add(stockTakingProduct);
-            stockTaking.InsertStockTaking("單品盤點");
-            ProductDetailDB.StockTakingProductManageMedicineByID(Medicine.ID, NewInventory,SelectedWareHouse.ID);
+            stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, finalInv, double.Parse(NewPrice), wareHouse);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (!(dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS")))
-                MessageWindow.ShowMessage("報廢失敗 請稍後再試", MessageType.ERROR);
-            else
-                DialogResult = true;
-
+            DialogResult = true;
             Close();
+        }
+        #endregion
+
+        #region ----- Define PropertyChanged -----
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
         #endregion
     }

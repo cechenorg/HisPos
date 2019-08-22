@@ -101,7 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void StockTakingAction()
         {
-            StockTakingWindow stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail);
+            StockTakingWindow stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail);
             stockTakingWindow.ShowDialog();
 
             if(stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
