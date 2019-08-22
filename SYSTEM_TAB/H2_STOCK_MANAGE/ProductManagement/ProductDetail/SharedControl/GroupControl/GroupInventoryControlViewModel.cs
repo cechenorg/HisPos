@@ -19,6 +19,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #endregion
 
         #region ----- Define Variables -----
+        private string medicineID;
+        private string wareHouseID;
+        private double inventory;
         private ProductGroupSettings productGroupSettingCollection;
         
         public ProductGroupSettings ProductGroupSettingCollection
@@ -36,23 +39,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Actions -----
         private void ShowProductGroupWindowAction()
         {
-            if (StockDetail.TotalInventory < 0)
+            if (inventory < 0)
             {
                 MessageWindow.ShowMessage("欲調整商品群組 需先解決負庫問題", MessageType.ERROR);
                 return;
             }
 
-            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(ProductGroupSettingCollection, SelectedWareHouse.ID, StockDetail.TotalInventory);
+            ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(ProductGroupSettingCollection, wareHouseID, inventory);
             productGroupSettingWindow.ShowDialog();
 
-            SearchProductRecordAction();
+            //待修
         }
         #endregion
 
         #region ----- Define Functions -----
-        private void ReloadProductGroup()
+        public void ReloadData(string medID, string wareID, double totalInventory)
         {
-            ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(Medicine.ID, SelectedWareHouse.ID);
+            inventory = totalInventory;
+            medicineID = medID;
+            wareHouseID = wareID;
+
+            ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(medicineID, wareHouseID);
         }
         #endregion
     }

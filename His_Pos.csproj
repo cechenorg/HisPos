@@ -802,6 +802,7 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
     </Compile>

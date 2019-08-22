@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
@@ -27,6 +28,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #endregion
 
         #region ----- Define Variables -----
+        private string productID;
+        private string wareHouseID;
+
+        public ProductManageDetail MedicineDetail { get; set; }
         #endregion
 
         public SingdePriceControlViewModel()
@@ -38,7 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Actions -----
         private void ViewHistoryPriceAction()
         {
-            NHIMedicineHistoryPriceWindow medicineHistoryPriceWindow = new NHIMedicineHistoryPriceWindow(Medicine.ID);
+            NHIMedicineHistoryPriceWindow medicineHistoryPriceWindow = new NHIMedicineHistoryPriceWindow(productID);
             medicineHistoryPriceWindow.ShowDialog();
         }
         private void PrintMedicineLabelAction()
@@ -47,8 +52,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             if (!(bool)confirmWindow.DialogResult) return;
 
-            MedicineTagStruct medicineTagStruct = new MedicineTagStruct(Medicine.ID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).Ingredient);
-            PrintMedBagSingleMode(medicineTagStruct);
+            //待修
+            //MedicineTagStruct medicineTagStruct = new MedicineTagStruct(productID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).Ingredient);
+            //PrintMedBagSingleMode(medicineTagStruct);
         }
         #endregion
 
@@ -75,6 +81,46 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             var rd = new ReportDataSource("MedicineTagDataSet", dataTable);
             rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
+        }
+
+        public void ReloadData(string proID, string wareID, ProductTypeEnum type)
+        {
+            productID = proID;
+            wareHouseID = wareID;
+
+            DataTable manageMedicineDetailDataTable = null;
+
+            switch (type)
+            {
+                case ProductTypeEnum.OTCMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(proID);
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageNHIMedicineDetailByID(proID);
+                    break;
+                case ProductTypeEnum.SpecialMedicine:
+                    manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(proID);
+                    break;
+            }
+
+            if (manageMedicineDetailDataTable is null || manageMedicineDetailDataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+                return;
+            }
+
+            switch (type)
+            {
+                case ProductTypeEnum.OTCMedicine:
+                    MedicineDetail = new ProductManageDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+                case ProductTypeEnum.NHIMedicine:
+                    MedicineDetail = new ProductNHIDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+                case ProductTypeEnum.SpecialMedicine:
+                    MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
+                    break;
+            }
         }
         #endregion
     }

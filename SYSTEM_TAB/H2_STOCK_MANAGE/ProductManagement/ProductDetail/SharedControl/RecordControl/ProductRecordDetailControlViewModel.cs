@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ExportProductRecord;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service.ExportService;
@@ -24,8 +26,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #endregion
 
         #region ----- Define Variables -----
+        private string productID;
+        private string wareHouseID;
         private DateTime? startDate = DateTime.Today.AddMonths(-3);
         private DateTime? endDate = DateTime.Today;
+        private ProductInventoryRecords inventoryRecordCollection;
+        private ProductInventoryRecord currentInventoryRecord;
+        private ICollectionView inventoryRecordCollectionView;
+        private ProductInventoryRecordType filterType = ProductInventoryRecordType.All;
 
         public DateTime? StartDate
         {
@@ -36,6 +44,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
+        }
+        public ProductInventoryRecords InventoryRecordCollection
+        {
+            get { return inventoryRecordCollection; }
+            set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
+        }
+        public ProductInventoryRecord CurrentInventoryRecord
+        {
+            get { return currentInventoryRecord; }
+            set { Set(() => CurrentInventoryRecord, ref currentInventoryRecord, value); }
+        }
+        public ICollectionView InventoryRecordCollectionView
+        {
+            get => inventoryRecordCollectionView;
+            set { Set(() => InventoryRecordCollectionView, ref inventoryRecordCollectionView, value); }
         }
         #endregion
 
@@ -54,7 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(Medicine.ID, SelectedWareHouse.ID, (DateTime)StartDate, (DateTime)EndDate);
+            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(productID, wareHouseID, (DateTime)StartDate, (DateTime)EndDate);
 
             InventoryRecordCollectionView = CollectionViewSource.GetDefaultView(InventoryRecordCollection);
             InventoryRecordCollectionView.Filter += RecordFilter;
@@ -64,18 +87,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 InventoryRecordCollectionView.MoveCurrentToLast();
                 CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
             }
-
-            ReloadStockDetail();
-            ReloadProductGroupAndPrescription();
+            
             MainWindow.ServerConnection.CloseConnection();
+
+            //待修
         }
         private void ExportRecordAction()
         {
-            Collection<object> tempCollection = new Collection<object>() { new List<object> { Medicine.ID, StartDate, EndDate, SelectedWareHouse.ID } };
+            Collection<object> tempCollection = new Collection<object>() { new List<object> { productID, StartDate, EndDate, wareHouseID } };
 
             MainWindow.ServerConnection.OpenConnection();
             ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductRecordTemplate());
-            bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{Medicine.ID}商品歷程{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+            bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{productID}商品歷程{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
             MainWindow.ServerConnection.CloseConnection();
 
             if (isSuccess)
@@ -111,6 +134,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 return true;
             else
                 return filterType == ((ProductInventoryRecord)record).Type;
+        }
+        internal void ReloadData(string proID, string wareID)
+        {
+            productID = proID;
+            wareHouseID = wareID;
+
+            SearchProductRecordAction();
         }
         #endregion
     }

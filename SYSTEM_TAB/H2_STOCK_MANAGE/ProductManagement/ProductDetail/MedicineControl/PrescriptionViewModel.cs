@@ -11,6 +11,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
     public class PrescriptionViewModel : ViewModelBase
     {
         #region ----- Define Variables -----
+        private string medicineID;
+        private string wareHouseID;
         private ProductRegisterPrescriptions productRegisterPrescriptionCollection;
         
         public ProductRegisterPrescriptions ProductRegisterPrescriptionCollection
@@ -20,9 +22,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         #endregion
 
-        private void ReloadProductPrescription()
+        public void ReloadData(string medID, string wareID)
         {
-            ProductRegisterPrescriptionCollection = ProductRegisterPrescriptions.GetRegisterPrescriptionsByID(Medicine.ID, SelectedWareHouse.ID);
+            medicineID = medID;
+            wareHouseID = wareID;
+
+            ProductRegisterPrescriptionCollection = ProductRegisterPrescriptions.GetRegisterPrescriptionsByID(medicineID, wareHouseID);
         }
     }
 }

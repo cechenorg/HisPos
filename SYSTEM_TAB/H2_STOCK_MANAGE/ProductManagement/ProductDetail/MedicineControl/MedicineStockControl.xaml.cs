@@ -20,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(textBlock is null) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            (textBlock.DataContext as MedicineControlViewModel).StockDetail.GetStockDetailByID((textBlock.DataContext as MedicineControlViewModel).Medicine.ID, (textBlock.DataContext as MedicineControlViewModel).SelectedWareHouse.ID);
+            (textBlock.DataContext as MedicineStockViewModel).GetStockDetailByID();
             MainWindow.ServerConnection.CloseConnection();
         }
         private void GetMedBagDetail(object sender, MouseEventArgs e)
@@ -30,7 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if (textBlock is null) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            (textBlock.DataContext as MedicineControlViewModel).StockDetail.GetMedBagDetailByID((textBlock.DataContext as MedicineControlViewModel).Medicine.ID, (textBlock.DataContext as MedicineControlViewModel).SelectedWareHouse.ID);
+            (textBlock.DataContext as MedicineStockViewModel).GetMedBagDetailByID();
             MainWindow.ServerConnection.CloseConnection();
         }
     }
