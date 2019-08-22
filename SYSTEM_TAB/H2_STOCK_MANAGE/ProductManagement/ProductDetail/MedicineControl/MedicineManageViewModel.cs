@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Actions -----
         private void ScrapAction()
         {
-            ScrapWindow scrapWindow = new ScrapWindow();
+            ScrapWindow scrapWindow = new ScrapWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
             scrapWindow.ShowDialog();
 
             if (scrapWindow.DialogResult != null && (bool)scrapWindow.DialogResult)
@@ -87,7 +87,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void RecycleAction()
         {
-            RecycleWindow recycleWindow = new RecycleWindow();
+            RecycleWindow recycleWindow = new RecycleWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
             recycleWindow.ShowDialog();
 
             if (recycleWindow.DialogResult != null && (bool)recycleWindow.DialogResult)
