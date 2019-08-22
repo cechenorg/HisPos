@@ -38,7 +38,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
         #region ----- Define Variables -----
         private string medicineID;
-        private string wareHouseID;
         private ProductTypeEnum productType;
         private WareHouse selectedWareHouse;
 
@@ -102,19 +101,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
         private void ReloadData()
         {
-            if (!wareHouseID.Equals(String.Empty))
-                selectedWareHouse = WareHouseCollection[int.Parse(wareHouseID)];
-
-            PriceViewModel.ReloadData(medicineID, wareHouseID, productType);
-            StockViewModel.ReloadData(medicineID, wareHouseID);
+            PriceViewModel.ReloadData(medicineID, selectedWareHouse.ID, productType);
+            StockViewModel.ReloadData(medicineID, selectedWareHouse.ID);
             GroupViewModel.ReloadData(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
-            RecordViewModel.ReloadData(medicineID, wareHouseID);
-            PrescriptionViewModel.ReloadData(medicineID, wareHouseID);
+            RecordViewModel.ReloadData(medicineID, selectedWareHouse.ID);
+            PrescriptionViewModel.ReloadData(medicineID, selectedWareHouse.ID);
         }
         public void ReloadData(string proID, string wareID, ProductTypeEnum type)
         {
+            if (!wareID.Equals(String.Empty))
+                selectedWareHouse = WareHouseCollection[int.Parse(wareID)];
+
             medicineID = proID;
-            wareHouseID = wareID;
             productType = type;
 
             ReloadData();
