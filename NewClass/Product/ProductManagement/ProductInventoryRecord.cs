@@ -35,6 +35,9 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 case "庫存管理":
                     Type = ProductInventoryRecordType.StockTaking;
                     break;
+                case "合併拆分":
+                    Type = ProductInventoryRecordType.MergeSplit;
+                    break;
                 default:
                     Type = ProductInventoryRecordType.Error;
                     break;

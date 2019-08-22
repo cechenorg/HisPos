@@ -25,6 +25,9 @@
         <DataTemplate x:Key="ErrorIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Image Source="/Images/DeleteDot.png" Width="18" Margin="10,0,5,0"/>
         </DataTemplate>
+        <DataTemplate x:Key="MergeSplitIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/MergeSplit.png" Width="23" Margin="10,0,5,0"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -129,6 +132,9 @@
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="Prescription">
                                                 <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionIcon}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="MergeSplit">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource MergeSplitIcon}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

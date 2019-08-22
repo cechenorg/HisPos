@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         StockTaking = 2,
         Prescription = 3,
         Transaction = 4,
-        All = 5
+        All = 5,
+        MergeSplit = 6
     }
 }
