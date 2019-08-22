@@ -219,11 +219,11 @@
             <Label Content="商品相關資料" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0"/>
             <Label Content="庫別" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0"/>
             <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="18" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="243,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="363,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="ForestGreen" Margin="10,0,0,0" Command="{Binding StockTakingCommand}"/>
             <Button Content="回收" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="RoyalBlue" Margin="10,0,0,0" Command="{Binding RecycleCommand}"/>
             <Button Content="報廢" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="IndianRed" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>
-            <Button Content="轉移庫別" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="DimGray" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>
+            <!--<Button Content="轉移庫別" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="DimGray" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>-->
         </StackPanel>
         <Grid Grid.Row="2" Grid.Column="1" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>
