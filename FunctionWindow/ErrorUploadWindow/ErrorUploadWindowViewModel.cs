@@ -58,6 +58,7 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
                     Add(new IcErrorCode("E000", "健保署資訊系統當機"));
                     Add(new IcErrorCode("E001", "控卡名單已簽切結書"));
                     Add(new IcErrorCode("F000", "醫事機構赴偏遠地區因無電話撥接"));
+                    Add(new IcErrorCode("G000", "新特約使用"));
                 }
             }
         }
