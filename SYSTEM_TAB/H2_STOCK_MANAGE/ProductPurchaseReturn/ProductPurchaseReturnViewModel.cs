@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -14,6 +15,8 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
+using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
@@ -40,6 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand CloseTabCommand { get; set; }
         public RelayCommand ReturnOrderCalculateReturnAmountCommand { get; set; }
         public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
+        public RelayCommand ExportOrderDataCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -228,6 +232,44 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if(CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
+        private void ExportOrderDataAction()
+        {
+            if (CurrentStoreOrder.OrderStatus == OrderStatusEnum.WAITING)
+            {
+                MessageWindow.ShowMessage("等待處理訂單資料不齊全 無法匯出!", MessageType.ERROR);
+                return;
+            }
+
+            IsBusy = true;
+            BusyContent = "匯出資料";
+
+            bool isSuccess = false;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
+                
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.SaveOrder();
+                ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
+                isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\進退貨資料{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isSuccess)
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                else
+                    MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -316,6 +358,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             CloseTabCommand = new RelayCommand(CloseTabAction);
             ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
+            ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
         }
         private void RegisterMessengers()
         {

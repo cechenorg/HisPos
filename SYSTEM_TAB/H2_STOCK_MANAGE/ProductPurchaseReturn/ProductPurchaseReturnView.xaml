@@ -10,6 +10,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:newClass="clr-namespace:His_Pos.NewClass"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
@@ -55,6 +56,7 @@
         <DataTemplate x:Key="ProcessingID" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <Label Content="{Binding ReceiveID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
         </DataTemplate>
+        <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
@@ -118,6 +120,11 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="70">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu TextBlock.TextAlignment="Center">
+                                                <MenuItem Header="匯出選取訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}" CommandParameter="S"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
