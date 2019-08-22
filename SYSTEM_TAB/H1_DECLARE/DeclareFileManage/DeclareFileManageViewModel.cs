@@ -347,7 +347,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             worker.DoWork += (o, ea) => { CreateDeclareFile(); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                ExportExcelAction();
                 Refresh();
             };
             IsBusy = true;
@@ -365,72 +364,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             BusyContent = StringRes.產生申報資料;
             var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
             DeclareFile.CreateDeclareFile(decFile, decDate);
-        }
-
-        private void ExportExcelAction() {
-            if (DeclareDate is null)
-            {
-                MessageWindow.ShowMessage("尚未填寫申報年月。", MessageType.WARNING);
-                return;
-            }
-            var decDate = (DateTime) DeclareDate;
-            var institutionDeclarePoints = new InstitutionDeclarePoints();
-            institutionDeclarePoints.GetDataByDate(decDate);
-            var dialog = CreateInstitutionSummaryFileDialog(decDate);
-            if (dialog.ShowDialog() != DialogResult.OK) return;
-            Properties.Settings.Default.DeclareXmlPath = dialog.FileName;
-            Properties.Settings.Default.Save();
-            try
-            {
-                CreateInstitutionSummaryFile(dialog,institutionDeclarePoints, decDate);
-            }
-            catch (Exception ex)
-            {
-                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-            }
-        }
-
-        private void CreateInstitutionSummaryFile(FileDialog dialog,InstitutionDeclarePoints institutionDeclarePoints, DateTime decDate)
-        {
-            using (var file = new StreamWriter(dialog.FileName, false, Encoding.UTF8))
-            {
-                file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
-                file.WriteLine("院所申報統計表");
-                file.WriteLine("月份 " + decDate.Month + "月");
-                file.WriteLine("院所,藥品點,特材點,藥服費,小計,部分負擔,申報額,筆數");
-                foreach (var ins in institutionDeclarePoints)
-                {
-                    file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
-                }
-                var sum = new InstitutionDeclarePoint
-                {
-                    InsName = "總計",
-                    MedicinePoint = institutionDeclarePoints.Sum(ins => ins.MedicinePoint),
-                    SpecialMedPoint = institutionDeclarePoints.Sum(ins => ins.SpecialMedPoint),
-                    MedicalServicePoint = institutionDeclarePoints.Sum(ins => ins.MedicalServicePoint),
-                    SubTotal = institutionDeclarePoints.Sum(ins => ins.SubTotal),
-                    CopayMentPoint = institutionDeclarePoints.Sum(ins => ins.CopayMentPoint),
-                    DeclarePoint = institutionDeclarePoints.Sum(ins => ins.DeclarePoint),
-                    PrescriptionCount = institutionDeclarePoints.Sum(ins => ins.PrescriptionCount)
-                };
-                file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
-                file.Close();
-                file.Dispose();
-            }
-            MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
-        }
-
-        private SaveFileDialog CreateInstitutionSummaryFileDialog(DateTime decDate)
-        {
-            // ReSharper disable once UseObjectOrCollectionInitializer
-            var dialog = new SaveFileDialog();
-            dialog.Title = StringRes.院所統計表;
-            dialog.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
-            dialog.Filter = StringRes.CSV檔案;
-            dialog.FileName = ViewModelMainWindow.CurrentPharmacy.Name + decDate.Month + "月院所申報統計表";
-            dialog.FilterIndex = 2;
-            dialog.RestoreDirectory = true;
-            return dialog;
         }
 
         private void AddToEditListAction()
