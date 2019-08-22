@@ -76,7 +76,7 @@ namespace His_Pos.Service
             return date;
         }
 
-        public static string ExportXml(XDocument xml, string FileTypeName,string fileName = null) {
+        public static string ExportXml(XDocument xml, string FileTypeName,DateTime? declareDate,string fileName = null) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = DateTime.Now.Month.ToString();
@@ -87,7 +87,11 @@ namespace His_Pos.Service
             if (FileTypeName.Equals("每月申報檔"))
             {
                 path += "\\藥健康系統申報";
-                path_ymd = path + "\\" + year + "年" + month + "月\\" + day;
+                path_ymd = path + "\\" +((DateTime)declareDate).Month + "月申報檔_" + 
+                           (DateTime.Now.Year-1911)+ "年" +DateTime.Now.Month.ToString().PadLeft(2,'0') + "月" +
+                           DateTime.Now.Day.ToString().PadLeft(2,'0') + "日" +
+                           DateTime.Now.Hour.ToString().PadLeft(2,'0') + "點" +
+                           DateTime.Now.Minute.ToString().PadLeft(2,'0') + "分轉出";
                 path_file = path_ymd + "\\";
                 path_file += "DRUGT";
             }
@@ -106,13 +110,15 @@ namespace His_Pos.Service
             var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();
-            string info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
+            var info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
             File.WriteAllText(path_file + ".xml", info.Replace("big5", "Big5"), Encoding.GetEncoding(950));
             var input = path_file + ".xml";
             var output =  (string.IsNullOrEmpty(fileName) ? path_file : path_ymd + "\\" + fileName) + ".zip";
             //壓縮XML
             if (File.Exists(output)) File.Delete(output);
             ZipFiles(new[] {input}, output);
+            if (FileTypeName.Equals("每月申報檔"))
+                File.Delete(input);
             return path_file;
         }
        
@@ -169,7 +175,7 @@ namespace His_Pos.Service
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "DailyUpload");
+                var filePath = ExportXml(dailyUpload, "DailyUpload",null);
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
@@ -225,7 +231,7 @@ namespace His_Pos.Service
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "DailyUpload");
+                var filePath = ExportXml(dailyUpload, "DailyUpload",null);
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案

@@ -11,7 +11,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product;
 using His_Pos.Properties;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
@@ -389,43 +388,59 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             SetBuckleAmount(buckle);
             DataTable table;
-            switch (type)
-            {
-                case PrescriptionType.ChronicReserve:
-                    table = MedicineDb.GetUsableAmountByReserveID(id);
-                    break;
-                default:
-                    if (id == 0)
-                    {
-                        var idList = this.Select(m => m.ID).ToList();
-                        table = MedicineDb.GetMedicinesBySearchIds(idList,wareHouseID,adjustDate);
-                    }
-                    else
-                        table = MedicineDb.GetUsableAmountByPrescriptionID(id);
-                    break;
-            }
-            if (id == 0 && type != PrescriptionType.ChronicReserve)
-            {
-                foreach (DataRow r in table.Rows)
-                {
-                    var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
-                    foreach (var m in medList)
-                    {
-                        m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                        m.UsableAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
-                    }
-                }
-            }
+            if (type == PrescriptionType.ChronicReserve)
+                table = MedicineDb.GetUsableAmountByReserveID(id);
             else
             {
-                foreach (DataRow r in table.Rows)
+                if (id == 0)
                 {
-                    var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
-                    foreach (var m in medList)
-                    {
-                        m.NHIPrice = (double)r.Field<decimal>("Med_Price");
-                        m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
-                    }
+                    var idList = this.Select(m => m.ID).ToList();
+                    table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
+                    UpdateInventoryID(table);
+                }
+                else
+                    table = MedicineDb.GetUsableAmountByPrescriptionID(id);
+            }
+            if (id == 0 && type != PrescriptionType.ChronicReserve)
+                ReserveUpdatePriceAndUsableAmount(table);
+            else
+                NormalUpdatePriceAndUsableAmount(table);
+        }
+
+        private void NormalUpdatePriceAndUsableAmount(DataTable table)
+        {
+            foreach (DataRow r in table.Rows)
+            {
+                var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
+                foreach (var m in medList)
+                {
+                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
+                }
+            }
+        }
+
+        private void ReserveUpdatePriceAndUsableAmount(DataTable table)
+        {
+            foreach (DataRow r in table.Rows)
+            {
+                var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
+                foreach (var m in medList)
+                {
+                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    m.UsableAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
+                }
+            }
+        }
+
+        private void UpdateInventoryID(DataTable table)
+        {
+            foreach (DataRow r in table.Rows)
+            {
+                foreach (var m in this)
+                {
+                    if (r.Field<string>("Pro_Id").Equals(m.ID))
+                        m.InventoryID = r.Field<int>("Inv_ID");
                 }
             }
         }
@@ -619,7 +634,6 @@ namespace His_Pos.NewClass.Medicine.Base
 
         public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList)
         {
-            var buckleMedicines = new List<BuckleMedicineStruct>();
             var inventoryIDList = new List<int>();
             foreach (var med in this)
             {
@@ -627,12 +641,13 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (!inventoryIDList.Contains(med.InventoryID))
                     inventoryIDList.Add(med.InventoryID);
             }
-            foreach (var inv in inventoryIDList)
-            {
-                var editMed = this.Where(m => m.InventoryID.Equals(inv));
-                var buckleAmount = editMed.Sum(m => m.BuckleAmount);
-                buckleMedicines.Add(new BuckleMedicineStruct(inv, buckleAmount));
-            }
+
+            var buckleMedicines = 
+                (from inv in inventoryIDList 
+                    let editMed = this.Where(m => m.InventoryID.Equals(inv))
+                    let buckleAmount = editMed.Sum(m => m.BuckleAmount) 
+                    select new BuckleMedicineStruct(inv, buckleAmount)).ToList();
+
             var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.InventoryID).ToList();
             MainWindow.ServerConnection.OpenConnection();
             var inventories = MedicineDb.GetInventoryByInvIDs(medIDs);
@@ -656,12 +671,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
                 if(buckle.BuckleAmount == 0) continue;
                 if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
-                foreach (var med in this)
-                {
-                    if (med is MedicineVirtual) continue;
-                    if (med.InventoryID.Equals(inv.ID))
-                        negativeStock += "藥品" + med.ID + "\n";
-                }
+                negativeStock = this.Where(med => !(med is MedicineVirtual))
+                    .Where(med => med.InventoryID.Equals(inv.ID))
+                    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
             }
             if (!string.IsNullOrEmpty(negativeStock))
             {
@@ -669,11 +681,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
             }
             return negativeStock;
-        }
-
-        public bool DeclareMedicalService()
-        {
-            return this.Count(m => m is MedicineNHI && !m.PaySelf) > 0;
         }
 
         public void ReOrder()

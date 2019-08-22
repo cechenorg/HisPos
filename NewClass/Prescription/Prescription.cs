@@ -1036,7 +1036,10 @@ namespace His_Pos.NewClass.Prescription
 
         private void SetNormalVariables()
         {
-            PrescriptionCase = VM.GetPrescriptionCases("09");
+            if (Division != null && !string.IsNullOrEmpty(Division.ID))
+                PrescriptionCase = Division.ID.Equals("40") ? VM.GetPrescriptionCases("19") : VM.GetPrescriptionCases("09");
+            else
+                PrescriptionCase = VM.GetPrescriptionCases("09");
             PaymentCategory = VM.GetPaymentCategory("4");
         }
 

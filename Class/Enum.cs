@@ -121,7 +121,8 @@ namespace His_Pos.Class
         ERROR = 0,
         SUCCESS = 1,
         WARNING = 2,
-        ONLYMESSAGE = 3
+        ONLYMESSAGE = 3,
+        TIPS = 4
     }
 
     public enum DeclareFileType

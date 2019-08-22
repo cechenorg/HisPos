@@ -232,6 +232,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             InitialCommandActions();
             InitPrescription();
             SelectedDetail = EditedPrescription.Patient.Name.Equals("匿名")? "Option2" : "Option1";
+            Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+        }
+
+        private void UpdateInventories(NotificationMessage msg)
+        {
+            if (msg.Notification == "UpdateUsableAmountMessage" && EditedPrescription != null)
+            {
+                if(EditedPrescription.Medicines != null && EditedPrescription.Medicines.Count > 0)
+                    EditedPrescription.UpdateMedicines();
+            }
         }
 
         private void InitPrescription()
@@ -727,13 +737,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var negativeStock = string.Empty;
             foreach (var inv in inventoryList)
             {
-                if (inv.OnTheFrame - EditedPrescription.Medicines.SingleOrDefault(m => m.InventoryID.Equals(inv.InvID))?.BuckleAmount >= 0) continue;
-                foreach (var med in EditedPrescription.Medicines)
-                {
-                    if (med is MedicineVirtual) continue;
-                    if (med.InventoryID.Equals(inv.InvID))
-                        negativeStock += "藥品" + med.ID + "\n";
-                }
+                var editMedicines = EditedPrescription.Medicines.Where(m => m.InventoryID.Equals(inv.InvID));
+                if (inv.OnTheFrame - editMedicines.Sum(m => m.BuckleAmount) >= 0) continue;
+                negativeStock =  EditedPrescription.Medicines.Where(med => !(med is MedicineVirtual))
+                    .Where(med => med.InventoryID.Equals(inv.InvID))
+                    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
             }
             return negativeStock;
         }

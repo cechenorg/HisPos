@@ -22,7 +22,10 @@ namespace His_Pos.FunctionWindow
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
                     break;
                 case MessageType.WARNING:
-                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Warning.png", UriKind.Relative));
+                    break;
+                case MessageType.TIPS:
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Tips.png", UriKind.Relative));
                     break;
             }
             Message.Text = message;

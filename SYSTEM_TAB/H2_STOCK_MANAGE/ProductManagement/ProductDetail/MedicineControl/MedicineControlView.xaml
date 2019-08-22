@@ -9,6 +9,11 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
              xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PriceControl"
+             xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
+             xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl"
+             xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl"
+             xmlns:presControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl"
+             xmlns:stockControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
@@ -25,11 +30,11 @@
         </DataTemplate>
         <DataTemplate x:Key="OTCMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <StackPanel Background="{StaticResource GridBackGround}">
-                <sharedControl:SingdePriceControl/>
+                <priceControl1:SingdePriceControl/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="NHIMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Grid>
+            <Grid DataContext="{Binding PriceViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -72,7 +77,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <ContentControl Content="{Binding}">
+                <ContentControl Content="{Binding ManageViewModel}">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource NoMedicineFlag}" />
@@ -210,25 +215,23 @@
                 <Button Width="120" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ConfirmChangeCommand}"/>
             </StackPanel>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Background="{StaticResource GridBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" DataContext="{Binding ManageViewModel}">
             <Label Content="商品相關資料" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0"/>
             <Label Content="庫別" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0"/>
             <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="18" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="40,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox Text="{Binding NewInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="25,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="363,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="ForestGreen" Margin="10,0,0,0" Command="{Binding StockTakingCommand}"/>
-            <TextBox Text="{Binding RecycleAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="30,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
             <Button Content="回收" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="RoyalBlue" Margin="10,0,0,0" Command="{Binding RecycleCommand}"/>
-            <TextBox Text="{Binding ScrapAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="30,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
             <Button Content="報廢" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="IndianRed" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>
+            <!--<Button Content="轉移庫別" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="DimGray" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>-->
         </StackPanel>
-        <Grid Grid.Row="2" Grid.Column="1">
+        <Grid Grid.Row="2" Grid.Column="1" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="290"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ContentControl Margin="0,10,10,0" Content="{Binding}">
+            <ContentControl Margin="0,10,10,0" Content="{Binding PriceViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NHIMedicinePriceControl}" />
@@ -247,18 +250,18 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170"/>
                     <ColumnDefinition/>
-                </Grid.ColumnDefinitions> 
-                <sharedControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0"/>
-                <medicineControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0"/>
+                </Grid.ColumnDefinitions>
+                <groupControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding GroupViewModel}"/>
+                <presControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding PrescriptionViewModel}"/>
             </Grid>
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0">
+        <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="220"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <sharedControl:StockControl Grid.Row="0"/>
-            <sharedControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0"/>
+            <stockControl:MedicineStockControl Grid.Row="0" DataContext="{Binding StockViewModel}"/>
+            <recordControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0" DataContext="{Binding RecordViewModel}"/>
         </Grid>
     </Grid>
 </UserControl>
