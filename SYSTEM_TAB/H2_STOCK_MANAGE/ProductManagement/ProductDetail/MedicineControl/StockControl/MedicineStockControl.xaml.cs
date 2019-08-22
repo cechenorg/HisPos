@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl
 {
     /// <summary>
     /// MedicineStockControl.xaml 的互動邏輯

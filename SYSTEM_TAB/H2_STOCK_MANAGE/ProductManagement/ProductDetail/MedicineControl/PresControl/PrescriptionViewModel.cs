@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Product.ProductManagement;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl
 {
     public class PrescriptionViewModel : ViewModelBase
     {

@@ -802,14 +802,14 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineManageViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineStockViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PrescriptionControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionControl.xaml.cs">
       <DependentUpon>PrescriptionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PrescriptionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml.cs">
       <DependentUpon>NHIMedicinePriceControl.xaml</DependentUpon>
     </Compile>
@@ -834,7 +834,7 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\SingdePriceControl.xaml.cs">
       <DependentUpon>SingdePriceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineStockControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockControl.xaml.cs">
       <DependentUpon>MedicineStockControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\RecordControl\ProductRecordDetailControlViewModel.cs" />
@@ -1451,7 +1451,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PrescriptionControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1483,7 +1483,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineStockControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

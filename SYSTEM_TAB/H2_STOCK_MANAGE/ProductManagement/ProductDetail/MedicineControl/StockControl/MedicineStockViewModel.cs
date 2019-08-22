@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl
 {
     public class MedicineStockViewModel : ViewModelBase
     {

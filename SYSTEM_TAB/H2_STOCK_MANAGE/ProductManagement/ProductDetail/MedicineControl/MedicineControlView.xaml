@@ -12,6 +12,8 @@
              xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
              xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl"
              xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl"
+             xmlns:presControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl"
+             xmlns:stockControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
@@ -250,7 +252,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <groupControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding GroupViewModel}"/>
-                <medicineControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding PrescriptionViewModel}"/>
+                <presControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding PrescriptionViewModel}"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" DataContext="{Binding ManageViewModel}">
@@ -258,7 +260,7 @@
                 <RowDefinition Height="220"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <medicineControl:MedicineStockControl Grid.Row="0" DataContext="{Binding StockViewModel}"/>
+            <stockControl:MedicineStockControl Grid.Row="0" DataContext="{Binding StockViewModel}"/>
             <recordControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0" DataContext="{Binding RecordViewModel}"/>
         </Grid>
     </Grid>

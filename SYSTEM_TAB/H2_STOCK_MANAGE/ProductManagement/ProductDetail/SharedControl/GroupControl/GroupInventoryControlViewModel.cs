@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductGroupSetting;
@@ -48,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             ProductGroupSettingWindow productGroupSettingWindow = new ProductGroupSettingWindow(ProductGroupSettingCollection, wareHouseID, inventory);
             productGroupSettingWindow.ShowDialog();
 
-            //待修
+            Messenger.Default.Send(new NotificationMessage<string>(this, medicineID, "RELOAD"));
         }
         #endregion
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.Base;
@@ -70,27 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Actions -----
         private void SearchProductRecordAction()
         {
-            if (StartDate is null || EndDate is null)
-            {
-                MessageWindow.ShowMessage("日期格式錯誤", MessageType.ERROR);
-                return;
-            }
-
-            MainWindow.ServerConnection.OpenConnection();
-            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(productID, wareHouseID, (DateTime)StartDate, (DateTime)EndDate);
-
-            InventoryRecordCollectionView = CollectionViewSource.GetDefaultView(InventoryRecordCollection);
-            InventoryRecordCollectionView.Filter += RecordFilter;
-
-            if (!InventoryRecordCollectionView.IsEmpty)
-            {
-                InventoryRecordCollectionView.MoveCurrentToLast();
-                CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
-            }
-            
-            MainWindow.ServerConnection.CloseConnection();
-
-            //待修
+            Messenger.Default.Send(new NotificationMessage<string>(this, productID, "RELOAD"));
         }
         private void ExportRecordAction()
         {
@@ -135,12 +116,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 return filterType == ((ProductInventoryRecord)record).Type;
         }
+        private void SearchRecord()
+        {
+            if (StartDate is null || EndDate is null)
+            {
+                MessageWindow.ShowMessage("日期格式錯誤", MessageType.ERROR);
+                return;
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            InventoryRecordCollection = ProductInventoryRecords.GetInventoryRecordsByID(productID, wareHouseID, (DateTime)StartDate, (DateTime)EndDate);
+
+            InventoryRecordCollectionView = CollectionViewSource.GetDefaultView(InventoryRecordCollection);
+            InventoryRecordCollectionView.Filter += RecordFilter;
+
+            if (!InventoryRecordCollectionView.IsEmpty)
+            {
+                InventoryRecordCollectionView.MoveCurrentToLast();
+                CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
+            }
+
+            MainWindow.ServerConnection.CloseConnection();
+        }
         internal void ReloadData(string proID, string wareID)
         {
             productID = proID;
             wareHouseID = wareID;
 
-            SearchProductRecordAction();
+            SearchRecord();
         }
         #endregion
     }
