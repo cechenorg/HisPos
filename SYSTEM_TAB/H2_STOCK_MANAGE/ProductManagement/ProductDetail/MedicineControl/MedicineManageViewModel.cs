@@ -19,6 +19,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Medicin
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -78,18 +79,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         #region ----- Define Actions -----
         private void ScrapAction()
         {
+            ScrapWindow scrapWindow = new ScrapWindow();
+            scrapWindow.ShowDialog();
 
-            ReloadData();
+            if (scrapWindow.DialogResult != null && (bool)scrapWindow.DialogResult)
+                ReloadData();
         }
         private void RecycleAction()
         {
+            RecycleWindow recycleWindow = new RecycleWindow();
+            recycleWindow.ShowDialog();
 
-            ReloadData();
+            if (recycleWindow.DialogResult != null && (bool)recycleWindow.DialogResult)
+                ReloadData();
         }
         private void StockTakingAction()
         {
+            StockTakingWindow stockTakingWindow = new StockTakingWindow();
+            stockTakingWindow.ShowDialog();
 
-            ReloadData();
+            if(stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
+                ReloadData();
         }
         #endregion
 
