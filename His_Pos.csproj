@@ -971,6 +971,7 @@
       <DependentUpon>EmployeeChangePasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeChangePasswordWindow\EmployeeChangePasswordWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeEnum.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeInsertWindow\EmployeeInsertWindow.xaml.cs">
       <DependentUpon>EmployeeInsertWindow.xaml</DependentUpon>
     </Compile>

@@ -29,6 +29,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public RelayCommand ChangePassWordCommand { get; set; }
         #endregion
         #region ----- Define Variables -----
+        
+        private EmployeeControlEnum controlType;
+        public EmployeeControlEnum ControlType
+        {
+            get => controlType;
+            set
+            {
+                Set(() => ControlType, ref controlType, value);
+            }
+        }
         private CollectionViewSource employeeCollectionViewSource;
         private CollectionViewSource EmployeeCollectionViewSource
         {
@@ -154,6 +164,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollectionViewSource = new CollectionViewSource { Source = EmployeeCollection };
             EmployeeCollectionView = EmployeeCollectionViewSource.View;
             EmployeeCollectionViewSource.Filter += Filter;
+
+            if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+                ControlType = EmployeeControlEnum.AllEditableControl;
         }
         private void Filter(object sender, FilterEventArgs e)
         {
