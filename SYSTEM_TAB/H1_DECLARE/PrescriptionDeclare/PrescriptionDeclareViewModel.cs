@@ -288,6 +288,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ClearAction();
             SetPharmacist();
             MainWindow.ServerConnection.CloseConnection();
+            Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+        }
+
+        private void UpdateInventories(NotificationMessage msg)
+        {
+            if (msg.Notification == "UpdateUsableAmountMessage" && CurrentPrescription != null)
+            {
+                if(CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count > 0)
+                    CurrentPrescription.UpdateMedicines();
+            }
         }
 
         private void SetPharmacist()
