@@ -21,7 +21,16 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
                     Add(new PrescriptionSendData(m));
                     if (tempMeds.Count(t => t.ID == m.InventoryID) == 0) {
-                        double selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+                        double selfPrepareAmount;
+                        if (prescription.PrescriptionStatus.OrderStatus.Contains("訂單狀態:已收貨") || prescription.PrescriptionStatus.OrderStatus.Contains("備藥狀態:已備藥")) {
+                            if (m.SendAmount >= 0)
+                                selfPrepareAmount = m.Amount;
+                            else
+                                selfPrepareAmount = 0;
+                        }
+                        else
+                            selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+                        
                         tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, selfPrepareAmount));
                         meds.Add(m.ID);
                     }
