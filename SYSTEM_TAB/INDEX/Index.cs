@@ -22,6 +22,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using His_Pos.NewClass.Product.CommonProduct;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -226,6 +227,25 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+        private CommonProducts commonProductsCollection;
+        public CommonProducts CommonProductsCollection
+        {
+            get => commonProductsCollection;
+            set
+            {
+                Set(() => CommonProductsCollection, ref commonProductsCollection, value);
+            }
+        }
+        private CommonProduct commonProductSelectedItem;
+        public CommonProduct CommonProductSelectedItem
+        {
+            get => commonProductSelectedItem;
+            set
+            {
+                Set(() => CommonProductSelectedItem, ref commonProductSelectedItem, value);
+            }
+        }
+
         #endregion
         #region Command
         public RelayCommand ReserveSearchCommand { get; set; }
@@ -242,6 +262,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ShowMedicineDetailCommand { get; set; }
         public RelayCommand PrintIndexReserveMedbagCommand { get; set; }
         public RelayCommand ShowReserveDetailCommand { get; set; }
+        public RelayCommand ShowCommonProductDetailCommand { get; set; }
+        public RelayCommand CommonProductGetDataCommand { get; set; }
         #endregion
         public Index() {
             InitStatusstring();
@@ -257,11 +279,27 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
+            ShowCommonProductDetailCommand = new RelayCommand(ShowCommonProductDetailAction); 
             PrintIndexReserveMedbagCommand = new RelayCommand(PrintPackageAction);
             ShowReserveDetailCommand = new RelayCommand(ShowReserveDetailAction);
+            CommonProductGetDataCommand = new RelayCommand(CommonProductGetDataAcion);
             ReserveSearchAction();
+            CommonProductGetDataAcion();
         }
         #region Action
+        private void CommonProductGetDataAcion() {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => {
+                BusyContent = "取得低於安全量商品..."; 
+                CommonProductsCollection = CommonProducts.GetData();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false; 
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
         private void DataChangeAction() {
             IsDataChanged = true;
         }
@@ -412,6 +450,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void ShowMedicineDetailAction() {
           ProductDetailWindow.ShowProductDetailWindow();
           Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveDetailSelectedItem.ID, "0" }, "ShowProductDetail"));
+        }
+        private void ShowCommonProductDetailAction()
+        {
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { CommonProductSelectedItem.ID, "0" }, "ShowProductDetail"));
         }
         private void ShowReserveDetailAction() {
             if (IndexReserveSelectedItem is null) 
