@@ -387,9 +387,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void PrescriptionEditedRefresh(NotificationMessage msg)
         {
             if (msg.Notification.Equals("PrescriptionEdited"))
-            {
                 Refresh();
-            }
         }
 
         private void GetPharmacistSchedule()

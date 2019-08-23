@@ -358,6 +358,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SearchAction()
         {
+            if (CheckSearchConditionsEmpty())
+            {
+                MessageWindow.ShowMessage("請至少填寫一個查詢條件",MessageType.WARNING);
+                return;
+            }
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { SearchByConditions(); };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -367,6 +372,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private bool CheckSearchConditionsEmpty()
+        {
+            return (StartDate is null || EndDate is null) && string.IsNullOrEmpty(PatientCondition) &&
+                   PatientBirth is null && string.IsNullOrEmpty(MedicineCondition) && string.IsNullOrEmpty(SelectedAdjustCase?.ID) &&
+                   string.IsNullOrEmpty(SelectedDivision?.ID);
         }
 
         private void ClearAction()
