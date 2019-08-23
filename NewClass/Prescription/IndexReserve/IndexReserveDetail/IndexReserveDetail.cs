@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
             Amount = r.Field<double>("TotalAmount");
             IsFrozen = r.Field<bool>("Med_IsFrozen");
             IsControl = r.Field<byte?>("Med_Control");
-            SendAmount = 0;
+            SendAmount = r.Field<double>("SendAmount");
         }
         public string StoOrdID { get; set; }
         public string Stock { get; set; }

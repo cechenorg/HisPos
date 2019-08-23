@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>2.0.11.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -810,10 +810,10 @@
       <DependentUpon>PrescriptionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHIMedicinePriceControl.xaml.cs">
       <DependentUpon>NHIMedicinePriceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHISpecialMedicinePriceControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHISpecialMedicinePriceControl.xaml.cs">
       <DependentUpon>NHISpecialMedicinePriceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml.cs">
@@ -1467,11 +1467,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHIMedicinePriceControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHIMedicinePriceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PriceControl\NHISpecialMedicinePriceControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHISpecialMedicinePriceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

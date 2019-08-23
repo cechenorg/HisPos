@@ -52,9 +52,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             if (!(bool)confirmWindow.DialogResult) return;
 
-            //待修
-            //MedicineTagStruct medicineTagStruct = new MedicineTagStruct(productID, Medicine.ChineseName, Medicine.EnglishName, (MedicineDetail as ProductNHIDetail).IsControl, (MedicineDetail as ProductNHIDetail).ControlLevel, (MedicineDetail as ProductNHIDetail).Ingredient);
-            //PrintMedBagSingleMode(medicineTagStruct);
+            MedicineTagStruct medicineTagStruct = MedicineTagStruct.GetDataByID(productID);
+
+            if (medicineTagStruct is null)
+                MessageWindow.ShowMessage("列印失敗 請稍後再試", MessageType.ERROR);
+            else
+                PrintMedBagSingleMode(medicineTagStruct);
         }
         #endregion
 
