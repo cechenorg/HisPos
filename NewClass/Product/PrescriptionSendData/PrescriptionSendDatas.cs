@@ -40,8 +40,11 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             foreach (var inv in inventories) { 
                 for (int i = 0; i < tempMeds.Count; i++)
                 {
-                    if (tempMeds[i].ID == inv.InvID)
+                    if (tempMeds[i].ID == inv.InvID) {
                         tempMeds[i].Amount += inv.InventoryAmount + inv.OnTheWayAmount - inv.MegBagAmount;
+                        tempMeds[i].Amount = tempMeds[i].Amount < 0 ? 0 : tempMeds[i].Amount;
+                    }
+                        
                 }
             }
             for (int i = 0; i < tempMeds.Count; i++) {
