@@ -56,6 +56,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             get { return textCusName; }
             set { Set(() => TextCusName, ref textCusName, value); }
         }
+        private string idNumber;
+        public string IdNumber
+        {
+            get { return idNumber; }
+            set { Set(() => IdNumber, ref idNumber, value); }
+        }
         private DateTime? textCusBirthDay;
         public DateTime? TextCusBirthDay
         {
@@ -100,6 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             get { return customer; }
             set { 
                 Set(() => Customer, ref customer, value);
+                if (Customer is null) return;
                 CustomerDetailPrescriptionCollection.GetDataByID(Customer.ID);
                 if (CustomerDetailPrescriptionCollection.Count > 0)
                 {
@@ -184,13 +191,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             TextCusBirthDay = null;
         }
         private void SearchAction() {
-            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null) {
-                MessageWindow.ShowMessage("姓名與生日其一不可為空",Class.MessageType.WARNING);
+            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber)) {
+                MessageWindow.ShowMessage("查詢欄位不可全空",Class.MessageType.WARNING);
                 return;
             }
 
             MainWindow.ServerConnection.OpenConnection(); 
-            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay);
+            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay,IdNumber);
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
