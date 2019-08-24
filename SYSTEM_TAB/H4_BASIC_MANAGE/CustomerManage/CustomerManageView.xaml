@@ -21,10 +21,7 @@
                 <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             </Grid>
         </DataTemplate>
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:CustomerManageViewModel/>
-    </UserControl.DataContext>
+    </UserControl.Resources> 
     <Grid Width="1365" Height="869">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -46,7 +43,7 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Label Content="身分證" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox    Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
+            <TextBox  Text="{Binding IdNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
             <Button Command="{Binding ClearCommand}" Margin="555,0,0,0" Width="100" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
             <Button Command="{Binding SearchCommand}" Margin="10,0,0,0" Width="100" Content="查詢" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0"/>
         </StackPanel>

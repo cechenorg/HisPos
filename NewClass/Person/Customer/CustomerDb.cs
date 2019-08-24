@@ -81,11 +81,12 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Customers", table);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList); 
         }
-        public static DataTable GetDataByNameOrBirth(string name, DateTime? date)
+        public static DataTable GetDataByNameOrBirth(string name, DateTime? date, string idNumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", name);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", date);
+            DataBaseFunction.AddSqlParameter(parameterList, "IdNumber", idNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByNameOrBirth]", parameterList);
         }
         public static DataTable CustomerTable()
