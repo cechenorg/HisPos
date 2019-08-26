@@ -659,8 +659,8 @@
                     </DataGrid.RowStyle>
                     <DataGrid.ContextMenu>
                         <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                            <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                            <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
@@ -840,10 +840,10 @@
                                             <Style TargetType="{x:Type ContentControl}">
                                                 <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="true">
+                                                    <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="false">
                                                         <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="false">
+                                                    <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="true">
                                                         <Setter Property="ContentTemplate" Value="{StaticResource AdjustNoBuckle}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
