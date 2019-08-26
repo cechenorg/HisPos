@@ -26,7 +26,7 @@ namespace His_Pos.NewClass.Medicine.Base
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;
             if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle"))
-                AdjustNoBuckle = r.Field<int>("AdjustNoBuckle") == 1;
+                AdjustNoBuckle = r.Field<bool>("AdjustNoBuckle");
             else
                 AdjustNoBuckle = false;
             SendAmount = -1;
