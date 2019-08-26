@@ -2033,6 +2033,7 @@
     <Resource Include="Images\Tips.png" />
     <Resource Include="Images\Warning.png" />
     <Resource Include="Images\MergeSplit.png" />
+    <Resource Include="Images\ban.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

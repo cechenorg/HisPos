@@ -530,11 +530,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             switch (EditedPrescription.SelectedMedicine.AdjustNoBuckle)
             {
-                case false:
-                    EditedPrescription.SelectedMedicine.AdjustNoBuckle = true;
-                    break;
                 case true:
                     EditedPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
+                    break;
+                case false:
+                    EditedPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    EditedPrescription.SelectedMedicine.BuckleAmount = 0;
                     break;
             }
         }

@@ -686,9 +686,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case true:
                     CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    CurrentPrescription.SelectedMedicine.BuckleAmount = CurrentPrescription.SelectedMedicine.Amount;
                     break;
                 case false:
                     CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
                     break;
             }
         }

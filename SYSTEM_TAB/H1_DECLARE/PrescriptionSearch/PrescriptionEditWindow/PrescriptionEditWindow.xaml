@@ -690,8 +690,8 @@
                     </DataGrid.RowStyle>
                     <DataGrid.ContextMenu>
                         <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding AdjustNoBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                            <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding AdjustNoBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.EditedPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.EditedPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
