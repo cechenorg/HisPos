@@ -727,7 +727,8 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_PaySelfValue", typeof(double));
             detailTable.Columns.Add("PreDet_BuckleAmount", typeof(float));
             detailTable.Columns.Add("PreDet_Order", typeof(int));
-            detailTable.Columns.Add("PreDet_SendAmount", typeof(float)); 
+            detailTable.Columns.Add("PreDet_SendAmount", typeof(float));
+            detailTable.Columns.Add("PreDet_AdjustNoBuckle", typeof(bool)); 
             return detailTable;
         }
 
@@ -881,6 +882,7 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_IsBuckle", false);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", 0);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_AdjustNoBuckle", false); 
                     prescriptionDetailTable.Rows.Add(newRow);
                     count++;
                 }
