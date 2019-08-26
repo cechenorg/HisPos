@@ -677,6 +677,12 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
+                <DataGrid.ContextMenu>
+                    <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding AdjustNoBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBoolToVisConverter}}"/>
+                        <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding AdjustNoBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn MinWidth="20" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Order,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>

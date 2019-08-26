@@ -25,6 +25,8 @@ namespace His_Pos.NewClass.Medicine.Base
             InventoryID = r.Field<int>("Inv_ID");
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;
+            if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle"))
+                AdjustNoBuckle = r.Field<bool>("AdjustNoBuckle");
             SendAmount = -1;
         }
 
@@ -53,6 +55,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = Convert.ToDouble(m.Price);
                     break;
             }
+            AdjustNoBuckle = false;
         }
 
         public Medicine(OrthopedicsMedicine m)
@@ -84,6 +87,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
                     break;
             }
+            AdjustNoBuckle = false;
         }
 
         #region Properties
@@ -389,11 +393,25 @@ namespace His_Pos.NewClass.Medicine.Base
                 Set(() => UsableAmount, ref usableAmount, value);
             }
         }
+
         private bool inventoryError;
         public bool InventoryError
         {
             get => inventoryError;
             set { Set(() => InventoryError, ref inventoryError, value); }
+        }
+
+        private bool adjustNoBuckle;//欠藥/調劑不扣庫
+        public bool AdjustNoBuckle
+        {
+            get => adjustNoBuckle;
+            set
+            {
+                if (adjustNoBuckle != value)
+                {
+                    Set(() => AdjustNoBuckle, ref adjustNoBuckle, value);
+                }
+            }
         }
         #endregion
 

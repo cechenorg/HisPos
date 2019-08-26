@@ -260,6 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<string> ShowMedicineDetail { get; set; }
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand AdjustNoBuckle { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
@@ -353,6 +354,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
+            AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
@@ -676,6 +678,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void MedicineAmountChangedAction()
         {
             CurrentPrescription.IsBuckle = CurrentPrescription.WareHouse != null;
+        }
+
+        private void AdjustNoBuckleAction()
+        {
+            switch (CurrentPrescription.SelectedMedicine.AdjustNoBuckle)
+            {
+                case true:
+                    CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    break;
+                case false:
+                    CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    break;
+            }
         }
 
         private void CountMedicinePointAction()
