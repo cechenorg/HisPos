@@ -539,6 +539,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     EditedPrescription.SelectedMedicine.BuckleAmount = 0;
                     break;
             }
+            DataChangedAction();
         }
 
         private void CustomerDetailEditedAction()

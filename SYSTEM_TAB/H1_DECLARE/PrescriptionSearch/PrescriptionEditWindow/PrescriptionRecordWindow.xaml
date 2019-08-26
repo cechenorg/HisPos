@@ -810,15 +810,31 @@
                     <DataGridTemplateColumn MinWidth="60" Header="扣庫量" IsReadOnly="True" Visibility="{Binding Data.EditedPrescription.IsBuckle,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},Source={StaticResource proxy}}" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="BuckleAmount" MinWidth="60" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                             FontSize="16" FontWeight="Bold"  CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
-                                             Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="TextChanged">
-                                            <command:EventToCommand Command="{Binding DataContext.DataChanged,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
+                                <DataTemplate.Resources>
+                                    <DataTemplate x:Key="AdjustBuckle">
+                                        <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
+                                                     FontSize="16" FontWeight="Bold" CaretBrush="Red" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
+                                                     Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="AdjustNoBuckle">
+                                        <Image Source="../../../../Images/ban.png" Width="20"/>
+                                    </DataTemplate>
+                                </DataTemplate.Resources>
+                                <ContentControl Content="{Binding}" >
+                                    <ContentControl.Style>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="false">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="true">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource AdjustNoBuckle}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
