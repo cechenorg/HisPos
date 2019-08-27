@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.NewClass.Product.ProductManagement.MedBagDetail;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 {
@@ -11,7 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
     {
         #region ----- Define Variables -----
         private string stockDetail = "";
-        private string medBagDetail = "";
+        private MedBagDetailStructs medBagDetails;
 
         public double MedBagOnTheWayAmount { get; set; }
         public double TotalOnTheWayAmount
@@ -26,10 +27,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
-        public string MedBagDetail
+        public MedBagDetailStructs MedBagDetails
         {
-            get { return medBagDetail; }
-            set { Set(() => MedBagDetail, ref medBagDetail, value); }
+            get { return medBagDetails; }
+            set { Set(() => MedBagDetails, ref medBagDetails, value); }
         }
         public bool IsInventoryError => MedBagInventory > TotalInventory;
         #endregion
@@ -66,19 +67,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         }
         internal void GetMedBagDetailByID(string proID, string wareID)
         {
-            DataTable dataTable = ProductDetailDB.GetMedBagDetailByID(proID, wareID);
-
-            string tempMedBagDetail = "";
-
-            for (int x = 0; x < dataTable.Rows.Count; x++)
-            {
-                tempMedBagDetail += dataTable.Rows[x].Field<string>("TYPE").PadRight(4) + dataTable.Rows[x].Field<string>("Cus_Name").PadRight(6) + dataTable.Rows[x].Field<string>("ADJUST_DATE").PadRight(10) + dataTable.Rows[x].Field<double>("MEDBAG_AMOUNT").ToString("N1").PadLeft(8);
-
-                if (x < dataTable.Rows.Count - 1)
-                    tempMedBagDetail += "\n";
-            }
-
-            MedBagDetail = tempMedBagDetail;
+            MedBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
         }
         #endregion
     }
