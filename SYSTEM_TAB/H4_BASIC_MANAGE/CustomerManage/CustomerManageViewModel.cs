@@ -68,6 +68,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             get { return textCusBirthDay; }
             set { Set(() => TextCusBirthDay, ref textCusBirthDay, value); }
         }
+        public bool isDataChanged;
+        public bool IsDataChanged
+        {
+            get { return isDataChanged; }
+            set { Set(() => IsDataChanged, ref isDataChanged, value); }
+        }
         public bool btnCancelEnable;
         public bool BtnCancelEnable
         {
@@ -189,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         private void ClearAction() {
             TextCusName = string.Empty;
             TextCusBirthDay = null;
+            IdNumber = string.Empty;
         }
         private void SearchAction() {
             if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber)) {
@@ -230,6 +237,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             Customer.Save();
             MainWindow.ServerConnection.CloseConnection();
             InitDataChanged();
+            MessageWindow.ShowMessage("更新成功!",Class.MessageType.SUCCESS);
         }
         private void ShowMedicinesDetailAction()
         {
@@ -241,17 +249,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         #region Function 
         private void DataChanged()
         {
-              
-            ChangeText = "已修改";
-            ChangeForeground = "Red"; 
+
+            IsDataChanged = true; 
             BtnCancelEnable = true;
             BtnSubmitEnable = true;
         }
 
         private void InitDataChanged()
         {
-            ChangeText = "未修改";
-            ChangeForeground = "Black";
+            IsDataChanged = false;
             BtnCancelEnable = false;
             BtnSubmitEnable = false;
         }
