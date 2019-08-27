@@ -722,6 +722,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             prescription.TempMedicalNumber = null;
             prescription.Patient = CurrentPrescription.Patient;
             prescription.PrescriptionStatus.Init();
+            prescription.Reset();
             CurrentPrescription = prescription;
             CurrentPrescription.ID = 0;
             CheckDeclareStatus();

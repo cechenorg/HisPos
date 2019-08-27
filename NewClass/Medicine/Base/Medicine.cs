@@ -502,7 +502,7 @@ namespace His_Pos.NewClass.Medicine.Base
 
 
         public object Clone()
-        {
+        { 
             if (this is MedicineNHI)
             {
                 var clonedMed = this as MedicineNHI;
@@ -536,8 +536,9 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
                     Frozen = clonedMed.Frozen,
-                    CanEdit = true
-                };
+                    CanEdit = true,
+                    SendAmount = -1
+            };
                 return medNHI;
             }
 
@@ -568,7 +569,8 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
                     Frozen = clonedMed.Frozen,
-                    CanEdit = true
+                    CanEdit = true,
+                    SendAmount = -1
                 };
                 return medSpecialMaterial;
             }
@@ -600,7 +602,8 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = clonedMed.TotalPrice,
                     Enable = clonedMed.Enable,
                     Frozen = clonedMed.Frozen,
-                    CanEdit = true
+                    CanEdit = true,
+                    SendAmount = -1
                 };
                 return medOtc;
             }
