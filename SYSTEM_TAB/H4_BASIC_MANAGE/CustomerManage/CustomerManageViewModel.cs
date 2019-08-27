@@ -195,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         private void ClearAction() {
             TextCusName = string.Empty;
             TextCusBirthDay = null;
+            IdNumber = string.Empty;
         }
         private void SearchAction() {
             if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber)) {
