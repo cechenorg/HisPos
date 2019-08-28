@@ -151,7 +151,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             if (IsSingde)
             {
                 if (OrderAmount >= SingdePackageAmount)
-                    price = SingdePackagePrice;
+                {
+                    double tempTotal = (OrderAmount % SingdePackageAmount) * SingdePrice + (OrderAmount - (OrderAmount % SingdePackageAmount)) * SingdePackagePrice;
+
+                    price = tempTotal / OrderAmount;
+                }
                 else
                     price = SingdePrice;
 
