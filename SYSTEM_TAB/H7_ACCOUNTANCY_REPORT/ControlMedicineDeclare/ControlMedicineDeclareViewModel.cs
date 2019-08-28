@@ -261,7 +261,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                                 if(t.TypeName == "調劑(未過卡)")
                                     target.Add(t); 
                             }
-                            
                         }
                         int index = 1;
                         foreach (ControlMedicineDetail t in target) {
