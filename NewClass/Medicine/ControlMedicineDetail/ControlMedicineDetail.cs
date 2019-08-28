@@ -7,8 +7,9 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
     public class ControlMedicineDetail : ObservableObject
     {
         public ControlMedicineDetail() { }
-        public ControlMedicineDetail(DataRow r, double stock)
+        public ControlMedicineDetail(DataRow r, double stock,string medID)
         {
+            MedID = medID;
             Date = r.Field<DateTime>("Date");
             TypeName = r.Field<string>("InvRec_Type");
             InputAmount = r.Field<double>("InputAmount");
@@ -21,6 +22,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
                 FinalStock = stock;
         }
         public DateTime Date { get; set; }
+        public string MedID { get; set; }
         public string TypeName { get; set; }
         public double InputAmount { get; set; }
         public double OutputAmount { get; set; }
