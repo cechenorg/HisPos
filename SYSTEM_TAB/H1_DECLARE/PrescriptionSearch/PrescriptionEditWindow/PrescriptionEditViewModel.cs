@@ -607,8 +607,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
-            EditedPrescription.Update();
-            if (EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
+            var result = EditedPrescription.Update();
+            if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
             {
                 MedicinesSendSingdeViewModel vm = null;
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(EditedPrescription);
@@ -618,7 +618,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService.SendOrder(vm);
             }
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
+            if(result)
+                MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }
