@@ -200,7 +200,7 @@
                 <Label Content="毛利 $" Foreground="Black" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
                 <TextBlock Text="{Binding IndexReserveSelectedItem.Profit,UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Foreground="Black" Margin="10,0,0,0" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Width="200"/>
                 <!--<CheckBox Content="全傳送" Foreground="Black" IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="22" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="230,0,0,0" />-->
-                <Button Width="120" Command="{Binding SubmitCommand}" Margin="325,0,0,0" Content="傳送處方" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                <Button Width="120" Command="{Binding SubmitCommand}" Margin="325,0,0,0" Content="備藥" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
         </Grid>
     </Grid>
