@@ -49,12 +49,12 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <Label Content="備藥狀態" FontSize="25" VerticalAlignment="Center"/> 
-                    <ComboBox  FontSize="20"   Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semi"  HorizontalAlignment="Center"
+                    <ComboBox  FontSize="20" Width="100" VerticalAlignment="Center" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,5"
                                ItemsSource="{Binding MedPrepareStatusCollection,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding MedPrepareStatusSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                   <CheckBox IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                   <CheckBox IsChecked="{Binding IsShowUnPhoneCall,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未接" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="20,0,0,0"/>
                     <CheckBox IsChecked="{Binding IsShowUnPhoneProcess,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="電話未處理" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                    <CheckBox IsChecked="{Binding IsExpensive,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="特殊處方" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
-                    <Button Width="120" Command="{Binding PrintIndexReserveMedbagCommand}" Margin="270,0,0,0" Content="列印明細" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" Visibility="{Binding IsShowPrepareReserve, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <CheckBox IsChecked="{Binding IsExpensive,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="特殊( 管藥、冰品、總申報額>5000 )" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="5,0,0,0"/>
+                    <Button Width="120" Command="{Binding PrintIndexReserveMedbagCommand}" Margin="21,0,0,0" Content="列印明細" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" Visibility="{Binding IsShowPrepareReserve, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding ReserveCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -204,7 +204,7 @@
                     <Label Content="處方" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     <Label Content="{Binding IndexReserveCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
                     <Label Content="張" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <Button Width="110" Command="{Binding ReserveMedicineSendCommand}" Margin="645,0,0,0" Content="預約採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+                    <Button Width="110" Command="{Binding ReserveMedicineSendCommand}" Margin="645,0,0,0" Content="預約採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="ForestGreen" BorderThickness="0" />
                 </StackPanel>
                 <Grid Grid.Row="4" Grid.Column="0" Background="{StaticResource GridBackGround}">
                     <Grid.RowDefinitions>
@@ -358,21 +358,16 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
-                    <RowDefinition Height="410"/>
-                    <RowDefinition />
+                    <RowDefinition/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                    <Label Content="每日庫存管理" Foreground="Black" FontSize="28" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
-                    <Button Width="110" Command="{Binding ReserveMedicineBackCommand}" Margin="10,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label Content="每日庫存管理" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
+                    <Button Width="120" Command="{Binding ReserveMedicineBackCommand}" Margin="125,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
                 </StackPanel>
-                <StackPanel Grid.Row="1"   Orientation="Horizontal">
-                    <Label Grid.Row="1" Content="低於安全量商品" Foreground="Black" FontSize="28" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
-                    <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0">
-                        <Image.InputBindings>
-                            <MouseBinding Command="{Binding CommonProductGetDataCommand}" MouseAction="LeftClick"/>
-                        </Image.InputBindings>
-                    </Image>
-                    <Button Width="110" Command="{Binding CommonMedStoreOrderCommand}" Margin="10,0,0,0" Content="常備採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DimGray" BorderThickness="0" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Label Content="低於安全量商品" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
+                    <Button Width="120" Command="{Binding CommonProductGetDataCommand}" Content="查詢" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Margin="95,0,0,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding CommonProductsCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
@@ -453,6 +448,12 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="共" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <Label Content="{Binding CommonProductsCollection.Count ,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
+                    <Label Content="個" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <Button Width="110" Command="{Binding CommonMedStoreOrderCommand}" Margin="205,0,0,0" Content="常備採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="ForestGreen" BorderThickness="0" />
+                </StackPanel>
             </Grid>
         </Grid>
     </xctk:BusyIndicator>
