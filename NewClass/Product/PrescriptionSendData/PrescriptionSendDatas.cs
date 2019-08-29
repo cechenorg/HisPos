@@ -17,24 +17,44 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             Clear(); 
             List<MedicineInventoryStruct> tempMeds = new List<MedicineInventoryStruct>();
             List<string> meds = new List<string>();
-            foreach (var m in prescription.Medicines) {
+            Medicines preoriginMeds = new Medicines();
+            if(prescription.Type == PrescriptionType.ChronicRegister)
+                preoriginMeds.GetDataByPrescriptionId(prescription.ID);
+            else if(prescription.Type == PrescriptionType.ChronicReserve)
+                preoriginMeds.GetDataByReserveId(int.Parse(prescription.SourceId));
+
+            foreach (var m in preoriginMeds) {
                 if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
-                    Add(new PrescriptionSendData(m));
-                    if (tempMeds.Count(t => t.ID == m.InventoryID) == 0) {
-                        double selfPrepareAmount;
-                        if (prescription.PrescriptionStatus.OrderStatus.Contains("訂單狀態:已收貨") || prescription.PrescriptionStatus.OrderStatus.Contains("備藥狀態:已備藥")) {
-                            if (m.SendAmount >= 0)
-                                selfPrepareAmount = m.Amount;
-                            else
-                                selfPrepareAmount = 0;
-                        }
-                        else
-                            selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
-                        
+                  
+                   double selfPrepareAmount;
+                   if (prescription.PrescriptionStatus.OrderStatus.Contains("訂單狀態:已收貨") || prescription.PrescriptionStatus.OrderStatus.Contains("備藥狀態:已備藥")) {
+                       if (m.SendAmount >= 0)
+                           selfPrepareAmount = m.Amount;
+                       else
+                           selfPrepareAmount = 0;
+                   }
+                   else
+                       selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+
+                    if (tempMeds.Count(t => t.ID == m.InventoryID) == 0)
                         tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, selfPrepareAmount));
-                        meds.Add(m.ID);
-                    }
+                    else {
+                        for (int i = 0; i < tempMeds.Count; i++) {
+                            if (tempMeds[i].ID == m.InventoryID)
+                                tempMeds[i].Amount += selfPrepareAmount;
+                        } 
+                    }      
                 } 
+            }
+            foreach (var m in prescription.Medicines)
+            {
+                if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC))
+                {
+                    Add(new PrescriptionSendData(m));
+                    meds.Add(m.ID);
+                    if(tempMeds.Count(temp => temp.ID == m.InventoryID) == 0)
+                        tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, 0));
+                }
             }
             Inventorys inventories = Inventorys.GetAllInventoryByProIDs(meds); 
             foreach (var inv in inventories) { 
