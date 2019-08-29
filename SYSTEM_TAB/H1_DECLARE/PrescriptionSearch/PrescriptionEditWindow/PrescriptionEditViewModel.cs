@@ -209,6 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand PrintReceipt { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
+        public RelayCommand AdjustNoBuckle { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
         public RelayCommand SavePatientData { get; set; }
@@ -311,6 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
+            AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
@@ -524,6 +526,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataChangedAction();
         }
 
+        private void AdjustNoBuckleAction()
+        {
+            switch (EditedPrescription.SelectedMedicine.AdjustNoBuckle)
+            {
+                case true:
+                    EditedPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    EditedPrescription.SelectedMedicine.BuckleAmount = EditedPrescription.SelectedMedicine.Amount;
+                    break;
+                case false:
+                    EditedPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    EditedPrescription.SelectedMedicine.BuckleAmount = 0;
+                    break;
+            }
+            DataChangedAction();
+        }
+
         private void CustomerDetailEditedAction()
         {
             CustomerEdited = true;
@@ -589,8 +607,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
-            EditedPrescription.Update();
-            if (EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
+            var result = EditedPrescription.Update();
+            if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
             {
                 MedicinesSendSingdeViewModel vm = null;
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(EditedPrescription);
@@ -600,7 +618,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService.SendOrder(vm);
             }
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
+            if(result)
+                MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
         }

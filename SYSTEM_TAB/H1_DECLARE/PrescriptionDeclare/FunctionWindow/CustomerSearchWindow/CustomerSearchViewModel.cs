@@ -197,6 +197,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 case 0:
                     ShowDialog = false;
                     MessageWindow.ShowMessage("查無顧客", MessageType.WARNING);
+                    AskAddCustomerData();
                     break;
                 case 1:
                     ShowDialog = false;

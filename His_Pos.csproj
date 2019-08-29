@@ -510,6 +510,8 @@
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\MedBagDetail\MedBagDetailStruct.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\MedBagDetail\MedBagDetailStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\MedicineTagStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecord.cs" />
@@ -2033,6 +2035,7 @@
     <Resource Include="Images\Tips.png" />
     <Resource Include="Images\Warning.png" />
     <Resource Include="Images\MergeSplit.png" />
+    <Resource Include="Images\ban.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

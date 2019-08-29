@@ -1687,5 +1687,17 @@ namespace His_Pos.NewClass.Prescription
         {
             throw new NotImplementedException();
         }
+
+        public void Reset()
+        {
+            PrescriptionStatus.ReserveSend = false;
+            PrescriptionStatus.OrderStatus = string.Empty;
+            OrderContent = string.Empty;
+            foreach (var m in Medicines)
+            {
+                m.BuckleAmount = m.Amount;
+                m.SendAmount = -1;
+            }
+        }
     }
 }

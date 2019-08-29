@@ -280,8 +280,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "pdata")]
     public class Pdata
     {
-        public Pdata() { }
-        public Pdata(Medicine.Base.Medicine m, string serial,DateTime adjustDate)
+        public Pdata()
+        {
+        }
+
+        public Pdata(Medicine.Base.Medicine m, string serial, DateTime adjustDate)
         {
             if (m is MedicineNHI && !m.PaySelf)
             {
@@ -289,7 +292,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P2 = m.ID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
                 P5 = m.PositionID;
@@ -301,6 +305,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
                 SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -311,7 +316,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P5 = m.PositionID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P6 = "105";
                 P10 = serial;
                 P11 = $"{m.Days:00}";
@@ -321,6 +327,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
                 SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
             else if (m is MedicineVirtual)
             {
@@ -337,6 +344,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 BuckleAmount = 0;
                 Order = m.Order;
                 SendAmount = m.SendAmount;
+                AdjustNoBuckle = true;
             }
             else
             {
@@ -348,9 +356,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P4 = m.UsageName;
                 P5 = m.PositionID;
                 P8 = string.Empty;
-                P9 = $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P10 = string.Empty;
-                var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
+                var days = m.Days is null ? string.Empty : $"{m.Days:00}";
                 P11 = days;
                 P12 = string.Empty;
                 P13 = P12;
@@ -358,12 +367,13 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 IsBuckle = m.IsBuckle;
                 Order = m.Order;
                 SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
             PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
         }
 
-        public Pdata(PDataType type,string code,int percentage,int amount,DateTime adjustDate)
+        public Pdata(PDataType type, string code, int percentage, int amount, DateTime adjustDate)
         {
             switch (type)
             {
@@ -391,10 +401,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                             P9 = $"{59 * percentage * 0.01:00000000}";
                             break;
                     }
+
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                     P13 = P12;
                     PaySelf = false;
                     IsBuckle = true;
+                    AdjustNoBuckle = true;
                     break;
                 case PDataType.SimpleForm:
                     P1 = "1";
@@ -413,6 +425,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                             P2 = "MA4";
                             break;
                     }
+
                     P3 = $"{1.0:0000.00}";
                     P4 = string.Empty;
                     P5 = string.Empty;
@@ -420,55 +433,37 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     P7 = $"{amount:00000.0}";
                     P8 = $"{int.Parse(code):00000.0}";
                     P9 = $"{int.Parse(code) * amount:00000000}";
-                    P11 = amount.ToString().PadLeft(2,'0');
+                    P11 = amount.ToString().PadLeft(2, '0');
                     P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
-                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate.AddDays(amount-1));
+                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate.AddDays(amount - 1));
                     PaySelf = false;
                     IsBuckle = true;
+                    AdjustNoBuckle = true;
                     break;
             }
         }
 
-        [XmlElement(ElementName = "p1")]
-        public string P1 { get; set; }
-        [XmlElement(ElementName = "p2")]
-        public string P2 { get; set; }
-        [XmlElement(ElementName = "p3")]
-        public string P3 { get; set; }
-        [XmlElement(ElementName = "p4")]
-        public string P4 { get; set; }
-        [XmlElement(ElementName = "p5")]
-        public string P5 { get; set; }
-        [XmlElement(ElementName = "p6")]
-        public string P6 { get; set; }
-        [XmlElement(ElementName = "p7")]
-        public string P7 { get; set; }
-        [XmlElement(ElementName = "p8")]
-        public string P8 { get; set; }
-        [XmlElement(ElementName = "p9")]
-        public string P9 { get; set; }
+        [XmlElement(ElementName = "p1")] public string P1 { get; set; }
+        [XmlElement(ElementName = "p2")] public string P2 { get; set; }
+        [XmlElement(ElementName = "p3")] public string P3 { get; set; }
+        [XmlElement(ElementName = "p4")] public string P4 { get; set; }
+        [XmlElement(ElementName = "p5")] public string P5 { get; set; }
+        [XmlElement(ElementName = "p6")] public string P6 { get; set; }
+        [XmlElement(ElementName = "p7")] public string P7 { get; set; }
+        [XmlElement(ElementName = "p8")] public string P8 { get; set; }
+        [XmlElement(ElementName = "p9")] public string P9 { get; set; }
         private string _p10;
-        [XmlElement(ElementName = "p10")]
-        public string P10 { get; set; }
-        [XmlElement(ElementName = "p11")]
-        public string P11 { get; set; }
-        [XmlElement(ElementName = "p12")]
-        public string P12 { get; set; }
-        [XmlElement(ElementName = "p13")]
-        public string P13 { get; set; }
-        [XmlElement(ElementName = "p15")]
-        public string P15 { get; set; }
-        [XmlIgnore]
-        public bool PaySelf { get; set; }
-        [XmlIgnore]
-        public bool IsBuckle { get; set; }
-        [XmlIgnore]
-        public double? BuckleAmount { get; set; }
-        [XmlIgnore]
-        public double? PaySelfValue { get; set; }
-        [XmlIgnore]
-        public int Order { get; set; }
-        [XmlIgnore]
-        public double SendAmount { get; set; }
+        [XmlElement(ElementName = "p10")] public string P10 { get; set; }
+        [XmlElement(ElementName = "p11")] public string P11 { get; set; }
+        [XmlElement(ElementName = "p12")] public string P12 { get; set; }
+        [XmlElement(ElementName = "p13")] public string P13 { get; set; }
+        [XmlElement(ElementName = "p15")] public string P15 { get; set; }
+        [XmlIgnore] public bool PaySelf { get; set; }
+        [XmlIgnore] public bool IsBuckle { get; set; }
+        [XmlIgnore] public double? BuckleAmount { get; set; }
+        [XmlIgnore] public double? PaySelfValue { get; set; }
+        [XmlIgnore] public int Order { get; set; }
+        [XmlIgnore] public double SendAmount { get; set; }
+        [XmlIgnore] public bool AdjustNoBuckle { get; set; }
     }
 }
