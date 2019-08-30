@@ -54,16 +54,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductByProductID]", parameters);
         }
-        
-        public static DataTable GetReturnProductBatchNumbers(string productID, string wareID)
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", productID));
-            parameters.Add(new SqlParameter("WARE_ID", wareID));
-
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductReturnBatchNumbers]", parameters);
-        }
-
         internal static DataTable GetProductOnTheWayDetailByID(string proID, int wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
