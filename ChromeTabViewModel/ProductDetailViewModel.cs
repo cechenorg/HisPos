@@ -11,8 +11,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 
 namespace His_Pos.ChromeTabViewModel
@@ -148,9 +147,6 @@ namespace His_Pos.ChromeTabViewModel
 
             switch (type)
             {
-                case ProductTypeEnum.OTC:
-                    newTab = new OtcDetailView() { TabName = newProduct[0], Icon = "/Images/OrangeDot.png" };
-                    break;
                 case ProductTypeEnum.NHIMedicine:
                 case ProductTypeEnum.OTCMedicine:
                 case ProductTypeEnum.SpecialMedicine:
