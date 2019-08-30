@@ -267,7 +267,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                             string isgetpay = target.Count(ta => ta.MedID == t.MedID) > 1 ? "Y" : "N";
                             switch (t.TypeName) { 
                                 case "上次結存":
-                                    file.WriteLine($"{index},P,{t.MedID.Substring(0,7)},{t.BatchNumber},{isgetpay},粒(tab) / 排 / 盒,");
+                                    file.WriteLine($"" +
+                                        $"{index}," +
+                                        $"P," +
+                                        $"{t.MedID.Substring(0,7)}," +
+                                        $"{t.BatchNumber}," +
+                                        $"{isgetpay}," +
+                                        $"1粒(tab)," +
+                                        $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},299," +
+                                        $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,," );
+                                    break;
+                                case "進貨":
+                                    file.WriteLine($"" +
+                                       $"{index}," +
+                                       $"P," +
+                                       $"{t.MedID.Substring(0, 7)}," +
+                                       $"{t.BatchNumber}," +
+                                       $"{isgetpay}," +
+                                       $"1粒(tab)," +
+                                       $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},202," +
+                                       $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,,");
                                     break;
 
                             } 

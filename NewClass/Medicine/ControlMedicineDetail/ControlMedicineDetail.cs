@@ -16,6 +16,8 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             OutputAmount = r.Field<double>("OutputAmount");
             BatchNumber = r.Field<string>("InvRec_BatchNumber");
             Description = r.Field<string>("Description");
+            ManufactoryName = r.Field<string>("Man_Name");
+            ManufactoryControlMedicinesID = r.Field<string>("Man_ControlMedicineID");
             if (TypeName != "調劑(未過卡)")
                 FinalStock = stock + InputAmount + OutputAmount;
             else
@@ -29,5 +31,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
         public string BatchNumber { get; set; }
         public double FinalStock { get; set; }
         public string Description { get; set; }
+        public string ManufactoryName { get; set; }
+        public string ManufactoryControlMedicinesID { get; set; }
     }
 }
